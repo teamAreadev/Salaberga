@@ -143,8 +143,7 @@ $hora_envio = date('H:i:s');
 
 //corpo email
 $arquivo = "Acesse o link abaixo para fazer a alteração de sua senha:
-https://salaberga.com/banco_testes/portalsalaberga/app/main/views/autentica%C3%A7%C3%A3o/alteraSenha.php
-
+<a href=https://salaberga.com/banco_testes/portalsalaberga/app/main/views/autentica%C3%A7%C3%A3o/alteraSenha.php?email=$email>link de alteração</a>
 email enviado por $nome, no dia $data_envio as $hora_envio.
 ";
 
@@ -162,6 +161,6 @@ $headers .= "From: $nome <$email>";
 
 mail($destino, $assunto, $arquivo, $headers);
 
-echo "<meta http-equiv='refresh' content='10;URL=../views/autenticação/recuperacaodesenha.php'>";
+echo "<meta http-equiv='refresh' content='10;URL=../../views/autenticação/recuperacaodesenha.php?email=$email>";
 }
 ?>
