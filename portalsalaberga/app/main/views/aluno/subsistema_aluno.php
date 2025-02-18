@@ -1,39 +1,6 @@
 <!-- //DEV SGTM (SALABERGA TORQUATO GOMES DE MATOS)
 
-        S S S S S S S S
-    S S S S S S S S S S
-    S S S S S S S S S S S
-    S S
-    S S S S S S S S S S S
-            S S S S S S           
-                S S S S S
-    S S S S S S S S S S S
-    S S S S S S S S S
-        S S S S S S S
 
-        T T T T T T T T T
-            T T T T
-            T T T T
-            T T T T
-            T T T T
-            T T T T
-            T T T T
-
-        G G G G G G G G
-    G G G G G G G G G
-    G G
-    G G     G G G G G G
-    G G             G G
-    G G G G G G G G
-        G G G G G G
-
-        M             M
-        M M         M M
-        M   M     M   M
-        M     M M     M
-        M       M     M
-        M             M
-        M             M
 
         Qual é o seu superpoder? Talvez seja curiosidade já que você está olhando nosso código fonte.
         What’s your superpower? Perhaps it’s curiosity since you are looking at our source code. -->
@@ -538,17 +505,15 @@ body {
                         </div>
                     </div>
                 </div>
-
+                <a href="../autenticacao/perfil.php">
                 <div class="flex items-center gap-3 cursor-pointer">
                     <div class="relative">
                         <img src="https://i.postimg.cc/m2d5f5L3/images-removebg-preview.png" alt="Perfil" class="w-10 h-10 rounded-full border-2 border-transparent hover:border-secondary transition-colors duration-300">
                         <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white">
                         </div>
                     </div>
-                    <span class="text-sm font-medium text-gray-700 hover:text-primary transition-colors duration-300">
-                        <a href="../autenticação/perfil.php">Meu Perfil</a>
-                    </span>
                 </div>
+                </a>
             </nav>
 
             <div class="md:hidden">
