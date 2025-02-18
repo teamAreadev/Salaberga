@@ -1,4 +1,10 @@
 <?php
+// Configura o fuso horário para Fortaleza
+date_default_timezone_set('America/Fortaleza');
+
+// Obtém a data e hora atual no formato compatível com o tipo DATETIME do MySQL
+$data = date('Y-m-d H:i:s');
+
 
 function cadastrarUsuario($nomeC, $email, $senha, $status)
 {
@@ -15,7 +21,7 @@ function cadastrarUsuario($nomeC, $email, $senha, $status)
     } else {
 
         // Se o email não existe, procede com a inserção
-        $stmtInsert = $conexao->prepare('INSERT INTO usuario (nome, email, senha, status) VALUES (:nomeC, :email, MD5(:senha), :status)');
+        $stmtInsert = $conexao->prepare('INSERT INTO usuario (nome_user, email, senha, status) VALUES (:nomeC, :email, MD5(:senha), :status)');
 
         $stmtInsert->bindValue(':nomeC', $nomeC);
         $stmtInsert->bindValue(':email', $email);
@@ -29,11 +35,12 @@ function cadastrarUsuario($nomeC, $email, $senha, $status)
 }
 function cadastrar($nome, $c1, $c2, $dn, $lp, $ar, $ef, $li, $ma, $ci, $ge, $hi, $re, $bairro, $publica, $pcd, $media)
 {
+
     session_start();
     require_once('../config/connect.php');
     //inserido na tabela candidato os dados do candidato
-    $result_cadastrar_candidato = $conexao->prepare("INSERT INTO candidato (nome, id_curso1_fk, id_curso2_fk, data_nascimento, bairro, publica, pcd, id_cadastrador) 
-    VALUES( :nome, :id_curso1_fk, :id_curso2_fk, :data_nascimento, :bairro, :publica, :pcd, :id)");
+    $result_cadastrar_candidato = $conexao->prepare("INSERT INTO candidato (nome, id_curso1_fk, id_curso2_fk, data_nascimento, bairro, publica, pcd, data, id_cadastrador) 
+    VALUES( :nome, :id_curso1_fk, :id_curso2_fk, :data_nascimento, :bairro, :publica, :pcd, :data, :id)");
     $result_cadastrar_candidato->bindValue(':nome', $nome);
     $result_cadastrar_candidato->bindValue(':id', $_SESSION['id_cadastrador']);
     $result_cadastrar_candidato->bindValue(':id_curso1_fk', $c1);
@@ -42,6 +49,7 @@ function cadastrar($nome, $c1, $c2, $dn, $lp, $ar, $ef, $li, $ma, $ci, $ge, $hi,
     $result_cadastrar_candidato->bindValue(':bairro', $bairro);
     $result_cadastrar_candidato->bindValue(':publica', $publica);
     $result_cadastrar_candidato->bindValue(':pcd', $pcd);
+    $result_cadastrar_candidato->bindValue(':data', $data);
     $result_cadastrar_candidato->execute();
 
     //procurando na tabela candidato o nome do candidato
@@ -111,7 +119,7 @@ function cadastrar2($nome, $c1, $c2, $dn, $lp, $ar, $li, $ma, $ci, $ge, $hi, $re
     }
 
     //inserindo na tabela nota, as notas do candidato cadastrado
-    $result_cadastrar_nota = $conexao->prepare("INSERT INTO nota VALUES(:l_portuguesa, :arte, NULL, :l_inglesa, :matematica, :ciencias, :geografia, :historia, :religiao, :candidato_id_candidato, :media )");
+    $result_cadastrar_nota = $conexao->prepare("INSERT INTO nota VALUES(:l_portuguesa, :arte, 0, :l_inglesa, :matematica, :ciencias, :geografia, :historia, :religiao, :candidato_id_candidato, :media )");
     $result_cadastrar_nota->BindValue(':l_portuguesa', $lp);
     $result_cadastrar_nota->BindValue(':arte', $ar);
     $result_cadastrar_nota->BindValue(':l_inglesa', $li);
@@ -156,6 +164,7 @@ function logar($email, $senha)
         $_SESSION['login'] = true;
         $_SESSION['status'] = $result[0]['status'];
         $_SESSION['id_cadastrador'] = $result[0]['id'];
+        $_SESSION['refresh'] = 0;
         return $result[0]['status'];
     } else {
         // Se não encontrou resultados, redirecionar para a página inicial
@@ -201,13 +210,26 @@ function delete($senha)
 function atualizar($lp, $ar, $ef, $li, $ma, $ci, $ge, $hi, $re, $id)
 {
     require_once('../config/connect.php');
-    //calculando a média do candidato
-    if ($ef == 0) {
-        $md = ($lp + $ar + $ef + $li + $ma + $ci + $ge + $hi + $re) / 8;
-    } else {
-        $md = ($lp + $ar + $ef + $li + $ma + $ci + $ge + $hi + $re) / 9;
+    
+    // Inicializa o divisor com 9 (total de matérias)
+    $divisor = 9;
+    $soma = $lp + $ar + $ef + $li + $ma + $ci + $ge + $hi + $re;
+    
+    // Verifica cada matéria e ajusta o divisor
+    if ($re == 0) {
+        $divisor--;
     }
-    //atualizando as notas do candidato
+    if ($ef == 0) {
+        $divisor--;
+    }
+    if ($ar == 0) {
+        $divisor--;
+    }
+    
+    // Calcula a média
+    $md = $soma / $divisor;
+    
+    // Atualizando as notas do candidato
     $stmtUpdate = $conexao->prepare("UPDATE nota SET l_portuguesa=:lp, arte=:ar, educacao_fisica=:ef, l_inglesa=:li, matematica=:ma, ciencias=:ci, geografia=:ge, historia=:hi, religiao=:re, media=:media WHERE candidato_id_candidato = :id");
 
     $stmtUpdate->BindValue(':lp', $lp);
@@ -220,9 +242,10 @@ function atualizar($lp, $ar, $ef, $li, $ma, $ci, $ge, $hi, $re, $id)
     $stmtUpdate->BindValue(':hi', $hi);
     $stmtUpdate->BindValue(':re', $re);
     $stmtUpdate->BindValue(':media', $md);
-    $stmtUpdate->BindValue(':id', $_SESSION['id']);
+    $stmtUpdate->BindValue(':id', $id); // Usando o ID recebido como parâmetro
     $stmtUpdate->execute();
 }
+
 function notas($id)
 {
     session_start();
@@ -331,14 +354,14 @@ function excluir_candidato($id_candidato)
 function excluir_usuario($nome)
 {
     require_once('../../config/connect.php');
-    $stmtCheck = $conexao->prepare("SELECT * FROM usuario WHERE nome = :nome");
+    $stmtCheck = $conexao->prepare("SELECT * FROM usuario WHERE nome_user = :nome");
     $stmtCheck->bindValue(':nome', $nome);
     $stmtCheck->execute();
     $row_count = $stmtCheck->rowCount();
 
     if ($row_count > 0) {
 
-        $stmt_excluir_usuario = $conexao->prepare("DELETE FROM usuario WHERE nome = :nome1");
+        $stmt_excluir_usuario = $conexao->prepare("DELETE FROM usuario WHERE nome_user = :nome1");
         $stmt_excluir_usuario->bindValue(':nome1', $nome);
         $stmt_excluir_usuario->execute();
 

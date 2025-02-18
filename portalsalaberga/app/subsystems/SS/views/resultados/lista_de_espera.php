@@ -31,7 +31,9 @@ function lista_de_espera($curso)
     // Cabeçalho com larguras ajustadas
     $pdf->Image('../assets/images/logo.png', 8, 8, 15, 0, 'PNG');
     $pdf->SetFont('Arial', 'B', 25);
-    $pdf->Cell(185, 10, ('LISTA DE ESPERA ' . $nome_curso), 0, 1, 'C');
+    $pdf->Cell(185, 10, utf8_decode('LISTA DE ESPERA'), 0, 1, 'C');
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(185, 5, utf8_decode(" - ".$nome_curso." - "), 0, 1, 'C');
     $pdf->SetFont('Arial', 'B', 8);
     $pdf->Cell(0, 10, ('PCD = PESSOA COM DEFICIENCIA | COTISTA = INCLUSO NA COTA DO BAIRRO | AC = AMPLA CONCORRENCIA'), 0, 1, 'C');
     $pdf->SetFont('Arial', 'b', 12);

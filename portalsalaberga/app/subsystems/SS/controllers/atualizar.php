@@ -20,6 +20,7 @@ if (isset($_POST['atualizar_nota'])) {
     require_once('../models/model.php');
     atualizar($lp, $ar, $ef, $li, $ma, $ci, $ge, $hi, $re, $id);
     header('Location: ../views/success_atualizar.php');
+    exit();
   } 
 
 if (isset($_POST['id'])) {

@@ -223,7 +223,7 @@
     <?php } ?>
 
     <?php if (isset($_GET['usuario_excluido_sucesso'])) { ?>
-      <h1>usuário excluindo com sucesso!</h1>
+      <h1>usuário excluido com sucesso!</h1>
     <?php } ?>
 
       <p class="message">

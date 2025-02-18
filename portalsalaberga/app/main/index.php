@@ -277,20 +277,20 @@
             window.location.href = ''; // Substitua pelo URL da página que você deseja
         };
     </script>
-    <div x-show="showEditalMessage"
+  <!--x-show="showEditalMessage"
         x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0 transform translate-y-4 sm:translate-y-0 sm:scale-95"
         x-transition:enter-end="opacity-100 transform translate-y-0 sm:scale-100"
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 transform translate-y-0 sm:scale-100"
         x-transition:leave-end="opacity-0 transform translate-y-4 sm:translate-y-0 sm:scale-95"
-        class="fixed inset-0 flex items-center justify-center z-50 px-4 sm:px-0">
-        <!-- Fundo borrado -->
-        <div class="absolute inset-0 bg-gray-900 bg-opacity-75 backdrop-filter backdrop-blur-sm"></div>
+        class="fixed inset-0 flex items-center justify-center z-50 px-4 sm:px-0">-->
+       
+        <!-- class="absolute inset-0 bg-gray-900 bg-opacity-75 backdrop-filter backdrop-blur-sm"></div>
 
-        <!-- Conteúdo da mensagem -->
+       
         <div class="bg-white rounded-lg shadow-2xl p-6 sm:p-8 m-4 max-w-lg w-full relative z-10 border-t-4 border-ceara-green">
-            <!-- Botão de fechar -->
+         
             <button @click="showEditalMessage = false" class="absolute top-4 right-4 text-gray-400 hover:text-ceara-orange transition duration-150">
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -308,7 +308,7 @@
                 O edital para novos alunos 2025 está disponível. Não perca essa oportunidade de fazer parte da nossa instituição!
             </p>
 
-            <div class="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
+        <div class="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
     <button @click="remindLater()"
         class="w-full sm:w-auto px-6 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ceara-green flex items-center justify-center">
         <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -328,7 +328,7 @@
         </svg>
     </a>
 </div>
-
+ -->
         </div>
     </div>
     <script>
@@ -471,26 +471,23 @@
                                         <!-- Seta -->
                                         <i class="fas fa-arrow-right text-ceara-orange opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-200"></i>
                                     </a>
-
-                                    <!-- Link Escolas Parceiras -->
+                                    <!--
                                     <a href="../escolas_parceiras/index.php"
                                         @click="isOpen = false"
                                         class="group flex items-center px-4 py-3 hover:bg-gradient-to-r hover:from-ceara-green/5 hover:to-ceara-orange/5 transition-all duration-300">
-                                        <!-- Ícone -->
                                         <div class="flex-shrink-0 mr-3">
                                             <div class="w-10 h-10 flex items-center justify-center rounded-full bg-ceara-green/10 group-hover:bg-ceara-green/20 transition-all duration-200">
                                                 <i class="fas fa-handshake text-ceara-green  duration-200"></i>
                                             </div>
                                         </div>
-                                        <!-- Texto -->
+                                        
                                         <div class="flex-1">
                                             <p class="text-sm font-medium text-gray-800 group-hover:text-ceara-green transition-colors duration-200">
                                                 Escolas Parceiras
                                             </p>
                                             <p class="text-xs text-gray-500">Conheça nossas parcerias</p>
                                         </div>
-                                        <!-- Seta -->
-                                        <i class="fas fa-arrow-right text-ceara-orange opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-200"></i>
+                                        -->
                                     </a>
                                 </div>
                             </div>
@@ -609,7 +606,7 @@
                             class="pl-13 space-y-4">
 
                             <!-- Salaberga -->
-                            <a href="../main/views/autenticação/precadastro.php"
+                            <a href="../main/views/autenticacao/login.php"
                                 @click="mobileMenuOpen = false"
                                 class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
                                 <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
@@ -622,7 +619,7 @@
                             </a>
 
                             <!-- Escolas Parceiras -->
-                            <a href="../escolas_parceiras/index.php"
+                           <!-- <a href="../escolas_parceiras/index.php"
                                 @click="mobileMenuOpen = false"
                                 class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
                                 <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
@@ -633,6 +630,7 @@
                                     <span class="text-sm text-white/70">Conheça nossas parcerias</span>
                                 </div>
                             </a>
+                            -->
                         </div>
                     </div>
                 </nav>
@@ -737,13 +735,7 @@
             speakText(message);
         }
 
-        function provideInitialInstructions() {
-            if (!initialInstructionsGiven) {
-                const instructions = "Bem-vindo. Para ativar a narração de tela, pressione a tecla N ou use a tecla Tab para navegar até o botão de ativação e pressione Enter.";
-                speakText(instructions);
-                initialInstructionsGiven = true;
-            }
-        }
+     
 
         function handleElementClick(event) {
             if (!isReading) return;

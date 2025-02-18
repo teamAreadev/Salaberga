@@ -114,7 +114,7 @@ $usuarios = lista_usuario();
                         <select name="nome_usuario" id="usuario">
                             <?php foreach ($usuarios as $usuario) { ?>
 
-                                <option value="<?php echo $usuario['nome'] ?>"><?php echo $usuario['nome'] ?></option>
+                                <option value="<?php echo $usuario['nome_user'] ?>"><?php echo $usuario['nome_user'] ?></option>
                             <?php } ?>
                         </select>
 

@@ -6,35 +6,43 @@ function publicaCotas($curso)
     session_start();
 
     if ((isset($_SESSION['status']) && $_SESSION['status'] == 1)){
-        $n = 122;
+        //ADMIN
+        $n = 102;
+        $p = 0; // ñ quebra a linha caso seja cliente 
+        $orientacao = 'L';
     } else if ((isset($_SESSION['status']) && $_SESSION['status'] == 0)){
+        //CLIENTE
         $n = 105;
+        $p = 1; // quebra a linha caso seja cliente 
+        $orientacao = 'P';
     }
 
     if (isset($_SESSION['status']) && $_SESSION['status'] == 1){
     $stmtSelect = $conexao->prepare("
-        SELECT candidato.id_candidato, candidato.id_cadastrador, candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd, nota.media
-        FROM candidato 
-        INNER JOIN nota ON nota.candidato_id_candidato = candidato.id_candidato 
-        WHERE candidato.publica = 1 
-        OR candidato.bairro = 1 
-        OR candidato.pcd = 1
-        AND candidato.id_curso1_fk = :curso
-        ORDER BY nota.media DESC,
-        candidato.data_nascimento DESC,
-        nota.l_portuguesa DESC,
-        nota.matematica DESC
-    ");
+    SELECT candidato.id_candidato, candidato.id_cadastrador, usuario.nome_user, candidato.nome, 
+    candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd, nota.media
+    FROM candidato 
+    INNER JOIN nota ON nota.candidato_id_candidato = candidato.id_candidato 
+    INNER JOIN usuario ON candidato.id_cadastrador = usuario.id
+    WHERE candidato.id_curso1_fk = :curso
+    AND candidato.publica = 1 
+    AND (candidato.pcd = 1 OR candidato.bairro = 1)
+    ORDER BY nota.media DESC,
+    candidato.data_nascimento DESC,
+    nota.l_portuguesa DESC,
+    nota.matematica DESC;
+
+
+");
     } else if (isset($_SESSION['status']) && $_SESSION['status'] == 0){
         $stmtSelect = $conexao->prepare("
-        SELECT candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd
-        FROM candidato 
-        INNER JOIN nota ON nota.candidato_id_candidato = candidato.id_candidato 
-        WHERE candidato.publica = 1 
-        OR candidato.bairro = 1 
-        OR candidato.pcd = 1
-        AND candidato.id_curso1_fk = :curso
-        ORDER BY nome ASC
+    SELECT candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd
+    FROM candidato 
+    INNER JOIN nota ON nota.candidato_id_candidato = candidato.id_candidato 
+    WHERE candidato.id_curso1_fk = :curso
+    AND candidato.publica = 1 
+    AND (candidato.pcd = 1 OR candidato.bairro = 1)
+    ORDER BY nome ASC
         ");
     }
     $stmtSelect->BindValue(':curso', $curso);
@@ -42,13 +50,13 @@ function publicaCotas($curso)
     $result = $stmtSelect->fetchAll(PDO::FETCH_ASSOC);
 
     require_once('../assets/fpdf/fpdf.php');
-    $pdf = new FPDF('L', 'mm', 'A4');
+    $pdf = new FPDF($orientacao, 'mm', 'A4');
     $pdf->AddPage();
 
     // Cabeçalho com larguras ajustadas
     $pdf->Image('../assets/images/logo.png', 8, 8, 15, 0, 'PNG');
     $pdf->SetFont('Arial', 'B', 25);
-    $pdf->Cell(108, 5, ('PUBLICA COTAS'), 0, 1, 'C');
+    $pdf->Cell(107, 5, ('PUBLICA COTAS'), 0, 1, 'C');
     $pdf->SetFont('Arial', 'B', 8);
     $pdf->Cell(188, 10, ('PCD = PESSOA COM DEFICIENCIA | COTISTA = INCLUSO NA COTA DO BAIRRO | AC = AMPLA CONCORRENCIA'), 0, 1, 'C');
     $pdf->SetFont('Arial', 'b', 12);
@@ -66,7 +74,7 @@ function publicaCotas($curso)
         $pdf->Cell(26, 7, 'Segmento', 1, 0, 'C', true);
         $pdf->Cell(20, 7, 'Id Aluno', 1, 0, 'C', true);
         $pdf->Cell(15, 7, 'Media', 1, 0, 'C', true);
-        $pdf->Cell(35, 7, 'Resp. Cadastro', 1, 1, 'C', true);
+        $pdf->Cell(55, 7, 'Resp. Cadastro', 1, 1, 'C', true);
     } else {
         $pdf->Cell(26, 7, 'Segmento', 1, 1, 'C', true); 
     }
@@ -104,7 +112,7 @@ function publicaCotas($curso)
         if ($row['pcd'] == 1) {
             $cota = 'PCD';
         } else if ($row['publica'] == 1 && $row['bairro'] == 1) {
-            $cota = 'COSTISTA';
+            $cota = 'COTISTA';
         } else {
             $cota = 'AC';
         }
@@ -115,14 +123,14 @@ function publicaCotas($curso)
 
         // Imprimir linha no PDF
         $pdf->Cell(10, 7, sprintf("%03d", $classificacao), 1, 0, 'C', true);
-        $pdf->Cell($n, 7, strToUpper(($row['nome'])), 1, 0, 'L', true);
+        $pdf->Cell($n, 7, strToUpper(utf8_decode($row['nome'])), 1, 0, 'L', true);
         $pdf->Cell(30, 7, $curso, 1, 0, 'L', true);
         $pdf->Cell(18, 7, $escola, 1, 0, 'L', true);
-        $pdf->Cell(26, 7, $cota, 1, 0, 'L', true);
+        $pdf->Cell(26, 7, $cota, 1, $p, 'L', true); // verificar parâmetro 'p' na parte superior do relatório
         if (isset($_SESSION['status']) && $_SESSION['status'] == 1) {
             $pdf->Cell(20, 7, $row['id_candidato'], 1, 0, 'C', true);
             $pdf->Cell(15, 7, number_format($row['media'], 2), 1, 0, 'C', true);
-            $pdf->Cell(35, 7, $row['id_cadastrador'], 1, 1, 'C', true);
+            $pdf->Cell(55, 7, strtoupper(utf8_decode($row['nome_user'])), 1, 1, 'L', true);
         }
         $classificacao++;
     }
