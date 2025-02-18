@@ -1,6 +1,0 @@
-RewriteEngine On
-RewriteBase /sistema_agendamento/
-RewriteRule ^default\.php$ - [L]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /default.php [L]
