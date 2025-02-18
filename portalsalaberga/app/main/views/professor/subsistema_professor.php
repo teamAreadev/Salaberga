@@ -471,7 +471,18 @@ body {
             <!-- Navegação Desktop -->
             <nav class="hidden md:flex items-center gap-5">
                 <a href="../../" class="nav-link">Início</a>
-                <a href="suporte.html" class="nav-link">Suporte</a>
+                <a href="suporte.html" class="inline-flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" role="switch">
+                <!-- Ícone Sol (para modo claro) -->
+                <svg class="w-5 h-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                
+                <!-- Ícone Lua (para modo escuro) -->
+                <svg class="w-5 h-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+                <span class="sr-only">Alternar modo escuro</span>
+                </a>
 
                 <!-- Hub de Acessibilidade Desktop -->
                 <div class="relative">
@@ -942,149 +953,167 @@ document.addEventListener('DOMContentLoaded', function() {
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Header Scroll Effect
-            const header = document.querySelector('.main-header');
-            const mobileNav = document.querySelector('.mobile-nav');
-            let lastScroll = 0;
+    // Header Scroll Effect
+    const header = document.querySelector('.main-header');
+    const mobileNav = document.querySelector('.mobile-nav');
+    let lastScroll = 0;
 
-            window.addEventListener('scroll', () => {
-                const currentScroll = window.pageYOffset;
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
 
-                if (currentScroll > lastScroll && currentScroll > 100) {
-                    header.classList.add('scrolled');
-                    mobileNav.style.transform = 'translate(-50%, 100%)';
-                } else {
-                    header.classList.remove('scrolled');
-                    mobileNav.style.transform = 'translate(-50%, 0)';
-                }
+        if (currentScroll > lastScroll && currentScroll > 100) {
+            header.classList.add('scrolled');
+            mobileNav.style.transform = 'translate(-50%, 100%)';
+        } else {
+            header.classList.remove('scrolled');
+            mobileNav.style.transform = 'translate(-50%, 0)';
+        }
 
-                lastScroll = currentScroll;
-            });
+        lastScroll = currentScroll;
+    });
 
-            // Search Functionality
-            const searchInput = document.getElementById('search-input');
-            const appCards = document.querySelectorAll('.app-card');
+    // Dark Mode Toggle
+    const darkModeToggle = document.querySelector('[role="switch"]'); // Adicione role="switch" ao seu botão
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    // Função para atualizar o modo escuro
+    function updateDarkMode(isDark) {
+        if (isDark) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    }
 
-            searchInput.addEventListener('input', function (e) {
-                const searchTerm = e.target.value.toLowerCase();
+    // Verificar preferência salva ou do sistema
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        updateDarkMode(savedTheme === 'dark');
+    } else {
+        updateDarkMode(prefersDarkScheme.matches);
+    }
 
-                appCards.forEach(card => {
-                    const appName = card.querySelector('.app-name').textContent.toLowerCase();
-                    const category = card.querySelector('.category-tag').textContent.toLowerCase();
+    // Listener para mudanças no botão
+    darkModeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
 
-                    if (appName.includes(searchTerm) || category.includes(searchTerm)) {
-                        card.style.display = 'block';
-                        card.style.animation = 'fadeIn 0.3s ease';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
+    // Listener para mudanças nas preferências do sistema
+    prefersDarkScheme.addListener((e) => {
+        if (!localStorage.getItem('theme')) {
+            updateDarkMode(e.matches);
+        }
+    });
 
-            // App Card Click Animation
-            appCards.forEach(card => {
-                card.addEventListener('click', function () {
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                });
-            });
+    // Search Functionality
+    const searchInput = document.getElementById('search-input');
+    const appCards = document.querySelectorAll('.app-card');
 
-            // Mobile Nav Animation
-            const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
-            mobileNavLinks.forEach(link => {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault();
+    searchInput.addEventListener('input', function (e) {
+        const searchTerm = e.target.value.toLowerCase();
 
-                    // Remove active class from all links
-                    mobileNavLinks.forEach(l => l.classList.remove('text-primary'));
+        appCards.forEach(card => {
+            const appName = card.querySelector('.app-name').textContent.toLowerCase();
+            const category = card.querySelector('.category-tag').textContent.toLowerCase();
 
-                    // Add active class to clicked link
-                    this.classList.add('text-primary');
-
-                    // Add click animation
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                });
-            });
-
-            // Animação de entrada dos cards
-            const animateCards = () => {
-                appCards.forEach((card, index) => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(20px)';
-
-                    setTimeout(() => {
-                        card.style.transition = 'all 0.3s ease-out';
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, index * 100);
-                });
-            };
-
-            // Executar animação quando a página carregar
-            animateCards();
-
-            // Adicionar efeito de hover nos cards
-            appCards.forEach(card => {
-                card.addEventListener('mouseenter', function () {
-                    const icon = this.querySelector('.icon-wrapper');
-                    icon.style.transform = 'scale(1.1) rotate(5deg)';
-                });
-
-                card.addEventListener('mouseleave', function () {
-                    const icon = this.querySelector('.icon-wrapper');
-                    icon.style.transform = 'scale(1) rotate(0)';
-                });
-            });
-
-            // Detectar modo escuro do sistema
-            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-            function handleDarkMode(e) {
-                if (e.matches) {
-                    document.body.classList.add('dark-mode');
-                } else {
-                    document.body.classList.remove('dark-mode');
-                }
+            if (appName.includes(searchTerm) || category.includes(searchTerm)) {
+                card.style.display = 'block';
+                card.style.animation = 'fadeIn 0.3s ease';
+            } else {
+                card.style.display = 'none';
             }
-
-            prefersDarkScheme.addListener(handleDarkMode);
-            handleDarkMode(prefersDarkScheme);
-
-            // Smooth scroll para links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-
-            // Adicionar indicador de loading
-            const showLoading = () => {
-                const loading = document.createElement('div');
-                loading.className = 'loading-indicator';
-                document.body.appendChild(loading);
-
-                setTimeout(() => {
-                    loading.remove();
-                }, 1000);
-            };
-
-            // Simular loading ao clicar nos cards
-            appCards.forEach(card => {
-                card.addEventListener('click', showLoading);
-            });
         });
+    });
+
+    // App Card Click Animation
+    appCards.forEach(card => {
+        card.addEventListener('click', function () {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+    });
+
+    // Mobile Nav Animation
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            mobileNavLinks.forEach(l => l.classList.remove('text-primary'));
+            this.classList.add('text-primary');
+
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+    });
+
+    // Animação de entrada dos cards
+    const animateCards = () => {
+        appCards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                card.style.transition = 'all 0.3s ease-out';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+    };
+
+    // Executar animação quando a página carregar
+    animateCards();
+
+    // Adicionar efeito de hover nos cards
+    appCards.forEach(card => {
+        card.addEventListener('mouseenter', function () {
+            const icon = this.querySelector('.icon-wrapper');
+            icon.style.transform = 'scale(1.1) rotate(5deg)';
+        });
+
+        card.addEventListener('mouseleave', function () {
+            const icon = this.querySelector('.icon-wrapper');
+            icon.style.transform = 'scale(1) rotate(0)';
+        });
+    });
+
+    // Smooth scroll para links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Adicionar indicador de loading
+    const showLoading = () => {
+        const loading = document.createElement('div');
+        loading.className = 'loading-indicator';
+        document.body.appendChild(loading);
+
+        setTimeout(() => {
+            loading.remove();
+        }, 1000);
+    };
+
+    // Simular loading ao clicar nos cards
+    appCards.forEach(card => {
+        card.addEventListener('click', showLoading);
+    });
+});
     </script>
 </body>
 
