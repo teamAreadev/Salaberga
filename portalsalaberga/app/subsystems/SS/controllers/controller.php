@@ -1,21 +1,11 @@
 <?php
-//cadastro
 
 function virg($num)
 {
     if (strpos($num, ',') !== false) {
         $num = str_replace(',', '.', $num);
     }
-    return floatval($num); // Converte para float
-}
-
-function calcularMediaSemReligiao($notas) {
-    $notas = array_filter($notas, function($nota) {
-        return $nota !== '' && $nota !== null && $nota > 0;
-    });
-    $soma = array_sum($notas);
-    $count = count($notas);
-    return $count > 0 ? $soma / $count : 0;
+    return floatval($num);
 }
 
 //Lógica para POST Pcd
@@ -39,10 +29,10 @@ switch ($_POST['curso']) {
         break;
     case 'Administração':
         $c1 = 3;
-        break;
+        break; 
     case 'Edificações':
         $c1 = 4;
-        break;
+        break; 
 }
 
 //Lógica para o Post Escola
@@ -203,34 +193,43 @@ if($d == 0){
     $ef = ($ef6 + $ef7 + $ef8 + $ef9) / $d;
 }
 
-// Cálculo da média geral
-$notasGerais = array(
-    ($lp6 + $lp7 + $lp8 + $lp9) / 4,
-    ($ar6 + $ar7 + $ar8 + $ar9) / 4,
-    ($li6 + $li7 + $li8 + $li9) / 4,
-    ($ma6 + $ma7 + $ma8 + $ma9) / 4,
-    ($ci6 + $ci7 + $ci8 + $ci9) / 4,
-    ($ge6 + $ge7 + $ge8 + $ge9) / 4,
-    ($hi6 + $hi7 + $hi8 + $hi9) / 4
-);
+// Organiza as notas em um array associativo
+$notasGerais = [
+    'portugues' => ($lp6 + $lp7 + $lp8 + $lp9) / 4,
+    'ingles' => ($li6 + $li7 + $li8 + $li9) / 4,
+    'matematica' => ($ma6 + $ma7 + $ma8 + $ma9) / 4,
+    'ciencias' => ($ci6 + $ci7 + $ci8 + $ci9) / 4,
+    'geografia' => ($ge6 + $ge7 + $ge8 + $ge9) / 4,
+    'historia' => ($hi6 + $hi7 + $hi8 + $hi9) / 4,
+    'artes' => ($ar6 + $ar7 + $ar8 + $ar9) / 4,
+    'religiao' => ($re6 + $re7 + $re8 + $re9) / 4
+];
 
-// Adiciona Educação Física se não for zero
 if ($ef != 0) {
-    $notasGerais[] = $ef;
+    $notasGerais['educacao_fisica'] = $ef;
 }
 
-// Adiciona Religião se todas as notas de Religião não forem vazias
-if ($re6 > 0 && $re7 > 0 && $re8 > 0 && $re9 > 0) {
-    $notasGerais[] = ($re6 + $re7 + $re8 + $re9) / 4;
-}
+// Filtra as notas, removendo Artes e Religião se necessário
+$notasParaMedia = array_filter($notasGerais, function($nota, $materia) {
+    if ($materia === 'artes') {
+        $temTodasNotas = $_POST['a6'] !== '' && $_POST['a7'] !== '' && $_POST['a8'] !== '' && $_POST['a9'] !== '';
+        return $temTodasNotas && $nota > 0;
+    }
+    if ($materia === 'religiao') {
+        $temTodasNotas = $_POST['r6'] !== '' && $_POST['r7'] !== '' && $_POST['r8'] !== '' && $_POST['r9'] !== '';
+        return $temTodasNotas && $nota > 0;
+    }
+    return true; // mantém todas as outras matérias
+}, ARRAY_FILTER_USE_BOTH);
 
-$media = calcularMediaSemReligiao($notasGerais);
+// Calcula a média final
+$media = array_sum($notasParaMedia) / count($notasParaMedia);
 
 require_once('../models/model.php');
 if ($ef == 0) {
-    $test = cadastrar2($nome, $c1, $c2, $dn, $lp9, $ar9, $li9, $ma9, $ci9, $ge9, $hi9, $re9, $bairro, $publica, $pcd, $media);
+    $test = cadastrar2($nome, $c1, $c2, $dn, $notasGerais['portugues'], $notasGerais['artes'], $notasGerais['ingles'], $notasGerais['matematica'], $notasGerais['ciencias'], $notasGerais['geografia'], $notasGerais['historias'], $notasGerais['religiao'], $bairro, $publica, $pcd, $media);
 } else {
-    $test = cadastrar($nome, $c1, $c2, $dn, $lp9, $ar9, $ef, $li9, $ma9, $ci9, $ge9, $hi9, $re9, $bairro, $publica, $pcd, $media);
+    $test = cadastrar($nome, $c1, $c2, $dn, $notasGerais['portugues'], $notasGerais['artes'], $ef, $notasGerais['ingles'], $notasGerais['matematica'], $notasGerais['ciencias'], $notasGerais['geografia'], $notasGerais['historia'], $notasGerais['religiao'], $bairro, $publica, $pcd, $media);
 }
 
 switch ($test) {

@@ -15,13 +15,13 @@ function classificados($curso)
             $nome_curso = 'ENFERMAGEM';
             break;
         case 2:
-            $nome_curso = 'INFORMATICA';
+            $nome_curso = 'INFORMÁTICA';
             break;
         case 3:
-            $nome_curso = 'ADMINISTRACAO';
+            $nome_curso = 'ADMINISTRAÇÃO';
             break;
         case 4:
-            $nome_curso = 'EDIFICACAO';
+            $nome_curso = 'EDIFICAÇÕES';
             break;
     }
 
@@ -31,21 +31,25 @@ function classificados($curso)
     // Cabeçalho com larguras ajustadas
     $pdf->Image('../assets/images/logo.png', 8, 8, 15, 0, 'PNG');
     $pdf->SetFont('Arial', 'B', 25);
-    $pdf->Cell(185, 10, ('CLASSIFICADOS ' . $nome_curso), 0, 1, 'C');
+    $pdf->Cell(185, 10, utf8_decode('CLASSIFICADOS'), 0, 1, 'C');
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(185, 5, utf8_decode(" - ".$nome_curso." - "), 0, 1, 'C');
     $pdf->SetFont('Arial', 'B', 8);
     $pdf->Cell(0, 10, ('PCD = PESSOA COM DEFICIENCIA | COTISTA = INCLUSO NA COTA DO BAIRRO | AC = AMPLA CONCORRENCIA'), 0, 1, 'C');
     $pdf->SetFont('Arial', 'b', 12);
     $pdf->Cell(185, 10, '', 0, 1, 'C');
 
-    //ac_publica
+    //PUBLICA - AC
     $stmtSelect_ac_publica = $conexao->prepare("
-    SELECT candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd, nota.media
+    SELECT DISTINCT candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd, nota.media
     FROM candidato 
     INNER JOIN nota ON nota.candidato_id_candidato = candidato.id_candidato 
-    AND candidato.publica = 1 
     AND candidato.id_curso1_fk = :curso
-    AND  candidato.bairro = 0 
+   
+    AND candidato.publica = 1 
     AND candidato.pcd = 0 
+    AND candidato.bairro = 0
+
     ORDER BY nota.media DESC,
     candidato.data_nascimento DESC,
     nota.l_portuguesa DESC,
@@ -85,13 +89,13 @@ function classificados($curso)
                 $curso = ('ENFERMAGEM');
                 break;
             case 2:
-                $curso = ('INFORMATICA');
+                $curso = ('INFORMÁTICA');
                 break;
             case 3:
-                $curso = ('ADMINISTRACAO');
+                $curso = ('ADMINISTRAÇÃO');
                 break;
             case 4:
-                $curso = ('EDIFICACOES');
+                $curso = ('EDIFICAÇÕES');
                 break;
             default:
                 $curso = ('Não definido');
@@ -116,8 +120,8 @@ function classificados($curso)
 
         // Imprimir linha no PDF
         $pdf->Cell(10, 7, sprintf("%03d", $classificacao), 1, 0, 'C', true);
-        $pdf->Cell(90, 7, strToUpper(($row['nome'])), 1, 0, 'L', true);
-        $pdf->Cell(32, 7, $curso, 1, 0, 'L', true);
+        $pdf->Cell(90, 7, strToUpper(utf8_decode($row['nome'])), 1, 0, 'L', true);
+        $pdf->Cell(32, 7, utf8_decode($curso), 1, 0, 'L', true);
         $pdf->Cell(18, 7, $escola, 1, 0, 'L', true);
         $pdf->Cell(26, 7, $cota, 1, 0, 'L', true);
         $pdf->Cell(15, 7, number_format($row['media'], 2), 1, 1, 'C', true);
@@ -126,15 +130,17 @@ function classificados($curso)
     }
     $pdf->Ln(20);
 
-    //bairro_publica
+    //PUBLICA - COTA
     $stmtSelect_bairro_publica = $conexao->prepare("
-    SELECT candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd, nota.media
+    SELECT DISTINCT candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd, nota.media
     FROM candidato 
     INNER JOIN nota ON nota.candidato_id_candidato = candidato.id_candidato 
-    AND candidato.publica = 1 
     AND candidato.id_curso1_fk = :curso2
-    AND  candidato.bairro = 1 
+
+    AND candidato.publica = 1 
     AND candidato.pcd = 0 
+    AND candidato.bairro = 1
+
     ORDER BY nota.media DESC,
     candidato.data_nascimento DESC,
     nota.l_portuguesa DESC,
@@ -174,13 +180,13 @@ function classificados($curso)
                 $curso = ('ENFERMAGEM');
                 break;
             case 2:
-                $curso = ('INFORMATICA');
+                $curso = ('INFORMÁTICA');
                 break;
             case 3:
-                $curso = ('ADMINISTRACAO');
+                $curso = ('ADMINISTRAÇÃO');
                 break;
             case 4:
-                $curso = ('EDIFICACOES');
+                $curso = ('EDIFICAÇÕES');
                 break;
             default:
                 $curso = ('Não definido');
@@ -205,8 +211,8 @@ function classificados($curso)
 
         // Imprimir linha no PDF
         $pdf->Cell(10, 7, sprintf("%03d", $classificacao), 1, 0, 'C', true);
-        $pdf->Cell(90, 7, strToUpper(($row['nome'])), 1, 0, 'L', true);
-        $pdf->Cell(32, 7, $curso, 1, 0, 'L', true);
+        $pdf->Cell(90, 7, strToUpper(utf8_decode($row['nome'])), 1, 0, 'L', true);
+        $pdf->Cell(32, 7, utf8_decode($curso), 1, 0, 'L', true);
         $pdf->Cell(18, 7, $escola, 1, 0, 'L', true);
         $pdf->Cell(26, 7, $cota, 1, 0, 'L', true);
         $pdf->Cell(15, 7, number_format($row['media'], 2), 1, 1, 'C', true);
@@ -215,13 +221,15 @@ function classificados($curso)
     }
     $pdf->Ln(20);
 
-    //pcd
+    //PCD - COTA
     $stmtSelect_pcd_publica = $conexao->prepare("
-    SELECT candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd, nota.media
+    SELECT DISTINCT candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd, nota.media
     FROM candidato 
     INNER JOIN nota ON nota.candidato_id_candidato = candidato.id_candidato 
     AND candidato.id_curso1_fk = :curso3
+
     AND candidato.pcd = 1 
+
     ORDER BY nota.media DESC,
     candidato.data_nascimento DESC,
     nota.l_portuguesa DESC,
@@ -262,13 +270,13 @@ function classificados($curso)
                 $curso = ('ENFERMAGEM');
                 break;
             case 2:
-                $curso = ('INFORMATICA');
+                $curso = ('INFORMÁTICA');
                 break;
             case 3:
-                $curso = ('ADMINISTRACAO');
+                $curso = ('ADMINISTRAÇÃO');
                 break;
             case 4:
-                $curso = ('EDIFICACOES');
+                $curso = ('EDIFICAÇÕES');
                 break;
             default:
                 $curso = ('Não definido');
@@ -293,8 +301,8 @@ function classificados($curso)
 
         // Imprimir linha no PDF
         $pdf->Cell(10, 7, sprintf("%03d", $classificacao), 1, 0, 'C', true);
-        $pdf->Cell(90, 7, strToUpper(($row['nome'])), 1, 0, 'L', true);
-        $pdf->Cell(32, 7, $curso, 1, 0, 'L', true);
+        $pdf->Cell(90, 7, strToUpper(utf8_decode($row['nome'])), 1, 0, 'L', true);
+        $pdf->Cell(32, 7, utf8_decode($curso), 1, 0, 'L', true);
         $pdf->Cell(18, 7, $escola, 1, 0, 'L', true);
         $pdf->Cell(26, 7, $cota, 1, 0, 'L', true);
         $pdf->Cell(15, 7, number_format($row['media'], 2), 1, 1, 'C', true);
@@ -303,15 +311,17 @@ function classificados($curso)
     }
     $pdf->Ln(20);
 
-    //ac_privada
+    //PRIVADA - AC
     $stmtSelect_ac_privada = $conexao->prepare("
-    SELECT candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd, nota.media
+    SELECT DISTINCT candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd, nota.media
     FROM candidato 
     INNER JOIN nota ON nota.candidato_id_candidato = candidato.id_candidato 
-    AND candidato.publica = 0 
     AND candidato.id_curso1_fk = :curso4 
-    AND  candidato.bairro = 0 
+
+    AND candidato.publica = 0 
     AND candidato.pcd = 0 
+    AND candidato.bairro = 0
+
     ORDER BY nota.media DESC,
     candidato.data_nascimento DESC,
     nota.l_portuguesa DESC,
@@ -352,13 +362,13 @@ function classificados($curso)
                 $curso = ('ENFERMAGEM');
                 break;
             case 2:
-                $curso = ('INFORMATICA');
+                $curso = ('INFORMÁTICA');
                 break;
             case 3:
-                $curso = ('ADMINISTRACAO');
+                $curso = ('ADMINISTRAÇÃO');
                 break;
             case 4:
-                $curso = ('EDIFICACOES');
+                $curso = ('EDIFICAÇÕES');
                 break;
             default:
                 $curso = ('Não definido');
@@ -383,8 +393,8 @@ function classificados($curso)
 
         // Imprimir linha no PDF
         $pdf->Cell(10, 7, sprintf("%03d", $classificacao), 1, 0, 'C', true);
-        $pdf->Cell(90, 7, strToUpper(($row['nome'])), 1, 0, 'L', true);
-        $pdf->Cell(32, 7, $curso, 1, 0, 'L', true);
+        $pdf->Cell(90, 7, strToUpper(utf8_decode($row['nome'])), 1, 0, 'L', true);
+        $pdf->Cell(32, 7, utf8_decode($curso), 1, 0, 'L', true);
         $pdf->Cell(18, 7, $escola, 1, 0, 'L', true);
         $pdf->Cell(26, 7, $cota, 1, 0, 'L', true);
         $pdf->Cell(15, 7, number_format($row['media'], 2), 1, 1, 'C', true);
@@ -393,15 +403,17 @@ function classificados($curso)
     }
     $pdf->Ln(20);
 
-    //bairro_privada
+    //PRIVADA - COTA
     $stmtSelect_bairro_privada = $conexao->prepare("
-    SELECT candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd, nota.media
+    SELECT DISTINCT candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd, nota.media
     FROM candidato 
     INNER JOIN nota ON nota.candidato_id_candidato = candidato.id_candidato 
-    AND candidato.publica = 0 
     AND candidato.id_curso1_fk = :curso5
-    AND  candidato.bairro = 1 
+   
+    AND candidato.publica = 0
     AND candidato.pcd = 0 
+    AND candidato.bairro = 1
+
     ORDER BY nota.media DESC,
     candidato.data_nascimento DESC,
     nota.l_portuguesa DESC,
@@ -442,13 +454,13 @@ function classificados($curso)
                 $curso = ('ENFERMAGEM');
                 break;
             case 2:
-                $curso = ('INFORMATICA');
+                $curso = ('INFORMÁTICA');
                 break;
             case 3:
-                $curso = ('ADMINISTRACAO');
+                $curso = ('ADMINISTRAÇÃO');
                 break;
             case 4:
-                $curso = ('EDIFICACOES');
+                $curso = ('EDIFICAÇÕES');
                 break;
             default:
                 $curso = ('Não definido');
@@ -473,8 +485,8 @@ function classificados($curso)
 
         // Imprimir linha no PDF
         $pdf->Cell(10, 7, sprintf("%03d", $classificacao), 1, 0, 'C', true);
-        $pdf->Cell(90, 7, strToUpper(($row['nome'])), 1, 0, 'L', true);
-        $pdf->Cell(32, 7, $curso, 1, 0, 'L', true);
+        $pdf->Cell(90, 7, strToUpper(utf8_decode($row['nome'])), 1, 0, 'L', true);
+        $pdf->Cell(32, 7, utf8_decode($curso), 1, 0, 'L', true);
         $pdf->Cell(18, 7, $escola, 1, 0, 'L', true);
         $pdf->Cell(26, 7, $cota, 1, 0, 'L', true);
         $pdf->Cell(15, 7, number_format($row['media'], 2), 1, 1, 'C', true);

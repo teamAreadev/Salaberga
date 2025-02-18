@@ -48,7 +48,7 @@ function usuarios()
 
         // Imprimir linha no PDF
         $pdf->Cell(10, 7, $row['id'], 1, 0, 'C', true);
-        $pdf->Cell(100, 7, strtoupper($row['nome_user']), 1, 0, 'L', true);
+        $pdf->Cell(100, 7, strtoupper(utf8_decode($row['nome_user'])), 1, 0, 'L', true);
         $pdf->Cell(60, 7, $row['email'], 1, 0, 'L', true);
         $pdf->Cell(20, 7, $status, 1, 1, 'L', true);
     }

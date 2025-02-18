@@ -1,6 +1,16 @@
 <?php
 session_start();
 
+
+if (isset($_SESSION['refresh']) && $_SESSION['refresh'] == 0) {
+    header("Cache-Control: no-cache, no-store, must-revalidate");
+    header("Pragma: no-cache");
+    header("Expires: 0");
+    header("refresh:0");
+    $_SESSION['refresh'] = 1;
+}
+
+
 // Pega o nome do arquivo atual
 $current_page = basename($_SERVER['PHP_SELF']);
 
@@ -24,7 +34,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] && $_SESSION['status'] == 0)
     }
 } else if (!isset($_SESSION['login']) || !$_SESSION['login']) {
     if (!isCurrentPage('index.php')) {
-        header('Location: ../../../../main/views/autenticacao/login.php'); // Corrigido para um nível acima
+        header('Location: ../../../main/views/autenticacao/login.php'); // Corrigido para um nível acima
         exit();
     }
 }

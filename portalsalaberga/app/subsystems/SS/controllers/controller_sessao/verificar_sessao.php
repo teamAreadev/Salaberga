@@ -6,7 +6,7 @@ function verificarSessao($tempo_limite = 600) {
         if (time() - $_SESSION['ultimo_acesso'] > $tempo_limite) {
             session_unset();
             session_destroy();
-            header('Location: ../../../main/views/autenticação/login.php');
+            header('Location: ../../../main/views/autenticacao/login.php');
             exit();
         }
     }
