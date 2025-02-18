@@ -2,6 +2,7 @@
 require_once('../controllers/controller_sessao/autenticar_sessao.php');
 require_once('../controllers/controller_sessao/verificar_sessao.php');
 verificarSessao(600);
+
 ?>
 
 <!DOCTYPE html>
@@ -468,7 +469,7 @@ verificarSessao(600);
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12v4m0 0l4 4m-4-4l-4 4m-4-4v-4m0 0l-4-4m4 4l4-4" />
                                     </svg>
-                                    Inserir Usuário
+                                    Cadastrar Usuário
                                 </button>
                             </li>
 
@@ -477,7 +478,7 @@ verificarSessao(600);
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                     </svg>
-                                    Atualizar
+                                    Atualizar nota
                                 </button>
                             </li>
 
@@ -515,14 +516,14 @@ verificarSessao(600);
                                 Excluir candidato
                             </button>
                             </li>
-                            <li>  
-                                <a href="../views/Excluir_usuario.php" class="w-full flex items-center px-4 py-3 text-base rounded-full border-2 border-pink-600 text-pink-600 font-semibold transition-all duration-300 ease-in-out hover:bg-pink-600 hover:text-ceara-white hover:shadow-md transform hover:scale-100 focus:outline-none focus:ring-2 focus:ring-pink-500">  
-                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                    Excluir usuário  
-                                </a>  
-                            </li>
+                            <li>
+                            <button onclick="window.location.href='../views/Excluir_usuario.php'" class="w-full flex items-center px-4 py-3 text-base rounded-full border-2 border-pink-600 text-pink-600 font-semibold transition-all duration-300 ease-in-out hover:bg-pink-600 hover:text-ceara-white hover:shadow-md transform hover:scale-100 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                Excluir usuário
+                            </button>
+                        </li>        
                     
                         </ul>
                     </div>

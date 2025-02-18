@@ -24,7 +24,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] && $_SESSION['status'] == 0)
     }
 } else if (!isset($_SESSION['login']) || !$_SESSION['login']) {
     if (!isCurrentPage('index.php')) {
-        header('Location: ../../../index.php'); // Corrigido para um nível acima
+        header('Location: ../../../../main/views/autenticacao/login.php'); // Corrigido para um nível acima
         exit();
     }
 }

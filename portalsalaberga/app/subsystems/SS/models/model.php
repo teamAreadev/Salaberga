@@ -15,7 +15,7 @@ function cadastrarUsuario($nomeC, $email, $senha, $status)
     } else {
 
         // Se o email não existe, procede com a inserção
-        $stmtInsert = $conexao->prepare('INSERT INTO usuario (nome, email, senha, status) VALUES (:nomeC, :email, MD5(:senha), :status)');
+        $stmtInsert = $conexao->prepare('INSERT INTO usuario (nome_user, email, senha, status) VALUES (:nomeC, :email, MD5(:senha), :status)');
 
         $stmtInsert->bindValue(':nomeC', $nomeC);
         $stmtInsert->bindValue(':email', $email);
@@ -331,14 +331,14 @@ function excluir_candidato($id_candidato)
 function excluir_usuario($nome)
 {
     require_once('../../config/connect.php');
-    $stmtCheck = $conexao->prepare("SELECT * FROM usuario WHERE nome = :nome");
+    $stmtCheck = $conexao->prepare("SELECT * FROM usuario WHERE nome_user = :nome");
     $stmtCheck->bindValue(':nome', $nome);
     $stmtCheck->execute();
     $row_count = $stmtCheck->rowCount();
 
     if ($row_count > 0) {
 
-        $stmt_excluir_usuario = $conexao->prepare("DELETE FROM usuario WHERE nome = :nome1");
+        $stmt_excluir_usuario = $conexao->prepare("DELETE FROM usuario WHERE nome_user = :nome1");
         $stmt_excluir_usuario->bindValue(':nome1', $nome);
         $stmt_excluir_usuario->execute();
 

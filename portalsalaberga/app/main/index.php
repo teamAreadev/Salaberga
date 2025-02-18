@@ -471,26 +471,23 @@
                                         <!-- Seta -->
                                         <i class="fas fa-arrow-right text-ceara-orange opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-200"></i>
                                     </a>
-
-                                    <!-- Link Escolas Parceiras -->
+                                    <!--
                                     <a href="../escolas_parceiras/index.php"
                                         @click="isOpen = false"
                                         class="group flex items-center px-4 py-3 hover:bg-gradient-to-r hover:from-ceara-green/5 hover:to-ceara-orange/5 transition-all duration-300">
-                                        <!-- Ícone -->
                                         <div class="flex-shrink-0 mr-3">
                                             <div class="w-10 h-10 flex items-center justify-center rounded-full bg-ceara-green/10 group-hover:bg-ceara-green/20 transition-all duration-200">
                                                 <i class="fas fa-handshake text-ceara-green  duration-200"></i>
                                             </div>
                                         </div>
-                                        <!-- Texto -->
+                                        
                                         <div class="flex-1">
                                             <p class="text-sm font-medium text-gray-800 group-hover:text-ceara-green transition-colors duration-200">
                                                 Escolas Parceiras
                                             </p>
                                             <p class="text-xs text-gray-500">Conheça nossas parcerias</p>
                                         </div>
-                                        <!-- Seta -->
-                                        <i class="fas fa-arrow-right text-ceara-orange opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-200"></i>
+                                        -->
                                     </a>
                                 </div>
                             </div>
@@ -609,7 +606,7 @@
                             class="pl-13 space-y-4">
 
                             <!-- Salaberga -->
-                            <a href="../main/views/autenticação/precadastro.php"
+                            <a href="../main/views/autenticacao/login.php"
                                 @click="mobileMenuOpen = false"
                                 class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
                                 <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
