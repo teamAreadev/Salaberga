@@ -1102,31 +1102,33 @@ function handleAvancar() {
     }
 }
 
-
+// Function to handle closing the modal
 function hideBimestreModal() {
     document.getElementById('bimestreModal').classList.add('hidden');
 }
-
 function maskNota(input) {
+    // Remove tudo exceto números e ponto
     let value = input.value.replace(/[^0-9.]/g, '');
-
+    
+    // Remove pontos extras (mantém apenas o primeiro)
     const parts = value.split('.');
     if (parts.length > 2) {
         value = parts[0] + '.' + parts.slice(1).join('');
     }
 
-    // Special handling for 101-110
-    if (['101', '102', '103', '104', '105', '106', '107', '108', '109', '110'].includes(value)) {
-        value = '10';
+    // Caso especial para 100
+    if (value === '100' || value === '1.00') {
+        value = '10.0';
         input.value = value;
         return;
     }
 
+    // Se não tiver ponto e tiver 2 ou mais dígitos, insere o ponto após o primeiro dígito
     if (!value.includes('.') && value.length >= 2) {
         value = value.slice(0, 1) + '.' + value.slice(1);
     }
 
-    // Ensure maximum 2 decimal places
+    // Garante que temos no máximo 2 casas decimais
     if (value.includes('.')) {
         const decimals = value.split('.')[1];
         if (decimals.length > 2) {
@@ -1134,20 +1136,22 @@ function maskNota(input) {
         }
     }
 
-    if (input.value === '10') {
-        input.value = '10';
-        return;
-    }
+    // Caso especial para 10
+if (input.value === '10') {
+    input.value = '10';
+    return;
+}
 
+    // Converte para número e verifica se é maior que 10
     const numericValue = parseFloat(value);
     if (numericValue > 10) {
+        // Pega apenas o primeiro dígito e adiciona .0
         value = value[0] + '.0';
     }
 
+    // Atualiza o valor no input
     input.value = value;
 }
-
-
 function showBimestreModal() {
     document.getElementById('bimestreModal').classList.remove('hidden');
 }
