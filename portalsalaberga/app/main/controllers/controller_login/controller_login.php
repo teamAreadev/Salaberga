@@ -19,34 +19,28 @@ if (isset($_GET['sair'])) {
     if ($recsenha !== null) {
         $_SESSION['recsenha'] = $recsenha;
     }
-    header('Location: ../../views/autenticação/login.php');
+    header('Location: ../../views/autenticacao/login.php');
     exit();
 }
-if (isset($_POST['login']) && isset($_POST['Email']) && isset($_POST['Password']) && !empty($_POST['Email']) && !empty($_POST['Password'])) {
 
-    $email = $_POST['Email'];
-    $senha = $_POST['Password'];
+if (isset($_POST['login']) && isset($_POST['email']) && isset($_POST['senha']) && !empty($_POST['email']) && !empty($_POST['senha'])) {
+
+    $email = $_POST['email'];
+    $senha = $_POST['senha'];
     require_once('../../models/model_dados.php');
     $login = login($email, $senha);
 
-    if ($login == 0) {
+    if ($login != 4) {
 
-        header('location:../../../subsystems/SS/index.php?');
-        exit();
-    } else if ($login == 1) {
-
-        header('location:../../../subsystems/SS/index.php?');
-        exit();
-    } else if ($login == 2) {
-
-        header('Location: ../../views/autenticação/login.php?login=erro');
+        header('location:../../views/subsytem/subsistema.php?');
         exit();
     } else {
-
-        header('Location: ../../views/autenticação/login.php');
+        header('Location: ../../views/autenticacao/login.php?login=erro');
         exit();
-    }
+    } 
 } else {
-    header('Location: ../../views/autenticação/login.php?login=erro');
+    header('Location: ../../views/autenticacao/login.php?login=erro');
     exit();
-}
+} 
+
+?>

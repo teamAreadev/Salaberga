@@ -440,7 +440,7 @@ verificarSessao(60);
 
                 <nav class="hidden md:flex items-center gap-5">
                     <a href="../../" class="nav-link">Início</a>
-                    <a href="#" class="nav-link">Sair</a>
+                    <a href="../../controllers/controller_sessao/autenticar_sessao.php?sair" class="nav-link">Sair</a>
                     <button id="darkModeToggle"
                         class="inline-flex items-center justify-center p-2 rounded-lg transition-colors" role="switch"
                         aria-label="Alternar modo escuro">
@@ -554,7 +554,7 @@ verificarSessao(60);
                 <i class="fa-solid fa-home text-xl"></i>
                 <span class="text-xs">Início</span>
             </a>
-            <a href="#" class="nav-link">
+            <a href="../../controllers/controller_sessao/autenticar_sessao.php?sair" class="nav-link">
     <i class="fa-solid fa-sign-out-alt text-xl"></i>
     <span class="text-xs">Sair</span>
 </a>

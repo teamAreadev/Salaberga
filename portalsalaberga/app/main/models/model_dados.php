@@ -82,7 +82,7 @@ function cadastrar($nome, $cpf, $email, $senha)
                 $stmtInsert->bindParam(':id_usuario', $result[0]['id']);
                 $stmtInsert->execute();
 
-                header('Location: ../../views/autenticação/login.php');
+                header('Location: ../../views/autenticacao/login.php');
                 exit();
             } else {
                 // usuário já existe
@@ -100,67 +100,62 @@ function cadastrar($nome, $cpf, $email, $senha)
     }
 }
 
-function login($email, $senha)
-{
+function login($email, $senha) {
     require_once('../../config/Database.php');
-    /*try {
-
-        // Primeiro, fazer o SELECT para verificar
-        $querySelect = "SELECT id, email, senha, tipo FROM usuario WHERE email = :email AND senha = MD5(:senha)";
+    try {
+        // Prepara e executa a consulta para verificar o usuário
+        $querySelect = "SELECT id, email, senha, status FROM usuario WHERE email = :email AND senha = MD5(:senha)";
         $stmtSelect = $conexao->prepare($querySelect);
         $stmtSelect->bindParam(':email', $email);
         $stmtSelect->bindParam(':senha', $senha);
         $stmtSelect->execute();
         $result = $stmtSelect->fetch(PDO::FETCH_ASSOC);
-    
-        $querySelectC = "SELECT telefone, nome FROM cliente WHERE id_usuario = '{$result['id']}'";
-        $stmtSelectC = $conexao->query($querySelectC);
-        $resultC = $stmtSelectC->fetch(PDO::FETCH_ASSOC);
-        
-        if (!empty($result) && $result['tipo'] == 'aluno') {
-            $_SESSION['Tipo'] = $result['tipo'];
-            $_SESSION['Telefone'] = $resultC['telefone'];
-            $_SESSION['Nome'] = $resultC['nome'];
+
+        if (!empty($result)) {
+            // Consulta para obter informações adicionais do cliente
+            $querySelectC = "SELECT telefone, nome FROM cliente WHERE id_usuario = :id_usuario";
+            $stmtSelectC = $conexao->prepare($querySelectC);
+            $stmtSelectC->bindParam(':id_usuario', $result['id']);
+            $stmtSelectC->execute();
+            $resultC = $stmtSelectC->fetch(PDO::FETCH_ASSOC);
+
+            // Configura as variáveis de sessão
             $_SESSION['login'] = true;
             $_SESSION['Email'] = $email;
-            $_SESSION['aluno'] = true;
-            header('Location: ../controller_login/controller_login.php?login=a');
-            exit();
-        } else if (!empty($result) && $result['tipo'] == 'professor') {
             $_SESSION['Telefone'] = $resultC['telefone'];
             $_SESSION['Nome'] = $resultC['nome'];
-            $_SESSION['login'] = true;
-            $_SESSION['Email'] = $email;
-            $_SESSION['professor'] = true;
-            header('Location: ../controller_login/controller_login.php?login=p');
+
+            // Redireciona com base no tipo de usuário
+            switch ($result['status']) {
+                case 'aluno':
+                    $_SESSION['status'] = 0;
+                    return 0;
+                    break;
+                case 'professor':
+                    $_SESSION['status'] = 1;
+                    return 1;
+                    break;
+                case 'adm':
+                    $_SESSION['status'] = 2;
+                    return 2;
+                    break;    
+                case 'egresso':
+                    $_SESSION['status'] = 3;
+                    return 3;
+                    break;         
+                default:
+                    # code...
+                    break;
+            
+            }
             exit();
-        } else if (empty($result)) {
+        } else {
             header('Location: ../controller_login/controller_login.php?login=erro');
             exit();
         }
     } catch (PDOException $e) {
         error_log("Erro no banco de dados: " . $e->getMessage());
         echo "Erro no banco de dados: " . $e->getMessage();
-    }*/
-
-    //verificando se os dados estão no sistema 
-    $result_logar = $conexao->prepare("SELECT * FROM usuario WHERE email = :email AND senha = MD5(:senha)");
-    $result_logar->bindValue(':email', $email);
-    $result_logar->bindValue(':senha', $senha);
-    $result_logar->execute();
-    $result = $result_logar->fetch(PDO::FETCH_ASSOC);
-
-
-    //se for o result_logar for maior que 0
-    if (!empty($result)) {
-
-        $_SESSION['login'] = true;
-        $_SESSION['status'] = $result['status'];
-
-        return $result['status'];
-    } else {
-
-        return $login = 2;
     }
 }
 
