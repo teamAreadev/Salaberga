@@ -313,7 +313,7 @@
             </div>
             <h2>Login</h2>
 
-            <form id="cadastroForm" action="../../../subsystems/SS/controllers/autentica.php" method="POST"><!--Colocar o arquivo de destino de acordo com a verificação de matricula-->
+            <form id="cadastroForm" action="../../controllers/controller_login/controller_login.php" method="POST"><!--Colocar o arquivo de destino de acordo com a verificação de matricula-->
 
                 <div class="input-group">
                     <input type="text" name="email" id="username" placeholder=" " required>

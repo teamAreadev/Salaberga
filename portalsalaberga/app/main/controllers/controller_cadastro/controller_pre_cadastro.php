@@ -1,11 +1,11 @@
 <?php
 
 if (isset($_GET['certo'])) {
-    header('location: ../../views/autenticação/cadastro.php');
+    header('location: ../../views/autenticacao/cadastro.php');
     exit();
 }
 if (isset($_GET['erro'])) {
-    header('location: ../../views/autenticação/precadastro.php?erro');
+    header('location: ../../views/autenticacao/precadastro.php?erro');
     exit();
 }
 
@@ -18,7 +18,7 @@ if (isset($_POST['pre_cadastro']) && isset($_POST['preemail']) && isset($_POST['
     pre_cadastro($email, $cpf);
 
 } else {
-    header('location:../../views/autenticação/precadastro.php');
+    header('location:../../views/autenticacao/precadastro.php');
     exit();
 }
 

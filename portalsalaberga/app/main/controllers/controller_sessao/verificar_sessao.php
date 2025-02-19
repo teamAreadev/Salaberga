@@ -6,7 +6,7 @@ function verificarSessaoSenha($tempo_limite = 10) {
         if (time() - $_SESSION['ultimo_acesso'] > $tempo_limite) {
             session_unset();
             session_destroy();
-            header("Location: ../../views/autenticação/login.php");
+            header("Location: ../../views/autenticacao/login.php");
             exit();
         }
     }
@@ -22,7 +22,7 @@ function verificarSessao($tempo_limite = 60) {
         if (time() - $_SESSION['ultimo_acesso'] > $tempo_limite) {
             session_unset();
             session_destroy();
-            header("Location: ../../views/autenticação/login.php");
+            header("Location: ../../views/autenticacao/login.php");
             exit();
         }
     }
