@@ -88,6 +88,7 @@
         .profile-image-container {
             position: relative;
             display: inline-block;
+
         }
 
         .profile-image-container::after {
@@ -95,7 +96,7 @@
             position: absolute;
             inset: -3px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #007A33, #FFA500);
+            border: 2px solid #007A33;
             z-index: -1;
             opacity: 0.5;
         }

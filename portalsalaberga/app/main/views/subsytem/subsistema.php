@@ -554,6 +554,10 @@ verificarSessao(60);
                 <i class="fa-solid fa-home text-xl"></i>
                 <span class="text-xs">Início</span>
             </a>
+            <a href="#" class="nav-link">
+    <i class="fa-solid fa-sign-out-alt text-xl"></i>
+    <span class="text-xs">Sair</span>
+</a>
 
             <div class="relative">
                 <button id="accessibilityBtnMobile" class="nav-link flex flex-col items-center">
@@ -562,18 +566,7 @@ verificarSessao(60);
                 </button>
 
                 <div id="accessibilityMenuMobile" class="menu-base bottom-24 hidden">
-                    <div class="px-4 py-2 border-b" style="color: #1a1a1a;">
-                        <span class="block text-sm font-semibold mb-2">Tamanho do Texto</span>
-                        <div class="flex gap-2">
-                            <button class="p-2 hover:bg-gray-100 rounded" aria-label="Diminuir tamanho do texto"><i
-                                    class="fa-solid fa-a"></i><b>-</b></button>
-                            <button class="p-2 hover:bg-gray-100 rounded" aria-label="Tamanho padrão do texto"><i
-                                    class="fa-solid fa-a"></i></button>
-                            <button class="p-2 hover:bg-gray-100 rounded" aria-label="Aumentar tamanho do texto"><i
-                                    class="fa-solid fa-a"></i><b>+</b></button>
-                        </div>
-                    </div>
-
+                   
                     <button class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
                         style="color: #1a1a1a;">
                         <i class="fa-solid fa-ear-listen"></i>
