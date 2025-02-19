@@ -535,13 +535,13 @@ verificarSessao(60);
 
                 <div class="md:hidden">
                     <div class="relative">
-                    <a href="../autenticacao/perfil.php">
-                        <img src="https://i.postimg.cc/m2d5f5L3/images-removebg-preview.png" alt="Perfil"
-                            class="w-10 h-10 rounded-full border-2 border-transparent hover:border-secondary transition-colors duration-300">
-                        <div
-                            class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white">
-                        </div>
-                    </a>
+                        <a href="../autenticacao/perfil.php">
+                            <img src="https://i.postimg.cc/m2d5f5L3/images-removebg-preview.png" alt="Perfil"
+                                class="w-10 h-10 rounded-full border-2 border-transparent hover:border-secondary transition-colors duration-300">
+                            <div
+                                class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white">
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -555,9 +555,9 @@ verificarSessao(60);
                 <span class="text-xs">Início</span>
             </a>
             <a href="../../controllers/controller_sessao/autenticar_sessao.php?sair" class="nav-link">
-    <i class="fa-solid fa-sign-out-alt text-xl"></i>
-    <span class="text-xs">Sair</span>
-</a>
+                <i class="fa-solid fa-sign-out-alt text-xl"></i>
+                <span class="text-xs">Sair</span>
+            </a>
 
             <div class="relative">
                 <button id="accessibilityBtnMobile" class="nav-link flex flex-col items-center">
@@ -566,7 +566,7 @@ verificarSessao(60);
                 </button>
 
                 <div id="accessibilityMenuMobile" class="menu-base bottom-24 hidden">
-                   
+
                     <button class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
                         style="color: #1a1a1a;">
                         <i class="fa-solid fa-ear-listen"></i>
@@ -664,10 +664,7 @@ verificarSessao(60);
     </style>
 
     <script>
-
-
-
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const darkModeToggle = document.getElementById('darkModeToggle');
             const darkModeToggleMobile = document.getElementById('darkModeToggleMobile');
             const sunIcon = darkModeToggle.querySelector('.sun-icon');
@@ -715,7 +712,7 @@ verificarSessao(60);
             });
 
             [darkModeToggle, darkModeToggleMobile].forEach(toggle => {
-                toggle.addEventListener('click', function () {
+                toggle.addEventListener('click', function() {
                     const isDark = !document.documentElement.classList.contains('dark');
                     updateDarkMode(isDark);
                 });
@@ -751,7 +748,7 @@ verificarSessao(60);
                 themeMenuDesktop?.classList.add('hidden');
             }
 
-            accessibilityBtnMobile?.addEventListener('click', function (e) {
+            accessibilityBtnMobile?.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const isHidden = accessibilityMenuMobile.classList.contains('hidden');
                 if (isHidden) {
@@ -763,19 +760,19 @@ verificarSessao(60);
                 }
             });
 
-            themeBtnMobile?.addEventListener('click', function (e) {
+            themeBtnMobile?.addEventListener('click', function(e) {
                 e.stopPropagation();
                 accessibilityMenuMobile.classList.add('hidden');
                 themeMenuMobile.classList.remove('hidden');
             });
 
-            backToMainMenu?.addEventListener('click', function (e) {
+            backToMainMenu?.addEventListener('click', function(e) {
                 e.stopPropagation();
                 themeMenuMobile.classList.add('hidden');
                 accessibilityMenuMobile.classList.remove('hidden');
             });
 
-            accessibilityBtnDesktop?.addEventListener('click', function (e) {
+            accessibilityBtnDesktop?.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const isHidden = accessibilityMenuDesktop.classList.contains('hidden');
                 if (isHidden) {
@@ -786,13 +783,13 @@ verificarSessao(60);
                 }
             });
 
-            themeBtnDesktop?.addEventListener('click', function (e) {
+            themeBtnDesktop?.addEventListener('click', function(e) {
                 e.stopPropagation();
                 accessibilityMenuDesktop.classList.add('hidden');
                 themeMenuDesktop.classList.remove('hidden');
             });
 
-            backToMainMenuDesktop?.addEventListener('click', function (e) {
+            backToMainMenuDesktop?.addEventListener('click', function(e) {
                 e.stopPropagation();
                 themeMenuDesktop.classList.add('hidden');
                 accessibilityMenuDesktop.classList.remove('hidden');
@@ -800,7 +797,7 @@ verificarSessao(60);
 
             menuOverlay?.addEventListener('click', closeAllMenus);
 
-            document.addEventListener('click', function (e) {
+            document.addEventListener('click', function(e) {
                 const isClickInsideAccessibilityMobile = accessibilityMenuMobile?.contains(e.target) || themeMenuMobile?.contains(e.target) || accessibilityBtnMobile?.contains(e.target);
                 const isClickInsideAccessibilityDesktop = accessibilityMenuDesktop?.contains(e.target) || themeMenuDesktop?.contains(e.target) || accessibilityBtnDesktop?.contains(e.target);
 
@@ -810,14 +807,14 @@ verificarSessao(60);
             });
 
             [accessibilityMenuMobile, themeMenuMobile, accessibilityMenuDesktop, themeMenuDesktop].forEach(menu => {
-                menu?.addEventListener('click', function (e) {
+                menu?.addEventListener('click', function(e) {
                     e.stopPropagation();
                 });
             });
 
             const themeButtons = document.querySelectorAll('[data-theme]');
             themeButtons.forEach(button => {
-                button.addEventListener('click', function () {
+                button.addEventListener('click', function() {
                     const theme = this.dataset.theme;
                     closeAllMenus();
                 });
@@ -844,7 +841,7 @@ verificarSessao(60);
             const searchInput = document.getElementById('search-input');
             const appCards = document.querySelectorAll('.app-card');
 
-            searchInput.addEventListener('input', function (e) {
+            searchInput.addEventListener('input', function(e) {
                 const searchTerm = e.target.value.toLowerCase();
 
                 appCards.forEach(card => {
@@ -861,7 +858,7 @@ verificarSessao(60);
             });
 
             appCards.forEach(card => {
-                card.addEventListener('click', function () {
+                card.addEventListener('click', function() {
                     this.style.transform = 'scale(0.95)';
                     setTimeout(() => {
                         this.style.transform = '';
@@ -871,7 +868,7 @@ verificarSessao(60);
 
             const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
             mobileNavLinks.forEach(link => {
-                link.addEventListener('click', function (e) {
+                link.addEventListener('click', function(e) {
                     e.preventDefault();
 
                     mobileNavLinks.forEach(l => l.classList.remove('text-primary'));
@@ -900,23 +897,26 @@ verificarSessao(60);
             animateCards();
 
             appCards.forEach(card => {
-                card.addEventListener('mouseenter', function () {
+                card.addEventListener('mouseenter', function() {
                     const icon = this.querySelector('.icon-wrapper');
                     icon.style.transform = 'scale(1.1) rotate(5deg)';
                 });
 
-                card.addEventListener('mouseleave', function () {
+                card.addEventListener('mouseleave', function() {
                     const icon = this.querySelector('.icon-wrapper');
                     icon.style.transform = 'scale(1) rotate(0)';
                 });
             });
 
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
+                anchor.addEventListener('click', function(e) {
                     e.preventDefault();
                     const target = document.querySelector(this.getAttribute('href'));
                     if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
                     }
                 });
             });
@@ -964,7 +964,7 @@ verificarSessao(60);
             </a>
 
             <a href="https://classroom.google.com/">
-            <div class="app-card w-{100px} h-full">
+                <div class="app-card w-{100px} h-full">
 
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/BQNdZvgK/image-1599078642807-removebg-preview.png"
@@ -976,160 +976,134 @@ verificarSessao(60);
             </a>
 
 
-           
-            <a href="https://material.seduc.ce.gov.br">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/RZGnRxZg/material.png" alt="Material Didático" class="app-icon">
-        </div>
-        <h3 class="app-name">Material Didático</h3>
-        <span class="category-tag">Estudos</span>
-    </div>
-</a>
 
-<a href="#">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/XYZ1234/entrada-saida.png" alt="Entrada e Saída de Alunos" class="app-icon">
-        </div>
-        <h3 class="app-name">Entrada e Saída de Alunos</h3>
-        <span class="category-tag">Administração</span>
-    </div>
-</a>
 
-<a href="#">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/XYZ1234/alimentacao.png" alt="Gestão da Alimentação Escolar" class="app-icon">
-        </div>
-        <h3 class="app-name">Gestão da Alimentação Escolar</h3>
-        <span class="category-tag">Nutrição</span>
-    </div>
-</a>
-
-<a href="#">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/XYZ1234/estoque.png" alt="Controle de Estoque de Materiais" class="app-icon">
-        </div>
-        <h3 class="app-name">Controle de Estoque de Materiais</h3>
-        <span class="category-tag">Logística</span>
-    </div>
-</a>
-
-<a href="#">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/XYZ1234/estagio.png" alt="Gestão de Estágio" class="app-icon">
-        </div>
-        <h3 class="app-name">Gestão de Estágio</h3>
-        <span class="category-tag">Carreira</span>
-    </div>
-</a>
-
-<a href="#">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/XYZ1234/suporte.png" alt="Chamados de Suporte" class="app-icon">
-        </div>
-        <h3 class="app-name">Chamados de Suporte</h3>
-        <span class="category-tag">TI</span>
-    </div>
-</a>
-
-<a href="#">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/XYZ1234/espacos.png" alt="Gerência de Espaços e Equipamentos" class="app-icon">
-        </div>
-        <h3 class="app-name">Gerência de Espaços e Equipamentos</h3>
-        <span class="category-tag">Infraestrutura</span>
-    </div>
-</a>
-
-<a href="#">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/XYZ1234/questoes.png" alt="Banco de Questões" class="app-icon">
-        </div>
-        <h3 class="app-name">Banco de Questões</h3>
-        <span class="category-tag">Educação</span>
-    </div>
-</a>
-
-<a href="#">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/XYZ1234/biblioteca.png" alt="Biblioteca" class="app-icon">
-        </div>
-        <h3 class="app-name">Biblioteca</h3>
-        <span class="category-tag">Recursos</span>
-    </div>
-</a>
-
-<a href="#">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/XYZ1234/pcd.png" alt="Registros PCD" class="app-icon">
-        </div>
-        <h3 class="app-name">Registros PCD</h3>
-        <span class="category-tag">Inclusão</span>
-    </div>
-</a>
-
-<a href="#">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/XYZ1234/secretaria.png" alt="Sistema de Secretaria" class="app-icon">
-        </div>
-        <h3 class="app-name">Sistema de Secretaria</h3>
-        <span class="category-tag">Administração</span>
-    </div>
-</a>
-
-<a href="#">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/XYZ1234/tombamento.png" alt="Tombamento" class="app-icon">
-        </div>
-        <h3 class="app-name">Tombamento</h3>
-        <span class="category-tag">Patrimônio</span>
-    </div>
-</a>
-
-<a href="#">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/XYZ1234/financeiro.png" alt="Financeiro" class="app-icon">
-        </div>
-        <h3 class="app-name">Financeiro</h3>
-        <span class="category-tag">Economia</span>
-    </div>
-</a>
-
-<a href="#">
-    <div class="app-card w-{100px} h-full">
-        <div class="icon-wrapper">
-            <img src="https://i.postimg.cc/XYZ1234/professor.png" alt="Professor Diretor de Turma" class="app-icon">
-        </div>
-        <h3 class="app-name">Professor Diretor de Turma</h3>
-        <span class="category-tag">Educação</span>
-    </div>
-</a>
-
-            <a href="https://material.seduc.ce.gov.br">
-            <div class="app-card w-{100px} h-full">
-
+            <a href="#">
+                <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/RZGnRxZg/material.png" alt="Material Didático" class="app-icon">
+                        <img src="https://i.postimg.cc/cJn3sprk/logout-15423241.png" alt="Entrada e Saída de Alunos" class="app-icon">
                     </div>
-                    <h3 class="app-name">Material Didático</h3>
-                    <span class="category-tag">Estudos</span>
+                    <h3 class="app-name">Entrada e Saída de Alunos</h3>
+                    <span class="category-tag">Administração</span>
                 </div>
             </a>
 
+            <a href="#">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/gjNXSdTj/diet-561611.png" alt="Gestão da Alimentação Escolar" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Gestão da Alimentação Escolar</h3>
+                    <span class="category-tag">Nutrição</span>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/VNQ6Fdk4/racking-system-11392607.png" alt="Controle de Estoque de Materiais" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Controle de Estoque de Materiais</h3>
+                    <span class="category-tag">Logística</span>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Gestão de Estágio</h3>
+                    <span class="category-tag">Carreira</span>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/d04BCPqs/suporte-tecnico.png" alt="Chamados de Suporte" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Chamados de Suporte</h3>
+                    <span class="category-tag">TI</span>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/G2vvjWRT/manutencao.png" alt="Gerência de Espaços e Equipamentos" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Gerência de Espaços e Equipamentos</h3>
+                    <span class="category-tag">Infraestrutura</span>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/QdDknxCN/armazenamento-de-banco-de-dados.png" alt="Banco de Questões" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Banco de Questões</h3>
+                    <span class="category-tag">Educação</span>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/Ls3gGHcR/pilha-de-livros.png" alt="Biblioteca" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Biblioteca</h3>
+                    <span class="category-tag">Recursos</span>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/8kFH70xG/pessoa.png" alt="Registros PCD" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Registros PCD</h3>
+                    <span class="category-tag">Inclusão</span>
+                </div>
+            </a>
+
+
+
+            <a href="#">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/C5VsTF74/scan-facial.png" alt="Tombamento" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Tombamento</h3>
+                    <span class="category-tag">Patrimônio</span>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/6qjqVc8G/profits-1571029.png" alt="Financeiro" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Financeiro</h3>
+                    <span class="category-tag">Economia</span>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/hjnXKfFh/businessman-1253671.png" alt="Professor Diretor de Turma" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Professor Diretor de Turma</h3>
+                    <span class="category-tag">Educação</span>
+                </div>
+            </a>
+
+
+
             <a href="https://mural.seduc.ce.gov.br">
-            <div class="app-card w-{100px} h-full">
+                <div class="app-card w-{100px} h-full">
 
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/CMX7vRKh/aviso-1.png" alt="Mural de Avisos" class="app-icon">
@@ -1140,7 +1114,7 @@ verificarSessao(60);
             </a>
 
             <a href="https://forms.google.com/">
-            <div class="app-card w-{100px} h-full">
+                <div class="app-card w-{100px} h-full">
 
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/Vkfm4T7j/png-transparent-g-suite-form-google-surveys-email-house-purple-violet-rectangle-removebg-preview.png"
@@ -1152,7 +1126,7 @@ verificarSessao(60);
             </a>
 
             <a href="https://chat.openai.com/">
-            <div class="app-card w-{100px} h-full">
+                <div class="app-card w-{100px} h-full">
 
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/DZqM9f0m/download-4-removebg-preview.png" alt="Chat GPT"
