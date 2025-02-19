@@ -28,7 +28,7 @@ verificarSessao(60);
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Portal Professores">
 
-    <title>Portal Professores stgm</title>
+    <title>Subsistemas STGM</title>
 </head>
 <script>
     tailwind.config = {
@@ -432,7 +432,7 @@ verificarSessao(60);
                 <div class="flex items-center gap-3">
                     <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="h-12 w-auto object-contain">
                     <div>
-                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Portal do <span class="text-secondary">Professores</span>
+                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Subsistemas <span class="text-secondary">STGM</span>
                         </h1>
                         <div class="h-0.5 bg-primary/20 rounded-full mt-1"></div>
                     </div>
@@ -440,6 +440,7 @@ verificarSessao(60);
 
                 <nav class="hidden md:flex items-center gap-5">
                     <a href="../../" class="nav-link">Início</a>
+                    <a href="#" class="nav-link">Sair</a>
                     <button id="darkModeToggle"
                         class="inline-flex items-center justify-center p-2 rounded-lg transition-colors" role="switch"
                         aria-label="Alternar modo escuro">
@@ -534,11 +535,13 @@ verificarSessao(60);
 
                 <div class="md:hidden">
                     <div class="relative">
+                    <a href="../autenticacao/perfil.php">
                         <img src="https://i.postimg.cc/m2d5f5L3/images-removebg-preview.png" alt="Perfil"
                             class="w-10 h-10 rounded-full border-2 border-transparent hover:border-secondary transition-colors duration-300">
                         <div
                             class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white">
                         </div>
+                    </a>
                     </div>
                 </div>
             </div>
