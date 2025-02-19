@@ -129,19 +129,24 @@ function login($email, $senha) {
             switch ($result['status']) {
                 case 'aluno':
                     $_SESSION['status'] = 0;
+                    return 0;
                     break;
                 case 'professor':
                     $_SESSION['status'] = 1;
+                    return 1;
                     break;
                 case 'adm':
                     $_SESSION['status'] = 2;
+                    return 2;
                     break;    
                 case 'egresso':
                     $_SESSION['status'] = 3;
+                    return 3;
                     break;         
                 default:
                     # code...
                     break;
+            
             }
             exit();
         } else {
