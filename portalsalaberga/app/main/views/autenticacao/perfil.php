@@ -2,6 +2,9 @@
 <html lang="pt-BR">
 
 <head>
+    <?php
+    session_start();
+    ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -163,8 +166,8 @@
                                 alt="Foto de Perfil"
                                 class="w-48 h-48 rounded-full border-4 border-white shadow-xl object-cover mx-auto" />
                         </div>
-                        <h2 class="text-3xl font-bold mb-2 text-custom-header dark:text-dark-header">John Doe</h2>
-                        <p class="text-gray-600 mb-6 dark:text-gray-300">john.doe@example.com</p>
+                        <h2 class="text-3xl font-bold mb-2 text-custom-header dark:text-dark-header"><?php echo $_SESSION['Nome'] ?></h2>
+                        <p class="text-gray-600 mb-6 dark:text-gray-300"><?php echo $_SESSION['Email'] ?></p>
                         <div class="flex justify-center space-x-4">
 
                         </div>
@@ -183,7 +186,7 @@
                             <div class="space-y-4">
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-envelope text-custom-accent dark:text-dark-accent"></i>
-                                    <p class="dark:text-gray-300"><span class="font-medium">Email:</span> john.doe@example.com</p>
+                                    <p class="dark:text-gray-300"><span class="font-medium">Email: </span><?php echo $_SESSION['Email']; ?></p>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-clock text-custom-accent dark:text-dark-accent"></i>
@@ -201,7 +204,7 @@
                             <div class="space-y-4">
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-key text-custom-accent dark:text-dark-accent"></i>
-                                    <p class="dark:text-gray-300"><span class="font-medium">Senha:</span> ••••••••</p>
+                                    <p class="dark:text-gray-300"><span class="font-medium">Senha: </span><?php echo $_SESSION['Senha']; ?></p>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-history text-custom-accent dark:text-dark-accent"></i>
@@ -273,7 +276,7 @@
                 <i class="fas fa-lock text-custom-header text-2xl dark:text-dark-header"></i>
                 <h3 class="text-2xl font-bold text-custom-header dark:text-dark-header">Alterar Senha</h3>
             </div>
-            <form class="space-y-6">
+            <form class="space-y-6" action="" method="POST">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Senha Atual</label>
                     <input type="password" name="current_password"

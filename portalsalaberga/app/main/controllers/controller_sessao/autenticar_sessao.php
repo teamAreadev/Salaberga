@@ -1,60 +1,49 @@
 <?php
-// Inicia a sessão
+/*
 session_start();
 
-if (isset($_GET['sair'])){
-// Destroi todas as variáveis de sessão
-$_SESSION = array();
-
-/*
-// Se deseja destruir a sessão completamente, apague também o cookie de sessão.
-// Nota: Isso destruirá a sessão, e não apenas os dados da sessão!
-if (ini_get("session.use_cookies")) {
-    $params = session_get_cookie_params();
-    setcookie(session_name(), '', time() - 42000,
-        $params["path"], $params["domain"],
-        $params["secure"], $params["httponly"]
-    );
+if (isset($_GET['sair'])) {
+    $_SESSION = array();
+    session_destroy();
+    header('Location: ../../views/autenticacao/login.php');
+    exit();
 }
-*/
-// Finalmente, destrói a sessão
-session_destroy();
 
-// Redireciona para a página de login ou inicial
-header('Location: ../../views/autenticacao/login.php'); // Substitua 'login.php' pela página desejada
-exit();
-    }
 
-// Pega o nome do arquivo atual
+session_start();
+
+// Verifica a página atual
 $current_page = basename($_SERVER['PHP_SELF']);
+var_dump($current_page); // Depuração: Verifique o valor
 
-// Função para verificar se já está na página correta
+// Função para verificar a página atual
 function isCurrentPage($page)
 {
     global $current_page;
     return $current_page === $page;
 }
 
-// Só redireciona se NÃO estiver na página correta
-if (isset($_SESSION['login']) && $_SESSION['login'] && isset($_SESSION['aluno']) && $_SESSION['aluno']) {
-    if (!isCurrentPage('subsistema_aluno.php')) {
-        header('Location: ../aluno/subsistema_aluno.php');
-        exit();
-    }
-} else if (isset($_SESSION['login']) && $_SESSION['login'] && isset($_SESSION['professor']) && $_SESSION['professor']) {
-    if (!isCurrentPage('subsistema_professor.php')) {
-        header('Location: ../professor/subsistema_professor.php');
-        exit();
-    }
-} else if (isset($_SESSION['precadastro']) && $_SESSION['precadastro']) {
-    if (!isCurrentPage('cadastro.php')) {
-        header('Location: ../../views/autenticacao/cadastro.php');
-        exit();
-    }
-} else {
-    if (!isCurrentPage('precadastro.php')) {
-        header('Location: ../../views/autenticacao/precadastro.php');
+// Verifica se o usuário está logado e tem status válido
+if (isset($_SESSION['login']) && $_SESSION['login'] && isset($_SESSION['status']) && !empty($_SESSION['status'])) {
+    // Se o usuário não está na página 'subsistema.php', redireciona
+    if (!isCurrentPage('subsistema.php')) {
+        header('Location: ../../../../views/subsystem/subsistema.php'); // Use caminho absoluto
         exit();
     }
 }
-?>
+// Verifica se o usuário está em pré-cadastro
+elseif (isset($_SESSION['precadastro']) && $_SESSION['precadastro']) {
+    // Se o usuário não está na página 'cadastro.php', redireciona
+    if (!isCurrentPage('cadastro.php')) {
+        header('Location: ../../../../views/autenticacao/cadastro.php'); // Use caminho absoluto
+        exit();
+    }
+}
+// Caso contrário, redireciona para pré-cadastro
+else {
+    // Se o usuário não está na página 'precadastro.php', redireciona
+    if (!isCurrentPage('precadastro.php')) {
+        header('Location: /caminho/absoluto/para/views/autenticacao/precadastro.php'); // Use caminho absoluto
+        exit();
+    }
+}*/
