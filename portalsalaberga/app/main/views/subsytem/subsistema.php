@@ -664,6 +664,9 @@ verificarSessao(60);
     </style>
 
     <script>
+
+
+
         document.addEventListener('DOMContentLoaded', function () {
             const darkModeToggle = document.getElementById('darkModeToggle');
             const darkModeToggleMobile = document.getElementById('darkModeToggleMobile');
@@ -837,34 +840,84 @@ verificarSessao(60);
 
                 lastScroll = currentScroll;
             });
+            const style = document.createElement('style');
+style.textContent = `
+@keyframes slideInFromLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
 
-            const searchInput = document.getElementById('search-input');
-            const appCards = document.querySelectorAll('.app-card');
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
 
-            searchInput.addEventListener('input', function (e) {
-                const searchTerm = e.target.value.toLowerCase();
+.app-card {
+    opacity: 0;
+}
 
-                appCards.forEach(card => {
-                    const appName = card.querySelector('.app-name').textContent.toLowerCase();
-                    const category = card.querySelector('.category-tag').textContent.toLowerCase();
+.app-card.visible {
+    animation: slideInFromLeft 0.3s ease forwards;
+}
 
-                    if (appName.includes(searchTerm) || category.includes(searchTerm)) {
-                        card.style.display = 'block';
-                        card.style.animation = 'fadeIn 0.3s ease';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
+.app-card.hidden-card {
+    display: none;
+}
+`;
+document.head.appendChild(style);
 
-            appCards.forEach(card => {
-                card.addEventListener('click', function () {
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                });
-            });
+// Atualizar o JavaScript da busca
+const searchInput = document.getElementById('search-input');
+const appCards = document.querySelectorAll('.app-card');
+
+searchInput.addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    let delay = 0;
+    
+    // Reset all cards first
+    appCards.forEach(card => {
+        card.classList.add('hidden-card');
+        card.classList.remove('visible');
+    });
+    
+    // Filter and animate visible cards
+    appCards.forEach(card => {
+        const appName = card.querySelector('.app-name').textContent.toLowerCase();
+        const category = card.querySelector('.category-tag').textContent.toLowerCase();
+        
+        if (appName.includes(searchTerm) || category.includes(searchTerm)) {
+            card.classList.remove('hidden-card');
+            
+            // Stagger the animation
+            setTimeout(() => {
+                card.classList.add('visible');
+            }, delay);
+            
+            delay += 50; // Increment delay for next card
+        }
+    });
+});
+
+// Animate cards on initial load
+document.addEventListener('DOMContentLoaded', () => {
+    let delay = 0;
+    appCards.forEach(card => {
+        setTimeout(() => {
+            card.classList.add('visible');
+        }, delay);
+        delay += 50;
+    });
+});
 
             const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
             mobileNavLinks.forEach(link => {

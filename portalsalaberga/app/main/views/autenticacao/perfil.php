@@ -96,7 +96,7 @@
             position: absolute;
             inset: -3px;
             border-radius: 50%;
-            border: 2px solid #007A33;
+            border: 6px solid #007A33;
             z-index: -1;
             opacity: 0.5;
         }
