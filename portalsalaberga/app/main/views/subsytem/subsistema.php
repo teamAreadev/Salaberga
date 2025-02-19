@@ -440,7 +440,7 @@ verificarSessao(60);
 
                 <nav class="hidden md:flex items-center gap-5">
                     <a href="../../" class="nav-link">Início</a>
-                    <a href="../../controllers/controller_sessao/autenticar_sessao.php?sair" class="nav-link">Sair</a>
+                    <a href="#" class="nav-link">Sair</a>
                     <button id="darkModeToggle"
                         class="inline-flex items-center justify-center p-2 rounded-lg transition-colors" role="switch"
                         aria-label="Alternar modo escuro">
@@ -554,7 +554,7 @@ verificarSessao(60);
                 <i class="fa-solid fa-home text-xl"></i>
                 <span class="text-xs">Início</span>
             </a>
-            <a href="../../controllers/controller_sessao/autenticar_sessao.php?sair" class="nav-link">
+            <a href="#" class="nav-link">
     <i class="fa-solid fa-sign-out-alt text-xl"></i>
     <span class="text-xs">Sair</span>
 </a>
@@ -840,84 +840,34 @@ verificarSessao(60);
 
                 lastScroll = currentScroll;
             });
-            const style = document.createElement('style');
-style.textContent = `
-@keyframes slideInFromLeft {
-    0% {
-        opacity: 0;
-        transform: translateX(-50px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
 
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 2rem;
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-}
+            const searchInput = document.getElementById('search-input');
+            const appCards = document.querySelectorAll('.app-card');
 
-.app-card {
-    opacity: 0;
-}
+            searchInput.addEventListener('input', function (e) {
+                const searchTerm = e.target.value.toLowerCase();
 
-.app-card.visible {
-    animation: slideInFromLeft 0.3s ease forwards;
-}
+                appCards.forEach(card => {
+                    const appName = card.querySelector('.app-name').textContent.toLowerCase();
+                    const category = card.querySelector('.category-tag').textContent.toLowerCase();
 
-.app-card.hidden-card {
-    display: none;
-}
-`;
-document.head.appendChild(style);
+                    if (appName.includes(searchTerm) || category.includes(searchTerm)) {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeIn 0.3s ease';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
 
-// Atualizar o JavaScript da busca
-const searchInput = document.getElementById('search-input');
-const appCards = document.querySelectorAll('.app-card');
-
-searchInput.addEventListener('input', function(e) {
-    const searchTerm = e.target.value.toLowerCase();
-    let delay = 0;
-    
-    // Reset all cards first
-    appCards.forEach(card => {
-        card.classList.add('hidden-card');
-        card.classList.remove('visible');
-    });
-    
-    // Filter and animate visible cards
-    appCards.forEach(card => {
-        const appName = card.querySelector('.app-name').textContent.toLowerCase();
-        const category = card.querySelector('.category-tag').textContent.toLowerCase();
-        
-        if (appName.includes(searchTerm) || category.includes(searchTerm)) {
-            card.classList.remove('hidden-card');
-            
-            // Stagger the animation
-            setTimeout(() => {
-                card.classList.add('visible');
-            }, delay);
-            
-            delay += 50; // Increment delay for next card
-        }
-    });
-});
-
-// Animate cards on initial load
-document.addEventListener('DOMContentLoaded', () => {
-    let delay = 0;
-    appCards.forEach(card => {
-        setTimeout(() => {
-            card.classList.add('visible');
-        }, delay);
-        delay += 50;
-    });
-});
+            appCards.forEach(card => {
+                card.addEventListener('click', function () {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
 
             const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
             mobileNavLinks.forEach(link => {
