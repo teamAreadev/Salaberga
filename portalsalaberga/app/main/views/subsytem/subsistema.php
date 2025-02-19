@@ -976,29 +976,147 @@ verificarSessao(60);
                 </div>
             </a>
 
-            <a href="https://biblioteca.seduc.ce.gov.br/">
-            <div class="app-card w-{100px} h-full">
-
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/qRwy4860/biblioteca.png" alt="Biblioteca Digital"
-                            class="app-icon">
-                    </div>
-                    <h3 class="app-name">Biblioteca Digital</h3>
-                    <span class="category-tag">Estudos</span>
-                </div>
-            </a>
 
            
-            <a href="https://calendario.seduc.ce.gov.br">
-            <div class="app-card w-{100px} h-full">
+            <a href="https://material.seduc.ce.gov.br">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/RZGnRxZg/material.png" alt="Material Didático" class="app-icon">
+        </div>
+        <h3 class="app-name">Material Didático</h3>
+        <span class="category-tag">Estudos</span>
+    </div>
+</a>
 
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/3NQ3Qv8Y/calendario.png" alt="Calendário" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Calendário</h3>
-                    <span class="category-tag">Agenda</span>
-                </div>
-            </a>
+<a href="#">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/XYZ1234/entrada-saida.png" alt="Entrada e Saída de Alunos" class="app-icon">
+        </div>
+        <h3 class="app-name">Entrada e Saída de Alunos</h3>
+        <span class="category-tag">Administração</span>
+    </div>
+</a>
+
+<a href="#">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/XYZ1234/alimentacao.png" alt="Gestão da Alimentação Escolar" class="app-icon">
+        </div>
+        <h3 class="app-name">Gestão da Alimentação Escolar</h3>
+        <span class="category-tag">Nutrição</span>
+    </div>
+</a>
+
+<a href="#">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/XYZ1234/estoque.png" alt="Controle de Estoque de Materiais" class="app-icon">
+        </div>
+        <h3 class="app-name">Controle de Estoque de Materiais</h3>
+        <span class="category-tag">Logística</span>
+    </div>
+</a>
+
+<a href="#">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/XYZ1234/estagio.png" alt="Gestão de Estágio" class="app-icon">
+        </div>
+        <h3 class="app-name">Gestão de Estágio</h3>
+        <span class="category-tag">Carreira</span>
+    </div>
+</a>
+
+<a href="#">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/XYZ1234/suporte.png" alt="Chamados de Suporte" class="app-icon">
+        </div>
+        <h3 class="app-name">Chamados de Suporte</h3>
+        <span class="category-tag">TI</span>
+    </div>
+</a>
+
+<a href="#">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/XYZ1234/espacos.png" alt="Gerência de Espaços e Equipamentos" class="app-icon">
+        </div>
+        <h3 class="app-name">Gerência de Espaços e Equipamentos</h3>
+        <span class="category-tag">Infraestrutura</span>
+    </div>
+</a>
+
+<a href="#">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/XYZ1234/questoes.png" alt="Banco de Questões" class="app-icon">
+        </div>
+        <h3 class="app-name">Banco de Questões</h3>
+        <span class="category-tag">Educação</span>
+    </div>
+</a>
+
+<a href="#">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/XYZ1234/biblioteca.png" alt="Biblioteca" class="app-icon">
+        </div>
+        <h3 class="app-name">Biblioteca</h3>
+        <span class="category-tag">Recursos</span>
+    </div>
+</a>
+
+<a href="#">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/XYZ1234/pcd.png" alt="Registros PCD" class="app-icon">
+        </div>
+        <h3 class="app-name">Registros PCD</h3>
+        <span class="category-tag">Inclusão</span>
+    </div>
+</a>
+
+<a href="#">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/XYZ1234/secretaria.png" alt="Sistema de Secretaria" class="app-icon">
+        </div>
+        <h3 class="app-name">Sistema de Secretaria</h3>
+        <span class="category-tag">Administração</span>
+    </div>
+</a>
+
+<a href="#">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/XYZ1234/tombamento.png" alt="Tombamento" class="app-icon">
+        </div>
+        <h3 class="app-name">Tombamento</h3>
+        <span class="category-tag">Patrimônio</span>
+    </div>
+</a>
+
+<a href="#">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/XYZ1234/financeiro.png" alt="Financeiro" class="app-icon">
+        </div>
+        <h3 class="app-name">Financeiro</h3>
+        <span class="category-tag">Economia</span>
+    </div>
+</a>
+
+<a href="#">
+    <div class="app-card w-{100px} h-full">
+        <div class="icon-wrapper">
+            <img src="https://i.postimg.cc/XYZ1234/professor.png" alt="Professor Diretor de Turma" class="app-icon">
+        </div>
+        <h3 class="app-name">Professor Diretor de Turma</h3>
+        <span class="category-tag">Educação</span>
+    </div>
+</a>
 
             <a href="https://material.seduc.ce.gov.br">
             <div class="app-card w-{100px} h-full">
