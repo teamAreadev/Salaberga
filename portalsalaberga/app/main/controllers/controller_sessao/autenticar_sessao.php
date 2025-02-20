@@ -1,5 +1,5 @@
 <?php
-/*
+
 session_start();
 
 if (isset($_GET['sair'])) {
@@ -10,11 +10,9 @@ if (isset($_GET['sair'])) {
 }
 
 
-session_start();
-
 // Verifica a página atual
 $current_page = basename($_SERVER['PHP_SELF']);
-var_dump($current_page); // Depuração: Verifique o valor
+
 
 // Função para verificar a página atual
 function isCurrentPage($page)
@@ -27,7 +25,7 @@ function isCurrentPage($page)
 if (isset($_SESSION['login']) && $_SESSION['login'] && isset($_SESSION['status']) && !empty($_SESSION['status'])) {
     // Se o usuário não está na página 'subsistema.php', redireciona
     if (!isCurrentPage('subsistema.php')) {
-        header('Location: ../../../../views/subsystem/subsistema.php'); // Use caminho absoluto
+        header('Location: ../../views/subsystem/subsistema.php'); // Use caminho absoluto
         exit();
     }
 }
@@ -35,7 +33,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] && isset($_SESSION['status']
 elseif (isset($_SESSION['precadastro']) && $_SESSION['precadastro']) {
     // Se o usuário não está na página 'cadastro.php', redireciona
     if (!isCurrentPage('cadastro.php')) {
-        header('Location: ../../../../views/autenticacao/cadastro.php'); // Use caminho absoluto
+        header('Location: ../../views/autenticacao/cadastro.php'); // Use caminho absoluto
         exit();
     }
 }
@@ -43,7 +41,7 @@ elseif (isset($_SESSION['precadastro']) && $_SESSION['precadastro']) {
 else {
     // Se o usuário não está na página 'precadastro.php', redireciona
     if (!isCurrentPage('precadastro.php')) {
-        header('Location: /caminho/absoluto/para/views/autenticacao/precadastro.php'); // Use caminho absoluto
+        header('Location: ../../views/autenticacao/precadastro.php'); // Use caminho absoluto
         exit();
     }
-}*/
+}

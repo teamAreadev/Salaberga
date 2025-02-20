@@ -276,10 +276,10 @@
                 <i class="fas fa-lock text-custom-header text-2xl dark:text-dark-header"></i>
                 <h3 class="text-2xl font-bold text-custom-header dark:text-dark-header">Alterar Senha</h3>
             </div>
-            <form class="space-y-6" action="" method="POST">
+            <form class="space-y-6" action="../../controllers/controller_perfil/controller_altSenha.php" method="POST">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Senha Atual</label>
-                    <input type="password" name="current_password"
+                    <input type="password" name="Senha"
                         class="w-full p-3 rounded-xl bg-white/50 border border-custom-grid 
                                text-custom-text placeholder-gray-400 focus:ring-2 focus:ring-custom-accent 
                                focus:border-transparent outline-none transition-all duration-300 dark:bg-dark-background/50 dark:border-dark-grid dark:text-dark-text"
@@ -287,7 +287,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Nova Senha</label>
-                    <input type="password" name="new_password"
+                    <input type="password" name="novaSenha"
                         class="w-full p-3 rounded-xl bg-white/50 border border-custom-grid 
                                text-custom-text placeholder-gray-400 focus:ring-2 focus:ring-custom-accent 
                                focus:border-transparent outline-none transition-all duration-300 dark:bg-dark-background/50 dark:border-dark-grid dark:text-dark-text"
@@ -295,13 +295,20 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Confirme a Nova Senha</label>
-                    <input type="password" name="confirm_password"
+                    <input type="password" name="confSenha"
                         class="w-full p-3 rounded-xl bg-white/50 border border-custom-grid 
                                text-custom-text placeholder-gray-400 focus:ring-2 focus:ring-custom-accent 
                                focus:border-transparent outline-none transition-all duration-300 dark:bg-dark-background/50 dark:border-dark-grid dark:text-dark-text"
                         placeholder="Confirme sua nova senha" required>
                 </div>
                 <div class="flex justify-end gap-4">
+                    <?php if (isset($_GET['erro'])) {
+                    if ($_GET['erro'] == 1) {
+                        echo '<script type="text/javascript">';
+                        echo 'window.alert("As senhas não coincidem.");';
+                        echo '</script>';
+                    }
+                }?>
                     <button type="button" onclick="closeSenhaModal()"
                         class="px-6 py-2.5 rounded-xl bg-gray-100 text-custom-text 
                                hover:bg-gray-200 transition-all duration-300 dark:bg-dark-background/50 dark:text-dark-text">
