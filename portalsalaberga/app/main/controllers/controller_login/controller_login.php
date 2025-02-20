@@ -32,7 +32,7 @@ if (isset($_POST['login']) && isset($_POST['email']) && isset($_POST['senha']) &
 
     if ($login != 4) {
 
-        header('location:../../../../views/subsytem/subsistema.php');
+        header('location: ../../views/subsytem/subsistema.php?');
         exit();
     } else {
         header('Location: ../../views/autenticacao/login.php?login=erro');

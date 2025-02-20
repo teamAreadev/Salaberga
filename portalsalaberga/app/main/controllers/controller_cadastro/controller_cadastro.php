@@ -2,12 +2,12 @@
 
 //matenha este if aqui se não irá ocorrer erro de lógica
 if (isset($_GET['erro1'])) {
-    header('location:../../views/autenticação/cadastro.php?login=erro1');
+    header('location:../../views/autenticacao/cadastro.php?login=erro1');
     exit();
 }
 //matenha este if aqui se não irá ocorrer erro de lógica
 if (isset($_GET['erro2'])) {
-    header('location:../../views/autenticação/cadastro.php?login=erro2');
+    header('location:../../views/autenticacao/cadastro.php?login=erro2');
     exit();
 }
 

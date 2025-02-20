@@ -239,7 +239,7 @@ function alterarTelefone($telefone)
         $stmtSelect->bindParam(':email', $_SESSION['Email']);
         $stmtSelect->execute();
         $resultSelect = $stmtSelect->fetch(PDO::FETCH_ASSOC);
-        print_r($resultSelect);
+        
 
         if (!empty($resultSelect)) {
 
@@ -253,6 +253,29 @@ function alterarTelefone($telefone)
             $stmtUpdate->execute();
             $resultUpdate = $stmtUpdate->fetchAll(PDO::FETCH_ASSOC);
             header('Location: ../controller_perfil/controller_telefone.php?alt');
+        }
+    } catch (PDOException $e) {
+        error_log("Erro no banco de dados: " . $e->getMessage());
+        echo "Erro no banco de dados: " . $e->getMessage();
+    }
+}
+
+function alterarSenha($novaSenha)
+{
+
+    require_once('../../config/Database.php');
+    try {
+        if (!empty($_SESSION['Senha'])) {
+        //altera a senha do usuário
+        $queryUpdate = "
+        UPDATE usuario SET senha = MD5(:senha) WHERE email = :email 
+        ";
+        $stmtUpdate = $conexao->prepare($queryUpdate);
+        $stmtUpdate->bindParam(':senha', $novaSenha);
+        $stmtUpdate->bindParam(':email', $_SESSION['Email']);
+        $stmtUpdate->execute();
+        $resultUpdate = $stmtUpdate->fetch(PDO::FETCH_ASSOC);
+        header('Location: ../controller_perfil/controller_altSenha.php?alt');
         }
     } catch (PDOException $e) {
         error_log("Erro no banco de dados: " . $e->getMessage());

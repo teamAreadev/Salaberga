@@ -1,8 +1,7 @@
 <?php
     require_once('../../controllers/controller_sessao/autenticar_sessao.php');
     require_once('../../controllers/controller_sessao/verificar_sessao.php');
-    verificarSessao(60);
-    
+    verificarSessao(60); 
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -315,7 +314,7 @@
                     <span>Forte</span>
                 </div>
                 <div class="forgot-password"> 
-   <a href="login.php">Ja tem cadastro?</a>
+                <a href="login.php">Ja tem cadastro?</a>
                 </div>
                 <?php
                 if (isset($_GET['login']) && $_GET['login'] == 'erro1') {
