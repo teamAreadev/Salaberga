@@ -837,34 +837,71 @@ verificarSessao(60);
 
                 lastScroll = currentScroll;
             });
-
             const searchInput = document.getElementById('search-input');
             const appCards = document.querySelectorAll('.app-card');
+            const gridContainer = document.querySelector('.grid-container');
 
             searchInput.addEventListener('input', function(e) {
                 const searchTerm = e.target.value.toLowerCase();
+                let visibleCards = [];
+                let hiddenCards = [];
 
+                // First, determine which cards should be visible
                 appCards.forEach(card => {
                     const appName = card.querySelector('.app-name').textContent.toLowerCase();
                     const category = card.querySelector('.category-tag').textContent.toLowerCase();
+                    const parentLink = card.parentElement;
 
                     if (appName.includes(searchTerm) || category.includes(searchTerm)) {
-                        card.style.display = 'block';
-                        card.style.animation = 'fadeIn 0.3s ease';
+                        visibleCards.push(parentLink);
+                        // Reset any previous hiding styles
+                        parentLink.style.display = '';
+                        parentLink.style.opacity = '1';
+                        parentLink.style.transform = 'scale(1)';
                     } else {
-                        card.style.display = 'none';
+                        hiddenCards.push(parentLink);
+                        // Prepare card for removal
+                        parentLink.style.opacity = '0';
+                        parentLink.style.transform = 'scale(0.8)';
                     }
                 });
+
+                // Add transition class to grid container for smooth reflow
+                gridContainer.style.transition = 'all 0.3s ease-out';
+
+                
+
+                // Hide cards that don't match
+                setTimeout(() => {
+                    hiddenCards.forEach(card => {
+                        card.style.display = 'none';
+                    });
+                }, 300); // Match transition duration
+
+                // Animate visible cards back in with a stagger effect
+                visibleCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.3s ease-out';
+                        card.style.opacity = '1';
+                        card.style.transform = 'scale(1)';
+                    }, index * 50); // Stagger the animations
+                });
+
+                // If search is cleared, show all cards with animation
+                if (searchTerm === '') {
+                    appCards.forEach((card, index) => {
+                        const parentLink = card.parentElement;
+                        parentLink.style.display = '';
+                        setTimeout(() => {
+                            parentLink.style.opacity = '1';
+                            parentLink.style.transform = 'scale(1)';
+                        }, index * 50);
+                    });
+                }
             });
 
-            appCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                });
-            });
+            // Add necessary styles to the grid container
+            gridContainer.style.position = 'relative';
 
             const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
             mobileNavLinks.forEach(link => {
@@ -955,7 +992,7 @@ verificarSessao(60);
             <a href="https://aluno.seduc.ce.gov.br/">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img , src="https://play-lh.googleusercontent.com/1bGImcJlMpv-FQLcJ0nIxF-oDB4fPL1MLkea58fMpOSmVECfDXbND7clcv80iFklbAw=w240-h480" alt="Aluno Online"
+                        <img , src="https://i.postimg.cc/MGhrtrk4/aluna.png" alt="Aluno Online"
                             class="app-icon">
                     </div>
                     <h3 class="app-name">Aluno Online</h3>
