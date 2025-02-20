@@ -100,7 +100,10 @@ function cadastrar($nome, $cpf, $email, $senha)
     }
 }
 
-function login($email, $senha) {
+
+
+function login($email, $senha)
+{
     require_once('../../config/Database.php');
     try {
         // Prepara e executa a consulta para verificar o usuário
@@ -119,9 +122,15 @@ function login($email, $senha) {
             $stmtSelectC->execute();
             $resultC = $stmtSelectC->fetch(PDO::FETCH_ASSOC);
 
+            function mascararSenha($senha)
+            {
+                return str_repeat('•', strlen($senha));
+            }
+
             // Configura as variáveis de sessão
             $_SESSION['login'] = true;
             $_SESSION['Email'] = $email;
+            $_SESSION['Senha'] = mascararSenha($senha);
             $_SESSION['Telefone'] = $resultC['telefone'];
             $_SESSION['Nome'] = $resultC['nome'];
 
@@ -138,15 +147,14 @@ function login($email, $senha) {
                 case 'adm':
                     $_SESSION['status'] = 2;
                     return 2;
-                    break;    
+                    break;
                 case 'egresso':
                     $_SESSION['status'] = 3;
                     return 3;
-                    break;         
+                    break;
                 default:
                     # code...
                     break;
-            
             }
             exit();
         } else {
