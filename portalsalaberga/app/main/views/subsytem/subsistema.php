@@ -18,8 +18,7 @@ verificarSessao(60);
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../../assets/js/service-worker.js"></script>
     <script src="../../assets/js/acessibilidades.js"></script>
-    <link rel=" icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png"
-        type="image/x-icon">
+    <link rel=" icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
 
     <link rel="manifest" href="../../assets/js/manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -98,21 +97,39 @@ verificarSessao(60);
         }
     }
 
+
+
+    .grid-container.transitioning {
+        transition: all 0.3s ease-out;
+    }
+
+    .app-card-link {
+        transition: all 0.3s ease-out;
+        width: 100%;
+    }
+
+    /* Adicione uma media query para responsividade */
+    @media (max-width: 768px) {
+        .grid-container {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .app-card {
+            min-height: 150px;
+            padding: 1rem;
+        }
+    }
+
     .grid-container {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 2rem;
         padding: 2rem;
         max-width: 1400px;
         margin: 0 auto;
-    }
-
-    @media (max-width: 768px) {
-        .grid-container {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            padding: 1rem;
-        }
+        transition: all 0.3s ease-out;
     }
 
     .app-card {
@@ -126,6 +143,78 @@ verificarSessao(60);
         position: relative;
         overflow: hidden;
         cursor: pointer;
+        height: 100%;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .clear-search {
+
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+
+
+        background: none;
+        border: none;
+        border-radius: 50%;
+        padding: 8px;
+        margin: 0;
+
+        color: #666;
+        transition: all 0.2s ease;
+        opacity: 0.7;
+
+
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+
+        min-width: 32px;
+        min-height: 32px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .clear-search::before {
+        content: "×";
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 1;
+    }
+
+    /* Estados do botão */
+    .clear-search:hover {
+        color: #333;
+        opacity: 1;
+
+    }
+
+    .clear-search:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+
+
+    /* Estilos para o container do input */
+    .search-container {
+        position: relative;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    /* Animação para os cards */
+    .app-card-link {
+        transition: all 0.3s ease-out;
+    }
+
+    .transitioning {
+        pointer-events: none;
     }
 
     .app-card::before {
@@ -430,9 +519,11 @@ verificarSessao(60);
         <div class="container mx-auto px-4 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="h-12 w-auto object-contain">
+                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo"
+                        class="h-12 w-auto object-contain">
                     <div>
-                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Subsistemas <span class="text-secondary">STGM</span>
+                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Subsistemas <span
+                                class="text-secondary">STGM</span>
                         </h1>
                         <div class="h-0.5 bg-primary/20 rounded-full mt-1"></div>
                     </div>
@@ -664,7 +755,7 @@ verificarSessao(60);
     </style>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const darkModeToggle = document.getElementById('darkModeToggle');
             const darkModeToggleMobile = document.getElementById('darkModeToggleMobile');
             const sunIcon = darkModeToggle.querySelector('.sun-icon');
@@ -712,7 +803,7 @@ verificarSessao(60);
             });
 
             [darkModeToggle, darkModeToggleMobile].forEach(toggle => {
-                toggle.addEventListener('click', function() {
+                toggle.addEventListener('click', function () {
                     const isDark = !document.documentElement.classList.contains('dark');
                     updateDarkMode(isDark);
                 });
@@ -748,7 +839,7 @@ verificarSessao(60);
                 themeMenuDesktop?.classList.add('hidden');
             }
 
-            accessibilityBtnMobile?.addEventListener('click', function(e) {
+            accessibilityBtnMobile?.addEventListener('click', function (e) {
                 e.stopPropagation();
                 const isHidden = accessibilityMenuMobile.classList.contains('hidden');
                 if (isHidden) {
@@ -760,19 +851,19 @@ verificarSessao(60);
                 }
             });
 
-            themeBtnMobile?.addEventListener('click', function(e) {
+            themeBtnMobile?.addEventListener('click', function (e) {
                 e.stopPropagation();
                 accessibilityMenuMobile.classList.add('hidden');
                 themeMenuMobile.classList.remove('hidden');
             });
 
-            backToMainMenu?.addEventListener('click', function(e) {
+            backToMainMenu?.addEventListener('click', function (e) {
                 e.stopPropagation();
                 themeMenuMobile.classList.add('hidden');
                 accessibilityMenuMobile.classList.remove('hidden');
             });
 
-            accessibilityBtnDesktop?.addEventListener('click', function(e) {
+            accessibilityBtnDesktop?.addEventListener('click', function (e) {
                 e.stopPropagation();
                 const isHidden = accessibilityMenuDesktop.classList.contains('hidden');
                 if (isHidden) {
@@ -783,13 +874,13 @@ verificarSessao(60);
                 }
             });
 
-            themeBtnDesktop?.addEventListener('click', function(e) {
+            themeBtnDesktop?.addEventListener('click', function (e) {
                 e.stopPropagation();
                 accessibilityMenuDesktop.classList.add('hidden');
                 themeMenuDesktop.classList.remove('hidden');
             });
 
-            backToMainMenuDesktop?.addEventListener('click', function(e) {
+            backToMainMenuDesktop?.addEventListener('click', function (e) {
                 e.stopPropagation();
                 themeMenuDesktop.classList.add('hidden');
                 accessibilityMenuDesktop.classList.remove('hidden');
@@ -797,7 +888,7 @@ verificarSessao(60);
 
             menuOverlay?.addEventListener('click', closeAllMenus);
 
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', function (e) {
                 const isClickInsideAccessibilityMobile = accessibilityMenuMobile?.contains(e.target) || themeMenuMobile?.contains(e.target) || accessibilityBtnMobile?.contains(e.target);
                 const isClickInsideAccessibilityDesktop = accessibilityMenuDesktop?.contains(e.target) || themeMenuDesktop?.contains(e.target) || accessibilityBtnDesktop?.contains(e.target);
 
@@ -807,14 +898,14 @@ verificarSessao(60);
             });
 
             [accessibilityMenuMobile, themeMenuMobile, accessibilityMenuDesktop, themeMenuDesktop].forEach(menu => {
-                menu?.addEventListener('click', function(e) {
+                menu?.addEventListener('click', function (e) {
                     e.stopPropagation();
                 });
             });
 
             const themeButtons = document.querySelectorAll('[data-theme]');
             themeButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const theme = this.dataset.theme;
                     closeAllMenus();
                 });
@@ -841,12 +932,18 @@ verificarSessao(60);
             const appCards = document.querySelectorAll('.app-card');
             const gridContainer = document.querySelector('.grid-container');
 
-            searchInput.addEventListener('input', function(e) {
-                const searchTerm = e.target.value.toLowerCase();
+            searchInput.addEventListener('input', function (e) {
+                const searchTerm = e.target.value.toLowerCase().trim(); // Adiciona trim() para remover espaços
                 let visibleCards = [];
                 let hiddenCards = [];
 
-                // First, determine which cards should be visible
+                // Se a pesquisa estiver vazia, mostrar todos os cards imediatamente
+                if (searchTerm === '') {
+                    showAllCards();
+                    return; // Sai da função para não executar o resto do código
+                }
+
+                // Lógica de pesquisa
                 appCards.forEach(card => {
                     const appName = card.querySelector('.app-name').textContent.toLowerCase();
                     const category = card.querySelector('.category-tag').textContent.toLowerCase();
@@ -854,58 +951,74 @@ verificarSessao(60);
 
                     if (appName.includes(searchTerm) || category.includes(searchTerm)) {
                         visibleCards.push(parentLink);
-                        // Reset any previous hiding styles
-                        parentLink.style.display = '';
-                        parentLink.style.opacity = '1';
-                        parentLink.style.transform = 'scale(1)';
-                    } else {
-                        hiddenCards.push(parentLink);
-                        // Prepare card for removal
-                        parentLink.style.opacity = '0';
-                        parentLink.style.transform = 'scale(0.8)';
-                    }
-                });
-
-                // Add transition class to grid container for smooth reflow
-                gridContainer.style.transition = 'all 0.3s ease-out';
-
-                
-
-                // Hide cards that don't match
-                setTimeout(() => {
-                    hiddenCards.forEach(card => {
-                        card.style.display = 'none';
-                    });
-                }, 300); // Match transition duration
-
-                // Animate visible cards back in with a stagger effect
-                visibleCards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.style.transition = 'all 0.3s ease-out';
-                        card.style.opacity = '1';
-                        card.style.transform = 'scale(1)';
-                    }, index * 50); // Stagger the animations
-                });
-
-                // If search is cleared, show all cards with animation
-                if (searchTerm === '') {
-                    appCards.forEach((card, index) => {
-                        const parentLink = card.parentElement;
-                        parentLink.style.display = '';
+                        parentLink.style.display = 'block';
                         setTimeout(() => {
                             parentLink.style.opacity = '1';
                             parentLink.style.transform = 'scale(1)';
-                        }, index * 50);
-                    });
+                        }, 50);
+                    } else {
+                        hiddenCards.push(parentLink);
+                        parentLink.style.opacity = '0';
+                        parentLink.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
+                            parentLink.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+
+            // Função para mostrar todos os cards
+            function showAllCards() {
+                gridContainer.classList.add('transitioning');
+
+                appCards.forEach((card, index) => {
+                    const parentLink = card.parentElement;
+
+                    // Reseta todos os estilos
+                    parentLink.style.display = 'block';
+                    parentLink.style.opacity = '0';
+                    parentLink.style.transform = 'scale(0.8)';
+
+                    setTimeout(() => {
+                        parentLink.style.opacity = '1';
+                        parentLink.style.transform = 'scale(1)';
+                    }, index * 50);
+                });
+
+           
+                setTimeout(() => {
+                    gridContainer.classList.remove('transitioning');
+                }, appCards.length * 50 + 300);
+            }
+
+            searchInput.addEventListener('search', function () {
+                if (this.value === '') {
+                    showAllCards();
                 }
             });
 
-            // Add necessary styles to the grid container
-            gridContainer.style.position = 'relative';
+         
+            const clearButton = document.createElement('button');
+            clearButton.textContent = '';
+            clearButton.classList.add('clear-search');
+            clearButton.style.display = 'none';
+
+            searchInput.parentElement.appendChild(clearButton);
+
+            clearButton.addEventListener('click', () => {
+                searchInput.value = '';
+                showAllCards();
+                clearButton.style.display = 'none';
+            });
+
+           
+            searchInput.addEventListener('input', function () {
+                clearButton.style.display = this.value ? 'block' : 'none';
+            });
 
             const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
             mobileNavLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
+                link.addEventListener('click', function (e) {
                     e.preventDefault();
 
                     mobileNavLinks.forEach(l => l.classList.remove('text-primary'));
@@ -934,19 +1047,19 @@ verificarSessao(60);
             animateCards();
 
             appCards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
+                card.addEventListener('mouseenter', function () {
                     const icon = this.querySelector('.icon-wrapper');
                     icon.style.transform = 'scale(1.1) rotate(5deg)';
                 });
 
-                card.addEventListener('mouseleave', function() {
+                card.addEventListener('mouseleave', function () {
                     const icon = this.querySelector('.icon-wrapper');
                     icon.style.transform = 'scale(1) rotate(0)';
                 });
             });
 
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
+                anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     const target = document.querySelector(this.getAttribute('href'));
                     if (target) {
@@ -992,8 +1105,7 @@ verificarSessao(60);
             <a href="https://aluno.seduc.ce.gov.br/">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img , src="https://i.postimg.cc/MGhrtrk4/aluna.png" alt="Aluno Online"
-                            class="app-icon">
+                        <img , src="https://i.postimg.cc/MGhrtrk4/aluna.png" alt="Aluno Online" class="app-icon">
                     </div>
                     <h3 class="app-name">Aluno Online</h3>
                     <span class="category-tag">Portal</span>
@@ -1018,7 +1130,8 @@ verificarSessao(60);
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/cJn3sprk/logout-15423241.png" alt="Entrada e Saída de Alunos" class="app-icon">
+                        <img src="https://i.postimg.cc/cJn3sprk/logout-15423241.png" alt="Entrada e Saída de Alunos"
+                            class="app-icon">
                     </div>
                     <h3 class="app-name">Entrada e Saída de Alunos</h3>
                     <span class="category-tag">Administração</span>
@@ -1028,7 +1141,8 @@ verificarSessao(60);
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/gjNXSdTj/diet-561611.png" alt="Gestão da Alimentação Escolar" class="app-icon">
+                        <img src="https://i.postimg.cc/gjNXSdTj/diet-561611.png" alt="Gestão da Alimentação Escolar"
+                            class="app-icon">
                     </div>
                     <h3 class="app-name">Gestão da Alimentação Escolar</h3>
                     <span class="category-tag">Nutrição</span>
@@ -1038,7 +1152,8 @@ verificarSessao(60);
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/VNQ6Fdk4/racking-system-11392607.png" alt="Controle de Estoque de Materiais" class="app-icon">
+                        <img src="https://i.postimg.cc/VNQ6Fdk4/racking-system-11392607.png"
+                            alt="Controle de Estoque de Materiais" class="app-icon">
                     </div>
                     <h3 class="app-name">Controle de Estoque de Materiais</h3>
                     <span class="category-tag">Logística</span>
@@ -1058,7 +1173,8 @@ verificarSessao(60);
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/d04BCPqs/suporte-tecnico.png" alt="Chamados de Suporte" class="app-icon">
+                        <img src="https://i.postimg.cc/d04BCPqs/suporte-tecnico.png" alt="Chamados de Suporte"
+                            class="app-icon">
                     </div>
                     <h3 class="app-name">Chamados de Suporte</h3>
                     <span class="category-tag">TI</span>
@@ -1068,7 +1184,8 @@ verificarSessao(60);
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/G2vvjWRT/manutencao.png" alt="Gerência de Espaços e Equipamentos" class="app-icon">
+                        <img src="https://i.postimg.cc/G2vvjWRT/manutencao.png" alt="Gerência de Espaços e Equipamentos"
+                            class="app-icon">
                     </div>
                     <h3 class="app-name">Gerência de Espaços e Equipamentos</h3>
                     <span class="category-tag">Infraestrutura</span>
@@ -1078,7 +1195,8 @@ verificarSessao(60);
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/QdDknxCN/armazenamento-de-banco-de-dados.png" alt="Banco de Questões" class="app-icon">
+                        <img src="https://i.postimg.cc/QdDknxCN/armazenamento-de-banco-de-dados.png"
+                            alt="Banco de Questões" class="app-icon">
                     </div>
                     <h3 class="app-name">Banco de Questões</h3>
                     <span class="category-tag">Educação</span>
@@ -1130,7 +1248,8 @@ verificarSessao(60);
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/hjnXKfFh/businessman-1253671.png" alt="Professor Diretor de Turma" class="app-icon">
+                        <img src="https://i.postimg.cc/hjnXKfFh/businessman-1253671.png"
+                            alt="Professor Diretor de Turma" class="app-icon">
                     </div>
                     <h3 class="app-name">Professor Diretor de Turma</h3>
                     <span class="category-tag">Educação</span>
