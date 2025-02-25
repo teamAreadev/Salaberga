@@ -190,7 +190,7 @@
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-clock text-custom-accent dark:text-dark-accent"></i>
-                                    <p class="dark:text-gray-300"><span class="font-medium">Último Acesso:</span> 19/02/2025 14:30</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Última alteração: 19/02/2025</p>
                                 </div>
                                 <button onclick="editEmail()"
                                     class="text-gray-400 hover:text-custom-accent transition-all duration-300 transform dark:hover:text-dark-accent">
@@ -203,7 +203,7 @@
                             <h3 class="text-xl font-semibold text-custom-header mb-4 dark:text-dark-header">Segurança</h3>
                             <div class="space-y-4">
                                 <div class="flex items-center gap-2">
-                                    <i class="fas fa-key text-custom-accent dark:text-dark-accent"></i>
+                                    <i class="fas fa-key text-custom-accent dark:text-dark-accent" ></i>
                                     <p class="dark:text-gray-300"><span class="font-medium">Senha: </span><?php echo $_SESSION['Senha']; ?></p>
                                 </div>
                                 <div class="flex items-center gap-2">
