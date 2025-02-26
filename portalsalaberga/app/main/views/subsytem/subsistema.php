@@ -1,3 +1,11 @@
+<?php
+
+require_once('../../controllers/controller_sessao/autenticar_sessao.php');
+require_once('../../controllers/controller_sessao/verificar_sessao.php');
+verificarSessao(60);
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -89,7 +97,7 @@
 
     @media (max-width: 768px) {
         .grid-container {
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
             padding: 1rem;
         }
@@ -126,60 +134,6 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-    }
-
-    .clear-search {
-        position: absolute;
-        right: 30px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none;
-        border: none;
-        border-radius: 50%;
-        padding: 8px;
-        margin: 0;
-        color: #666;
-        transition: all 0.2s ease;
-        opacity: 0.7;
-        cursor: pointer;
-        user-select: none;
-        -webkit-user-select: none;
-        min-width: 32px;
-        min-height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .clear-search::before {
-        content: "×";
-        font-size: 20px;
-        font-weight: 500;
-        line-height: 1;
-    }
-
-    .clear-search:hover {
-        color: #333;
-        opacity: 1;
-    }
-
-    .clear-search:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-    }
-
-    .search-container {
-        position: relative;
-        max-width: 500px;
-        margin: 0 auto;
-    }
-
-    .app-card-link {
-        transition: all 0.3s ease-out;
-    }
-
-    .transitioning {
-        pointer-events: none;
     }
 
     .app-card::before {
@@ -234,10 +188,26 @@
         color: var(--text-color);
         margin-top: 1rem;
         transition: color 0.3s ease;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        max-width: 100%;
     }
 
     .app-card:hover .app-name {
         color: var(--header-color);
+    }
+
+    .category-tag {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        background: rgba(0, 122, 51, 0.1);
+        color: var(--header-color);
+        margin-top: 0.5rem;
+        display: inline-block;
     }
 
     .main-header {
@@ -278,16 +248,6 @@
 
     .nav-link:hover::after {
         width: 100%;
-    }
-
-    .category-tag {
-        font-size: 0.75rem;
-        padding: 0.25rem 0.75rem;
-        border-radius: 12px;
-        background: rgba(0, 122, 51, 0.1);
-        color: var(--header-color);
-        margin-top: 0.5rem;
-        display: inline-block;
     }
 
     .search-container {
@@ -398,20 +358,55 @@
     }
 </style>
 <body class="select-none">
-    <noscript>
-        <div class="fixed inset-0 bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center z-50">
-            <div class="bg-white p-6 rounded-lg shadow-2xl border border-red-300 max-w-md w-full mx-4 text-center animate-pulse">
-                <h1 class="text-2xl font-bold text-red-600 mb-4">Atenção!</h1>
-                <p class="text-lg text-gray-800 mb-4">Este site requer JavaScript para funcionar corretamente.</p>
-                <p class="text-md text-gray-600 mb-6">Por favor, ative o JavaScript no seu navegador para acessar todas as funcionalidades do Portal do Aluno, como navegação interativa, modo escuro e acessibilidade.</p>
-                <div class="flex justify-center gap-4">
-                    <a href="https://www.enable-javascript.com/pt/" target="_blank" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">Como Ativar JavaScript</a>
-                    <button onclick="window.location.reload()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">Recarregar Página</button>
-                </div>
-                <p class="text-sm text-gray-500 mt-4">Se o problema persistir, entre em contato com o suporte.</p>
+<noscript>
+    <div class="fixed inset-0 bg-gradient-to-br from-[#007A33]/10 to-[#FFA500]/10 flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white p-8 rounded-xl shadow-2xl border-2 border-[#007A33]/20 max-w-md w-full mx-4 text-center">
+            <div class="mb-6">
+                <svg class="w-16 h-16 mx-auto text-[#007A33]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            
+            <h1 class="text-2xl font-bold text-[#007A33] mb-4">JavaScript Necessário</h1>
+            
+            <div class="space-y-4 mb-6">
+                <p class="text-lg text-gray-800">Para uma melhor experiência, ative o JavaScript.</p>
+                <p class="text-md text-gray-600">O Portal do Aluno necessita do JavaScript para fornecer:</p>
+                
+                <ul class="text-gray-700 space-y-2">
+                    <li class="flex items-center justify-center gap-2">
+                        <span class="text-[#FFA500]">✓</span> Navegação interativa
+                    </li>
+                    <li class="flex items-center justify-center gap-2">
+                        <span class="text-[#FFA500]">✓</span> Recursos de acessibilidade
+                    </li>
+                    <li class="flex items-center justify-center gap-2">
+                        <span class="text-[#FFA500]">✓</span> Personalização da interface
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-3 mb-6">
+                <a href="https://www.enable-javascript.com/pt/" 
+                   target="_blank" 
+                   class="bg-[#007A33] text-white px-6 py-2.5 rounded-lg hover:bg-[#007A33]/90 transition-all duration-300 shadow-md hover:shadow-lg">
+                    Como Ativar JavaScript
+                </a>
+                <button onclick="window.location.reload()" 
+                        class="bg-[#FFA500] text-white px-6 py-2.5 rounded-lg hover:bg-[#FFA500]/90 transition-all duration-300 shadow-md hover:shadow-lg">
+                    Recarregar Página
+                </button>
+            </div>
+
+            <div class="text-sm text-gray-500 flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>Precisa de ajuda? Entre em contato com o suporte técnico</span>
             </div>
         </div>
-    </noscript>
+    </div>
+</noscript>
     <header class="main-header">
         <div class="container mx-auto px-4 py-3">
             <div class="flex items-center justify-between">
@@ -666,15 +661,15 @@
             }
 
             function closeAllMenus() {
-                accessibilityMenuMobile?.classList.add('hidden');
-                themeMenuMobile?.classList.add('hidden');
+                accessibilityMenuMobile.classList.add('hidden');
+                themeMenuMobile.classList.add('hidden');
                 hideOverlay();
 
-                accessibilityMenuDesktop?.classList.add('hidden');
-                themeMenuDesktop?.classList.add('hidden');
+                accessibilityMenuDesktop.classList.add('hidden');
+                themeMenuDesktop.classList.add('hidden');
             }
 
-            accessibilityBtnMobile?.addEventListener('click', function (e) {
+            accessibilityBtnMobile.addEventListener('click', function (e) {
                 e.stopPropagation();
                 const isHidden = accessibilityMenuMobile.classList.contains('hidden');
                 if (isHidden) {
@@ -686,19 +681,19 @@
                 }
             });
 
-            themeBtnMobile?.addEventListener('click', function (e) {
+            themeBtnMobile.addEventListener('click', function (e) {
                 e.stopPropagation();
                 accessibilityMenuMobile.classList.add('hidden');
                 themeMenuMobile.classList.remove('hidden');
             });
 
-            backToMainMenu?.addEventListener('click', function (e) {
+            backToMainMenu.addEventListener('click', function (e) {
                 e.stopPropagation();
                 themeMenuMobile.classList.add('hidden');
                 accessibilityMenuMobile.classList.remove('hidden');
             });
 
-            accessibilityBtnDesktop?.addEventListener('click', function (e) {
+            accessibilityBtnDesktop.addEventListener('click', function (e) {
                 e.stopPropagation();
                 const isHidden = accessibilityMenuDesktop.classList.contains('hidden');
                 if (isHidden) {
@@ -709,23 +704,23 @@
                 }
             });
 
-            themeBtnDesktop?.addEventListener('click', function (e) {
+            themeBtnDesktop.addEventListener('click', function (e) {
                 e.stopPropagation();
                 accessibilityMenuDesktop.classList.add('hidden');
                 themeMenuDesktop.classList.remove('hidden');
             });
 
-            backToMainMenuDesktop?.addEventListener('click', function (e) {
+            backToMainMenuDesktop.addEventListener('click', function (e) {
                 e.stopPropagation();
                 themeMenuDesktop.classList.add('hidden');
                 accessibilityMenuDesktop.classList.remove('hidden');
             });
 
-            menuOverlay?.addEventListener('click', closeAllMenus);
+            menuOverlay.addEventListener('click', closeAllMenus);
 
             document.addEventListener('click', function (e) {
-                const isClickInsideAccessibilityMobile = accessibilityMenuMobile?.contains(e.target) || themeMenuMobile?.contains(e.target) || accessibilityBtnMobile?.contains(e.target);
-                const isClickInsideAccessibilityDesktop = accessibilityMenuDesktop?.contains(e.target) || themeMenuDesktop?.contains(e.target) || accessibilityBtnDesktop?.contains(e.target);
+                const isClickInsideAccessibilityMobile = accessibilityMenuMobile.contains(e.target) || themeMenuMobile.contains(e.target) || accessibilityBtnMobile.contains(e.target);
+                const isClickInsideAccessibilityDesktop = accessibilityMenuDesktop.contains(e.target) || themeMenuDesktop.contains(e.target) || accessibilityBtnDesktop.contains(e.target);
 
                 if (!isClickInsideAccessibilityMobile && !isClickInsideAccessibilityDesktop) {
                     closeAllMenus();
@@ -733,7 +728,7 @@
             });
 
             [accessibilityMenuMobile, themeMenuMobile, accessibilityMenuDesktop, themeMenuDesktop].forEach(menu => {
-                menu?.addEventListener('click', function (e) {
+                menu.addEventListener('click', function (e) {
                     e.stopPropagation();
                 });
             });
@@ -921,16 +916,16 @@
     <main class="container mx-auto px-4">
         <div class="grid-container">
             <a href="https://salaberga.com" target="_blank">
-                <div class="app-card w-{100px} h-full h-4">
+                <div class="app-card">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png" alt="Portal STGM" class="app-icon">
+                        <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Portal STGM" class="app-icon">
                     </div>
                     <h3 class="app-name">Portal STGM</h3>
                     <span class="category-tag">Sistema</span>
                 </div>
             </a>
             <a href="https://aluno.seduc.ce.gov.br/">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/MGhrtrk4/aluna.png" alt="Aluno Online" class="app-icon">
                     </div>
@@ -939,7 +934,7 @@
                 </div>
             </a>
             <a href="https://classroom.google.com/">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/BQNdZvgK/image-1599078642807-removebg-preview.png" alt="Google Classroom" class="app-icon">
                     </div>
@@ -948,7 +943,7 @@
                 </div>
             </a>
             <a href="#">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/cJn3sprk/logout-15423241.png" alt="Entrada e Saída de Alunos" class="app-icon">
                     </div>
@@ -957,7 +952,7 @@
                 </div>
             </a>
             <a href="#">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/gjNXSdTj/diet-561611.png" alt="Gestão da Alimentação Escolar" class="app-icon">
                     </div>
@@ -966,7 +961,7 @@
                 </div>
             </a>
             <a href="#">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/VNQ6Fdk4/racking-system-11392607.png" alt="Controle de Estoque de Materiais" class="app-icon">
                     </div>
@@ -975,7 +970,7 @@
                 </div>
             </a>
             <a href="#">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
@@ -984,7 +979,7 @@
                 </div>
             </a>
             <a href="#">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/d04BCPqs/suporte-tecnico.png" alt="Chamados de Suporte" class="app-icon">
                     </div>
@@ -993,7 +988,7 @@
                 </div>
             </a>
             <a href="#">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/G2vvjWRT/manutencao.png" alt="Gerência de Espaços e Equipamentos" class="app-icon">
                     </div>
@@ -1002,16 +997,16 @@
                 </div>
             </a>
             <a href="#">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/QdDknxCN/armazenamento-de-banco-de-dados.png" alt="Banco de Questões" class="app-icon">
+                        <img src="banco de questoes.png" alt="Banco de Questões" class="app-icon">
                     </div>
                     <h3 class="app-name">Banco de Questões</h3>
                     <span class="category-tag">Educação</span>
                 </div>
             </a>
             <a href="#">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/Ls3gGHcR/pilha-de-livros.png" alt="Biblioteca" class="app-icon">
                     </div>
@@ -1020,7 +1015,7 @@
                 </div>
             </a>
             <a href="#">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/8kFH70xG/pessoa.png" alt="Registros PCD" class="app-icon">
                     </div>
@@ -1029,7 +1024,7 @@
                 </div>
             </a>
             <a href="#">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/C5VsTF74/scan-facial.png" alt="Tombamento" class="app-icon">
                     </div>
@@ -1038,7 +1033,7 @@
                 </div>
             </a>
             <a href="#">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/6qjqVc8G/profits-1571029.png" alt="Financeiro" class="app-icon">
                     </div>
@@ -1047,7 +1042,7 @@
                 </div>
             </a>
             <a href="#">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/hjnXKfFh/businessman-1253671.png" alt="Professor Diretor de Turma" class="app-icon">
                     </div>
@@ -1056,7 +1051,7 @@
                 </div>
             </a>
             <a href="https://mural.seduc.ce.gov.br">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/CMX7vRKh/aviso-1.png" alt="Mural de Avisos" class="app-icon">
                     </div>
@@ -1065,7 +1060,7 @@
                 </div>
             </a>
             <a href="https://forms.google.com/">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/Vkfm4T7j/png-transparent-g-suite-form-google-surveys-email-house-purple-violet-rectangle-removebg-preview.png" alt="Google Forms" class="app-icon">
                     </div>
@@ -1074,7 +1069,7 @@
                 </div>
             </a>
             <a href="https://chat.openai.com/">
-                <div class="app-card w-{100px} h-full">
+                <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/DZqM9f0m/download-4-removebg-preview.png" alt="Chat GPT" class="app-icon">
                     </div>
