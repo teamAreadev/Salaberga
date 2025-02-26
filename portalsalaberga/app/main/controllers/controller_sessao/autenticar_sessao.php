@@ -41,7 +41,7 @@ elseif (isset($_SESSION['precadastro']) && $_SESSION['precadastro']) {
 else {
     // Se o usuário não está na página 'precadastro.php', redireciona
     if (!isCurrentPage('precadastro.php')) {
-        header('Location: ../../views/subsytem/subsistema.php'); // Use caminho absoluto
+        header('Location: ../../views/autenticacao/precadastro.php'); // Use caminho absoluto
         exit();
     }
 }

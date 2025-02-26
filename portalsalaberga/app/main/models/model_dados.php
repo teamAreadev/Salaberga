@@ -107,7 +107,7 @@ function login($email, $senha)
     require_once('../../config/Database.php');
     try {
         // Prepara e executa a consulta para verificar o usuário
-        $querySelect = "SELECT id, email, senha, tipo status FROM usuario WHERE email = :email AND senha = MD5(:senha)";
+        $querySelect = "SELECT id, email, senha, status FROM usuario WHERE email = :email AND senha = MD5(:senha)";
         $stmtSelect = $conexao->prepare($querySelect);
         $stmtSelect->bindParam(':email', $email);
         $stmtSelect->bindParam(':senha', $senha);
