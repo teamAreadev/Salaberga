@@ -1,14 +1,32 @@
+<?php
+
+require_once('../../controllers/controller_sessao/autenticar_sessao.php');
+require_once('../../controllers/controller_sessao/verificar_sessao.php');
+verificarSessao(60);
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#007A33">
+    <meta name="theme-color" content="#4A90E2">
     <meta name="description" content="Portal do Professores - Acesse suas atividades e recursos escolares">
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../../assets/js/service-worker.js"></script>
     <script src="../../assets/js/acessibilidades.js"></script>
-    <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
+    <link rel=" icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
+
+    <link rel="manifest" href="../../assets/js/manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Portal Professores">
+
     <title>Subsistemas STGM</title>
 </head>
 <script>
@@ -23,6 +41,7 @@
         }
     }
 </script>
+
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -78,6 +97,8 @@
         }
     }
 
+
+
     .grid-container.transitioning {
         transition: all 0.3s ease-out;
     }
@@ -87,6 +108,7 @@
         width: 100%;
     }
 
+    /* Adicione uma media query para responsividade */
     @media (max-width: 768px) {
         .grid-container {
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -129,23 +151,31 @@
     }
 
     .clear-search {
+
         position: absolute;
         right: 30px;
         top: 50%;
         transform: translateY(-50%);
+
+
         background: none;
         border: none;
         border-radius: 50%;
         padding: 8px;
         margin: 0;
+
         color: #666;
         transition: all 0.2s ease;
         opacity: 0.7;
+
+
         cursor: pointer;
         user-select: none;
         -webkit-user-select: none;
+
         min-width: 32px;
         min-height: 32px;
+
         display: flex;
         align-items: center;
         justify-content: center;
@@ -158,9 +188,11 @@
         line-height: 1;
     }
 
+    /* Estados do botão */
     .clear-search:hover {
         color: #333;
         opacity: 1;
+
     }
 
     .clear-search:focus {
@@ -168,12 +200,15 @@
         box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
     }
 
+
+    /* Estilos para o container do input */
     .search-container {
         position: relative;
         max-width: 500px;
         margin: 0 auto;
     }
 
+    /* Animação para os cards */
     .app-card-link {
         transition: all 0.3s ease-out;
     }
@@ -396,17 +431,85 @@
     .mobile-nav a:hover {
         color: var(--header-color);
     }
+
+    .install-button {
+        position: fixed;
+        bottom: clamp(16px, 4vh, 32px);
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        padding: clamp(12px, 3vw, 24px) clamp(24px, 5vw, 48px);
+        min-width: min(200px, 80vw);
+        max-width: 90vw;
+        background: linear-gradient(45deg, var(--header-color), var(--accent-color));
+        color: white;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+        font-size: clamp(14px, 4vw, 16px);
+        font-weight: 600;
+        line-height: 1.5;
+        text-align: center;
+        border: none;
+        border-radius: 9999px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+        cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+    }
+
+    .install-button:hover {
+        transform: translateX(-50%) translateY(-4px);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .install-button:focus-visible {
+        outline: 3px solid var(--accent-color);
+        outline-offset: 2px;
+    }
+
+    .install-button:active {
+        transform: translateX(-50%) translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .install-button {
+            transition: none;
+        }
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .install-button {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .install-button {
+            padding: 14px 28px;
+            font-size: 15px;
+        }
+    }
 </style>
+</head>
+
 <body class="select-none">
     <noscript>
         <div class="fixed inset-0 bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center z-50">
-            <div class="bg-white p-6 rounded-lg shadow-2xl border border-red-300 max-w-md w-full mx-4 text-center animate-pulse">
+            <div
+                class="bg-white p-6 rounded-lg shadow-2xl border border-red-300 max-w-md w-full mx-4 text-center animate-pulse">
                 <h1 class="text-2xl font-bold text-red-600 mb-4">Atenção!</h1>
                 <p class="text-lg text-gray-800 mb-4">Este site requer JavaScript para funcionar corretamente.</p>
-                <p class="text-md text-gray-600 mb-6">Por favor, ative o JavaScript no seu navegador para acessar todas as funcionalidades do Portal do Aluno, como navegação interativa, modo escuro e acessibilidade.</p>
+                <p class="text-md text-gray-600 mb-6">Por favor, ative o JavaScript no seu navegador para acessar todas
+                    as funcionalidades do Portal do Aluno, como navegação interativa, modo escuro e acessibilidade.</p>
                 <div class="flex justify-center gap-4">
-                    <a href="https://www.enable-javascript.com/pt/" target="_blank" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">Como Ativar JavaScript</a>
-                    <button onclick="window.location.reload()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">Recarregar Página</button>
+                    <a href="https://www.enable-javascript.com/pt/" target="_blank"
+                        class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">Como
+                        Ativar JavaScript</a>
+                    <button onclick="window.location.reload()"
+                        class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">Recarregar
+                        Página</button>
                 </div>
                 <p class="text-sm text-gray-500 mt-4">Se o problema persistir, entre em contato com o suporte.</p>
             </div>
@@ -416,42 +519,68 @@
         <div class="container mx-auto px-4 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="h-12 w-auto object-contain">
+                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo"
+                        class="h-12 w-auto object-contain">
                     <div>
-                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Subsistemas <span class="text-secondary">STGM</span></h1>
+                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Subsistemas <span
+                                class="text-secondary">STGM</span>
+                        </h1>
                         <div class="h-0.5 bg-primary/20 rounded-full mt-1"></div>
                     </div>
                 </div>
+
                 <nav class="hidden md:flex items-center gap-5">
-                    <a href="/" class="nav-link">Início</a>
-                    <a href="/controllers/controller_sessao/autenticar_sessao.php?sair" class="nav-link">Sair</a>
-                    <button id="darkModeToggle" class="inline-flex items-center justify-center p-2 rounded-lg transition-colors" role="switch" aria-label="Alternar modo escuro">
-                        <svg class="w-5 h-5 sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    <a href="../../" class="nav-link">Início</a>
+                    <a href="../../controllers/controller_sessao/autenticar_sessao.php?sair" class="nav-link">Sair</a>
+                    <button id="darkModeToggle"
+                        class="inline-flex items-center justify-center p-2 rounded-lg transition-colors" role="switch"
+                        aria-label="Alternar modo escuro">
+                        <svg class="w-5 h-5 sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
-                        <svg class="w-5 h-5 moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        <svg class="w-5 h-5 moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                         </svg>
                         <span class="sr-only">Alternar modo escuro</span>
                     </button>
+
                     <div class="relative">
-                        <button id="accessibilityBtnDesktop" class="flex items-center gap-2 p-2 rounded-lg transition-colors duration-300" aria-expanded="false" aria-haspopup="true">
+                        <button id="accessibilityBtnDesktop"
+                            class="flex items-center gap-2 p-2 rounded-lg transition-colors duration-300"
+                            aria-expanded="false" aria-haspopup="true">
                             <i class="fa-solid fa-universal-access text-xl"></i>
                         </button>
-                        <div id="accessibilityMenuDesktop" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 hidden z-50" role="menu">
+
+                        <div id="accessibilityMenuDesktop"
+                            class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 hidden z-50"
+                            role="menu">
                             <div class="px-4 py-2 border-b" style="color: #1a1a1a;">
                                 <span class="block text-sm font-semibold mb-2">Tamanho do Texto</span>
                                 <div class="flex gap-2">
-                                    <button class="p-2 hover:bg-gray-100 rounded" aria-label="Diminuir tamanho do texto"><i class="fa-solid fa-a"></i><b>-</b></button>
-                                    <button class="p-2 hover:bg-gray-100 rounded" aria-label="Tamanho padrão do texto"><i class="fa-solid fa-a"></i></button>
-                                    <button class="p-2 hover:bg-gray-100 rounded" aria-label="Aumentar tamanho do texto"><i class="fa-solid fa-a"></i><b>+</b></button>
+                                    <button class="p-2 hover:bg-gray-100 rounded"
+                                        aria-label="Diminuir tamanho do texto"><i
+                                            class="fa-solid fa-a"></i><b>-</b></button>
+                                    <button class="p-2 hover:bg-gray-100 rounded"
+                                        aria-label="Tamanho padrão do texto"><i class="fa-solid fa-a"></i></button>
+                                    <button class="p-2 hover:bg-gray-100 rounded"
+                                        aria-label="Aumentar tamanho do texto"><i
+                                            class="fa-solid fa-a"></i><b>+</b></button>
                                 </div>
                             </div>
-                            <button class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2" style="color: #1a1a1a;">
+
+                            <button class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
+                                style="color: #1a1a1a;">
                                 <i class="fa-solid fa-ear-listen"></i>
                                 <span>Leitor de Tela</span>
                             </button>
-                            <button id="themeBtnDesktop" class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center justify-between" style="color: #1a1a1a;">
+
+                            <button id="themeBtnDesktop"
+                                class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center justify-between"
+                                style="color: #1a1a1a;">
                                 <div class="flex items-center gap-2">
                                     <i class="fa-solid fa-circle-half-stroke"></i>
                                     <span>Temas de Contraste</span>
@@ -459,63 +588,86 @@
                                 <i class="fa-solid fa-chevron-right"></i>
                             </button>
                         </div>
-                        <div id="themeMenuDesktop" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 hidden z-50">
+
+                        <div id="themeMenuDesktop"
+                            class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 hidden z-50">
                             <div class="flex items-center px-4 py-2 border-b">
                                 <button id="backToMainMenuDesktop" class="mr-2" style="color: #1a1a1a;">
                                     <i class="fa-solid fa-arrow-left"></i>
                                 </button>
                                 <span class="font-semibold">Temas de Contraste</span>
                             </div>
+
                             <div class="py-2" style="color: #1a1a1a;">
-                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100" data-theme="monochrome">Monocromático</button>
-                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100" data-theme="inverted-grayscale">Escala de cinza invertida</button>
-                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100" data-theme="inverted-color">Cor invertida</button>
-                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100" data-theme="original">Cores originais</button>
+                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100"
+                                    data-theme="monochrome">Monocromático</button>
+                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100"
+                                    data-theme="inverted-grayscale">Escala de cinza invertida</button>
+                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100"
+                                    data-theme="inverted-color">Cor invertida</button>
+                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100" data-theme="original">Cores
+                                    originais</button>
                             </div>
                         </div>
                     </div>
-                    <a href="/autenticacao/perfil.php">
+
+                    <a href="../autenticacao/perfil.php">
                         <div class="flex items-center gap-3 cursor-pointer">
                             <div class="relative">
-                                <img src="https://i.postimg.cc/m2d5f5L3/images-removebg-preview.png" alt="Perfil" class="w-10 h-10 rounded-full border-2 border-transparent hover:border-secondary transition-colors duration-300">
-                                <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                <img src="https://i.postimg.cc/m2d5f5L3/images-removebg-preview.png" alt="Perfil"
+                                    class="w-10 h-10 rounded-full border-2 border-transparent hover:border-secondary transition-colors duration-300">
+                                <div
+                                    class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white">
+                                </div>
                             </div>
                         </div>
                     </a>
                 </nav>
+
                 <div class="md:hidden">
                     <div class="relative">
-                        <a href="/autenticacao/perfil.php">
-                            <img src="https://i.postimg.cc/m2d5f5L3/images-removebg-preview.png" alt="Perfil" class="w-10 h-10 rounded-full border-2 border-transparent hover:border-secondary transition-colors duration-300">
-                            <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                        <a href="../autenticacao/perfil.php">
+                            <img src="https://i.postimg.cc/m2d5f5L3/images-removebg-preview.png" alt="Perfil"
+                                class="w-10 h-10 rounded-full border-2 border-transparent hover:border-secondary transition-colors duration-300">
+                            <div
+                                class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white">
+                            </div>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </header>
+
     <nav class="mobile-nav md:hidden">
         <div class="flex justify-around items-center">
-            <a href="/" class="nav-link">
+            <a href="../../" class="nav-link">
                 <i class="fa-solid fa-home text-xl"></i>
                 <span class="text-xs">Início</span>
             </a>
-            <a href="/controllers/controller_sessao/autenticar_sessao.php?sair" class="nav-link">
+            <a href="../../controllers/controller_sessao/autenticar_sessao.php?sair" class="nav-link">
                 <i class="fa-solid fa-sign-out-alt text-xl"></i>
                 <span class="text-xs">Sair</span>
             </a>
+
             <div class="relative">
                 <button id="accessibilityBtnMobile" class="nav-link flex flex-col items-center">
                     <i class="fa-solid fa-universal-access text-xl"></i>
                     <span class="text-xs">Acessibilidade</span>
                 </button>
+
                 <div id="accessibilityMenuMobile" class="menu-base bottom-24 hidden">
-                    <button class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2" style="color: #1a1a1a;">
+
+                    <button class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
+                        style="color: #1a1a1a;">
                         <i class="fa-solid fa-ear-listen"></i>
                         <span>Leitor de Tela</span>
                     </button>
+
                     <div class="relative">
-                        <button id="themeBtnMobile" class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center justify-between" style="color: #1a1a1a;">
+                        <button id="themeBtnMobile"
+                            class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center justify-between"
+                            style="color: #1a1a1a;">
                             <div class="flex items-center gap-2">
                                 <i class="fa-solid fa-circle-half-stroke"></i>
                                 <span>Temas de Contraste</span>
@@ -524,6 +676,7 @@
                         </button>
                     </div>
                 </div>
+
                 <div id="themeMenuMobile" class="menu-base bottom-24 hidden">
                     <div class="flex items-center px-4 py-2 border-b">
                         <button id="backToMainMenu" class="mr-2" style="color: #1a1a1a;">
@@ -531,27 +684,38 @@
                         </button>
                         <span class="font-semibold">Temas de Contraste</span>
                     </div>
+
                     <div class="py-2" style="color: #1a1a1a;">
-                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100" data-theme="monochrome">Monocromático</button>
-                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100" data-theme="inverted-grayscale">Escala de cinza invertida</button>
-                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100" data-theme="inverted-color">Cor invertida</button>
-                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100" data-theme="original">Cores originais</button>
+                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100"
+                            data-theme="monochrome">Monocromático</button>
+                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100"
+                            data-theme="inverted-grayscale">Escala de cinza invertida</button>
+                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100" data-theme="inverted-color">Cor
+                            invertida</button>
+                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100" data-theme="original">Cores
+                            originais</button>
                     </div>
                 </div>
             </div>
             <button id="darkModeToggleMobile" class="nav-link flex flex-col items-center">
-                <svg class="w-6 h-6 sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                <svg class="w-6 h-6 sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
-                <svg class="w-6 h-6 moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                <svg class="w-6 h-6 moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                 </svg>
                 <span class="text-xs sr-only">Alternar modo escuro</span>
                 <span class="text-xs">Tema</span>
             </button>
         </div>
+
         <div id="menuOverlay" class="menu-overlay"></div>
     </nav>
+
     <style>
         .mobile-nav {
             transition: transform 0.3s ease-in-out;
@@ -589,6 +753,7 @@
             pointer-events: auto;
         }
     </style>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const darkModeToggle = document.getElementById('darkModeToggle');
@@ -763,21 +928,22 @@
 
                 lastScroll = currentScroll;
             });
-
             const searchInput = document.getElementById('search-input');
             const appCards = document.querySelectorAll('.app-card');
             const gridContainer = document.querySelector('.grid-container');
 
             searchInput.addEventListener('input', function (e) {
-                const searchTerm = e.target.value.toLowerCase().trim();
+                const searchTerm = e.target.value.toLowerCase().trim(); // Adiciona trim() para remover espaços
                 let visibleCards = [];
                 let hiddenCards = [];
 
+                // Se a pesquisa estiver vazia, mostrar todos os cards imediatamente
                 if (searchTerm === '') {
                     showAllCards();
-                    return;
+                    return; // Sai da função para não executar o resto do código
                 }
 
+                // Lógica de pesquisa
                 appCards.forEach(card => {
                     const appName = card.querySelector('.app-name').textContent.toLowerCase();
                     const category = card.querySelector('.category-tag').textContent.toLowerCase();
@@ -801,12 +967,14 @@
                 });
             });
 
+            // Função para mostrar todos os cards
             function showAllCards() {
                 gridContainer.classList.add('transitioning');
 
                 appCards.forEach((card, index) => {
                     const parentLink = card.parentElement;
 
+                    // Reseta todos os estilos
                     parentLink.style.display = 'block';
                     parentLink.style.opacity = '0';
                     parentLink.style.transform = 'scale(0.8)';
@@ -817,6 +985,7 @@
                     }, index * 50);
                 });
 
+           
                 setTimeout(() => {
                     gridContainer.classList.remove('transitioning');
                 }, appCards.length * 50 + 300);
@@ -828,6 +997,7 @@
                 }
             });
 
+         
             const clearButton = document.createElement('button');
             clearButton.textContent = '';
             clearButton.classList.add('clear-search');
@@ -841,6 +1011,7 @@
                 clearButton.style.display = 'none';
             });
 
+           
             searchInput.addEventListener('input', function () {
                 clearButton.style.display = this.value ? 'block' : 'none';
             });
@@ -923,57 +1094,72 @@
             <a href="https://salaberga.com" target="_blank">
                 <div class="app-card w-{100px} h-full h-4">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png" alt="Portal STGM" class="app-icon">
+                        <img src="https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png"
+                            alt="Portal STGM" class="app-icon">
                     </div>
                     <h3 class="app-name">Portal STGM</h3>
                     <span class="category-tag">Sistema</span>
                 </div>
             </a>
+
             <a href="https://aluno.seduc.ce.gov.br/">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/MGhrtrk4/aluna.png" alt="Aluno Online" class="app-icon">
+                        <img , src="https://i.postimg.cc/MGhrtrk4/aluna.png" alt="Aluno Online" class="app-icon">
                     </div>
                     <h3 class="app-name">Aluno Online</h3>
                     <span class="category-tag">Portal</span>
                 </div>
             </a>
+
             <a href="https://classroom.google.com/">
                 <div class="app-card w-{100px} h-full">
+
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/BQNdZvgK/image-1599078642807-removebg-preview.png" alt="Google Classroom" class="app-icon">
+                        <img src="https://i.postimg.cc/BQNdZvgK/image-1599078642807-removebg-preview.png"
+                            alt="Google Classroom" class="app-icon">
                     </div>
                     <h3 class="app-name">Google Classroom</h3>
                     <span class="category-tag">Aulas</span>
                 </div>
             </a>
+
+
+
+
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/cJn3sprk/logout-15423241.png" alt="Entrada e Saída de Alunos" class="app-icon">
+                        <img src="https://i.postimg.cc/cJn3sprk/logout-15423241.png" alt="Entrada e Saída de Alunos"
+                            class="app-icon">
                     </div>
                     <h3 class="app-name">Entrada e Saída de Alunos</h3>
                     <span class="category-tag">Administração</span>
                 </div>
             </a>
+
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/gjNXSdTj/diet-561611.png" alt="Gestão da Alimentação Escolar" class="app-icon">
+                        <img src="https://i.postimg.cc/gjNXSdTj/diet-561611.png" alt="Gestão da Alimentação Escolar"
+                            class="app-icon">
                     </div>
                     <h3 class="app-name">Gestão da Alimentação Escolar</h3>
                     <span class="category-tag">Nutrição</span>
                 </div>
             </a>
+
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/VNQ6Fdk4/racking-system-11392607.png" alt="Controle de Estoque de Materiais" class="app-icon">
+                        <img src="https://i.postimg.cc/VNQ6Fdk4/racking-system-11392607.png"
+                            alt="Controle de Estoque de Materiais" class="app-icon">
                     </div>
                     <h3 class="app-name">Controle de Estoque de Materiais</h3>
                     <span class="category-tag">Logística</span>
                 </div>
             </a>
+
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
@@ -983,33 +1169,40 @@
                     <span class="category-tag">Carreira</span>
                 </div>
             </a>
+
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/d04BCPqs/suporte-tecnico.png" alt="Chamados de Suporte" class="app-icon">
+                        <img src="https://i.postimg.cc/d04BCPqs/suporte-tecnico.png" alt="Chamados de Suporte"
+                            class="app-icon">
                     </div>
                     <h3 class="app-name">Chamados de Suporte</h3>
                     <span class="category-tag">TI</span>
                 </div>
             </a>
+
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/G2vvjWRT/manutencao.png" alt="Gerência de Espaços e Equipamentos" class="app-icon">
+                        <img src="https://i.postimg.cc/G2vvjWRT/manutencao.png" alt="Gerência de Espaços e Equipamentos"
+                            class="app-icon">
                     </div>
                     <h3 class="app-name">Gerência de Espaços e Equipamentos</h3>
                     <span class="category-tag">Infraestrutura</span>
                 </div>
             </a>
+
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/QdDknxCN/armazenamento-de-banco-de-dados.png" alt="Banco de Questões" class="app-icon">
+                        <img src="https://i.postimg.cc/QdDknxCN/armazenamento-de-banco-de-dados.png"
+                            alt="Banco de Questões" class="app-icon">
                     </div>
                     <h3 class="app-name">Banco de Questões</h3>
                     <span class="category-tag">Educação</span>
                 </div>
             </a>
+
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
@@ -1019,6 +1212,7 @@
                     <span class="category-tag">Recursos</span>
                 </div>
             </a>
+
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
@@ -1028,6 +1222,9 @@
                     <span class="category-tag">Inclusão</span>
                 </div>
             </a>
+
+
+
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
@@ -1037,6 +1234,7 @@
                     <span class="category-tag">Patrimônio</span>
                 </div>
             </a>
+
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
@@ -1046,17 +1244,23 @@
                     <span class="category-tag">Economia</span>
                 </div>
             </a>
+
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/hjnXKfFh/businessman-1253671.png" alt="Professor Diretor de Turma" class="app-icon">
+                        <img src="https://i.postimg.cc/hjnXKfFh/businessman-1253671.png"
+                            alt="Professor Diretor de Turma" class="app-icon">
                     </div>
                     <h3 class="app-name">Professor Diretor de Turma</h3>
                     <span class="category-tag">Educação</span>
                 </div>
             </a>
+
+
+
             <a href="https://mural.seduc.ce.gov.br">
                 <div class="app-card w-{100px} h-full">
+
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/CMX7vRKh/aviso-1.png" alt="Mural de Avisos" class="app-icon">
                     </div>
@@ -1064,19 +1268,25 @@
                     <span class="category-tag">Comunicação</span>
                 </div>
             </a>
+
             <a href="https://forms.google.com/">
                 <div class="app-card w-{100px} h-full">
+
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/Vkfm4T7j/png-transparent-g-suite-form-google-surveys-email-house-purple-violet-rectangle-removebg-preview.png" alt="Google Forms" class="app-icon">
+                        <img src="https://i.postimg.cc/Vkfm4T7j/png-transparent-g-suite-form-google-surveys-email-house-purple-violet-rectangle-removebg-preview.png"
+                            alt="Google Forms" class="app-icon">
                     </div>
                     <h3 class="app-name">Google Forms</h3>
                     <span class="category-tag">Atividades</span>
                 </div>
             </a>
+
             <a href="https://chat.openai.com/">
                 <div class="app-card w-{100px} h-full">
+
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/DZqM9f0m/download-4-removebg-preview.png" alt="Chat GPT" class="app-icon">
+                        <img src="https://i.postimg.cc/DZqM9f0m/download-4-removebg-preview.png" alt="Chat GPT"
+                            class="app-icon">
                     </div>
                     <h3 class="app-name">Chat GPT</h3>
                     <span class="category-tag">Auxílio</span>
@@ -1085,4 +1295,5 @@
         </div>
     </main>
 </body>
+
 </html>
