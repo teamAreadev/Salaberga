@@ -239,7 +239,7 @@ function alterarTelefone($telefone)
         $stmtSelect->bindParam(':email', $_SESSION['Email']);
         $stmtSelect->execute();
         $resultSelect = $stmtSelect->fetch(PDO::FETCH_ASSOC);
-        
+
 
         if (!empty($resultSelect)) {
 
@@ -260,24 +260,33 @@ function alterarTelefone($telefone)
     }
 }
 
-function alterarSenha($novaSenha)
+function alterarSenha($novaSenha,$senhaAntiga)
 {
 
     require_once('../../config/Database.php');
     try {
-        if (!empty($_SESSION['Senha'])) {
-        //altera a senha do usuário
-        $queryUpdate = "
+        $querySelect = "SELECT id FROM usuario WHERE senha = :senha";
+        $stmtSelect = $conexao->prepare($querySelect);
+        $stmtSelect->bindParam(':senha', $senhaAntiga);
+        $stmtSelect->execute();
+        $resultSelect = $stmtSelect->fetch(PDO::FETCH_ASSOC);
+        echo ($resultSelect);
+        echo $_SESSION['Senha'];
+        
+/*
+        if (!empty($resultSelect)) {
+            //altera a senha do usuário
+            $queryUpdate = "
         UPDATE usuario SET senha = MD5(:senha) WHERE email = :email 
         ";
-        $stmtUpdate = $conexao->prepare($queryUpdate);
-        $stmtUpdate->bindParam(':senha', $novaSenha);
-        $stmtUpdate->bindParam(':email', $_SESSION['Email']);
-        $stmtUpdate->execute();
-        $resultUpdate = $stmtUpdate->fetch(PDO::FETCH_ASSOC);
-        header('Location: ../controller_perfil/controller_altSenha.php?alt');
+            $stmtUpdate = $conexao->prepare($queryUpdate);
+            $stmtUpdate->bindParam(':senha', $novaSenha);
+            $stmtUpdate->bindParam(':email', $_SESSION['Email']);
+            $stmtUpdate->execute();
+            $resultUpdate = $stmtUpdate->fetch(PDO::FETCH_ASSOC);
+            header('Location: ../controller_perfil/controller_altSenha.php?alt');
         }
-    } catch (PDOException $e) {
+    */} catch (PDOException $e) {
         error_log("Erro no banco de dados: " . $e->getMessage());
         echo "Erro no banco de dados: " . $e->getMessage();
     }
