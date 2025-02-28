@@ -260,34 +260,64 @@ function alterarTelefone($telefone)
     }
 }
 
-function alterarSenha($novaSenha,$senhaAntiga)
-{
-
-    require_once('../../config/Database.php');
+function alterarSenha($novaSenha, $confSenha, $senhaAntiga) {
     try {
-        $querySelect = "SELECT id FROM usuario WHERE senha = :senha";
+        require_once('../../config/Database.php');
+
+        // Busca a senha criptografada
+        $querySelect = "SELECT id, senha FROM usuario";
         $stmtSelect = $conexao->prepare($querySelect);
-        $stmtSelect->bindParam(':senha', $senhaAntiga);
         $stmtSelect->execute();
         $resultSelect = $stmtSelect->fetch(PDO::FETCH_ASSOC);
-        echo ($resultSelect);
-        echo $_SESSION['Senha'];
-        
-/*
-        if (!empty($resultSelect)) {
-            //altera a senha do usuário
-            $queryUpdate = "
-        UPDATE usuario SET senha = MD5(:senha) WHERE email = :email 
-        ";
-            $stmtUpdate = $conexao->prepare($queryUpdate);
-            $stmtUpdate->bindParam(':senha', $novaSenha);
-            $stmtUpdate->bindParam(':email', $_SESSION['Email']);
-            $stmtUpdate->execute();
-            $resultUpdate = $stmtUpdate->fetch(PDO::FETCH_ASSOC);
-            header('Location: ../controller_perfil/controller_altSenha.php?alt');
+
+        // Verifica se as novas senhas coincidem
+        if ($confSenha != $novaSenha) {
+            return 'erro=1'; // Nova senha e confirmação não coincidem
         }
-    */} catch (PDOException $e) {
-        error_log("Erro no banco de dados: " . $e->getMessage());
-        echo "Erro no banco de dados: " . $e->getMessage();
+
+        // Verifica se a senha antiga está correta
+        if ($senhaAntiga != $resultSelect['senha']) {
+            return 'erro=2'; // Senha antiga incorreta
+        }
+
+        // Se chegou aqui, atualiza a senha
+        $queryUpdate = "UPDATE usuario SET senha = md5(:novaSenha) WHERE id = :id";
+        $stmtUpdate = $conexao->prepare($queryUpdate);
+        $stmtUpdate->bindParam(':novaSenha', $novaSenha);
+        $stmtUpdate->bindParam(':id', $resultSelect['id']);
+        $stmtUpdate->execute();
+
+        return 'sucesso=1';
+
+    } catch (PDOException $e) {
+        header('Location: ../../views/autenticacao/perfil.php?erro=3&msg=' . urlencode($e->getMessage()));
+        exit();
+    }
+}
+
+function alterarEmail($email,$senha)
+{
+    try {
+
+        require_once('../../config/Database.php');
+
+        // Busca a senha criptografada
+        $querySelect = "SELECT id, email FROM usuario where senha = :senha";
+        $stmtSelect = $conexao->prepare($querySelect);
+        $stmtSelect->bindParam(':senha', $senha);
+        $stmtSelect->execute();
+        $resultSelect = $stmtSelect->fetch(PDO::FETCH_ASSOC);
+
+        // Senha antiga correta, atualiza com a nova senha criptografada
+        $queryUpdate = "UPDATE usuario SET email = :emailNovo WHERE email = :emailAntigo";
+        $stmtUpdate = $conexao->prepare($queryUpdate);
+        $stmtUpdate->bindParam(':emailNovo', $email);
+        $stmtUpdate->bindParam(':emailAntigo', $_SESSION['Email']);
+        $stmtUpdate->execute();
+
+        return $resultado = 'sucesso=1';
+    } catch (PDOException $e) {
+        header('Location: ../../views/autenticacao/perfil.php?erro=3&msg=' . urlencode($e->getMessage()));
+        exit();
     }
 }

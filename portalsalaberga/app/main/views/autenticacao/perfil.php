@@ -203,7 +203,7 @@
                             <h3 class="text-xl font-semibold text-custom-header mb-4 dark:text-dark-header">Segurança</h3>
                             <div class="space-y-4">
                                 <div class="flex items-center gap-2">
-                                    <i class="fas fa-key text-custom-accent dark:text-dark-accent" ></i>
+                                    <i class="fas fa-key text-custom-accent dark:text-dark-accent"></i>
                                     <p class="dark:text-gray-300"><span class="font-medium">Senha: </span><?php echo $_SESSION['Senha']; ?></p>
                                 </div>
                                 <div class="flex items-center gap-2">
@@ -244,10 +244,18 @@
                 <i class="fas fa-envelope text-custom-header text-2xl dark:text-dark-header"></i>
                 <h3 class="text-2xl font-bold text-custom-header dark:text-dark-header">Editar Email</h3>
             </div>
-            <form class="space-y-6">
+            <form class="space-y-6" method="POST" action="../../controllers/controller_perfil/controller_altEmail.php">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Novo Email</label>
-                    <input type="email" name="new_email"
+                    <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Email Atual</label>
+                    <input type="email"
+                        class="w-full p-3 rounded-xl bg-white/50 border border-custom-grid 
+                               text-custom-text placeholder-gray-400 focus:ring-2 focus:ring-custom-accent 
+                               focus:border-transparent outline-none transition-all duration-300 dark:bg-dark-background/50 dark:border-dark-grid dark:text-dark-text "
+                        placeholder="<?php echo $_SESSION['Email']; ?>" disabled>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Email Novo</label>
+                    <input type="email" name="Email"
                         class="w-full p-3 rounded-xl bg-white/50 border border-custom-grid 
                                text-custom-text placeholder-gray-400 focus:ring-2 focus:ring-custom-accent 
                                focus:border-transparent outline-none transition-all duration-300 dark:bg-dark-background/50 dark:border-dark-grid dark:text-dark-text"
@@ -303,12 +311,19 @@
                 </div>
                 <div class="flex justify-end gap-4">
                     <?php if (isset($_GET['erro'])) {
-                    if ($_GET['erro'] == 1) {
-                        echo '<script type="text/javascript">';
-                        echo 'window.alert("As senhas não coincidem.");';
-                        echo '</script>';
-                    }
-                }?>
+                        if ($_GET['erro'] == 1) {
+                            echo '<script type="text/javascript">';
+                            echo 'window.alert("As senhas não coincidem.");';
+                            echo '</script>';
+                        }
+                    } ?>
+                    <?php if (isset($_GET['erro'])) {
+                        if ($_GET['erro'] == 2) {
+                            echo '<script type="text/javascript">';
+                            echo 'window.alert("Sua senha atual está incorreta");';
+                            echo '</script>';
+                        }
+                    } ?>
                     <button type="button" onclick="closeSenhaModal()"
                         class="px-6 py-2.5 rounded-xl bg-gray-100 text-custom-text 
                                hover:bg-gray-200 transition-all duration-300 dark:bg-dark-background/50 dark:text-dark-text">
