@@ -1,9 +1,9 @@
 <?php
-
+/*
 require_once('../../controllers/controller_sessao/autenticar_sessao.php');
 require_once('../../controllers/controller_sessao/verificar_sessao.php');
 verificarSessao(60);
-
+*/
 ?>
 
 <!DOCTYPE html>
@@ -108,7 +108,6 @@ verificarSessao(60);
         width: 100%;
     }
 
-    /* Adicione uma media query para responsividade */
     @media (max-width: 768px) {
         .grid-container {
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -188,7 +187,6 @@ verificarSessao(60);
         line-height: 1;
     }
 
-    /* Estados do botão */
     .clear-search:hover {
         color: #333;
         opacity: 1;
@@ -201,14 +199,12 @@ verificarSessao(60);
     }
 
 
-    /* Estilos para o container do input */
     .search-container {
         position: relative;
         max-width: 500px;
         margin: 0 auto;
     }
 
-    /* Animação para os cards */
     .app-card-link {
         transition: all 0.3s ease-out;
     }
@@ -933,17 +929,15 @@ verificarSessao(60);
             const gridContainer = document.querySelector('.grid-container');
 
             searchInput.addEventListener('input', function (e) {
-                const searchTerm = e.target.value.toLowerCase().trim(); // Adiciona trim() para remover espaços
+                const searchTerm = e.target.value.toLowerCase().trim(); 
                 let visibleCards = [];
                 let hiddenCards = [];
 
-                // Se a pesquisa estiver vazia, mostrar todos os cards imediatamente
                 if (searchTerm === '') {
                     showAllCards();
-                    return; // Sai da função para não executar o resto do código
+                    return; 
                 }
 
-                // Lógica de pesquisa
                 appCards.forEach(card => {
                     const appName = card.querySelector('.app-name').textContent.toLowerCase();
                     const category = card.querySelector('.category-tag').textContent.toLowerCase();
@@ -967,14 +961,12 @@ verificarSessao(60);
                 });
             });
 
-            // Função para mostrar todos os cards
             function showAllCards() {
                 gridContainer.classList.add('transitioning');
 
                 appCards.forEach((card, index) => {
                     const parentLink = card.parentElement;
 
-                    // Reseta todos os estilos
                     parentLink.style.display = 'block';
                     parentLink.style.opacity = '0';
                     parentLink.style.transform = 'scale(0.8)';

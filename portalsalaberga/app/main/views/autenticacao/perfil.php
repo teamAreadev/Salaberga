@@ -71,6 +71,9 @@
             z-index: -1;
             opacity: 0.5;
         }
+        .dark .profile-image-container::after {
+            border: 6px solid #004d1a;
+        }
         .animate-status {
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
@@ -82,28 +85,15 @@
 </head>
 <body class="bg-gradient-to-br from-custom-background to-white min-h-screen font-inter select-none dark:bg-gradient-to-br dark:from-dark-background dark:to-dark-background">
     <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
         <nav class="glass-effect mb-12 rounded-2xl p-6 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <h1 class="text-4xl font-bold text-custom-header flex items-center gap-4 dark:text-dark-header">
                     <i class="fas fa-user-circle"></i> Meu Perfil
                 </h1>
             </div>
-            <button id="darkModeToggle" class="inline-flex items-center justify-center p-2 rounded-lg transition-colors text-custom-header hover:bg-custom-header/10 dark:text-gray-200 dark:hover:bg-gray-700" role="switch" aria-label="Alternar modo escuro">
-                <svg class="w-5 h-5 sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-                <svg class="w-5 h-5 moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-                <span class="sr-only">Alternar modo escuro</span>
-            </button>
         </nav>
-
-        <!-- Main Content -->
         <main class="max-w-5xl mx-auto">
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Profile Card -->
                 <div class="md:col-span-1">
                     <div class="glass-effect rounded-3xl p-8 text-center">
                         <div class="profile-image-container mb-6">
@@ -117,8 +107,6 @@
                         </a>
                     </div>
                 </div>
-
-                <!-- Info Cards -->
                 <div class="md:col-span-2 space-y-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div class="bg-white/95 backdrop-blur-md rounded-2xl p-6 profile-card dark:bg-dark-background/95">
@@ -137,7 +125,6 @@
                                 </button>
                             </div>
                         </div>
-
                         <div class="bg-white/95 backdrop-blur-md rounded-2xl p-6 profile-card dark:bg-dark-background/95">
                             <h3 class="text-xl font-semibold text-custom-header mb-4 dark:text-dark-header">Segurança</h3>
                             <div class="space-y-4">
@@ -155,8 +142,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Status Card -->
                     <div class="glass-effect rounded-2xl p-6">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
@@ -173,8 +158,6 @@
             </div>
         </main>
     </div>
-
-    <!-- Email Modal -->
     <div id="emailModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center backdrop-blur-sm">
         <div class="glass-effect p-8 rounded-2xl w-full max-w-md mx-4">
             <div class="flex items-center gap-3 mb-6">
@@ -197,8 +180,6 @@
             </form>
         </div>
     </div>
-
-    <!-- Senha Modal -->
     <div id="senhaModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center backdrop-blur-sm">
         <div class="glass-effect p-8 rounded-2xl w-full max-w-md mx-4">
             <div class="flex items-center gap-3 mb-6">
@@ -223,7 +204,7 @@
                         if ($_GET['erro'] == 1) {
                             echo '<script type="text/javascript">window.alert("As senhas não coincidem.");</script>';
                         } elseif ($_GET['erro'] == 2) {
-                            echo '<script type="text/javascript">window.alert("Sua senha atual está incorreta");</script>';
+                            echo '<script type="text/javascript">window.alert("Sua senha atual está incorrreta");</script>';
                         }
                     } ?>
                     <button type="button" onclick="closeSenhaModal()" class="px-6 py-2.5 rounded-xl bg-gray-100 text-custom-text hover:bg-gray-200 transition-all duration-300 dark:bg-dark-background/50 dark:text-dark-text">Cancelar</button>
@@ -232,65 +213,18 @@
             </form>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            const sunIcon = darkModeToggle.querySelector('.sun-icon');
-            const moonIcon = darkModeToggle.querySelector('.moon-icon');
-            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-            // Function to update icons based on dark mode state
-            function updateIcons(isDark) {
-                if (isDark) {
-                    sunIcon.classList.add('hidden');
-                    moonIcon.classList.remove('hidden');
-                } else {
-                    sunIcon.classList.remove('hidden');
-                    moonIcon.classList.add('hidden');
-                }
-            }
-
-            // Function to apply dark mode and save preference
-            function updateDarkMode(isDark) {
-                if (isDark) {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('theme', 'light');
-                }
-                updateIcons(isDark);
-            }
-
-            // Check saved theme or system preference on load
             const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                updateDarkMode(savedTheme === 'dark');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
             } else {
-                updateDarkMode(prefersDarkScheme.matches);
+                document.documentElement.classList.remove('dark');
             }
-
-            // Listen for system theme changes (only if no saved preference)
-            prefersDarkScheme.addEventListener('change', (e) => {
-                if (!localStorage.getItem('theme')) {
-                    updateDarkMode(e.matches);
-                }
-            });
-
-            // Toggle dark mode on button click
-            darkModeToggle.addEventListener('click', () => {
-                const isDark = !document.documentElement.classList.contains('dark');
-                updateDarkMode(isDark);
-            });
-
-            // Modal functions
-            function editEmail() { document.getElementById('emailModal').style.display = 'flex'; }
-            function closeEmailModal() { document.getElementById('emailModal').style.display = 'none'; }
-            function editSenha() { document.getElementById('senhaModal').style.display = 'flex'; }
-            function closeSenhaModal() { document.getElementById('senhaModal').style.display = 'none'; }
-
-            // Close modals when clicking outside
+            window.editEmail = function() { document.getElementById('emailModal').style.display = 'flex'; };
+            window.closeEmailModal = function() { document.getElementById('emailModal').style.display = 'none'; };
+            window.editSenha = function() { document.getElementById('senhaModal').style.display = 'flex'; };
+            window.closeSenhaModal = function() { document.getElementById('senhaModal').style.display = 'none'; };
             window.addEventListener('click', (e) => {
                 const emailModal = document.getElementById('emailModal');
                 const senhaModal = document.getElementById('senhaModal');
