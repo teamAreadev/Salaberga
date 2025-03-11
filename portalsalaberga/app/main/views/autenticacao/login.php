@@ -327,9 +327,9 @@
                 </div>
 
               <!--  <div class="password-links-container">
-                <!--    <div class="forgot-password2">
-                    <!--    <a href="./cadastro.php">Criar conta</a>
-                   <!-- </div>
+                    <div class="forgot-password2">
+                        <a href="./cadastro.php">Criar conta</a>
+                    </div>
 
                     <div class="forgot-password">
                         <a href="./recuperacaodesenha.php">Esqueceu sua senha?</a>

@@ -1,7 +1,17 @@
+<?php
+session_start(); 
+require_once('../../controllers/controller_sessao/autenticar_sessao.php');
+require_once('../../controllers/controller_sessao/verificar_sessao.php');
+verificarSessao(60);
+
+echo "<pre>";
+
+print_r($_SESSION);
+echo "</pre>";
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <?php session_start(); ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
