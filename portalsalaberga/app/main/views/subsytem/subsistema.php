@@ -1101,7 +1101,6 @@ verificarSessao(60);
                     <span class="category-tag">Sistema</span>
                 </div>
             </a>
-<!--
             <a href="https://aluno.seduc.ce.gov.br/">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
@@ -1202,7 +1201,7 @@ verificarSessao(60);
                     <span class="category-tag">Educação</span>
                 </div>
             </a>
-    -->
+ 
             <a href="https://salaberga.com/salaberga/portalsalaberga/app/subsystems/biblioteca/app/main/index.php" target="_blank">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
@@ -1212,7 +1211,7 @@ verificarSessao(60);
                     <span class="category-tag">Recursos</span>
                 </div>
             </a>
-<!--
+
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
@@ -1292,7 +1291,7 @@ verificarSessao(60);
                     <span class="category-tag">Auxílio</span>
                 </div>
             </a>
-    -->
+    
         </div>
     </main>
 </body>
