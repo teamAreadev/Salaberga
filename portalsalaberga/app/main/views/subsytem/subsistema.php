@@ -1219,9 +1219,9 @@ verificarSessao(60);
             <a href="#">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/C5VsTF74/scan-facial.png" alt="Tombamento" class="app-icon">
+                        <img src="https://i.postimg.cc/C5VsTF74/scan-facial.png" alt="Sistema de patrimônios" class="app-icon">
                     </div>
-                    <h3 class="app-name">Tombamento</h3>
+                    <h3 class="app-name">Sistema de patrimônios</h3>
                     <span class="category-tag">Patrimônio</span>
                 </div>
             </a>
