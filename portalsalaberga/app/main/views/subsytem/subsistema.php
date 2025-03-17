@@ -1,9 +1,13 @@
 <?php
 
-require_once('../../controllers/controller_sessao/autenticar_sessao.php');
-require_once('../../controllers/controller_sessao/verificar_sessao.php');
-verificarSessao(60);
+require_once('../../models/sessions.php');
+$session = new sessions();
+$session->tempo_session(600);
+$session->autenticar_session();
 
+if (isset($_GET['sair'])) {
+    $session->quebra_session();
+}
 ?>
 
 <!DOCTYPE html>
@@ -527,7 +531,7 @@ verificarSessao(60);
 
                 <nav class="hidden md:flex items-center gap-5">
                     <a href="../../" class="nav-link">Início</a>
-                    <a href="../../controllers/controller_sessao/autenticar_sessao.php?sair" class="nav-link">Sair</a>
+                    <a href="./subsistema.php?sair" class="nav-link">Sair</a>
                     <button id="darkModeToggle"
                         class="inline-flex items-center justify-center p-2 rounded-lg transition-colors" role="switch"
                         aria-label="Alternar modo escuro">
@@ -641,10 +645,11 @@ verificarSessao(60);
                 <i class="fa-solid fa-home text-xl"></i>
                 <span class="text-xs">Início</span>
             </a>
-            <a href="../../controllers/controller_sessao/autenticar_sessao.php?sair" class="nav-link">
+            <form action="" method="post">
+                <button type="submit" name="logout"></button>
                 <i class="fa-solid fa-sign-out-alt text-xl"></i>
                 <span class="text-xs">Sair</span>
-            </a>
+            </form>
 
             <div class="relative">
                 <button id="accessibilityBtnMobile" class="nav-link flex flex-col items-center">
@@ -751,7 +756,7 @@ verificarSessao(60);
     </style>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const darkModeToggle = document.getElementById('darkModeToggle');
             const darkModeToggleMobile = document.getElementById('darkModeToggleMobile');
             const sunIcon = darkModeToggle.querySelector('.sun-icon');
@@ -799,7 +804,7 @@ verificarSessao(60);
             });
 
             [darkModeToggle, darkModeToggleMobile].forEach(toggle => {
-                toggle.addEventListener('click', function () {
+                toggle.addEventListener('click', function() {
                     const isDark = !document.documentElement.classList.contains('dark');
                     updateDarkMode(isDark);
                 });
@@ -835,7 +840,7 @@ verificarSessao(60);
                 themeMenuDesktop?.classList.add('hidden');
             }
 
-            accessibilityBtnMobile?.addEventListener('click', function (e) {
+            accessibilityBtnMobile?.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const isHidden = accessibilityMenuMobile.classList.contains('hidden');
                 if (isHidden) {
@@ -847,19 +852,19 @@ verificarSessao(60);
                 }
             });
 
-            themeBtnMobile?.addEventListener('click', function (e) {
+            themeBtnMobile?.addEventListener('click', function(e) {
                 e.stopPropagation();
                 accessibilityMenuMobile.classList.add('hidden');
                 themeMenuMobile.classList.remove('hidden');
             });
 
-            backToMainMenu?.addEventListener('click', function (e) {
+            backToMainMenu?.addEventListener('click', function(e) {
                 e.stopPropagation();
                 themeMenuMobile.classList.add('hidden');
                 accessibilityMenuMobile.classList.remove('hidden');
             });
 
-            accessibilityBtnDesktop?.addEventListener('click', function (e) {
+            accessibilityBtnDesktop?.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const isHidden = accessibilityMenuDesktop.classList.contains('hidden');
                 if (isHidden) {
@@ -870,13 +875,13 @@ verificarSessao(60);
                 }
             });
 
-            themeBtnDesktop?.addEventListener('click', function (e) {
+            themeBtnDesktop?.addEventListener('click', function(e) {
                 e.stopPropagation();
                 accessibilityMenuDesktop.classList.add('hidden');
                 themeMenuDesktop.classList.remove('hidden');
             });
 
-            backToMainMenuDesktop?.addEventListener('click', function (e) {
+            backToMainMenuDesktop?.addEventListener('click', function(e) {
                 e.stopPropagation();
                 themeMenuDesktop.classList.add('hidden');
                 accessibilityMenuDesktop.classList.remove('hidden');
@@ -884,7 +889,7 @@ verificarSessao(60);
 
             menuOverlay?.addEventListener('click', closeAllMenus);
 
-            document.addEventListener('click', function (e) {
+            document.addEventListener('click', function(e) {
                 const isClickInsideAccessibilityMobile = accessibilityMenuMobile?.contains(e.target) || themeMenuMobile?.contains(e.target) || accessibilityBtnMobile?.contains(e.target);
                 const isClickInsideAccessibilityDesktop = accessibilityMenuDesktop?.contains(e.target) || themeMenuDesktop?.contains(e.target) || accessibilityBtnDesktop?.contains(e.target);
 
@@ -894,14 +899,14 @@ verificarSessao(60);
             });
 
             [accessibilityMenuMobile, themeMenuMobile, accessibilityMenuDesktop, themeMenuDesktop].forEach(menu => {
-                menu?.addEventListener('click', function (e) {
+                menu?.addEventListener('click', function(e) {
                     e.stopPropagation();
                 });
             });
 
             const themeButtons = document.querySelectorAll('[data-theme]');
             themeButtons.forEach(button => {
-                button.addEventListener('click', function () {
+                button.addEventListener('click', function() {
                     const theme = this.dataset.theme;
                     closeAllMenus();
                 });
@@ -928,14 +933,14 @@ verificarSessao(60);
             const appCards = document.querySelectorAll('.app-card');
             const gridContainer = document.querySelector('.grid-container');
 
-            searchInput.addEventListener('input', function (e) {
-                const searchTerm = e.target.value.toLowerCase().trim(); 
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase().trim();
                 let visibleCards = [];
                 let hiddenCards = [];
 
                 if (searchTerm === '') {
                     showAllCards();
-                    return; 
+                    return;
                 }
 
                 appCards.forEach(card => {
@@ -977,19 +982,19 @@ verificarSessao(60);
                     }, index * 50);
                 });
 
-           
+
                 setTimeout(() => {
                     gridContainer.classList.remove('transitioning');
                 }, appCards.length * 50 + 300);
             }
 
-            searchInput.addEventListener('search', function () {
+            searchInput.addEventListener('search', function() {
                 if (this.value === '') {
                     showAllCards();
                 }
             });
 
-         
+
             const clearButton = document.createElement('button');
             clearButton.textContent = '';
             clearButton.classList.add('clear-search');
@@ -1003,14 +1008,14 @@ verificarSessao(60);
                 clearButton.style.display = 'none';
             });
 
-           
-            searchInput.addEventListener('input', function () {
+
+            searchInput.addEventListener('input', function() {
                 clearButton.style.display = this.value ? 'block' : 'none';
             });
 
             const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
             mobileNavLinks.forEach(link => {
-                link.addEventListener('click', function (e) {
+                link.addEventListener('click', function(e) {
                     e.preventDefault();
 
                     mobileNavLinks.forEach(l => l.classList.remove('text-primary'));
@@ -1039,19 +1044,19 @@ verificarSessao(60);
             animateCards();
 
             appCards.forEach(card => {
-                card.addEventListener('mouseenter', function () {
+                card.addEventListener('mouseenter', function() {
                     const icon = this.querySelector('.icon-wrapper');
                     icon.style.transform = 'scale(1.1) rotate(5deg)';
                 });
 
-                card.addEventListener('mouseleave', function () {
+                card.addEventListener('mouseleave', function() {
                     const icon = this.querySelector('.icon-wrapper');
                     icon.style.transform = 'scale(1) rotate(0)';
                 });
             });
 
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
+                anchor.addEventListener('click', function(e) {
                     e.preventDefault();
                     const target = document.querySelector(this.getAttribute('href'));
                     if (target) {
@@ -1193,7 +1198,7 @@ verificarSessao(60);
                     <span class="category-tag">Educação</span>
                 </div>
             </a>
- 
+
             <a href="https://salaberga.com/salaberga/portalsalaberga/app/subsystems/biblioteca/app/main/index.php" target="_blank">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
@@ -1283,7 +1288,7 @@ verificarSessao(60);
                     <span class="category-tag">Auxílio</span>
                 </div>
             </a>
-    
+
         </div>
     </main>
 </body>
