@@ -107,7 +107,7 @@ function login($email, $senha)
     require_once('../../config/Database.php');
     try {
         // Prepara e executa a consulta para verificar o usuário
-        $querySelect = "SELECT id, email, senha, status FROM usuario WHERE email = :email AND senha = MD5(:senha)";
+        $querySelect = "SELECT id, email, senha, tipo FROM usuario WHERE email = :email AND senha = MD5(:senha)";
         $stmtSelect = $conexao->prepare($querySelect);
         $stmtSelect->bindParam(':email', $email);
         $stmtSelect->bindParam(':senha', $senha);
@@ -135,7 +135,7 @@ function login($email, $senha)
             $_SESSION['Nome'] = $resultC['nome'];
 
             // Redireciona com base no tipo de usuário
-            switch ($result['status']) {
+            switch ($result['tipo']) {
                 case 'aluno':
                     $_SESSION['status'] = 0;
                     return 0;
@@ -158,8 +158,7 @@ function login($email, $senha)
             }
             exit();
         } else {
-            header('Location: ../controller_login/controller_login.php?login=erro');
-            exit();
+            return 4;
         }
     } catch (PDOException $e) {
         error_log("Erro no banco de dados: " . $e->getMessage());

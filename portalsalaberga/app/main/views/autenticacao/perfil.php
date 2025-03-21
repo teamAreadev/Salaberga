@@ -1,16 +1,16 @@
 <?php
-session_start(); 
-require_once('../../controllers/controller_sessao/autenticar_sessao.php');
-require_once('../../controllers/controller_sessao/verificar_sessao.php');
-verificarSessao(60);
+require_once('../../models/sessions.php');
+$session = new sessions();
+$session->tempo_session(600);
+$session->autenticar_session();
 
-echo "<pre>";
-
-print_r($_SESSION);
-echo "</pre>";
+if (isset($_POST['logout'])) {
+    $session->quebra_session();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,7 +38,9 @@ echo "</pre>";
                             grid: '#333333',
                         },
                     },
-                    boxShadow: { 'custom': '0 0 15px rgba(0, 0, 0, 0.1)' },
+                    boxShadow: {
+                        'custom': '0 0 15px rgba(0, 0, 0, 0.1)'
+                    },
                     fontFamily: {
                         'noto': ['Noto Sans', 'sans-serif'],
                         'anton': ['Anton', 'serif'],
@@ -59,19 +61,23 @@ echo "</pre>";
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
         }
+
         .dark .glass-effect {
             background: rgba(26, 26, 26, 0.95);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         .glass-effect:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(0, 122, 51, 0.3);
         }
+
         .profile-image-container {
             position: relative;
             display: inline-block;
         }
+
         .profile-image-container::after {
             content: '';
             position: absolute;
@@ -81,18 +87,29 @@ echo "</pre>";
             z-index: -1;
             opacity: 0.5;
         }
+
         .dark .profile-image-container::after {
             border: 6px solid #004d1a;
         }
+
         .animate-status {
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
+
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
     </style>
 </head>
+
 <body class="bg-gradient-to-br from-custom-background to-white min-h-screen font-inter select-none dark:bg-gradient-to-br dark:from-dark-background dark:to-dark-background">
     <div class="container mx-auto px-4 py-8">
         <nav class="glass-effect mb-12 rounded-2xl p-6 flex justify-between items-center">
@@ -109,8 +126,8 @@ echo "</pre>";
                         <div class="profile-image-container mb-6">
                             <img src="https://api.dicebear.com/9.x/initials/svg?seed=JD" alt="Foto de Perfil" class="w-48 h-48 rounded-full border-4 border-white shadow-xl object-cover mx-auto" />
                         </div>
-                        <h2 class="text-3xl font-bold mb-2 text-custom-header dark:text-dark-header"><?php echo $_SESSION['Nome'] ?? 'Usuário'; ?></h2>
-                        <p class="text-gray-600 mb-6 dark:text-gray-300"><?php echo $_SESSION['Email'] ?? 'email@exemplo.com'; ?></p>
+                        <h2 class="text-3xl font-bold mb-2 text-custom-header dark:text-dark-header"><?= $_SESSION['Nome'] ?></h2>
+                        <p class="text-gray-600 mb-6 dark:text-gray-300"><?= $_SESSION['Email']; ?></p>
                         <div class="flex justify-center space-x-4"></div>
                         <a href="../subsytem/subsistema.php" class="text-custom-header hover:text-custom-accent transition-all duration-300 transform hover:scale-110 dark:text-gray-200 dark:hover:text-white">
                             <i class="fas fa-arrow-left text-2xl"></i>
@@ -124,7 +141,7 @@ echo "</pre>";
                             <div class="space-y-4">
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-envelope text-custom-accent dark:text-dark-accent"></i>
-                                    <p class="dark:text-gray-300"><span class="font-medium">Email: </span><?php echo $_SESSION['Email'] ?? 'email@exemplo.com'; ?></p>
+                                    <p class="dark:text-gray-300"><span class="font-medium">Email: </span><?= $_SESSION['Email'] ?></p>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-clock text-custom-accent dark:text-dark-accent"></i>
@@ -140,7 +157,7 @@ echo "</pre>";
                             <div class="space-y-4">
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-key text-custom-accent dark:text-dark-accent"></i>
-                                    <p class="dark:text-gray-300"><span class="font-medium">Senha: </span><?php echo $_SESSION['Senha'] ?? '********'; ?></p>
+                                    <p class="dark:text-gray-300"><span class="font-medium">Senha: </span><?=$_SESSION['Senha']?></p>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-history text-custom-accent dark:text-dark-accent"></i>
@@ -177,7 +194,7 @@ echo "</pre>";
             <form class="space-y-6" method="POST" action="../../controllers/controller_perfil/controller_altEmail.php">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Email Atual</label>
-                    <input type="email" class="w-full p-3 rounded-xl bg-white/50 border border-custom-grid text-custom-text placeholder-gray-400 focus:ring-2 focus:ring-custom-accent focus:border-transparent outline-none transition-all duration-300 dark:bg-dark-background/50 dark:border-dark-grid dark:text-dark-text" placeholder="<?php echo $_SESSION['Email'] ?? 'email@exemplo.com'; ?>" disabled>
+                    <input type="email" class="w-full p-3 rounded-xl bg-white/50 border border-custom-grid text-custom-text placeholder-gray-400 focus:ring-2 focus:ring-custom-accent focus:border-transparent outline-none transition-all duration-300 dark:bg-dark-background/50 dark:border-dark-grid dark:text-dark-text" placeholder="<?php echo $_SESSION['Email'];?>" disabled>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Email Novo</label>
@@ -231,10 +248,18 @@ echo "</pre>";
             } else {
                 document.documentElement.classList.remove('dark');
             }
-            window.editEmail = function() { document.getElementById('emailModal').style.display = 'flex'; };
-            window.closeEmailModal = function() { document.getElementById('emailModal').style.display = 'none'; };
-            window.editSenha = function() { document.getElementById('senhaModal').style.display = 'flex'; };
-            window.closeSenhaModal = function() { document.getElementById('senhaModal').style.display = 'none'; };
+            window.editEmail = function() {
+                document.getElementById('emailModal').style.display = 'flex';
+            };
+            window.closeEmailModal = function() {
+                document.getElementById('emailModal').style.display = 'none';
+            };
+            window.editSenha = function() {
+                document.getElementById('senhaModal').style.display = 'flex';
+            };
+            window.closeSenhaModal = function() {
+                document.getElementById('senhaModal').style.display = 'none';
+            };
             window.addEventListener('click', (e) => {
                 const emailModal = document.getElementById('emailModal');
                 const senhaModal = document.getElementById('senhaModal');
@@ -244,4 +269,5 @@ echo "</pre>";
         });
     </script>
 </body>
+
 </html>
