@@ -124,7 +124,7 @@ if (isset($_POST['logout'])) {
                 <div class="md:col-span-1">
                     <div class="glass-effect rounded-3xl p-8 text-center">
                         <div class="profile-image-container mb-6">
-                            <img src="https://api.dicebear.com/9.x/initials/svg?seed=JD" alt="Foto de Perfil" class="w-48 h-48 rounded-full border-4 border-white shadow-xl object-cover mx-auto" />
+                            <img src="https://api.dicebear.com/9.x/initials/svg?seed=<?= $_SESSION['Nome'] ?>" alt="Foto de Perfil" class="w-48 h-48 rounded-full border-4 border-white shadow-xl object-cover mx-auto" />
                         </div>
                         <h2 class="text-3xl font-bold mb-2 text-custom-header dark:text-dark-header"><?= $_SESSION['Nome'] ?></h2>
                         <p class="text-gray-600 mb-6 dark:text-gray-300"><?= $_SESSION['Email']; ?></p>
@@ -157,7 +157,7 @@ if (isset($_POST['logout'])) {
                             <div class="space-y-4">
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-key text-custom-accent dark:text-dark-accent"></i>
-                                    <p class="dark:text-gray-300"><span class="font-medium">Senha: </span><?=$_SESSION['Senha']?></p>
+                                    <p class="dark:text-gray-300"><span class="font-medium">Senha: </span><?= $_SESSION['Senha'] ?></p>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-history text-custom-accent dark:text-dark-accent"></i>
@@ -194,7 +194,7 @@ if (isset($_POST['logout'])) {
             <form class="space-y-6" method="POST" action="../../controllers/controller_perfil/controller_altEmail.php">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Email Atual</label>
-                    <input type="email" class="w-full p-3 rounded-xl bg-white/50 border border-custom-grid text-custom-text placeholder-gray-400 focus:ring-2 focus:ring-custom-accent focus:border-transparent outline-none transition-all duration-300 dark:bg-dark-background/50 dark:border-dark-grid dark:text-dark-text" placeholder="<?php echo $_SESSION['Email'];?>" disabled>
+                    <input type="email" class="w-full p-3 rounded-xl bg-white/50 border border-custom-grid text-custom-text placeholder-gray-400 focus:ring-2 focus:ring-custom-accent focus:border-transparent outline-none transition-all duration-300 dark:bg-dark-background/50 dark:border-dark-grid dark:text-dark-text" placeholder="<?php echo $_SESSION['Email']; ?>" disabled>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Email Novo</label>
