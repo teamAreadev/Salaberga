@@ -1215,15 +1215,31 @@
                         <div class="flex items-center mb-4">
                             <i class="fas fa-user-graduate text-3xl text-ceara-orange mr-4"></i>
                             <div>
-                                <h3 class="font-bold text-xl mb-1 text-ceara-green">Processo Seletivo 2025</h3>
-                                <p class="text-gray-600">29 de novembro, 2024</p>
+                                <h3 class="font-bold text-xl mb-1 text-ceara-green">Curso Huawei 5g</h3>
+                                <p class="text-gray-600">02 de abril, 2025</p>
                             </div>
                         </div>
-                        <p class="text-gray-700 mb-4">Edital para o processo seletivo do próximo ano letivo!
+                        <p class="text-gray-700 mb-4">Código do curso: z4ttcV
                         </p>
-                        <a href="https://www.crede01.seduc.ce.gov.br/wp-content/uploads/sites/124/2024/11/EEEP-Salaberga-Torquato-Maranguape-Edital-Selecao-Alunos-2025.pdf" target="_blank"
+                        <a href="https://id1.cloud.huawei.com/CAS/portal/userRegister/regbyphone.html?loginUrl=https%3A%2F%2Funiportal.huawei.com%2Funiportal1%2Fhwid-login.html%3Fx_app_id%3Dcom.huawei.prm.talent%26lang%3Den_US%26redirect%3Dhttps%253A%252F%252Fe.huawei.com%252Fen%252Ftalent%252F%2523%252Fcourse%252Fcourse-details%253FapplicationId%253D1743527126781%2526courseType%253DICT%2526invitedCode%253Dz4ttcV%2526urlForm%253Dmyclass%26relationKey%3D4bc61e81ea2c4353bb25076259f69af0&service=https%3A%2F%2Foauth-login1.cloud.huawei.com%2Foauth2%2Fv3%2Fauthorize%3Fclient_id%3D104526677%26redirect_uri%3Dhttps%253A%252F%252Funiportal.huawei.com%252Funiportal1%252Fhwid-login-result.html%253FrelationKey%253Ddd7045ae84f748d4933ea2341aefe8ab%26response_type%3Dcode%26state%3Ddd7045ae84f748d4933ea2341aefe8ab%26scope%3Dhttps%253A%252F%252Fwww.huawei.com%252Fauth%252Faccount%252Funified.profile1%2Bhttps%253A%252F%252Fwww.huawei.com%252Fauth%252Faccount%252Fpetal.email%26access_type%3Doffline%26lang%3Den-us%26display%3Dpage&lang=en-us&scope=https%3A%2F%2Fwww.huawei.com%2Fauth%2Faccount%2Funified.profile1+https%3A%2F%2Fwww.huawei.com%2Fauth%2Faccount%2Fpetal.email&state=dd7045ae84f748d4933ea2341aefe8ab&themeName=red" target="_blank"
                             class="inline-block bg-ceara-white text-ceara-green border border-ceara-green hover:bg-ceara-green hover:text-ceara-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
-                            <i class="fas fa-file-alt mr-1"></i> Ler Edital
+                            <i class="fas fa-file-alt mr-1"></i> Acesse aqui
+                        </a>
+                    </div>
+                    
+                     <div class="bg-white rounded-lg shadow-lg p-6 hover-scale">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-user-graduate text-3xl text-ceara-orange mr-4"></i>
+                            <div>
+                                <h3 class="font-bold text-xl mb-1 text-ceara-green">Estagio Informática</h3>
+                                <p class="text-gray-600">25 de abril, 2025</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-4">Formulário vagas Estagio
+                        </p>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfGvkOCRltkaNwPD3b25bKnXMRrP7VMhKiu2YTq0_hHOch2vQ/viewform" target="_blank"
+                            class="inline-block bg-ceara-white text-ceara-green border border-ceara-green hover:bg-ceara-green hover:text-ceara-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                            <i class="fas fa-file-alt mr-1"></i> Acesse aqui
                         </a>
                     </div>
 
