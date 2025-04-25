@@ -2,13 +2,13 @@
 
 session_start();
 
+
 class sessions
 {
-
     function autenticar_session()
     {
         if (!isset($_SESSION['Email']) == true && !isset($_SESSION['Senha']) == true) {
-
+            
             unset($_SESSION['Email']);
             unset($_SESSION['Senha']);
             header('location:../autenticacao/login.php');

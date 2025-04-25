@@ -134,6 +134,7 @@ function login($email, $senha)
             $_SESSION['Telefone'] = $resultC['telefone'];
             $_SESSION['Nome'] = $resultC['nome'];
 
+
             // Redireciona com base no tipo de usuário
             switch ($result['tipo']) {
                 case 'aluno':

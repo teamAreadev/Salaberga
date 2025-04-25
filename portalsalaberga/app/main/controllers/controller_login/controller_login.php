@@ -30,12 +30,12 @@ if (isset($_POST['login']) && isset($_POST['email']) && isset($_POST['senha']) &
     require_once('../../models/model_dados.php');
     $login = login($email, $senha);
 
-    if ($login != 4) {
+    if ($login == 0 || $login == 1 || $login == 3 ) {
 
         header('location: ../../views/subsytem/subsistema.php');
         exit();
-    } else {
-        header('Location: ../../views/autenticacao/login.php?login=erro');
+    } else if ($login == 2){
+        header('Location: ../../views/subsytem/subsistema_estagio.php');
         exit();
     } 
 } else {

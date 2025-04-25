@@ -1225,23 +1225,6 @@
                             class="inline-block bg-ceara-white text-ceara-green border border-ceara-green hover:bg-ceara-green hover:text-ceara-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
                             <i class="fas fa-file-alt mr-1"></i> Acesse aqui
                         </a>
-                    </div>
-                    
-                     <div class="bg-white rounded-lg shadow-lg p-6 hover-scale">
-                        <div class="flex items-center mb-4">
-                            <i class="fas fa-user-graduate text-3xl text-ceara-orange mr-4"></i>
-                            <div>
-                                <h3 class="font-bold text-xl mb-1 text-ceara-green">Estagio Informática</h3>
-                                <p class="text-gray-600">25 de abril, 2025</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-700 mb-4">Formulário vagas Estagio
-                        </p>
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfGvkOCRltkaNwPD3b25bKnXMRrP7VMhKiu2YTq0_hHOch2vQ/viewform" target="_blank"
-                            class="inline-block bg-ceara-white text-ceara-green border border-ceara-green hover:bg-ceara-green hover:text-ceara-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
-                            <i class="fas fa-file-alt mr-1"></i> Acesse aqui
-                        </a>
-                    </div>
 
                 </div>
             </div>
