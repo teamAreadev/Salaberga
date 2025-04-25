@@ -610,7 +610,7 @@ if (isset($_GET['sair'])) {
                             </div>
                         </div>
                     </div>
-
+                    <!--
                     <a href="../autenticacao/perfil.php">
                         <div class="flex items-center gap-3 cursor-pointer">
                             <div class="relative">
@@ -623,6 +623,7 @@ if (isset($_GET['sair'])) {
                         </div>
                     </a>
                 </nav>
+                
 
                 <div class="md:hidden">
                     <div class="relative">
@@ -635,6 +636,7 @@ if (isset($_GET['sair'])) {
                         </a>
                     </div>
                 </div>
+                -->
             </div>
         </div>
     </header>
