@@ -182,5 +182,28 @@ class InscricaoModel {
             ];
         }
     }
+
+    public function buscarPorEmailTelefone($email, $telefone) {
+        $sql = "SELECT * FROM alunos WHERE email = ? AND telefone = ? LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$email, $telefone]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function buscarPorId($id) {
+        // Buscar dados do aluno
+        $sql = "SELECT * FROM alunos WHERE id = ? LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
+        $aluno = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$aluno) return null;
+        // Buscar modalidades
+        $sql2 = "SELECT modalidade, categoria, nome_equipe, status FROM inscricoes WHERE aluno_id = ?";
+        $stmt2 = $this->db->prepare($sql2);
+        $stmt2->execute([$id]);
+        $modalidades = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+        $aluno['modalidades'] = $modalidades;
+        return $aluno;
+    }
 }
 ?>

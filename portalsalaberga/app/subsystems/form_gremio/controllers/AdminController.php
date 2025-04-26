@@ -38,6 +38,10 @@ class AdminController {
         echo json_encode($resultado);
     }
 
+
+
+    
+
     public function logout() {
         session_unset();
         session_destroy();

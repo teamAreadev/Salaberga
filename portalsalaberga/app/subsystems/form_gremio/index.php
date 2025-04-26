@@ -70,6 +70,13 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeInUp {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
         .checkbox-custom:checked + label:before {
             background-color: #005A24;
             border-color: #005A24;
@@ -183,8 +190,11 @@
                     </div>
                     <div class="flex items-center space-x-4">
                         <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome-MOpK2hbpuoqfoF8sir0Ue6SvciAArc.svg" alt="Logo Copa Grêmio" class="h-16 w-16">
-                        <a href="admin/login.php" class="bg-secondary-600 hover:bg-secondary-700 text-white px-4 py-2 rounded-md shadow-md transition-colors flex items-center">
+                        <a href="admin/login.php" class="bg-secondary-600 hover:bg-secondary-700 text-white px-4 py-2 rounded-md shadow-md transition-colors flex items-center animate-fadeInUp">
                             <i class="fas fa-user-shield mr-2"></i> Admin
+                        </a>
+                        <a href="usuario/login.php" class="bg-primary-500 hover:bg-primary-700 text-white px-4 py-2 rounded-md shadow-md transition-colors flex items-center animate-fadeInUp" style="animation-delay:0.2s">
+                            <i class="fas fa-user mr-2"></i> Área do Usuário
                         </a>
                     </div>
                 </div>
@@ -242,7 +252,7 @@
                     
                     <form id="inscricaoForm" class="space-y-8">
                         <!-- Dados Pessoais -->
-                        <section id="secao-dados-pessoais" class="p-5 border border-gray-200 rounded-lg bg-white shadow-sm section-card">
+                        <section id="secao-dados-pessoais" class="p-5 border border-gray-200 rounded-lg bg-white shadow-sm section-card animate-fadeInUp">
                             <h3 class="text-xl font-semibold text-primary-700 mb-4 flex items-center">
                                 <i class="fas fa-user-circle mr-2 text-secondary-600"></i>
                                 <span>1. Dados Pessoais</span>
@@ -325,11 +335,73 @@
                             </div>
                         </section>
 
+                        <!-- Dados Escolares -->
+                        <section id="secao-dados-escolares" class="p-5 border border-gray-200 rounded-lg bg-white shadow-sm section-card animate-fadeInUp">
+                            <h3 class="text-xl font-semibold text-primary-700 mb-4 flex items-center">
+                                <i class="fas fa-school mr-2 text-secondary-600"></i>
+                                <span>2. Dados Escolares</span>
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label for="escola" class="block text-sm font-medium text-gray-700 mb-1">Escola*</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-school text-gray-400"></i>
+                                        </div>
+                                        <input type="text" id="escola" name="escola" required 
+                                            class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 input-focus"
+                                            placeholder="Digite o nome da sua escola">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="serie" class="block text-sm font-medium text-gray-700 mb-1">Série*</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <i class="fas fa-book text-gray-400"></i>
+                                            </div>
+                                            <select id="serie" name="serie" required 
+                                                class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 input-focus appearance-none">
+                                                <option value="" disabled selected>Série</option>
+                                                <option value="1">1º Ano</option>
+                                                <option value="2">2º Ano</option>
+                                                <option value="3">3º Ano</option>
+                                            </select>
+                                            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                                <i class="fas fa-chevron-down text-gray-400"></i>
+                                            </div>
+                                        </div>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <i class="fas fa-users text-gray-400"></i>
+                                            </div>
+                                            <select id="turma-escola" name="turma-escola" required 
+                                                class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 input-focus appearance-none">
+                                                <option value="" disabled selected>Turma</option>
+                                                <option value="A">A</option>
+                                                <option value="B">B</option>
+                                                <option value="C">C</option>
+                                                <option value="D">D</option>
+                                            </select>
+                                            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                                <i class="fas fa-chevron-down text-gray-400"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-right">
+                                <button type="button" id="btn-proximo-2" class="px-4 py-2 bg-secondary-600 text-white font-medium rounded-md hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-500 transition-colors">
+                                    Próximo <i class="fas fa-arrow-right ml-1"></i>
+                                </button>
+                            </div>
+                        </section>
+
                         <!-- Modalidades -->
-                        <section id="secao-modalidades" class="p-5 border border-gray-200 rounded-lg bg-white shadow-sm section-card hidden">
+                        <section id="secao-modalidades" class="p-5 border border-gray-200 rounded-lg bg-white shadow-sm section-card animate-fadeInUp">
                             <h3 class="text-xl font-semibold text-primary-700 mb-4 flex items-center">
                                 <i class="fas fa-trophy mr-2 text-secondary-600"></i>
-                                <span>2. Modalidades Esportivas</span>
+                                <span>3. Modalidades Esportivas</span>
                             </h3>
                             
                             <!-- Modalidades Individuais -->
@@ -484,7 +556,7 @@
                         <section id="secao-detalhes" class="p-5 border border-gray-200 rounded-lg bg-white shadow-sm section-card hidden">
                             <h3 class="text-xl font-semibold text-primary-700 mb-4 flex items-center">
                                 <i class="fas fa-info-circle mr-2 text-secondary-600"></i>
-                                <span>3. Detalhes das Modalidades</span>
+                                <span>4. Detalhes das Modalidades</span>
                             </h3>
                             <div id="detalhesModalidades" class="space-y-6">
                                 <!-- Os detalhes das modalidades serão adicionados dinamicamente via JavaScript -->
@@ -504,61 +576,29 @@
                             </div>
                         </section>
 
-                        <!-- Valor e Confirmação -->
-                        <section id="secao-confirmacao" class="p-5 border border-gray-200 rounded-lg bg-white shadow-sm section-card hidden">
+                        <!-- Termos e Condições -->
+                        <section id="secao-termo" class="p-5 border border-gray-200 rounded-lg bg-white shadow-sm section-card animate-fadeInUp">
                             <h3 class="text-xl font-semibold text-primary-700 mb-4 flex items-center">
-                                <i class="fas fa-check-circle mr-2 text-secondary-600"></i>
-                                <span>4. Valor e Confirmação</span>
+                                <i class="fas fa-file-signature mr-2 text-secondary-600"></i>
+                                <span>5. Termos e Condições</span>
                             </h3>
-                            
-                            <!-- Valor da Inscrição -->
-                            <div class="bg-primary-50 p-5 rounded-md mb-6">
-                                <h4 class="text-lg font-semibold text-primary-700 mb-2 flex items-center">
-                                    <i class="fas fa-money-bill-wave mr-2 text-secondary-600"></i> Valor da Inscrição
-                                </h4>
-                                <p class="text-sm text-gray-600 mb-3">R$5,00 por modalidade. Se você se inscrever em 3 ou mais modalidades, o valor será R$3,00 por modalidade.</p>
-                                <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
-                                    <span class="text-lg font-medium">Total a pagar:</span>
-                                    <span id="valorTotal" class="text-2xl font-bold text-primary-800">R$ 0,00</span>
+                            <div class="flex items-start mb-3">
+                                <div class="flex items-center h-5 mt-1">
+                                    <input id="termos" name="termos" type="checkbox" required class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
                                 </div>
-                                <div class="mt-3 text-sm text-gray-600">
-                                    <i class="fas fa-info-circle mr-1 text-secondary-500"></i>
-                                    O pagamento deverá ser realizado no dia da competição ou antecipadamente via PIX.
+                                <div class="ml-3 text-sm">
+                                    <label for="termos" class="font-medium text-gray-700">Declaro que li e concordo com o <button type="button" id="btnRegulamento" class="text-secondary-600 underline hover:text-secondary-800">regulamento da Copa Grêmio 2025</button></label>
                                 </div>
                             </div>
-
-                            <!-- Resumo da Inscrição -->
-                            <div class="mb-6">
-                                <h4 class="text-lg font-semibold text-primary-700 mb-3 flex items-center">
-                                    <i class="fas fa-list-alt mr-2 text-secondary-600"></i> Resumo da Inscrição
-                                </h4>
-                                <div class="bg-gray-50 p-4 rounded-lg" id="resumo-inscricao">
-                                    <!-- Será preenchido via JavaScript -->
-                                    <p class="text-gray-500 text-center py-4">Carregando resumo...</p>
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5 mt-1">
+                                    <input id="dados" name="dados" type="checkbox" required class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="dados" class="font-medium text-gray-700">Concordo com o armazenamento dos meus dados para fins de organização do evento</label>
+                                    <p class="text-gray-500 text-xs mt-1">Seus dados serão armazenados em nosso banco de dados e utilizados apenas para a organização da Copa Grêmio 2025.</p>
                                 </div>
                             </div>
-
-                            <!-- Termos e Condições -->
-                            <div class="mb-6">
-                                <div class="flex items-start mb-3">
-                                    <div class="flex items-center h-5 mt-1">
-                                        <input id="termos" name="termos" type="checkbox" required class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
-                                    </div>
-                                    <div class="ml-3 text-sm">
-                                        <label for="termos" class="font-medium text-gray-700">Declaro que li e concordo com o <button type="button" id="btnRegulamento" class="text-secondary-600 underline hover:text-secondary-800">regulamento da Copa Grêmio 2025</button></label>
-                                    </div>
-                                </div>
-                                <div class="flex items-start">
-                                    <div class="flex items-center h-5 mt-1">
-                                        <input id="dados" name="dados" type="checkbox" required class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
-                                    </div>
-                                    <div class="ml-3 text-sm">
-                                        <label for="dados" class="font-medium text-gray-700">Concordo com o armazenamento dos meus dados para fins de organização do evento</label>
-                                        <p class="text-gray-500 text-xs mt-1">Seus dados serão armazenados em nosso banco de dados e utilizados apenas para a organização da Copa Grêmio 2025.</p>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="flex justify-between mt-6">
                                 <button type="button" id="btn-anterior-4" class="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
                                     <i class="fas fa-arrow-left mr-1"></i> Anterior
