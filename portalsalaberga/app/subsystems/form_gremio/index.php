@@ -181,8 +181,11 @@
                         <h1 class="text-3xl font-bold">Copa Grêmio 2025</h1>
                         <p class="text-primary-200">Grêmio Estudantil José Ivan Pontes Júnior</p>
                     </div>
-                    <div class="flex space-x-2">
+                    <div class="flex items-center space-x-4">
                         <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome-MOpK2hbpuoqfoF8sir0Ue6SvciAArc.svg" alt="Logo Copa Grêmio" class="h-16 w-16">
+                        <a href="admin/login.php" class="bg-secondary-600 hover:bg-secondary-700 text-white px-4 py-2 rounded-md shadow-md transition-colors flex items-center">
+                            <i class="fas fa-user-shield mr-2"></i> Admin
+                        </a>
                     </div>
                 </div>
             </div>
@@ -210,6 +213,32 @@
                         Formulário de Inscrição
                         <span class="ml-2 text-sm bg-primary-100 text-primary-800 py-1 px-2 rounded-full">Copa Grêmio 2025</span>
                     </h2>
+                    
+                    <!-- Seção de verificação de inscrição -->
+                    <div class="mb-8 p-5 border border-gray-200 rounded-lg bg-gray-50">
+                        <h3 class="text-xl font-semibold text-primary-700 mb-4 flex items-center">
+                            <i class="fas fa-search mr-2 text-secondary-600"></i>
+                            <span>Verificar Status da Inscrição</span>
+                        </h3>
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <div class="flex-grow">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-id-card text-gray-400"></i>
+                                    </div>
+                                    <input type="text" id="verificar-id" 
+                                        class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 input-focus"
+                                        placeholder="Digite o número da sua inscrição">
+                                </div>
+                            </div>
+                            <button type="button" id="btn-verificar" class="px-4 py-2 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+                                <i class="fas fa-search mr-1"></i> Verificar
+                            </button>
+                        </div>
+                        <div id="resultado-verificacao" class="mt-4 hidden">
+                            <!-- Será preenchido via JavaScript -->
+                        </div>
+                    </div>
                     
                     <form id="inscricaoForm" class="space-y-8">
                         <!-- Dados Pessoais -->
@@ -545,17 +574,26 @@
         </main>
 
         <!-- Rodapé -->
-        <footer class="bg-primary-800 text-white py-6 mt-auto">
+        <footer class="bg-primary-800 text-white py-8 mt-auto">
             <div class="container mx-auto px-4 md:px-6">
-                <div class="flex flex-col md:flex-row justify-between items-center">
-                    <div class="mb-4 md:mb-0">
-                        <p>&copy; 2025 Grêmio Estudantil José Ivan Pontes Júnior</p>
-                        <p class="text-primary-200 text-sm">EEEP Salaberga Torquato Gomes de Matos</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="text-lg font-bold mb-4">Copa Grêmio 2025</h3>
+                        <p class="text-primary-200">Organizado pelo Grêmio Estudantil José Ivan Pontes Júnior</p>
                     </div>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-white hover:text-secondary-400 transition-colors"><i class="fab fa-instagram text-xl"></i></a>
-                        <a href="#" class="text-white hover:text-secondary-400 transition-colors"><i class="fab fa-whatsapp text-xl"></i></a>
-                        <a href="#" class="text-white hover:text-secondary-400 transition-colors"><i class="fas fa-envelope text-xl"></i></a>
+                    <div>
+                        <h3 class="text-lg font-bold mb-4">Contato</h3>
+                        <div class="flex space-x-4">
+                            <a href="https://www.linkedin.com/in/matheus-felix-9b1a3b123/" target="_blank" class="text-primary-200 hover:text-secondary-500 transition-colors">
+                                <i class="fab fa-linkedin-in text-2xl"></i>
+                            </a>
+                            <a href="https://www.instagram.com/matheusfelix.dev/" target="_blank" class="text-primary-200 hover:text-secondary-500 transition-colors">
+                                <i class="fab fa-instagram text-2xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-center md:text-right">
+                        <p class="text-primary-200">Desenvolvido por Matheus Felix</p>
                     </div>
                 </div>
             </div>
@@ -638,6 +676,34 @@
                             Fechar
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de resultado da verificação -->
+    <div id="resultado-modal" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-50">
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+        
+        <div class="modal-container bg-white w-11/12 md:max-w-2xl mx-auto rounded shadow-lg z-50 overflow-y-auto max-h-screen">
+            <div class="modal-content py-4 text-left px-6">
+                <div class="flex justify-between items-center pb-3 border-b">
+                    <p id="resultado-titulo" class="text-2xl font-bold text-primary-700">Resultado da Verificação</p>
+                    <div class="modal-close-resultado cursor-pointer z-50">
+                        <svg class="fill-current text-gray-500" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <div id="resultado-conteudo" class="my-5">
+                    <!-- Será preenchido via JavaScript -->
+                </div>
+                
+                <div class="flex justify-end pt-2 border-t">
+                    <button class="modal-close-resultado px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors">
+                        Fechar
+                    </button>
                 </div>
             </div>
         </div>
@@ -1008,7 +1074,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('modalidades', JSON.stringify(modalidades));
         
         // Envia os dados para o controller via AJAX
-        fetch('controllers/InscricaoController.php', {
+        fetch('controllers/InscricaoController.php?action=cadastrar', {
             method: 'POST',
             body: formData
         })
@@ -1081,6 +1147,206 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializar progresso
     atualizarProgresso(1);
+
+    // Event listener para verificar inscrição
+    document.getElementById('btn-verificar').addEventListener('click', function() {
+        const inscricaoId = document.getElementById('verificar-id').value.trim();
+        
+        if (!inscricaoId) {
+            alert('Por favor, digite o número da sua inscrição.');
+            return;
+        }
+        
+        // Exibir carregamento
+        const resultadoModal = document.getElementById('resultado-modal');
+        const resultadoConteudo = document.getElementById('resultado-conteudo');
+        
+        resultadoModal.classList.remove('opacity-0');
+        resultadoModal.classList.remove('pointer-events-none');
+        
+        resultadoConteudo.innerHTML = `
+            <div class="flex justify-center items-center py-8">
+                <i class="fas fa-spinner fa-spin mr-2 text-primary-600"></i> Verificando sua inscrição...
+            </div>
+        `;
+        
+        // Fazer a requisição para verificar o status
+        fetch(`controllers/InscricaoController.php?action=verificar&id=${inscricaoId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    renderizarResultadoVerificacao(data.inscricoes);
+                } else {
+                    resultadoConteudo.innerHTML = `
+                        <div class="p-5 bg-red-50 text-red-700 rounded-lg text-center">
+                            <i class="fas fa-exclamation-circle text-4xl mb-3 text-red-500"></i>
+                            <p class="font-medium text-lg">${data.message}</p>
+                            <p class="mt-2">Verifique o número da inscrição e tente novamente.</p>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao verificar inscrição:', error);
+                resultadoConteudo.innerHTML = `
+                    <div class="p-5 bg-red-50 text-red-700 rounded-lg text-center">
+                        <i class="fas fa-exclamation-circle text-4xl mb-3 text-red-500"></i>
+                        <p class="font-medium text-lg">Erro ao verificar inscrição</p>
+                        <p class="mt-2">Ocorreu um erro ao processar sua solicitação. Tente novamente mais tarde.</p>
+                    </div>
+                `;
+            });
+    });
+    
+    // Renderizar resultado da verificação
+    function renderizarResultadoVerificacao(inscricoes) {
+        const resultadoConteudo = document.getElementById('resultado-conteudo');
+        const primeiraInscricao = inscricoes[0]; // Para obter dados do aluno
+        
+        // Verificar status geral
+        const todasAprovadas = inscricoes.every(i => i.status === 'aprovado');
+        const algumaReprovada = inscricoes.some(i => i.status === 'reprovado');
+        
+        let statusGeral = 'pendente';
+        let statusTexto = 'Pendente';
+        let statusIcone = 'clock';
+        let statusCor = 'yellow';
+        
+        if (todasAprovadas) {
+            statusGeral = 'aprovado';
+            statusTexto = 'Aprovada';
+            statusIcone = 'check-circle';
+            statusCor = 'green';
+        } else if (algumaReprovada) {
+            statusGeral = 'reprovado';
+            statusTexto = 'Reprovada';
+            statusIcone = 'times-circle';
+            statusCor = 'red';
+        }
+        
+        // Atualizar título do modal com o status
+        document.getElementById('resultado-titulo').innerHTML = `
+            Inscrição <span class="text-${statusCor}-600">${statusTexto}</span>
+        `;
+        
+        let html = `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold text-primary-700 mb-2">Dados do Aluno</h3>
+                    <ul class="space-y-2">
+                        <li><strong>Nome:</strong> ${primeiraInscricao.nome}</li>
+                        <li><strong>Turma:</strong> ${primeiraInscricao.ano}º ${primeiraInscricao.turma}</li>
+                        <li><strong>Nº de Inscrição:</strong> #${primeiraInscricao.id}</li>
+                    </ul>
+                </div>
+                <div class="bg-${statusCor}-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold text-${statusCor}-700 mb-2">Status da Inscrição</h3>
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-${statusIcone} text-3xl text-${statusCor}-500 mr-3"></i>
+                        <span class="text-xl font-bold text-${statusCor}-600">${statusTexto}</span>
+                    </div>
+                    <p class="text-sm text-${statusCor}-600">
+                        ${statusGeral === 'aprovado' 
+                            ? 'Sua inscrição foi aprovada! Você está oficialmente inscrito na Copa Grêmio 2025.' 
+                            : statusGeral === 'reprovado'
+                                ? 'Sua inscrição foi reprovada. Entre em contato com a organização para mais informações.'
+                                : 'Sua inscrição está em análise. Verifique novamente mais tarde para atualizações.'}
+                    </p>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <h3 class="text-lg font-semibold text-primary-700 mb-3">Modalidades Inscritas</h3>
+                <div class="bg-white border border-gray-200 rounded-md overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Modalidade</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Categoria</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+        `;
+        
+        inscricoes.forEach(inscricao => {
+            const modalidade = inscricao.modalidade.replace(/-/g, ' ');
+            let statusClass = '';
+            let statusBg = '';
+            let statusIcon = '';
+            
+            switch(inscricao.status) {
+                case 'pendente':
+                    statusClass = 'text-yellow-700';
+                    statusBg = 'bg-yellow-100';
+                    statusIcon = 'clock';
+                    break;
+                case 'aprovado':
+                    statusClass = 'text-green-700';
+                    statusBg = 'bg-green-100';
+                    statusIcon = 'check-circle';
+                    break;
+                case 'reprovado':
+                    statusClass = 'text-red-700';
+                    statusBg = 'bg-red-100';
+                    statusIcon = 'times-circle';
+                    break;
+            }
+            
+            html += `
+                <tr>
+                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900 capitalize">${modalidade}</td>
+                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">${inscricao.categoria}</td>
+                    <td class="px-4 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-medium ${statusClass} ${statusBg} rounded-full">
+                            <i class="fas fa-${statusIcon} mr-1"></i>
+                            ${inscricao.status.charAt(0).toUpperCase() + inscricao.status.slice(1)}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        html += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="bg-primary-50 p-4 rounded-lg">
+                <h3 class="text-lg font-semibold text-primary-700 mb-2">Próximos passos</h3>
+                <ol class="list-decimal list-inside space-y-2 text-sm text-gray-700">
+                    ${statusGeral === 'aprovado' 
+                        ? `
+                            <li>Confira os detalhes das modalidades em que você foi aprovado.</li>
+                            <li>Realize o pagamento da inscrição no valor correspondente ao número de modalidades.</li>
+                            <li>Prepare-se para o evento! O calendário será divulgado em breve.</li>
+                        ` 
+                        : statusGeral === 'reprovado'
+                            ? `
+                                <li>Entre em contato com a organização pelo WhatsApp para entender os motivos da reprovação.</li>
+                                <li>Caso necessário, faça uma nova inscrição corrigindo as pendências identificadas.</li>
+                            ` 
+                            : `
+                                <li>Aguarde a análise da sua inscrição pela equipe organizadora.</li>
+                                <li>Você pode verificar o status novamente mais tarde usando seu número de inscrição.</li>
+                                <li>Em caso de dúvidas, entre em contato com a organização.</li>
+                            `
+                    }
+                </ol>
+            </div>
+        `;
+        
+        resultadoConteudo.innerHTML = html;
+    }
+    
+    // Fechar modal de resultado
+    document.querySelectorAll('.modal-close-resultado').forEach(button => {
+        button.addEventListener('click', function() {
+            document.getElementById('resultado-modal').classList.add('opacity-0');
+            document.getElementById('resultado-modal').classList.add('pointer-events-none');
+        });
+    });
 });
     </script>
 </body>

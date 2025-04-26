@@ -21,9 +21,35 @@ class InscricaoController {
         
         echo json_encode($resultado);
     }
+    
+    public function verificarStatusInscricao() {
+        header('Content-Type: application/json');
+        
+        if (!isset($_GET['id']) || empty($_GET['id'])) {
+            echo json_encode(['success' => false, 'message' => 'ID da inscrição não fornecido']);
+            return;
+        }
+        
+        $alunoId = $_GET['id'];
+        $resultado = $this->model->verificarStatusInscricao($alunoId);
+        
+        echo json_encode($resultado);
+    }
 }
 
 // Instancia e executa o controller
 $controller = new InscricaoController();
-$controller->processarInscricao();
+
+// Determina qual ação executar
+$action = isset($_GET['action']) ? $_GET['action'] : 'cadastrar';
+
+switch ($action) {
+    case 'verificar':
+        $controller->verificarStatusInscricao();
+        break;
+    case 'cadastrar':
+    default:
+        $controller->processarInscricao();
+        break;
+}
 ?>
