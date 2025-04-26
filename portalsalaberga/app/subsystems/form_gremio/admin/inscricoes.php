@@ -87,24 +87,6 @@ if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
             background-color: #fee2e2;
             color: #b91c1c;
         }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeInUp {
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-        .animate-pulse {
-            animation: pulse 2s infinite;
-        }
-        .hover-float:hover {
-            transform: translateY(-3px);
-            transition: transform 0.3s ease;
-        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -113,14 +95,14 @@ if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
         <div class="container mx-auto py-4 px-4 md:px-6">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="text-center md:text-left mb-4 md:mb-0">
-                    <h1 class="text-2xl font-bold flex items-center animate-fadeInUp"><i class="fas fa-tachometer-alt mr-2 animate-pulse"></i>Painel Administrativo</h1>
+                    <h1 class="text-2xl font-bold">Painel Administrativo</h1>
                     <p class="text-primary-200">Copa Grêmio 2025</p>
                 </div>
-                <div class="flex items-center space-x-4 animate-fadeInUp" style="animation-delay:0.2s">
+                <div class="flex items-center space-x-4">
                     <span class="text-primary-100">
                         <i class="fas fa-user mr-1"></i> Olá, <?php echo htmlspecialchars($_SESSION['admin_nome']); ?>
                     </span>
-                    <a href="../controllers/AdminController.php?action=logout" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm flex items-center hover-float">
+                    <a href="../controllers/AdminController.php?action=logout" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm flex items-center">
                         <i class="fas fa-sign-out-alt mr-1"></i> Sair
                     </a>
                 </div>
@@ -130,27 +112,29 @@ if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
 
     <!-- Conteúdo Principal -->
     <main class="container mx-auto py-8 px-4 md:px-6 flex-grow">
-        <div class="mb-6 bg-white rounded-lg shadow-md p-6 animate-fadeInUp">
+        <div class="mb-6 bg-white rounded-lg shadow-md p-6">
             <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-                <h2 class="text-xl font-semibold text-primary-800 flex items-center animate-fadeInUp"><i class="fas fa-list-alt mr-2 text-secondary-600"></i> Dashboard de Inscrições</h2>
-                <div class="mt-4 md:mt-0 flex items-center animate-fadeInUp" style="animation-delay:0.2s">
+                <h2 class="text-xl font-semibold text-primary-800 flex items-center">
+                    <i class="fas fa-list-alt mr-2 text-secondary-600"></i> Gerenciar Inscrições
+                </h2>
+                <div class="mt-4 md:mt-0 flex items-center">
                     <div class="relative mr-2">
                         <input type="text" id="search" placeholder="Buscar aluno..." class="w-64 pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-search text-gray-400"></i>
                         </div>
                     </div>
-                    <button id="refresh-btn" class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md text-sm flex items-center hover-float">
+                    <button id="refresh-btn" class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md text-sm flex items-center">
                         <i class="fas fa-sync-alt mr-1"></i> Atualizar
                     </button>
                 </div>
             </div>
             
-            <!-- Cards de estatísticas -->
+            <!-- Estatísticas -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div class="bg-primary-50 p-4 rounded-lg border border-primary-200 animate-fadeInUp hover-float">
+                <div class="bg-primary-50 p-4 rounded-lg border border-primary-200">
                     <div class="flex items-center">
-                        <div class="bg-primary-500 p-3 rounded-full mr-4 animate-pulse">
+                        <div class="bg-primary-500 p-3 rounded-full mr-4">
                             <i class="fas fa-users text-white"></i>
                         </div>
                         <div>
@@ -159,9 +143,9 @@ if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
                         </div>
                     </div>
                 </div>
-                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200 animate-fadeInUp hover-float" style="animation-delay:0.1s">
+                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
                     <div class="flex items-center">
-                        <div class="bg-yellow-500 p-3 rounded-full mr-4 animate-pulse">
+                        <div class="bg-yellow-500 p-3 rounded-full mr-4">
                             <i class="fas fa-clock text-white"></i>
                         </div>
                         <div>
@@ -170,9 +154,9 @@ if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
                         </div>
                     </div>
                 </div>
-                <div class="bg-green-50 p-4 rounded-lg border border-green-200 animate-fadeInUp hover-float" style="animation-delay:0.2s">
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
                     <div class="flex items-center">
-                        <div class="bg-green-500 p-3 rounded-full mr-4 animate-pulse">
+                        <div class="bg-green-500 p-3 rounded-full mr-4">
                             <i class="fas fa-check-circle text-white"></i>
                         </div>
                         <div>
@@ -181,9 +165,9 @@ if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
                         </div>
                     </div>
                 </div>
-                <div class="bg-red-50 p-4 rounded-lg border border-red-200 animate-fadeInUp hover-float" style="animation-delay:0.3s">
+                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
                     <div class="flex items-center">
-                        <div class="bg-red-500 p-3 rounded-full mr-4 animate-pulse">
+                        <div class="bg-red-500 p-3 rounded-full mr-4">
                             <i class="fas fa-times-circle text-white"></i>
                         </div>
                         <div>
@@ -191,14 +175,6 @@ if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
                             <h3 class="text-2xl font-bold text-red-800" id="total-reprovadas">0</h3>
                         </div>
                     </div>
-                </div>
-            </div>
-            
-            <!-- Placeholder para gráfico -->
-            <div class="bg-white rounded-lg shadow p-6 mb-6 animate-fadeInUp hover-float" style="animation-delay:0.4s">
-                <h3 class="text-lg font-semibold text-primary-700 mb-4 flex items-center"><i class="fas fa-chart-bar mr-2 text-secondary-600"></i> Gráfico de Inscrições (em breve)</h3>
-                <div class="w-full h-40 flex items-center justify-center text-gray-400">
-                    <i class="fas fa-spinner fa-pulse text-3xl mr-2"></i> Em breve um gráfico interativo aqui!
                 </div>
             </div>
             

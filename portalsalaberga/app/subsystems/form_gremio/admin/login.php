@@ -56,137 +56,69 @@
         .input-focus:focus {
             box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.2);
         }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.8;
-            }
-        }
-        
-        .animate-fadeInUp {
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-        
-        .animate-slideInLeft {
-            animation: slideInLeft 0.5s ease-out forwards;
-        }
-        
-        .animate-pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        .hover-float:hover {
-            transform: translateY(-3px);
-            transition: transform 0.3s ease;
-        }
-        
-        .input-transition {
-            transition: all 0.3s ease;
-        }
-        
-        .input-transition:focus {
-            border-color: #007d40;
-            transform: translateY(-2px);
-        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center min-h-screen">
-    <div class="w-full max-w-md animate-fadeInUp" style="animation-delay: 0.1s">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md">
         <!-- Cabeçalho -->
-        <div class="bg-gradient-to-r from-primary-700 to-primary-800 text-white rounded-t-lg py-6 px-8 text-center shadow-lg">
-            <i class="fas fa-user-shield text-4xl mb-3 text-secondary-300 animate-pulse"></i>
+        <div class="bg-primary-700 text-white rounded-t-lg py-6 px-8 text-center">
             <h1 class="text-2xl font-bold">Área Administrativa</h1>
             <p class="text-primary-200">Copa Grêmio 2025</p>
         </div>
         
         <!-- Formulário de Login -->
-        <div class="bg-white shadow-xl rounded-b-lg p-8 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-primary-50 rounded-full -mt-16 -mr-16 opacity-50"></div>
-            <div class="absolute bottom-0 left-0 w-24 h-24 bg-secondary-50 rounded-full -mb-12 -ml-12 opacity-50"></div>
-            
-            <div class="mb-6 text-center relative z-10 animate-fadeInUp" style="animation-delay: 0.3s">
-                <div class="inline-block p-4 bg-primary-50 rounded-full mb-3">
-                    <i class="fas fa-lock text-4xl text-primary-600"></i>
-                </div>
+        <div class="bg-white shadow-md rounded-b-lg p-8">
+            <div class="mb-6 text-center">
+                <i class="fas fa-lock text-5xl text-primary-600 mb-3"></i>
                 <h2 class="text-xl font-semibold text-gray-700">Login Administrativo</h2>
                 <p class="text-gray-500 text-sm">Acesse para gerenciar as inscrições</p>
             </div>
             
-            <form id="login-form" class="space-y-6 relative z-10">
-                <div class="animate-fadeInUp" style="animation-delay: 0.4s">
+            <form id="login-form" class="space-y-6">
+                <div>
                     <label for="usuario" class="block text-sm font-medium text-gray-700 mb-1">Usuário</label>
-                    <div class="relative group">
+                    <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-user text-gray-400 group-hover:text-primary-500 transition-colors"></i>
+                            <i class="fas fa-user text-gray-400"></i>
                         </div>
                         <input type="text" id="usuario" name="usuario" required 
-                            class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 input-focus input-transition hover:border-primary-300"
+                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 input-focus"
                             placeholder="Nome de usuário">
                     </div>
                 </div>
                 
-                <div class="animate-fadeInUp" style="animation-delay: 0.5s">
+                <div>
                     <label for="senha" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
-                    <div class="relative group">
+                    <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-lock text-gray-400 group-hover:text-primary-500 transition-colors"></i>
+                            <i class="fas fa-lock text-gray-400"></i>
                         </div>
                         <input type="password" id="senha" name="senha" required 
-                            class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 input-focus input-transition hover:border-primary-300"
+                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 input-focus"
                             placeholder="Sua senha">
                     </div>
                 </div>
                 
-                <div id="mensagem-erro" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded relative animate-slideInLeft" role="alert">
-                    <div class="flex">
-                        <div class="py-1"><i class="fas fa-exclamation-circle mr-2"></i></div>
-                        <div>
-                            <span class="block sm:inline"></span>
-                        </div>
-                    </div>
+                <div id="mensagem-erro" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <span class="block sm:inline"></span>
                 </div>
                 
-                <div class="animate-fadeInUp" style="animation-delay: 0.6s">
-                    <button type="submit" class="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white py-3 px-4 rounded-md hover:from-primary-700 hover:to-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-300 transform hover-float shadow-md flex items-center justify-center">
+                <div>
+                    <button type="submit" class="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors flex items-center justify-center">
                         <span>Entrar</span>
                         <i class="fas fa-sign-in-alt ml-2"></i>
                     </button>
                 </div>
             </form>
             
-            <div class="mt-6 text-center relative z-10 animate-fadeInUp" style="animation-delay: 0.7s">
-                <a href="../index.php" class="text-sm text-primary-600 hover:text-primary-800 flex items-center justify-center transition-colors duration-300">
+            <div class="mt-6 text-center">
+                <a href="../index.php" class="text-sm text-primary-600 hover:text-primary-800 flex items-center justify-center">
                     <i class="fas fa-arrow-left mr-1"></i> Voltar para o formulário de inscrição
                 </a>
             </div>
         </div>
         
-        <div class="mt-4 text-center text-xs text-gray-500 animate-fadeInUp" style="animation-delay: 0.8s">
+        <div class="mt-4 text-center text-xs text-gray-500">
             <p>&copy; 2025 Grêmio Estudantil José Ivan Pontes Júnior</p>
             <p>EEEP Salaberga Torquato Gomes de Matos</p>
         </div>
@@ -197,24 +129,8 @@
             const form = document.getElementById('login-form');
             const mensagemErro = document.getElementById('mensagem-erro');
             
-            // Adicionar efeito visual nos inputs quando focados
-            const inputs = document.querySelectorAll('input');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.parentNode.classList.add('ring-1', 'ring-primary-300');
-                });
-                input.addEventListener('blur', function() {
-                    this.parentNode.classList.remove('ring-1', 'ring-primary-300');
-                });
-            });
-            
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
-                // Efeito visual ao enviar
-                const button = form.querySelector('button[type="submit"]');
-                button.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Entrando...';
-                button.disabled = true;
                 
                 const formData = new FormData(form);
                 
@@ -226,27 +142,14 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Efeito visual de sucesso antes de redirecionar
-                        button.innerHTML = '<i class="fas fa-check"></i> Sucesso!';
-                        button.classList.remove('from-primary-600', 'to-primary-700');
-                        button.classList.add('from-green-500', 'to-green-600');
-                        
-                        setTimeout(() => {
-                            window.location.href = 'inscricoes.php';
-                        }, 500);
+                        window.location.href = 'inscricoes.php';
                     } else {
-                        button.innerHTML = '<span>Entrar</span><i class="fas fa-sign-in-alt ml-2"></i>';
-                        button.disabled = false;
-                        
                         mensagemErro.classList.remove('hidden');
                         mensagemErro.querySelector('span').textContent = data.message;
                     }
                 })
                 .catch(error => {
                     console.error('Erro ao realizar login:', error);
-                    button.innerHTML = '<span>Entrar</span><i class="fas fa-sign-in-alt ml-2"></i>';
-                    button.disabled = false;
-                    
                     mensagemErro.classList.remove('hidden');
                     mensagemErro.querySelector('span').textContent = 'Erro ao processar o login. Tente novamente.';
                 });
