@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Copa Grêmio 2025</title>
+    <title>Área do Usuário - Copa Grêmio 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -151,10 +151,24 @@
         .input-field:focus {
             transform: translateY(-2px);
         }
+        
+        /* Animação para o logo */
+        .logo-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
     <div class="w-full max-w-md form-container">
+        <!-- Logo -->
+       
+        
         <!-- Card Principal -->
         <div class="bg-white rounded-2xl overflow-hidden card-shadow">
             <!-- Cabeçalho -->
@@ -162,7 +176,7 @@
                 <div class="absolute top-0 left-0 w-full h-full opacity-10">
                     <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z\' fill=\'%23ffffff\' fill-opacity=\'1\' fill-rule=\'evenodd\'/%3E%3C/svg%3E');"></div>
                 </div>
-                <h1 class="text-3xl font-bold mb-1 relative">Área Administrativa</h1>
+                <h1 class="text-3xl font-bold mb-1 relative">Área do Usuário</h1>
                 <p class="text-primary-100 text-lg relative">Copa Grêmio 2025</p>
             </div>
             
@@ -170,46 +184,43 @@
             <div class="px-8 py-10">
                 <div class="mb-8 text-center">
                     <div class="inline-block p-3 bg-primary-50 rounded-full mb-4">
-                        <i class="fas fa-lock text-4xl text-primary-600"></i>
+                        <i class="fas fa-user-circle text-4xl text-primary-600"></i>
                     </div>
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-1">Login Administrativo</h2>
-                    <p class="text-gray-500">Acesse para gerenciar as inscrições</p>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-1">Login do Usuário</h2>
+                    <p class="text-gray-500">Acesse para visualizar suas informações</p>
                 </div>
                 
                 <form id="login-form" class="space-y-6">
                     <div class="space-y-1">
-                        <label for="usuario" class="block text-sm font-medium text-gray-700 mb-1">Usuário</label>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                        <div class="relative input-container">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-gray-400 input-icon"></i>
+                            </div>
+                            <input type="email" id="email" name="email" required 
+                                class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 input-focus input-field"
+                                placeholder="Seu e-mail">
+                            <div class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" id="email-error-icon">
+                                <i class="fas fa-exclamation-circle text-red-500"></i>
+                            </div>
+                        </div>
+                        <p class="hidden text-red-500 text-xs mt-1" id="email-error-message"></p>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
                         <div class="relative input-container">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                 <i class="fas fa-user text-gray-400 input-icon"></i>
                             </div>
-                            <input type="text" id="usuario" name="usuario" required 
+                            <input type="text" id="nome" name="nome" required 
                                 class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 input-focus input-field"
-                                placeholder="Nome de usuário">
-                            <div class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" id="usuario-error-icon">
+                                placeholder="Seu nome completo">
+                            <div class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" id="nome-error-icon">
                                 <i class="fas fa-exclamation-circle text-red-500"></i>
                             </div>
                         </div>
-                        <p class="hidden text-red-500 text-xs mt-1" id="usuario-error-message"></p>
-                    </div>
-                    
-                    <div class="space-y-1">
-                        <label for="senha" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
-                        <div class="relative input-container">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <i class="fas fa-lock text-gray-400 input-icon"></i>
-                            </div>
-                            <input type="password" id="senha" name="senha" required 
-                                class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 input-focus input-field"
-                                placeholder="Sua senha">
-                            <div class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" id="senha-error-icon">
-                                <i class="fas fa-exclamation-circle text-red-500"></i>
-                            </div>
-                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" id="toggle-password">
-                                <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
-                            </div>
-                        </div>
-                        <p class="hidden text-red-500 text-xs mt-1" id="senha-error-message"></p>
+                        <p class="hidden text-red-500 text-xs mt-1" id="nome-error-message"></p>
                     </div>
                     
                     <div id="mensagem-erro" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
@@ -251,63 +262,52 @@
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('login-form');
             const mensagemErro = document.getElementById('mensagem-erro');
-            const usuarioInput = document.getElementById('usuario');
-            const senhaInput = document.getElementById('senha');
-            const usuarioErrorIcon = document.getElementById('usuario-error-icon');
-            const usuarioErrorMessage = document.getElementById('usuario-error-message');
-            const senhaErrorIcon = document.getElementById('senha-error-icon');
-            const senhaErrorMessage = document.getElementById('senha-error-message');
+            const emailInput = document.getElementById('email');
+            const nomeInput = document.getElementById('nome');
+            const emailErrorIcon = document.getElementById('email-error-icon');
+            const emailErrorMessage = document.getElementById('email-error-message');
+            const nomeErrorIcon = document.getElementById('nome-error-icon');
+            const nomeErrorMessage = document.getElementById('nome-error-message');
             const loginButton = document.getElementById('login-button');
             const loadingSpinner = document.getElementById('loading-spinner');
-            const togglePassword = document.getElementById('toggle-password');
             
-            // Toggle password visibility
-            togglePassword.addEventListener('click', function() {
-                const type = senhaInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                senhaInput.setAttribute('type', type);
+            // Validação de email
+            emailInput.addEventListener('blur', function() {
+                validateEmail();
+            });
+            
+            // Validação de nome
+            nomeInput.addEventListener('blur', function() {
+                validateName();
+            });
+            
+            function validateEmail() {
+                const emailValue = emailInput.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 
-                // Toggle eye icon
-                const eyeIcon = togglePassword.querySelector('i');
-                eyeIcon.classList.toggle('fa-eye');
-                eyeIcon.classList.toggle('fa-eye-slash');
-            });
-            
-            // Validação de usuário
-            usuarioInput.addEventListener('blur', function() {
-                validateUsuario();
-            });
-            
-            // Validação de senha
-            senhaInput.addEventListener('blur', function() {
-                validateSenha();
-            });
-            
-            function validateUsuario() {
-                const usuarioValue = usuarioInput.value.trim();
-                
-                if (usuarioValue === '') {
-                    showError(usuarioInput, usuarioErrorIcon, usuarioErrorMessage, 'O usuário é obrigatório');
+                if (emailValue === '') {
+                    showError(emailInput, emailErrorIcon, emailErrorMessage, 'O email é obrigatório');
                     return false;
-                } else if (usuarioValue.length < 3) {
-                    showError(usuarioInput, usuarioErrorIcon, usuarioErrorMessage, 'O usuário deve ter pelo menos 3 caracteres');
+                } else if (!emailRegex.test(emailValue)) {
+                    showError(emailInput, emailErrorIcon, emailErrorMessage, 'Digite um email válido');
                     return false;
                 } else {
-                    hideError(usuarioInput, usuarioErrorIcon, usuarioErrorMessage);
+                    hideError(emailInput, emailErrorIcon, emailErrorMessage);
                     return true;
                 }
             }
             
-            function validateSenha() {
-                const senhaValue = senhaInput.value.trim();
+            function validateName() {
+                const nomeValue = nomeInput.value.trim();
                 
-                if (senhaValue === '') {
-                    showError(senhaInput, senhaErrorIcon, senhaErrorMessage, 'A senha é obrigatória');
+                if (nomeValue === '') {
+                    showError(nomeInput, nomeErrorIcon, nomeErrorMessage, 'O nome é obrigatório');
                     return false;
-                } else if (senhaValue.length < 4) {
-                    showError(senhaInput, senhaErrorIcon, senhaErrorMessage, 'A senha deve ter pelo menos 4 caracteres');
+                } else if (nomeValue.length < 3) {
+                    showError(nomeInput, nomeErrorIcon, nomeErrorMessage, 'O nome deve ter pelo menos 3 caracteres');
                     return false;
                 } else {
-                    hideError(senhaInput, senhaErrorIcon, senhaErrorMessage);
+                    hideError(nomeInput, nomeErrorIcon, nomeErrorMessage);
                     return true;
                 }
             }
@@ -332,10 +332,10 @@
                 e.preventDefault();
                 
                 // Validar formulário antes de enviar
-                const isUsuarioValid = validateUsuario();
-                const isSenhaValid = validateSenha();
+                const isEmailValid = validateEmail();
+                const isNameValid = validateName();
                 
-                if (!isUsuarioValid || !isSenhaValid) {
+                if (!isEmailValid || !isNameValid) {
                     return;
                 }
                 
@@ -347,7 +347,7 @@
                 const formData = new FormData(form);
                 
                 // Enviar dados para o controller
-                fetch('../controllers/AdminController.php?action=login', {
+                fetch('../controllers/UsuarioController.php?action=login', {
                     method: 'POST',
                     body: formData
                 })
@@ -367,7 +367,7 @@
                         
                         // Redirecionar após 1 segundo
                         setTimeout(() => {
-                            window.location.href = 'inscricoes.php';
+                            window.location.href = 'perfil.php';
                         }, 1000);
                     } else {
                         mensagemErro.classList.remove('hidden');

@@ -216,18 +216,12 @@ if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
     </main>
     
     <!-- Footer -->
-    <footer class="bg-white border-t border-gray-100 py-3 px-4">
-        <div class="container mx-auto">
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div class="text-center sm:text-left">
-                    <p class="text-sm text-gray-500">© 2025 Grêmio Estudantil José Ivan Pontes Júnior</p>
-                    <p class="text-xs text-gray-400">EEEP Salaberga Torquato Gomes de Matos</p>
-                </div>
-                <div>
-                    <a href="../index.php" class="text-green-600 hover:text-green-800 transition-colors text-sm">
-                        <i class="fas fa-home mr-1"></i> Página Inicial
-                    </a>
-                </div>
+    <footer class="bg-white border-t border-gray-100 py-4 mt-6">
+        <div class="container mx-auto px-4">
+            <div class="text-center text-sm text-gray-500">
+                <p>&copy; 2025 Grêmio Estudantil José Ivan Pontes Júnior</p>
+                <p>EEEP Salaberga Torquato Gomes de Matos</p>
+                <p class="mt-1">Desenvolvido por <span class="font-medium text-green-600">Matheus Felix</span></p>
             </div>
         </div>
     </footer>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -47,6 +46,9 @@
                         700: '#b31e00',
                         800: '#801500',
                         900: '#4d0c00',
+                    },
+                    screens: {
+                        'xs': '480px'
                     }
                 }
             }
@@ -179,6 +181,10 @@
         z-index: 1000;
         opacity: 0;
         transition: opacity 0.3s;
+        font-size: 14px;
+        max-width: 90%;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
     .copy-toast.show {
         opacity: 1;
@@ -189,22 +195,113 @@
 <div class="min-h-screen flex flex-col">
     <!-- Cabeçalho - Reduzido -->
     <header class="bg-primary-700 text-white shadow-lg sticky top-0 z-10">
-        <div class="container mx-auto py-3 px-4 md:px-6">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome-MOpK2hbpuoqfoF8sir0Ue6SvciAArc.svg" alt="Logo Copa Grêmio" class="h-10 w-10">
-                    <div>
-                        <!-- Added whitespace-nowrap to prevent title from wrapping on mobile -->
-                        <h1 class="text-xl font-bold whitespace-nowrap">Copa Grêmio 2025</h1>
-                        <p class="text-primary-200 text-xs">Grêmio Estudantil José Ivan Pontes Júnior</p>
+    <div class="container mx-auto py-4 px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center">
+            <!-- Logo and Title -->
+            <div class="flex items-center space-x-3">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome-MOpK2hbpuoqfoF8sir0Ue6SvciAArc.svg" 
+                     alt="Logo Copa Grêmio" 
+                     class="h-10 w-10 md:h-12 md:w-12 transition-all">
+                <div>
+                    <h1 class="text-lg sm:text-xl md:text-2xl font-bold whitespace-nowrap tracking-tight">Copa Grêmio 2025</h1>
+                    <p class="text-primary-200 text-xs md:text-sm hidden sm:block">Grêmio Estudantil José Ivan Pontes Júnior</p>
+                    <p class="text-primary-200 text-xs md:text-sm sm:hidden">G.E. José Ivan Pontes Jr.</p>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Button (hidden on larger screens) -->
+            <button class="md:hidden text-white hover:text-primary-200 transition-colors" id="mobileMenuButton">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            
+            <!-- Desktop Login Dropdown -->
+            <div class="relative hidden md:block" id="loginDropdown">
+                <button class="bg-primary-600 hover:bg-primary-500 font-bold text-white px-5 py-2 rounded-md shadow-md transition-all flex items-center text-sm group" id="loginButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                    </svg>
+                    Login
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transition-transform duration-200 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 hidden transform origin-top-right transition-all duration-200 opacity-0 scale-95" id="loginOptions">
+                    <div class="py-1 rounded-md bg-white ring-1 ring-black ring-opacity-5">
+                        <a href="usuario/login.php" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            Usuário
+                        </a>
+                        <a href="admin/login.php" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-secondary-50 hover:text-secondary-700 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-secondary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                            Admin
+                        </a>
                     </div>
                 </div>
-                <a href="admin/login.php" class="bg-secondary-600 hover:bg-secondary-700 text-white px-3 py-1 rounded-md shadow-md transition-colors flex items-center text-sm">
-                    <i class="fas fa-user-shield mr-1"></i> Admin
+            </div>
+        </div>
+        
+        <!-- Mobile Menu (hidden by default) -->
+        <div class="md:hidden mt-4 hidden" id="mobileMenu">
+            <div class="bg-primary-600 rounded-md p-4 shadow-inner">
+                <a href="usuario/login.php" class="block py-2 px-4 text-white hover:bg-primary-500 rounded-md mb-2 transition-colors flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Login Usuário
+                </a>
+                <a href="admin/login.php" class="block py-2 px-4 text-white hover:bg-primary-500 rounded-md transition-colors flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    Login Admin
                 </a>
             </div>
         </div>
-    </header>
+    </div>
+</header>
+
+<script>
+    // Desktop dropdown functionality
+    const loginButton = document.getElementById('loginButton');
+    const loginOptions = document.getElementById('loginOptions');
+    
+    if (loginButton && loginOptions) {
+        loginButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            loginOptions.classList.toggle('hidden');
+            loginOptions.classList.toggle('opacity-0');
+            loginOptions.classList.toggle('scale-95');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            if (!loginOptions.classList.contains('hidden')) {
+                loginOptions.classList.add('hidden', 'opacity-0', 'scale-95');
+            }
+        });
+        
+        // Prevent dropdown from closing when clicking inside it
+        loginOptions.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+    
+    // Mobile menu functionality
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+</script>
 
     <!-- Formulário de Inscrição -->
     <main class="container mx-auto py-8 px-4 md:px-6 flex-grow">
@@ -294,9 +391,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-4 text-right">
-                            <button type="button" id="btn-proximo-1" class="px-4 py-2 bg-secondary-600 text-white font-medium rounded-md hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-500 transition-colors">
-                                Próximo <i class="fas fa-arrow-right ml-1"></i>
+                        <div class="mt-4 flex justify-end">
+                            <button type="button" id="btn-proximo-1" class="flex items-center px-6 py-2 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+                                Próximo <i class="fas fa-arrow-right ml-2"></i>
                             </button>
                         </div>
                     </section>
@@ -446,12 +543,12 @@
                             </div>
                         </div>
 
-                        <div class="flex justify-between mt-6">
-                            <button type="button" id="btn-anterior-2" class="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
-                                <i class="fas fa-arrow-left mr-1"></i> Anterior
+                        <div class="mt-4 flex justify-between">
+                            <button type="button" id="btn-anterior-2" class="flex items-center px-6 py-2 bg-gray-100 text-gray-600 font-medium rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                                <i class="fas fa-arrow-left mr-2"></i> Anterior
                             </button>
-                            <button type="button" id="btn-proximo-2" class="px-4 py-2 bg-secondary-600 text-white font-medium rounded-md hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-500 transition-colors">
-                                Próximo <i class="fas fa-arrow-right ml-1"></i>
+                            <button type="button" id="btn-proximo-2" class="flex items-center px-6 py-2 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+                                Próximo <i class="fas fa-arrow-right ml-2"></i>
                             </button>
                         </div>
                     </section>
@@ -470,12 +567,12 @@
                             </div>
                         </div>
 
-                        <div class="flex justify-between mt-6">
-                            <button type="button" id="btn-anterior-3" class="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
-                                <i class="fas fa-arrow-left mr-1"></i> Anterior
+                        <div class="mt-4 flex justify-between">
+                            <button type="button" id="btn-anterior-3" class="flex items-center px-6 py-2 bg-gray-100 text-gray-600 font-medium rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                                <i class="fas fa-arrow-left mr-2"></i> Anterior
                             </button>
-                            <button type="button" id="btn-proximo-3" class="px-4 py-2 bg-secondary-600 text-white font-medium rounded-md hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-500 transition-colors">
-                                Próximo <i class="fas fa-arrow-right ml-1"></i>
+                            <button type="button" id="btn-proximo-3" class="flex items-center px-6 py-2 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+                                Próximo <i class="fas fa-arrow-right ml-2"></i>
                             </button>
                         </div>
                     </section>
@@ -496,12 +593,12 @@
                                 Realize o pagamento da sua inscrição utilizando a chave PIX abaixo:
                             </p>
                             <div class="flex items-center justify-between bg-white p-3 rounded border border-gray-300">
-                                <div class="flex items-center overflow-hidden">
+                                <div class="flex items-center overflow-hidden flex-1 mr-2">
                                     <i class="fas fa-key text-secondary-600 mr-2 flex-shrink-0"></i>
-                                    <span id="pix-key" class="font-mono text-gray-800 truncate">09593342389</span>
+                                    <span id="pix-key" class="font-mono text-gray-800 truncate text-sm sm:text-base">09593342389</span>
                                 </div>
                                 <!-- Improved responsive button -->
-                                <button type="button" id="copy-pix" class="ml-2 flex-shrink-0 px-3 py-1 bg-secondary-600 text-white text-sm rounded hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-secondary-500 transition-colors flex items-center whitespace-nowrap">
+                                <button type="button" id="copy-pix" class="flex-shrink-0 px-2 sm:px-3 py-1 bg-secondary-600 text-white text-xs sm:text-sm rounded hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-secondary-500 transition-colors flex items-center whitespace-nowrap">
                                     <i class="fas fa-copy mr-1"></i> <span class="hidden sm:inline">Copiar</span>
                                 </button>
                             </div>
@@ -527,12 +624,12 @@
                                 <p class="text-gray-500 text-xs mt-1">Seus dados serão armazenados em nosso banco de dados e utilizados apenas para a organização da Copa Grêmio 2025.</p>
                             </div>
                         </div>
-                        <div class="flex justify-between mt-6">
-                            <button type="button" id="btn-anterior-4" class="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
-                                <i class="fas fa-arrow-left mr-1"></i> Anterior
+                        <div class="mt-4 flex justify-between">
+                            <button type="button" id="btn-anterior-4" class="flex items-center px-6 py-2 bg-gray-100 text-gray-600 font-medium rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                                <i class="fas fa-arrow-left mr-2"></i> Anterior
                             </button>
-                            <button type="submit" class="px-6 py-3 bg-secondary-600 text-white font-medium rounded-md hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-500 transition-colors">
-                                <i class="fas fa-paper-plane mr-1"></i> Finalizar Inscrição
+                            <button type="submit" class="flex items-center px-6 py-2 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+                                Finalizar <i class="fas fa-check ml-2"></i>
                             </button>
                         </div>
                     </section>
@@ -542,8 +639,16 @@
     </main>
 
     <!-- Simplified footer with just developer credit -->
-    <footer class="bg-primary-700 text-white py-3 text-center">
-        <p class="text-sm font-medium">Desenvolvido por <span class="text-secondary-300">Matheus Felix</span></p>
+    <footer class="bg-primary-700 text-white">
+        <div class="container mx-auto py-4 px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+                <p class="text-sm sm:text-base text-primary-100">EEEP Salaberga Torquato Gomes de Matos</p>
+                <p class="text-sm sm:text-base font-medium">
+                    Desenvolvido por 
+                    <span class="text-secondary-300 hover:text-secondary-200 transition-colors">Matheus Felix</span>
+                </p>
+            </div>
+        </div>
     </footer>
 </div>
 
@@ -594,7 +699,9 @@
             </div>
 
             <div class="flex justify-end pt-2">
-                <button class="modal-close px-4 bg-secondary-600 p-3 rounded-lg text-white hover:bg-secondary-700">Fechar</button>
+                <button class="modal-close px-6 py-2 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+                    Fechar
+                </button>
             </div>
         </div>
     </div>
@@ -621,10 +728,10 @@
                 </div>
                 
                 <div class="flex flex-col w-full gap-3">
-                    <a id="enviar-comprovante" href="#" target="_blank" class="w-full px-4 py-3 bg-accent-400 text-white font-medium rounded-md hover:bg-accent-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500 transition-colors flex items-center justify-center">
-                        <i class="fab fa-whatsapp mr-2 text-lg"></i> Enviar Comprovante via WhatsApp
+                    <a id="enviar-comprovante" href="#" target="_blank" class="w-full px-6 py-2 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors flex items-center justify-center">
+                        <i class="fab fa-whatsapp mr-2"></i> Enviar Comprovante via WhatsApp
                     </a>
-                    <button id="fechar-sucesso" class="w-full px-4 py-3 bg-gray-200 text-gray-700 font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                    <button id="fechar-sucesso" class="w-full px-6 py-2 bg-gray-100 text-gray-600 font-medium rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
                         Fechar
                     </button>
                 </div>
@@ -1033,7 +1140,12 @@ copyPixBtn.addEventListener('click', function() {
         copyToast.classList.remove('show');
     }, 2000);
 });
+
+// Carregar inscrições ao carregar a página
+carregarInscricoes();
 });
+
+
 </script>
 </body>
 </html>
