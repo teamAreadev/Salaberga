@@ -33,21 +33,6 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
     :root {
-        --background-color: #f0f7ff;
-        --text-color: #333333;
-        --header-color: #007A33;
-        --icon-bg: #ffffff;
-        --icon-shadow: rgba(0, 0, 0, 0.1);
-        --accent-color: #FFA500;
-        --grid-color: #e0e0e0;
-        --card-bg: rgba(255, 255, 255, 0.9);
-        --header-bg: rgba(255, 255, 255, 0.95);
-        --mobile-nav-bg: rgba(255, 255, 255, 0.95);
-        --search-bar-bg: white;
-        --card-border-hover: var(--header-color);
-    }
-
-    .dark {
         --background-color: #1a1a1a;
         --text-color: #ffffff;
         --header-color: #00b348;
@@ -61,6 +46,8 @@
         --search-bar-bg: #2d2d2d;
         --card-border-hover: var(--accent-color);
     }
+
+
 
     * {
         margin: 0;
@@ -291,31 +278,13 @@
                 <nav class="hidden md:flex items-center gap-5">
                     <a href="#" class="nav-link">Início</a>
                     <a href="#" class="nav-link">Sair</a>
-                    <a href="./login.php" class="inline-flex items-center justify-center px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors">
+                    <a href="./views/login.php" class="inline-flex items-center justify-center px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors">
                         <i class="fas fa-sign-in-alt mr-2"></i>
                         Login
                     </a>
-                    <button id="darkModeToggle" class="inline-flex items-center justify-center p-2 rounded-lg transition-colors" role="switch" aria-label="Alternar modo escuro">
-                        <svg class="w-5 h-5 sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        <svg class="w-5 h-5 moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                        </svg>
-                        <span class="sr-only">Alternar modo escuro</span>
-                    </button>
+                   
                 </nav>
 
-                <div class="md:hidden">
-                    <button id="darkModeToggleMobile" class="inline-flex items-center justify-center p-2 rounded-lg transition-colors">
-                        <svg class="w-5 h-5 sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        <svg class="w-5 h-5 moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                        </svg>
-                    </button>
-                </div>
             </div>
         </div>
     </header>
@@ -525,54 +494,7 @@
                 renderCandidates(filtered);
             }
             
-            // Configurar modo escuro
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            const darkModeToggleMobile = document.getElementById('darkModeToggleMobile');
-            const sunIcon = darkModeToggle.querySelector('.sun-icon');
-            const moonIcon = darkModeToggle.querySelector('.moon-icon');
-            const sunIconMobile = darkModeToggleMobile.querySelector('.sun-icon');
-            const moonIconMobile = darkModeToggleMobile.querySelector('.moon-icon');
-            
-            function updateIcons(isDark) {
-                if (isDark) {
-                    sunIcon.classList.add('hidden');
-                    moonIcon.classList.remove('hidden');
-                    sunIconMobile.classList.add('hidden');
-                    moonIconMobile.classList.remove('hidden');
-                } else {
-                    sunIcon.classList.remove('hidden');
-                    moonIcon.classList.add('hidden');
-                    sunIconMobile.classList.remove('hidden');
-                    moonIconMobile.classList.add('hidden');
-                }
-            }
-            
-            function updateDarkMode(isDark) {
-                if (isDark) {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.removeItem('theme');
-                }
-                updateIcons(isDark);
-            }
-            
-            const savedTheme = localStorage.getItem('theme');
-            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-            
-            if (savedTheme) {
-                updateDarkMode(savedTheme === 'dark');
-            } else {
-                updateDarkMode(prefersDarkScheme.matches);
-            }
-            
-            [darkModeToggle, darkModeToggleMobile].forEach(toggle => {
-                toggle.addEventListener('click', function() {
-                    const isDark = !document.documentElement.classList.contains('dark');
-                    updateDarkMode(isDark);
-                });
-            });
+           
             
             // Animação para os cards
             const animateCards = () => {

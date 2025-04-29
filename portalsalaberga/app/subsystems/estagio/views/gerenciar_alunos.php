@@ -189,6 +189,98 @@
             border-color: #007A33 !important;
             box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2) !important;
         }
+
+        /* Estilos para os cards mobile */
+        .mobile-card {
+            background-color: #2d2d2d;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .mobile-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border-color: rgba(0, 122, 51, 0.3);
+        }
+
+        .mobile-card-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .mobile-card-label {
+            font-weight: 600;
+            color: #00C250;
+            min-width: 100px;
+            margin-right: 0.5rem;
+        }
+
+        .mobile-card-value {
+            flex: 1;
+        }
+
+        .mobile-card-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-card-actions button {
+            margin-left: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            color: white;
+        }
+
+        .mobile-card-actions button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-card-actions button.edit-btn {
+            color: #00FF6B;
+        }
+
+        .mobile-card-actions button.delete-btn {
+            color: #f87171;
+        }
+
+        .mobile-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .table-container.desktop-table {
+                display: none;
+            }
+            
+            .mobile-cards-container {
+                display: block;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-cards-container {
+                display: none;
+            }
+            
+            .table-container.desktop-table {
+                display: block;
+            }
+        }
     </style>
 </head>
 
@@ -278,6 +370,16 @@
                         Relatórios
                     </a>
                 </nav>
+                <div class="mt-auto pt-4 border-t border-gray-700">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-cog w-5 mr-3"></i>
+                        Configurações
+                    </a>
+                    <a href="login.php" class="sidebar-link text-red-400 hover:text-red-300">
+                        <i class="fas fa-sign-out-alt w-5 mr-3"></i>
+                        Sair
+                    </a>
+                </div>
             </div>
         </div>
         <!-- Conteúdo principal -->
@@ -304,15 +406,9 @@
                 
                 <!-- Actions Bar -->
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full">
-                        <button id="addAlunoBtn" class="inline-flex items-center justify-center px-4 py-2 border-0 rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 focus:ring-offset-dark-400 w-full sm:w-auto transition-colors duration-200">
-                            <i class="fas fa-plus mr-2"></i>
-                            Novo Aluno
-                        </button>
-                        <div class="relative w-full sm:w-64">
-                            <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="w-full pl-10 pr-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-400">
-                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        </div>
+                    <div class="relative w-full sm:w-64">
+                        <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="w-full pl-10 pr-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-400">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
                     </div>
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
                         <select id="filterArea" class="pl-4 pr-8 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-400 w-full sm:w-auto appearance-none bg-dark-100 text-white">
@@ -330,8 +426,9 @@
                         </select>
                     </div>
                 </div>
-                <!-- Table -->
-                <div class="table-container overflow-x-auto">
+                
+                <!-- Table Desktop -->
+                <div class="table-container desktop-table overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-700 text-sm">
                         <thead>
                             <tr>
@@ -349,21 +446,26 @@
                         </tbody>
                     </table>
                 </div>
+                
+                <!-- Cards Mobile -->
+                <div id="alunosMobileCards" class="mobile-cards-container">
+                    <!-- Dados dos alunos serão inseridos aqui via JavaScript -->
+                </div>
             </main>
         </div>
-        <!-- Modal de Cadastro/Edição -->
+        <!-- Modal de Edição -->
         <div id="alunoModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
-            <div class="bg-dark-50 rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl border border-gray-800">
-                <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white">Novo Aluno</h2>
+            <div class="bg-dark-50 rounded-lg p-6 max-w-md w-full mx-4 shadow-2xl border border-gray-800 max-h-[90vh] overflow-y-auto">
+                <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white">Editar Aluno</h2>
                 <form id="alunoForm">
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-300">Nome</label>
-                            <input type="text" id="alunoNome" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent" required>
+                            <input type="text" id="alunoNome" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent" disabled>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-300">Área</label>
-                            <select id="alunoArea" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <select id="alunoArea" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent" disabled>
                                 <option value="desenvolvimento">Desenvolvimento</option>
                                 <option value="design">Design</option>
                                 <option value="midia">Mídia</option>
@@ -380,19 +482,19 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-300">Nota</label>
-                            <input type="number" id="alunoNota" min="0" max="10" step="0.1" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <input type="number" id="alunoNota" min="0" max="10" step="0.1" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent" disabled>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-300">Projetos Participados</label>
                             <input type="text" id="alunoProjetos" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                         </div>
                     </div>
-                    <div class="mt-6 flex justify-end space-x-4">
+                    <div class="mt-6 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
                         <button type="button" id="cancelarBtn" class="px-4 py-2 border border-gray-700 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 transition-colors">
                             Cancelar
                         </button>
                         <button type="submit" class="px-4 py-2 border-0 rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
-                            Salvar
+                            Salvar Alterações
                         </button>
                     </div>
                 </form>
@@ -406,11 +508,13 @@
             { id: 1, nome: "ALEXANDRE NETO DANTAS DA SILVA", area: "desenvolvimento", status: "ativo", nota: 8.5, projetos: "Projeto A, Projeto B" },
             { id: 2, nome: "ANA CLARA CAVALCANTE LIMA", area: "design", status: "ativo", nota: 9.0, projetos: "Projeto C" },
             { id: 3, nome: "ANGELA MICHELE DOS SANTOS LIMA", area: "midia", status: "estagiando", nota: 8.7, projetos: "Projeto D" },
-            // ... adicionar os demais alunos
+            { id: 4, nome: "CARLOS EDUARDO SILVA SANTOS", area: "redes", status: "ativo", nota: 7.8, projetos: "Projeto E, Projeto F" },
+            { id: 5, nome: "DANIELA FERNANDES OLIVEIRA", area: "design", status: "inativo", nota: 8.2, projetos: "Projeto G" },
+            { id: 6, nome: "EDUARDO MORAES COSTA", area: "desenvolvimento", status: "estagiando", nota: 9.1, projetos: "Projeto H, Projeto I" }
         ];
 
-        // Função para renderizar a tabela de alunos
-        function renderizarTabela(alunosFiltrados = alunos) {
+        // Função para renderizar a tabela de alunos (desktop)
+        function renderizarTabelaDesktop(alunosFiltrados = alunos) {
             const tbody = document.getElementById('alunosTableBody');
             tbody.innerHTML = '';
 
@@ -450,6 +554,101 @@
             });
         }
 
+        // Função para renderizar os cards de alunos (mobile)
+        function renderizarCardsMobile(alunosFiltrados = alunos) {
+            const container = document.getElementById('alunosMobileCards');
+            container.innerHTML = '';
+
+            alunosFiltrados.forEach(aluno => {
+                const card = document.createElement('div');
+                card.className = 'mobile-card';
+                
+                const areaClass = aluno.area === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
+                                aluno.area === 'design' ? 'bg-purple-900 text-purple-300' : 
+                                aluno.area === 'midia' ? 'bg-green-900 text-green-300' : 
+                                'bg-orange-900 text-orange-300';
+                                
+                const statusClass = aluno.status === 'ativo' ? 'status-ativo' : 
+                                 aluno.status === 'inativo' ? 'status-inativo' : 
+                                 'status-estagiando';
+                
+                card.innerHTML = `
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">ID:</span>
+                        <span class="mobile-card-value">${aluno.id}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Nome:</span>
+                        <span class="mobile-card-value font-medium">${aluno.nome}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Área:</span>
+                        <span class="mobile-card-value">
+                            <span class="mobile-badge ${areaClass}">${aluno.area}</span>
+                        </span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Status:</span>
+                        <span class="mobile-card-value">
+                            <span class="status-pill ${statusClass}">${aluno.status}</span>
+                        </span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Nota:</span>
+                        <span class="mobile-card-value">${aluno.nota}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Projetos:</span>
+                        <span class="mobile-card-value">${aluno.projetos}</span>
+                    </div>
+                    <div class="mobile-card-actions">
+                        <button onclick="editarAluno(${aluno.id})" class="edit-btn">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button onclick="excluirAluno(${aluno.id})" class="delete-btn">
+                            <i class="fas fa-trash"></i> Excluir
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Função para editar aluno
+        function editarAluno(id) {
+            const aluno = alunos.find(a => a.id === id);
+            if (aluno) {
+                document.getElementById('modalTitle').textContent = 'Editar Aluno';
+                
+                // Preenche todos os campos
+                document.getElementById('alunoNome').value = aluno.nome;
+                document.getElementById('alunoArea').value = aluno.area;
+                document.getElementById('alunoStatus').value = aluno.status;
+                document.getElementById('alunoNota').value = aluno.nota;
+                document.getElementById('alunoProjetos').value = aluno.projetos;
+                
+                // Desabilita os campos que não podem ser editados
+                document.getElementById('alunoNome').disabled = true;
+                document.getElementById('alunoArea').disabled = true;
+                document.getElementById('alunoNota').disabled = true;
+                
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function excluirAluno(id) {
+            if (confirm('Tem certeza que deseja excluir este aluno?')) {
+                // Simulação de exclusão
+                const index = alunos.findIndex(a => a.id === id);
+                if (index !== -1) {
+                    alunos.splice(index, 1);
+                    aplicarFiltros();
+                    alert('Aluno excluído com sucesso!');
+                }
+            }
+        }
+
         // Sidebar mobile toggle
         const sidebarToggle = document.getElementById('sidebarToggle');
         const closeSidebar = document.getElementById('closeSidebar');
@@ -457,26 +656,46 @@
 
         sidebarToggle.addEventListener('click', () => {
             mobileSidebar.classList.remove('-translate-x-full');
+            document.body.style.overflow = 'hidden';
         });
 
         closeSidebar.addEventListener('click', () => {
             mobileSidebar.classList.add('-translate-x-full');
+            document.body.style.overflow = 'auto';
         });
 
-        // Modal de Cadastro/Edição
+        // Fechar sidebar ao clicar fora
+        mobileSidebar.addEventListener('click', (e) => {
+            if (e.target === mobileSidebar) {
+                mobileSidebar.classList.add('-translate-x-full');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Modal de Edição
         const modal = document.getElementById('alunoModal');
-        const addAlunoBtn = document.getElementById('addAlunoBtn');
         const cancelarBtn = document.getElementById('cancelarBtn');
         const alunoForm = document.getElementById('alunoForm');
 
-        addAlunoBtn.addEventListener('click', () => {
-            document.getElementById('modalTitle').textContent = 'Novo Aluno';
-            alunoForm.reset();
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+        cancelarBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         });
 
-        cancelarBtn.addEventListener('click', () => {
+        // Fechar modal ao clicar fora
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        });
+
+        // Form submit
+        alunoForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Simulação de salvamento
+            alert('Alterações salvas com sucesso!');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         });
@@ -498,15 +717,34 @@
                 return matchSearch && matchArea && matchStatus;
             });
 
-            renderizarTabela(alunosFiltrados);
+            renderizarTabelaDesktop(alunosFiltrados);
+            renderizarCardsMobile(alunosFiltrados);
         }
 
         searchInput.addEventListener('input', aplicarFiltros);
         filterArea.addEventListener('change', aplicarFiltros);
         filterStatus.addEventListener('change', aplicarFiltros);
 
-        // Inicializar tabela
-        renderizarTabela();
+        // Inicializar tabela e cards
+        renderizarTabelaDesktop();
+        renderizarCardsMobile();
+        
+        // Verificar tamanho da tela e ajustar renderização
+        function checkScreenSize() {
+            if (window.innerWidth < 768) {
+                document.querySelector('.desktop-table').style.display = 'none';
+                document.querySelector('.mobile-cards-container').style.display = 'block';
+            } else {
+                document.querySelector('.desktop-table').style.display = 'block';
+                document.querySelector('.mobile-cards-container').style.display = 'none';
+            }
+        }
+        
+        // Adicionar listener para redimensionamento
+        window.addEventListener('resize', checkScreenSize);
+        
+        // Verificar tamanho inicial
+        checkScreenSize();
     </script>
 </body>
-</html> 
+</html>

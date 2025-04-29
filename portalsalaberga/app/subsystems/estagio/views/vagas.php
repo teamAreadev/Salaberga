@@ -183,6 +183,23 @@
             background-color: rgba(245, 158, 11, 0.2);
             color: #fcd34d;
         }
+
+        /* Modal de candidatura */
+        .candidatura-modal {
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Cards mobile */
+        @media (max-width: 640px) {
+            .vaga-card {
+                padding: 1rem;
+            }
+            
+            .mobile-stack {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 
@@ -328,9 +345,9 @@
                 </div>
             </main>
         </div>
-        <!-- Modal de Cadastro/Edição -->
+        <!-- Modal de Cadastro/Edição de Vaga -->
         <div id="vagaModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
-            <div class="bg-dark-50 rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl border border-gray-800">
+            <div class="bg-dark-50 rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl border border-gray-800 candidatura-modal">
                 <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white">Nova Vaga</h2>
                 <form id="vagaForm">
                     <div class="space-y-4">
@@ -381,6 +398,63 @@
                 </form>
             </div>
         </div>
+        
+        <!-- Modal de Candidatura -->
+        <div id="candidaturaModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+            <div class="bg-dark-50 rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl border border-gray-800 candidatura-modal">
+                <h2 id="candidaturaModalTitle" class="text-2xl font-bold mb-6 text-white">Candidatar-se à Vaga</h2>
+                <form id="candidaturaForm">
+                    <input type="hidden" id="vagaIdCandidatura">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300">Filtrar por Área</label>
+                            <select id="filtroAreaCandidatura" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option value="">Todas as áreas</option>
+                                <option value="desenvolvimento">Desenvolvimento</option>
+                                <option value="design">Design</option>
+                                <option value="midia">Mídia</option>
+                                <option value="redes">Redes/Suporte</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300">Filtrar por Nota Mínima</label>
+                            <input type="number" id="filtroNotaCandidatura" min="0" max="10" step="0.1" placeholder="0-10" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300">Selecionar Aluno</label>
+                            <select id="alunoCandidatura" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent" required>
+                                <option value="">Selecione um aluno</option>
+                                <!-- Alunos serão carregados via JavaScript -->
+                            </select>
+                        </div>
+                        <div id="alunoInfo" class="hidden p-4 bg-dark-100 rounded-md">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm text-gray-400">Área:</p>
+                                    <p id="alunoAreaInfo" class="text-sm font-medium"></p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-400">Nota:</p>
+                                    <p id="alunoNotaInfo" class="text-sm font-medium"></p>
+                                </div>
+                                <div class="col-span-2">
+                                    <p class="text-sm text-gray-400">Projetos:</p>
+                                    <p id="alunoProjetosInfo" class="text-sm"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end space-x-4">
+                        <button type="button" id="cancelarCandidaturaBtn" class="px-4 py-2 border border-gray-700 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="px-4 py-2 border-0 rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+                            Confirmar Candidatura
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -389,6 +463,16 @@
             { id: 1, nome: "TechCorp Solutions" },
             { id: 2, nome: "Mídia Digital" },
             { id: 3, nome: "Redes & Cia" }
+        ];
+
+        // Dados dos alunos
+        const alunos = [
+            { id: 1, nome: "ALEXANDRE NETO DANTAS DA SILVA", area: "desenvolvimento", status: "ativo", nota: 8.5, projetos: "Projeto A, Projeto B" },
+            { id: 2, nome: "ANA CLARA CAVALCANTE LIMA", area: "design", status: "ativo", nota: 9.0, projetos: "Projeto C" },
+            { id: 3, nome: "ANGELA MICHELE DOS SANTOS LIMA", area: "midia", status: "estagiando", nota: 8.7, projetos: "Projeto D" },
+            { id: 4, nome: "CARLOS EDUARDO SILVA SANTOS", area: "redes", status: "ativo", nota: 7.8, projetos: "Projeto E, Projeto F" },
+            { id: 5, nome: "DANIELA FERNANDES OLIVEIRA", area: "design", status: "inativo", nota: 8.2, projetos: "Projeto G" },
+            { id: 6, nome: "EDUARDO MORAES COSTA", area: "desenvolvimento", status: "estagiando", nota: 9.1, projetos: "Projeto H, Projeto I" }
         ];
 
         // Dados das vagas
@@ -424,6 +508,9 @@
                 cargaHoraria: 25
             }
         ];
+
+        // Dados de candidaturas
+        const candidaturas = [];
 
         // Função para renderizar os cards das vagas
         function renderizarVagas(vagasFiltradas = vagas) {
@@ -466,7 +553,7 @@
                             <p class="text-sm font-medium text-white">Bolsa: <span class="text-secondary-400">R$ ${vaga.bolsa.toFixed(2)}</span></p>
                             <p class="text-sm text-gray-400">${vaga.cargaHoraria}h semanais</p>
                         </div>
-                        <button class="px-4 py-2 text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 rounded-md transition-colors">
+                        <button onclick="abrirModalCandidatura(${vaga.id})" class="px-4 py-2 text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 rounded-md transition-colors">
                             Candidatar-se
                         </button>
                     </div>
@@ -480,6 +567,7 @@
             const selects = ['filterEmpresa', 'vagaEmpresa'];
             selects.forEach(selectId => {
                 const select = document.getElementById(selectId);
+                select.innerHTML = '<option value="">Todas as empresas</option>';
                 empresas.forEach(empresa => {
                     const option = document.createElement('option');
                     option.value = empresa.id;
@@ -487,6 +575,83 @@
                     select.appendChild(option);
                 });
             });
+        }
+
+        // Função para abrir modal de candidatura
+        function abrirModalCandidatura(vagaId) {
+            document.getElementById('vagaIdCandidatura').value = vagaId;
+            
+            // Carregar alunos no select
+            const selectAluno = document.getElementById('alunoCandidatura');
+            selectAluno.innerHTML = '<option value="">Selecione um aluno</option>';
+            
+            alunos.forEach(aluno => {
+                const option = document.createElement('option');
+                option.value = aluno.id;
+                option.textContent = aluno.nome;
+                option.setAttribute('data-area', aluno.area);
+                option.setAttribute('data-nota', aluno.nota);
+                option.setAttribute('data-projetos', aluno.projetos);
+                selectAluno.appendChild(option);
+            });
+            
+            // Resetar filtros
+            document.getElementById('filtroAreaCandidatura').value = '';
+            document.getElementById('filtroNotaCandidatura').value = '';
+            document.getElementById('alunoInfo').classList.add('hidden');
+            
+            // Abrir modal
+            document.getElementById('candidaturaModal').classList.remove('hidden');
+            document.getElementById('candidaturaModal').classList.add('flex');
+            
+            // Atualizar título com o nome da vaga
+            const vaga = vagas.find(v => v.id === vagaId);
+            if (vaga) {
+                document.getElementById('candidaturaModalTitle').textContent = `Candidatar-se à vaga: ${vaga.titulo}`;
+            }
+        }
+
+        // Função para filtrar alunos no modal de candidatura
+        function filtrarAlunosCandidatura() {
+            const areaFiltro = document.getElementById('filtroAreaCandidatura').value;
+            const notaFiltro = parseFloat(document.getElementById('filtroNotaCandidatura').value) || 0;
+            
+            const selectAluno = document.getElementById('alunoCandidatura');
+            const options = selectAluno.querySelectorAll('option');
+            
+            options.forEach(option => {
+                if (option.value === "") {
+                    option.hidden = false;
+                    return;
+                }
+                
+                const alunoArea = option.getAttribute('data-area');
+                const alunoNota = parseFloat(option.getAttribute('data-nota'));
+                
+                const matchArea = !areaFiltro || alunoArea === areaFiltro;
+                const matchNota = alunoNota >= notaFiltro;
+                
+                option.hidden = !(matchArea && matchNota);
+            });
+            
+            // Resetar seleção
+            selectAluno.value = "";
+            document.getElementById('alunoInfo').classList.add('hidden');
+        }
+
+        // Função para mostrar informações do aluno selecionado
+        function mostrarInfoAluno(alunoId) {
+            const aluno = alunos.find(a => a.id === parseInt(alunoId));
+            const alunoInfo = document.getElementById('alunoInfo');
+            
+            if (aluno) {
+                document.getElementById('alunoAreaInfo').textContent = aluno.area;
+                document.getElementById('alunoNotaInfo').textContent = aluno.nota;
+                document.getElementById('alunoProjetosInfo').textContent = aluno.projetos;
+                alunoInfo.classList.remove('hidden');
+            } else {
+                alunoInfo.classList.add('hidden');
+            }
         }
 
         // Sidebar mobile toggle
@@ -502,8 +667,8 @@
             mobileSidebar.classList.add('-translate-x-full');
         });
 
-        // Modal de Cadastro/Edição
-        const modal = document.getElementById('vagaModal');
+        // Modal de Cadastro/Edição de Vaga
+        const vagaModal = document.getElementById('vagaModal');
         const addVagaBtn = document.getElementById('addVagaBtn');
         const cancelarBtn = document.getElementById('cancelarBtn');
         const vagaForm = document.getElementById('vagaForm');
@@ -511,44 +676,138 @@
         addVagaBtn.addEventListener('click', () => {
             document.getElementById('modalTitle').textContent = 'Nova Vaga';
             vagaForm.reset();
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            vagaModal.classList.remove('hidden');
+            vagaModal.classList.add('flex');
         });
 
         cancelarBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            vagaModal.classList.add('hidden');
+            vagaModal.classList.remove('flex');
         });
 
-        // Busca e Filtros
-        const searchInput = document.getElementById('searchVaga');
-        const filterArea = document.getElementById('filterArea');
-        const filterEmpresa = document.getElementById('filterEmpresa');
+        // Modal de Candidatura
+        const candidaturaModal = document.getElementById('candidaturaModal');
+        const cancelarCandidaturaBtn = document.getElementById('cancelarCandidaturaBtn');
+        const candidaturaForm = document.getElementById('candidaturaForm');
 
-        function aplicarFiltros() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const areaFiltro = filterArea.value;
-            const empresaFiltro = filterEmpresa.value;
+        cancelarCandidaturaBtn.addEventListener('click', () => {
+            candidaturaModal.classList.add('hidden');
+            candidaturaModal.classList.remove('flex');
+        });
 
-            const vagasFiltradas = vagas.filter(vaga => {
-                const empresa = empresas.find(e => e.id === vaga.empresa);
-                const matchSearch = vaga.titulo.toLowerCase().includes(searchTerm) || 
-                                  empresa.nome.toLowerCase().includes(searchTerm);
-                const matchArea = !areaFiltro || vaga.area === areaFiltro;
-                const matchEmpresa = !empresaFiltro || vaga.empresa === parseInt(empresaFiltro);
-                return matchSearch && matchArea && matchEmpresa;
+        // Fechar modais ao clicar fora
+        [vagaModal, candidaturaModal].forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
             });
+        });
 
-            renderizarVagas(vagasFiltradas);
+        // Event listeners para filtros de candidatura
+        document.getElementById('filtroAreaCandidatura').addEventListener('change', filtrarAlunosCandidatura);
+        document.getElementById('filtroNotaCandidatura').addEventListener('input', filtrarAlunosCandidatura);
+        document.getElementById('alunoCandidatura').addEventListener('change', function() {
+            mostrarInfoAluno(this.value);
+        });
+
+        // Form submit de candidatura
+        candidaturaForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const vagaId = parseInt(document.getElementById('vagaIdCandidatura').value)
+            const alunoId = parseInt(document.getElementById('alunoCandidatura').value);
+        
+        if (!alunoId) {
+            alert('Por favor, selecione um aluno');
+            return;
         }
+        
+        const vaga = vagas.find(v => v.id === vagaId);
+        const aluno = alunos.find(a => a.id === alunoId);
+        
+        // Verificar se já existe candidatura para este aluno e vaga
+        const candidaturaExistente = candidaturas.find(c => 
+            c.vagaId === vagaId && c.alunoId === alunoId
+        );
+        
+        if (candidaturaExistente) {
+            alert('Este aluno já está candidatado a esta vaga');
+            return;
+        }
+        
+        // Adicionar candidatura
+        candidaturas.push({
+            id: candidaturas.length + 1,
+            vagaId,
+            alunoId,
+            data: new Date().toISOString(),
+            status: 'pendente'
+        });
+        
+        alert(`Candidatura de ${aluno.nome} para a vaga "${vaga.titulo}" realizada com sucesso!`);
+        candidaturaModal.classList.add('hidden');
+        candidaturaModal.classList.remove('flex');
+    });
 
-        searchInput.addEventListener('input', aplicarFiltros);
-        filterArea.addEventListener('change', aplicarFiltros);
-        filterEmpresa.addEventListener('change', aplicarFiltros);
+    // Busca e Filtros de vagas
+    const searchInput = document.getElementById('searchVaga');
+    const filterArea = document.getElementById('filterArea');
+    const filterEmpresa = document.getElementById('filterEmpresa');
 
-        // Inicializar página
-        preencherSelectEmpresas();
-        renderizarVagas();
-    </script>
-</body>
-</html> 
+    function aplicarFiltros() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const areaFiltro = filterArea.value;
+        const empresaFiltro = filterEmpresa.value;
+
+        const vagasFiltradas = vagas.filter(vaga => {
+            const empresa = empresas.find(e => e.id === vaga.empresa);
+            const matchSearch = vaga.titulo.toLowerCase().includes(searchTerm) || 
+                              empresa.nome.toLowerCase().includes(searchTerm);
+            const matchArea = !areaFiltro || vaga.area === areaFiltro;
+            const matchEmpresa = !empresaFiltro || vaga.empresa === parseInt(empresaFiltro);
+            return matchSearch && matchArea && matchEmpresa;
+        });
+
+        renderizarVagas(vagasFiltradas);
+    }
+
+    searchInput.addEventListener('input', aplicarFiltros);
+    filterArea.addEventListener('change', aplicarFiltros);
+    filterEmpresa.addEventListener('change', aplicarFiltros);
+
+    // Funções para editar e excluir vagas (simuladas)
+    function editarVaga(id) {
+        const vaga = vagas.find(v => v.id === id);
+        if (vaga) {
+            document.getElementById('modalTitle').textContent = 'Editar Vaga';
+            document.getElementById('vagaTitulo').value = vaga.titulo;
+            document.getElementById('vagaEmpresa').value = vaga.empresa;
+            document.getElementById('vagaArea').value = vaga.area;
+            document.getElementById('vagaDescricao').value = vaga.descricao;
+            document.getElementById('vagaRequisitos').value = vaga.requisitos;
+            document.getElementById('vagaBolsa').value = vaga.bolsa;
+            document.getElementById('vagaCargaHoraria').value = vaga.cargaHoraria;
+            
+            vagaModal.classList.remove('hidden');
+            vagaModal.classList.add('flex');
+        }
+    }
+
+    function excluirVaga(id) {
+        if (confirm('Tem certeza que deseja excluir esta vaga?')) {
+            // Simulação de exclusão
+            const index = vagas.findIndex(v => v.id === id);
+            if (index !== -1) {
+                vagas.splice(index, 1);
+                aplicarFiltros();
+                alert('Vaga excluída com sucesso!');
+            }
+        }
+    }
+
+    // Inicializar página
+    preencherSelectEmpresas();
+    renderizarVagas();
+</script>

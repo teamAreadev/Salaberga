@@ -33,16 +33,6 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
     :root {
-        --background-color: #f0f7ff;
-        --text-color: #333333;
-        --header-color: #007A33;
-        --accent-color: #FFA500;
-        --card-bg: rgba(255, 255, 255, 0.9);
-        --sidebar-bg: #ffffff;
-        --sidebar-active: rgba(0, 122, 51, 0.1);
-    }
-
-    .dark {
         --background-color: #1a1a1a;
         --text-color: #ffffff;
         --header-color: #00b348;
@@ -52,6 +42,7 @@
         --sidebar-active: rgba(0, 179, 72, 0.2);
     }
 
+ 
     * {
         margin: 0;
         padding: 0;
@@ -222,16 +213,7 @@
                 </div>
                 
                 <div class="mt-4 md:mt-0 flex items-center">
-                    <div class="mr-4">
-                        <button id="darkModeToggle" class="inline-flex items-center justify-center p-2 rounded-lg transition-colors">
-                            <svg class="w-5 h-5 sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                            <svg class="w-5 h-5 moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                            </svg>
-                        </button>
-                    </div>
+                   
                     
                     <div class="flex items-center">
                         <div class="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
@@ -376,44 +358,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Configurar modo escuro
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            const sunIcon = darkModeToggle.querySelector('.sun-icon');
-            const moonIcon = darkModeToggle.querySelector('.moon-icon');
-            
-            function updateIcons(isDark) {
-                if (isDark) {
-                    sunIcon.classList.add('hidden');
-                    moonIcon.classList.remove('hidden');
-                } else {
-                    sunIcon.classList.remove('hidden');
-                    moonIcon.classList.add('hidden');
-                }
-            }
-            
-            function updateDarkMode(isDark) {
-                if (isDark) {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.removeItem('theme');
-                }
-                updateIcons(isDark);
-            }
-            
-            const savedTheme = localStorage.getItem('theme');
-            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-            
-            if (savedTheme) {
-                updateDarkMode(savedTheme === 'dark');
-            } else {
-                updateDarkMode(prefersDarkScheme.matches);
-            }
-            
-            darkModeToggle.addEventListener('click', function() {
-                const isDark = !document.documentElement.classList.contains('dark');
-                updateDarkMode(isDark);
-            });
+          
             
             // Mobile sidebar toggle
             const sidebarToggle = document.getElementById('sidebarToggle');
