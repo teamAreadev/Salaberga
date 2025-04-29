@@ -1,3 +1,13 @@
+<?php 
+require_once('../../models/sessions.php');
+$session = new sessions();
+$session->tempo_session(600);
+$session->autenticar_session();
+
+if (isset($_GET['sair'])) {
+    $session->quebra_session();
+}
+?>
 <?php
 require_once('../../assets/fpdf/fpdf.php');
 require_once('../../config/connect.php');

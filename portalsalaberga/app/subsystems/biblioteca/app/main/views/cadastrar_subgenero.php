@@ -1,3 +1,13 @@
+<?php 
+require_once('../../models/sessions.php');
+$session = new sessions();
+$session->tempo_session(600);
+$session->autenticar_session();
+
+if (isset($_GET['sair'])) {
+    $session->quebra_session();
+}
+?>
 <?php
 require_once('../models/select_model.php');
 $select_model = new select_model();

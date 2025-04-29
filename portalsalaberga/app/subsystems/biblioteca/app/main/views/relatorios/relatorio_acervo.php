@@ -1,3 +1,13 @@
+<?php 
+require_once('../../models/sessions.php');
+$session = new sessions();
+$session->tempo_session(600);
+$session->autenticar_session();
+
+if (isset($_GET['sair'])) {
+    $session->quebra_session();
+}
+?>
 <?php
 require_once('../../assets/fpdf/fpdf.php');
 
@@ -46,8 +56,8 @@ class PDF extends FPDF
 $pdf = new PDF("L", "pt", "A4");
 $pdf->AliasNbPages();
 $pdf->AddPage();
-$pdo = new PDO("mysql:host=localhost;dbname=u750204740_sistBiblioteca;charset=utf8", "u750204740_sistBiblioteca", "paoComOvo123!@##");
-/*$pdo = new PDO("mysql:host=localhost;dbname=sist_biblioteca;charset=utf8", "root", "");*/
+/*$pdo = new PDO("mysql:host=localhost;dbname=u750204740_sistBiblioteca;charset=utf8", "u750204740_sistBiblioteca", "paoComOvo123!@##");*/
+$pdo = new PDO("mysql:host=localhost;dbname=sist_biblioteca;charset=utf8", "root", "");
 
 $acervo = $pdo->prepare("SELECT 
     c.id,
