@@ -1102,16 +1102,55 @@ if (isset($_GET['sair'])) {
                 </div>
             </a>
 
+            <a href="./estagio/page_alunos.php">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/CMX7vRKh/aviso-1.png" alt="Gestão de Estágio" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Selecionados Estágio 2025</h3>
+                    <span class="category-tag">Carreira</span>
+                </div>
+            </a>
+
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSfGvkOCRltkaNwPD3b25bKnXMRrP7VMhKiu2YTq0_hHOch2vQ/viewform">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
-                    <h3 class="app-name">Gestão de Estágio</h3>
-                    <span class="category-tag">Carreira</span>
+                    <h3 class="app-name">Vagas Estágio</h3>
+                    <span class="category-tag">Formulário</span>
                 </div>
             </a>
 
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPxOcbRHApBMiUzETFePoVk3qFt5wN4wD5cQaRG8pMcrJnTw/viewform?fbzx=2231577792646554531">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Custeio Maracanaú</h3>
+                    <span class="category-tag">Formulário</span>
+                </div>
+            </a>
+            
+             <a href="https://docs.google.com/forms/d/e/1FAIpQLSfP-eDUeU8KO20zQAP3LUEREfJTrK_kjTnaKSLuk8kAnZRQ-g/viewform">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Perfil Estágio</h3>
+                    <span class="category-tag">Formulário</span>
+                </div>
+            </a>
+            
+            <a href="https://forms.gle/rngcZ6MYSiraZYGT7">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Dados da Apólice </h3>
+                    <span class="category-tag">Formulário</span>
+                </div>
+            </a>
         </div>
     </main>
 </body>
