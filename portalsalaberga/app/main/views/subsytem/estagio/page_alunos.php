@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -629,7 +628,6 @@
                         statusText = 'Em espera';
                         break;
                 }
-
                 let cardContent = `
                     <div class="flex justify-between items-start">
                         <div>
@@ -637,7 +635,6 @@
                             <div class="mt-2 flex flex-wrap gap-2">
                                 <span class="status-badge ${candidate.status}">${statusText}</span>
                 `;
-
                 // Adicionar área e empresa apenas para aprovados
                 if (candidate.status === 'approved') {
                     cardContent += `
@@ -645,14 +642,12 @@
                                 <span class="company-badge">${candidate.company}</span>
                     `;
                 }
-
                 cardContent += `
                             </div>
                         </div>
                         <div class="text-sm text-gray-500">#${candidate.id.toString().padStart(2, '0')}</div>
                     </div>
                 `;
-
                 card.innerHTML = cardContent;
                 container.appendChild(card);
             });
@@ -679,7 +674,6 @@
                 clearButton.style.display = 'none';
                 filterCandidates();
             });
-
             // Configurar filtros de status
             const statusFilters = document.querySelectorAll('.status-filter');
             statusFilters.forEach(button => {
@@ -689,7 +683,6 @@
                     filterCandidates();
                 });
             });
-
             // Função para aplicar todos os filtros
             function filterCandidates() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
@@ -715,7 +708,6 @@
             const moonIcon = darkModeToggle.querySelector('.moon-icon');
             const sunIconMobile = darkModeToggleMobile.querySelector('.sun-icon');
             const moonIconMobile = darkModeToggleMobile.querySelector('.moon-icon');
-
             function updateIcons(isDark) {
                 if (isDark) {
                     sunIcon.classList.add('hidden');
@@ -729,7 +721,6 @@
                     moonIconMobile.classList.add('hidden');
                 }
             }
-
             function updateDarkMode(isDark) {
                 if (isDark) {
                     document.documentElement.classList.add('dark');
@@ -749,21 +740,18 @@
             } else {
                 updateDarkMode(prefersDarkScheme.matches);
             }
-
             [darkModeToggle, darkModeToggleMobile].forEach(toggle => {
                 toggle.addEventListener('click', function() {
                     const isDark = !document.documentElement.classList.contains('dark');
                     updateDarkMode(isDark);
                 });
             });
-
             // Animação para os cards
             const animateCards = () => {
                 const cards = document.querySelectorAll('.candidate-card');
                 cards.forEach((card, index) => {
                     card.style.opacity = '0';
                     card.style.transform = 'translateY(20px)';
-
                     setTimeout(() => {
                         card.style.transition = 'all 0.3s ease-out';
                         card.style.opacity = '1';
