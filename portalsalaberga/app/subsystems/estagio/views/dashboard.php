@@ -1,15 +1,20 @@
+<?php
+require_once('../models/select_model.php');
+$select_model = new select_model();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#4A90E2">
     <meta name="description" content="Dashboard - Sistema de Gerenciamento de Estágio">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <title>Dashboard - Sistema de Estágio</title>
 </head>
 <script>
@@ -211,7 +216,7 @@
                     <h1 class="text-2xl font-bold">Dashboard</h1>
                     <p class="text-gray-600 dark:text-gray-400">Bem-vindo ao Sistema de Gerenciamento de Estágio</p>
                 </div>
-                
+
                 <div class="mt-4 md:mt-0 flex items-center">
                    
                     
@@ -239,36 +244,49 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="flex items-center justify-between">
                         <div>
                             <h3 class="text-lg font-semibold">Empresas</h3>
-                            <p class="text-3xl font-bold mt-2 text-info">12</p>
+                            <?php
+                            $dados = $select_model->total_empresa();
+                            foreach ($dados as $dado) {
+
+                            ?>
+                                <p class="text-3xl font-bold mt-2 text-info"><?= $dado ?></p>
+                            <?php } ?>
                         </div>
                         <div class="h-12 w-12 rounded-lg bg-info/10 flex items-center justify-center text-info">
                             <i class="fas fa-building text-xl"></i>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="flex items-center justify-between">
                         <div>
                             <h3 class="text-lg font-semibold">Vagas</h3>
-                            <p class="text-3xl font-bold mt-2 text-secondary">24</p>
+                            <?php
+                            $dados = $select_model->total_vagas();
+                            foreach ($dados as $dado) {
+                            ?>
+                                <p class="text-3xl font-bold mt-2 text-secondary"><?= $dado ?></p>
+                            <?php
+                            }
+                            ?>
                         </div>
                         <div class="h-12 w-12 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
                             <i class="fas fa-briefcase text-xl"></i>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="flex items-center justify-between">
                         <div>
                             <h3 class="text-lg font-semibold">Estágios Ativos</h3>
-                            <p class="text-3xl font-bold mt-2 text-success">18</p>
+                            <p class="text-3xl font-bold mt-2 text-success">desatualido</p>
                         </div>
                         <div class="h-12 w-12 rounded-lg bg-success/10 flex items-center justify-center text-success">
                             <i class="fas fa-check-circle text-xl"></i>
@@ -291,7 +309,7 @@
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Adicionar novo aluno ao sistema</p>
                             </div>
                         </a>
-                        
+
                         <a href="gerenciar_empresas.php" class="flex items-center p-3 rounded-lg hover:bg-info/10 transition-colors">
                             <div class="h-10 w-10 rounded-lg bg-info/10 flex items-center justify-center text-info mr-3">
                                 <i class="fas fa-building"></i>
@@ -301,7 +319,7 @@
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Adicionar nova empresa parceira</p>
                             </div>
                         </a>
-                        
+
                         <a href="vagas.php" class="flex items-center p-3 rounded-lg hover:bg-secondary/10 transition-colors">
                             <div class="h-10 w-10 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary mr-3">
                                 <i class="fas fa-briefcase"></i>
@@ -313,7 +331,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Estatísticas por Área -->
                 <div class="dashboard-card lg:col-span-2">
                     <h3 class="text-lg font-semibold mb-4">Estatísticas por Área</h3>
@@ -321,31 +339,51 @@
                         <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                             <h4 class="font-medium text-blue-600 dark:text-blue-400">Desenvolvimento</h4>
                             <div class="mt-2 flex justify-between items-end">
-                                <p class="text-2xl font-bold">8</p>
+                                <?php
+                                $dados = $select_model->total_vagas_dev();
+                                foreach ($dados as $dado) {
+                                ?>
+                                    <p class="text-2xl font-bold"><?= $dado ?></p>
+                                <?php } ?>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Vagas</span>
                             </div>
                         </div>
-                        
+
                         <div class="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                             <h4 class="font-medium text-purple-600 dark:text-purple-400">Design</h4>
                             <div class="mt-2 flex justify-between items-end">
-                                <p class="text-2xl font-bold">5</p>
+                            <?php
+                                $dados = $select_model->total_vagas_suporte();
+                                foreach ($dados as $dado) {
+                                ?>
+                                    <p class="text-2xl font-bold"><?= $dado ?></p>
+                                <?php } ?>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Vagas</span>
                             </div>
                         </div>
-                        
+
                         <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                             <h4 class="font-medium text-green-600 dark:text-green-400">Mídia</h4>
                             <div class="mt-2 flex justify-between items-end">
-                                <p class="text-2xl font-bold">6</p>
+                            <?php
+                                $dados = $select_model->total_vagas_design();
+                                foreach ($dados as $dado) {
+                                ?>
+                                    <p class="text-2xl font-bold"><?= $dado ?></p>
+                                <?php } ?>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Vagas</span>
                             </div>
                         </div>
-                        
+
                         <div class="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
                             <h4 class="font-medium text-orange-600 dark:text-orange-400">Redes/Suporte</h4>
                             <div class="mt-2 flex justify-between items-end">
-                                <p class="text-2xl font-bold">5</p>
+                            <?php
+                                $dados = $select_model->total_vagas_tutoria();
+                                foreach ($dados as $dado) {
+                                ?>
+                                    <p class="text-2xl font-bold"><?= $dado ?></p>
+                                <?php } ?>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Vagas</span>
                             </div>
                         </div>
@@ -364,15 +402,16 @@
             const sidebarToggle = document.getElementById('sidebarToggle');
             const closeSidebar = document.getElementById('closeSidebar');
             const mobileSidebar = document.getElementById('mobileSidebar');
-            
+
             sidebarToggle.addEventListener('click', function() {
                 mobileSidebar.classList.remove('-translate-x-full');
             });
-            
+
             closeSidebar.addEventListener('click', function() {
                 mobileSidebar.classList.add('-translate-x-full');
             });
         });
     </script>
 </body>
-</html> 
+
+</html>

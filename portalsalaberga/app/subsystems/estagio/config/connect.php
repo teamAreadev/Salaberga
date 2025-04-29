@@ -1,17 +1,27 @@
 <?php
-try {
-    $dsn = 'mysql:host=localhost;dbname=u750204740_portalsaberga';
-    $username = "u750204740_salaberga";
-    $password = "paoComOvo123!@##";
 
-    $conexao = new PDO($dsn, $username, $password);
-} catch (PDOException $exception) {
+define('HOST', 'localhost');
+define('DATABASE', 'estagio');
+define('USER', 'root');
+define('PASSWORD', '');
+class connect
+{
+    protected $connect;
 
-    $dsn = 'mysql:host=localhost;dbname=estagio';
-    $username = "root";
-    $password = "";
-    $conexao = new PDO($dsn, $username, $password);
-    
-} finally {
-    echo "Connection error: " . $exception->getMessage();
+    function __construct()
+    {
+        $this->connect_database();
+    }
+
+    function connect_database()
+    {
+
+        try {
+
+            $this->connect = new PDO('mysql:host=' . HOST . ';dbname=' . DATABASE, USER, PASSWORD);
+        } catch (PDOException $e) {
+
+            die('Erro! O sistema não possui conexão com o banco de dados.');
+        }
+    }
 }
