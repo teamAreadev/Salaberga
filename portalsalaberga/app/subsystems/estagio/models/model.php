@@ -29,29 +29,46 @@ class main_model extends connect
             return 2;
         }
     }
-    function cadastrar_empresa($nome, $area, $endereco, $telefone)
-    {
-
+    function cadastrar_empresa($nome, $endereco, $telefone, $perfis) {
+        // Verificar se a empresa já existe
         $stmt_check = $this->connect->prepare("SELECT * FROM concedentes WHERE nome = :nome");
         $stmt_check->bindValue(':nome', $nome);
         $stmt_check->execute();
         $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
+    
         if (empty($result)) {
-            $stmt_cadastrar_empresa = $this->connect->prepare("INSERT INTO concedentes VALUES(null,:nome, :contato,:endereco ,:perfil)");
-            $stmt_cadastrar_empresa->bindValue(':nome', $nome);
-            $stmt_cadastrar_empresa->bindValue(':contato', $telefone);
-            $stmt_cadastrar_empresa->bindValue(':endereco', $endereco);
-            $stmt_cadastrar_empresa->bindValue(':perfil', $area);
-            $stmt_cadastrar_empresa->execute();
-
-            if ($stmt_cadastrar_empresa) {
-                return 1;
-            } else {
-                return 2;
+            // Iniciar uma transação para garantir consistência
+            $this->connect->beginTransaction();
+    
+            try {
+                // Inserir a empresa na tabela concedentes
+                $stmt_cadastrar_empresa = $this->connect->prepare("INSERT INTO concedentes (nome, contato, endereco) VALUES (:nome, :contato, :endereco)");
+                $stmt_cadastrar_empresa->bindValue(':nome', $nome);
+                $stmt_cadastrar_empresa->bindValue(':contato', $telefone);
+                $stmt_cadastrar_empresa->bindValue(':endereco', $endereco);
+                $stmt_cadastrar_empresa->execute();
+    
+                // Obter o ID da empresa recém-cadastrada
+                $concedente_id = $this->connect->lastInsertId();
+    
+                // Inserir os perfis associados na tabela concedentes_perfis
+                $stmt_cadastrar_perfil = $this->connect->prepare("INSERT INTO concedentes_perfis (concedente_id, perfil_id) VALUES (:concedente_id, :perfil_id)");
+                foreach ($perfis as $perfil_id) {
+                    $stmt_cadastrar_perfil->bindValue(':concedente_id', $concedente_id);
+                    $stmt_cadastrar_perfil->bindValue(':perfil_id', $perfil_id);
+                    $stmt_cadastrar_perfil->execute();
+                }
+    
+                // Confirmar a transação
+                $this->connect->commit();
+                return 1; // Sucesso
+            } catch (Exception $e) {
+                // Reverter a transação em caso de erro
+                $this->connect->rollBack();
+                return 2; // Erro ao cadastrar
             }
         } else {
-
-            return 3;
+            return 3; // Empresa já existe
         }
     }
 }
