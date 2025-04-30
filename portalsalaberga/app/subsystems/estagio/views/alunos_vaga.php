@@ -4,7 +4,6 @@ $select_model = new select_model();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +13,8 @@ $select_model = new select_model();
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <title>Seleção de Alunos - Sistema de Estágio</title>
 
@@ -62,6 +63,13 @@ $select_model = new select_model();
                             '800': '#0e0e0e',
                             '900': '#0a0a0a'
                         }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.36)',
+                        'card': '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2)'
                     }
                 }
             }
@@ -83,15 +91,19 @@ $select_model = new select_model();
             color: #ffffff;
             min-height: 100vh;
             background-image:
-                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.03) 0%, rgba(255, 165, 0, 0) 20%);
+                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.05) 0%, rgba(0, 122, 51, 0) 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.05) 0%, rgba(255, 165, 0, 0) 20%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23007A33' fill-opacity='0.03' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
             transition: all 0.3s ease;
         }
 
+        /* Sidebar styling */
         .sidebar {
-            background-color: #2d2d2d;
+            background-color: rgba(45, 45, 45, 0.95);
+            background-image: linear-gradient(to bottom, #2d2d2d, #222222);
             border-right: 1px solid rgba(0, 122, 51, 0.2);
             transition: all 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
         }
 
         .sidebar-link {
@@ -107,85 +119,326 @@ $select_model = new select_model();
         .sidebar-link:hover {
             background-color: rgba(0, 122, 51, 0.2);
             color: #00C250;
+            transform: translateX(5px);
         }
 
         .sidebar-link.active {
             background-color: rgba(0, 122, 51, 0.3);
             color: #00FF6B;
             font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 122, 51, 0.15);
         }
 
-        /* Tabela estilizada */
-        .table-container {
-            overflow-x: auto;
-            border-radius: 8px;
-            background-color: #2d2d2d;
+        /* Vaga info card styling */
+        .vaga-info-card {
+            background: linear-gradient(135deg, rgba(49, 49, 49, 0.95) 0%, rgba(37, 37, 37, 0.95) 100%);
+            border-radius: 16px;
+            padding: 1.75rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .vaga-info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, #00FF6B, #007A33);
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+
+        .vaga-info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 122, 51, 0.3);
+        }
+
+        .vaga-info-card:hover::before {
+            opacity: 1;
+            box-shadow: 0 0 15px rgba(0, 255, 107, 0.4);
+        }
+
+        .vaga-info-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.2;
+            background: linear-gradient(90deg, #ffffff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .vaga-info-card:hover .vaga-info-title {
+            background: linear-gradient(90deg, #ffffff, #00FF6B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        /* Table styling */
+        .table-container {
+            background: linear-gradient(135deg, rgba(49, 49, 49, 0.95) 0%, rgba(37, 37, 37, 0.95) 100%);
+            border-radius: 16px;
+            overflow-x: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
 
         .custom-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
         .custom-table thead th {
-            background-color: #232323;
-            padding: 0.75rem 1rem;
+            background: rgba(35, 35, 35, 0.9);
+            padding: 1rem;
             text-align: left;
             font-weight: 600;
             font-size: 0.875rem;
             color: #b0b0b0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .custom-table tbody tr {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         .custom-table tbody tr:hover {
             background-color: rgba(0, 122, 51, 0.1);
+            transform: translateX(5px);
         }
 
         .custom-table tbody td {
-            padding: 0.75rem 1rem;
+            padding: 1rem;
             font-size: 0.875rem;
             color: #e0e0e0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         }
 
-        /* Checkbox estilizado */
+        /* Checkbox styling */
         .custom-checkbox {
-            display: flex;
+            appearance: none;
+            width: 1.2rem;
+            height: 1.2rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            background-color: transparent;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .custom-checkbox:checked {
+            border-color: #007A33;
+            background-color: #007A33;
+            box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2);
+        }
+
+        .custom-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 0.3rem;
+            height: 0.6rem;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            animation: scaleIn 0.15s ease-in-out;
+        }
+
+        /* Status chips */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.35rem 1rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .chip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .chip-green {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .chip-green:hover {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.3) 100%);
+        }
+
+        .chip-yellow {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.2) 100%);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .chip-yellow:hover {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.3) 100%);
+        }
+
+        .chip-red {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .chip-red:hover {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(220, 38, 38, 0.3) 100%);
+        }
+
+        /* Custom input styling */
+        .custom-input {
+            background-color: rgba(35, 35, 35, 0.8) !important;
+            border: 2px solid rgba(61, 61, 61, 0.8) !important;
+            border-radius: 10px !important;
+            color: #ffffff !important;
+            padding: 0.75rem 1rem !important;
+            width: 100% !important;
+            font-size: 0.95rem !important;
+            transition: all 0.3s ease !important;
+            backdrop-filter: blur(5px) !important;
+            -webkit-backdrop-filter: blur(5px) !important;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .custom-input:focus {
+            border-color: #007A33 !important;
+            box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            outline: none !important;
+            background-color: rgba(40, 40, 40, 0.9) !important;
+        }
+
+        .custom-input::placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+        }
+
+        /* Search input styling */
+        .search-input-container {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .search-input-container:focus-within {
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .search-input-container:focus-within .search-icon {
+            color: #00C250;
+        }
+
+        /* Custom button styling */
+        .custom-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
+            gap: 0.5rem;
         }
 
-        .custom-checkbox input[type="checkbox"] {
-            appearance: none;
-            width: 1.125rem;
-            height: 1.125rem;
-            border: 2px solid #4b4b4b;
-            border-radius: 0.25rem;
-            background-color: #2d2d2d;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .custom-checkbox input[type="checkbox"]:checked {
-            background-color: #007A33;
-            border-color: #007A33;
-        }
-
-        .custom-checkbox input[type="checkbox"]:checked::after {
-            content: '✓';
-            display: block;
+        .custom-btn-primary {
+            background: linear-gradient(135deg, #007A33 0%, #009940 100%);
             color: white;
-            font-size: 0.875rem;
-            text-align: center;
-            line-height: 1;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 122, 51, 0.3);
         }
 
-        /* Scrollbar customizada */
+        .custom-btn-primary:hover {
+            background: linear-gradient(135deg, #00993F 0%, #00B64B 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 122, 51, 0.4);
+        }
+
+        .custom-btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .custom-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .custom-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .custom-btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .btn-icon {
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .custom-btn:hover .btn-icon {
+            transform: translateX(3px);
+            opacity: 1;
+        }
+
+        /* Action bar styling */
+        .action-bar {
+            background-color: rgba(45, 45, 45, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -204,29 +457,29 @@ $select_model = new select_model();
             background: #007A33;
         }
 
-        /* Status chips */
-        .chip {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
+        /* Animations */
+        @keyframes scaleIn {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            100% { transform: translate(-50%, -50%) scale(1); }
         }
 
-        .chip-green {
-            background-color: rgba(16, 185, 129, 0.2);
-            color: #6ee7b7;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .chip-yellow {
-            background-color: rgba(245, 158, 11, 0.2);
-            color: #fcd34d;
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .chip-red {
-            background-color: rgba(239, 68, 68, 0.2);
-            color: #fca5a5;
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        .slide-up { animation: slideUp 0.4s ease-out forwards; }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .custom-input { min-width: 100% !important; }
+            .table-container { padding: 0.5rem; }
         }
     </style>
 </head>
@@ -280,7 +533,7 @@ $select_model = new select_model();
 
         <!-- Mobile Sidebar Toggle -->
         <div class="md:hidden fixed top-4 left-4 z-50">
-            <button id="sidebarToggle" class="bg-dark-50 p-2 rounded-lg shadow-md">
+            <button id="sidebarToggle" class="bg-dark-50 p-2 rounded-lg shadow-md hover:bg-dark-100 transition-all">
                 <i class="fas fa-bars text-primary-400"></i>
             </button>
         </div>
@@ -293,7 +546,7 @@ $select_model = new select_model();
                         <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="h-10 w-auto">
                         <h1 class="text-lg font-bold text-primary-400">Sistema <span class="text-secondary">STGM</span></h1>
                     </div>
-                    <button id="closeSidebar" class="p-2 text-gray-400 hover:text-white">
+                    <button id="closeSidebar" class="p-2 text-gray-400 hover:text-white transition-colors">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -339,83 +592,100 @@ $select_model = new select_model();
             <!-- Main Content -->
             <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6 sm:py-8 w-full">
                 <!-- Breadcrumbs -->
-                <div class="text-sm text-gray-400 mb-6">
-                    <a href="dashboard.php" class="hover:text-primary-400">Dashboard</a>
-                    <span class="mx-2">/</span>
-                    <a href="vagas.php" class="hover:text-primary-400">Vagas</a>
-                    <span class="mx-2">/</span>
+                <div class="text-sm text-gray-400 mb-6 flex items-center">
+                    <a href="dashboard.php" class="hover:text-primary-400 transition-colors">Dashboard</a>
+                    <span class="mx-2 text-gray-600">/</span>
+                    <a href="vagas.php" class="hover:text-primary-400 transition-colors">Vagas</a>
+                    <span class="mx-2 text-gray-600">/</span>
                     <span class="text-white">Selecionar Alunos</span>
                 </div>
 
                 <!-- Info da Vaga -->
-                <div class="bg-dark-50 p-6 rounded-lg shadow-md mb-6 border border-gray-800">
-                    <h2 id="vagaTitulo" class="text-xl font-bold text-white mb-2">Carregando...</h2>
+                <div class="vaga-info-card mb-8 slide-up">
+                    <h2 id="vagaTitulo" class="vaga-info-title mb-3">Carregando...</h2>
                     <div class="flex flex-wrap gap-4 text-sm">
-                        <div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-building text-primary-400"></i>
                             <span class="text-gray-400">Empresa:</span>
-                            <span id="vagaEmpresa" class="text-white ml-1">Carregando...</span>
+                            <span id="vagaEmpresa" class="text-white">Carregando...</span>
                         </div>
-                        <div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-tag text-primary-400"></i>
                             <span class="text-gray-400">Área:</span>
-                            <span id="vagaArea" class="text-white ml-1">Carregando...</span>
+                            <span id="vagaArea" class="text-white">Carregando...</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Actions Bar -->
-                <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full">
-                        <div class="relative w-full sm:w-64">
-                            <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="w-full pl-10 pr-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-400">
-                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                <div class="mb-8 action-bar p-4 sm:p-5 fade-in">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full">
+                            <div class="search-input-container relative w-full sm:w-64">
+                                <i class="fas fa-search search-icon"></i>
+                                <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="custom-input pl-10 pr-4 py-2.5 w-full">
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
-                        <select id="filterArea" class="pl-4 pr-8 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-400 w-full sm:w-auto appearance-none bg-dark-100 text-white">
-                            <option value="">Todas as áreas</option>
-                            <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="design">Design</option>
-                            <option value="midia">Mídia</option>
-                            <option value="redes">Redes/Suporte</option>
-                        </select>
-                        <button id="selectAllBtn" class="px-4 py-2 border-0 rounded-md shadow-sm text-sm font-medium text-white bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 focus:ring-offset-dark-400 w-full sm:w-auto transition-colors duration-200">
-                            Selecionar Todos
-                        </button>
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
+                            <div class="relative">
+                                <select id="filterArea" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
+                                    <option value="">Todas as áreas</option>
+                                    <option value="desenvolvimento">Desenvolvimento</option>
+                                    <option value="design">Design</option>
+                                    <option value="midia">Mídia</option>
+                                    <option value="redes">Redes/Suporte</option>
+                                </select>
+                                <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
+                            </div>
+                            <button id="selectAllBtn" class="custom-btn custom-btn-primary w-full sm:w-auto">
+                                <i class="fas fa-check-square btn-icon"></i>
+                                <span>Selecionar Todos</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Tabela de Alunos -->
-                <div class="table-container">
+                <div class="table-container slide-up">
                     <form id="alunosForm">
                         <table class="custom-table">
                             <thead>
                                 <tr>
                                     <th width="40px" class="text-center">#</th>
-                                    <th width="50px"></th>
+                                    <th width="50px" class="text-center"></th>
                                     <th>Nome</th>
-                                    <th width="80px">Média</th>
+                                    <th width="80px" class="text-center">Média</th>
                                     <th>Projetos</th>
                                     <th width="100px">Área 1</th>
                                     <th width="100px">Área 2</th>
-                                    <th width="100px">Ocorrências</th>
+                                    <th width="100px" class="text-center">Ocorrências</th>
                                     <th width="100px">Custeio</th>
                                 </tr>
                             </thead>
                             <tbody id="alunosTableBody">
-
                                 <?php
                                 $dados = $select_model->alunos_aptos();
-                                foreach ($dados as $dado) {
+                                foreach ($dados as $index => $dado) {
                                 ?>
-                                    <td><?= $dado['id'] ?></td>
-                                    <td><input type="checkbox" name="" id=""></td>
-                                    <td><?= $dado['nome'] ?></td>
-                                    <td><?= $dado['medias'] ?></td>
-                                    <td><?= $dado['projetos'] ?? "-" ?></td>
-                                    <td><?= $dado['perfil_opc1'] ?></td>
-                                    <td><?= $dado['perfil_opc2'] ?></td>
-                                    <td><?= $dado['ocorrencia'] ?></td>
-                                    <td><?= $dado['custeio'] ?></td>
+                                    <tr class="slide-up" style="animation-delay: <?= $index * 0.1 ?>s;">
+                                        <td class="text-center"><?= $index + 1 ?></td>
+                                        <td class="text-center">
+                                            <input type="checkbox" class="custom-checkbox" id="aluno_<?= $dado['id'] ?>" name="alunos[]" value="<?= $dado['id'] ?>">
+                                        </td>
+                                        <td><?= htmlspecialchars($dado['nome']) ?></td>
+                                        <td class="text-center"><?= number_format($dado['medias'], 1) ?></td>
+                                        <td><?= htmlspecialchars($dado['projetos'] ?? '-') ?></td>
+                                        <td><?= htmlspecialchars($dado['perfil_opc1']) ?></td>
+                                        <td><?= htmlspecialchars($dado['perfil_opc2'] ?? '-') ?></td>
+                                        <td class="text-center">
+                                            <?php
+                                            $ocorrencias = $dado['ocorrencia'];
+                                            $chipClass = $ocorrencias == 0 ? 'chip-green' : ($ocorrencias == 1 ? 'chip-yellow' : 'chip-red');
+                                            echo "<span class='chip $chipClass'>$ocorrencias</span>";
+                                            ?>
+                                        </td>
+                                        <td><?= htmlspecialchars($dado['custeio']) ?></td>
+                                    </tr>
                                 <?php } ?>
                             </tbody>
                         </table>
@@ -423,12 +693,14 @@ $select_model = new select_model();
                 </div>
 
                 <!-- Botões de Ação -->
-                <div class="mt-6 flex justify-end space-x-4">
-                    <a href="vagas.php" class="px-4 py-2 border border-gray-700 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 transition-colors">
-                        Cancelar
+                <div class="mt-6 flex justify-end space-x-4 fade-in">
+                    <a href="vagas.php" class="custom-btn custom-btn-secondary">
+                        <i class="fas fa-times btn-icon"></i>
+                        <span>Cancelar</span>
                     </a>
-                    <button id="confirmarSelecaoBtn" class="px-4 py-2 border-0 rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
-                        Confirmar Seleção
+                    <button id="confirmarSelecaoBtn" class="custom-btn custom-btn-primary">
+                        <i class="fas fa-check btn-icon"></i>
+                        <span>Confirmar Seleção</span>
                     </button>
                 </div>
             </main>
@@ -436,135 +708,138 @@ $select_model = new select_model();
     </div>
 
     <script>
-        // Dados das empresas
-
-
-        // Obter ID da vaga da URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const vagaId = parseInt(urlParams.get('vaga_id')) || 1;
-
-        // Preencher informações da vaga
-        function preencherInfoVaga() {
-            const vaga = vagas.find(v => v.id === vagaId);
-            if (vaga) {
-                const empresa = empresas.find(e => e.id === vaga.empresa);
-                document.getElementById('vagaTitulo').textContent = vaga.titulo;
-                document.getElementById('vagaEmpresa').textContent = empresa.nome;
-                document.getElementById('vagaArea').textContent = vaga.area;
-            }
-        }
-
-        // Renderizar tabela de alunos
-        function renderizarTabelaAlunos(alunosFiltrados = alunos) {
-            const tbody = document.getElementById('alunosTableBody');
-            tbody.innerHTML = '';
-
-            alunosFiltrados.forEach((aluno, index) => {
-                const tr = document.createElement('tr');
-
-                tr.innerHTML = `
-                    <td class="text-center">${index + 1}</td>
-                    <td class="custom-checkbox">
-                        <input type="checkbox" id="aluno_${aluno.id}" name="alunos[]" value="${aluno.id}">
-                    </td>
-                    <td>${aluno.nome}</td>
-                    <td>${aluno.nota.toFixed(1)}</td>
-                    <td>${aluno.projetos || '-'}</td>
-                    <td>${aluno.area}</td>
-                    <td class="text-center">
-                        ${getOcorrenciasHTML(aluno.ocorrencias)}
-                    </td>
-                    <td>${aluno.custeio}</td>
-                `;
-
-                tbody.appendChild(tr);
-            });
-        }
-
-        // Gerar HTML para ocorrências
-        function getOcorrenciasHTML(ocorrencias) {
-            if (ocorrencias === 0) {
-                return '<span class="chip chip-green">0</span>';
-            } else if (ocorrencias === 1) {
-                return '<span class="chip chip-yellow">1</span>';
-            } else {
-                return `<span class="chip chip-red">${ocorrencias}</span>`;
-            }
-        }
-
-        // Aplicar filtros na tabela
-        function aplicarFiltros() {
-            const searchTerm = document.getElementById('searchAluno').value.toLowerCase();
-            const areaFiltro = document.getElementById('filterArea').value;
-
-            const alunosFiltrados = alunos.filter(aluno => {
-                const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
-                const matchArea = !areaFiltro || aluno.area === areaFiltro;
-                return matchSearch && matchArea;
-            });
-
-            renderizarTabelaAlunos(alunosFiltrados);
-        }
-
-        // Selecionar/Deselecionar todos os alunos
-        let todosSelecaionados = false;
-
-        function toggleSelectAll() {
-            const checkboxes = document.querySelectorAll('#alunosTableBody input[type="checkbox"]');
-            todosSelecaionados = !todosSelecaionados;
-
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = todosSelecaionados;
-            });
-
-            document.getElementById('selectAllBtn').textContent = todosSelecaionados ? 'Desmarcar Todos' : 'Selecionar Todos';
-        }
-
-        // Confirmar seleção de alunos
-        function confirmarSelecao() {
-            const checkboxes = document.querySelectorAll('#alunosTableBody input[type="checkbox"]:checked');
-            const alunosSelecionados = Array.from(checkboxes).map(cb => parseInt(cb.value));
-
-            if (alunosSelecionados.length === 0) {
-                alert('Por favor, selecione pelo menos um aluno.');
-                return;
-            }
-
-            const vaga = vagas.find(v => v.id === vagaId);
-            const alunosNomes = alunosSelecionados.map(id => {
-                const aluno = alunos.find(a => a.id === id);
-                return aluno.nome;
-            }).join(', ');
-
-            alert(`Alunos selecionados para a vaga "${vaga.titulo}":\n${alunosNomes}`);
-            window.location.href = 'vagas.php';
-        }
-
-        // Sidebar mobile toggle
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const closeSidebar = document.getElementById('closeSidebar');
-        const mobileSidebar = document.getElementById('mobileSidebar');
-
-        sidebarToggle.addEventListener('click', () => {
-            mobileSidebar.classList.remove('-translate-x-full');
-        });
-
-        closeSidebar.addEventListener('click', () => {
-            mobileSidebar.classList.add('-translate-x-full');
-        });
-
-        // Event listeners
-        document.getElementById('searchAluno').addEventListener('input', aplicarFiltros);
-        document.getElementById('filterArea').addEventListener('change', aplicarFiltros);
-        document.getElementById('selectAllBtn').addEventListener('click', toggleSelectAll);
-        document.getElementById('confirmarSelecaoBtn').addEventListener('click', confirmarSelecao);
-
-        // Inicializar página
         document.addEventListener('DOMContentLoaded', () => {
+            const searchAluno = document.getElementById('searchAluno');
+            const filterArea = document.getElementById('filterArea');
+            const selectAllBtn = document.getElementById('selectAllBtn');
+            const confirmarSelecaoBtn = document.getElementById('confirmarSelecaoBtn');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const mobileSidebar = document.getElementById('mobileSidebar');
+
+            // Dados simulados para vagas e empresas (substituir por dados reais do backend)
+            const vagas = [
+                { id: 1, titulo: "Desenvolvedor Front-end", empresa: 1, area: "Desenvolvimento" },
+                { id: 2, titulo: "Designer Gráfico", empresa: 2, area: "Design" },
+                { id: 3, titulo: "Técnico de Redes", empresa: 3, area: "Redes/Suporte" }
+            ];
+            const empresas = [
+                { id: 1, nome: "TechCorp Solutions" },
+                { id: 2, nome: "Mídia Digital" },
+                { id: 3, nome: "Redes & Cia" }
+            ];
+
+            // Obter ID da vaga da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const vagaId = parseInt(urlParams.get('vaga_id')) || 1;
+
+            // Preencher informações da vaga
+            function preencherInfoVaga() {
+                const vaga = vagas.find(v => v.id === vagaId);
+                if (vaga) {
+                    const empresa = empresas.find(e => e.id === vaga.empresa);
+                    document.getElementById('vagaTitulo').textContent = vaga.titulo;
+                    document.getElementById('vagaEmpresa').textContent = empresa.nome;
+                    document.getElementById('vagaArea').textContent = vaga.area;
+                }
+            }
+
+            // GSAP Animations
+            gsap.from('.vaga-info-card', { opacity: 0, y: 50, duration: 0.6, ease: 'power3.out' });
+            gsap.from('.table-container', { opacity: 0, y: 50, duration: 0.6, delay: 0.2, ease: 'power3.out' });
+            gsap.from('.action-bar', { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' });
+
+            // Sidebar mobile toggle
+            sidebarToggle.addEventListener('click', () => {
+                gsap.to(mobileSidebar, { x: 0, duration: 0.3, ease: 'power2.out' });
+            });
+
+            closeSidebar.addEventListener('click', () => {
+                gsap.to(mobileSidebar, { x: '-100%', duration: 0.3, ease: 'power2.in' });
+            });
+
+            // Aplicar filtros na tabela
+            function aplicarFiltros() {
+                const searchTerm = searchAluno.value.toLowerCase();
+                const areaFiltro = filterArea.value;
+                const rows = document.querySelectorAll('#alunosTableBody tr');
+
+                let hasVisible = false;
+                rows.forEach((row, index) => {
+                    const nome = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                    const area1 = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
+                    const area2 = row.querySelector('td:nth-child(7)').textContent.toLowerCase();
+                    const matchSearch = nome.includes(searchTerm);
+                    const matchArea = !areaFiltro || area1 === areaFiltro || area2 === areaFiltro;
+
+                    if (matchSearch && matchArea) {
+                        row.style.display = '';
+                        hasVisible = true;
+                        gsap.fromTo(row,
+                            { opacity: 0, y: 20 },
+                            { opacity: 1, y: 0, duration: 0.3, delay: index * 0.05 }
+                        );
+                    } else {
+                        gsap.to(row, {
+                            opacity: 0,
+                            y: 20,
+                            duration: 0.3,
+                            onComplete: () => { row.style.display = 'none'; }
+                        });
+                    }
+                });
+
+                const tbody = document.getElementById('alunosTableBody');
+                if (!hasVisible && !tbody.querySelector('p')) {
+                    const noResults = document.createElement('p');
+                    noResults.className = 'text-center text-gray-400 col-span-full py-4';
+                    noResults.textContent = 'Nenhum aluno encontrado.';
+                    tbody.appendChild(noResults);
+                } else if (hasVisible && tbody.querySelector('p')) {
+                    tbody.querySelector('p').remove();
+                }
+            }
+
+            // Selecionar/Deselecionar todos os alunos
+            let todosSelecionados = false;
+            function toggleSelectAll() {
+                todosSelecionados = !todosSelecionados;
+                const checkboxes = document.querySelectorAll('#alunosTableBody input[type="checkbox"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = todosSelecionados;
+                });
+                selectAllBtn.querySelector('span').textContent = todosSelecionados ? 'Desmarcar Todos' : 'Selecionar Todos';
+            }
+
+            // Confirmar seleção de alunos
+            function confirmarSelecao() {
+                const checkboxes = document.querySelectorAll('#alunosTableBody input[type="checkbox"]:checked');
+                const alunosSelecionados = Array.from(checkboxes).map(cb => ({
+                    id: parseInt(cb.value),
+                    nome: cb.closest('tr').querySelector('td:nth-child(3)').textContent
+                }));
+
+                if (alunosSelecionados.length === 0) {
+                    alert('Por favor, selecione pelo menos um aluno.');
+                    return;
+                }
+
+                const vaga = vagas.find(v => v.id === vagaId);
+                const alunosNomes = alunosSelecionados.map(aluno => aluno.nome).join(', ');
+                alert(`Alunos selecionados para a vaga "${vaga.titulo}":\n${alunosNomes}`);
+                window.location.href = 'vagas.php';
+            }
+
+            // Event listeners
+            searchAluno.addEventListener('input', aplicarFiltros);
+            filterArea.addEventListener('change', aplicarFiltros);
+            selectAllBtn.addEventListener('click', toggleSelectAll);
+            confirmarSelecaoBtn.addEventListener('click', confirmarSelecao);
+
+            // Inicializar página
             preencherInfoVaga();
-            renderizarTabelaAlunos();
+            aplicarFiltros();
         });
     </script>
 </body>
-
 </html>
