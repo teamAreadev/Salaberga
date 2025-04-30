@@ -68,7 +68,10 @@ class select_model extends connect
     }
     function alunos_aptos_curso($perfil1, $perfil2){
 
-        $stmt_alunos = $this->connect->query("SELECT * FROM aluno WHERE perfil_opc1 IS NOT NULL OR perfil_opc2 IS NOT NULL ORDER BY medias DESC, COALESCE(ocorrencia, 0) ASC;");
+        $stmt_alunos = $this->connect->prepare("SELECT * FROM aluno WHERE perfil_opc1 IS NOT NULL AND :perfil1 OR perfil_opc2 IS NOT NULL AND :perfil2 ORDER BY medias DESC, COALESCE(ocorrencia, 0) ASC;");
+        $stmt_alunos->bindValue(':perfil1', $perfil1);
+        $stmt_alunos->bindValue(':perfil2', $perfil2);
+        $stmt_alunos->execute();
         $result = $stmt_alunos->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;
