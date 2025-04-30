@@ -229,19 +229,19 @@ if (isset($_POST['logout'])) {
                     </div>
                 </div>
                 <nav class="flex-1">
-                    <a href="#" class="sidebar-link">
+                    <a href="./dashboard.php" class="sidebar-link">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="#" class="sidebar-link">
+                    <a href="./gerenciar_alunos.php" class="sidebar-link">
                         <i class="fas fa-user-graduate w-5 mr-3"></i>
                         Gerenciar Alunos
                     </a>
-                    <a href="#" class="sidebar-link">
+                    <a href="./gerenciar_empresas.php" class="sidebar-link">
                         <i class="fas fa-building w-5 mr-3"></i>
                         Gerenciar Empresas
                     </a>
-                    <a href="#" class="sidebar-link active">
+                    <a href="./vagas.php" class="sidebar-link active">
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
