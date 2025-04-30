@@ -1,14 +1,6 @@
 <?php
 require_once('../models/select_model.php');
 $select_model = new select_model();
-/*require_once('../models/sessions.php');
-$session = new sessions;
-$session->tempo_session(600);
-$session->autenticar_session();
-
-if (isset($_POST['logout'])) {
-    $session->quebra_session();
-}*/
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -76,7 +68,7 @@ if (isset($_POST['logout'])) {
                     },
                     boxShadow: {
                         'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.36)',
-                        'card': '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2)'
+                        'card': '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px RGBA(0, 0, 0, 0.2)'
                     }
                 }
             }
@@ -103,7 +95,6 @@ if (isset($_POST['logout'])) {
             transition: all 0.3s ease;
         }
 
-        /* Sidebar styling */
         .sidebar {
             background-color: rgba(45, 45, 45, 0.95);
             background-image: linear-gradient(to bottom, #2d2d2d, #222222);
@@ -224,7 +215,6 @@ if (isset($_POST['logout'])) {
             border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
-        /* Input e botões estilizados */
         input, select, textarea {
             background-color: #232323 !important;
             border-color: #3d3d3d !important;
@@ -249,7 +239,6 @@ if (isset($_POST['logout'])) {
             color: rgba(255, 255, 255, 0.4) !important;
         }
 
-        /* Search input styling */
         .search-input-container {
             position: relative;
             transition: all 0.3s ease;
@@ -272,7 +261,6 @@ if (isset($_POST['logout'])) {
             color: #00C250;
         }
 
-        /* Custom button styling */
         .custom-btn {
             padding: 0.75rem 1.5rem;
             border-radius: 10px;
@@ -337,7 +325,6 @@ if (isset($_POST['logout'])) {
             opacity: 1;
         }
 
-        /* Action bar styling */
         .action-bar {
             background-color: rgba(45, 45, 45, 0.6);
             backdrop-filter: blur(10px);
@@ -347,7 +334,6 @@ if (isset($_POST['logout'])) {
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
-        /* Modal styling */
         .candidatura-modal {
             background: linear-gradient(135deg, rgba(49, 49, 49, 0.95) 0%, rgba(37, 37, 37, 0.95) 100%);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -358,7 +344,6 @@ if (isset($_POST['logout'])) {
             overflow-y: auto;
         }
 
-        /* Scrollbar customizada */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -377,7 +362,6 @@ if (isset($_POST['logout'])) {
             background: #007A33;
         }
 
-        /* Mobile card actions */
         .mobile-card-actions button {
             padding: 0.625rem;
             border-radius: 10px;
@@ -395,7 +379,6 @@ if (isset($_POST['logout'])) {
             color: #f87171;
         }
 
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -409,7 +392,6 @@ if (isset($_POST['logout'])) {
         .fade-in { animation: fadeIn 0.3s ease-out forwards; }
         .slide-up { animation: slideUp 0.4s ease-out forwards; }
 
-        /* Responsividade */
         @media (max-width: 768px) {
             .table-container.desktop-table {
                 display: none;
@@ -498,7 +480,7 @@ if (isset($_POST['logout'])) {
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <nav class="flex-1">
+                <nav class=" Massey Ferguson flex-1">
                     <a href="dashboard.php" class="sidebar-link">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
@@ -592,41 +574,100 @@ if (isset($_POST['logout'])) {
                     <table class="min-w-full divide-y divide-gray-700 text-sm">
                         <thead>
                             <tr>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">ID</th>
                                 <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Nome</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Contato</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Medias</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">email</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Projetos</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Opcão 1</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Opcão 2</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Ocorrência</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Custeio</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="alunosTableBody">
                             <?php
                             $dados = $select_model->alunos_aptos();
-                            foreach ($dados as $dado) {
+                            foreach ($dados as $index => $dado) {
                             ?>
-                                <td><?= $dado['id'] ?></td>
-                                <td><?= $dado['nome'] ?></td>
-                                <td><?= $dado['contato'] ?></td>
-                                <td><?= $dado['medias'] ?></td>
-                                <td><?= $dado['email'] ?></td>
-                                <td><?= $dado['projetos'] ?? "-" ?></td>
-                                <td><?= $dado['perfil_opc1'] ?></td>
-                                <td><?= $dado['perfil_opc2'] ?></td>
-                                <td><?= $dado['ocorrencia'] ?></td>
-                                <td><?= $dado['custeio'] = $dado['custeio'] == "1" ? "Sim":"Não"?></td>
+                                <tr class="hover:bg-dark-50 transition-colors slide-up" style="animation-delay: <?= $index * 50 ?>ms;">
+                                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
+                                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 mr-3 transition-colors">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                        <button onclick="editarAluno(<?= $dado['id'] ?>)" class="text-primary-400 hover:text-primary-300 mr-3 transition-colors">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button onclick="excluirAluno(<?= $dado['id'] ?>)" class="text-red-500 hover:text-red-400 transition-colors">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
                             <?php } ?>
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Cards Mobile -->
-                <div id="alunosMobileCards" class="mobile-cards-container">
-                    <!-- Dados dos alunos serão inseridos aqui via JavaScript -->
+                <div id="alunosMobileCards" class="mobile-cards-container space-y-4">
+                    <?php
+                    foreach ($dados as $dado) {
+                        $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
+                                        ($dado['perfil_opc1'] === 'design' ? 'bg-purple-900 text-purple-300' : 
+                                        ($dado['perfil_opc1'] === 'midia' ? 'bg-green-900 text-green-300' : 'bg-orange-900 text-orange-300'));
+                        $areaClassOpc2 = $dado['perfil_opc2'] === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
+                                        ($dado['perfil_opc2'] === 'design' ? 'bg-purple-900 text-purple-300' : 
+                                        ($dado['perfil_opc2'] === 'midia' ? 'bg-green-900 text-green-300' : 'bg-orange-900 text-orange-300'));
+                    ?>
+                        <div class="mobile-card bg-dark-300 rounded-lg p-4 shadow-md">
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">ID:</span>
+                                <span class="mobile-card-value"><?= htmlspecialchars($dado['id']) ?></span>
+                            </div>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Nome:</span>
+                                <span class="mobile-card-value font-medium"><?= htmlspecialchars($dado['nome']) ?></span>
+                            </div>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Contato:</span>
+                                <span class="mobile-card-value"><?= htmlspecialchars($dado['contato'] ?: '-') ?></span>
+                            </div>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Médias:</span>
+                                <span class="mobile-card-value"><?= htmlspecialchars($dado['medias'] ?: '-') ?></span>
+                            </div>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Email:</span>
+                                <span class="mobile-card-value"><?= htmlspecialchars($dado['email'] ?: '-') ?></span>
+                            </div>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Projetos:</span>
+                                <span class="mobile-card-value"><?= htmlspecialchars($dado['projetos'] ?: '-') ?></span>
+                            </div>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Opção 1:</span>
+                                <span class="mobile-card-value">
+                                    <span class="mobile-badge <?= $areaClassOpc1 ?>"><?= htmlspecialchars($dado['perfil_opc1']) ?></span>
+                                </span>
+                            </div>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Opção 2:</span>
+                                <span class="mobile-card-value">
+                                    <span class="mobile-badge <?= $areaClassOpc2 ?>"><?= htmlspecialchars($dado['perfil_opc2']) ?></span>
+                                </span>
+                            </div>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Ocorrência:</span>
+                                <span class="mobile-card-value"><?= htmlspecialchars($dado['ocorrencia'] ?: '-') ?></span>
+                            </div>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Custeio:</span>
+                                <span class="mobile-card-value"><?= $dado['custeio'] == "1" ? 'Sim' : 'Não' ?></span>
+                            </div>
+                            <div class="mobile-card-actions flex space-x-2 mt-4">
+                                <button onclick="editarAluno(<?= $dado['id'] ?>)" class="edit-btn flex-1">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button onclick="excluirAluno(<?= $dado['id'] ?>)" class="delete-btn flex-1">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </button>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
             </main>
         </div>
@@ -636,13 +677,30 @@ if (isset($_POST['logout'])) {
             <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
                 <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white slide-up">Editar Aluno</h2>
                 <form id="alunoForm" class="space-y-4">
+                    <input type="hidden" id="alunoId">
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Nome</label>
                         <input type="text" id="alunoNome" class="custom-input mt-1" disabled>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300">Área</label>
-                        <select id="alunoArea" class="custom-select mt-1" disabled>
+                        <label class="block text-sm font-medium text-gray-300">Contato</label>
+                        <input type="text" id="alunoContato" class="custom-input mt-1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Médias</label>
+                        <input type="number" id="alunoMedias" min="0" max="10" step="0.1" class="custom-input mt-1" disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Email</label>
+                        <input type="email" id="alunoEmail" class="custom-input mt-1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Projetos Participados</label>
+                        <input type="text" id="alunoProjetos" class="custom-input mt-1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Opção 1</label>
+                        <select id="alunoOpc1" class="custom-select mt-1" disabled>
                             <option value="desenvolvimento">Desenvolvimento</option>
                             <option value="design">Design</option>
                             <option value="midia">Mídia</option>
@@ -650,20 +708,24 @@ if (isset($_POST['logout'])) {
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300">Status</label>
-                        <select id="alunoStatus" class="custom-select mt-1">
-                            <option value="ativo">Ativo</option>
-                            <option value="inativo">Inativo</option>
-                            <option value="estagiando">Estagiando</option>
+                        <label class="block text-sm font-medium text-gray-300">Opção 2</label>
+                        <select id="alunoOpc2" class="custom-select mt-1" disabled>
+                            <option value="desenvolvimento">Desenvolvimento</option>
+                            <option value="design">Design</option>
+                            <option value="midia">Mídia</option>
+                            <option value="redes">Redes/Suporte</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300">Nota</label>
-                        <input type="number" id="alunoNota" min="0" max="10" step="0.1" class="custom-input mt-1" disabled>
+                        <label class="block text-sm font-medium text-gray-300">Ocorrência</label>
+                        <input type="text" id="alunoOcorrencia" class="custom-input mt-1">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300">Projetos Participados</label>
-                        <input type="text" id="alunoProjetos" class="custom-input mt-1">
+                        <label class="block text-sm font-medium text-gray-300">Custeio</label>
+                        <select id="alunoCusteio" class="custom-select mt-1">
+                            <option value="1">Sim</option>
+                            <option value="0">Não</option>
+                        </select>
                     </div>
                     <div class="mt-6 flex justify-end space-x-4">
                         <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">
@@ -678,78 +740,88 @@ if (isset($_POST['logout'])) {
                 </form>
             </div>
         </div>
+
+        <!-- Modal de Detalhes -->
+        <div id="detalhesModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+            <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
+                <h2 class="text-2xl font-bold mb-6 text-white slide-up">Detalhes do Aluno</h2>
+                <div id="detalhesContent" class="space-y-4 text-sm">
+                    <!-- Conteúdo será preenchido via JavaScript -->
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button id="fecharDetalhesBtn" class="custom-btn custom-btn-secondary">
+                        <i class="fas fa-times btn-icon"></i>
+                        <span>Fechar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         // Dados dos alunos
-        const alunos = [
-            { id: 1, nome: "ALEXANDRE NETO DANTAS DA SILVA", area: "desenvolvimento", status: "ativo", nota: 8.5, projetos: "Projeto A, Projeto B" },
-            { id: 2, nome: "ANA CLARA CAVALCANTE LIMA", area: "design", status: "ativo", nota: 9.0, projetos: "Projeto C" },
-            { id: 3, nome: "ANGELA MICHELE DOS SANTOS LIMA", area: "midia", status: "estagiando", nota: 8.7, projetos: "Projeto D" },
-            { id: 4, nome: "CARLOS EDUARDO SILVA SANTOS", area: "redes", status: "ativo", nota: 7.8, projetos: "Projeto E, Projeto F" },
-            { id: 5, nome: "DANIELA FERNANDES OLIVEIRA", area: "design", status: "inativo", nota: 8.2, projetos: "Projeto G" },
-            { id: 6, nome: "EDUARDO MORAES COSTA", area: "desenvolvimento", status: "estagiando", nota: 9.1, projetos: "Projeto H, Projeto I" }
+        let alunos = [
+            <?php foreach ($dados as $dado) { ?>
+                {
+                    id: <?= $dado['id'] ?>,
+                    nome: "<?= addslashes($dado['nome']) ?>",
+                    contato: "<?= addslashes($dado['contato'] ?: '-') ?>",
+                    medias: "<?= addslashes($dado['medias'] ?: '-') ?>",
+                    email: "<?= addslashes($dado['email'] ?: '-') ?>",
+                    projetos: "<?= addslashes($dado['projetos'] ?: '-') ?>",
+                    perfil_opc1: "<?= addslashes($dado['perfil_opc1']) ?>",
+                    perfil_opc2: "<?= addslashes($dado['perfil_opc2']) ?>",
+                    ocorrencia: "<?= addslashes($dado['ocorrencia'] ?: '-') ?>",
+                    custeio: <?= $dado['custeio'] ?>
+                },
+            <?php } ?>
         ];
 
-            // Função para renderizar a tabela de alunos (desktop)
-            function renderizarTabelaDesktop(alunosFiltrados = alunos) {
-                const tbody = document.getElementById('alunosTableBody');
-                tbody.innerHTML = '';
+        // Função para renderizar a tabela de alunos (desktop)
+        function renderizarTabelaDesktop(alunosFiltrados = alunos) {
+            const tbody = document.getElementById('alunosTableBody');
+            tbody.innerHTML = '';
 
-                alunosFiltrados.forEach((aluno, index) => {
-                    const tr = document.createElement('tr');
-                    tr.className = 'hover:bg-dark-50 transition-colors slide-up';
-                    tr.style.animationDelay = `${index * 50}ms`;
-                    tr.innerHTML = `
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.id}</td>
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                            <span class="status-pill area-${aluno.area}">
-                                <i class="fas fa-${
-                                    aluno.area === 'desenvolvimento' ? 'code' :
-                                    aluno.area === 'design' ? 'paint-brush' :
-                                    aluno.area === 'midia' ? 'video' :
-                                    'network-wired'
-                                } text-xs mr-1"></i>
-                                ${aluno.area}
-                            </span>
-                        </td>
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
-                            <span class="status-pill status-${aluno.status}">${aluno.status}</span>
-                        </td>
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.nota}</td>
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.projetos}</td>
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <button onclick="editarAluno(${aluno.id})" class="text-primary-400 hover:text-primary-300 mr-3 transition-colors">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button onclick="excluirAluno(${aluno.id})" class="text-red-500 hover:text-red-400 transition-colors">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
+            alunosFiltrados.forEach((aluno, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-dark-50 transition-colors slide-up';
+                tr.style.animationDelay = `${index * 50}ms`;
+                tr.innerHTML = `
+                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
+                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 mr-3 transition-colors">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button onclick="editarAluno(${aluno.id})" class="text-primary-400 hover:text-primary-300 mr-3 transition-colors">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="excluirAluno(${aluno.id})" class="text-red-500 hover:text-red-400 transition-colors">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
 
-            // Função para renderizar os cards de alunos (mobile)
-            function renderizarCardsMobile(alunosFiltrados = alunos) {
-                const container = document.getElementById('alunosMobileCards');
-                container.innerHTML = '';
+        // Função para renderizar os cards de alunos (mobile)
+        function renderizarCardsMobile(alunosFiltrados = alunos) {
+            const container = document.getElementById('alunosMobileCards');
+            container.innerHTML = '';
 
             alunosFiltrados.forEach(aluno => {
                 const card = document.createElement('div');
-                card.className = 'mobile-card';
-                
-                const areaClass = aluno.area === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
-                                aluno.area === 'design' ? 'bg-purple-900 text-purple-300' : 
-                                aluno.area === 'midia' ? 'bg-green-900 text-green-300' : 
-                                'bg-orange-900 text-orange-300';
-                                
-                const statusClass = aluno.status === 'ativo' ? 'status-ativo' : 
-                                 aluno.status === 'inativo' ? 'status-inativo' : 
-                                 'status-estagiando';
-                
+                card.className = 'mobile-card bg-dark-300 rounded-lg p-4 shadow-md';
+
+                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
+                                    aluno.perfil_opc1 === 'design' ? 'bg-purple-900 text-purple-300' : 
+                                    aluno.perfil_opc1 === 'midia' ? 'bg-green-900 text-green-300' : 
+                                    'bg-orange-900 text-orange-300';
+                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
+                                    aluno.perfil_opc2 === 'design' ? 'bg-purple-900 text-purple-300' : 
+                                    aluno.perfil_opc2 === 'midia' ? 'bg-green-900 text-green-300' : 
+                                    'bg-orange-900 text-orange-300';
+
                 card.innerHTML = `
                     <div class="mobile-card-item">
                         <span class="mobile-card-label">ID:</span>
@@ -760,30 +832,46 @@ if (isset($_POST['logout'])) {
                         <span class="mobile-card-value font-medium">${aluno.nome}</span>
                     </div>
                     <div class="mobile-card-item">
-                        <span class="mobile-card-label">Área:</span>
-                        <span class="mobile-card-value">
-                            <span class="mobile-badge ${areaClass}">${aluno.area}</span>
-                        </span>
+                        <span class="mobile-card-label">Contato:</span>
+                        <span class="mobile-card-value">${aluno.contato}</span>
                     </div>
                     <div class="mobile-card-item">
-                        <span class="mobile-card-label">Status:</span>
-                        <span class="mobile-card-value">
-                            <span class="status-pill ${statusClass}">${aluno.status}</span>
-                        </span>
+                        <span class="mobile-card-label">Médias:</span>
+                        <span class="mobile-card-value">${aluno.medias}</span>
                     </div>
                     <div class="mobile-card-item">
-                        <span class="mobile-card-label">Nota:</span>
-                        <span class="mobile-card-value">${aluno.nota}</span>
+                        <span class="mobile-card-label">Email:</span>
+                        <span class="mobile-card-value">${aluno.email}</span>
                     </div>
                     <div class="mobile-card-item">
                         <span class="mobile-card-label">Projetos:</span>
                         <span class="mobile-card-value">${aluno.projetos}</span>
                     </div>
-                    <div class="mobile-card-actions">
-                        <button onclick="editarAluno(${aluno.id})" class="edit-btn">
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Opção 1:</span>
+                        <span class="mobile-card-value">
+                            <span class="mobile-badge ${areaClassOpc1}">${aluno.perfil_opc1}</span>
+                        </span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Opção 2:</span>
+                        <span class="mobile-card-value">
+                            <span class="mobile-badge ${areaClassOpc2}">${aluno.perfil_opc2}</span>
+                        </span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Ocorrência:</span>
+                        <span class="mobile-card-value">${aluno.ocorrencia}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Custeio:</span>
+                        <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
+                    </div>
+                    <div class="mobile-card-actions flex space-x-2 mt-4">
+                        <button onclick="editarAluno(${aluno.id})" class="edit-btn flex-1">
                             <i class="fas fa-edit"></i> Editar
                         </button>
-                        <button onclick="excluirAluno(${aluno.id})" class="delete-btn">
+                        <button onclick="excluirAluno(${aluno.id})" class="delete-btn flex-1">
                             <i class="fas fa-trash"></i> Excluir
                         </button>
                     </div>
@@ -792,32 +880,111 @@ if (isset($_POST['logout'])) {
             });
         }
 
+        // Função para mostrar detalhes do aluno
+        function verDetalhes(id) {
+            const aluno = alunos.find(a => a.id === id);
+            if (aluno) {
+                const detalhesContent = document.getElementById('detalhesContent');
+                const areaClassOpc1 = aluno.perfil_opc1.toLowerCase();
+                const areaClassOpc2 = aluno.perfil_opc2.toLowerCase();
+                detalhesContent.innerHTML = `
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">ID:</span>
+                        <span class="mobile-card-value">${aluno.id}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Nome:</span>
+                        <span class="mobile-card-value font-medium">${aluno.nome}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Contato:</span>
+                        <span class="mobile-card-value">${aluno.contato}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Médias:</span>
+                        <span class="mobile-card-value">${aluno.medias}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Email:</span>
+                        <span class="mobile-card-value">${aluno.email}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Projetos:</span>
+                        <span class="mobile-card-value">${aluno.projetos}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Opção 1:</span>
+                        <span class="mobile-card-value">
+                            <span class="status-pill area-${areaClassOpc1}">
+                                <i class="fas fa-${
+                                    aluno.perfil_opc1 === 'desenvolvimento' ? 'code' :
+                                    aluno.perfil_opc1 === 'design' ? 'paint-brush' :
+                                    aluno.perfil_opc1 === 'midia' ? 'video' :
+                                    'network-wired'
+                                } text-xs mr-1"></i>
+                                ${aluno.perfil_opc1}
+                            </span>
+                        </span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Opção 2:</span>
+                        <span class="mobile-card-value">
+                            <span class="status-pill area-${areaClassOpc2}">
+                                <i class="fas fa-${
+                                    aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
+                                    aluno.perfil_opc2 === 'design' ? 'paint-brush' :
+                                    aluno.perfil_opc2 === 'midia' ? 'video' :
+                                    'network-wired'
+                                } text-xs mr-1"></i>
+                                ${aluno.perfil_opc2}
+                            </span>
+                        </span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Ocorrência:</span>
+                        <span class="mobile-card-value">${aluno.ocorrencia}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Custeio:</span>
+                        <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
+                    </div>
+                `;
+                const modal = document.getElementById('detalhesModal');
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex'; // Ensure display is set to flex
+            }
+        }
+
         // Função para editar aluno
         function editarAluno(id) {
             const aluno = alunos.find(a => a.id === id);
             if (aluno) {
                 document.getElementById('modalTitle').textContent = 'Editar Aluno';
-                
-                // Preenche todos os campos
+                document.getElementById('alunoId').value = aluno.id;
                 document.getElementById('alunoNome').value = aluno.nome;
-                document.getElementById('alunoArea').value = aluno.area;
-                document.getElementById('alunoStatus').value = aluno.status;
-                document.getElementById('alunoNota').value = aluno.nota;
+                document.getElementById('alunoContato').value = aluno.contato;
+                document.getElementById('alunoMedias').value = aluno.medias;
+                document.getElementById('alunoEmail').value = aluno.email;
                 document.getElementById('alunoProjetos').value = aluno.projetos;
-                
-                // Desabilita os campos que não podem ser editados
+                document.getElementById('alunoOpc1').value = aluno.perfil_opc1;
+                document.getElementById('alunoOpc2').value = aluno.perfil_opc2;
+                document.getElementById('alunoOcorrencia').value = aluno.ocorrencia;
+                document.getElementById('alunoCusteio').value = aluno.custeio;
+
                 document.getElementById('alunoNome').disabled = true;
-                document.getElementById('alunoArea').disabled = true;
-                document.getElementById('alunoNota').disabled = true;
-                
+                document.getElementById('alunoMedias').disabled = true;
+                document.getElementById('alunoOpc1').disabled = true;
+                document.getElementById('alunoOpc2').disabled = true;
+
+                const modal = document.getElementById('alunoModal');
                 modal.classList.remove('hidden');
-                modal.classList.add('flex');
+                modal.style.display = 'flex'; // Ensure display is set to flex
             }
         }
 
+        // Função para excluir aluno
         function excluirAluno(id) {
             if (confirm('Tem certeza que deseja excluir este aluno?')) {
-                // Simulação de exclusão
                 const index = alunos.findIndex(a => a.id === id);
                 if (index !== -1) {
                     alunos.splice(index, 1);
@@ -842,7 +1009,6 @@ if (isset($_POST['logout'])) {
             document.body.style.overflow = 'auto';
         });
 
-        // Fechar sidebar ao clicar fora
         mobileSidebar.addEventListener('click', (e) => {
             if (e.target === mobileSidebar) {
                 mobileSidebar.classList.add('-translate-x-full');
@@ -857,71 +1023,97 @@ if (isset($_POST['logout'])) {
 
         cancelarBtn.addEventListener('click', () => {
             modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            modal.style.display = 'none';
         });
 
-        // Fechar modal ao clicar fora
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.classList.add('hidden');
-                modal.classList.remove('flex');
+                modal.style.display = 'none';
             }
         });
 
-        // Form submit
         alunoForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // Simulação de salvamento
-            alert('Alterações salvas com sucesso!');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            const id = parseInt(document.getElementById('alunoId').value);
+            const alunoIndex = alunos.findIndex(a => a.id === id);
+            if (alunoIndex !== -1) {
+                alunos[alunoIndex] = {
+                    ...alunos[alunoIndex],
+                    contato: document.getElementById('alunoContato').value,
+                    email: document.getElementById('alunoEmail').value,
+                    projetos: document.getElementById('alunoProjetos').value,
+                    ocorrencia: document.getElementById('alunoOcorrencia').value,
+                    custeio: parseInt(document.getElementById('alunoCusteio').value)
+                };
+                aplicarFiltros();
+                alert('Alterações salvas com sucesso!');
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            }
         });
 
-            // Busca e Filtros
-            function aplicarFiltros() {
-                const searchTerm = searchInput.value.toLowerCase();
-                const areaFiltro = filterArea.value;
-                const statusFiltro = filterStatus.value;
+        // Modal de Detalhes
+        const detalhesModal = document.getElementById('detalhesModal');
+        const fecharDetalhesBtn = document.getElementById('fecharDetalhesBtn');
 
-                const alunosFiltrados = alunos.filter(aluno => {
-                    const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
-                    const matchArea = !areaFiltro || aluno.area === areaFiltro;
-                    const matchStatus = !statusFiltro || aluno.status === statusFiltro;
-                    return matchSearch && matchArea && matchStatus;
-                });
+        fecharDetalhesBtn.addEventListener('click', () => {
+            detalhesModal.classList.add('hidden');
+            detalhesModal.style.display = 'none';
+        });
 
-                renderizarTabelaDesktop(alunosFiltrados);
-                renderizarCardsMobile(alunosFiltrados);
-
-                const noResultsMessage = document.getElementById('noResultsMessage');
-                if (alunosFiltrados.length === 0 && !noResultsMessage) {
-                    const message = document.createElement('div');
-                    message.id = 'noResultsMessage';
-                    message.className = 'col-span-3 text-center py-8 text-gray-400 fade-in';
-                    message.innerHTML = `
-                        <i class="fas fa-search text-4xl mb-4 text-gray-600 opacity-30"></i>
-                        <p class="text-lg">Nenhum aluno encontrado com os filtros atuais.</p>
-                        <button id="clearFiltersBtn" class="mt-4 custom-btn custom-btn-secondary">
-                            <i class="fas fa-times-circle btn-icon"></i>
-                            <span>Limpar Filtros</span>
-                        </button>
-                    `;
-                    document.getElementById('alunosMobileCards').insertAdjacentElement('afterend', message);
-                    document.getElementById('clearFiltersBtn').addEventListener('click', () => {
-                        searchInput.value = '';
-                        filterArea.value = '';
-                        filterStatus.value = '';
-                        aplicarFiltros();
-                    });
-                } else if (alunosFiltrados.length > 0 && noResultsMessage) {
-                    noResultsMessage.remove();
-                }
+        detalhesModal.addEventListener('click', (e) => {
+            if (e.target === detalhesModal) {
+                detalhesModal.classList.add('hidden');
+                detalhesModal.style.display = 'none';
             }
+        });
 
-            searchInput.addEventListener('input', aplicarFiltros);
-            filterArea.addEventListener('change', aplicarFiltros);
-            filterStatus.addEventListener('change', aplicarFiltros);
+        // Busca e Filtros
+        function aplicarFiltros() {
+            const searchTerm = document.getElementById('searchAluno').value.toLowerCase();
+            const areaFiltro = document.getElementById('filterArea').value;
+            const statusFiltro = document.getElementById('filterStatus').value;
+
+            const alunosFiltrados = alunos.filter(aluno => {
+                const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
+                const matchArea = !areaFiltro || aluno.perfil_opc1 === areaFiltro || aluno.perfil_opc2 === areaFiltro;
+                const matchStatus = !statusFiltro || (statusFiltro === 'ativo' && aluno.custeio == 1) || (statusFiltro === 'inativo' && aluno.custeio == 0) || (statusFiltro === 'estagiando' && aluno.ocorrencia.toLowerCase().includes('estagiando'));
+                return matchSearch && matchArea && matchStatus;
+            });
+
+            renderizarTabelaDesktop(alunosFiltrados);
+            renderizarCardsMobile(alunosFiltrados);
+
+            const noResultsMessage = document.getElementById('noResultsMessage');
+            if (alunosFiltrados.length === 0 && !noResultsMessage) {
+                const message = document.createElement('div');
+                message.id = 'noResultsMessage';
+                message.className = 'col-span-3 text-center py-8 text-gray-400 fade-in';
+                message.innerHTML = `
+                    <i class="fas fa-search text-4xl mb-4 text-gray-600 opacity-30"></i>
+                    <p class="text-lg">Nenhum aluno encontrado com os filtros atuais.</p>
+                    <button id="clearFiltersBtn" class="mt-4 custom-btn custom-btn-secondary">
+                        <i class="fas fa-times-circle btn-icon"></i>
+                        <span>Limpar Filtros</span>
+                    </button>
+                `;
+                document.getElementById('alunosMobileCards').insertAdjacentElement('afterend', message);
+                document.getElementById('clearFiltersBtn').addEventListener('click', () => {
+                    document.getElementById('searchAluno').value = '';
+                    document.getElementById('filterArea').value = '';
+                    document.getElementById('filterStatus').value = '';
+                    aplicarFiltros();
+                });
+            } else if (alunosFiltrados.length > 0 && noResultsMessage) {
+                noResultsMessage.remove();
+            }
+        }
+
+        document.getElementById('searchAluno').addEventListener('input', aplicarFiltros);
+        document.getElementById('filterArea').addEventListener('change', aplicarFiltros);
+        document.getElementById('filterStatus').addEventListener('change', aplicarFiltros);
 
         // Inicializar tabela e cards
         renderizarTabelaDesktop();
@@ -938,12 +1130,8 @@ if (isset($_POST['logout'])) {
             }
         }
         
-        // Adicionar listener para redimensionamento
         window.addEventListener('resize', checkScreenSize);
-        
-        // Verificar tamanho inicial
         checkScreenSize();
     </script>
 </body>
-
 </html>
