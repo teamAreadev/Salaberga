@@ -458,7 +458,7 @@ if (isset($_POST['logout'])) {
                                     <span class="ml-2 text-gray-300">Tutoria</span>
                                 </label>
                                 <label class="inline-flex items-center">
-                                    <input type="radio" class="form-radio text-primary-500 bg-dark-200 border-dark-100" name="areas" value="midia">
+                                    <input type="radio" class="form-radio text-primary-500 bg-dark-200 border-dark-100" name="areas" value="mídia/design">
                                     <span class="ml-2 text-gray-300">Design/Mídia</span>
                                 </label>
                                 <label class="inline-flex items-center">
