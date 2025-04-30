@@ -1,4 +1,6 @@
-<?php 
+<?php
+require_once('../models/select_model.php');
+$select_model = new select_model();
 /*require_once('../models/sessions.php');
 $session = new sessions;
 $session->tempo_session(600);
@@ -10,16 +12,17 @@ if (isset($_POST['logout'])) {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a1a1a">
     <meta name="description" content="Gerenciamento de Alunos - Sistema de Estágio">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <title>Gerenciar Alunos - Sistema de Estágio</title>
 
     <script>
@@ -87,8 +90,8 @@ if (isset($_POST['logout'])) {
             background-color: #1a1a1a;
             color: #ffffff;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%), 
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%),
                 radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.03) 0%, rgba(255, 165, 0, 0) 20%);
             transition: all 0.3s ease;
         }
@@ -120,7 +123,8 @@ if (isset($_POST['logout'])) {
             font-weight: 600;
         }
 
-        .dashboard-card, .table-container {
+        .dashboard-card,
+        .table-container {
             background-color: #2d2d2d;
             border-radius: 12px;
             padding: 1.5rem;
@@ -129,7 +133,8 @@ if (isset($_POST['logout'])) {
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .dashboard-card:hover, .table-container:hover {
+        .dashboard-card:hover,
+        .table-container:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(0, 122, 51, 0.2);
@@ -189,13 +194,17 @@ if (isset($_POST['logout'])) {
         }
 
         /* Input e botões estilizados */
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             background-color: #232323 !important;
             border-color: #3d3d3d !important;
             color: #ffffff !important;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             border-color: #007A33 !important;
             box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2) !important;
         }
@@ -276,7 +285,7 @@ if (isset($_POST['logout'])) {
             .table-container.desktop-table {
                 display: none;
             }
-            
+
             .mobile-cards-container {
                 display: block;
             }
@@ -286,7 +295,7 @@ if (isset($_POST['logout'])) {
             .mobile-cards-container {
                 display: none;
             }
-            
+
             .table-container.desktop-table {
                 display: block;
             }
@@ -413,7 +422,7 @@ if (isset($_POST['logout'])) {
                     <span class="mx-2">/</span>
                     <span class="text-white">Gerenciar Alunos</span>
                 </div>
-                
+
                 <!-- Actions Bar -->
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="relative w-full sm:w-64">
@@ -436,7 +445,7 @@ if (isset($_POST['logout'])) {
                         </select>
                     </div>
                 </div>
-                
+
                 <!-- Table Desktop -->
                 <div class="table-container desktop-table overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-700 text-sm">
@@ -444,19 +453,36 @@ if (isset($_POST['logout'])) {
                             <tr>
                                 <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">ID</th>
                                 <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Nome</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Área</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Nota</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Contato</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Medias</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">email</th>
                                 <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Projetos</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Ações</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Opcão 1</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Opcão 2</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Ocorrência</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Custeio</th>
                             </tr>
                         </thead>
                         <tbody id="alunosTableBody">
-                            <!-- Dados dos alunos serão inseridos aqui via JavaScript -->
+                            <?php
+                            $dados = $select_model->alunos_aptos();
+                            foreach ($dados as $dado) {
+                            ?>
+                                <td><?= $dado['id'] ?></td>
+                                <td><?= $dado['nome'] ?></td>
+                                <td><?= $dado['contato'] ?></td>
+                                <td><?= $dado['medias'] ?></td>
+                                <td><?= $dado['email'] ?></td>
+                                <td><?= $dado['projetos'] ?? "-" ?></td>
+                                <td><?= $dado['perfil_opc1'] ?></td>
+                                <td><?= $dado['perfil_opc2'] ?></td>
+                                <td><?= $dado['ocorrencia'] ?></td>
+                                <td><?= $dado['custeio'] = $dado['custeio'] == "1" ? "Sim":"Não"?></td>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>
-                
+
                 <!-- Cards Mobile -->
                 <div id="alunosMobileCards" class="mobile-cards-container">
                     <!-- Dados dos alunos serão inseridos aqui via JavaScript -->
@@ -514,14 +540,7 @@ if (isset($_POST['logout'])) {
 
     <script>
         // Dados dos alunos
-        const alunos = [
-            { id: 1, nome: "ALEXANDRE NETO DANTAS DA SILVA", area: "desenvolvimento", status: "ativo", nota: 8.5, projetos: "Projeto A, Projeto B" },
-            { id: 2, nome: "ANA CLARA CAVALCANTE LIMA", area: "design", status: "ativo", nota: 9.0, projetos: "Projeto C" },
-            { id: 3, nome: "ANGELA MICHELE DOS SANTOS LIMA", area: "midia", status: "estagiando", nota: 8.7, projetos: "Projeto D" },
-            { id: 4, nome: "CARLOS EDUARDO SILVA SANTOS", area: "redes", status: "ativo", nota: 7.8, projetos: "Projeto E, Projeto F" },
-            { id: 5, nome: "DANIELA FERNANDES OLIVEIRA", area: "design", status: "inativo", nota: 8.2, projetos: "Projeto G" },
-            { id: 6, nome: "EDUARDO MORAES COSTA", area: "desenvolvimento", status: "estagiando", nota: 9.1, projetos: "Projeto H, Projeto I" }
-        ];
+
 
         // Função para renderizar a tabela de alunos (desktop)
         function renderizarTabelaDesktop(alunosFiltrados = alunos) {
@@ -572,16 +591,16 @@ if (isset($_POST['logout'])) {
             alunosFiltrados.forEach(aluno => {
                 const card = document.createElement('div');
                 card.className = 'mobile-card';
-                
-                const areaClass = aluno.area === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
-                                aluno.area === 'design' ? 'bg-purple-900 text-purple-300' : 
-                                aluno.area === 'midia' ? 'bg-green-900 text-green-300' : 
-                                'bg-orange-900 text-orange-300';
-                                
-                const statusClass = aluno.status === 'ativo' ? 'status-ativo' : 
-                                 aluno.status === 'inativo' ? 'status-inativo' : 
-                                 'status-estagiando';
-                
+
+                const areaClass = aluno.area === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' :
+                    aluno.area === 'design' ? 'bg-purple-900 text-purple-300' :
+                    aluno.area === 'midia' ? 'bg-green-900 text-green-300' :
+                    'bg-orange-900 text-orange-300';
+
+                const statusClass = aluno.status === 'ativo' ? 'status-ativo' :
+                    aluno.status === 'inativo' ? 'status-inativo' :
+                    'status-estagiando';
+
                 card.innerHTML = `
                     <div class="mobile-card-item">
                         <span class="mobile-card-label">ID:</span>
@@ -629,19 +648,19 @@ if (isset($_POST['logout'])) {
             const aluno = alunos.find(a => a.id === id);
             if (aluno) {
                 document.getElementById('modalTitle').textContent = 'Editar Aluno';
-                
+
                 // Preenche todos os campos
                 document.getElementById('alunoNome').value = aluno.nome;
                 document.getElementById('alunoArea').value = aluno.area;
                 document.getElementById('alunoStatus').value = aluno.status;
                 document.getElementById('alunoNota').value = aluno.nota;
                 document.getElementById('alunoProjetos').value = aluno.projetos;
-                
+
                 // Desabilita os campos que não podem ser editados
                 document.getElementById('alunoNome').disabled = true;
                 document.getElementById('alunoArea').disabled = true;
                 document.getElementById('alunoNota').disabled = true;
-                
+
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
             }
@@ -703,7 +722,7 @@ if (isset($_POST['logout'])) {
         // Form submit
         alunoForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
+
             // Simulação de salvamento
             alert('Alterações salvas com sucesso!');
             modal.classList.add('hidden');
@@ -738,7 +757,7 @@ if (isset($_POST['logout'])) {
         // Inicializar tabela e cards
         renderizarTabelaDesktop();
         renderizarCardsMobile();
-        
+
         // Verificar tamanho da tela e ajustar renderização
         function checkScreenSize() {
             if (window.innerWidth < 768) {
@@ -749,12 +768,13 @@ if (isset($_POST['logout'])) {
                 document.querySelector('.mobile-cards-container').style.display = 'none';
             }
         }
-        
+
         // Adicionar listener para redimensionamento
         window.addEventListener('resize', checkScreenSize);
-        
+
         // Verificar tamanho inicial
         checkScreenSize();
     </script>
 </body>
+
 </html>
