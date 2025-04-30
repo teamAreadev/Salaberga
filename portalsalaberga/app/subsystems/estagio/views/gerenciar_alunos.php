@@ -1,6 +1,14 @@
 <?php
 require_once('../models/select_model.php');
 $select_model = new select_model();
+/*require_once('../models/sessions.php');
+$session = new sessions;
+$session->tempo_session(600);
+$session->autenticar_session();
+
+if (isset($_POST['logout'])) {
+    $session->quebra_session();
+}*/
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -10,11 +18,11 @@ $select_model = new select_model();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a1a1a">
     <meta name="description" content="Gerenciamento de Alunos - Sistema de Estágio">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <title>Gerenciar Alunos - Sistema de Estágio</title>
 
     <script>
@@ -89,8 +97,8 @@ $select_model = new select_model();
             background-color: #1a1a1a;
             color: #ffffff;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%), 
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%),
                 radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.03) 0%, rgba(255, 165, 0, 0) 20%);
             transition: all 0.3s ease;
         }
@@ -100,7 +108,7 @@ $select_model = new select_model();
             background-image: linear-gradient(to bottom, #2d2d2d, #222222);
             border-right: 1px solid rgba(0, 122, 51, 0.2);
             transition: all 0.3s ease;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar-link {
@@ -126,7 +134,8 @@ $select_model = new select_model();
             box-shadow: 0 2px 8px rgba(0, 122, 51, 0.15);
         }
 
-        .dashboard-card, .table-container {
+        .dashboard-card,
+        .table-container {
             background-color: #2d2d2d;
             border-radius: 12px;
             padding: 1.5rem;
@@ -139,7 +148,8 @@ $select_model = new select_model();
             -webkit-backdrop-filter: blur(5px);
         }
 
-        .dashboard-card:hover, .table-container:hover {
+        .dashboard-card:hover,
+        .table-container:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(0, 122, 51, 0.2);
@@ -159,7 +169,8 @@ $select_model = new select_model();
             background-color: rgba(0, 122, 51, 0.1);
         }
 
-        .status-pill, .mobile-badge {
+        .status-pill,
+        .mobile-badge {
             padding: 0.35rem 1rem;
             border-radius: 30px;
             font-size: 0.75rem;
@@ -228,7 +239,9 @@ $select_model = new select_model();
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             border-color: #007A33 !important;
             box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
             outline: none !important;
@@ -380,23 +393,40 @@ $select_model = new select_model();
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        .slide-up { animation: slideUp 0.4s ease-out forwards; }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.4s ease-out forwards;
+        }
 
         @media (max-width: 768px) {
             .table-container.desktop-table {
                 display: none;
             }
-            
+
             .mobile-cards-container {
                 display: block;
             }
@@ -406,7 +436,7 @@ $select_model = new select_model();
             .mobile-cards-container {
                 display: none;
             }
-            
+
             .table-container.desktop-table {
                 display: block;
             }
@@ -453,10 +483,12 @@ $select_model = new select_model();
                         <i class="fas fa-cog w-5 mr-3"></i>
                         Configurações
                     </a>
-                    <a href="login.php" class="sidebar-link text-red-400 hover:text-red-300">
-                        <i class="fas fa-sign-out-alt w-5 mr-3"></i>
-                        Sair
-                    </a>
+                    <form action="" method="post">
+                        <button type="submit" class="sidebar-link text-red-400 hover:text-red-300">
+                            <i class="fas fa-sign-out-alt w-5 mr-3"></i>
+                            Sair
+                        </button>
+                    </form>
                 </div>
             </div>
         </aside>
@@ -762,7 +794,7 @@ $select_model = new select_model();
         // Dados dos alunos
         let alunos = [
             <?php foreach ($dados as $dado) { ?>
-                {
+                
                     id: <?= $dado['id'] ?>,
                     nome: "<?= addslashes($dado['nome']) ?>",
                     contato: "<?= addslashes($dado['contato'] ?: '-') ?>",
@@ -773,7 +805,7 @@ $select_model = new select_model();
                     perfil_opc2: "<?= addslashes($dado['perfil_opc2']) ?>",
                     ocorrencia: "<?= addslashes($dado['ocorrencia'] ?: '-') ?>",
                     custeio: <?= $dado['custeio'] ?>
-                },
+                
             <?php } ?>
         ];
 
@@ -1118,7 +1150,7 @@ $select_model = new select_model();
         // Inicializar tabela e cards
         renderizarTabelaDesktop();
         renderizarCardsMobile();
-        
+
         // Verificar tamanho da tela e ajustar renderização
         function checkScreenSize() {
             if (window.innerWidth < 768) {

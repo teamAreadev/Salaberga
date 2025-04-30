@@ -36,5 +36,4 @@ class sessions
         header('location:../views/login.php');
         exit();
     }
-}
-*/
+}*/

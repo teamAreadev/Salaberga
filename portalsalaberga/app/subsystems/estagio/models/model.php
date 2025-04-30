@@ -9,7 +9,7 @@ class main_model extends connect
         parent::__construct();
     }
 
-    function cadastra($email, $senha)
+    function login($email, $senha)
     {
         session_start();
         $stmt_cadastro = $this->connect->prepare("SELECT * FROM usuario WHERE email = :email AND senha = :senha");
@@ -18,7 +18,8 @@ class main_model extends connect
         $stmt_cadastro->execute();
         $result = $stmt_cadastro->fetch(PDO::FETCH_ASSOC);
 
-        if (empty($result) && $result) {
+        print_r($result);
+        if (!empty($result)) {
 
             $_SESSION['email'] = $email;
             $_SESSION['senha'] = $senha;

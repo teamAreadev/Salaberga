@@ -7,7 +7,7 @@ if (isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) 
     $senha = $_POST['senha'];
 
     $model = new main_model;
-    $result = $model->cadastra($email, $senha);
+    $result = $model->login($email, $senha);
 
     switch ($result) {
 
