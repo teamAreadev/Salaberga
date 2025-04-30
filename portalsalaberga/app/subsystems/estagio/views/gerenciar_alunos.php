@@ -15,12 +15,13 @@ if (isset($_POST['logout'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a1a1a">
     <meta name="description" content="Gerenciamento de Alunos - Sistema de Estágio">
-    
+    <title>Gerenciar Alunos - Sistema de Estágio</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <title>Gerenciar Alunos - Sistema de Estágio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -67,6 +68,13 @@ if (isset($_POST['logout'])) {
                             '800': '#0e0e0e',
                             '900': '#0a0a0a'
                         }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.36)',
+                        'card': '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2)'
                     }
                 }
             }
@@ -87,16 +95,20 @@ if (isset($_POST['logout'])) {
             background-color: #1a1a1a;
             color: #ffffff;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%), 
-                radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.03) 0%, rgba(255, 165, 0, 0) 20%);
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.05) 0%, rgba(0, 122, 51, 0) 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.05) 0%, rgba(255, 165, 0, 0) 20%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23007A33' fill-opacity='0.03' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
             transition: all 0.3s ease;
         }
 
+        /* Sidebar styling */
         .sidebar {
-            background-color: #2d2d2d;
+            background-color: rgba(45, 45, 45, 0.95);
+            background-image: linear-gradient(to bottom, #2d2d2d, #222222);
             border-right: 1px solid rgba(0, 122, 51, 0.2);
             transition: all 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
         }
 
         .sidebar-link {
@@ -112,61 +124,256 @@ if (isset($_POST['logout'])) {
         .sidebar-link:hover {
             background-color: rgba(0, 122, 51, 0.2);
             color: #00C250;
+            transform: translateX(5px);
         }
 
         .sidebar-link.active {
             background-color: rgba(0, 122, 51, 0.3);
             color: #00FF6B;
             font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 122, 51, 0.15);
         }
 
-        .dashboard-card, .table-container {
-            background-color: #2d2d2d;
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        /* Table and Card styling */
+        .table-container, .mobile-card {
+            background: linear-gradient(135deg, rgba(49, 49, 49, 0.95) 0%, rgba(37, 37, 37, 0.95) 100%);
+            border-radius: 16px;
+            padding: 1.75rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
 
-        .dashboard-card:hover, .table-container:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(0, 122, 51, 0.2);
+        .table-container::before, .mobile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, #00FF6B, #007A33);
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+
+        .table-container:hover, .mobile-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 122, 51, 0.3);
+        }
+
+        .table-container:hover::before, .mobile-card:hover::before {
+            opacity: 1;
+            box-shadow: 0 0 15px rgba(0, 255, 107, 0.4);
         }
 
         thead {
-            background-color: #232323;
+            background: rgba(35, 35, 35, 0.95);
+            backdrop-filter: blur(5px);
         }
 
         tbody tr {
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
         }
 
         tbody tr:hover {
             background-color: rgba(0, 122, 51, 0.1);
         }
 
-        .status-pill {
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
+        .status-pill, .mobile-badge {
+            padding: 0.35rem 1rem;
+            border-radius: 30px;
             font-size: 0.75rem;
             font-weight: 600;
+            text-transform: capitalize;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            transition: all 0.3s ease;
         }
 
         .status-ativo {
-            background-color: rgba(0, 194, 80, 0.2);
+            background: linear-gradient(135deg, rgba(0, 194, 80, 0.2) 0%, rgba(0, 122, 51, 0.2) 100%);
             color: #00FF6B;
+            border: 1px solid rgba(0, 194, 80, 0.3);
         }
 
         .status-inativo {
-            background-color: rgba(239, 68, 68, 0.2);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(153, 27, 27, 0.2) 100%);
             color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         .status-estagiando {
-            background-color: rgba(255, 165, 0, 0.2);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.2) 100%);
             color: #FBBF24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .area-desenvolvimento {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(29, 78, 216, 0.2) 100%);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .area-design {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(126, 34, 206, 0.2) 100%);
+            color: #c4b5fd;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .area-midia {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .area-redes {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.2) 100%);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        /* Custom input styling */
+        .custom-input, .custom-select {
+            background-color: rgba(35, 35, 35, 0.8) !important;
+            border: 2px solid rgba(61, 61, 61, 0.8) !important;
+            border-radius: 10px !important;
+            color: #ffffff !important;
+            padding: 0.75rem 1rem !important;
+            width: 100% !important;
+            font-size: 0.95rem !important;
+            transition: all 0.3s ease !important;
+            backdrop-filter: blur(5px) !important;
+            -webkit-backdrop-filter: blur(5px) !important;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .custom-input:focus, .custom-select:focus {
+            border-color: #007A33 !important;
+            box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            outline: none !important;
+            background-color: rgba(40, 40, 40, 0.9) !important;
+        }
+
+        .custom-input::placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+        }
+
+        /* Search input styling */
+        .search-input-container {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .search-input-container:focus-within {
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .search-input-container:focus-within .search-icon {
+            color: #00C250;
+        }
+
+        /* Custom button styling */
+        .custom-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .custom-btn-primary {
+            background: linear-gradient(135deg, #007A33 0%, #009940 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 122, 51, 0.3);
+        }
+
+        .custom-btn-primary:hover {
+            background: linear-gradient(135deg, #00993F 0%, #00B64B 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 122, 51, 0.4);
+        }
+
+        .custom-btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .custom-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .custom-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .custom-btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .btn-icon {
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .custom-btn:hover .btn-icon {
+            transform: translateX(3px);
+            opacity: 1;
+        }
+
+        /* Action bar styling */
+        .action-bar {
+            background-color: rgba(45, 45, 45, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Modal styling */
+        .candidatura-modal {
+            background: linear-gradient(135deg, rgba(49, 49, 49, 0.95) 0%, rgba(37, 37, 37, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         /* Scrollbar customizada */
@@ -188,71 +395,14 @@ if (isset($_POST['logout'])) {
             background: #007A33;
         }
 
-        /* Input e botões estilizados */
-        input, select, textarea {
-            background-color: #232323 !important;
-            border-color: #3d3d3d !important;
-            color: #ffffff !important;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: #007A33 !important;
-            box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2) !important;
-        }
-
-        /* Estilos para os cards mobile */
-        .mobile-card {
-            background-color: #2d2d2d;
-            border-radius: 0.75rem;
-            padding: 1.25rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.2s ease;
-        }
-
-        .mobile-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            border-color: rgba(0, 122, 51, 0.3);
-        }
-
-        .mobile-card-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.75rem;
-            font-size: 0.9rem;
-        }
-
-        .mobile-card-label {
-            font-weight: 600;
-            color: #00C250;
-            min-width: 100px;
-            margin-right: 0.5rem;
-        }
-
-        .mobile-card-value {
-            flex: 1;
-        }
-
-        .mobile-card-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 0.75rem;
-            padding-top: 0.75rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
+        /* Mobile card actions */
         .mobile-card-actions button {
-            margin-left: 0.75rem;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
+            padding: 0.625rem;
+            border-radius: 10px;
             transition: all 0.2s ease;
-            color: white;
-        }
-
-        .mobile-card-actions button:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .mobile-card-actions button.edit-btn {
@@ -263,20 +413,25 @@ if (isset($_POST['logout'])) {
             color: #f87171;
         }
 
-        .mobile-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-block;
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        .slide-up { animation: slideUp 0.4s ease-out forwards; }
 
         /* Responsividade */
         @media (max-width: 768px) {
             .table-container.desktop-table {
                 display: none;
             }
-            
             .mobile-cards-container {
                 display: block;
             }
@@ -286,7 +441,6 @@ if (isset($_POST['logout'])) {
             .mobile-cards-container {
                 display: none;
             }
-            
             .table-container.desktop-table {
                 display: block;
             }
@@ -323,7 +477,7 @@ if (isset($_POST['logout'])) {
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="./alunos_vaga.php" class="sidebar-link">
+                    <a href="relatorios.php" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -340,12 +494,14 @@ if (isset($_POST['logout'])) {
                 </div>
             </div>
         </aside>
+
         <!-- Mobile Sidebar Toggle -->
         <div class="md:hidden fixed top-4 left-4 z-50">
-            <button id="sidebarToggle" class="bg-dark-50 p-2 rounded-lg shadow-md">
+            <button id="sidebarToggle" class="bg-dark-50 p-2 rounded-lg shadow-md hover:bg-dark-100 transition-all">
                 <i class="fas fa-bars text-primary-400"></i>
             </button>
         </div>
+
         <!-- Mobile Sidebar -->
         <div id="mobileSidebar" class="fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden sidebar">
             <div class="p-4 flex flex-col h-full">
@@ -354,7 +510,7 @@ if (isset($_POST['logout'])) {
                         <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="h-10 w-auto">
                         <h1 class="text-lg font-bold text-primary-400">Sistema <span class="text-secondary">STGM</span></h1>
                     </div>
-                    <button id="closeSidebar" class="p-2 text-gray-400 hover:text-white">
+                    <button id="closeSidebar" class="p-2 text-gray-400 hover:text-white transition-colors">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -363,19 +519,19 @@ if (isset($_POST['logout'])) {
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="./gerenciar_alunos.php" class="sidebar-link active">
+                    <a href="gerenciar_alunos.php" class="sidebar-link active">
                         <i class="fas fa-user-graduate w-5 mr-3"></i>
                         Gerenciar Alunos
                     </a>
-                    <a href="./gerenciar_empresas.php" class="sidebar-link">
+                    <a href="gerenciar_empresas.php" class="sidebar-link">
                         <i class="fas fa-building w-5 mr-3"></i>
                         Gerenciar Empresas
                     </a>
-                    <a href="./vagas.php" class="sidebar-link">
+                    <a href="vagas.php" class="sidebar-link">
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="./relatorios.php" class="sidebar-link">
+                    <a href="relatorios.php" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -392,6 +548,7 @@ if (isset($_POST['logout'])) {
                 </div>
             </div>
         </div>
+
         <!-- Conteúdo principal -->
         <div class="flex-1 flex flex-col overflow-y-auto bg-dark-400">
             <!-- Header -->
@@ -405,40 +562,49 @@ if (isset($_POST['logout'])) {
                     </div>
                 </div>
             </header>
+
             <!-- Main Content -->
             <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6 sm:py-8 w-full">
                 <!-- Breadcrumbs -->
-                <div class="text-sm text-gray-400 mb-6">
-                    <a href="dashboard.php" class="hover:text-primary-400">Dashboard</a>
-                    <span class="mx-2">/</span>
+                <div class="text-sm text-gray-400 mb-6 flex items-center">
+                    <a href="dashboard.php" class="hover:text-primary-400 transition-colors">Dashboard</a>
+                    <span class="mx-2 text-gray-600">/</span>
                     <span class="text-white">Gerenciar Alunos</span>
                 </div>
-                
+
                 <!-- Actions Bar -->
-                <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div class="relative w-full sm:w-64">
-                        <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="w-full pl-10 pr-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-400">
-                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                    </div>
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
-                        <select id="filterArea" class="pl-4 pr-8 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-400 w-full sm:w-auto appearance-none bg-dark-100 text-white">
-                            <option value="">Todas as áreas</option>
-                            <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="design">Design</option>
-                            <option value="midia">Mídia</option>
-                            <option value="redes">Redes/Suporte</option>
-                        </select>
-                        <select id="filterStatus" class="pl-4 pr-8 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-400 w-full sm:w-auto appearance-none bg-dark-100 text-white">
-                            <option value="">Todos os status</option>
-                            <option value="ativo">Ativo</option>
-                            <option value="inativo">Inativo</option>
-                            <option value="estagiando">Estagiando</option>
-                        </select>
+                <div class="mb-8 action-bar p-4 sm:p-5 fade-in">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div class="search-input-container relative w-full sm:w-64">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="custom-input pl-10 pr-4 py-2.5 w-full">
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
+                            <div class="relative">
+                                <select id="filterArea" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
+                                    <option value="">Todas as áreas</option>
+                                    <option value="desenvolvimento">Desenvolvimento</option>
+                                    <option value="design">Design</option>
+                                    <option value="midia">Mídia</option>
+                                    <option value="redes">Redes/Suporte</option>
+                                </select>
+                                <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
+                            </div>
+                            <div class="relative">
+                                <select id="filterStatus" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
+                                    <option value="">Todos os status</option>
+                                    <option value="ativo">Ativo</option>
+                                    <option value="inativo">Inativo</option>
+                                    <option value="estagiando">Estagiando</option>
+                                </select>
+                                <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
+
                 <!-- Table Desktop -->
-                <div class="table-container desktop-table overflow-x-auto">
+                <div class="table-container desktop-table overflow-x-auto slide-up">
                     <table class="min-w-full divide-y divide-gray-700 text-sm">
                         <thead>
                             <tr>
@@ -456,55 +622,56 @@ if (isset($_POST['logout'])) {
                         </tbody>
                     </table>
                 </div>
-                
+
                 <!-- Cards Mobile -->
                 <div id="alunosMobileCards" class="mobile-cards-container">
                     <!-- Dados dos alunos serão inseridos aqui via JavaScript -->
                 </div>
             </main>
         </div>
+
         <!-- Modal de Edição -->
         <div id="alunoModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
-            <div class="bg-dark-50 rounded-lg p-6 max-w-md w-full mx-4 shadow-2xl border border-gray-800 max-h-[90vh] overflow-y-auto">
-                <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white">Editar Aluno</h2>
-                <form id="alunoForm">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300">Nome</label>
-                            <input type="text" id="alunoNome" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent" disabled>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300">Área</label>
-                            <select id="alunoArea" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent" disabled>
-                                <option value="desenvolvimento">Desenvolvimento</option>
-                                <option value="design">Design</option>
-                                <option value="midia">Mídia</option>
-                                <option value="redes">Redes/Suporte</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300">Status</label>
-                            <select id="alunoStatus" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                                <option value="ativo">Ativo</option>
-                                <option value="inativo">Inativo</option>
-                                <option value="estagiando">Estagiando</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300">Nota</label>
-                            <input type="number" id="alunoNota" min="0" max="10" step="0.1" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent" disabled>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300">Projetos Participados</label>
-                            <input type="text" id="alunoProjetos" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                        </div>
+            <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
+                <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white slide-up">Editar Aluno</h2>
+                <form id="alunoForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Nome</label>
+                        <input type="text" id="alunoNome" class="custom-input mt-1" disabled>
                     </div>
-                    <div class="mt-6 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
-                        <button type="button" id="cancelarBtn" class="px-4 py-2 border border-gray-700 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 transition-colors">
-                            Cancelar
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Área</label>
+                        <select id="alunoArea" class="custom-select mt-1" disabled>
+                            <option value="desenvolvimento">Desenvolvimento</option>
+                            <option value="design">Design</option>
+                            <option value="midia">Mídia</option>
+                            <option value="redes">Redes/Suporte</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Status</label>
+                        <select id="alunoStatus" class="custom-select mt-1">
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                            <option value="estagiando">Estagiando</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Nota</label>
+                        <input type="number" id="alunoNota" min="0" max="10" step="0.1" class="custom-input mt-1" disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Projetos Participados</label>
+                        <input type="text" id="alunoProjetos" class="custom-input mt-1">
+                    </div>
+                    <div class="mt-6 flex justify-end space-x-4">
+                        <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">
+                            <i class="fas fa-times btn-icon"></i>
+                            <span>Cancelar</span>
                         </button>
-                        <button type="submit" class="px-4 py-2 border-0 rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
-                            Salvar Alterações
+                        <button type="submit" class="custom-btn custom-btn-primary">
+                            <i class="fas fa-save btn-icon"></i>
+                            <span>Salvar Alterações</span>
                         </button>
                     </div>
                 </form>
@@ -513,7 +680,7 @@ if (isset($_POST['logout'])) {
     </div>
 
     <script>
-        // Dados dos alunos
+        // Dados dos alunos (simulados)
         const alunos = [
             { id: 1, nome: "ALEXANDRE NETO DANTAS DA SILVA", area: "desenvolvimento", status: "ativo", nota: 8.5, projetos: "Projeto A, Projeto B" },
             { id: 2, nome: "ANA CLARA CAVALCANTE LIMA", area: "design", status: "ativo", nota: 9.0, projetos: "Projeto C" },
@@ -523,238 +690,342 @@ if (isset($_POST['logout'])) {
             { id: 6, nome: "EDUARDO MORAES COSTA", area: "desenvolvimento", status: "estagiando", nota: 9.1, projetos: "Projeto H, Projeto I" }
         ];
 
-        // Função para renderizar a tabela de alunos (desktop)
-        function renderizarTabelaDesktop(alunosFiltrados = alunos) {
-            const tbody = document.getElementById('alunosTableBody');
-            tbody.innerHTML = '';
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('alunoModal');
+            const modalContent = modal.querySelector('.candidatura-modal');
+            const alunoForm = document.getElementById('alunoForm');
+            const cancelarBtn = document.getElementById('cancelarBtn');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const mobileSidebar = document.getElementById('mobileSidebar');
+            const searchInput = document.getElementById('searchAluno');
+            const filterArea = document.getElementById('filterArea');
+            const filterStatus = document.getElementById('filterStatus');
 
-            alunosFiltrados.forEach(aluno => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-dark-50 transition-colors';
-                tr.innerHTML = `
-                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.id}</td>
-                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
-                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                        <span class="px-2 py-1 text-xs font-medium rounded-full ${
-                            aluno.area === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
-                            aluno.area === 'design' ? 'bg-purple-900 text-purple-300' : 
-                            aluno.area === 'midia' ? 'bg-green-900 text-green-300' : 
-                            'bg-orange-900 text-orange-300'
-                        }">${aluno.area}</span>
-                    </td>
-                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
-                        <span class="status-pill ${
-                            aluno.status === 'ativo' ? 'status-ativo' : 
-                            aluno.status === 'inativo' ? 'status-inativo' : 
-                            'status-estagiando'
-                        }">${aluno.status}</span>
-                    </td>
-                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.nota}</td>
-                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.projetos}</td>
-                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button onclick="editarAluno(${aluno.id})" class="text-primary-400 hover:text-primary-300 mr-3 transition-colors">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button onclick="excluirAluno(${aluno.id})" class="text-red-500 hover:text-red-400 transition-colors">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
+            // GSAP Animations
+            gsap.from('.action-bar', { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' });
+            gsap.from('.table-container, .mobile-card', {
+                opacity: 0,
+                y: 50,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: 'power3.out'
             });
-        }
 
-        // Função para renderizar os cards de alunos (mobile)
-        function renderizarCardsMobile(alunosFiltrados = alunos) {
-            const container = document.getElementById('alunosMobileCards');
-            container.innerHTML = '';
-
-            alunosFiltrados.forEach(aluno => {
-                const card = document.createElement('div');
-                card.className = 'mobile-card';
-                
-                const areaClass = aluno.area === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
-                                aluno.area === 'design' ? 'bg-purple-900 text-purple-300' : 
-                                aluno.area === 'midia' ? 'bg-green-900 text-green-300' : 
-                                'bg-orange-900 text-orange-300';
-                                
-                const statusClass = aluno.status === 'ativo' ? 'status-ativo' : 
-                                 aluno.status === 'inativo' ? 'status-inativo' : 
-                                 'status-estagiando';
-                
-                card.innerHTML = `
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">ID:</span>
-                        <span class="mobile-card-value">${aluno.id}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Nome:</span>
-                        <span class="mobile-card-value font-medium">${aluno.nome}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Área:</span>
-                        <span class="mobile-card-value">
-                            <span class="mobile-badge ${areaClass}">${aluno.area}</span>
-                        </span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Status:</span>
-                        <span class="mobile-card-value">
-                            <span class="status-pill ${statusClass}">${aluno.status}</span>
-                        </span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Nota:</span>
-                        <span class="mobile-card-value">${aluno.nota}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Projetos:</span>
-                        <span class="mobile-card-value">${aluno.projetos}</span>
-                    </div>
-                    <div class="mobile-card-actions">
-                        <button onclick="editarAluno(${aluno.id})" class="edit-btn">
-                            <i class="fas fa-edit"></i> Editar
-                        </button>
-                        <button onclick="excluirAluno(${aluno.id})" class="delete-btn">
-                            <i class="fas fa-trash"></i> Excluir
-                        </button>
-                    </div>
-                `;
-                container.appendChild(card);
+            // Sidebar mobile toggle
+            sidebarToggle.addEventListener('click', () => {
+                gsap.to(mobileSidebar, { x: 0, duration: 0.3, ease: 'power2.out' });
+                document.body.style.overflow = 'hidden';
             });
-        }
 
-        // Função para editar aluno
-        function editarAluno(id) {
-            const aluno = alunos.find(a => a.id === id);
-            if (aluno) {
+            closeSidebar.addEventListener('click', () => {
+                gsap.to(mobileSidebar, { x: '-100%', duration: 0.3, ease: 'power2.in' });
+                document.body.style.overflow = 'auto';
+            });
+
+            // Modal handling
+            function resetModal() {
+                modalContent.style.opacity = '0';
+                modalContent.style.transform = 'scale(0.9)';
+                alunoForm.reset();
                 document.getElementById('modalTitle').textContent = 'Editar Aluno';
-                
-                // Preenche todos os campos
+                document.getElementById('alunoNome').disabled = true;
+                document.getElementById('alunoArea').disabled = true;
+                document.getElementById('alunoNota').disabled = true;
+            }
+
+            function openModal(aluno) {
+                resetModal();
                 document.getElementById('alunoNome').value = aluno.nome;
                 document.getElementById('alunoArea').value = aluno.area;
                 document.getElementById('alunoStatus').value = aluno.status;
                 document.getElementById('alunoNota').value = aluno.nota;
                 document.getElementById('alunoProjetos').value = aluno.projetos;
-                
-                // Desabilita os campos que não podem ser editados
-                document.getElementById('alunoNome').disabled = true;
-                document.getElementById('alunoArea').disabled = true;
-                document.getElementById('alunoNota').disabled = true;
-                
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
+                gsap.to(modalContent, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' });
             }
-        }
 
-        function excluirAluno(id) {
-            if (confirm('Tem certeza que deseja excluir este aluno?')) {
-                // Simulação de exclusão
-                const index = alunos.findIndex(a => a.id === id);
-                if (index !== -1) {
-                    alunos.splice(index, 1);
-                    aplicarFiltros();
-                    alert('Aluno excluído com sucesso!');
+            function closeModal() {
+                gsap.to(modalContent, {
+                    opacity: 0,
+                    scale: 0.9,
+                    duration: 0.3,
+                    ease: 'power2.in',
+                    onComplete: () => {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                        resetModal();
+                    }
+                });
+            }
+
+            cancelarBtn.addEventListener('click', closeModal);
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
                 }
-            }
-        }
-
-        // Sidebar mobile toggle
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const closeSidebar = document.getElementById('closeSidebar');
-        const mobileSidebar = document.getElementById('mobileSidebar');
-
-        sidebarToggle.addEventListener('click', () => {
-            mobileSidebar.classList.remove('-translate-x-full');
-            document.body.style.overflow = 'hidden';
-        });
-
-        closeSidebar.addEventListener('click', () => {
-            mobileSidebar.classList.add('-translate-x-full');
-            document.body.style.overflow = 'auto';
-        });
-
-        // Fechar sidebar ao clicar fora
-        mobileSidebar.addEventListener('click', (e) => {
-            if (e.target === mobileSidebar) {
-                mobileSidebar.classList.add('-translate-x-full');
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        // Modal de Edição
-        const modal = document.getElementById('alunoModal');
-        const cancelarBtn = document.getElementById('cancelarBtn');
-        const alunoForm = document.getElementById('alunoForm');
-
-        cancelarBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        });
-
-        // Fechar modal ao clicar fora
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
-        });
-
-        // Form submit
-        alunoForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            // Simulação de salvamento
-            alert('Alterações salvas com sucesso!');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        });
-
-        // Busca e Filtros
-        const searchInput = document.getElementById('searchAluno');
-        const filterArea = document.getElementById('filterArea');
-        const filterStatus = document.getElementById('filterStatus');
-
-        function aplicarFiltros() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const areaFiltro = filterArea.value;
-            const statusFiltro = filterStatus.value;
-
-            const alunosFiltrados = alunos.filter(aluno => {
-                const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
-                const matchArea = !areaFiltro || aluno.area === areaFiltro;
-                const matchStatus = !statusFiltro || aluno.status === statusFiltro;
-                return matchSearch && matchArea && matchStatus;
             });
 
-            renderizarTabelaDesktop(alunosFiltrados);
-            renderizarCardsMobile(alunosFiltrados);
-        }
+            // Função para renderizar a tabela de alunos (desktop)
+            function renderizarTabelaDesktop(alunosFiltrados = alunos) {
+                const tbody = document.getElementById('alunosTableBody');
+                tbody.innerHTML = '';
 
-        searchInput.addEventListener('input', aplicarFiltros);
-        filterArea.addEventListener('change', aplicarFiltros);
-        filterStatus.addEventListener('change', aplicarFiltros);
-
-        // Inicializar tabela e cards
-        renderizarTabelaDesktop();
-        renderizarCardsMobile();
-        
-        // Verificar tamanho da tela e ajustar renderização
-        function checkScreenSize() {
-            if (window.innerWidth < 768) {
-                document.querySelector('.desktop-table').style.display = 'none';
-                document.querySelector('.mobile-cards-container').style.display = 'block';
-            } else {
-                document.querySelector('.desktop-table').style.display = 'block';
-                document.querySelector('.mobile-cards-container').style.display = 'none';
+                alunosFiltrados.forEach((aluno, index) => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-dark-50 transition-colors slide-up';
+                    tr.style.animationDelay = `${index * 50}ms`;
+                    tr.innerHTML = `
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.id}</td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            <span class="status-pill area-${aluno.area}">
+                                <i class="fas fa-${
+                                    aluno.area === 'desenvolvimento' ? 'code' :
+                                    aluno.area === 'design' ? 'paint-brush' :
+                                    aluno.area === 'midia' ? 'video' :
+                                    'network-wired'
+                                } text-xs mr-1"></i>
+                                ${aluno.area}
+                            </span>
+                        </td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                            <span class="status-pill status-${aluno.status}">${aluno.status}</span>
+                        </td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.nota}</td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.projetos}</td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button onclick="editarAluno(${aluno.id})" class="text-primary-400 hover:text-primary-300 mr-3 transition-colors">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="excluirAluno(${aluno.id})" class="text-red-500 hover:text-red-400 transition-colors">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
             }
-        }
-        
-        // Adicionar listener para redimensionamento
-        window.addEventListener('resize', checkScreenSize);
-        
-        // Verificar tamanho inicial
-        checkScreenSize();
+
+            // Função para renderizar os cards de alunos (mobile)
+            function renderizarCardsMobile(alunosFiltrados = alunos) {
+                const container = document.getElementById('alunosMobileCards');
+                container.innerHTML = '';
+
+                alunosFiltrados.forEach((aluno, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'mobile-card slide-up';
+                    card.style.animationDelay = `${index * 50}ms`;
+                    card.innerHTML = `
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">ID:</span>
+                            <span class="mobile-card-value">${aluno.id}</span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Nome:</span>
+                            <span class="mobile-card-value font-medium">${aluno.nome}</span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Área:</span>
+                            <span class="mobile-card-value">
+                                <span class="mobile-badge area-${aluno.area}">
+                                    <i class="fas fa-${
+                                        aluno.area === 'desenvolvimento' ? 'code' :
+                                        aluno.area === 'design' ? 'paint-brush' :
+                                        aluno.area === 'midia' ? 'video' :
+                                        'network-wired'
+                                    } text-xs mr-1"></i>
+                                    ${aluno.area}
+                                </span>
+                            </span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Status:</span>
+                            <span class="mobile-card-value">
+                                <span class="status-pill status-${aluno.status}">${aluno.status}</span>
+                            </span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Nota:</span>
+                            <span class="mobile-card-value">${aluno.nota}</span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Projetos:</span>
+                            <span class="mobile-card-value">${aluno.projetos}</span>
+                        </div>
+                        <div class="mobile-card-actions">
+                            <button onclick="editarAluno(${aluno.id})" class="edit-btn">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="excluirAluno(${aluno.id})" class="delete-btn">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            // Função para editar aluno
+            window.editarAluno = (id) => {
+                const aluno = alunos.find(a => a.id === id);
+                if (aluno) {
+                    openModal(aluno);
+                }
+            };
+
+            // Função para excluir aluno
+            window.excluirAluno = (id) => {
+                const confirmDialog = document.createElement('div');
+                confirmDialog.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50';
+                confirmDialog.innerHTML = `
+                    <div class="candidatura-modal rounded-lg p-6 max-w-md w-full mx-4">
+                        <div class="text-center mb-6">
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/10 text-red-500 mb-4">
+                                <i class="fas fa-exclamation-triangle text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white slide-up">Confirmar Exclusão</h3>
+                            <p class="text-gray-400 mt-2">Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita.</p>
+                        </div>
+                        <div class="flex justify-center space-x-4">
+                            <button id="cancelExcluir" class="custom-btn custom-btn-secondary">
+                                <i class="fas fa-times btn-icon"></i>
+                                <span>Cancelar</span>
+                            </button>
+                            <button id="confirmarExcluir" class="custom-btn bg-red-500 hover:bg-red-600 text-white">
+                                <i class="fas fa-trash-alt btn-icon"></i>
+                                <span>Excluir Aluno</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(confirmDialog);
+                const confirmModalContent = confirmDialog.querySelector('.candidatura-modal');
+                gsap.to(confirmModalContent, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' });
+
+                confirmDialog.querySelector('#cancelExcluir').addEventListener('click', () => {
+                    gsap.to(confirmModalContent, {
+                        opacity: 0,
+                        scale: 0.9,
+                        duration: 0.3,
+                        ease: 'power2.in',
+                        onComplete: () => {
+                            document.body.removeChild(confirmDialog);
+                        }
+                    });
+                });
+
+                confirmDialog.querySelector('#confirmarExcluir').addEventListener('click', () => {
+                    const index = alunos.findIndex(a => a.id === id);
+                    if (index !== -1) {
+                        alunos.splice(index, 1);
+                        aplicarFiltros();
+                        gsap.to(confirmModalContent, {
+                            opacity: 0,
+                            scale: 0.9,
+                            duration: 0.3,
+                            ease: 'power2.in',
+                            onComplete: () => {
+                                document.body.removeChild(confirmDialog);
+                                showToast('Aluno excluído com sucesso!', 'success');
+                            }
+                        });
+                    }
+                });
+            };
+
+            // Form submit
+            alunoForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const alunoId = alunos.find(a => a.nome === document.getElementById('alunoNome').value).id;
+                const alunoIndex = alunos.findIndex(a => a.id === alunoId);
+                if (alunoIndex !== -1) {
+                    alunos[alunoIndex].status = document.getElementById('alunoStatus').value;
+                    alunos[alunoIndex].projetos = document.getElementById('alunoProjetos').value;
+                    aplicarFiltros();
+                    closeModal();
+                    showToast('Alterações salvas com sucesso!', 'success');
+                } else {
+                    showToast('Erro ao salvar alterações.', 'error');
+                }
+            });
+
+            // Busca e Filtros
+            function aplicarFiltros() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const areaFiltro = filterArea.value;
+                const statusFiltro = filterStatus.value;
+
+                const alunosFiltrados = alunos.filter(aluno => {
+                    const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
+                    const matchArea = !areaFiltro || aluno.area === areaFiltro;
+                    const matchStatus = !statusFiltro || aluno.status === statusFiltro;
+                    return matchSearch && matchArea && matchStatus;
+                });
+
+                renderizarTabelaDesktop(alunosFiltrados);
+                renderizarCardsMobile(alunosFiltrados);
+
+                const noResultsMessage = document.getElementById('noResultsMessage');
+                if (alunosFiltrados.length === 0 && !noResultsMessage) {
+                    const message = document.createElement('div');
+                    message.id = 'noResultsMessage';
+                    message.className = 'col-span-3 text-center py-8 text-gray-400 fade-in';
+                    message.innerHTML = `
+                        <i class="fas fa-search text-4xl mb-4 text-gray-600 opacity-30"></i>
+                        <p class="text-lg">Nenhum aluno encontrado com os filtros atuais.</p>
+                        <button id="clearFiltersBtn" class="mt-4 custom-btn custom-btn-secondary">
+                            <i class="fas fa-times-circle btn-icon"></i>
+                            <span>Limpar Filtros</span>
+                        </button>
+                    `;
+                    document.getElementById('alunosMobileCards').insertAdjacentElement('afterend', message);
+                    document.getElementById('clearFiltersBtn').addEventListener('click', () => {
+                        searchInput.value = '';
+                        filterArea.value = '';
+                        filterStatus.value = '';
+                        aplicarFiltros();
+                    });
+                } else if (alunosFiltrados.length > 0 && noResultsMessage) {
+                    noResultsMessage.remove();
+                }
+            }
+
+            searchInput.addEventListener('input', aplicarFiltros);
+            filterArea.addEventListener('change', aplicarFiltros);
+            filterStatus.addEventListener('change', aplicarFiltros);
+
+            // Função para exibir toast
+            function showToast(message, type) {
+                const toast = document.createElement('div');
+                toast.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 fade-in ${
+                    type === 'success' ? 'bg-green-500' : 'bg-red-500'
+                } text-white`;
+                toast.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-3"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    gsap.to(toast, {
+                        opacity: 0,
+                        y: 20,
+                        duration: 0.3,
+                        onComplete: () => {
+                            document.body.removeChild(toast);
+                        }
+                    });
+                }, type === 'success' ? 3000 : 4000);
+            }
+
+            // Inicializar tabela e cards
+            renderizarTabelaDesktop();
+            renderizarCardsMobile();
+        });
     </script>
 </body>
 </html>
