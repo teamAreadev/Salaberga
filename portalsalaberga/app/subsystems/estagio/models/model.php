@@ -39,7 +39,7 @@ class main_model extends connect
 
         if (empty($result)) {
             // Iniciar uma transação para garantir consistência
-            $this->connect->beginTransaction();
+
 
             try {
                 // Inserir a empresa na tabela concedentes
@@ -47,25 +47,45 @@ class main_model extends connect
                 $stmt_cadastrar_empresa->bindValue(':nome', $nome);
                 $stmt_cadastrar_empresa->bindValue(':contato', $telefone);
                 $stmt_cadastrar_empresa->bindValue(':endereco', $endereco);
-                $stmt_cadastrar_empresa->execute();
+                $test = $stmt_cadastrar_empresa->execute();
+                $stmt_result = $stmt_cadastrar_empresa->fetch(PDO::FETCH_ASSOC);
+
+                $stmt_selecionar_perfil = $this->connect->prepare("SELECT * FROM PERFIS");
+                $test = $stmt_selecionar_perfil->execute();
+                $perfil_id = $stmt_selecionar_perfil->fetchAll(PDO::FETCH_ASSOC);
 
                 // Obter o ID da empresa recém-cadastrada
                 $concedente_id = $this->connect->lastInsertId();
+                $perfis_banco = $perfil_id;
+                echo 'oi';
 
                 // Inserir os perfis associados na tabela concedentes_perfis
-                $stmt_cadastrar_perfil = $this->connect->prepare("INSERT INTO concedentes_perfis (concedente_id, perfil_id) VALUES (:concedente_id, :perfil_id)");
-                foreach ($perfis as $perfil_id) {
-                    $stmt_cadastrar_perfil->bindValue(':concedente_id', $concedente_id);
-                    $stmt_cadastrar_perfil->bindValue(':perfil_id', $perfil_id);
-                    $stmt_cadastrar_perfil->execute();
+                // Inserção dos perfis válidos
+                if (!empty($perfis)) {
+                    $stmt_cadastrar_perfil = $this->connect->prepare("INSERT INTO concedentes_perfis (concedente_id, perfil_id) VALUES (:concedente_id, :perfil_id)");
+                    $tamanho_perfis = count($perfis);
+
+                    for ($i = 0; $i < $tamanho_perfis; $i++) {
+                        $stmt_cadastrar_perfil->bindValue(':concedente_id', $concedente_id);
+                        $stmt_cadastrar_perfil->bindValue(':perfil_id', $perfis[$i]);
+                        if ($stmt_cadastrar_perfil->execute()) {
+                            // Opcional: Buscar o nome do perfil para exibir na mensagem
+                            $nome_perfil = array_column($perfis_banco, 'nome_perfil', 'id')[$perfis[$i]];
+                            echo "Perfil ID {$perfis[$i]} ($nome_perfil) associado à empresa ID $concedente_id com sucesso!<br>";
+                        } else {
+                            echo "Erro ao associar perfil ID {$perfis[$i]} à empresa ID $concedente_id.<br>";
+                        }
+                    }
+                } else {
+                    echo "Nenhum perfil válido para cadastrar.<br>";
                 }
 
                 // Confirmar a transação
-                $this->connect->commit();
+
                 return 1; // Sucesso
+
             } catch (Exception $e) {
                 // Reverter a transação em caso de erro
-                $this->connect->rollBack();
                 return 2; // Erro ao cadastrar
             }
         } else {

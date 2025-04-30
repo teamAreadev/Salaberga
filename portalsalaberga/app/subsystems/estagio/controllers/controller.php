@@ -18,15 +18,39 @@ if (isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) 
             header('location:../views/login.php?erro');
             exit();
     }
-} else if (isset($_POST['nome']) && !empty($_POST['nome']) && isset($_POST['areas']) && !empty($_POST['areas']) && isset($_POST['endereco']) && !empty($_POST['endereco']) && isset($_POST['telefone']) && !empty($_POST['telefone'])) {
+} else if (isset($_POST['nome']) && !empty($_POST['nome']) && isset($_POST['endereco']) && !empty($_POST['endereco']) && isset($_POST['telefone']) && !empty($_POST['telefone'])) {
 
     $nome = $_POST['nome'];
-    $area = $_POST['areas'];
     $endereco = $_POST['endereco'];
     $telefone = $_POST['telefone'];
+    if(isset($_POST)) {
+        $perfis = array();
+        
+        // Lista de possíveis posts
+        $possiveis = ['sup', 'des', 'dev', 'tut'];
+        
+        // Conta quantos posts válidos existem
+        $count = 0;
+        foreach($possiveis as $post) {
+            if(isset($_POST[$post]) && !empty($_POST[$post])) {
+                $count++;
+            }
+        }
+        
+        // Adiciona apenas o número de posts correspondente à contagem
+        $adicionados = 0;
+        foreach($possiveis as $post) {
+            if(isset($_POST[$post]) && !empty($_POST[$post]) && $adicionados < $count) {
+                $perfis[] = $_POST[$post];
+                $adicionados++;
+            }
+        }
+    }
+
 
     $model = new main_model;
-    $result = $model->cadastrar_empresa($nome, $area, $endereco, $telefone);
+    $result = $model->cadastrar_empresa($nome,$endereco, $telefone,$perfis);
+    /*
     switch ($result) {
 
         case 1:
@@ -38,7 +62,7 @@ if (isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) 
         case 3:
             header('location:../views/gerenciar_empresas.php?existe');
             exit();
-    }
+    }*/
 } /*else {
     header('location:../views/login.php?session');
     exit();
