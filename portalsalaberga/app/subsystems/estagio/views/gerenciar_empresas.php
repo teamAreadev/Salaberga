@@ -138,7 +138,6 @@ if (isset($_POST['logout'])) {
             border: 1px solid rgba(0, 122, 51, 0.2);
         }
 
-        /* Scrollbar customizada */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -157,10 +156,7 @@ if (isset($_POST['logout'])) {
             background: #007A33;
         }
 
-        /* Input e botões estilizados */
-        input,
-        select,
-        textarea {
+        input, select, textarea {
             background-color: #232323 !important;
             border-color: #3d3d3d !important;
             color: #ffffff !important;
@@ -173,7 +169,6 @@ if (isset($_POST['logout'])) {
             box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2) !important;
         }
 
-        /* Chip de área */
         .area-chip {
             padding: 0.25rem 0.75rem;
             border-radius: 9999px;
@@ -216,23 +211,23 @@ if (isset($_POST['logout'])) {
                     </div>
                 </div>
                 <nav class="flex-1">
-                    <a href="dashboard.php" class="sidebar-link">
+                    <a href="./dashboard.php" class="sidebar-link">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="gerenciar_alunos.php" class="sidebar-link">
+                    <a href="./gerenciar_alunos.php" class="sidebar-link">
                         <i class="fas fa-user-graduate w-5 mr-3"></i>
                         Gerenciar Alunos
                     </a>
-                    <a href="gerenciar_empresas.php" class="sidebar-link active">
+                    <a href="./gerenciar_empresas.php" class="sidebar-link active">
                         <i class="fas fa-building w-5 mr-3"></i>
                         Gerenciar Empresas
                     </a>
-                    <a href="vagas.php" class="sidebar-link">
+                    <a href="./vagas.php" class="sidebar-link">
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="relatorios.php" class="sidebar-link">
+                    <a href="#" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -242,7 +237,7 @@ if (isset($_POST['logout'])) {
                         <i class="fas fa-cog w-5 mr-3"></i>
                         Configurações
                     </a>
-                    <a href="login.php" class="sidebar-link text-red-400 hover:text-red-300">
+                    <a href="#" class="sidebar-link text-red-400 hover:text-red-300">
                         <i class="fas fa-sign-out-alt w-5 mr-3"></i>
                         Sair
                     </a>
@@ -268,23 +263,23 @@ if (isset($_POST['logout'])) {
                     </button>
                 </div>
                 <nav class="flex-1">
-                    <a href="dashboard.php" class="sidebar-link">
+                    <a href="#" class="sidebar-link">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="gerenciar_alunos.php" class="sidebar-link">
+                    <a href="#" class="sidebar-link">
                         <i class="fas fa-user-graduate w-5 mr-3"></i>
                         Gerenciar Alunos
                     </a>
-                    <a href="gerenciar_empresas.php" class="sidebar-link active">
+                    <a href="#" class="sidebar-link active">
                         <i class="fas fa-building w-5 mr-3"></i>
                         Gerenciar Empresas
                     </a>
-                    <a href="vagas.php" class="sidebar-link">
+                    <a href="#" class="sidebar-link">
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="relatorios.php" class="sidebar-link">
+                    <a href="#" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -308,7 +303,7 @@ if (isset($_POST['logout'])) {
             <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6 sm:py-8 w-full">
                 <!-- Breadcrumbs -->
                 <div class="text-sm text-gray-400 mb-6">
-                    <a href="dashboard.php" class="hover:text-primary-400">Dashboard</a>
+                    <a href="#" class="hover:text-primary-400">Dashboard</a>
                     <span class="mx-2">/</span>
                     <span class="text-white">Gerenciar Empresas</span>
                 </div>
@@ -343,13 +338,13 @@ if (isset($_POST['logout'])) {
         </div>
         <!-- Modal de Cadastro/Edição -->
         <div id="empresaModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
-            <div class="bg-dark-50 rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl border border-gray-800">
+            <div class="bg-dark-50 rounded-lg p-8 max-w-md w-full mx-4 shadow- Transição de 2xl border border-gray-800">
                 <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white">Nova Empresa</h2>
                 <form id="empresaForm">
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-300">Nome da Empresa</label>
-                            <input type="text" id="empresaNome" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent" required>
+                            <input type="text" id="empresaNome" name="nome" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent" required>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-300">Áreas de Atuação</label>
@@ -374,19 +369,11 @@ if (isset($_POST['logout'])) {
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-300">Endereço</label>
-                            <input type="text" id="empresaEndereco" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <input type="text" id="empresaEndereco" name="endereco" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-300">Telefone</label>
-                            <input type="tel" id="empresaTelefone" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300">Email</label>
-                            <input type="email" id="empresaEmail" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300">Vagas Disponíveis</label>
-                            <input type="number" id="empresaVagas" min="0" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <input type="tel" id="empresaTelefone" name="telefone" class="mt-1 block w-full rounded-md bg-dark-100 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                         </div>
                     </div>
                     <div class="mt-6 flex justify-end space-x-4">
@@ -409,27 +396,21 @@ if (isset($_POST['logout'])) {
                 nome: "TechCorp Solutions",
                 areas: ["desenvolvimento", "design"],
                 endereco: "Rua A, 123",
-                telefone: "(85) 3333-4444",
-                email: "contato@techcorp.com",
-                vagas: 5
+                telefone: "(85) 3333-4444"
             },
             {
                 id: 2,
                 nome: "Mídia Digital",
                 areas: ["midia"],
                 endereco: "Av. B, 456",
-                telefone: "(85) 3333-5555",
-                email: "contato@midiadigital.com",
-                vagas: 3
+                telefone: "(85) 3333-5555"
             },
             {
                 id: 3,
                 nome: "Redes & Cia",
                 areas: ["redes"],
                 endereco: "Rua C, 789",
-                telefone: "(85) 3333-6666",
-                email: "contato@redesecia.com",
-                vagas: 2
+                telefone: "(85) 3333-6666"
             }
         ];
 
@@ -437,6 +418,11 @@ if (isset($_POST['logout'])) {
         function renderizarEmpresas(empresasFiltradas = empresas) {
             const grid = document.getElementById('empresasGrid');
             grid.innerHTML = '';
+
+            if (empresasFiltradas.length === 0) {
+                grid.innerHTML = '<div class="col-span-3 text-center py-8 text-gray-400">Nenhuma empresa encontrada.</div>';
+                return;
+            }
 
             empresasFiltradas.forEach(empresa => {
                 const card = document.createElement('div');
@@ -463,13 +449,9 @@ if (isset($_POST['logout'])) {
                     <div class="mt-4 space-y-2 text-sm text-gray-300">
                         <p><i class="fas fa-map-marker-alt w-5"></i> ${empresa.endereco}</p>
                         <p><i class="fas fa-phone w-5"></i> ${empresa.telefone}</p>
-                        <p><i class="fas fa-envelope w-5"></i> ${empresa.email}</p>
                     </div>
                     <div class="mt-4 flex justify-between items-center pt-4 border-t border-gray-700">
-                        <span class="text-sm font-medium text-white">
-                            Vagas disponíveis: <span class="text-secondary-400">${empresa.vagas}</span>
-                        </span>
-                        <a href="vagas.php?empresa=${empresa.id}" class="text-primary-400 hover:text-primary-300 text-sm font-medium transition-colors">
+                        <a href="#" class="text-primary-400 hover:text-primary-300 text-sm font-medium transition-colors">
                             Ver vagas <i class="fas fa-arrow-right ml-1"></i>
                         </a>
                     </div>
@@ -478,60 +460,117 @@ if (isset($_POST['logout'])) {
             });
         }
 
-        // Sidebar mobile toggle
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const closeSidebar = document.getElementById('closeSidebar');
-        const mobileSidebar = document.getElementById('mobileSidebar');
-
-        sidebarToggle.addEventListener('click', () => {
-            mobileSidebar.classList.remove('-translate-x-full');
-        });
-
-        closeSidebar.addEventListener('click', () => {
-            mobileSidebar.classList.add('-translate-x-full');
-        });
-
-        // Modal de Cadastro/Edição
-        const modal = document.getElementById('empresaModal');
-        const addEmpresaBtn = document.getElementById('addEmpresaBtn');
-        const cancelarBtn = document.getElementById('cancelarBtn');
-        const empresaForm = document.getElementById('empresaForm');
-
-        addEmpresaBtn.addEventListener('click', () => {
-            document.getElementById('modalTitle').textContent = 'Nova Empresa';
-            empresaForm.reset();
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        });
-
-        cancelarBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        });
-
-        // Busca e Filtros
-        const searchInput = document.getElementById('searchEmpresa');
-        const filterArea = document.getElementById('filterArea');
-
-        function aplicarFiltros() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const areaFiltro = filterArea.value;
-
-            const empresasFiltradas = empresas.filter(empresa => {
-                const matchSearch = empresa.nome.toLowerCase().includes(searchTerm);
-                const matchArea = !areaFiltro || empresa.areas.includes(areaFiltro);
-                return matchSearch && matchArea;
-            });
-
-            renderizarEmpresas(empresasFiltradas);
+        // Função para editar empresa
+        function editarEmpresa(id) {
+            const empresa = empresas.find(e => e.id === id);
+            if (empresa) {
+                document.getElementById('modalTitle').textContent = 'Editar Empresa';
+                document.getElementById('empresaNome').value = empresa.nome;
+                document.querySelectorAll('input[name="areas"]').forEach(checkbox => {
+                    checkbox.checked = empresa.areas.includes(checkbox.value);
+                });
+                document.getElementById('empresaEndereco').value = empresa.endereco;
+                document.getElementById('empresaTelefone').value = empresa.telefone;
+                const modal = document.getElementById('empresaModal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
         }
 
-        searchInput.addEventListener('input', aplicarFiltros);
-        filterArea.addEventListener('change', aplicarFiltros);
+        // Função para excluir empresa
+        function excluirEmpresa(id) {
+            if (confirm('Tem certeza que deseja excluir esta empresa?')) {
+                const index = empresas.findIndex(e => e.id === id);
+                if (index !== -1) {
+                    empresas.splice(index, 1);
+                    renderizarEmpresas();
+                    alert('Empresa excluída com sucesso! (Simulação)');
+                }
+            }
+        }
 
-        // Inicializar grid
-        renderizarEmpresas();
+        // Inicializar após o DOM estar carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('empresaModal');
+            const addEmpresaBtn = document.getElementById('addEmpresaBtn');
+            const cancelarBtn = document.getElementById('cancelarBtn');
+            const empresaForm = document.getElementById('empresaForm');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const mobileSidebar = document.getElementById('mobileSidebar');
+            const searchInput = document.getElementById('searchEmpresa');
+            const filterArea = document.getElementById('filterArea');
+
+            console.log('addEmpresaBtn:', addEmpresaBtn);
+
+            addEmpresaBtn.addEventListener('click', () => {
+                console.log('Botão Nova Empresa clicado');
+                document.getElementById('modalTitle').textContent = 'Nova Empresa';
+                empresaForm.reset();
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
+
+            cancelarBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            });
+
+            empresaForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const nome = document.getElementById('empresaNome').value;
+                const areasChecked = Array.from(document.querySelectorAll('input[name="areas"]:checked')).map(cb => cb.value);
+                const endereco = document.getElementById('empresaEndereco').value;
+                const telefone = document.getElementById('empresaTelefone').value;
+
+                const novaEmpresa = {
+                    id: empresas.length + 1,
+                    nome,
+                    areas: areasChecked,
+                    endereco,
+                    telefone
+                };
+
+                empresas.push(novaEmpresa);
+                renderizarEmpresas();
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                alert('Empresa salva com sucesso! (Simulação)');
+            });
+
+            sidebarToggle.addEventListener('click', () => {
+                mobileSidebar.classList.remove('-translate-x-full');
+            });
+
+            closeSidebar.addEventListener('click', () => {
+                mobileSidebar.classList.add('-translate-x-full');
+            });
+
+            function aplicarFiltros() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const areaFiltro = filterArea.value;
+
+                const empresasFiltradas = empresas.filter(empresa => {
+                    const matchSearch = empresa.nome.toLowerCase().includes(searchTerm);
+                    const matchArea = !areaFiltro || empresa.areas.includes(areaFiltro);
+                    return matchSearch && matchArea;
+                });
+
+                renderizarEmpresas(empresasFiltradas);
+            }
+
+            searchInput.addEventListener('input', aplicarFiltros);
+            filterArea.addEventListener('change', aplicarFiltros);
+
+            renderizarEmpresas();
+        });
     </script>
 </body>
-
 </html>
