@@ -1,4 +1,6 @@
-<?php 
+<?php
+require_once('../models/select_model.php');
+$select_model = new select_model();
 /*require_once('../models/sessions.php');
 $session = new sessions;
 $session->tempo_session(600);
@@ -10,18 +12,18 @@ if (isset($_POST['logout'])) {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a1a1a">
     <meta name="description" content="Gerenciamento de Alunos - Sistema de Estágio">
-    <title>Gerenciar Alunos - Sistema de Estágio</title>
-
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <title>Gerenciar Alunos - Sistema de Estágio</title>
 
     <script>
         tailwind.config = {
@@ -95,10 +97,9 @@ if (isset($_POST['logout'])) {
             background-color: #1a1a1a;
             color: #ffffff;
             min-height: 100vh;
-            background-image:
-                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.05) 0%, rgba(0, 122, 51, 0) 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.05) 0%, rgba(255, 165, 0, 0) 20%),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23007A33' fill-opacity='0.03' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%), 
+                radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.03) 0%, rgba(255, 165, 0, 0) 20%);
             transition: all 0.3s ease;
         }
 
@@ -134,13 +135,12 @@ if (isset($_POST['logout'])) {
             box-shadow: 0 2px 8px rgba(0, 122, 51, 0.15);
         }
 
-        /* Table and Card styling */
-        .table-container, .mobile-card {
-            background: linear-gradient(135deg, rgba(49, 49, 49, 0.95) 0%, rgba(37, 37, 37, 0.95) 100%);
-            border-radius: 16px;
-            padding: 1.75rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        .dashboard-card, .table-container {
+            background-color: #2d2d2d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.05);
             position: relative;
             overflow: hidden;
@@ -148,27 +148,10 @@ if (isset($_POST['logout'])) {
             -webkit-backdrop-filter: blur(5px);
         }
 
-        .table-container::before, .mobile-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 6px;
-            height: 100%;
-            background: linear-gradient(to bottom, #00FF6B, #007A33);
-            opacity: 0.6;
-            transition: all 0.3s ease;
-        }
-
-        .table-container:hover, .mobile-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(0, 122, 51, 0.3);
-        }
-
-        .table-container:hover::before, .mobile-card:hover::before {
-            opacity: 1;
-            box-shadow: 0 0 15px rgba(0, 255, 107, 0.4);
+        .dashboard-card:hover, .table-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 122, 51, 0.2);
         }
 
         thead {
@@ -241,11 +224,10 @@ if (isset($_POST['logout'])) {
             border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
-        /* Custom input styling */
-        .custom-input, .custom-select {
-            background-color: rgba(35, 35, 35, 0.8) !important;
-            border: 2px solid rgba(61, 61, 61, 0.8) !important;
-            border-radius: 10px !important;
+        /* Input e botões estilizados */
+        input, select, textarea {
+            background-color: #232323 !important;
+            border-color: #3d3d3d !important;
             color: #ffffff !important;
             padding: 0.75rem 1rem !important;
             width: 100% !important;
@@ -256,7 +238,7 @@ if (isset($_POST['logout'])) {
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
         }
 
-        .custom-input:focus, .custom-select:focus {
+        input:focus, select:focus, textarea:focus {
             border-color: #007A33 !important;
             box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
             outline: none !important;
@@ -432,6 +414,7 @@ if (isset($_POST['logout'])) {
             .table-container.desktop-table {
                 display: none;
             }
+            
             .mobile-cards-container {
                 display: block;
             }
@@ -441,6 +424,7 @@ if (isset($_POST['logout'])) {
             .mobile-cards-container {
                 display: none;
             }
+            
             .table-container.desktop-table {
                 display: block;
             }
@@ -610,15 +594,32 @@ if (isset($_POST['logout'])) {
                             <tr>
                                 <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">ID</th>
                                 <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Nome</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Área</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Nota</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Contato</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Medias</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">email</th>
                                 <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Projetos</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Ações</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Opcão 1</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Opcão 2</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Ocorrência</th>
+                                <th scope="col" class="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Custeio</th>
                             </tr>
                         </thead>
                         <tbody id="alunosTableBody">
-                            <!-- Dados dos alunos serão inseridos aqui via JavaScript -->
+                            <?php
+                            $dados = $select_model->alunos_aptos();
+                            foreach ($dados as $dado) {
+                            ?>
+                                <td><?= $dado['id'] ?></td>
+                                <td><?= $dado['nome'] ?></td>
+                                <td><?= $dado['contato'] ?></td>
+                                <td><?= $dado['medias'] ?></td>
+                                <td><?= $dado['email'] ?></td>
+                                <td><?= $dado['projetos'] ?? "-" ?></td>
+                                <td><?= $dado['perfil_opc1'] ?></td>
+                                <td><?= $dado['perfil_opc2'] ?></td>
+                                <td><?= $dado['ocorrencia'] ?></td>
+                                <td><?= $dado['custeio'] = $dado['custeio'] == "1" ? "Sim":"Não"?></td>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>
@@ -680,7 +681,7 @@ if (isset($_POST['logout'])) {
     </div>
 
     <script>
-        // Dados dos alunos (simulados)
+        // Dados dos alunos
         const alunos = [
             { id: 1, nome: "ALEXANDRE NETO DANTAS DA SILVA", area: "desenvolvimento", status: "ativo", nota: 8.5, projetos: "Projeto A, Projeto B" },
             { id: 2, nome: "ANA CLARA CAVALCANTE LIMA", area: "design", status: "ativo", nota: 9.0, projetos: "Projeto C" },
@@ -689,84 +690,6 @@ if (isset($_POST['logout'])) {
             { id: 5, nome: "DANIELA FERNANDES OLIVEIRA", area: "design", status: "inativo", nota: 8.2, projetos: "Projeto G" },
             { id: 6, nome: "EDUARDO MORAES COSTA", area: "desenvolvimento", status: "estagiando", nota: 9.1, projetos: "Projeto H, Projeto I" }
         ];
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const modal = document.getElementById('alunoModal');
-            const modalContent = modal.querySelector('.candidatura-modal');
-            const alunoForm = document.getElementById('alunoForm');
-            const cancelarBtn = document.getElementById('cancelarBtn');
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const closeSidebar = document.getElementById('closeSidebar');
-            const mobileSidebar = document.getElementById('mobileSidebar');
-            const searchInput = document.getElementById('searchAluno');
-            const filterArea = document.getElementById('filterArea');
-            const filterStatus = document.getElementById('filterStatus');
-
-            // GSAP Animations
-            gsap.from('.action-bar', { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' });
-            gsap.from('.table-container, .mobile-card', {
-                opacity: 0,
-                y: 50,
-                duration: 0.6,
-                stagger: 0.1,
-                ease: 'power3.out'
-            });
-
-            // Sidebar mobile toggle
-            sidebarToggle.addEventListener('click', () => {
-                gsap.to(mobileSidebar, { x: 0, duration: 0.3, ease: 'power2.out' });
-                document.body.style.overflow = 'hidden';
-            });
-
-            closeSidebar.addEventListener('click', () => {
-                gsap.to(mobileSidebar, { x: '-100%', duration: 0.3, ease: 'power2.in' });
-                document.body.style.overflow = 'auto';
-            });
-
-            // Modal handling
-            function resetModal() {
-                modalContent.style.opacity = '0';
-                modalContent.style.transform = 'scale(0.9)';
-                alunoForm.reset();
-                document.getElementById('modalTitle').textContent = 'Editar Aluno';
-                document.getElementById('alunoNome').disabled = true;
-                document.getElementById('alunoArea').disabled = true;
-                document.getElementById('alunoNota').disabled = true;
-            }
-
-            function openModal(aluno) {
-                resetModal();
-                document.getElementById('alunoNome').value = aluno.nome;
-                document.getElementById('alunoArea').value = aluno.area;
-                document.getElementById('alunoStatus').value = aluno.status;
-                document.getElementById('alunoNota').value = aluno.nota;
-                document.getElementById('alunoProjetos').value = aluno.projetos;
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                gsap.to(modalContent, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' });
-            }
-
-            function closeModal() {
-                gsap.to(modalContent, {
-                    opacity: 0,
-                    scale: 0.9,
-                    duration: 0.3,
-                    ease: 'power2.in',
-                    onComplete: () => {
-                        modal.classList.add('hidden');
-                        modal.classList.remove('flex');
-                        resetModal();
-                    }
-                });
-            }
-
-            cancelarBtn.addEventListener('click', closeModal);
-
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
-            });
 
             // Função para renderizar a tabela de alunos (desktop)
             function renderizarTabelaDesktop(alunosFiltrados = alunos) {
@@ -814,143 +737,146 @@ if (isset($_POST['logout'])) {
                 const container = document.getElementById('alunosMobileCards');
                 container.innerHTML = '';
 
-                alunosFiltrados.forEach((aluno, index) => {
-                    const card = document.createElement('div');
-                    card.className = 'mobile-card slide-up';
-                    card.style.animationDelay = `${index * 50}ms`;
-                    card.innerHTML = `
-                        <div class="mobile-card-item">
-                            <span class="mobile-card-label">ID:</span>
-                            <span class="mobile-card-value">${aluno.id}</span>
-                        </div>
-                        <div class="mobile-card-item">
-                            <span class="mobile-card-label">Nome:</span>
-                            <span class="mobile-card-value font-medium">${aluno.nome}</span>
-                        </div>
-                        <div class="mobile-card-item">
-                            <span class="mobile-card-label">Área:</span>
-                            <span class="mobile-card-value">
-                                <span class="mobile-badge area-${aluno.area}">
-                                    <i class="fas fa-${
-                                        aluno.area === 'desenvolvimento' ? 'code' :
-                                        aluno.area === 'design' ? 'paint-brush' :
-                                        aluno.area === 'midia' ? 'video' :
-                                        'network-wired'
-                                    } text-xs mr-1"></i>
-                                    ${aluno.area}
-                                </span>
-                            </span>
-                        </div>
-                        <div class="mobile-card-item">
-                            <span class="mobile-card-label">Status:</span>
-                            <span class="mobile-card-value">
-                                <span class="status-pill status-${aluno.status}">${aluno.status}</span>
-                            </span>
-                        </div>
-                        <div class="mobile-card-item">
-                            <span class="mobile-card-label">Nota:</span>
-                            <span class="mobile-card-value">${aluno.nota}</span>
-                        </div>
-                        <div class="mobile-card-item">
-                            <span class="mobile-card-label">Projetos:</span>
-                            <span class="mobile-card-value">${aluno.projetos}</span>
-                        </div>
-                        <div class="mobile-card-actions">
-                            <button onclick="editarAluno(${aluno.id})" class="edit-btn">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button onclick="excluirAluno(${aluno.id})" class="delete-btn">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            }
-
-            // Função para editar aluno
-            window.editarAluno = (id) => {
-                const aluno = alunos.find(a => a.id === id);
-                if (aluno) {
-                    openModal(aluno);
-                }
-            };
-
-            // Função para excluir aluno
-            window.excluirAluno = (id) => {
-                const confirmDialog = document.createElement('div');
-                confirmDialog.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50';
-                confirmDialog.innerHTML = `
-                    <div class="candidatura-modal rounded-lg p-6 max-w-md w-full mx-4">
-                        <div class="text-center mb-6">
-                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/10 text-red-500 mb-4">
-                                <i class="fas fa-exclamation-triangle text-2xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-white slide-up">Confirmar Exclusão</h3>
-                            <p class="text-gray-400 mt-2">Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita.</p>
-                        </div>
-                        <div class="flex justify-center space-x-4">
-                            <button id="cancelExcluir" class="custom-btn custom-btn-secondary">
-                                <i class="fas fa-times btn-icon"></i>
-                                <span>Cancelar</span>
-                            </button>
-                            <button id="confirmarExcluir" class="custom-btn bg-red-500 hover:bg-red-600 text-white">
-                                <i class="fas fa-trash-alt btn-icon"></i>
-                                <span>Excluir Aluno</span>
-                            </button>
-                        </div>
+            alunosFiltrados.forEach(aluno => {
+                const card = document.createElement('div');
+                card.className = 'mobile-card';
+                
+                const areaClass = aluno.area === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
+                                aluno.area === 'design' ? 'bg-purple-900 text-purple-300' : 
+                                aluno.area === 'midia' ? 'bg-green-900 text-green-300' : 
+                                'bg-orange-900 text-orange-300';
+                                
+                const statusClass = aluno.status === 'ativo' ? 'status-ativo' : 
+                                 aluno.status === 'inativo' ? 'status-inativo' : 
+                                 'status-estagiando';
+                
+                card.innerHTML = `
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">ID:</span>
+                        <span class="mobile-card-value">${aluno.id}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Nome:</span>
+                        <span class="mobile-card-value font-medium">${aluno.nome}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Área:</span>
+                        <span class="mobile-card-value">
+                            <span class="mobile-badge ${areaClass}">${aluno.area}</span>
+                        </span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Status:</span>
+                        <span class="mobile-card-value">
+                            <span class="status-pill ${statusClass}">${aluno.status}</span>
+                        </span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Nota:</span>
+                        <span class="mobile-card-value">${aluno.nota}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Projetos:</span>
+                        <span class="mobile-card-value">${aluno.projetos}</span>
+                    </div>
+                    <div class="mobile-card-actions">
+                        <button onclick="editarAluno(${aluno.id})" class="edit-btn">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button onclick="excluirAluno(${aluno.id})" class="delete-btn">
+                            <i class="fas fa-trash"></i> Excluir
+                        </button>
                     </div>
                 `;
-                document.body.appendChild(confirmDialog);
-                const confirmModalContent = confirmDialog.querySelector('.candidatura-modal');
-                gsap.to(confirmModalContent, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' });
-
-                confirmDialog.querySelector('#cancelExcluir').addEventListener('click', () => {
-                    gsap.to(confirmModalContent, {
-                        opacity: 0,
-                        scale: 0.9,
-                        duration: 0.3,
-                        ease: 'power2.in',
-                        onComplete: () => {
-                            document.body.removeChild(confirmDialog);
-                        }
-                    });
-                });
-
-                confirmDialog.querySelector('#confirmarExcluir').addEventListener('click', () => {
-                    const index = alunos.findIndex(a => a.id === id);
-                    if (index !== -1) {
-                        alunos.splice(index, 1);
-                        aplicarFiltros();
-                        gsap.to(confirmModalContent, {
-                            opacity: 0,
-                            scale: 0.9,
-                            duration: 0.3,
-                            ease: 'power2.in',
-                            onComplete: () => {
-                                document.body.removeChild(confirmDialog);
-                                showToast('Aluno excluído com sucesso!', 'success');
-                            }
-                        });
-                    }
-                });
-            };
-
-            // Form submit
-            alunoForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const alunoId = alunos.find(a => a.nome === document.getElementById('alunoNome').value).id;
-                const alunoIndex = alunos.findIndex(a => a.id === alunoId);
-                if (alunoIndex !== -1) {
-                    alunos[alunoIndex].status = document.getElementById('alunoStatus').value;
-                    alunos[alunoIndex].projetos = document.getElementById('alunoProjetos').value;
-                    aplicarFiltros();
-                    closeModal();
-                    showToast('Alterações salvas com sucesso!', 'success');
-                } else {
-                    showToast('Erro ao salvar alterações.', 'error');
-                }
+                container.appendChild(card);
             });
+        }
+
+        // Função para editar aluno
+        function editarAluno(id) {
+            const aluno = alunos.find(a => a.id === id);
+            if (aluno) {
+                document.getElementById('modalTitle').textContent = 'Editar Aluno';
+                
+                // Preenche todos os campos
+                document.getElementById('alunoNome').value = aluno.nome;
+                document.getElementById('alunoArea').value = aluno.area;
+                document.getElementById('alunoStatus').value = aluno.status;
+                document.getElementById('alunoNota').value = aluno.nota;
+                document.getElementById('alunoProjetos').value = aluno.projetos;
+                
+                // Desabilita os campos que não podem ser editados
+                document.getElementById('alunoNome').disabled = true;
+                document.getElementById('alunoArea').disabled = true;
+                document.getElementById('alunoNota').disabled = true;
+                
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function excluirAluno(id) {
+            if (confirm('Tem certeza que deseja excluir este aluno?')) {
+                // Simulação de exclusão
+                const index = alunos.findIndex(a => a.id === id);
+                if (index !== -1) {
+                    alunos.splice(index, 1);
+                    aplicarFiltros();
+                    alert('Aluno excluído com sucesso!');
+                }
+            }
+        }
+
+        // Sidebar mobile toggle
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+
+        sidebarToggle.addEventListener('click', () => {
+            mobileSidebar.classList.remove('-translate-x-full');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            mobileSidebar.classList.add('-translate-x-full');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Fechar sidebar ao clicar fora
+        mobileSidebar.addEventListener('click', (e) => {
+            if (e.target === mobileSidebar) {
+                mobileSidebar.classList.add('-translate-x-full');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Modal de Edição
+        const modal = document.getElementById('alunoModal');
+        const cancelarBtn = document.getElementById('cancelarBtn');
+        const alunoForm = document.getElementById('alunoForm');
+
+        cancelarBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        });
+
+        // Fechar modal ao clicar fora
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        });
+
+        // Form submit
+        alunoForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Simulação de salvamento
+            alert('Alterações salvas com sucesso!');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        });
 
             // Busca e Filtros
             function aplicarFiltros() {
@@ -997,35 +923,27 @@ if (isset($_POST['logout'])) {
             filterArea.addEventListener('change', aplicarFiltros);
             filterStatus.addEventListener('change', aplicarFiltros);
 
-            // Função para exibir toast
-            function showToast(message, type) {
-                const toast = document.createElement('div');
-                toast.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 fade-in ${
-                    type === 'success' ? 'bg-green-500' : 'bg-red-500'
-                } text-white`;
-                toast.innerHTML = `
-                    <div class="flex items-center">
-                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-3"></i>
-                        <span>${message}</span>
-                    </div>
-                `;
-                document.body.appendChild(toast);
-                setTimeout(() => {
-                    gsap.to(toast, {
-                        opacity: 0,
-                        y: 20,
-                        duration: 0.3,
-                        onComplete: () => {
-                            document.body.removeChild(toast);
-                        }
-                    });
-                }, type === 'success' ? 3000 : 4000);
+        // Inicializar tabela e cards
+        renderizarTabelaDesktop();
+        renderizarCardsMobile();
+        
+        // Verificar tamanho da tela e ajustar renderização
+        function checkScreenSize() {
+            if (window.innerWidth < 768) {
+                document.querySelector('.desktop-table').style.display = 'none';
+                document.querySelector('.mobile-cards-container').style.display = 'block';
+            } else {
+                document.querySelector('.desktop-table').style.display = 'block';
+                document.querySelector('.mobile-cards-container').style.display = 'none';
             }
-
-            // Inicializar tabela e cards
-            renderizarTabelaDesktop();
-            renderizarCardsMobile();
-        });
+        }
+        
+        // Adicionar listener para redimensionamento
+        window.addEventListener('resize', checkScreenSize);
+        
+        // Verificar tamanho inicial
+        checkScreenSize();
     </script>
 </body>
+
 </html>
