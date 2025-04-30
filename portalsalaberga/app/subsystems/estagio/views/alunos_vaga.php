@@ -1,3 +1,7 @@
+<?php 
+require_once('../models/select_model.php');
+$select_model = new select_model();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 <head>
@@ -390,13 +394,28 @@
                                     <th>Nome</th>
                                     <th width="80px">Média</th>
                                     <th>Projetos</th>
-                                    <th width="100px">Área</th>
+                                    <th width="100px">Área 1</th>
+                                    <th width="100px">Área 2</th>
                                     <th width="100px">Ocorrências</th>
                                     <th width="100px">Custeio</th>
                                 </tr>
                             </thead>
                             <tbody id="alunosTableBody">
-                                <!-- Linhas da tabela serão geradas por JavaScript -->
+                    
+                                <?php 
+                                $dados = $select_model->alunos_aptos();
+                                foreach($dados as $dado){
+                                ?>
+                                <td><?=$dado['id']?></td>
+                                <td><input type="checkbox" name="" id=""></td>
+                                <td><?=$dado['nome']?></td>
+                                <td><?=$dado['medias']?></td>
+                                <td><?=$dado['projetos']?></td>
+                                <td><?=$dado['perfil_opc1']?></td>
+                                <td><?=$dado['perfil_opc2']?></td>
+                                <td><?=$dado['ocorrencia']?></td>
+                                <td><?=$dado['custeio']?></td>
+                                <?php }?>
                             </tbody>
                         </table>
                     </form>
@@ -417,97 +436,7 @@
 
     <script>
         // Dados das empresas
-        const empresas = [
-            { id: 1, nome: "TechCorp Solutions" },
-            { id: 2, nome: "Mídia Digital" },
-            { id: 3, nome: "Redes & Cia" }
-        ];
-
-        // Dados dos alunos
-        const alunos = [
-            { 
-                id: 1, 
-                nome: "ALEXANDRE NETO DANTAS DA SILVA", 
-                area: "desenvolvimento", 
-                status: "ativo", 
-                nota: 8.5, 
-                projetos: "Projeto A, Projeto B",
-                ocorrencias: 0,
-                custeio: "Integral"
-            },
-            { 
-                id: 2, 
-                nome: "ANA CLARA CAVALCANTE LIMA", 
-                area: "design", 
-                status: "ativo", 
-                nota: 9.0, 
-                projetos: "Projeto C",
-                ocorrencias: 1,
-                custeio: "Parcial"
-            },
-            { 
-                id: 3, 
-                nome: "ANGELA MICHELE DOS SANTOS LIMA", 
-                area: "midia", 
-                status: "estagiando", 
-                nota: 8.7, 
-                projetos: "Projeto D",
-                ocorrencias: 0,
-                custeio: "Integral"
-            },
-            { 
-                id: 4, 
-                nome: "CARLOS EDUARDO SILVA SANTOS", 
-                area: "redes", 
-                status: "ativo", 
-                nota: 7.8, 
-                projetos: "Projeto E, Projeto F",
-                ocorrencias: 2,
-                custeio: "Não"
-            },
-            { 
-                id: 5, 
-                nome: "DANIELA FERNANDES OLIVEIRA", 
-                area: "design", 
-                status: "inativo", 
-                nota: 8.2, 
-                projetos: "Projeto G",
-                ocorrencias: 1,
-                custeio: "Parcial"
-            },
-            { 
-                id: 6, 
-                nome: "EDUARDO MORAES COSTA", 
-                area: "desenvolvimento", 
-                status: "estagiando", 
-                nota: 9.1, 
-                projetos: "Projeto H, Projeto I",
-                ocorrencias: 0,
-                custeio: "Integral"
-            }
-        ];
-
-        // Dados das vagas
-        const vagas = [
-            {
-                id: 1,
-                titulo: "Desenvolvedor Web Jr",
-                empresa: 1,
-                area: "desenvolvimento"
-            },
-            {
-                id: 2,
-                titulo: "Designer UI/UX",
-                empresa: 2,
-                area: "design"
-            },
-            {
-                id: 3,
-                titulo: "Suporte Técnico",
-                empresa: 3,
-                area: "redes"
-            }
-        ];
+    
 
         // Obter ID da vaga da URL
         const urlParams = new URLSearchParams(window.location.search);
