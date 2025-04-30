@@ -1,12 +1,14 @@
 <?php
-require_once('../models/sessions.php');
+require_once('../models/select_model.php');
+$select_model = new select_model;
+/*require_once('../models/sessions.php');
 $session = new sessions;
 $session->tempo_session(600);
 $session->autenticar_session();
 
 if (isset($_POST['logout'])) {
     $session->quebra_session();
-}
+}*/
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -324,15 +326,25 @@ if (isset($_POST['logout'])) {
                         <select id="filterArea" class="pl-4 pr-8 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-400 w-full sm:w-auto appearance-none bg-dark-100 text-white">
                             <option value="">Todas as áreas</option>
                             <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="design">Design</option>
-                            <option value="midia">Mídia</option>
+                            <option value="design">tutoria</option>
+                            <option value="midia">Design/Mídia</option>
                             <option value="redes">Redes/Suporte</option>
                         </select>
                     </div>
                 </div>
                 <!-- Grid de Empresas -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="empresasGrid">
-                    <!-- Cards das empresas serão inseridos aqui via JavaScript -->
+
+                <?php 
+                $dados = $select_model->concedentes();
+
+                foreach($dados as $dado){
+                ?>
+                <p><?=$dado['nome']?></p>
+                <p><?=$dado['perfil']?></p>
+                <p><?=$dado['endereco']?></p>
+                <p><?=$dado['contato']?></p>
+                <?php }?>
                 </div>
             </main>
         </div>
@@ -340,7 +352,7 @@ if (isset($_POST['logout'])) {
         <div id="empresaModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
             <div class="bg-dark-50 rounded-lg p-8 max-w-md w-full mx-4 shadow- Transição de 2xl border border-gray-800">
                 <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white">Nova Empresa</h2>
-                <form id="empresaForm">
+                <form action="../controllers/controller.php" id="empresaForm" method="post">
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-300">Nome da Empresa</label>
@@ -350,19 +362,19 @@ if (isset($_POST['logout'])) {
                             <label class="block text-sm font-medium text-gray-300">Áreas de Atuação</label>
                             <div class="mt-2 space-y-2">
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" class="form-checkbox text-primary-500 bg-dark-200 border-dark-100" name="areas" value="desenvolvimento">
+                                    <input type="radio" class="form-checkbox text-primary-500 bg-dark-200 border-dark-100" name="areas" value="desenvolvimento">
                                     <span class="ml-2 text-gray-300">Desenvolvimento</span>
                                 </label>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" class="form-checkbox text-primary-500 bg-dark-200 border-dark-100" name="areas" value="design">
-                                    <span class="ml-2 text-gray-300">Design</span>
+                                    <input type="radio" class="form-checkbox text-primary-500 bg-dark-200 border-dark-100" name="areas" value="tutoria">
+                                    <span class="ml-2 text-gray-300">Tutoria</span>
                                 </label>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" class="form-checkbox text-primary-500 bg-dark-200 border-dark-100" name="areas" value="midia">
-                                    <span class="ml-2 text-gray-300">Mídia</span>
+                                    <input type="radio" class="form-checkbox text-primary-500 bg-dark-200 border-dark-100" name="areas" value="mídia/design">
+                                    <span class="ml-2 text-gray-300">Design/Mídia</span>
                                 </label>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" class="form-checkbox text-primary-500 bg-dark-200 border-dark-100" name="areas" value="redes">
+                                    <input type="radio" class="form-checkbox text-primary-500 bg-dark-200 border-dark-100" name="areas" value="suporte">
                                     <span class="ml-2 text-gray-300">Redes/Suporte</span>
                                 </label>
                             </div>
@@ -391,110 +403,14 @@ if (isset($_POST['logout'])) {
 
     <script>
         // Dados das empresas
-        const empresas = [{
-                id: 1,
-                nome: "TechCorp Solutions",
-                areas: ["desenvolvimento", "design"],
-                endereco: "Rua A, 123",
-                telefone: "(85) 3333-4444"
-            },
-            {
-                id: 2,
-                nome: "Mídia Digital",
-                areas: ["midia"],
-                endereco: "Av. B, 456",
-                telefone: "(85) 3333-5555"
-            },
-            {
-                id: 3,
-                nome: "Redes & Cia",
-                areas: ["redes"],
-                endereco: "Rua C, 789",
-                telefone: "(85) 3333-6666"
-            }
-        ];
-
-        // Função para renderizar os cards das empresas
-        function renderizarEmpresas(empresasFiltradas = empresas) {
-            const grid = document.getElementById('empresasGrid');
-            grid.innerHTML = '';
-
-            if (empresasFiltradas.length === 0) {
-                grid.innerHTML = '<div class="col-span-3 text-center py-8 text-gray-400">Nenhuma empresa encontrada.</div>';
-                return;
-            }
-
-            empresasFiltradas.forEach(empresa => {
-                const card = document.createElement('div');
-                card.className = 'empresa-card p-6 hover:border-primary-400 transition-all';
-                card.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="text-lg font-semibold text-white">${empresa.nome}</h3>
-                            <div class="mt-2 flex flex-wrap gap-2">
-                                ${empresa.areas.map(area => `
-                                    <span class="area-chip area-${area}">${area}</span>
-                                `).join('')}
-                            </div>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button onclick="editarEmpresa(${empresa.id})" class="text-primary-400 hover:text-primary-300 transition-colors">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button onclick="excluirEmpresa(${empresa.id})" class="text-red-500 hover:text-red-400 transition-colors">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="mt-4 space-y-2 text-sm text-gray-300">
-                        <p><i class="fas fa-map-marker-alt w-5"></i> ${empresa.endereco}</p>
-                        <p><i class="fas fa-phone w-5"></i> ${empresa.telefone}</p>
-                    </div>
-                    <div class="mt-4 flex justify-between items-center pt-4 border-t border-gray-700">
-                        <a href="#" class="text-primary-400 hover:text-primary-300 text-sm font-medium transition-colors">
-                            Ver vagas <i class="fas fa-arrow-right ml-1"></i>
-                        </a>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        // Função para editar empresa
-        function editarEmpresa(id) {
-            const empresa = empresas.find(e => e.id === id);
-            if (empresa) {
-                document.getElementById('modalTitle').textContent = 'Editar Empresa';
-                document.getElementById('empresaNome').value = empresa.nome;
-                document.querySelectorAll('input[name="areas"]').forEach(checkbox => {
-                    checkbox.checked = empresa.areas.includes(checkbox.value);
-                });
-                document.getElementById('empresaEndereco').value = empresa.endereco;
-                document.getElementById('empresaTelefone').value = empresa.telefone;
-                const modal = document.getElementById('empresaModal');
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            }
-        }
-
-        // Função para excluir empresa
-        function excluirEmpresa(id) {
-            if (confirm('Tem certeza que deseja excluir esta empresa?')) {
-                const index = empresas.findIndex(e => e.id === id);
-                if (index !== -1) {
-                    empresas.splice(index, 1);
-                    renderizarEmpresas();
-                    alert('Empresa excluída com sucesso! (Simulação)');
-                }
-            }
-        }
+     
 
         // Inicializar após o DOM estar carregado
         document.addEventListener('DOMContentLoaded', () => {
             const modal = document.getElementById('empresaModal');
-            const addEmpresaBtn = document.getElementById('addEmpresaBtn');
+   
             const cancelarBtn = document.getElementById('cancelarBtn');
-            const empresaForm = document.getElementById('empresaForm');
+    
             const sidebarToggle = document.getElementById('sidebarToggle');
             const closeSidebar = document.getElementById('closeSidebar');
             const mobileSidebar = document.getElementById('mobileSidebar');
@@ -523,27 +439,7 @@ if (isset($_POST['logout'])) {
                 }
             });
 
-            empresaForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const nome = document.getElementById('empresaNome').value;
-                const areasChecked = Array.from(document.querySelectorAll('input[name="areas"]:checked')).map(cb => cb.value);
-                const endereco = document.getElementById('empresaEndereco').value;
-                const telefone = document.getElementById('empresaTelefone').value;
-
-                const novaEmpresa = {
-                    id: empresas.length + 1,
-                    nome,
-                    areas: areasChecked,
-                    endereco,
-                    telefone
-                };
-
-                empresas.push(novaEmpresa);
-                renderizarEmpresas();
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-                alert('Empresa salva com sucesso! (Simulação)');
-            });
+           
 
             sidebarToggle.addEventListener('click', () => {
                 mobileSidebar.classList.remove('-translate-x-full');

@@ -52,4 +52,11 @@ class select_model extends connect
 
         return $result;
     }
+    function concedentes()
+    {
+        $stmt_empresa = $this->connect->query("SELECT * FROM concedentes");
+        $result = $stmt_empresa->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
 }
