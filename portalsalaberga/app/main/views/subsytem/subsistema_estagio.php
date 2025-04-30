@@ -1102,7 +1102,7 @@ if (isset($_GET['sair'])) {
                 </div>
             </a>
 
-            <a href="./estagio/page_alunos.php">
+            <a href="../../../subsystems/estagio/index.php">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/CMX7vRKh/aviso-1.png" alt="Gestão de Estágio" class="app-icon">
