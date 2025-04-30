@@ -1,15 +1,26 @@
+<?php
+require_once('../models/sessions.php');
+$session = new sessions;
+$session->tempo_session(600);
+$session->autenticar_session();
+
+if (isset($_POST['logout'])) {
+    $session->quebra_session();
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a1a1a">
     <meta name="description" content="Gerenciamento de Empresas - Sistema de Estágio">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <title>Gerenciar Empresas - Sistema de Estágio</title>
 
     <script>
@@ -77,8 +88,8 @@
             background-color: #1a1a1a;
             color: #ffffff;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%), 
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%),
                 radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.03) 0%, rgba(255, 165, 0, 0) 20%);
             transition: all 0.3s ease;
         }
@@ -110,7 +121,8 @@
             font-weight: 600;
         }
 
-        .dashboard-card, .empresa-card {
+        .dashboard-card,
+        .empresa-card {
             background-color: #2d2d2d;
             border-radius: 12px;
             padding: 1.5rem;
@@ -119,7 +131,8 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .dashboard-card:hover, .empresa-card:hover {
+        .dashboard-card:hover,
+        .empresa-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(0, 122, 51, 0.2);
@@ -145,13 +158,17 @@
         }
 
         /* Input e botões estilizados */
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             background-color: #232323 !important;
             border-color: #3d3d3d !important;
             color: #ffffff !important;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             border-color: #007A33 !important;
             box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2) !important;
         }
@@ -295,7 +312,7 @@
                     <span class="mx-2">/</span>
                     <span class="text-white">Gerenciar Empresas</span>
                 </div>
-                
+
                 <!-- Actions Bar -->
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full">
@@ -387,8 +404,7 @@
 
     <script>
         // Dados das empresas
-        const empresas = [
-            {
+        const empresas = [{
                 id: 1,
                 nome: "TechCorp Solutions",
                 areas: ["desenvolvimento", "design"],
@@ -517,4 +533,5 @@
         renderizarEmpresas();
     </script>
 </body>
-</html> 
+
+</html>

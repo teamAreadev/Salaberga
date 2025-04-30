@@ -1,6 +1,15 @@
 <?php
 require_once('../models/select_model.php');
+require_once('../models/sessions.php');
 $select_model = new select_model();
+$session = new sessions;
+
+$session->tempo_session(600);
+$session->autenticar_session();
+
+if (isset($_POST['logout'])) {
+    $session->quebra_session();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -367,10 +376,16 @@ $select_model = new select_model();
                             <div class="mt-2 flex justify-between items-end">
                             <?php
                                 $dados = $select_model->total_vagas_design();
+                                if($dados == 0){
+
+                                    
+                                }else{
+
+                
                                 foreach ($dados as $dado) {
                                 ?>
                                     <p class="text-2xl font-bold"><?= $dado ?></p>
-                                <?php } ?>
+                                <?php } }?>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Vagas</span>
                             </div>
                         </div>

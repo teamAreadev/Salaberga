@@ -112,18 +112,23 @@
             <div class="h-0.5 bg-primary/20 rounded-full mt-1 mx-auto w-3/4"></div>
         </div>
 
-        <form id="loginForm" class="space-y-4">
+        <form action="../controllers/controller.php" id="loginForm" class="space-y-4">
             <div>
                 <label for="username" class="block mb-1 font-medium">Usuário</label>
-                <input type="text" id="username" class="login-input" placeholder="Digite seu usuário" required>
+                <input name="email" type="text" id="username" class="login-input" placeholder="Digite seu usuário" required>
             </div>
             
             <div>
                 <label for="password" class="block mb-1 font-medium">Senha</label>
-                <input type="password" id="password" class="login-input" placeholder="Digite sua senha" required>
+                <input name="senha" type="password" id="password" class="login-input" placeholder="Digite sua senha" required>
             </div>
             
             <div class="flex items-center justify-between mt-6">
+                <?php 
+                if(isset($_GET['erro'])){
+                ?>
+                <p>senha ou email incorretos</p>
+                <?php }?>
                 <div class="flex items-center">
                     <input type="checkbox" id="remember" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
                     <label for="remember" class="ml-2 block text-sm">Lembrar-me</label>
