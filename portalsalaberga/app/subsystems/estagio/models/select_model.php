@@ -55,12 +55,20 @@ class select_model extends connect
     function concedentes()
     {
         $stmt_empresa = $this->connect->query("SELECT * FROM concedentes");
-        $result = $stmt_empresa->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt_empresa->fetchAll(PDO::FETCH_ASSOC); 
 
         return $result;
     }
-    function alunos_aptos(){
-        $stmt_alunos = $this->connect->query("SELECT * FROM aluno");
+    function alunos_aptos()
+    {
+        $stmt_alunos = $this->connect->query("SELECT * FROM aluno WHERE perfil_opc1 IS NOT NULL OR perfil_opc2 IS NOT NULL ORDER BY medias DESC, COALESCE(ocorrencia, 0) ASC;");
+        $result = $stmt_alunos->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+    function alunos_aptos_curso($perfil1, $perfil2){
+
+        $stmt_alunos = $this->connect->query("SELECT * FROM aluno WHERE perfil_opc1 IS NOT NULL OR perfil_opc2 IS NOT NULL ORDER BY medias DESC, COALESCE(ocorrencia, 0) ASC;");
         $result = $stmt_alunos->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;
