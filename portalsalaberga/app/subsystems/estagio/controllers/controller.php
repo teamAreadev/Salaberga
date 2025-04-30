@@ -9,7 +9,7 @@ if (isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) 
     $model = new main_model;
     $result = $model->login($email, $senha);
 
-    switch ($result) {
+    /*switch ($result) {
 
         case 1:
             header('location:../views/dashboard.php');
@@ -17,7 +17,7 @@ if (isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) 
         case 2:
             header('location:../views/login.php?erro');
             exit();
-    }
+    }*/
 } else if (isset($_POST['nome']) && !empty($_POST['nome']) && isset($_POST['areas']) && !empty($_POST['areas']) && isset($_POST['endereco']) && !empty($_POST['endereco']) && isset($_POST['telefone']) && !empty($_POST['telefone'])) {
 
     $nome = $_POST['nome'];

@@ -1,14 +1,14 @@
 <?php
 require_once('../models/select_model.php');
 $select_model = new select_model();
-/*require_once('../models/sessions.php');
+require_once('../models/sessions.php');
 $session = new sessions;
 $session->tempo_session(600);
 $session->autenticar_session();
 
 if (isset($_POST['logout'])) {
     $session->quebra_session();
-}*/
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -226,7 +226,14 @@ if (isset($_POST['logout'])) {
             border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
+<<<<<<< Updated upstream
         input, select, textarea {
+=======
+        /* Input e botões estilizados */
+        input,
+        select,
+        textarea {
+>>>>>>> Stashed changes
             background-color: #232323 !important;
             border-color: #3d3d3d !important;
             color: #ffffff !important;
@@ -615,6 +622,7 @@ if (isset($_POST['logout'])) {
                             $dados = $select_model->alunos_aptos();
                             foreach ($dados as $index => $dado) {
                             ?>
+<<<<<<< Updated upstream
                                 <tr class="hover:bg-dark-50 transition-colors slide-up" style="animation-delay: <?= $index * 50 ?>ms;">
                                     <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
                                     <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -629,6 +637,18 @@ if (isset($_POST['logout'])) {
                                         </button>
                                     </td>
                                 </tr>
+=======
+                                <td><?= $dado['id'] ?></td>
+                                <td><?= $dado['nome'] ?></td>
+                                <td><?= $dado['contato'] ?></td>
+                                <td><?= $dado['medias'] ?></td>
+                                <td><?= $dado['email'] ?></td>
+                                <td><?= $dado['projetos'] ?? "-" ?></td>
+                                <td><?= $dado['perfil_opc1'] ?></td>
+                                <td><?= $dado['perfil_opc2'] ?></td>
+                                <td><?= $dado['ocorrencia'] ?></td>
+                                <td><?= $dado['custeio'] = $dado['custeio'] == "1" ? "Sim" : "Não" ?></td>
+>>>>>>> Stashed changes
                             <?php } ?>
                         </tbody>
                     </table>
@@ -792,6 +812,7 @@ if (isset($_POST['logout'])) {
 
     <script>
         // Dados dos alunos
+<<<<<<< Updated upstream
         let alunos = [
             <?php foreach ($dados as $dado) { ?>
                 
@@ -807,6 +828,56 @@ if (isset($_POST['logout'])) {
                     custeio: <?= $dado['custeio'] ?>
                 
             <?php } ?>
+=======
+        const alunos = [{
+                id: 1,
+                nome: "ALEXANDRE NETO DANTAS DA SILVA",
+                area: "desenvolvimento",
+                status: "ativo",
+                nota: 8.5,
+                projetos: "Projeto A, Projeto B"
+            },
+            {
+                id: 2,
+                nome: "ANA CLARA CAVALCANTE LIMA",
+                area: "design",
+                status: "ativo",
+                nota: 9.0,
+                projetos: "Projeto C"
+            },
+            {
+                id: 3,
+                nome: "ANGELA MICHELE DOS SANTOS LIMA",
+                area: "midia",
+                status: "estagiando",
+                nota: 8.7,
+                projetos: "Projeto D"
+            },
+            {
+                id: 4,
+                nome: "CARLOS EDUARDO SILVA SANTOS",
+                area: "redes",
+                status: "ativo",
+                nota: 7.8,
+                projetos: "Projeto E, Projeto F"
+            },
+            {
+                id: 5,
+                nome: "DANIELA FERNANDES OLIVEIRA",
+                area: "design",
+                status: "inativo",
+                nota: 8.2,
+                projetos: "Projeto G"
+            },
+            {
+                id: 6,
+                nome: "EDUARDO MORAES COSTA",
+                area: "desenvolvimento",
+                status: "estagiando",
+                nota: 9.1,
+                projetos: "Projeto H, Projeto I"
+            }
+>>>>>>> Stashed changes
         ];
 
         // Função para renderizar a tabela de alunos (desktop)
@@ -819,6 +890,7 @@ if (isset($_POST['logout'])) {
                 tr.className = 'hover:bg-dark-50 transition-colors slide-up';
                 tr.style.animationDelay = `${index * 50}ms`;
                 tr.innerHTML = `
+<<<<<<< Updated upstream
                     <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
                     <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 mr-3 transition-colors">
@@ -832,6 +904,35 @@ if (isset($_POST['logout'])) {
                         </button>
                     </td>
                 `;
+=======
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.id}</td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            <span class="status-pill area-${aluno.area}">
+                                <i class="fas fa-${
+                                    aluno.area === 'desenvolvimento' ? 'code' :
+                                    aluno.area === 'design' ? 'paint-brush' :
+                                    aluno.area === 'midia' ? 'video' :
+                                    'network-wired'
+                                } text-xs mr-1"></i>
+                                ${aluno.area}
+                            </span>
+                        </td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                            <span class="status-pill status-${aluno.status}">${aluno.status}</span>
+                        </td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.nota}</td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.projetos}</td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button onclick="editarAluno(${aluno.id})" class="text-primary-400 hover:text-primary-300 mr-3 transition-colors">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="excluirAluno(${aluno.id})" class="text-red-500 hover:text-red-400 transition-colors">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+>>>>>>> Stashed changes
                 tbody.appendChild(tr);
             });
         }
@@ -843,6 +944,7 @@ if (isset($_POST['logout'])) {
 
             alunosFiltrados.forEach(aluno => {
                 const card = document.createElement('div');
+<<<<<<< Updated upstream
                 card.className = 'mobile-card bg-dark-300 rounded-lg p-4 shadow-md';
 
                 const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
@@ -853,6 +955,18 @@ if (isset($_POST['logout'])) {
                                     aluno.perfil_opc2 === 'design' ? 'bg-purple-900 text-purple-300' : 
                                     aluno.perfil_opc2 === 'midia' ? 'bg-green-900 text-green-300' : 
                                     'bg-orange-900 text-orange-300';
+=======
+                card.className = 'mobile-card';
+
+                const areaClass = aluno.area === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' :
+                    aluno.area === 'design' ? 'bg-purple-900 text-purple-300' :
+                    aluno.area === 'midia' ? 'bg-green-900 text-green-300' :
+                    'bg-orange-900 text-orange-300';
+
+                const statusClass = aluno.status === 'ativo' ? 'status-ativo' :
+                    aluno.status === 'inativo' ? 'status-inativo' :
+                    'status-estagiando';
+>>>>>>> Stashed changes
 
                 card.innerHTML = `
                     <div class="mobile-card-item">
@@ -992,12 +1106,18 @@ if (isset($_POST['logout'])) {
             const aluno = alunos.find(a => a.id === id);
             if (aluno) {
                 document.getElementById('modalTitle').textContent = 'Editar Aluno';
+<<<<<<< Updated upstream
                 document.getElementById('alunoId').value = aluno.id;
+=======
+
+                // Preenche todos os campos
+>>>>>>> Stashed changes
                 document.getElementById('alunoNome').value = aluno.nome;
                 document.getElementById('alunoContato').value = aluno.contato;
                 document.getElementById('alunoMedias').value = aluno.medias;
                 document.getElementById('alunoEmail').value = aluno.email;
                 document.getElementById('alunoProjetos').value = aluno.projetos;
+<<<<<<< Updated upstream
                 document.getElementById('alunoOpc1').value = aluno.perfil_opc1;
                 document.getElementById('alunoOpc2').value = aluno.perfil_opc2;
                 document.getElementById('alunoOcorrencia').value = aluno.ocorrencia;
@@ -1009,6 +1129,14 @@ if (isset($_POST['logout'])) {
                 document.getElementById('alunoOpc2').disabled = true;
 
                 const modal = document.getElementById('alunoModal');
+=======
+
+                // Desabilita os campos que não podem ser editados
+                document.getElementById('alunoNome').disabled = true;
+                document.getElementById('alunoArea').disabled = true;
+                document.getElementById('alunoNota').disabled = true;
+
+>>>>>>> Stashed changes
                 modal.classList.remove('hidden');
                 modal.style.display = 'flex'; // Ensure display is set to flex
             }
@@ -1067,6 +1195,7 @@ if (isset($_POST['logout'])) {
 
         alunoForm.addEventListener('submit', (e) => {
             e.preventDefault();
+<<<<<<< Updated upstream
             
             const id = parseInt(document.getElementById('alunoId').value);
             const alunoIndex = alunos.findIndex(a => a.id === id);
@@ -1146,6 +1275,59 @@ if (isset($_POST['logout'])) {
         document.getElementById('searchAluno').addEventListener('input', aplicarFiltros);
         document.getElementById('filterArea').addEventListener('change', aplicarFiltros);
         document.getElementById('filterStatus').addEventListener('change', aplicarFiltros);
+=======
+
+            // Simulação de salvamento
+            alert('Alterações salvas com sucesso!');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        });
+
+        // Busca e Filtros
+        function aplicarFiltros() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const areaFiltro = filterArea.value;
+            const statusFiltro = filterStatus.value;
+
+            const alunosFiltrados = alunos.filter(aluno => {
+                const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
+                const matchArea = !areaFiltro || aluno.area === areaFiltro;
+                const matchStatus = !statusFiltro || aluno.status === statusFiltro;
+                return matchSearch && matchArea && matchStatus;
+            });
+
+            renderizarTabelaDesktop(alunosFiltrados);
+            renderizarCardsMobile(alunosFiltrados);
+
+            const noResultsMessage = document.getElementById('noResultsMessage');
+            if (alunosFiltrados.length === 0 && !noResultsMessage) {
+                const message = document.createElement('div');
+                message.id = 'noResultsMessage';
+                message.className = 'col-span-3 text-center py-8 text-gray-400 fade-in';
+                message.innerHTML = `
+                        <i class="fas fa-search text-4xl mb-4 text-gray-600 opacity-30"></i>
+                        <p class="text-lg">Nenhum aluno encontrado com os filtros atuais.</p>
+                        <button id="clearFiltersBtn" class="mt-4 custom-btn custom-btn-secondary">
+                            <i class="fas fa-times-circle btn-icon"></i>
+                            <span>Limpar Filtros</span>
+                        </button>
+                    `;
+                document.getElementById('alunosMobileCards').insertAdjacentElement('afterend', message);
+                document.getElementById('clearFiltersBtn').addEventListener('click', () => {
+                    searchInput.value = '';
+                    filterArea.value = '';
+                    filterStatus.value = '';
+                    aplicarFiltros();
+                });
+            } else if (alunosFiltrados.length > 0 && noResultsMessage) {
+                noResultsMessage.remove();
+            }
+        }
+
+        searchInput.addEventListener('input', aplicarFiltros);
+        filterArea.addEventListener('change', aplicarFiltros);
+        filterStatus.addEventListener('change', aplicarFiltros);
+>>>>>>> Stashed changes
 
         // Inicializar tabela e cards
         renderizarTabelaDesktop();
@@ -1161,8 +1343,16 @@ if (isset($_POST['logout'])) {
                 document.querySelector('.mobile-cards-container').style.display = 'none';
             }
         }
+<<<<<<< Updated upstream
         
         window.addEventListener('resize', checkScreenSize);
+=======
+
+        // Adicionar listener para redimensionamento
+        window.addEventListener('resize', checkScreenSize);
+
+        // Verificar tamanho inicial
+>>>>>>> Stashed changes
         checkScreenSize();
     </script>
 </body>

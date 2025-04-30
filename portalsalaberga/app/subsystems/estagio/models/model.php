@@ -19,7 +19,11 @@ class main_model extends connect
         $result = $stmt_cadastro->fetch(PDO::FETCH_ASSOC);
 
         print_r($result);
+<<<<<<< Updated upstream
         if (!empty($result)) {
+=======
+        /*if (!empty($result)) {
+>>>>>>> Stashed changes
 
             $_SESSION['email'] = $email;
             $_SESSION['senha'] = $senha;
@@ -28,7 +32,7 @@ class main_model extends connect
             unset($_SESSION['email']);
             unset($_SESSION['senha']);
             return 2;
-        }
+        }*/
     }
     function cadastrar_empresa($nome, $area, $endereco, $telefone)
     {

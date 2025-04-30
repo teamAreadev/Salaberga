@@ -1,5 +1,5 @@
 <?php
-/*session_start();
+session_start();
 
 class sessions
 {
@@ -36,4 +36,8 @@ class sessions
         header('location:../views/login.php');
         exit();
     }
+<<<<<<< Updated upstream
 }*/
+=======
+}
+>>>>>>> Stashed changes
