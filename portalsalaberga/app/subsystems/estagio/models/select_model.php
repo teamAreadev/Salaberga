@@ -59,4 +59,10 @@ class select_model extends connect
 
         return $result;
     }
+    function alunos_aptos(){
+        $stmt_alunos = $this->connect->query("SELECT * FROM aluno");
+        $result = $stmt_alunos->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
 }

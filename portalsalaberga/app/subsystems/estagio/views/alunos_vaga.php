@@ -1,15 +1,20 @@
+<?php
+require_once('../models/select_model.php');
+$select_model = new select_model();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a1a1a">
     <meta name="description" content="Seleção de Alunos - Sistema de Estágio">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <title>Seleção de Alunos - Sistema de Estágio</title>
 
     <script>
@@ -77,8 +82,8 @@
             background-color: #1a1a1a;
             color: #ffffff;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%), 
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%),
                 radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.03) 0%, rgba(255, 165, 0, 0) 20%);
             transition: all 0.3s ease;
         }
@@ -330,7 +335,7 @@
                     </div>
                 </div>
             </header>
-            
+
             <!-- Main Content -->
             <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6 sm:py-8 w-full">
                 <!-- Breadcrumbs -->
@@ -341,7 +346,7 @@
                     <span class="mx-2">/</span>
                     <span class="text-white">Selecionar Alunos</span>
                 </div>
-                
+
                 <!-- Info da Vaga -->
                 <div class="bg-dark-50 p-6 rounded-lg shadow-md mb-6 border border-gray-800">
                     <h2 id="vagaTitulo" class="text-xl font-bold text-white mb-2">Carregando...</h2>
@@ -356,7 +361,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Actions Bar -->
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full">
@@ -378,7 +383,7 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <!-- Tabela de Alunos -->
                 <div class="table-container">
                     <form id="alunosForm">
@@ -390,18 +395,33 @@
                                     <th>Nome</th>
                                     <th width="80px">Média</th>
                                     <th>Projetos</th>
-                                    <th width="100px">Área</th>
+                                    <th width="100px">Área 1</th>
+                                    <th width="100px">Área 2</th>
                                     <th width="100px">Ocorrências</th>
                                     <th width="100px">Custeio</th>
                                 </tr>
                             </thead>
                             <tbody id="alunosTableBody">
-                                <!-- Linhas da tabela serão geradas por JavaScript -->
+
+                                <?php
+                                $dados = $select_model->alunos_aptos();
+                                foreach ($dados as $dado) {
+                                ?>
+                                    <td><?= $dado['id'] ?></td>
+                                    <td><input type="checkbox" name="" id=""></td>
+                                    <td><?= $dado['nome'] ?></td>
+                                    <td><?= $dado['medias'] ?></td>
+                                    <td><?= $dado['projetos'] ?? "-" ?></td>
+                                    <td><?= $dado['perfil_opc1'] ?></td>
+                                    <td><?= $dado['perfil_opc2'] ?></td>
+                                    <td><?= $dado['ocorrencia'] ?></td>
+                                    <td><?= $dado['custeio'] ?></td>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </form>
                 </div>
-                
+
                 <!-- Botões de Ação -->
                 <div class="mt-6 flex justify-end space-x-4">
                     <a href="vagas.php" class="px-4 py-2 border border-gray-700 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 transition-colors">
@@ -417,97 +437,7 @@
 
     <script>
         // Dados das empresas
-        const empresas = [
-            { id: 1, nome: "TechCorp Solutions" },
-            { id: 2, nome: "Mídia Digital" },
-            { id: 3, nome: "Redes & Cia" }
-        ];
 
-        // Dados dos alunos
-        const alunos = [
-            { 
-                id: 1, 
-                nome: "ALEXANDRE NETO DANTAS DA SILVA", 
-                area: "desenvolvimento", 
-                status: "ativo", 
-                nota: 8.5, 
-                projetos: "Projeto A, Projeto B",
-                ocorrencias: 0,
-                custeio: "Integral"
-            },
-            { 
-                id: 2, 
-                nome: "ANA CLARA CAVALCANTE LIMA", 
-                area: "design", 
-                status: "ativo", 
-                nota: 9.0, 
-                projetos: "Projeto C",
-                ocorrencias: 1,
-                custeio: "Parcial"
-            },
-            { 
-                id: 3, 
-                nome: "ANGELA MICHELE DOS SANTOS LIMA", 
-                area: "midia", 
-                status: "estagiando", 
-                nota: 8.7, 
-                projetos: "Projeto D",
-                ocorrencias: 0,
-                custeio: "Integral"
-            },
-            { 
-                id: 4, 
-                nome: "CARLOS EDUARDO SILVA SANTOS", 
-                area: "redes", 
-                status: "ativo", 
-                nota: 7.8, 
-                projetos: "Projeto E, Projeto F",
-                ocorrencias: 2,
-                custeio: "Não"
-            },
-            { 
-                id: 5, 
-                nome: "DANIELA FERNANDES OLIVEIRA", 
-                area: "design", 
-                status: "inativo", 
-                nota: 8.2, 
-                projetos: "Projeto G",
-                ocorrencias: 1,
-                custeio: "Parcial"
-            },
-            { 
-                id: 6, 
-                nome: "EDUARDO MORAES COSTA", 
-                area: "desenvolvimento", 
-                status: "estagiando", 
-                nota: 9.1, 
-                projetos: "Projeto H, Projeto I",
-                ocorrencias: 0,
-                custeio: "Integral"
-            }
-        ];
-
-        // Dados das vagas
-        const vagas = [
-            {
-                id: 1,
-                titulo: "Desenvolvedor Web Jr",
-                empresa: 1,
-                area: "desenvolvimento"
-            },
-            {
-                id: 2,
-                titulo: "Designer UI/UX",
-                empresa: 2,
-                area: "design"
-            },
-            {
-                id: 3,
-                titulo: "Suporte Técnico",
-                empresa: 3,
-                area: "redes"
-            }
-        ];
 
         // Obter ID da vaga da URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -531,7 +461,7 @@
 
             alunosFiltrados.forEach((aluno, index) => {
                 const tr = document.createElement('tr');
-                
+
                 tr.innerHTML = `
                     <td class="text-center">${index + 1}</td>
                     <td class="custom-checkbox">
@@ -546,7 +476,7 @@
                     </td>
                     <td>${aluno.custeio}</td>
                 `;
-                
+
                 tbody.appendChild(tr);
             });
         }
@@ -578,14 +508,15 @@
 
         // Selecionar/Deselecionar todos os alunos
         let todosSelecaionados = false;
+
         function toggleSelectAll() {
             const checkboxes = document.querySelectorAll('#alunosTableBody input[type="checkbox"]');
             todosSelecaionados = !todosSelecaionados;
-            
+
             checkboxes.forEach(checkbox => {
                 checkbox.checked = todosSelecaionados;
             });
-            
+
             document.getElementById('selectAllBtn').textContent = todosSelecaionados ? 'Desmarcar Todos' : 'Selecionar Todos';
         }
 
@@ -593,18 +524,18 @@
         function confirmarSelecao() {
             const checkboxes = document.querySelectorAll('#alunosTableBody input[type="checkbox"]:checked');
             const alunosSelecionados = Array.from(checkboxes).map(cb => parseInt(cb.value));
-            
+
             if (alunosSelecionados.length === 0) {
                 alert('Por favor, selecione pelo menos um aluno.');
                 return;
             }
-            
+
             const vaga = vagas.find(v => v.id === vagaId);
             const alunosNomes = alunosSelecionados.map(id => {
                 const aluno = alunos.find(a => a.id === id);
                 return aluno.nome;
             }).join(', ');
-            
+
             alert(`Alunos selecionados para a vaga "${vaga.titulo}":\n${alunosNomes}`);
             window.location.href = 'vagas.php';
         }
@@ -635,4 +566,5 @@
         });
     </script>
 </body>
-</html> 
+
+</html>
