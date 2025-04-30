@@ -362,13 +362,64 @@ $select_model = new select_model();
             background: #007A33;
         }
 
+        .mobile-card {
+            background: rgba(45, 45, 45, 0.9);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 122, 51, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .mobile-card-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mobile-card-label {
+            font-weight: 500;
+            color: #a0aec0;
+            font-size: 0.85rem;
+        }
+
+        .mobile-card-value {
+            font-weight: 400;
+            color: #ffffff;
+            font-size: 0.85rem;
+            text-align: right;
+            flex: 1;
+        }
+
+        .mobile-card-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
         .mobile-card-actions button {
-            padding: 0.625rem;
-            border-radius: 10px;
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
             transition: all 0.2s ease;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .mobile-card-actions button.info-btn {
+            color: #93c5fd;
         }
 
         .mobile-card-actions button.edit-btn {
@@ -377,6 +428,21 @@ $select_model = new select_model();
 
         .mobile-card-actions button.delete-btn {
             color: #f87171;
+        }
+
+        .mobile-card-actions button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .table-container.desktop-table th,
+        .table-container.desktop-table td {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .table-container.desktop-table .action-icons i {
+            font-size: 1.25rem;
         }
 
         @keyframes fadeIn {
@@ -399,6 +465,23 @@ $select_model = new select_model();
             
             .mobile-cards-container {
                 display: block;
+            }
+
+            .mobile-cards-container {
+                padding: 0 0.5rem;
+            }
+
+            .action-bar {
+                padding: 1rem;
+            }
+
+            .search-input-container {
+                width: 100%;
+            }
+
+            .custom-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
             }
         }
 
@@ -480,7 +563,7 @@ $select_model = new select_model();
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <nav class=" Massey Ferguson flex-1">
+                <nav class="flex-1">
                     <a href="dashboard.php" class="sidebar-link">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
@@ -574,8 +657,8 @@ $select_model = new select_model();
                     <table class="min-w-full divide-y divide-gray-700 text-sm">
                         <thead>
                             <tr>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Nome</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Ações</th>
+                                <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Nome</th>
+                                <th scope="col" class="px-3 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="alunosTableBody">
@@ -584,12 +667,12 @@ $select_model = new select_model();
                             foreach ($dados as $index => $dado) {
                             ?>
                                 <tr class="hover:bg-dark-50 transition-colors slide-up" style="animation-delay: <?= $index * 50 ?>ms;">
-                                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
-                                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 mr-3 transition-colors">
+                                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
+                                    <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
+                                        <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
                                             <i class="fas fa-info-circle"></i>
                                         </button>
-                                        <button onclick="editarAluno(<?= $dado['id'] ?>)" class="text-primary-400 hover:text-primary-300 mr-3 transition-colors">
+                                        <button onclick="editarAluno(<?= $dado['id'] ?>)" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button onclick="excluirAluno(<?= $dado['id'] ?>)" class="text-red-500 hover:text-red-400 transition-colors">
@@ -606,12 +689,12 @@ $select_model = new select_model();
                 <div id="alunosMobileCards" class="mobile-cards-container space-y-4">
                     <?php
                     foreach ($dados as $dado) {
-                        $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
-                                        ($dado['perfil_opc1'] === 'design' ? 'bg-purple-900 text-purple-300' : 
-                                        ($dado['perfil_opc1'] === 'midia' ? 'bg-green-900 text-green-300' : 'bg-orange-900 text-orange-300'));
-                        $areaClassOpc2 = $dado['perfil_opc2'] === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
-                                        ($dado['perfil_opc2'] === 'design' ? 'bg-purple-900 text-purple-300' : 
-                                        ($dado['perfil_opc2'] === 'midia' ? 'bg-green-900 text-green-300' : 'bg-orange-900 text-orange-300'));
+                        $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'area-desenvolvimento' : 
+                                        ($dado['perfil_opc1'] === 'design' ? 'area-design' : 
+                                        ($dado['perfil_opc1'] === 'midia' ? 'area-midia' : 'area-redes'));
+                        $areaClassOpc2 = $dado['perfil_opc2'] === 'desenvolvimento' ? 'area-desenvolvimento' : 
+                                        ($dado['perfil_opc2'] === 'design' ? 'area-design' : 
+                                        ($dado['perfil_opc2'] === 'midia' ? 'area-midia' : 'area-redes'));
                     ?>
                         <div class="mobile-card bg-dark-300 rounded-lg p-4 shadow-md">
                             <div class="mobile-card-item">
@@ -641,13 +724,19 @@ $select_model = new select_model();
                             <div class="mobile-card-item">
                                 <span class="mobile-card-label">Opção 1:</span>
                                 <span class="mobile-card-value">
-                                    <span class="mobile-badge <?= $areaClassOpc1 ?>"><?= htmlspecialchars($dado['perfil_opc1']) ?></span>
+                                    <span class="status-pill <?= $areaClassOpc1 ?>">
+                                        <i class="fas fa-<?= $dado['perfil_opc1'] === 'desenvolvimento' ? 'code' : ($dado['perfil_opc1'] === 'design' ? 'paint-brush' : ($dado['perfil_opc1'] === 'midia' ? 'video' : 'network-wired')) ?> text-xs mr-1"></i>
+                                        <?= htmlspecialchars($dado['perfil_opc1']) ?>
+                                    </span>
                                 </span>
                             </div>
                             <div class="mobile-card-item">
                                 <span class="mobile-card-label">Opção 2:</span>
                                 <span class="mobile-card-value">
-                                    <span class="mobile-badge <?= $areaClassOpc2 ?>"><?= htmlspecialchars($dado['perfil_opc2']) ?></span>
+                                    <span class="status-pill <?= $areaClassOpc2 ?>">
+                                        <i class="fas fa-<?= $dado['perfil_opc2'] === 'desenvolvimento' ? 'code' : ($dado['perfil_opc2'] === 'design' ? 'paint-brush' : ($dado['perfil_opc2'] === 'midia' ? 'video' : 'network-wired')) ?> text-xs mr-1"></i>
+                                        <?= htmlspecialchars($dado['perfil_opc2']) ?>
+                                    </span>
                                 </span>
                             </div>
                             <div class="mobile-card-item">
@@ -659,6 +748,9 @@ $select_model = new select_model();
                                 <span class="mobile-card-value"><?= $dado['custeio'] == "1" ? 'Sim' : 'Não' ?></span>
                             </div>
                             <div class="mobile-card-actions flex space-x-2 mt-4">
+                                <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="info-btn flex-1">
+                                    <i class="fas fa-info-circle"></i> Detalhes
+                                </button>
                                 <button onclick="editarAluno(<?= $dado['id'] ?>)" class="edit-btn flex-1">
                                     <i class="fas fa-edit"></i> Editar
                                 </button>
@@ -787,12 +879,12 @@ $select_model = new select_model();
                 tr.className = 'hover:bg-dark-50 transition-colors slide-up';
                 tr.style.animationDelay = `${index * 50}ms`;
                 tr.innerHTML = `
-                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
-                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 mr-3 transition-colors">
+                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
+                        <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
                             <i class="fas fa-info-circle"></i>
                         </button>
-                        <button onclick="editarAluno(${aluno.id})" class="text-primary-400 hover:text-primary-300 mr-3 transition-colors">
+                        <button onclick="editarAluno(${aluno.id})" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button onclick="excluirAluno(${aluno.id})" class="text-red-500 hover:text-red-400 transition-colors">
@@ -813,14 +905,14 @@ $select_model = new select_model();
                 const card = document.createElement('div');
                 card.className = 'mobile-card bg-dark-300 rounded-lg p-4 shadow-md';
 
-                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
-                                    aluno.perfil_opc1 === 'design' ? 'bg-purple-900 text-purple-300' : 
-                                    aluno.perfil_opc1 === 'midia' ? 'bg-green-900 text-green-300' : 
-                                    'bg-orange-900 text-orange-300';
-                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
-                                    aluno.perfil_opc2 === 'design' ? 'bg-purple-900 text-purple-300' : 
-                                    aluno.perfil_opc2 === 'midia' ? 'bg-green-900 text-green-300' : 
-                                    'bg-orange-900 text-orange-300';
+                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'area-desenvolvimento' : 
+                                    aluno.perfil_opc1 === 'design' ? 'area-design' : 
+                                    aluno.perfil_opc1 === 'midia' ? 'area-midia' : 
+                                    'area-redes';
+                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'area-desenvolvimento' : 
+                                    aluno.perfil_opc2 === 'design' ? 'area-design' : 
+                                    aluno.perfil_opc2 === 'midia' ? 'area-midia' : 
+                                    'area-redes';
 
                 card.innerHTML = `
                     <div class="mobile-card-item">
@@ -850,13 +942,29 @@ $select_model = new select_model();
                     <div class="mobile-card-item">
                         <span class="mobile-card-label">Opção 1:</span>
                         <span class="mobile-card-value">
-                            <span class="mobile-badge ${areaClassOpc1}">${aluno.perfil_opc1}</span>
+                            <span class="status-pill ${areaClassOpc1}">
+                                <i class="fas fa-${
+                                    aluno.perfil_opc1 === 'desenvolvimento' ? 'code' :
+                                    aluno.perfil_opc1 === 'design' ? 'paint-brush' :
+                                    aluno.perfil_opc1 === 'midia' ? 'video' :
+                                    'network-wired'
+                                } text-xs mr-1"></i>
+                                ${aluno.perfil_opc1}
+                            </span>
                         </span>
                     </div>
                     <div class="mobile-card-item">
                         <span class="mobile-card-label">Opção 2:</span>
                         <span class="mobile-card-value">
-                            <span class="mobile-badge ${areaClassOpc2}">${aluno.perfil_opc2}</span>
+                            <span class="status-pill ${areaClassOpc2}">
+                                <i class="fas fa-${
+                                    aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
+                                    aluno.perfil_opc2 === 'design' ? 'paint-brush' :
+                                    aluno.perfil_opc2 === 'midia' ? 'video' :
+                                    'network-wired'
+                                } text-xs mr-1"></i>
+                                ${aluno.perfil_opc2}
+                            </span>
                         </span>
                     </div>
                     <div class="mobile-card-item">
@@ -868,6 +976,9 @@ $select_model = new select_model();
                         <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
                     </div>
                     <div class="mobile-card-actions flex space-x-2 mt-4">
+                        <button onclick="verDetalhes(${aluno.id})" class="info-btn flex-1">
+                            <i class="fas fa-info-circle"></i> Detalhes
+                        </button>
                         <button onclick="editarAluno(${aluno.id})" class="edit-btn flex-1">
                             <i class="fas fa-edit"></i> Editar
                         </button>
@@ -951,7 +1062,7 @@ $select_model = new select_model();
                 `;
                 const modal = document.getElementById('detalhesModal');
                 modal.classList.remove('hidden');
-                modal.style.display = 'flex'; // Ensure display is set to flex
+                modal.style.display = 'flex';
             }
         }
 
@@ -978,7 +1089,7 @@ $select_model = new select_model();
 
                 const modal = document.getElementById('alunoModal');
                 modal.classList.remove('hidden');
-                modal.style.display = 'flex'; // Ensure display is set to flex
+                modal.style.display = 'flex';
             }
         }
 
