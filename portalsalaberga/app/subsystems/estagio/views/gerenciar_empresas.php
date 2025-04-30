@@ -22,7 +22,8 @@ if (isset($_POST['logout'])) {
     <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
     <title>Gerenciar Empresas - Sistema de Estágio</title>
 
     <script>
@@ -162,32 +163,15 @@ if (isset($_POST['logout'])) {
             transition: all 0.3s ease;
         }
 
-        .empresa-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at top right, rgba(0, 122, 51, 0.1), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            pointer-events: none;
-        }
-
         .empresa-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 122, 51, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(0, 122, 51, 0.3);
         }
 
         .empresa-card:hover::before {
             opacity: 1;
             box-shadow: 0 0 15px rgba(0, 255, 107, 0.4);
-        }
-
-        .empresa-card:hover::after {
-            opacity: 1;
         }
 
         .empresa-card-header {
@@ -232,7 +216,6 @@ if (isset($_POST['logout'])) {
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-    
         .empresa-card-info {
             display: flex;
             flex-direction: column;
@@ -241,19 +224,17 @@ if (isset($_POST['logout'])) {
         }
 
         .empresa-card-info-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 0.875rem;
-    color: #d1d5db;
-    padding: 0.5rem 0.75rem;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease;
-}
-
-
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: #d1d5db;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
 
         .empresa-card-info-item i {
             color: #007A33;
@@ -264,6 +245,7 @@ if (isset($_POST['logout'])) {
             color: #00FF6B;
         }
 
+        /* Area chips styling */
         .area-chip {
             padding: 0.35rem 1rem;
             border-radius: 30px;
@@ -278,23 +260,29 @@ if (isset($_POST['logout'])) {
             transition: all 0.3s ease;
         }
 
-    
+        .area-chip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
         .area-desenvolvimento {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(29, 78, 216, 0.2) 100%);
             color: #93c5fd;
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
-    
+        .area-desenvolvimento:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(29, 78, 216, 0.3) 100%);
+        }
 
         .area-tutoria {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(126, 34, 206, 0.2) 100%);
             color: #c4b5fd;
             border: 1px solid rgba(168, 85, 247, 0.3);
         }
 
         .area-tutoria:hover {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(126, 34, 206, 0.3) 100%);
         }
 
         .area-mídia\/design {
@@ -317,6 +305,7 @@ if (isset($_POST['logout'])) {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.3) 100%);
         }
 
+        /* Ver vagas link styling */
         .ver-vagas-link {
             display: inline-flex;
             align-items: center;
@@ -359,26 +348,7 @@ if (isset($_POST['logout'])) {
             transform: translateX(5px);
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #3d3d3d;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #007A33;
-        }
-
-        /* Custom Form Styling */
+        /* Custom input styling */
         .custom-input {
             background-color: rgba(35, 35, 35, 0.8) !important;
             border: 2px solid rgba(61, 61, 61, 0.8) !important;
@@ -404,162 +374,30 @@ if (isset($_POST['logout'])) {
             color: rgba(255, 255, 255, 0.4) !important;
         }
 
-        .form-label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-            color: rgba(255, 255, 255, 0.8);
-            transition: all 0.3s ease;
-        }
-
-        .input-group:focus-within .form-label {
-            color: #00C250;
-        }
-
-        .custom-radio {
-            appearance: none;
-            width: 1.2rem;
-            height: 1.2rem;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            background-color: transparent;
+        /* Search input styling */
+        .search-input-container {
             position: relative;
-            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .custom-radio:checked {
-            border-color: #007A33;
-            background-color: #007A33;
-            box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2);
+        .search-input-container:focus-within {
+            transform: translateY(-2px);
         }
 
-        .custom-radio:checked::after {
-            content: '';
+        .search-icon {
             position: absolute;
+            left: 1rem;
             top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 0.4rem;
-            height: 0.4rem;
-            background-color: white;
-            border-radius: 50%;
-            animation: scaleIn 0.15s ease-in-out;
-        }
-
-        .custom-radio-label {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 0.75rem;
-            border-radius: 8px;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
             transition: all 0.3s ease;
-            cursor: pointer;
         }
 
-        .custom-radio-label:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .custom-radio:checked + .custom-radio-label {
-            background-color: rgba(0, 122, 51, 0.1);
+        .search-input-container:focus-within .search-icon {
             color: #00C250;
         }
 
-        .radio-icon {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .custom-radio:checked ~ .custom-radio-label .radio-icon {
-            color: #00C250;
-        }
-
-        .form-group {
-            background: rgba(30, 30, 30, 0.5);
-            border-radius: 12px;
-            padding: 1.5rem;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin-bottom: 1.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group:hover {
-            border-color: rgba(0, 122, 51, 0.2);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Custom Modal */
-        .modal-overlay {
-            background-color: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, rgba(49, 49, 49, 0.95) 0%, rgba(37, 37, 37, 0.95) 100%);
-            border-radius: 16px;
-            padding: 2rem;
-            max-width: 550px;
-            width: 90%;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 10px 10px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transform: scale(0.9);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .modal-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, #007A33, #00C250);
-        }
-
-        .modal-content::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at top right, rgba(0, 122, 51, 0.1), transparent 60%);
-            pointer-events: none;
-        }
-
-        .modal-header {
-            margin-bottom: 1.5rem;
-            position: relative;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .modal-header h2 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, #ffffff, #00C250);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
-        }
-
-        .modal-show .modal-content {
-            transform: scale(1);
-            opacity: 1;
-        }
-
+        /* Custom button styling */
         .custom-btn {
             padding: 0.75rem 1.5rem;
             border-radius: 10px;
@@ -584,11 +422,6 @@ if (isset($_POST['logout'])) {
             background: linear-gradient(135deg, #00993F 0%, #00B64B 100%);
             transform: translateY(-3px);
             box-shadow: 0 7px 15px rgba(0, 122, 51, 0.4);
-        }
-
-        .custom-btn-primary:active {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(0, 122, 51, 0.3);
         }
 
         .custom-btn-secondary {
@@ -625,65 +458,11 @@ if (isset($_POST['logout'])) {
         }
 
         .custom-btn:hover .btn-icon {
-        
+            transform: translateX(3px);
             opacity: 1;
         }
 
-        /* Animations */
-        @keyframes scaleIn {
-            0% {
-                transform: translate(-50%, -50%) scale(0);
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-
-        .slide-up {
-            animation: slideUp 0.4s ease-out forwards;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 640px) {
-            .custom-input {
-                min-width: 100% !important;
-            }
-            
-            .modal-content {
-                padding: 1.5rem;
-                width: 95%;
-            }
-            
-            .form-group {
-                padding: 1rem;
-            }
-        }
-
-        /* Action bar enhancements */
+        /* Action bar styling */
         .action-bar {
             background-color: rgba(45, 45, 45, 0.6);
             backdrop-filter: blur(10px);
@@ -693,44 +472,97 @@ if (isset($_POST['logout'])) {
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
-        /* Card animations and effects */
-        .card-enter {
-            opacity: 0;
-            transform: translateY(20px);
+        /* Modal styling */
+        .candidatura-modal {
+            background: linear-gradient(135deg, rgba(49, 49, 49, 0.95) 0%, rgba(37, 37, 37, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
-        .card-enter-active {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 300ms, transform 300ms;
-        }
-
-        /* Search input styling */
-        .search-input-container {
+        /* Checkbox styling */
+        .custom-checkbox {
+            appearance: none;
+            width: 1.2rem;
+            height: 1.2rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            background-color: transparent;
             position: relative;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .search-input-container:focus-within {
-            transform: translateY(-2px);
+        .custom-checkbox:checked {
+            border-color: #007A33;
+            background-color: #007A33;
+            box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2);
         }
 
-        .search-icon {
+        .custom-checkbox:checked::after {
+            content: '';
             position: absolute;
-            left: 1rem;
             top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.5);
-            transition: all 0.3s ease;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 0.3rem;
+            height: 0.6rem;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            animation: scaleIn 0.15s ease-in-out;
         }
 
-        .search-input-container:focus-within .search-icon {
-            color: #00C250;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #3d3d3d;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #007A33;
+        }
+
+        /* Animations */
+        @keyframes scaleIn {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        .slide-up { animation: slideUp 0.4s ease-out forwards; }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .empresa-card { padding: 1rem; }
+            .custom-input { min-width: 100% !important; }
+            .mobile-stack { flex-direction: column; }
         }
     </style>
 </head>
 
-<body>
+<body class="select-none">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
         <aside class="sidebar w-64 hidden md:block">
@@ -759,7 +591,7 @@ if (isset($_POST['logout'])) {
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="./alunos_vaga.php" class="sidebar-link">
+                    <a href="./relatorios.php" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -776,14 +608,14 @@ if (isset($_POST['logout'])) {
                 </div>
             </div>
         </aside>
-        
+
         <!-- Mobile Sidebar Toggle -->
         <div class="md:hidden fixed top-4 left-4 z-50">
             <button id="sidebarToggle" class="bg-dark-50 p-2 rounded-lg shadow-md hover:bg-dark-100 transition-all">
                 <i class="fas fa-bars text-primary-400"></i>
             </button>
         </div>
-        
+
         <!-- Mobile Sidebar -->
         <div id="mobileSidebar" class="fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden sidebar">
             <div class="p-4 flex flex-col h-full">
@@ -813,14 +645,14 @@ if (isset($_POST['logout'])) {
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="./alunos_vaga.php" class="sidebar-link">
+                    <a href="./relatorios.php" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
                 </nav>
             </div>
         </div>
-        
+
         <!-- Conteúdo principal -->
         <div class="flex-1 flex flex-col overflow-y-auto bg-dark-400">
             <!-- Header -->
@@ -834,7 +666,7 @@ if (isset($_POST['logout'])) {
                     </div>
                 </div>
             </header>
-            
+
             <!-- Main Content -->
             <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6 sm:py-8 w-full">
                 <!-- Breadcrumbs -->
@@ -848,11 +680,11 @@ if (isset($_POST['logout'])) {
                 <div class="mb-8 action-bar p-4 sm:p-5 fade-in">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full">
-                            <button id="addEmpresaBtn" class="custom-btn custom-btn-primary">
+                            <button id="addEmpresaBtn" class="custom-btn custom-btn-primary w-full sm:w-auto">
                                 <i class="fas fa-plus btn-icon"></i>
                                 <span>Nova Empresa</span>
                             </button>
-                            <div class="search-input-container relative w-full sm:w-64 group">
+                            <div class="search-input-container relative w-full sm:w-64">
                                 <i class="fas fa-search search-icon"></i>
                                 <input type="text" id="searchEmpresa" placeholder="Buscar empresa..." class="custom-input pl-10 pr-4 py-2.5 w-full">
                             </div>
@@ -871,13 +703,13 @@ if (isset($_POST['logout'])) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Grid de Empresas -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="empresasGrid">
                     <?php 
                     $dados = $select_model->concedentes();
                     if (empty($dados)): ?>
-                        <div class="col-span-3 text-center py-16 text-gray-400 animate__animated animate__fadeIn">
+                        <div class="col-span-3 text-center py-16 text-gray-400 fade-in">
                             <i class="fas fa-building text-5xl mb-4 text-gray-600 opacity-30"></i>
                             <p class="text-xl">Nenhuma empresa cadastrada no momento.</p>
                             <button id="firstEmpresaBtn" class="mt-6 custom-btn custom-btn-primary">
@@ -895,6 +727,9 @@ if (isset($_POST['logout'])) {
                                 <div class="empresa-card-header">
                                     <h3 class="empresa-card-title"><?= htmlspecialchars($dado['nome']) ?></h3>
                                     <div class="empresa-card-actions">
+                                        <button class="empresa-card-action text-gray-400 hover:text-primary-400" onclick="editarEmpresa(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome']) ?>', '<?= htmlspecialchars($dado['perfil']) ?>', '<?= htmlspecialchars($dado['endereco']) ?>', '<?= htmlspecialchars($dado['contato']) ?>')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
                                         <button class="empresa-card-action text-red-500 hover:text-red-400" onclick="excluirEmpresa(<?= $dado['id'] ?>)">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -936,82 +771,47 @@ if (isset($_POST['logout'])) {
                 </div>
             </main>
         </div>
-        
-        <!-- Modal de Cadastro -->
-        <div id="empresaModal" class="modal-overlay fixed inset-0 bg-black/75 hidden z-50 backdrop-blur-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 id="modalTitle" class="text-2xl font-bold">Nova Empresa</h2>
-                </div>
-                <form action="../controllers/controller.php" id="empresaForm" method="post" class="space-y-6">
+
+        <!-- Modal de Cadastro/Edição de Empresa -->
+        <div id="empresaModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+            <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
+                <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white slide-up">Nova Empresa</h2>
+                <form action="../controllers/controller.php" id="empresaForm" method="post" class="space-y-4">
                     <input type="hidden" id="empresaId" name="empresa_id" value="">
-                    
-                    <div class="form-group">
-                        <div class="input-group mb-4">
-                            <label for="empresaNome" class="form-label">
-                                <i class="fas fa-building mr-2 text-primary-400"></i>
-                                Nome da Empresa
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Nome da Empresa</label>
+                        <input type="text" id="empresaNome" name="nome" class="custom-input mt-1" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Área de Atuação</label>
+                        <div class="mt-2 space-y-2">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="custom-checkbox" name="areas" value="desenvolvimento">
+                                <span class="ml-2 text-gray-300">Desenvolvimento</span>
                             </label>
-                            <input type="text" id="empresaNome" name="nome" class="custom-input" required>
-                        </div>
-                        
-                        <div class="input-group">
-                            <label class="form-label mb-3">
-                                <i class="fas fa-tag mr-2 text-primary-400"></i>
-                                Área de Atuação
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="custom-checkbox" name="areas" value="tutoria">
+                                <span class="ml-2 text-gray-300">Tutoria</span>
                             </label>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                <div class="flex items-center">
-                                    <input type="radio" id="area-dev" class="custom-radio" name="areas" value="desenvolvimento">
-                                    <label for="area-dev" class="custom-radio-label">
-                                        <i class="fas fa-code radio-icon"></i>
-                                        <span>Desenvolvimento</span>
-                                    </label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input type="radio" id="area-tutoria" class="custom-radio" name="areas" value="tutoria">
-                                    <label for="area-tutoria" class="custom-radio-label">
-                                        <i class="fas fa-chalkboard-teacher radio-icon"></i>
-                                        <span>Tutoria</span>
-                                    </label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input type="radio" id="area-design" class="custom-radio" name="areas" value="mídia/design">
-                                    <label for="area-design" class="custom-radio-label">
-                                        <i class="fas fa-paint-brush radio-icon"></i>
-                                        <span>Design/Mídia</span>
-                                    </label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input type="radio" id="area-suporte" class="custom-radio" name="areas" value="suporte">
-                                    <label for="area-suporte" class="custom-radio-label">
-                                        <i class="fas fa-network-wired radio-icon"></i>
-                                        <span>Redes/Suporte</span>
-                                    </label>
-                                </div>
-                            </div>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="custom-checkbox" name="areas" value="mídia/design">
+                                <span class="ml-2 text-gray-300">Design/Mídia</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="custom-checkbox" name="areas" value="suporte">
+                                <span class="ml-2 text-gray-300">Redes/Suporte</span>
+                            </label>
                         </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <div class="input-group mb-4">
-                            <label for="empresaEndereco" class="form-label">
-                                <i class="fas fa-map-marker-alt mr-2 text-primary-400"></i>
-                                Endereço Completo
-                            </label>
-                            <input type="text" id="empresaEndereco" name="endereco" class="custom-input" placeholder="Rua, número, cidade - UF">
-                        </div>
-                        
-                        <div class="input-group">
-                            <label for="empresaTelefone" class="form-label">
-                                <i class="fas fa-phone mr-2 text-primary-400"></i>
-                                Telefone de Contato
-                            </label>
-                            <input type="tel" id="empresaTelefone" name="telefone" placeholder="(XX) XXXXX-XXXX" class="custom-input">
-                        </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Endereço Completo</label>
+                        <input type="text" id="empresaEndereco" name="endereco" class="custom-input mt-1" placeholder="Rua, número, cidade - UF">
                     </div>
-                    
-                    <div class="mt-8 flex justify-end space-x-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Telefone de Contato</label>
+                        <input type="tel" id="empresaTelefone" name="telefone" placeholder="(XX) XXXXX-XXXX" class="custom-input mt-1">
+                    </div>
+                    <div class="mt-6 flex justify-end space-x-4">
                         <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">
                             <i class="fas fa-times btn-icon"></i>
                             <span>Cancelar</span>
@@ -1026,120 +826,115 @@ if (isset($_POST['logout'])) {
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const modal = document.getElementById('empresaModal');
-            const modalContent = modal.querySelector('.modal-content');
+            const modalContent = modal.querySelector('.candidatura-modal');
+            const empresaForm = document.getElementById('empresaForm');
             const addEmpresaBtn = document.getElementById('addEmpresaBtn');
             const firstEmpresaBtn = document.getElementById('firstEmpresaBtn');
             const cancelarBtn = document.getElementById('cancelarBtn');
-            const empresaForm = document.getElementById('empresaForm');
             const sidebarToggle = document.getElementById('sidebarToggle');
             const closeSidebar = document.getElementById('closeSidebar');
             const mobileSidebar = document.getElementById('mobileSidebar');
             const searchInput = document.getElementById('searchEmpresa');
             const filterArea = document.getElementById('filterArea');
             const telefoneInput = document.getElementById('empresaTelefone');
-            
-            // Animation for empresa cards
-            const empresaCards = document.querySelectorAll('.empresa-card');
-            if (empresaCards.length > 0) {
-                gsap.from(empresaCards, {
-                    duration: 0.6,
-                    y: 30,
-                    opacity: 0,
-                    stagger: 0.1,
-                    ease: "power3.out"
-                });
-            }
 
-            // First empresa button listener
-            if (firstEmpresaBtn) {
-                firstEmpresaBtn.addEventListener('click', () => {
-                    document.getElementById('modalTitle').textContent = 'Nova Empresa';
-                    document.getElementById('empresaId').value = '';
-                    empresaForm.reset();
-                    openModal();
-                });
-            }
+            // GSAP Animations
+            gsap.from('.action-bar', { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' });
+            gsap.from('.empresa-card', {
+                opacity: 0,
+                y: 50,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: 'power3.out'
+            });
 
             // Máscara de telefone
             telefoneInput.addEventListener('input', (e) => {
                 let value = e.target.value.replace(/\D/g, '');
-                
                 if (value.length > 11) {
                     value = value.slice(0, 11);
                 }
-
                 if (value.length <= 10) {
-                    // Formato: (XX) XXXX-XXXX
                     value = value.replace(/(\d{2})(\d{0,4})(\d{0,4})/, '($1) $2-$3');
                 } else {
-                    // Formato: (XX) XXXXX-XXXX
                     value = value.replace(/(\d{2})(\d{0,5})(\d{0,4})/, '($1) $2-$3');
                 }
-
                 e.target.value = value.trim();
             });
 
             // Limpar caracteres não numéricos antes de enviar o formulário
             empresaForm.addEventListener('submit', (e) => {
                 telefoneInput.value = telefoneInput.value.replace(/\D/g, '');
-                
-                // Animate the submit button
                 const submitBtn = e.submitter;
                 if (submitBtn) {
-                    submitBtn.classList.add('animate__animated', 'animate__pulse');
-                    setTimeout(() => {
-                        submitBtn.classList.remove('animate__animated', 'animate__pulse');
-                    }, 500);
+                    gsap.to(submitBtn, {
+                        scale: 0.95,
+                        duration: 0.1,
+                        yoyo: true,
+                        repeat: 1
+                    });
                 }
             });
 
-            function openModal() {
+            // Sidebar mobile toggle
+            sidebarToggle.addEventListener('click', () => {
+                gsap.to(mobileSidebar, { x: 0, duration: 0.3, ease: 'power2.out' });
+            });
+
+            closeSidebar.addEventListener('click', () => {
+                gsap.to(mobileSidebar, { x: '-100%', duration: 0.3, ease: 'power2.in' });
+            });
+
+            // Modal handling
+            function resetModal() {
+                modalContent.style.opacity = '0';
+                modalContent.style.transform = 'scale(0.9)';
+                empresaForm.reset();
+                document.getElementById('empresaId').value = '';
+                document.getElementById('modalTitle').textContent = 'Nova Empresa';
+                const checkboxes = document.querySelectorAll('input[name="areas"]');
+                checkboxes.forEach(cb => cb.checked = false);
+            }
+
+            function openModal(isEdit = false, empresa = null) {
+                resetModal();
+                if (isEdit && empresa) {
+                    document.getElementById('modalTitle').textContent = 'Editar Empresa';
+                    document.getElementById('empresaId').value = empresa.id;
+                    document.getElementById('empresaNome').value = empresa.nome;
+                    document.getElementById('empresaEndereco').value = empresa.endereco || '';
+                    document.getElementById('empresaTelefone').value = empresa.telefone || '';
+                    const checkboxes = document.querySelectorAll('input[name="areas"]');
+                    checkboxes.forEach(cb => {
+                        cb.checked = empresa.perfil === cb.value;
+                    });
+                }
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
-                modal.classList.add('modal-show');
-                
-                // Animate modal opening
-                gsap.fromTo(modalContent, 
-                    { scale: 0.9, opacity: 0 }, 
-                    { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.7)" }
-                );
-                
-                // Add escape key listener
-                document.addEventListener('keydown', closeModalOnEscape);
-            }
-            
-            function closeModal() {
-                // Animate modal closing
-                gsap.to(modalContent, {
-                    scale: 0.9,
-                    opacity: 0,
-                    duration: 0.2,
-                    onComplete: () => {
-                        modal.classList.add('hidden');
-                        modal.classList.remove('flex', 'modal-show');
-                    }
-                });
-                
-                // Remove escape key listener
-                document.removeEventListener('keydown', closeModalOnEscape);
-            }
-            
-            function closeModalOnEscape(e) {
-                if (e.key === 'Escape') {
-                    closeModal();
-                }
+                gsap.to(modalContent, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' });
             }
 
-            addEmpresaBtn.addEventListener('click', () => {
-                document.getElementById('modalTitle').textContent = 'Nova Empresa';
-                document.getElementById('empresaId').value = '';
-                empresaForm.reset();
-                openModal();
-            });
+            function closeModal() {
+                gsap.to(modalContent, {
+                    opacity: 0,
+                    scale: 0.9,
+                    duration: 0.3,
+                    ease: 'power2.in',
+                    onComplete: () => {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                        resetModal();
+                    }
+                });
+            }
+
+            addEmpresaBtn.addEventListener('click', () => openModal());
+            if (firstEmpresaBtn) {
+                firstEmpresaBtn.addEventListener('click', () => openModal());
+            }
 
             cancelarBtn.addEventListener('click', closeModal);
 
@@ -1149,81 +944,56 @@ if (isset($_POST['logout'])) {
                 }
             });
 
-            sidebarToggle.addEventListener('click', () => {
-                mobileSidebar.classList.remove('-translate-x-full');
-                // Animate sidebar opening
-                gsap.from('#mobileSidebar .sidebar-link', {
-                    x: -20,
-                    opacity: 0,
-                    stagger: 0.05,
-                    duration: 0.3
-                });
-            });
-
-            closeSidebar.addEventListener('click', () => {
-                mobileSidebar.classList.add('-translate-x-full');
-            });
-
+            // Filtragem de empresas
             function aplicarFiltros() {
                 const searchTerm = searchInput.value.toLowerCase();
                 const areaFiltro = filterArea.value;
                 const empresaCards = document.querySelectorAll('.empresa-card');
                 let visibleCount = 0;
 
-                empresaCards.forEach(card => {
+                empresaCards.forEach((card, index) => {
                     const nome = card.querySelector('.empresa-card-title').textContent.toLowerCase();
                     const area = card.dataset.area;
                     const matchSearch = nome.includes(searchTerm);
                     const matchArea = !areaFiltro || area === areaFiltro;
 
                     if (matchSearch && matchArea) {
-                        gsap.to(card, {
-                            opacity: 1,
-                            scale: 1,
-                            height: 'auto',
-                            duration: 0.3,
-                            display: 'block',
-                            ease: "power2.out"
-                        });
+                        card.style.display = '';
                         visibleCount++;
+                        gsap.fromTo(card,
+                            { opacity: 0, y: 20 },
+                            { opacity: 1, y: 0, duration: 0.3, delay: index * 0.05 }
+                        );
                     } else {
                         gsap.to(card, {
                             opacity: 0,
-                            scale: 0.95,
-                            height: 0,
-                            padding: 0,
-                            margin: 0,
+                            y: 20,
                             duration: 0.3,
-                            display: 'none',
-                            ease: "power2.in"
+                            onComplete: () => { card.style.display = 'none'; }
                         });
                     }
                 });
 
-                // Show message if no results
                 const noResultsMessage = document.getElementById('noResultsMessage');
-                if (visibleCount === 0) {
-                    if (!noResultsMessage) {
-                        const message = document.createElement('div');
-                        message.id = 'noResultsMessage';
-                        message.className = 'col-span-3 text-center py-8 text-gray-400 mt-8 animate__animated animate__fadeIn';
-                        message.innerHTML = `
-                            <i class="fas fa-search text-4xl mb-4 text-gray-600 opacity-30"></i>
-                            <p class="text-lg">Nenhuma empresa encontrada com os filtros atuais.</p>
-                            <button id="clearFiltersBtn" class="mt-4 custom-btn custom-btn-secondary">
-                                <i class="fas fa-times-circle btn-icon"></i>
-                                <span>Limpar Filtros</span>
-                            </button>
-                        `;
-                        document.getElementById('empresasGrid').appendChild(message);
-                        
-                        document.getElementById('clearFiltersBtn').addEventListener('click', () => {
-                            searchInput.value = '';
-                            filterArea.value = '';
-                            aplicarFiltros();
-                        });
-                    }
-                } else if (noResultsMessage) {
+                if (visibleCount === 0 && !noResultsMessage) {
+                    const message = document.createElement('div');
+                    message.id = 'noResultsMessage';
+                    message.className = 'col-span-3 text-center py-8 text-gray-400 fade-in';
+                    message.innerHTML = `
+                        <i class="fas fa-search text-4xl mb-4 text-gray-600 opacity-30"></i>
+                        <p class="text-lg">Nenhuma empresa encontrada com os filtros atuais.</p>
+                        <button id="clearFiltersBtn" class="mt-4 custom-btn custom-btn-secondary">
+                            <i class="fas fa-times-circle btn-icon"></i>
+                            <span>Limpar Filtros</span>
+                        </button>
+                    `;
+                    document.getElementById('empresasGrid').appendChild(message);
+                    document.getElementById('clearFiltersBtn').addEventListener('click', () => {
+                        searchInput.value = '';
+                        filterArea.value = '';
+                        aplicarFiltros();
+                    });
+                } else if (visibleCount > 0 && noResultsMessage) {
                     noResultsMessage.remove();
                 }
             }
@@ -1231,32 +1001,22 @@ if (isset($_POST['logout'])) {
             searchInput.addEventListener('input', aplicarFiltros);
             filterArea.addEventListener('change', aplicarFiltros);
 
-            // Animate search input focus
-            searchInput.addEventListener('focus', () => {
-                gsap.to(searchInput, {
-                    boxShadow: '0 0 0 3px rgba(0, 122, 51, 0.2), 0 0 15px rgba(0, 122, 51, 0.15)',
-                    duration: 0.3
-                });
-            });
-            
-            searchInput.addEventListener('blur', () => {
-                gsap.to(searchInput, {
-                    boxShadow: '0 0 0 0px rgba(0, 122, 51, 0), 0 0 0px rgba(0, 122, 51, 0)',
-                    duration: 0.3
-                });
-            });
+            // Editar empresa
+            window.editarEmpresa = (id, nome, perfil, endereco, telefone) => {
+                openModal(true, { id, nome, perfil, endereco, telefone });
+            };
 
-            function excluirEmpresa(id) {
-                // Create custom confirm dialog
+            // Excluir empresa
+            window.excluirEmpresa = (id) => {
                 const confirmDialog = document.createElement('div');
-                confirmDialog.className = 'fixed inset-0 bg-black/75 flex items-center justify-center z-50 backdrop-blur-sm';
+                confirmDialog.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50';
                 confirmDialog.innerHTML = `
-                    <div class="bg-dark-50 rounded-lg p-6 max-w-md w-full mx-4 shadow-2xl border border-gray-800 transform scale-95 opacity-0 transition-all duration-300">
+                    <div class="candidatura-modal rounded-lg p-6 max-w-md w-full mx-4">
                         <div class="text-center mb-6">
                             <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/10 text-red-500 mb-4">
                                 <i class="fas fa-exclamation-triangle text-2xl"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-white">Confirmar Exclusão</h3>
+                            <h3 class="text-xl font-bold text-white slide-up">Confirmar Exclusão</h3>
                             <p class="text-gray-400 mt-2">Tem certeza que deseja excluir esta empresa? Esta ação não pode ser desfeita.</p>
                         </div>
                         <div class="flex justify-center space-x-4">
@@ -1271,30 +1031,23 @@ if (isset($_POST['logout'])) {
                         </div>
                     </div>
                 `;
-                
                 document.body.appendChild(confirmDialog);
-                
-                // Animate the dialog
-                setTimeout(() => {
-                    const dialogContent = confirmDialog.querySelector('div');
-                    dialogContent.classList.remove('scale-95', 'opacity-0');
-                    dialogContent.classList.add('scale-100', 'opacity-100');
-                }, 10);
-                
-                // Setup event listeners
+                const confirmModalContent = confirmDialog.querySelector('.candidatura-modal');
+                gsap.to(confirmModalContent, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' });
+
                 confirmDialog.querySelector('#cancelExcluir').addEventListener('click', () => {
-                    // Animate out
-                    const dialogContent = confirmDialog.querySelector('div');
-                    dialogContent.classList.remove('scale-100', 'opacity-100');
-                    dialogContent.classList.add('scale-95', 'opacity-0');
-                    
-                    setTimeout(() => {
-                        document.body.removeChild(confirmDialog);
-                    }, 300);
+                    gsap.to(confirmModalContent, {
+                        opacity: 0,
+                        scale: 0.9,
+                        duration: 0.3,
+                        ease: 'power2.in',
+                        onComplete: () => {
+                            document.body.removeChild(confirmDialog);
+                        }
+                    });
                 });
-                
+
                 confirmDialog.querySelector('#confirmarExcluir').addEventListener('click', () => {
-                    // Proceed with deletion
                     fetch('excluir_empresa.php', {
                         method: 'POST',
                         headers: {
@@ -1304,38 +1057,17 @@ if (isset($_POST['logout'])) {
                     })
                     .then(response => response.json())
                     .then(data => {
+                        document.body.removeChild(confirmDialog);
                         if (data.success) {
-                            // Find the card and animate its removal
                             const card = document.querySelector(`[data-empresa-id="${id}"]`);
                             if (card) {
                                 gsap.to(card, {
-                                    scale: 0.9,
                                     opacity: 0,
                                     y: -20,
                                     duration: 0.3,
                                     onComplete: () => {
                                         card.remove();
-                                        
-                                        // Show success message
-                                        const toast = document.createElement('div');
-                                        toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate__animated animate__fadeInUp';
-                                        toast.innerHTML = `
-                                            <div class="flex items-center">
-                                                <i class="fas fa-check-circle mr-3"></i>
-                                                <span>Empresa excluída com sucesso!</span>
-                                            </div>
-                                        `;
-                                        document.body.appendChild(toast);
-                                        
-                                        setTimeout(() => {
-                                            toast.classList.remove('animate__fadeInUp');
-                                            toast.classList.add('animate__fadeOutDown');
-                                            setTimeout(() => {
-                                                document.body.removeChild(toast);
-                                            }, 500);
-                                        }, 3000);
-                                        
-                                        // Check if no more companies
+                                        showToast('Empresa excluída com sucesso!', 'success');
                                         const remainingCards = document.querySelectorAll('.empresa-card');
                                         if (remainingCards.length === 0) {
                                             window.location.reload();
@@ -1344,59 +1076,41 @@ if (isset($_POST['logout'])) {
                                 });
                             }
                         } else {
-                            // Show error message
-                            const toast = document.createElement('div');
-                            toast.className = 'fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate__animated animate__fadeInUp';
-                            toast.innerHTML = `
-                                <div class="flex items-center">
-                                    <i class="fas fa-exclamation-circle mr-3"></i>
-                                    <span>Erro ao excluir empresa: ${data.message}</span>
-                                </div>
-                            `;
-                            document.body.appendChild(toast);
-                            
-                            setTimeout(() => {
-                                toast.classList.remove('animate__fadeInUp');
-                                toast.classList.add('animate__fadeOutDown');
-                                setTimeout(() => {
-                                    document.body.removeChild(toast);
-                                }, 500);
-                            }, 4000);
+                            showToast(`Erro ao excluir empresa: ${data.message}`, 'error');
                         }
-                        
-                        // Remove the dialog
-                        document.body.removeChild(confirmDialog);
                     })
                     .catch(error => {
-                        console.error('Erro:', error);
-                        
-                        // Show error toast
-                        const toast = document.createElement('div');
-                        toast.className = 'fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate__animated animate__fadeInUp';
-                        toast.innerHTML = `
-                            <div class="flex items-center">
-                                <i class="fas fa-exclamation-circle mr-3"></i>
-                                <span>Erro ao excluir empresa. Tente novamente.</span>
-                            </div>
-                        `;
-                        document.body.appendChild(toast);
-                        
-                        setTimeout(() => {
-                            toast.classList.remove('animate__fadeInUp');
-                            toast.classList.add('animate__fadeOutDown');
-                            setTimeout(() => {
-                                document.body.removeChild(toast);
-                            }, 500);
-                        }, 4000);
-                        
-                        // Remove the dialog
                         document.body.removeChild(confirmDialog);
+                        console.error('Erro:', error);
+                        showToast('Erro ao excluir empresa. Tente novamente.', 'error');
                     });
                 });
+            };
+
+            // Função para exibir toast
+            function showToast(message, type) {
+                const toast = document.createElement('div');
+                toast.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 fade-in ${
+                    type === 'success' ? 'bg-green-500' : 'bg-red-500'
+                } text-white`;
+                toast.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-3"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    gsap.to(toast, {
+                        opacity: 0,
+                        y: 20,
+                        duration: 0.3,
+                        onComplete: () => {
+                            document.body.removeChild(toast);
+                        }
+                    });
+                }, type === 'success' ? 3000 : 4000);
             }
-            
-            // Expor função ao escopo global para o botão
-            window.excluirEmpresa = excluirEmpresa;
         });
     </script>
 </body>
