@@ -551,10 +551,12 @@ $select_model = new select_model();
                         <i class="fas fa-cog w-5 mr-3"></i>
                         Configurações
                     </a>
-                    <a href="login.php" class="sidebar-link text-red-400 hover:text-red-300">
-                        <i class="fas fa-sign-out-alt w-5 mr-3"></i>
-                        Sair
-                    </a>
+                    <form action="" method="post">
+                        <button type="submit" name="layout" class="sidebar-link text-red-400 hover:text-red-300">
+                            <i class="fas fa-sign-out-alt w-5 mr-3"></i>
+                            Sair
+                        </button>
+                    </form>
                 </div>
             </div>
         </aside>

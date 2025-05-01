@@ -1,6 +1,16 @@
 <?php
 require_once('../models/select_model.php');
 $select_model = new select_model;
+require_once('../models/sessions.php');
+
+$session = new sessions;
+$session->tempo_session();
+$session->autenticar_session();
+
+if (isset($_POST['layout'])) {
+    $session->quebra_session();
+}
+?>
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -625,7 +635,7 @@ $select_model = new select_model;
                         Configurações
                     </a>
                     <form action="" method="post">
-                        <button type="submit" class="sidebar-link text-red-400 hover:text-red-300">
+                        <button type="submit" name="layout" class="sidebar-link text-red-400 hover:text-red-300">
                             <i class="fas fa-sign-out-alt w-5 mr-3"></i>
                             Sair
                         </button>
@@ -744,11 +754,10 @@ $select_model = new select_model;
                         </div>
                     <?php else: ?>
                         <?php
-                        $delay = 0;
+                        $dados = $select_model->concedentes();
                         foreach ($dados as $dado):
-                            $delay += 100;
                         ?>
-                            <div class="empresa-card slide-up" style="animation-delay: <?= $delay ?>ms;" data-empresa-id="<?= htmlspecialchars($dado['id']) ?>" data-area="<?= htmlspecialchars($dado['perfil']) ?>">
+                            <div class="empresa-card slide-up" style="animation-delay: 100ms;" data-empresa-id="<?= htmlspecialchars($dado['id']) ?>" data-area="">
                                 <div class="empresa-card-header">
                                     <h3 class="empresa-card-title"><?= htmlspecialchars($dado['nome']) ?></h3>
                                     <div class="empresa-card-actions">

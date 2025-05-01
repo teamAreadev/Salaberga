@@ -113,10 +113,10 @@
             <div class="h-0.5 bg-primary/20 rounded-full mt-1 mx-auto w-3/4"></div>
         </div>
 
-        <form action="../controllers/controller.php" id="loginForm" class="space-y-4">
+        <form action="../controllers/controller.php" method="POST" id="loginForm" class="space-y-4">
             <div>
                 <label for="username" class="block mb-1 font-medium">Usuário</label>
-                <input name="email" type="text" id="username" class="login-input" placeholder="Digite seu usuário" required>
+                <input name="email" type="email" id="username" class="login-input" placeholder="Digite seu usuário" required>
             </div>
 
             <div>
@@ -141,30 +141,7 @@
             <button type="submit" class="login-button mt-6">Entrar</button>
         </form>
 
-
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Configurar modo escuro
-
-
-            // Configurar formulário de login
-            const loginForm = document.getElementById('loginForm');
-
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-
-                // Simular autenticação
-                if (username && password) {
-                    // Redirecionamento para o dashboard
-                    window.location.href = 'dashboard.php';
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

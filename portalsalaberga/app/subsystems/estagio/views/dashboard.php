@@ -1,7 +1,14 @@
 <?php
-require_once('../models/model.php');
 require_once('../models/select_model.php');
+require_once('../models/sessions.php');
 $select_model = new select_model();
+$session = new sessions;
+$session->tempo_session();
+$session->autenticar_session();
+
+if (isset($_POST['layout'])) {
+    $session->quebra_session();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -147,7 +154,7 @@ $select_model = new select_model();
                         Configurações
                     </a>
                     <form action="" method="post">
-                        <button type="submit" class="sidebar-link text-red-400 hover:text-red-300">
+                        <button type="submit" name="layout" class="sidebar-link text-red-400 hover:text-red-300">
                             <i class="fas fa-sign-out-alt w-5 mr-3"></i>
                             Sair
                         </button>
@@ -204,10 +211,12 @@ $select_model = new select_model();
                         <i class="fas fa-cog w-5 mr-3"></i>
                         Configurações
                     </a>
-                    <a href="login.php" class="sidebar-link text-danger">
-                        <i class="fas fa-sign-out-alt w-5 mr-3"></i>
-                        Sair
-                    </a>
+                    <form action="" method="post">
+                        <button type="submit" name="layout" class="sidebar-link text-red-400 hover:text-red-300">
+                            <i class="fas fa-sign-out-alt w-5 mr-3"></i>
+                            Sair
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
