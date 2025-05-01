@@ -10,7 +10,6 @@ if (isset($_POST['layout'])) {
     $session->quebra_session();
 }
 ?>
-?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 
@@ -535,7 +534,7 @@ if (isset($_POST['layout'])) {
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="relatorios.php" class="sidebar-link">
+                    <a href="alunos_vaga.php" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -591,7 +590,7 @@ if (isset($_POST['layout'])) {
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="relatorios.php" class="sidebar-link">
+                    <a href="alunos_vaga.php" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>

@@ -624,7 +624,7 @@ if (isset($_POST['layout'])) {
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="./relatorios.php" class="sidebar-link">
+                    <a href="./alunos_vaga.php" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -680,7 +680,7 @@ if (isset($_POST['layout'])) {
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="./relatorios.php" class="sidebar-link">
+                    <a href="./alunos_vaga.php" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -754,14 +754,16 @@ if (isset($_POST['layout'])) {
                         </div>
                     <?php else: ?>
                         <?php
+                        $delay = 0;
                         $dados = $select_model->concedentes();
                         foreach ($dados as $dado):
+                            $delay += 100;
                         ?>
-                            <div class="empresa-card slide-up" style="animation-delay: 100ms;" data-empresa-id="<?= htmlspecialchars($dado['id']) ?>" data-area="">
+                            <div class="empresa-card slide-up" style="animation-delay: <?= $delay ?>ms;" data-empresa-id="<?= htmlspecialchars($dado['id']) ?>" data-area="<?= htmlspecialchars($dado['perfis']) ?>">
                                 <div class="empresa-card-header">
                                     <h3 class="empresa-card-title"><?= htmlspecialchars($dado['nome']) ?></h3>
                                     <div class="empresa-card-actions">
-                                        <button class="empresa-card-action text-gray-400 hover:text-primary-400" onclick="editarEmpresa(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome']) ?>', '<?= htmlspecialchars($dado['perfil']) ?>', '<?= htmlspecialchars($dado['endereco']) ?>', '<?= htmlspecialchars($dado['contato']) ?>')">
+                                        <button class="empresa-card-action text-gray-400 hover:text-primary-400" onclick="editarEmpresa(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome']) ?>', '<?= htmlspecialchars($dado['nome']) ?>', '<?= htmlspecialchars($dado['endereco']) ?>', '<?= htmlspecialchars($dado['contato']) ?>')">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button class="empresa-card-action text-red-500 hover:text-red-400" onclick="excluirEmpresa(<?= $dado['id'] ?>)">
@@ -770,17 +772,17 @@ if (isset($_POST['layout'])) {
                                     </div>
                                 </div>
                                 <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="area-chip area-<?= htmlspecialchars($dado['perfil']) ?>">
-                                        <?php if ($dado['perfil'] === 'desenvolvimento'): ?>
+                                    <span class="area-chip area-<?= htmlspecialchars($dado['perfis']) ?>">
+                                        <?php if ($dado['perfis'] === 'desenvolvimento'): ?>
                                             <i class="fas fa-code text-xs"></i>
-                                        <?php elseif ($dado['perfil'] === 'tutoria'): ?>
+                                        <?php elseif ($dado['perfis'] === 'tutoria'): ?>
                                             <i class="fas fa-chalkboard-teacher text-xs"></i>
-                                        <?php elseif ($dado['perfil'] === 'mídia/design'): ?>
+                                        <?php elseif ($dado['perfis'] === 'mídia/design'): ?>
                                             <i class="fas fa-paint-brush text-xs"></i>
-                                        <?php elseif ($dado['perfil'] === 'suporte'): ?>
+                                        <?php elseif ($dado['perfis'] === 'suporte'): ?>
                                             <i class="fas fa-network-wired text-xs"></i>
                                         <?php endif; ?>
-                                        <?= htmlspecialchars($dado['perfil']) ?>
+                                        <?= htmlspecialchars($dado['perfis']) ?>
                                     </span>
                                 </div>
                                 <div class="empresa-card-info">

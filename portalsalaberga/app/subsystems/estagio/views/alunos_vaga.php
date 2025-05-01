@@ -541,7 +541,7 @@ $select_model = new select_model();
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="relatorios.php" class="sidebar-link">
+                    <a href="alunos_vaga.php" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -597,7 +597,7 @@ $select_model = new select_model();
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="relatorios.php" class="sidebar-link">
+                    <a href="alunos_vaga.php" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -663,7 +663,7 @@ $select_model = new select_model();
                                     <option value="desenvolvimento">Desenvolvimento</option>
                                     <option value="design">Design</option>
                                     <option value="midia">Mídia</option>
-                                    <option value="redes">Redes/Suporte</option>
+                                    <option value="redes">Suporte/Redes</option>
                                 </select>
                                 <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
                             </div>
