@@ -9,24 +9,22 @@ class main_model extends connect
         parent::__construct();
     }
 
-    function login($email, $senha)
+    /*function login($email, $senha)
     {
-        
+
         $stmt_cadastro = $this->connect->prepare("SELECT * FROM usuario WHERE email = :email AND senha = :senha");
-        $stmt_cadastro->bindValue(':email', $email);
-        $stmt_cadastro->bindValue(':senha', $senha);
+        $stmt_cadastro->bindParam(':email', $email);
+        $stmt_cadastro->bindParam(':senha', $senha);
         $stmt_cadastro->execute();
 
         if ($stmt_cadastro->rowCount() > 0) {
-            session_start();
-            $_SESSION['email'] = $email;
+
             return 1;
         } else {
-            session_start();
-            unset($_SESSION['email']);
+
             return 2;
         }
-    }
+    }*/
     function cadastrar_empresa($nome, $area, $endereco, $telefone)
     {
 
