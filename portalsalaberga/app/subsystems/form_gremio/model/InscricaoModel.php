@@ -117,22 +117,35 @@ class InscricaoModel {
 
     public function obterTodasInscricoes() {
         try {
-            $query = "SELECT a.id, a.nome, a.ano, a.turma, a.email, a.telefone, a.data_inscricao,
-                     COUNT(i.id) as total_modalidades,
-                     SUM(CASE WHEN i.status = 'aprovado' THEN 1 ELSE 0 END) as aprovadas,
-                     SUM(CASE WHEN i.status = 'pendente' THEN 1 ELSE 0 END) as pendentes,
-                     SUM(CASE WHEN i.status = 'reprovado' THEN 1 ELSE 0 END) as reprovadas
+            $query = "SELECT 
+                     a.id, a.nome, a.ano, a.turma, a.email, a.telefone, a.data_inscricao,
+                     i.id as inscricao_id,
+                     i.modalidade,
+                     i.categoria,
+                     i.nome_equipe,
+                     i.status,
+                     CASE 
+                         WHEN i.nome_equipe IS NOT NULL THEN 'coletiva'
+                         ELSE 'individual'
+                     END as tipo_inscricao
                      FROM alunos a
                      JOIN inscricoes i ON a.id = i.aluno_id
-                     GROUP BY a.id
-                     ORDER BY a.data_inscricao DESC";
+                     ORDER BY a.data_inscricao DESC, i.modalidade ASC";
             
             $stmt = $this->db->prepare($query);
             $stmt->execute();
             
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return [
+                'success' => true,
+                'inscricoes' => $stmt->fetchAll(PDO::FETCH_ASSOC)
+            ];
         } catch(PDOException $e) {
-            return [];
+            error_log("Erro ao obter inscrições: " . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Erro ao obter inscrições',
+                'inscricoes' => []
+            ];
         }
     }
 

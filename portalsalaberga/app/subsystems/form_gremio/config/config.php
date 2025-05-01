@@ -4,14 +4,14 @@ define('SISTEMA_NOME', 'Copa Grêmio 2025');
 define('SISTEMA_VERSAO', '1.0.0');
 
 // Configurações de pagamento
-define('PIX_CHAVE', '123e4567-e89b-12d3-a456-426614174000'); // Substitua pela chave PIX real
-define('PIX_NOME', 'Grêmio Student');
-define('PIX_CIDADE', 'Brasilia');
+define('PIX_CHAVE', '09593342389'); // CPF do beneficiário
+define('PIX_NOME', 'Matheus Lima de Araujo');
+define('PIX_CIDADE', 'Fortaleza');
 define('PIX_VALOR_BASE', 5.00); // Valor base por modalidade
 define('PIX_VALOR_DESCONTO', 3.00); // Valor com desconto (3+ modalidades)
 
 // Configurações de contato
-define('WHATSAPP_NUMERO', '5561999999999'); // Substitua pelo número real
+define('WHATSAPP_NUMERO', '558598530920'); // Número para envio do comprovante
 define('EMAIL_CONTATO', 'gremio@escola.edu.br');
 
 // Configurações de sessão

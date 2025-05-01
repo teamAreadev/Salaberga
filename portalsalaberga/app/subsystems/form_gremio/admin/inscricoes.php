@@ -16,7 +16,7 @@ if (!isset($_SESSION['admin_id']) ||
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - Copa Grêmio 2025</title>
+    <title>Gerenciar Inscrições - Copa Grêmio 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="shortcut icon" href="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome-MOpK2hbpuoqfoF8sir0Ue6SvciAArc.svg" type="image/svg">
@@ -30,11 +30,9 @@ if (!isset($_SESSION['admin_id']) ||
         
         .card {
             transition: all 0.3s ease;
-          
         }
         
         .card:hover {
-    
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         
@@ -81,8 +79,8 @@ if (!isset($_SESSION['admin_id']) ||
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
         <div class="mb-8">
-            <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
-            <p class="text-gray-600">Bem-vindo ao painel administrativo</p>
+            <h1 class="text-2xl font-bold text-gray-800">Gerenciar Inscrições</h1>
+            <p class="text-gray-600">Gerencie todas as inscrições individuais e coletivas</p>
         </div>
         
         <!-- Stats Cards -->
@@ -93,8 +91,8 @@ if (!isset($_SESSION['admin_id']) ||
                         <i class="fas fa-users text-xl"></i>
                     </div>
                     <div>
-                        <p class="text-gray-500 text-sm">Total de Equipes</p>
-                        <h3 class="text-2xl font-bold text-gray-800" id="total-equipes">0</h3>
+                        <p class="text-gray-500 text-sm">Total de Inscrições</p>
+                        <h3 class="text-2xl font-bold text-gray-800" id="total-inscricoes">0</h3>
                     </div>
                 </div>
             </div>
@@ -105,8 +103,8 @@ if (!isset($_SESSION['admin_id']) ||
                         <i class="fas fa-clock text-xl"></i>
                     </div>
                     <div>
-                        <p class="text-gray-500 text-sm">Equipes Pendentes</p>
-                        <h3 class="text-2xl font-bold text-gray-800" id="equipes-pendentes">0</h3>
+                        <p class="text-gray-500 text-sm">Inscrições Pendentes</p>
+                        <h3 class="text-2xl font-bold text-gray-800" id="inscricoes-pendentes">0</h3>
                     </div>
                 </div>
             </div>
@@ -117,8 +115,8 @@ if (!isset($_SESSION['admin_id']) ||
                         <i class="fas fa-check-circle text-xl"></i>
                     </div>
                     <div>
-                        <p class="text-gray-500 text-sm">Equipes Aprovadas</p>
-                        <h3 class="text-2xl font-bold text-gray-800" id="equipes-aprovadas">0</h3>
+                        <p class="text-gray-500 text-sm">Inscrições Aprovadas</p>
+                        <h3 class="text-2xl font-bold text-gray-800" id="inscricoes-aprovadas">0</h3>
                     </div>
                 </div>
             </div>
@@ -129,27 +127,27 @@ if (!isset($_SESSION['admin_id']) ||
                         <i class="fas fa-times-circle text-xl"></i>
                     </div>
                     <div>
-                        <p class="text-gray-500 text-sm">Equipes Reprovadas</p>
-                        <h3 class="text-2xl font-bold text-gray-800" id="equipes-reprovadas">0</h3>
+                        <p class="text-gray-500 text-sm">Inscrições Reprovadas</p>
+                        <h3 class="text-2xl font-bold text-gray-800" id="inscricoes-reprovadas">0</h3>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Equipes Section -->
+        <!-- Inscrições Section -->
         <div class="card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="px-6 py-5 border-b border-gray-100">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                     <div class="mb-4 md:mb-0">
                         <h2 class="text-xl font-semibold text-gray-800 flex items-center">
-                            <i class="fas fa-users mr-3 text-green-600"></i> 
-                            Gerenciar Equipes
+                            <i class="fas fa-clipboard-list mr-3 text-green-600"></i> 
+                            Todas as Inscrições
                 </h2>
-                        <p class="text-gray-500 text-sm mt-1">Gerencie todas as inscrições de equipes</p>
+                        <p class="text-gray-500 text-sm mt-1">Gerencie inscrições individuais e coletivas</p>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-3">
                         <div class="relative">
-                            <input type="text" id="search" placeholder="Buscar equipe..." 
+                            <input type="text" id="search" placeholder="Buscar inscrição..." 
                                    class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-search text-gray-400"></i>
@@ -173,254 +171,204 @@ if (!isset($_SESSION['admin_id']) ||
                 </div>
             </div>
             
-            <div id="equipes-container" class="p-6">
+            <div id="inscricoes-container" class="p-6">
                 <div class="flex justify-center items-center py-12">
                     <i class="fas fa-spinner fa-spin mr-3 text-green-600 text-xl"></i>
-                    <span class="text-gray-500">Carregando equipes...</span>
+                    <span class="text-gray-500">Carregando inscrições...</span>
                                 </div>
             </div>
         </div>
     </main>
-    
-   
-    <!-- Modal -->
-    <div id="modal-detalhes" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden transition-opacity duration-300">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0">
-            <div class="p-6">
-                <div class="flex justify-between items-center pb-4 mb-4 border-b">
-                    <h3 class="text-xl font-bold text-gray-800">Detalhes da Inscrição</h3>
-                    <button class="modal-close text-gray-400 hover:text-gray-600 p-2">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-                
-                <div id="detalhes-inscricao">
-                    <div class="flex justify-center items-center py-12">
-                        <i class="fas fa-spinner fa-spin mr-3 text-green-600 text-xl"></i>
-                        <span class="text-gray-500">Carregando detalhes...</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
-        // Todo o JavaScript original permanece EXATAMENTE o mesmo
         document.addEventListener('DOMContentLoaded', function() {
+            const inscricoesContainer = document.getElementById('inscricoes-container');
             const searchInput = document.getElementById('search');
+            const statusFilter = document.getElementById('status-filter');
             const refreshBtn = document.getElementById('refresh-btn');
-            const equipesContainer = document.getElementById('equipes-container');
-            
-            let equipes = [];
-            
-            // Função para carregar equipes
-            async function carregarEquipes() {
+            let inscricoes = [];
+
+            // Função para carregar todas as inscrições
+            async function carregarInscricoes() {
                 try {
-                    const response = await fetch('../controllers/AdminController.php?action=listar-equipes');
-                    if (!response.ok) {
-                        throw new Error('Erro ao carregar equipes: ' + response.status);
-                    }
-                    
-                    const responseText = await response.text();
-                    try {
-                        const data = JSON.parse(responseText);
+                    const response = await fetch('../controllers/AdminController.php?action=listar-inscricoes');
+                    const data = await response.json();
                         
                         if (data.success) {
-                            equipes = data.equipes;
-                            atualizarContadores(equipes);
-                            renderizarEquipes(equipes);
+                        inscricoes = data.inscricoes;
+                        renderizarInscricoes(inscricoes);
+                        atualizarContadores(inscricoes);
                         } else {
-                            throw new Error(data.message || 'Erro ao carregar equipes');
-                        }
-                    } catch (e) {
-                        console.error('Resposta inválida:', responseText);
-                        throw new Error('Erro ao processar resposta do servidor');
+                        throw new Error(data.message || 'Erro ao carregar inscrições');
                     }
                 } catch (error) {
-                    console.error('Erro ao carregar equipes:', error);
+                    console.error('Erro:', error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Erro',
-                        text: error.message,
-                        confirmButtonText: 'Tentar Novamente'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            carregarEquipes();
-                        }
+                        text: 'Erro ao carregar inscrições'
                     });
                 }
             }
             
-            // Função para atualizar contadores
-            function atualizarContadores(equipes) {
-                const totalEquipes = equipes.length;
-                const equipesPendentes = equipes.filter(e => e.status_equipe === 'pendente').length;
-                const equipesAprovadas = equipes.filter(e => e.status_equipe === 'aprovado').length;
-                const equipesReprovadas = equipes.filter(e => e.status_equipe === 'reprovado').length;
-                
-                document.getElementById('total-equipes').textContent = totalEquipes;
-                document.getElementById('equipes-pendentes').textContent = equipesPendentes;
-                document.getElementById('equipes-aprovadas').textContent = equipesAprovadas;
-                document.getElementById('equipes-reprovadas').textContent = equipesReprovadas;
-            }
-            
-            // Função para renderizar equipes
-            function renderizarEquipes(equipes) {
-                equipesContainer.innerHTML = equipes.map(equipe => `
-                    <div class="card bg-white rounded-lg border border-gray-100 p-6 mb-4 " data-equipe-id="${equipe.id}">
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                            <div class="mb-3 md:mb-0">
-                                <h3 class="text-lg font-semibold text-gray-800">${equipe.nome}</h3>
-                                <p class="text-gray-500 text-sm">
-                                    <span class="font-medium">Modalidade:</span> ${equipe.modalidade.charAt(0).toUpperCase() + equipe.modalidade.slice(1)}
-                                    <span class="mx-2">•</span>
-                                    <span class="font-medium">Categoria:</span> ${equipe.categoria}
-                                </p>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <span class="status-badge ${getStatusClass(equipe.status_equipe)}">
-                                    ${equipe.status_equipe.charAt(0).toUpperCase() + equipe.status_equipe.slice(1)}
-                                </span>
-                                <div class="flex space-x-2">
-                                    <button type="button" onclick="window.atualizarStatusEquipe(${equipe.id}, 'aprovado')" class="btn-action bg-green-100 text-green-700 hover:bg-green-200 px-3 py-2 rounded-md" title="Aprovar Equipe">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                    <button type="button" onclick="window.atualizarStatusEquipe(${equipe.id}, 'reprovado')" class="btn-action bg-red-100 text-red-700 hover:bg-red-200 px-3 py-2 rounded-md" title="Reprovar Equipe">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                    <button type="button" onclick="window.atualizarStatusEquipe(${equipe.id}, 'pendente')" class="btn-action bg-yellow-100 text-yellow-700 hover:bg-yellow-200 px-3 py-2 rounded-md" title="Marcar como Pendente">
-                                        <i class="fas fa-clock"></i>
-                                    </button>
+            // Função para renderizar as inscrições
+            function renderizarInscricoes(inscricoes) {
+                inscricoesContainer.innerHTML = inscricoes.map(inscricao => {
+                    // Verificar se é inscrição coletiva
+                    if (inscricao.tipo_inscricao === 'coletiva') {
+                        return `
+                        <div class="card bg-white rounded-lg border border-gray-200 p-4 mb-4" data-inscricao-id="${inscricao.inscricao_id}">
+                            <div class="flex flex-col">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800">${inscricao.nome_equipe}</h3>
+                                        <p class="text-gray-600 text-sm">
+                                            Modalidade: ${inscricao.modalidade.charAt(0).toUpperCase() + inscricao.modalidade.slice(1)} • 
+                                            Categoria: ${inscricao.categoria}
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="status-badge ${getStatusClass(inscricao.status)}">
+                                            ${inscricao.status.charAt(0).toUpperCase() + inscricao.status.slice(1)}
+                                        </span>
+                                        <div class="flex space-x-1">
+                                            <button type="button" onclick="atualizarStatusInscricao(${inscricao.inscricao_id}, 'aprovado')" 
+                                                    class="btn-action bg-green-100 text-green-700 hover:bg-green-200 px-3 py-2 rounded-md" 
+                                                    title="Aprovar">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button type="button" onclick="atualizarStatusInscricao(${inscricao.inscricao_id}, 'reprovado')" 
+                                                    class="btn-action bg-red-100 text-red-700 hover:bg-red-200 px-3 py-2 rounded-md" 
+                                                    title="Reprovar">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                            <button type="button" onclick="atualizarStatusInscricao(${inscricao.inscricao_id}, 'pendente')" 
+                                                    class="btn-action bg-yellow-100 text-yellow-700 hover:bg-yellow-200 px-3 py-2 rounded-md" 
+                                                    title="Pendente">
+                                                <i class="fas fa-clock"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h4 class="text-sm font-medium text-gray-700">Membros da Equipe</h4>
+                                        <span class="text-xs text-gray-500">1 / 12 membros</span>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <p class="font-medium text-gray-800 flex items-center">
+                                                    ${inscricao.nome}
+                                                    <span class="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">Líder</span>
+                                                </p>
+                                                <p class="text-xs text-gray-500">${inscricao.ano}º ${inscricao.turma} • ${inscricao.email}</p>
+                                            </div>
+                                            <span class="status-badge ${getStatusClass(inscricao.status)}">
+                                                ${inscricao.status.charAt(0).toUpperCase() + inscricao.status.slice(1)}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="border-t pt-4">
-                            <div class="flex items-center justify-between mb-3">
-                                <h4 class="font-medium text-gray-700">Membros da Equipe</h4>
-                                <span class="text-sm text-gray-500">${equipe.total_membros} / ${equipe.limite_membros} membros</span>
-                            </div>
-                            <div class="space-y-3">
-                                ${equipe.membros.map(membro => `
-                                    <div class="flex justify-between items-center py-2 px-4 bg-gray-50 rounded-lg">
-                                        <div>
-                                            <p class="font-medium text-gray-800">
-                                                ${membro.nome}
-                                                ${membro.is_lider ? '<span class="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">Líder</span>' : ''}
-                                            </p>
-                                            <p class="text-sm text-gray-500">${membro.ano}º ${membro.turma} • ${membro.email}</p>
-                                        </div>
-                                        <span class="status-badge ${getStatusClass(membro.status || 'pendente')}">
-                                            ${(membro.status || 'pendente').charAt(0).toUpperCase() + (membro.status || 'pendente').slice(1)}
-                                        </span>
+                        </div>`;
+                    } else {
+                        // Inscrições individuais mantêm o formato atual
+                        return `
+                        <div class="card bg-white rounded-lg border border-gray-100 p-6 mb-4" data-inscricao-id="${inscricao.inscricao_id}">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                                <div class="mb-3 md:mb-0">
+                                    <h3 class="text-lg font-semibold text-gray-800">${inscricao.nome}</h3>
+                                    <p class="text-gray-500 text-sm">
+                                        <span class="font-medium">Modalidade:</span> ${inscricao.modalidade.charAt(0).toUpperCase() + inscricao.modalidade.slice(1)}
+                                        <span class="mx-2">•</span>
+                                        <span class="font-medium">Categoria:</span> ${inscricao.categoria}
+                                        <span class="mx-2">•</span>
+                                        <span class="font-medium">Tipo:</span> Individual
+                                    </p>
+                                    <p class="text-gray-500 text-sm">
+                                        <span class="font-medium">Turma:</span> ${inscricao.ano}º ${inscricao.turma}
+                                        <span class="mx-2">•</span>
+                                        <span class="font-medium">Email:</span> ${inscricao.email}
+                                    </p>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <span class="status-badge ${getStatusClass(inscricao.status)}">
+                                        ${inscricao.status.charAt(0).toUpperCase() + inscricao.status.slice(1)}
+                                    </span>
+                                    <div class="flex space-x-2">
+                                        <button type="button" onclick="atualizarStatusInscricao(${inscricao.inscricao_id}, 'aprovado')" 
+                                                class="btn-action bg-green-100 text-green-700 hover:bg-green-200 px-3 py-2 rounded-md" 
+                                                title="Aprovar Inscrição">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button type="button" onclick="atualizarStatusInscricao(${inscricao.inscricao_id}, 'reprovado')" 
+                                                class="btn-action bg-red-100 text-red-700 hover:bg-red-200 px-3 py-2 rounded-md" 
+                                                title="Reprovar Inscrição">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                        <button type="button" onclick="atualizarStatusInscricao(${inscricao.inscricao_id}, 'pendente')" 
+                                                class="btn-action bg-yellow-100 text-yellow-700 hover:bg-yellow-200 px-3 py-2 rounded-md" 
+                                                title="Marcar como Pendente">
+                                            <i class="fas fa-clock"></i>
+                                        </button>
                                     </div>
-                                `).join('')}
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                `).join('') || '<p class="text-center text-gray-500 py-8">Nenhuma equipe encontrada</p>';
-                
-                function getStatusClass(status) {
-                    return {
-                        'pendente': 'bg-yellow-100 text-yellow-800',
-                        'aprovado': 'bg-green-100 text-green-800',
-                        'reprovado': 'bg-red-100 text-red-800'
-                    }[status] || 'bg-gray-100 text-gray-800';
-                }
+                        </div>`;
+                    }
+                }).join('') || '<p class="text-center text-gray-500 py-8">Nenhuma inscrição encontrada</p>';
             }
-            
-            // Função para filtrar equipes
-            function filtrarEquipes(termo, status = 'todos') {
+
+            // Função para atualizar contadores
+            function atualizarContadores(inscricoes) {
+                const total = inscricoes.length;
+                const pendentes = inscricoes.filter(i => i.status === 'pendente').length;
+                const aprovadas = inscricoes.filter(i => i.status === 'aprovado').length;
+                const reprovadas = inscricoes.filter(i => i.status === 'reprovado').length;
+
+                document.getElementById('total-inscricoes').textContent = total;
+                document.getElementById('inscricoes-pendentes').textContent = pendentes;
+                document.getElementById('inscricoes-aprovadas').textContent = aprovadas;
+                document.getElementById('inscricoes-reprovadas').textContent = reprovadas;
+            }
+
+            // Função para filtrar inscrições
+            function filtrarInscricoes(termo, status = 'todos') {
                 const termoLower = termo.toLowerCase();
-                const equipeFiltradas = equipes.filter(equipe => {
-                    const matchTermo = equipe.nome.toLowerCase().includes(termoLower) ||
-                        equipe.modalidade.toLowerCase().includes(termoLower) ||
-                        equipe.categoria.toLowerCase().includes(termoLower) ||
-                        equipe.membros.some(membro => 
-                            membro.nome.toLowerCase().includes(termoLower) ||
-                            membro.email.toLowerCase().includes(termoLower)
-                        );
+                const inscricoesFiltradas = inscricoes.filter(inscricao => {
+                    const matchTermo = inscricao.nome.toLowerCase().includes(termoLower) ||
+                        inscricao.modalidade.toLowerCase().includes(termoLower) ||
+                        inscricao.categoria.toLowerCase().includes(termoLower) ||
+                        (inscricao.nome_equipe && inscricao.nome_equipe.toLowerCase().includes(termoLower)) ||
+                        inscricao.email.toLowerCase().includes(termoLower);
                     
-                    const matchStatus = status === 'todos' || equipe.status_equipe === status;
+                    const matchStatus = status === 'todos' || inscricao.status === status;
                     
                     return matchTermo && matchStatus;
                 });
-                renderizarEquipes(equipeFiltradas);
+                renderizarInscricoes(inscricoesFiltradas);
             }
-            
-            // Event Listeners
-            const statusFilter = document.getElementById('status-filter');
-            searchInput.addEventListener('input', (e) => filtrarEquipes(e.target.value, statusFilter.value));
-            statusFilter.addEventListener('change', (e) => filtrarEquipes(searchInput.value, e.target.value));
-            refreshBtn.addEventListener('click', () => {
-                // Resetar filtros
-                searchInput.value = '';
-                statusFilter.value = 'todos';
-                carregarEquipes();
-            });
-            
-            // Função global para atualizar status
-            window.atualizarStatusEquipe = async function(equipeId, status) {
+
+            // Função para atualizar status de uma inscrição
+            window.atualizarStatusInscricao = async function(inscricaoId, status) {
                 try {
-                    console.log('=== Início atualizarStatusEquipe ===');
-                    console.log('Parâmetros:', { equipeId, status });
-                    
-                    // Desabilitar os botões da equipe durante o processamento
-                    const equipeElement = document.querySelector(`[data-equipe-id="${equipeId}"]`);
-                    if (equipeElement) {
-                        const botoes = equipeElement.querySelectorAll('button');
-                        botoes.forEach(btn => btn.disabled = true);
-                    }
-                    
-                    // Mostrar loading
-                    const loadingAlert = Swal.fire({
-                        title: 'Processando...',
-                        text: 'Atualizando status da equipe',
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        willOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-                
                 const formData = new FormData();
-                    formData.append('action', 'atualizar-status-equipe');
-                    formData.append('equipe_id', equipeId);
+                    formData.append('action', 'atualizar-status');
+                    formData.append('inscricao_id', inscricaoId);
                 formData.append('status', status);
                 
-                    console.log('Enviando requisição para:', '../controllers/AdminController.php');
-                    
-                    try {
                         const response = await fetch('../controllers/AdminController.php', {
                             method: 'POST',
                             body: formData
                         });
                         
-                        console.log('Status da resposta:', response.status);
-                        
-                        // Log da resposta bruta para debug
-                        const responseText = await response.text();
-                        console.log('Resposta bruta do servidor:', responseText);
-                        
-                        let data;
-                        try {
-                            data = JSON.parse(responseText);
-                            console.log('Resposta processada:', data);
-                        } catch (e) {
-                            throw new Error('Resposta inválida do servidor: ' + responseText);
-                        }
+                    const data = await response.json();
                         
                         if (data.success) {
-                            console.log('Operação realizada com sucesso:', data.message);
-                            
-                            // Fechar o loading antes de recarregar
-                            await loadingAlert.close();
-                            
-                            // Recarregar os dados
-                            await carregarEquipes();
-                            
-                            // Mostrar mensagem de sucesso
-                            await Swal.fire({
+                        await carregarInscricoes();
+                        Swal.fire({
                                 icon: 'success',
                                 title: 'Sucesso',
                                 text: data.message,
@@ -431,38 +379,35 @@ if (!isset($_SESSION['admin_id']) ||
                             throw new Error(data.message || 'Erro ao atualizar status');
                         }
                     } catch (error) {
-                        throw error;
-                    } finally {
-                        // Reabilitar os botões
-                        if (equipeElement) {
-                            const botoes = equipeElement.querySelectorAll('button');
-                            botoes.forEach(btn => btn.disabled = false);
-                        }
-                    }
-                    
-                    console.log('=== Fim atualizarStatusEquipe ===');
-                } catch (error) {
-                    console.error('Erro ao atualizar status:', error);
-                    console.error('Stack trace:', error.stack);
-                    
-                    // Fechar o loading se estiver aberto
-                    Swal.close();
-                    
-                    // Mostrar erro
-                    await Swal.fire({
+                    console.error('Erro:', error);
+                    Swal.fire({
                         icon: 'error',
                         title: 'Erro',
-                        text: error.message || 'Erro ao atualizar status da equipe',
-                        confirmButtonText: 'OK'
+                        text: error.message || 'Erro ao atualizar status da inscrição'
                     });
-                    
-                    // Recarregar os dados para garantir consistência
-                    await carregarEquipes();
                 }
             };
-            
-            // Carregar equipes inicialmente
-            carregarEquipes();
+
+            // Função para obter classe CSS do status
+            function getStatusClass(status) {
+                return {
+                    'pendente': 'bg-yellow-100 text-yellow-800',
+                    'aprovado': 'bg-green-100 text-green-800',
+                    'reprovado': 'bg-red-100 text-red-800'
+                }[status] || 'bg-gray-100 text-gray-800';
+            }
+
+            // Event Listeners
+            searchInput.addEventListener('input', (e) => filtrarInscricoes(e.target.value, statusFilter.value));
+            statusFilter.addEventListener('change', (e) => filtrarInscricoes(searchInput.value, e.target.value));
+            refreshBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                statusFilter.value = 'todos';
+                carregarInscricoes();
+            });
+
+            // Carregar inscrições inicialmente
+            carregarInscricoes();
         });
     </script>
 </body>

@@ -98,32 +98,32 @@ class UsuarioController {
         header('Content-Type: application/json');
         
         try {
-            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                echo json_encode(['success' => false, 'message' => 'Método não permitido']);
-                return;
-            }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Método não permitido']);
+            return;
+        }
 
-            // Validar dados obrigatórios
-            $campos = ['nome', 'email', 'telefone', 'ano', 'turma'];
-            $dados = [];
-            
-            foreach ($campos as $campo) {
-                if (!isset($_POST[$campo]) || empty($_POST[$campo])) {
-                    echo json_encode(['success' => false, 'message' => 'Todos os campos são obrigatórios']);
-                    return;
-                }
-                $dados[$campo] = $_POST[$campo];
-            }
-            
-            // Validar email
-            if (!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) {
-                echo json_encode(['success' => false, 'message' => 'Email inválido']);
+        // Validar dados obrigatórios
+        $campos = ['nome', 'email', 'telefone', 'ano', 'turma'];
+        $dados = [];
+        
+        foreach ($campos as $campo) {
+            if (!isset($_POST[$campo]) || empty($_POST[$campo])) {
+                echo json_encode(['success' => false, 'message' => 'Todos os campos são obrigatórios']);
                 return;
             }
-            
-            // Cadastrar usuário
-            $resultado = $this->model->cadastrarUsuario($dados);
-            echo json_encode($resultado);
+            $dados[$campo] = $_POST[$campo];
+        }
+        
+        // Validar email
+        if (!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) {
+            echo json_encode(['success' => false, 'message' => 'Email inválido']);
+            return;
+        }
+        
+        // Cadastrar usuário
+        $resultado = $this->model->cadastrarUsuario($dados);
+        echo json_encode($resultado);
             
         } catch (Exception $e) {
             error_log("Erro no cadastro de usuário: " . $e->getMessage());
@@ -138,27 +138,27 @@ class UsuarioController {
 // Se chamado diretamente, determina qual método executar
 if (basename($_SERVER['SCRIPT_FILENAME']) == basename(__FILE__)) {
     try {
-        $controller = new UsuarioController();
-        
-        $action = $_POST['action'] ?? $_GET['action'] ?? '';
-        
-        switch ($action) {
-            case 'cadastrar':
-                $controller->cadastrar();
-                break;
-            case 'login':
-                $controller->login();
-                break;
-            case 'logout':
-                $controller->logout();
-                break;
-            case 'dados':
-                $controller->dadosUsuario();
-                break;
-            default:
-                header('Content-Type: application/json');
-                echo json_encode(['success' => false, 'message' => 'Ação não reconhecida']);
-                break;
+    $controller = new UsuarioController();
+    
+    $action = $_POST['action'] ?? $_GET['action'] ?? '';
+    
+    switch ($action) {
+        case 'cadastrar':
+            $controller->cadastrar();
+            break;
+        case 'login':
+            $controller->login();
+            break;
+        case 'logout':
+            $controller->logout();
+            break;
+        case 'dados':
+            $controller->dadosUsuario();
+            break;
+        default:
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => 'Ação não reconhecida']);
+            break;
         }
     } catch (Exception $e) {
         error_log("Erro ao processar requisição: " . $e->getMessage());

@@ -1,13 +1,13 @@
 <?php
 session_start();
 if (!isset($_SESSION['aluno_id'])) {
-    header('Location: ../index.php');
+    header("Location: ../index.php");
     exit();
 }
 
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../model/EquipeModel.php';
-require_once __DIR__ . '/../model/UsuarioModel.php';
+require_once '../config/config.php';
+require_once '../model/EquipeModel.php';
+require_once '../model/UsuarioModel.php';
 
 $alunoId = $_SESSION['aluno_id'];
 $equipeModel = new EquipeModel();
@@ -537,12 +537,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="space-y-2">
                         <span class="text-sm text-gray-700">Chave PIX:</span>
                         <div class="flex items-center gap-2">
-                            <span id="modalChavePix" class="font-mono bg-gray-50 px-3 py-2 rounded border text-sm flex-1 overflow-x-auto whitespace-nowrap"></span>
+                            <span id="modalChavePix" class="font-mono bg-gray-50 px-3 py-2 rounded border text-sm flex-1 overflow-x-auto whitespace-nowrap"><?php echo PIX_CHAVE; ?></span>
                             <button onclick="copiarPix(document.getElementById('modalChavePix').textContent)" 
                                     class="bg-primary-600 hover:bg-primary-700 text-white p-2 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-105">
                                 <i class="fas fa-copy"></i>
                             </button>
                         </div>
+                        <p class="text-sm text-gray-600 mt-1">
+                            <i class="fas fa-user mr-1"></i> <?php echo PIX_NOME; ?>
+                        </p>
                     </div>
                 </div>
 
@@ -634,10 +637,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function enviarComprovante(identificador, valor, nomeEquipe) {
             const mensagem = `Olá! Segue o comprovante de pagamento:\n\n` +
                             `*Equipe:* ${nomeEquipe}\n` +
-                        
                             `*Valor:* R$ ${valor}`;
             
-            const numeroWhatsapp = '558598530920';
+            const numeroWhatsapp = '<?php echo WHATSAPP_NUMERO; ?>';
             const url = `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(mensagem)}`;
             window.open(url, '_blank');
         }

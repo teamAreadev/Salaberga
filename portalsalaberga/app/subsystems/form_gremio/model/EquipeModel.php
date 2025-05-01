@@ -660,9 +660,9 @@ class EquipeModel {
             $pixInfo = null;
             if ($atingiuMinimo) {
                 $pixInfo = [
-                    'chave' => '09593342389',
-                    'beneficiario' => 'Matheus Lima de Araujo',
-                    'cidade' => 'Fortaleza',
+                    'chave' => PIX_CHAVE,
+                    'beneficiario' => PIX_NOME,
+                    'cidade' => PIX_CIDADE,
                     'valor' => number_format($valorTotal, 2, '.', ''),
                     'identificador' => 'GREMIO' . $equipeId . date('YmdHis'),
                     'descricao' => 'Inscrição Copa Grêmio 2025 - Equipe ' . $equipe['nome']

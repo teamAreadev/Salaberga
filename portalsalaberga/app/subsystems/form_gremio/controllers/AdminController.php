@@ -185,10 +185,10 @@ class AdminController {
     public function obterTodasInscricoes() {
         $this->verificarAutenticacao();
         
-        $inscricoes = $this->inscricaoModel->obterTodasInscricoes();
+        $resultado = $this->inscricaoModel->obterTodasInscricoes();
         
         header('Content-Type: application/json');
-        echo json_encode(['success' => true, 'inscricoes' => $inscricoes]);
+        echo json_encode($resultado);
     }
 
     public function obterInscricaoPorId() {
