@@ -11,7 +11,6 @@ if (isset($_POST['layout'])) {
     $session->quebra_session();
 }
 ?>
-?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 
