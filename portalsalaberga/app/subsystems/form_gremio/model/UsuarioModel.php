@@ -5,8 +5,17 @@ class UsuarioModel {
     private $db;
 
     public function __construct() {
-        $database = new Database();
-        $this->db = $database->getConnection();
+        try {
+            $database = new Database();
+            $this->db = $database->getConnection();
+            
+            if (!$this->db) {
+                throw new Exception("Não foi possível estabelecer conexão com o banco de dados");
+            }
+        } catch (Exception $e) {
+            error_log("Erro na inicialização do UsuarioModel: " . $e->getMessage());
+            throw $e;
+        }
     }
 
     /**

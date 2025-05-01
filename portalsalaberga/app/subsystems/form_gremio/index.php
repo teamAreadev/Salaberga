@@ -424,7 +424,7 @@
             
             try {
                 const formData = new FormData(form);
-                const response = await fetch(form.action, {
+                const response = await fetch('controllers/UsuarioController.php', {
                     method: 'POST',
                     body: formData
                 });

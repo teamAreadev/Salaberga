@@ -182,14 +182,7 @@ if (!isset($_SESSION['admin_id']) ||
         </div>
     </main>
     
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-6 mt-12">
-        <div class="container mx-auto px-4 text-center">
-            <p>© 2025 Copa Grêmio - Grêmio Estudantil José Ivan Pontes Júnior</p>
-            <p class="text-gray-400 text-sm mt-1">Todos os direitos reservados</p>
-        </div>
-    </footer>
-
+   
     <!-- Modal -->
     <div id="modal-detalhes" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0">
