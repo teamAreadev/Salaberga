@@ -19,14 +19,35 @@ class select_model extends connect
     }
     function total_vagas()
     {
-        $stmt_vagas = $this->connect->query("SELECT sum(numero_vagas) FROM concedentes");
+        $stmt_vagas = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas");
         $result = $stmt_vagas->fetch(PDO::FETCH_ASSOC);
 
         return $result;
     }
-    function total_vagas_design()
+    function total_vagas_des()
     {
-        $stmt_empresa = $this->connect->query("SELECT numero_vagas FROM concedentes WHERE perfil = 'design'");
+        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas WHERE id_perfil = 2");
+        $result = $stmt_empresa->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+    function total_vagas_dev()
+    {
+        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas WHERE id_perfil = 1");
+        $result = $stmt_empresa->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+    function total_vagas_tut()
+    {
+        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas WHERE id_perfil = 4");
+        $result = $stmt_empresa->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+    function total_vagas_sup()
+    {
+        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas WHERE id_perfil = 3");
         $result = $stmt_empresa->fetch(PDO::FETCH_ASSOC);
 
         return $result;
