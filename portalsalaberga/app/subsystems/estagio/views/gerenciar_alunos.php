@@ -1,14 +1,6 @@
 <?php
 require_once('../models/select_model.php');
 $select_model = new select_model();
-require_once('../models/sessions.php');
-$session = new sessions;
-$session->tempo_session(600);
-$session->autenticar_session();
-
-if (isset($_POST['logout'])) {
-    $session->quebra_session();
-}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -18,11 +10,11 @@ if (isset($_POST['logout'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a1a1a">
     <meta name="description" content="Gerenciamento de Alunos - Sistema de Estágio">
-
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    
     <title>Gerenciar Alunos - Sistema de Estágio</title>
 
     <script>
@@ -97,8 +89,8 @@ if (isset($_POST['logout'])) {
             background-color: #1a1a1a;
             color: #ffffff;
             min-height: 100vh;
-            background-image:
-                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%),
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%), 
                 radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.03) 0%, rgba(255, 165, 0, 0) 20%);
             transition: all 0.3s ease;
         }
@@ -108,7 +100,7 @@ if (isset($_POST['logout'])) {
             background-image: linear-gradient(to bottom, #2d2d2d, #222222);
             border-right: 1px solid rgba(0, 122, 51, 0.2);
             transition: all 0.3s ease;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
         }
 
         .sidebar-link {
@@ -134,8 +126,7 @@ if (isset($_POST['logout'])) {
             box-shadow: 0 2px 8px rgba(0, 122, 51, 0.15);
         }
 
-        .dashboard-card,
-        .table-container {
+        .dashboard-card, .table-container {
             background-color: #2d2d2d;
             border-radius: 12px;
             padding: 1.5rem;
@@ -148,8 +139,7 @@ if (isset($_POST['logout'])) {
             -webkit-backdrop-filter: blur(5px);
         }
 
-        .dashboard-card:hover,
-        .table-container:hover {
+        .dashboard-card:hover, .table-container:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(0, 122, 51, 0.2);
@@ -169,8 +159,7 @@ if (isset($_POST['logout'])) {
             background-color: rgba(0, 122, 51, 0.1);
         }
 
-        .status-pill,
-        .mobile-badge {
+        .status-pill, .mobile-badge {
             padding: 0.35rem 1rem;
             border-radius: 30px;
             font-size: 0.75rem;
@@ -226,14 +215,7 @@ if (isset($_POST['logout'])) {
             border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
-<<<<<<< Updated upstream
         input, select, textarea {
-=======
-        /* Input e botões estilizados */
-        input,
-        select,
-        textarea {
->>>>>>> Stashed changes
             background-color: #232323 !important;
             border-color: #3d3d3d !important;
             color: #ffffff !important;
@@ -246,9 +228,7 @@ if (isset($_POST['logout'])) {
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
         }
 
-        input:focus,
-        select:focus,
-        textarea:focus {
+        input:focus, select:focus, textarea:focus {
             border-color: #007A33 !important;
             box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
             outline: none !important;
@@ -382,13 +362,64 @@ if (isset($_POST['logout'])) {
             background: #007A33;
         }
 
+        .mobile-card {
+            background: rgba(45, 45, 45, 0.9);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 122, 51, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .mobile-card-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mobile-card-label {
+            font-weight: 500;
+            color: #a0aec0;
+            font-size: 0.85rem;
+        }
+
+        .mobile-card-value {
+            font-weight: 400;
+            color: #ffffff;
+            font-size: 0.85rem;
+            text-align: right;
+            flex: 1;
+        }
+
+        .mobile-card-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
         .mobile-card-actions button {
-            padding: 0.625rem;
-            border-radius: 10px;
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
             transition: all 0.2s ease;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .mobile-card-actions button.info-btn {
+            color: #93c5fd;
         }
 
         .mobile-card-actions button.edit-btn {
@@ -399,43 +430,58 @@ if (isset($_POST['logout'])) {
             color: #f87171;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
+        .mobile-card-actions button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
 
-            to {
-                opacity: 1;
-            }
+        .table-container.desktop-table th,
+        .table-container.desktop-table td {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .table-container.desktop-table .action-icons i {
+            font-size: 1.25rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .fade-in {
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-
-        .slide-up {
-            animation: slideUp 0.4s ease-out forwards;
-        }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        .slide-up { animation: slideUp 0.4s ease-out forwards; }
 
         @media (max-width: 768px) {
             .table-container.desktop-table {
                 display: none;
             }
-
+            
             .mobile-cards-container {
                 display: block;
+            }
+
+            .mobile-cards-container {
+                padding: 0 0.5rem;
+            }
+
+            .action-bar {
+                padding: 1rem;
+            }
+
+            .search-input-container {
+                width: 100%;
+            }
+
+            .custom-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
             }
         }
 
@@ -443,7 +489,7 @@ if (isset($_POST['logout'])) {
             .mobile-cards-container {
                 display: none;
             }
-
+            
             .table-container.desktop-table {
                 display: block;
             }
@@ -490,12 +536,10 @@ if (isset($_POST['logout'])) {
                         <i class="fas fa-cog w-5 mr-3"></i>
                         Configurações
                     </a>
-                    <form action="" method="post">
-                        <button type="submit" class="sidebar-link text-red-400 hover:text-red-300">
-                            <i class="fas fa-sign-out-alt w-5 mr-3"></i>
-                            Sair
-                        </button>
-                    </form>
+                    <a href="login.php" class="sidebar-link text-red-400 hover:text-red-300">
+                        <i class="fas fa-sign-out-alt w-5 mr-3"></i>
+                        Sair
+                    </a>
                 </div>
             </div>
         </aside>
@@ -519,7 +563,7 @@ if (isset($_POST['logout'])) {
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <nav class=" Massey Ferguson flex-1">
+                <nav class="flex-1">
                     <a href="dashboard.php" class="sidebar-link">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
@@ -613,8 +657,8 @@ if (isset($_POST['logout'])) {
                     <table class="min-w-full divide-y divide-gray-700 text-sm">
                         <thead>
                             <tr>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Nome</th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Ações</th>
+                                <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Nome</th>
+                                <th scope="col" class="px-3 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="alunosTableBody">
@@ -622,14 +666,13 @@ if (isset($_POST['logout'])) {
                             $dados = $select_model->alunos_aptos();
                             foreach ($dados as $index => $dado) {
                             ?>
-<<<<<<< Updated upstream
                                 <tr class="hover:bg-dark-50 transition-colors slide-up" style="animation-delay: <?= $index * 50 ?>ms;">
-                                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
-                                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 mr-3 transition-colors">
+                                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
+                                    <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
+                                        <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
                                             <i class="fas fa-info-circle"></i>
                                         </button>
-                                        <button onclick="editarAluno(<?= $dado['id'] ?>)" class="text-primary-400 hover:text-primary-300 mr-3 transition-colors">
+                                        <button onclick="editarAluno(<?= $dado['id'] ?>)" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button onclick="excluirAluno(<?= $dado['id'] ?>)" class="text-red-500 hover:text-red-400 transition-colors">
@@ -637,18 +680,6 @@ if (isset($_POST['logout'])) {
                                         </button>
                                     </td>
                                 </tr>
-=======
-                                <td><?= $dado['id'] ?></td>
-                                <td><?= $dado['nome'] ?></td>
-                                <td><?= $dado['contato'] ?></td>
-                                <td><?= $dado['medias'] ?></td>
-                                <td><?= $dado['email'] ?></td>
-                                <td><?= $dado['projetos'] ?? "-" ?></td>
-                                <td><?= $dado['perfil_opc1'] ?></td>
-                                <td><?= $dado['perfil_opc2'] ?></td>
-                                <td><?= $dado['ocorrencia'] ?></td>
-                                <td><?= $dado['custeio'] = $dado['custeio'] == "1" ? "Sim" : "Não" ?></td>
->>>>>>> Stashed changes
                             <?php } ?>
                         </tbody>
                     </table>
@@ -658,12 +689,12 @@ if (isset($_POST['logout'])) {
                 <div id="alunosMobileCards" class="mobile-cards-container space-y-4">
                     <?php
                     foreach ($dados as $dado) {
-                        $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
-                                        ($dado['perfil_opc1'] === 'design' ? 'bg-purple-900 text-purple-300' : 
-                                        ($dado['perfil_opc1'] === 'midia' ? 'bg-green-900 text-green-300' : 'bg-orange-900 text-orange-300'));
-                        $areaClassOpc2 = $dado['perfil_opc2'] === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
-                                        ($dado['perfil_opc2'] === 'design' ? 'bg-purple-900 text-purple-300' : 
-                                        ($dado['perfil_opc2'] === 'midia' ? 'bg-green-900 text-green-300' : 'bg-orange-900 text-orange-300'));
+                        $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'area-desenvolvimento' : 
+                                        ($dado['perfil_opc1'] === 'design' ? 'area-design' : 
+                                        ($dado['perfil_opc1'] === 'midia' ? 'area-midia' : 'area-redes'));
+                        $areaClassOpc2 = $dado['perfil_opc2'] === 'desenvolvimento' ? 'area-desenvolvimento' : 
+                                        ($dado['perfil_opc2'] === 'design' ? 'area-design' : 
+                                        ($dado['perfil_opc2'] === 'midia' ? 'area-midia' : 'area-redes'));
                     ?>
                         <div class="mobile-card bg-dark-300 rounded-lg p-4 shadow-md">
                             <div class="mobile-card-item">
@@ -693,13 +724,19 @@ if (isset($_POST['logout'])) {
                             <div class="mobile-card-item">
                                 <span class="mobile-card-label">Opção 1:</span>
                                 <span class="mobile-card-value">
-                                    <span class="mobile-badge <?= $areaClassOpc1 ?>"><?= htmlspecialchars($dado['perfil_opc1']) ?></span>
+                                    <span class="status-pill <?= $areaClassOpc1 ?>">
+                                        <i class="fas fa-<?= $dado['perfil_opc1'] === 'desenvolvimento' ? 'code' : ($dado['perfil_opc1'] === 'design' ? 'paint-brush' : ($dado['perfil_opc1'] === 'midia' ? 'video' : 'network-wired')) ?> text-xs mr-1"></i>
+                                        <?= htmlspecialchars($dado['perfil_opc1']) ?>
+                                    </span>
                                 </span>
                             </div>
                             <div class="mobile-card-item">
                                 <span class="mobile-card-label">Opção 2:</span>
                                 <span class="mobile-card-value">
-                                    <span class="mobile-badge <?= $areaClassOpc2 ?>"><?= htmlspecialchars($dado['perfil_opc2']) ?></span>
+                                    <span class="status-pill <?= $areaClassOpc2 ?>">
+                                        <i class="fas fa-<?= $dado['perfil_opc2'] === 'desenvolvimento' ? 'code' : ($dado['perfil_opc2'] === 'design' ? 'paint-brush' : ($dado['perfil_opc2'] === 'midia' ? 'video' : 'network-wired')) ?> text-xs mr-1"></i>
+                                        <?= htmlspecialchars($dado['perfil_opc2']) ?>
+                                    </span>
                                 </span>
                             </div>
                             <div class="mobile-card-item">
@@ -711,6 +748,9 @@ if (isset($_POST['logout'])) {
                                 <span class="mobile-card-value"><?= $dado['custeio'] == "1" ? 'Sim' : 'Não' ?></span>
                             </div>
                             <div class="mobile-card-actions flex space-x-2 mt-4">
+                                <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="info-btn flex-1">
+                                    <i class="fas fa-info-circle"></i> Detalhes
+                                </button>
                                 <button onclick="editarAluno(<?= $dado['id'] ?>)" class="edit-btn flex-1">
                                     <i class="fas fa-edit"></i> Editar
                                 </button>
@@ -812,10 +852,9 @@ if (isset($_POST['logout'])) {
 
     <script>
         // Dados dos alunos
-<<<<<<< Updated upstream
         let alunos = [
             <?php foreach ($dados as $dado) { ?>
-                
+                {
                     id: <?= $dado['id'] ?>,
                     nome: "<?= addslashes($dado['nome']) ?>",
                     contato: "<?= addslashes($dado['contato'] ?: '-') ?>",
@@ -826,58 +865,8 @@ if (isset($_POST['logout'])) {
                     perfil_opc2: "<?= addslashes($dado['perfil_opc2']) ?>",
                     ocorrencia: "<?= addslashes($dado['ocorrencia'] ?: '-') ?>",
                     custeio: <?= $dado['custeio'] ?>
-                
+                },
             <?php } ?>
-=======
-        const alunos = [{
-                id: 1,
-                nome: "ALEXANDRE NETO DANTAS DA SILVA",
-                area: "desenvolvimento",
-                status: "ativo",
-                nota: 8.5,
-                projetos: "Projeto A, Projeto B"
-            },
-            {
-                id: 2,
-                nome: "ANA CLARA CAVALCANTE LIMA",
-                area: "design",
-                status: "ativo",
-                nota: 9.0,
-                projetos: "Projeto C"
-            },
-            {
-                id: 3,
-                nome: "ANGELA MICHELE DOS SANTOS LIMA",
-                area: "midia",
-                status: "estagiando",
-                nota: 8.7,
-                projetos: "Projeto D"
-            },
-            {
-                id: 4,
-                nome: "CARLOS EDUARDO SILVA SANTOS",
-                area: "redes",
-                status: "ativo",
-                nota: 7.8,
-                projetos: "Projeto E, Projeto F"
-            },
-            {
-                id: 5,
-                nome: "DANIELA FERNANDES OLIVEIRA",
-                area: "design",
-                status: "inativo",
-                nota: 8.2,
-                projetos: "Projeto G"
-            },
-            {
-                id: 6,
-                nome: "EDUARDO MORAES COSTA",
-                area: "desenvolvimento",
-                status: "estagiando",
-                nota: 9.1,
-                projetos: "Projeto H, Projeto I"
-            }
->>>>>>> Stashed changes
         ];
 
         // Função para renderizar a tabela de alunos (desktop)
@@ -890,13 +879,12 @@ if (isset($_POST['logout'])) {
                 tr.className = 'hover:bg-dark-50 transition-colors slide-up';
                 tr.style.animationDelay = `${index * 50}ms`;
                 tr.innerHTML = `
-<<<<<<< Updated upstream
-                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
-                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 mr-3 transition-colors">
+                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
+                        <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
                             <i class="fas fa-info-circle"></i>
                         </button>
-                        <button onclick="editarAluno(${aluno.id})" class="text-primary-400 hover:text-primary-300 mr-3 transition-colors">
+                        <button onclick="editarAluno(${aluno.id})" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button onclick="excluirAluno(${aluno.id})" class="text-red-500 hover:text-red-400 transition-colors">
@@ -904,35 +892,6 @@ if (isset($_POST['logout'])) {
                         </button>
                     </td>
                 `;
-=======
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.id}</td>
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                            <span class="status-pill area-${aluno.area}">
-                                <i class="fas fa-${
-                                    aluno.area === 'desenvolvimento' ? 'code' :
-                                    aluno.area === 'design' ? 'paint-brush' :
-                                    aluno.area === 'midia' ? 'video' :
-                                    'network-wired'
-                                } text-xs mr-1"></i>
-                                ${aluno.area}
-                            </span>
-                        </td>
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
-                            <span class="status-pill status-${aluno.status}">${aluno.status}</span>
-                        </td>
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.nota}</td>
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">${aluno.projetos}</td>
-                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <button onclick="editarAluno(${aluno.id})" class="text-primary-400 hover:text-primary-300 mr-3 transition-colors">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button onclick="excluirAluno(${aluno.id})" class="text-red-500 hover:text-red-400 transition-colors">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    `;
->>>>>>> Stashed changes
                 tbody.appendChild(tr);
             });
         }
@@ -944,29 +903,16 @@ if (isset($_POST['logout'])) {
 
             alunosFiltrados.forEach(aluno => {
                 const card = document.createElement('div');
-<<<<<<< Updated upstream
                 card.className = 'mobile-card bg-dark-300 rounded-lg p-4 shadow-md';
 
-                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
-                                    aluno.perfil_opc1 === 'design' ? 'bg-purple-900 text-purple-300' : 
-                                    aluno.perfil_opc1 === 'midia' ? 'bg-green-900 text-green-300' : 
-                                    'bg-orange-900 text-orange-300';
-                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' : 
-                                    aluno.perfil_opc2 === 'design' ? 'bg-purple-900 text-purple-300' : 
-                                    aluno.perfil_opc2 === 'midia' ? 'bg-green-900 text-green-300' : 
-                                    'bg-orange-900 text-orange-300';
-=======
-                card.className = 'mobile-card';
-
-                const areaClass = aluno.area === 'desenvolvimento' ? 'bg-blue-900 text-blue-300' :
-                    aluno.area === 'design' ? 'bg-purple-900 text-purple-300' :
-                    aluno.area === 'midia' ? 'bg-green-900 text-green-300' :
-                    'bg-orange-900 text-orange-300';
-
-                const statusClass = aluno.status === 'ativo' ? 'status-ativo' :
-                    aluno.status === 'inativo' ? 'status-inativo' :
-                    'status-estagiando';
->>>>>>> Stashed changes
+                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'area-desenvolvimento' : 
+                                    aluno.perfil_opc1 === 'design' ? 'area-design' : 
+                                    aluno.perfil_opc1 === 'midia' ? 'area-midia' : 
+                                    'area-redes';
+                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'area-desenvolvimento' : 
+                                    aluno.perfil_opc2 === 'design' ? 'area-design' : 
+                                    aluno.perfil_opc2 === 'midia' ? 'area-midia' : 
+                                    'area-redes';
 
                 card.innerHTML = `
                     <div class="mobile-card-item">
@@ -996,13 +942,29 @@ if (isset($_POST['logout'])) {
                     <div class="mobile-card-item">
                         <span class="mobile-card-label">Opção 1:</span>
                         <span class="mobile-card-value">
-                            <span class="mobile-badge ${areaClassOpc1}">${aluno.perfil_opc1}</span>
+                            <span class="status-pill ${areaClassOpc1}">
+                                <i class="fas fa-${
+                                    aluno.perfil_opc1 === 'desenvolvimento' ? 'code' :
+                                    aluno.perfil_opc1 === 'design' ? 'paint-brush' :
+                                    aluno.perfil_opc1 === 'midia' ? 'video' :
+                                    'network-wired'
+                                } text-xs mr-1"></i>
+                                ${aluno.perfil_opc1}
+                            </span>
                         </span>
                     </div>
                     <div class="mobile-card-item">
                         <span class="mobile-card-label">Opção 2:</span>
                         <span class="mobile-card-value">
-                            <span class="mobile-badge ${areaClassOpc2}">${aluno.perfil_opc2}</span>
+                            <span class="status-pill ${areaClassOpc2}">
+                                <i class="fas fa-${
+                                    aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
+                                    aluno.perfil_opc2 === 'design' ? 'paint-brush' :
+                                    aluno.perfil_opc2 === 'midia' ? 'video' :
+                                    'network-wired'
+                                } text-xs mr-1"></i>
+                                ${aluno.perfil_opc2}
+                            </span>
                         </span>
                     </div>
                     <div class="mobile-card-item">
@@ -1014,6 +976,9 @@ if (isset($_POST['logout'])) {
                         <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
                     </div>
                     <div class="mobile-card-actions flex space-x-2 mt-4">
+                        <button onclick="verDetalhes(${aluno.id})" class="info-btn flex-1">
+                            <i class="fas fa-info-circle"></i> Detalhes
+                        </button>
                         <button onclick="editarAluno(${aluno.id})" class="edit-btn flex-1">
                             <i class="fas fa-edit"></i> Editar
                         </button>
@@ -1097,7 +1062,7 @@ if (isset($_POST['logout'])) {
                 `;
                 const modal = document.getElementById('detalhesModal');
                 modal.classList.remove('hidden');
-                modal.style.display = 'flex'; // Ensure display is set to flex
+                modal.style.display = 'flex';
             }
         }
 
@@ -1106,18 +1071,12 @@ if (isset($_POST['logout'])) {
             const aluno = alunos.find(a => a.id === id);
             if (aluno) {
                 document.getElementById('modalTitle').textContent = 'Editar Aluno';
-<<<<<<< Updated upstream
                 document.getElementById('alunoId').value = aluno.id;
-=======
-
-                // Preenche todos os campos
->>>>>>> Stashed changes
                 document.getElementById('alunoNome').value = aluno.nome;
                 document.getElementById('alunoContato').value = aluno.contato;
                 document.getElementById('alunoMedias').value = aluno.medias;
                 document.getElementById('alunoEmail').value = aluno.email;
                 document.getElementById('alunoProjetos').value = aluno.projetos;
-<<<<<<< Updated upstream
                 document.getElementById('alunoOpc1').value = aluno.perfil_opc1;
                 document.getElementById('alunoOpc2').value = aluno.perfil_opc2;
                 document.getElementById('alunoOcorrencia').value = aluno.ocorrencia;
@@ -1129,16 +1088,8 @@ if (isset($_POST['logout'])) {
                 document.getElementById('alunoOpc2').disabled = true;
 
                 const modal = document.getElementById('alunoModal');
-=======
-
-                // Desabilita os campos que não podem ser editados
-                document.getElementById('alunoNome').disabled = true;
-                document.getElementById('alunoArea').disabled = true;
-                document.getElementById('alunoNota').disabled = true;
-
->>>>>>> Stashed changes
                 modal.classList.remove('hidden');
-                modal.style.display = 'flex'; // Ensure display is set to flex
+                modal.style.display = 'flex';
             }
         }
 
@@ -1195,7 +1146,6 @@ if (isset($_POST['logout'])) {
 
         alunoForm.addEventListener('submit', (e) => {
             e.preventDefault();
-<<<<<<< Updated upstream
             
             const id = parseInt(document.getElementById('alunoId').value);
             const alunoIndex = alunos.findIndex(a => a.id === id);
@@ -1275,64 +1225,11 @@ if (isset($_POST['logout'])) {
         document.getElementById('searchAluno').addEventListener('input', aplicarFiltros);
         document.getElementById('filterArea').addEventListener('change', aplicarFiltros);
         document.getElementById('filterStatus').addEventListener('change', aplicarFiltros);
-=======
-
-            // Simulação de salvamento
-            alert('Alterações salvas com sucesso!');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        });
-
-        // Busca e Filtros
-        function aplicarFiltros() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const areaFiltro = filterArea.value;
-            const statusFiltro = filterStatus.value;
-
-            const alunosFiltrados = alunos.filter(aluno => {
-                const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
-                const matchArea = !areaFiltro || aluno.area === areaFiltro;
-                const matchStatus = !statusFiltro || aluno.status === statusFiltro;
-                return matchSearch && matchArea && matchStatus;
-            });
-
-            renderizarTabelaDesktop(alunosFiltrados);
-            renderizarCardsMobile(alunosFiltrados);
-
-            const noResultsMessage = document.getElementById('noResultsMessage');
-            if (alunosFiltrados.length === 0 && !noResultsMessage) {
-                const message = document.createElement('div');
-                message.id = 'noResultsMessage';
-                message.className = 'col-span-3 text-center py-8 text-gray-400 fade-in';
-                message.innerHTML = `
-                        <i class="fas fa-search text-4xl mb-4 text-gray-600 opacity-30"></i>
-                        <p class="text-lg">Nenhum aluno encontrado com os filtros atuais.</p>
-                        <button id="clearFiltersBtn" class="mt-4 custom-btn custom-btn-secondary">
-                            <i class="fas fa-times-circle btn-icon"></i>
-                            <span>Limpar Filtros</span>
-                        </button>
-                    `;
-                document.getElementById('alunosMobileCards').insertAdjacentElement('afterend', message);
-                document.getElementById('clearFiltersBtn').addEventListener('click', () => {
-                    searchInput.value = '';
-                    filterArea.value = '';
-                    filterStatus.value = '';
-                    aplicarFiltros();
-                });
-            } else if (alunosFiltrados.length > 0 && noResultsMessage) {
-                noResultsMessage.remove();
-            }
-        }
-
-        searchInput.addEventListener('input', aplicarFiltros);
-        filterArea.addEventListener('change', aplicarFiltros);
-        filterStatus.addEventListener('change', aplicarFiltros);
->>>>>>> Stashed changes
 
         // Inicializar tabela e cards
         renderizarTabelaDesktop();
         renderizarCardsMobile();
-
+        
         // Verificar tamanho da tela e ajustar renderização
         function checkScreenSize() {
             if (window.innerWidth < 768) {
@@ -1343,16 +1240,8 @@ if (isset($_POST['logout'])) {
                 document.querySelector('.mobile-cards-container').style.display = 'none';
             }
         }
-<<<<<<< Updated upstream
         
         window.addEventListener('resize', checkScreenSize);
-=======
-
-        // Adicionar listener para redimensionamento
-        window.addEventListener('resize', checkScreenSize);
-
-        // Verificar tamanho inicial
->>>>>>> Stashed changes
         checkScreenSize();
     </script>
 </body>
