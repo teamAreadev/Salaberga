@@ -1,3 +1,48 @@
+<?php
+session_start();
+
+// Se o usuário já estiver logado, redirecionar para o dashboard
+if (isset($_SESSION['aluno_id'])) {
+    header("Location: dashboard.php");
+    exit();
+}
+
+// Processa o login quando o formulário é enviado
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_once '../model/UsuarioModel.php';
+    
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    $nome = isset($_POST['nome']) ? trim($_POST['nome']) : '';
+    
+    // Validação básica
+    $error = '';
+    if (empty($email)) {
+        $error = 'O campo email é obrigatório';
+    } elseif (empty($nome)) {
+        $error = 'O campo nome é obrigatório';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Email inválido';
+    }
+    
+    if (empty($error)) {
+        $usuarioModel = new UsuarioModel();
+        $resultado = $usuarioModel->verificarUsuario($email, $nome);
+        
+        if ($resultado['success']) {
+            // Salva os dados do usuário na sessão
+            $_SESSION['aluno_id'] = $resultado['aluno']['id'];
+            $_SESSION['aluno_nome'] = $resultado['aluno']['nome'];
+            $_SESSION['aluno_email'] = $resultado['aluno']['email'];
+            
+            // Redireciona para o dashboard
+            header("Location: dashboard.php");
+            exit();
+        } else {
+            $error = $resultado['message'];
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -166,9 +211,6 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
     <div class="w-full max-w-md form-container">
-        <!-- Logo -->
-       
-        
         <!-- Card Principal -->
         <div class="bg-white rounded-2xl overflow-hidden card-shadow">
             <!-- Cabeçalho -->
@@ -190,7 +232,20 @@
                     <p class="text-gray-500">Acesse para visualizar suas informações</p>
                 </div>
                 
-                <form id="login-form" class="space-y-6">
+                <?php if (isset($error) && !empty($error)): ?>
+                <div id="mensagem-erro" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md mb-6" role="alert">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm"><?php echo $error; ?></p>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+                
+                <form id="login-form" method="post" class="space-y-6">
                     <div class="space-y-1">
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
                         <div class="relative input-container">
@@ -199,12 +254,9 @@
                             </div>
                             <input type="email" id="email" name="email" required 
                                 class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 input-focus input-field"
-                                placeholder="Seu e-mail">
-                            <div class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" id="email-error-icon">
-                                <i class="fas fa-exclamation-circle text-red-500"></i>
-                            </div>
+                                placeholder="Seu e-mail"
+                                value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>">
                         </div>
-                        <p class="hidden text-red-500 text-xs mt-1" id="email-error-message"></p>
                     </div>
                     
                     <div class="space-y-1">
@@ -215,27 +267,13 @@
                             </div>
                             <input type="text" id="nome" name="nome" required 
                                 class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 input-focus input-field"
-                                placeholder="Seu nome completo">
-                            <div class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" id="nome-error-icon">
-                                <i class="fas fa-exclamation-circle text-red-500"></i>
-                            </div>
-                        </div>
-                        <p class="hidden text-red-500 text-xs mt-1" id="nome-error-message"></p>
-                    </div>
-                    
-                    <div id="mensagem-erro" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
-                        <div class="flex">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm"></p>
-                            </div>
+                                placeholder="Seu nome completo"
+                                value="<?php echo isset($_POST['nome']) ? htmlspecialchars($_POST['nome']) : ''; ?>">
                         </div>
                     </div>
                     
                     <div>
-                        <button type="submit" id="login-button" class="w-full btn-login text-white py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors flex items-center justify-center font-medium text-base">
+                        <button type="submit" class="w-full btn-login text-white py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors flex items-center justify-center font-medium text-base">
                             <span>Entrar</span>
                             <i class="fas fa-sign-in-alt ml-2"></i>
                             <div class="loading-spinner ml-2" id="loading-spinner"></div>
@@ -244,157 +282,20 @@
                 </form>
                 
                 <div class="mt-6 text-center">
-                    <a href="../index.php" class="text-sm text-primary-600 hover:text-primary-800 flex items-center justify-center transition-colors duration-200">
-                        <i class="fas fa-arrow-left mr-2"></i> Voltar para o formulário de inscrição
+                    <a href="../index.php" class="text-primary-600 hover:text-primary-800 font-medium">
+                        <i class="fas fa-arrow-left mr-1"></i> Voltar para o início
                     </a>
                 </div>
             </div>
         </div>
         
-        <div class="mt-6 text-center text-xs text-gray-500">
-            <p>&copy; 2025 Grêmio Estudantil José Ivan Pontes Júnior</p>
-            <p>EEEP Salaberga Torquato Gomes de Matos</p>
-            <p class="mt-2">Desenvolvido por <span class="font-medium text-primary-600">Matheus Felix</span></p>
-        </div>
+      
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('login-form');
-            const mensagemErro = document.getElementById('mensagem-erro');
-            const emailInput = document.getElementById('email');
-            const nomeInput = document.getElementById('nome');
-            const emailErrorIcon = document.getElementById('email-error-icon');
-            const emailErrorMessage = document.getElementById('email-error-message');
-            const nomeErrorIcon = document.getElementById('nome-error-icon');
-            const nomeErrorMessage = document.getElementById('nome-error-message');
-            const loginButton = document.getElementById('login-button');
-            const loadingSpinner = document.getElementById('loading-spinner');
-            
-            // Validação de email
-            emailInput.addEventListener('blur', function() {
-                validateEmail();
-            });
-            
-            // Validação de nome
-            nomeInput.addEventListener('blur', function() {
-                validateName();
-            });
-            
-            function validateEmail() {
-                const emailValue = emailInput.value.trim();
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                
-                if (emailValue === '') {
-                    showError(emailInput, emailErrorIcon, emailErrorMessage, 'O email é obrigatório');
-                    return false;
-                } else if (!emailRegex.test(emailValue)) {
-                    showError(emailInput, emailErrorIcon, emailErrorMessage, 'Digite um email válido');
-                    return false;
-                } else {
-                    hideError(emailInput, emailErrorIcon, emailErrorMessage);
-                    return true;
-                }
-            }
-            
-            function validateName() {
-                const nomeValue = nomeInput.value.trim();
-                
-                if (nomeValue === '') {
-                    showError(nomeInput, nomeErrorIcon, nomeErrorMessage, 'O nome é obrigatório');
-                    return false;
-                } else if (nomeValue.length < 3) {
-                    showError(nomeInput, nomeErrorIcon, nomeErrorMessage, 'O nome deve ter pelo menos 3 caracteres');
-                    return false;
-                } else {
-                    hideError(nomeInput, nomeErrorIcon, nomeErrorMessage);
-                    return true;
-                }
-            }
-            
-            function showError(input, icon, message, text) {
-                input.classList.add('border-red-500');
-                input.classList.remove('border-gray-300');
-                icon.classList.remove('hidden');
-                message.classList.remove('hidden');
-                message.textContent = text;
-            }
-            
-            function hideError(input, icon, message) {
-                input.classList.remove('border-red-500');
-                input.classList.add('border-gray-300');
-                icon.classList.add('hidden');
-                message.classList.add('hidden');
-                message.textContent = '';
-            }
-            
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Validar formulário antes de enviar
-                const isEmailValid = validateEmail();
-                const isNameValid = validateName();
-                
-                if (!isEmailValid || !isNameValid) {
-                    return;
-                }
-                
-                // Mostrar loading
-                loginButton.querySelector('span').textContent = 'Entrando';
-                loadingSpinner.style.display = 'block';
-                loginButton.disabled = true;
-                
-                const formData = new FormData(form);
-                
-                // Enviar dados para o controller
-                fetch('../controllers/UsuarioController.php?action=login', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Esconder loading
-                    loadingSpinner.style.display = 'none';
-                    loginButton.disabled = false;
-                    loginButton.querySelector('span').textContent = 'Entrar';
-                    
-                    if (data.success) {
-                        // Mostrar mensagem de sucesso antes de redirecionar
-                        const successMessage = document.createElement('div');
-                        successMessage.className = 'fixed top-0 right-0 m-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded shadow-lg animate-fade-in';
-                        successMessage.innerHTML = '<div class="flex items-center"><i class="fas fa-check-circle mr-2"></i> Login realizado com sucesso!</div>';
-                        document.body.appendChild(successMessage);
-                        
-                        // Redirecionar após 1 segundo
-                        setTimeout(() => {
-                            window.location.href = 'perfil.php';
-                        }, 1000);
-                    } else {
-                        mensagemErro.classList.remove('hidden');
-                        mensagemErro.classList.add('shake');
-                        mensagemErro.querySelector('p').textContent = data.message;
-                        
-                        // Remover a classe de animação após a animação terminar
-                        setTimeout(() => {
-                            mensagemErro.classList.remove('shake');
-                        }, 500);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao realizar login:', error);
-                    loadingSpinner.style.display = 'none';
-                    loginButton.disabled = false;
-                    loginButton.querySelector('span').textContent = 'Entrar';
-                    
-                    mensagemErro.classList.remove('hidden');
-                    mensagemErro.classList.add('shake');
-                    mensagemErro.querySelector('p').textContent = 'Erro ao processar o login. Tente novamente.';
-                    
-                    setTimeout(() => {
-                        mensagemErro.classList.remove('shake');
-                    }, 500);
-                });
-            });
+        // Exibir spinner de carregamento ao submeter o formulário
+        document.getElementById('login-form').addEventListener('submit', function() {
+            document.getElementById('loading-spinner').style.display = 'block';
         });
     </script>
 </body>

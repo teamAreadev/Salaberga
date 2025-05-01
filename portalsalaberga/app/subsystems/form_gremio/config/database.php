@@ -1,12 +1,6 @@
 <?php
 class Database {
-  /*
     private $host = 'localhost';
-    private $db_name = 'u750204740_formcpgremio';
-    private $username = 'u750204740_formcpgremio';
-    private $password = 'Gremio@25!';
-  */
-        private $host = 'localhost';
     private $db_name = 'copa_gremio';
     private $username = 'root';
     private $password = '';
@@ -17,14 +11,19 @@ class Database {
 
         try {
             $this->conn = new PDO(
-                "mysql:host={$this->host};dbname={$this->db_name}", 
+                "mysql:host={$this->host};dbname={$this->db_name};charset=utf8", 
                 $this->username, 
-                $this->password
+                $this->password,
+                array(
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
+                )
             );
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->conn->exec("set names utf8");
         } catch(PDOException $exception) {
-            echo "Erro de conexão: " . $exception->getMessage();
+            error_log("Erro de conexão: " . $exception->getMessage());
+            throw $exception;
         }
 
         return $this->conn;

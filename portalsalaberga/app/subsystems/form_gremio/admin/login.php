@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+// Verificação mais robusta da sessão do admin
+if (isset($_SESSION['admin_id']) && 
+    isset($_SESSION['admin_logado']) && 
+    $_SESSION['admin_logado'] === true && 
+    isset($_SESSION['admin_usuario'])) {
+    header("Location: inscricoes.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,6 +18,8 @@
     <title>Admin - Copa Grêmio 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -176,7 +190,8 @@
                     <p class="text-gray-500">Acesse para gerenciar as inscrições</p>
                 </div>
                 
-                <form id="login-form" class="space-y-6">
+                <form id="login-form" method="post" class="space-y-6">
+                    <input type="hidden" name="action" value="login">
                     <div class="space-y-1">
                         <label for="usuario" class="block text-sm font-medium text-gray-700 mb-1">Usuário</label>
                         <div class="relative input-container">
@@ -240,159 +255,127 @@
             </div>
         </div>
         
-        <div class="mt-6 text-center text-xs text-gray-500">
-            <p>&copy; 2025 Grêmio Estudantil José Ivan Pontes Júnior</p>
-            <p>EEEP Salaberga Torquato Gomes de Matos</p>
-            <p class="mt-2">Desenvolvido por <span class="font-medium text-primary-600">Matheus Felix</span></p>
-        </div>
+       
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+        console.log('Página de login carregada');
+        
             const form = document.getElementById('login-form');
-            const mensagemErro = document.getElementById('mensagem-erro');
-            const usuarioInput = document.getElementById('usuario');
-            const senhaInput = document.getElementById('senha');
-            const usuarioErrorIcon = document.getElementById('usuario-error-icon');
-            const usuarioErrorMessage = document.getElementById('usuario-error-message');
-            const senhaErrorIcon = document.getElementById('senha-error-icon');
-            const senhaErrorMessage = document.getElementById('senha-error-message');
+        console.log('Formulário encontrado:', form !== null);
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Formulário enviado');
+            
+            // Obter os valores dos campos
+            const usuario = document.getElementById('usuario').value;
+            const senha = document.getElementById('senha').value;
+            
+            console.log('Dados:', { usuario, senha });
+            
+            // Verificar se os campos estão preenchidos
+            if (!usuario || !senha) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    text: 'Preencha todos os campos',
+                    confirmButtonColor: '#007d40'
+                });
+                return;
+            }
+            
+            // Mostrar loading
             const loginButton = document.getElementById('login-button');
             const loadingSpinner = document.getElementById('loading-spinner');
-            const togglePassword = document.getElementById('toggle-password');
+            loginButton.disabled = true;
+            loginButton.querySelector('span').textContent = 'Entrando...';
+            loadingSpinner.style.display = 'block';
             
-            // Toggle password visibility
-            togglePassword.addEventListener('click', function() {
-                const type = senhaInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                senhaInput.setAttribute('type', type);
-                
-                // Toggle eye icon
-                const eyeIcon = togglePassword.querySelector('i');
-                eyeIcon.classList.toggle('fa-eye');
-                eyeIcon.classList.toggle('fa-eye-slash');
-            });
+            // Criar os dados do formulário
+            const formData = new FormData();
+            formData.append('action', 'login');
+            formData.append('usuario', usuario);
+            formData.append('senha', senha);
             
-            // Validação de usuário
-            usuarioInput.addEventListener('blur', function() {
-                validateUsuario();
-            });
+            console.log('FormData criado com ação:', 'login');
             
-            // Validação de senha
-            senhaInput.addEventListener('blur', function() {
-                validateSenha();
-            });
+            // URL para onde enviar o formulário
+            const url = '../controllers/AdminController.php';
+            console.log('Enviando para URL:', url);
             
-            function validateUsuario() {
-                const usuarioValue = usuarioInput.value.trim();
-                
-                if (usuarioValue === '') {
-                    showError(usuarioInput, usuarioErrorIcon, usuarioErrorMessage, 'O usuário é obrigatório');
-                    return false;
-                } else if (usuarioValue.length < 3) {
-                    showError(usuarioInput, usuarioErrorIcon, usuarioErrorMessage, 'O usuário deve ter pelo menos 3 caracteres');
-                    return false;
-                } else {
-                    hideError(usuarioInput, usuarioErrorIcon, usuarioErrorMessage);
-                    return true;
-                }
-            }
-            
-            function validateSenha() {
-                const senhaValue = senhaInput.value.trim();
-                
-                if (senhaValue === '') {
-                    showError(senhaInput, senhaErrorIcon, senhaErrorMessage, 'A senha é obrigatória');
-                    return false;
-                } else if (senhaValue.length < 4) {
-                    showError(senhaInput, senhaErrorIcon, senhaErrorMessage, 'A senha deve ter pelo menos 4 caracteres');
-                    return false;
-                } else {
-                    hideError(senhaInput, senhaErrorIcon, senhaErrorMessage);
-                    return true;
-                }
-            }
-            
-            function showError(input, icon, message, text) {
-                input.classList.add('border-red-500');
-                input.classList.remove('border-gray-300');
-                icon.classList.remove('hidden');
-                message.classList.remove('hidden');
-                message.textContent = text;
-            }
-            
-            function hideError(input, icon, message) {
-                input.classList.remove('border-red-500');
-                input.classList.add('border-gray-300');
-                icon.classList.add('hidden');
-                message.classList.add('hidden');
-                message.textContent = '';
-            }
-            
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Validar formulário antes de enviar
-                const isUsuarioValid = validateUsuario();
-                const isSenhaValid = validateSenha();
-                
-                if (!isUsuarioValid || !isSenhaValid) {
-                    return;
-                }
-                
-                // Mostrar loading
-                loginButton.querySelector('span').textContent = 'Entrando';
-                loadingSpinner.style.display = 'block';
-                loginButton.disabled = true;
-                
-                const formData = new FormData(form);
-                
-                // Enviar dados para o controller
-                fetch('../controllers/AdminController.php?action=login', {
+            // Enviar requisição
+            fetch(url, {
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
+            .then(response => {
+                console.log('Status da resposta:', response.status);
+                if (!response.ok) {
+                    console.error('Erro na resposta do servidor:', response.statusText);
+                    throw new Error(`Erro na resposta do servidor: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
                 .then(data => {
-                    // Esconder loading
-                    loadingSpinner.style.display = 'none';
-                    loginButton.disabled = false;
-                    loginButton.querySelector('span').textContent = 'Entrar';
+                console.log('Dados recebidos:', data);
                     
+                // Verificar o resultado
                     if (data.success) {
-                        // Mostrar mensagem de sucesso antes de redirecionar
-                        const successMessage = document.createElement('div');
-                        successMessage.className = 'fixed top-0 right-0 m-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded shadow-lg animate-fade-in';
-                        successMessage.innerHTML = '<div class="flex items-center"><i class="fas fa-check-circle mr-2"></i> Login realizado com sucesso!</div>';
-                        document.body.appendChild(successMessage);
-                        
-                        // Redirecionar após 1 segundo
-                        setTimeout(() => {
-                            window.location.href = 'inscricoes.php';
-                        }, 1000);
+                    console.log('Login bem-sucedido, redirecionando...');
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
                     } else {
-                        mensagemErro.classList.remove('hidden');
-                        mensagemErro.classList.add('shake');
-                        mensagemErro.querySelector('p').textContent = data.message;
-                        
-                        // Remover a classe de animação após a animação terminar
-                        setTimeout(() => {
-                            mensagemErro.classList.remove('shake');
-                        }, 500);
+                        window.location.href = 'inscricoes.php';
+                    }
+                    } else {
+                    console.error('Login falhou:', data.message);
+                    
+                    // Adicionar classe de erro ao campo de senha
+                    const senhaInput = document.getElementById('senha');
+                    senhaInput.classList.add('border-red-500', 'bg-red-50');
+                    
+                    // Mostrar ícone de erro
+                    document.getElementById('senha-error-icon').classList.remove('hidden');
+                    
+                    // Mostrar mensagem de erro com animação
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Acesso Negado',
+                        text: 'Senha incorreta. Por favor, verifique suas credenciais e tente novamente.',
+                        confirmButtonColor: '#007d40',
+                        showClass: {
+                            popup: 'animate__animated animate__shakeX'
+                        }
+                    });
+                    
+                    // Limpar o campo de senha
+                    senhaInput.value = '';
+                    
+                    // Remover classes de erro após 3 segundos
+                    setTimeout(() => {
+                        senhaInput.classList.remove('border-red-500', 'bg-red-50');
+                        document.getElementById('senha-error-icon').classList.add('hidden');
+                    }, 3000);
                     }
                 })
                 .catch(error => {
-                    console.error('Erro ao realizar login:', error);
-                    loadingSpinner.style.display = 'none';
-                    loginButton.disabled = false;
-                    loginButton.querySelector('span').textContent = 'Entrar';
-                    
-                    mensagemErro.classList.remove('hidden');
-                    mensagemErro.classList.add('shake');
-                    mensagemErro.querySelector('p').textContent = 'Erro ao processar o login. Tente novamente.';
-                    
-                    setTimeout(() => {
-                        mensagemErro.classList.remove('shake');
-                    }, 500);
+                console.error('Erro ao processar requisição:', error);
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    html: 'Ocorreu um erro ao tentar fazer login.<br>Detalhes: ' + error.message,
+                    confirmButtonColor: '#007d40'
+                });
+            })
+            .finally(() => {
+                console.log('Finalizando requisição');
+                // Restaurar o botão
+                loginButton.disabled = false;
+                loginButton.querySelector('span').textContent = 'Entrar';
+                loadingSpinner.style.display = 'none';
                 });
             });
         });

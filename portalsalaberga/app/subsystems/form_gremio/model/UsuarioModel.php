@@ -1,5 +1,5 @@
 <?php
-require_once '../config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 class UsuarioModel {
     private $db;
@@ -96,6 +96,60 @@ class UsuarioModel {
             return [
                 'success' => false,
                 'message' => 'Erro ao obter dados do usuário: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Cadastra um novo usuário
+     * @param array $dados Dados do usuário
+     * @return array Resultado do cadastro
+     */
+    public function cadastrarUsuario($dados) {
+        try {
+            // Verificar se o email já está cadastrado
+            $queryVerificar = "SELECT COUNT(*) as total FROM alunos WHERE email = :email";
+            $stmtVerificar = $this->db->prepare($queryVerificar);
+            $stmtVerificar->bindParam(':email', $dados['email']);
+            $stmtVerificar->execute();
+            
+            $resultado = $stmtVerificar->fetch(PDO::FETCH_ASSOC);
+            
+            if ($resultado['total'] > 0) {
+                return [
+                    'success' => false,
+                    'message' => 'Este email já está cadastrado'
+                ];
+            }
+            
+            // Inserir novo aluno
+            $query = "INSERT INTO alunos (nome, email, telefone, ano, turma) 
+                     VALUES (:nome, :email, :telefone, :ano, :turma)";
+            $stmt = $this->db->prepare($query);
+            
+            $stmt->bindParam(':nome', $dados['nome']);
+            $stmt->bindParam(':email', $dados['email']);
+            $stmt->bindParam(':telefone', $dados['telefone']);
+            $stmt->bindParam(':ano', $dados['ano']);
+            $stmt->bindParam(':turma', $dados['turma']);
+            
+            if ($stmt->execute()) {
+                return [
+                    'success' => true,
+                    'message' => 'Usuário cadastrado com sucesso',
+                    'aluno_id' => $this->db->lastInsertId()
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'Erro ao cadastrar usuário'
+                ];
+            }
+            
+        } catch(PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Erro ao cadastrar usuário: ' . $e->getMessage()
             ];
         }
     }

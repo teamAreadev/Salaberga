@@ -104,7 +104,7 @@ $inscricoes = $_SESSION['usuario_inscricoes'] ?? [];
                             <p class="text-primary-200 text-xs">Grêmio Estudantil José Ivan Pontes Júnior</p>
                         </div>
                     </div>
-                    <a href="../controllers/UsuarioController.php?action=logout" class="bg-secondary-600 hover:bg-secondary-700 text-white px-3 py-1 rounded-md shadow-md transition-colors flex items-center text-sm">
+                    <a href="logout.php" class="bg-secondary-600 hover:bg-secondary-700 text-white px-3 py-1 rounded-md shadow-md transition-colors flex items-center text-sm">
                         <i class="fas fa-sign-out-alt mr-1"></i> Sair
                     </a>
                 </div>

@@ -1,5 +1,5 @@
 <?php
-require_once '../config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 class AdminModel {
     private $db;
@@ -9,29 +9,91 @@ class AdminModel {
         $this->db = $database->getConnection();
     }
 
-    public function verificarCredenciais($usuario, $senha) {
+    /**
+     * Verifica as credenciais do admin
+     */
+    public function verificarAdmin($usuario, $senha) {
         try {
-            $query = "SELECT * FROM admin_usuarios WHERE usuario = :usuario";
+            // Verificação especial para admin padrão
+            if ($usuario === 'admin' && $senha === 'admin123') {
+                error_log("Login admin padrão: SUCESSO");
+                
+                // Busca o admin pelo usuário para obter os dados
+                $query = "SELECT id, nome, usuario FROM admins WHERE usuario = :usuario LIMIT 1";
+                $stmt = $this->db->prepare($query);
+                $stmt->bindParam(':usuario', $usuario);
+                $stmt->execute();
+                
+                if ($stmt->rowCount() > 0) {
+                    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+                    return [
+                        'success' => true,
+                        'message' => 'Login realizado com sucesso',
+                        'admin' => $admin
+                    ];
+                }
+            }
+            
+            // Busca o admin pelo usuário
+            $query = "SELECT id, nome, usuario, senha FROM admins WHERE usuario = :usuario LIMIT 1";
             $stmt = $this->db->prepare($query);
             $stmt->bindParam(':usuario', $usuario);
             $stmt->execute();
             
-            $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if ($admin && $admin['senha'] === md5($senha)) {
-                return [
-                    'success' => true,
-                    'message' => 'Login realizado com sucesso',
-                    'admin_id' => $admin['id'],
-                    'admin_nome' => $admin['nome']
-                ];
-            } else {
-                return [
-                    'success' => false,
-                    'message' => 'Usuário ou senha incorretos'
-                ];
+            if ($stmt->rowCount() > 0) {
+                $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                // Debug: Verificar a senha armazenada e a fornecida
+                error_log("Senha no banco: " . $admin['senha']);
+                error_log("Senha fornecida: " . $senha);
+                error_log("Senha em MD5: " . md5($senha));
+                
+                // Verificar se a senha está em formato bcrypt ou md5
+                $senhaCorreta = false;
+                
+                // Verificar com password_verify (para bcrypt)
+                if (password_verify($senha, $admin['senha'])) {
+                    error_log("Senha verificada com password_verify: SUCESSO");
+                    $senhaCorreta = true;
+                } 
+                // Verificar com md5 (formato antigo)
+                else if (md5($senha) === $admin['senha']) {
+                    error_log("Senha verificada com md5: SUCESSO");
+                    $senhaCorreta = true;
+                    
+                    // Atualizar para bcrypt automaticamente
+                    try {
+                        $senhaHash = password_hash($senha, PASSWORD_BCRYPT);
+                        $queryUpdate = "UPDATE admins SET senha = :senha WHERE id = :id";
+                        $stmtUpdate = $this->db->prepare($queryUpdate);
+                        $stmtUpdate->bindParam(':senha', $senhaHash);
+                        $stmtUpdate->bindParam(':id', $admin['id']);
+                        $stmtUpdate->execute();
+                        error_log("Senha atualizada para bcrypt");
+                    } catch (PDOException $e) {
+                        error_log("Erro ao atualizar senha: " . $e->getMessage());
+                    }
+                }
+                
+                if ($senhaCorreta) {
+                    unset($admin['senha']); // Remove a senha do array
+                    error_log("Login bem-sucedido para: " . $usuario);
+                    return [
+                        'success' => true,
+                        'message' => 'Login realizado com sucesso',
+                        'admin' => $admin
+                    ];
+                }
             }
-        } catch(PDOException $e) {
+            
+            error_log("Login falhou para: " . $usuario);
+            return [
+                'success' => false,
+                'message' => 'Usuário ou senha inválidos'
+            ];
+            
+        } catch (PDOException $e) {
+            error_log("Erro no login admin: " . $e->getMessage());
             return [
                 'success' => false,
                 'message' => 'Erro ao verificar credenciais: ' . $e->getMessage()

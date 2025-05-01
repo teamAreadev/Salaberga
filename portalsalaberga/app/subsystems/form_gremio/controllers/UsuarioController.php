@@ -90,15 +90,52 @@ class UsuarioController {
             exit;
         }
     }
+
+    /**
+     * Cadastra um novo usuário
+     */
+    public function cadastrar() {
+        header('Content-Type: application/json');
+        
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Método não permitido']);
+            return;
+        }
+
+        // Validar dados obrigatórios
+        $campos = ['nome', 'email', 'telefone', 'ano', 'turma'];
+        $dados = [];
+        
+        foreach ($campos as $campo) {
+            if (!isset($_POST[$campo]) || empty($_POST[$campo])) {
+                echo json_encode(['success' => false, 'message' => 'Todos os campos são obrigatórios']);
+                return;
+            }
+            $dados[$campo] = $_POST[$campo];
+        }
+        
+        // Validar email
+        if (!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) {
+            echo json_encode(['success' => false, 'message' => 'Email inválido']);
+            return;
+        }
+        
+        // Cadastrar usuário
+        $resultado = $this->model->cadastrarUsuario($dados);
+        echo json_encode($resultado);
+    }
 }
 
 // Se chamado diretamente, determina qual método executar
 if (basename($_SERVER['SCRIPT_FILENAME']) == basename(__FILE__)) {
     $controller = new UsuarioController();
     
-    $action = $_GET['action'] ?? '';
+    $action = $_POST['action'] ?? $_GET['action'] ?? '';
     
     switch ($action) {
+        case 'cadastrar':
+            $controller->cadastrar();
+            break;
         case 'login':
             $controller->login();
             break;

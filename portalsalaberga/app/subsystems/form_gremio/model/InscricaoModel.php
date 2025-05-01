@@ -1,5 +1,5 @@
 <?php
-require_once '../config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 class InscricaoModel {
     private $db;
@@ -62,6 +62,55 @@ class InscricaoModel {
             return [
                 'success' => false,
                 'message' => 'Erro ao realizar inscrição: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Cadastra uma inscrição individual para um aluno já cadastrado
+     * @param array $dados Dados da inscrição
+     * @return array Resultado da operação
+     */
+    public function cadastrarInscricaoIndividual($dados) {
+        try {
+            // Verificar se o aluno já tem inscrição para esta modalidade
+            $queryVerificar = "SELECT * FROM inscricoes 
+                             WHERE aluno_id = :aluno_id AND modalidade = :modalidade";
+            $stmtVerificar = $this->db->prepare($queryVerificar);
+            
+            $stmtVerificar->bindParam(':aluno_id', $dados['aluno_id']);
+            $stmtVerificar->bindParam(':modalidade', $dados['modalidade']);
+            $stmtVerificar->execute();
+            
+            if ($stmtVerificar->rowCount() > 0) {
+                return [
+                    'success' => false,
+                    'message' => 'Você já possui uma inscrição para esta modalidade'
+                ];
+            }
+            
+            // Inserir nova inscrição
+            $queryInscricao = "INSERT INTO inscricoes (aluno_id, modalidade, categoria, status) 
+                             VALUES (:aluno_id, :modalidade, :categoria, 'pendente')";
+            $stmtInscricao = $this->db->prepare($queryInscricao);
+            
+            $stmtInscricao->bindParam(':aluno_id', $dados['aluno_id']);
+            $stmtInscricao->bindParam(':modalidade', $dados['modalidade']);
+            $stmtInscricao->bindParam(':categoria', $dados['categoria']);
+            
+            $stmtInscricao->execute();
+            $inscricaoId = $this->db->lastInsertId();
+            
+            return [
+                'success' => true,
+                'message' => 'Inscrição individual realizada com sucesso!',
+                'inscricao_id' => $inscricaoId
+            ];
+            
+        } catch(PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Erro ao realizar inscrição individual: ' . $e->getMessage()
             ];
         }
     }
@@ -179,6 +228,105 @@ class InscricaoModel {
             return [
                 'success' => false,
                 'message' => 'Erro: ' . $e->getMessage()
+            ];
+        }
+    }
+    
+    /**
+     * Cancela uma inscrição
+     * @param int $inscricaoId ID da inscrição
+     * @return array Resultado da operação
+     */
+    public function cancelarInscricao($inscricaoId) {
+        try {
+            // Verificar se a inscrição existe
+            $queryVerificar = "SELECT * FROM inscricoes WHERE id = :id";
+            $stmtVerificar = $this->db->prepare($queryVerificar);
+            $stmtVerificar->bindParam(':id', $inscricaoId);
+            $stmtVerificar->execute();
+            
+            if ($stmtVerificar->rowCount() === 0) {
+                return [
+                    'success' => false,
+                    'message' => 'Inscrição não encontrada'
+                ];
+            }
+            
+            $inscricao = $stmtVerificar->fetch(PDO::FETCH_ASSOC);
+            
+            // Não é possível cancelar inscrições já aprovadas
+            if ($inscricao['status'] === 'aprovado') {
+                return [
+                    'success' => false,
+                    'message' => 'Não é possível cancelar uma inscrição já aprovada'
+                ];
+            }
+            
+            // Se for uma inscrição de equipe, verificar se o aluno é membro
+            if ($inscricao['equipe_id']) {
+                $queryRemoverMembro = "DELETE FROM equipe_membros 
+                                     WHERE equipe_id = :equipe_id AND aluno_id = :aluno_id";
+                $stmtRemoverMembro = $this->db->prepare($queryRemoverMembro);
+                $stmtRemoverMembro->bindParam(':equipe_id', $inscricao['equipe_id']);
+                $stmtRemoverMembro->bindParam(':aluno_id', $inscricao['aluno_id']);
+                $stmtRemoverMembro->execute();
+            }
+            
+            // Excluir inscrição
+            $queryExcluir = "DELETE FROM inscricoes WHERE id = :id";
+            $stmtExcluir = $this->db->prepare($queryExcluir);
+            $stmtExcluir->bindParam(':id', $inscricaoId);
+            
+            if ($stmtExcluir->execute()) {
+                return [
+                    'success' => true,
+                    'message' => 'Inscrição cancelada com sucesso'
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'Erro ao cancelar inscrição'
+                ];
+            }
+        } catch(PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Erro: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Atualiza o status de todas as inscrições de uma equipe
+     * @param int $equipeId ID da equipe
+     * @param string $status Novo status
+     * @return array Resultado da operação
+     */
+    public function atualizarStatusEquipeCompleta($equipeId, $status) {
+        try {
+            $query = "UPDATE inscricoes SET status = :status WHERE equipe_id = :equipe_id";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':equipe_id', $equipeId);
+            
+            if ($stmt->execute()) {
+                return [
+                    'success' => true,
+                    'message' => 'Status da equipe atualizado com sucesso',
+                    'affected_rows' => $stmt->rowCount()
+                ];
+            } else {
+                $error = $stmt->errorInfo();
+                return [
+                    'success' => false,
+                    'message' => 'Erro ao atualizar status da equipe',
+                    'error' => $error[2]
+                ];
+            }
+        } catch(PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Erro ao atualizar status: ' . $e->getMessage()
             ];
         }
     }
