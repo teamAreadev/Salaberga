@@ -1,7 +1,7 @@
 <?php
 require_once('../models/sessions.php');
 $session = new sessions;
-$session->tempo_session(600);
+$session->tempo_session();
 $session->autenticar_session();
 
 if (isset($_POST['logout'])) {

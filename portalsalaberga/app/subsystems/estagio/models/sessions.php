@@ -6,17 +6,18 @@ class sessions
 
     function autenticar_session()
     {
-        if (!isset($_SESSION['email']) == true && !isset($_SESSION['senha']) == true) {
+        if (!isset($_SESSION['email'])) {
 
-            unset($_SESSION['email']);
-            unset($_SESSION['senha']);
+            session_unset();
+            session_destroy();
             header('location:../views/login.php');
             exit();
         }
-        $logado = $_SESSION['email'];
+        return $_SESSION['email'];
     }
-    function tempo_session($tempo)
+    function tempo_session()
     {
+        $tempo = 600;
         if (isset($_SESSION['ultimo_acesso'])) {
 
             if (time() - $_SESSION['ultimo_acesso'] > $tempo) {
@@ -36,8 +37,4 @@ class sessions
         header('location:../views/login.php');
         exit();
     }
-<<<<<<< Updated upstream
-}*/
-=======
 }
->>>>>>> Stashed changes

@@ -11,28 +11,21 @@ class main_model extends connect
 
     function login($email, $senha)
     {
-        session_start();
+        
         $stmt_cadastro = $this->connect->prepare("SELECT * FROM usuario WHERE email = :email AND senha = :senha");
         $stmt_cadastro->bindValue(':email', $email);
         $stmt_cadastro->bindValue(':senha', $senha);
         $stmt_cadastro->execute();
-        $result = $stmt_cadastro->fetch(PDO::FETCH_ASSOC);
 
-        print_r($result);
-<<<<<<< Updated upstream
-        if (!empty($result)) {
-=======
-        /*if (!empty($result)) {
->>>>>>> Stashed changes
-
+        if ($stmt_cadastro->rowCount() > 0) {
+            session_start();
             $_SESSION['email'] = $email;
-            $_SESSION['senha'] = $senha;
             return 1;
         } else {
+            session_start();
             unset($_SESSION['email']);
-            unset($_SESSION['senha']);
             return 2;
-        }*/
+        }
     }
     function cadastrar_empresa($nome, $area, $endereco, $telefone)
     {

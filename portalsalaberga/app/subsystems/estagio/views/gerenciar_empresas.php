@@ -3,7 +3,7 @@ require_once('../models/select_model.php');
 $select_model = new select_model;
 require_once('../models/sessions.php');
 $session = new sessions;
-$session->tempo_session(600);
+$session->tempo_session();
 $session->autenticar_session();
 
 if (isset($_POST['logout'])) {
@@ -12,6 +12,7 @@ if (isset($_POST['logout'])) {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -111,7 +112,7 @@ if (isset($_POST['logout'])) {
             background-image: linear-gradient(to bottom, #2d2d2d, #222222);
             border-right: 1px solid rgba(0, 122, 51, 0.2);
             transition: all 0.3s ease;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar-link {
@@ -536,28 +537,58 @@ if (isset($_POST['logout'])) {
 
         /* Animations */
         @keyframes scaleIn {
-            0% { transform: translate(-50%, -50%) scale(0); }
-            100% { transform: translate(-50%, -50%) scale(1); }
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        .slide-up { animation: slideUp 0.4s ease-out forwards; }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.4s ease-out forwards;
+        }
 
         /* Responsive adjustments */
         @media (max-width: 640px) {
-            .empresa-card { padding: 1rem; }
-            .custom-input { min-width: 100% !important; }
-            .mobile-stack { flex-direction: column; }
+            .empresa-card {
+                padding: 1rem;
+            }
+
+            .custom-input {
+                min-width: 100% !important;
+            }
+
+            .mobile-stack {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -708,7 +739,7 @@ if (isset($_POST['logout'])) {
 
                 <!-- Grid de Empresas -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="empresasGrid">
-                    <?php 
+                    <?php
                     $dados = $select_model->concedentes();
                     if (empty($dados)): ?>
                         <div class="col-span-3 text-center py-16 text-gray-400 fade-in">
@@ -720,9 +751,9 @@ if (isset($_POST['logout'])) {
                             </button>
                         </div>
                     <?php else: ?>
-                        <?php 
+                        <?php
                         $delay = 0;
-                        foreach ($dados as $dado): 
+                        foreach ($dados as $dado):
                             $delay += 100;
                         ?>
                             <div class="empresa-card slide-up" style="animation-delay: <?= $delay ?>ms;" data-empresa-id="<?= htmlspecialchars($dado['id']) ?>" data-area="<?= htmlspecialchars($dado['perfil']) ?>">
@@ -844,7 +875,12 @@ if (isset($_POST['logout'])) {
             const telefoneInput = document.getElementById('empresaTelefone');
 
             // GSAP Animations
-            gsap.from('.action-bar', { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' });
+            gsap.from('.action-bar', {
+                opacity: 0,
+                y: 20,
+                duration: 0.5,
+                ease: 'power2.out'
+            });
             gsap.from('.empresa-card', {
                 opacity: 0,
                 y: 50,
@@ -883,11 +919,19 @@ if (isset($_POST['logout'])) {
 
             // Sidebar mobile toggle
             sidebarToggle.addEventListener('click', () => {
-                gsap.to(mobileSidebar, { x: 0, duration: 0.3, ease: 'power2.out' });
+                gsap.to(mobileSidebar, {
+                    x: 0,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
             });
 
             closeSidebar.addEventListener('click', () => {
-                gsap.to(mobileSidebar, { x: '-100%', duration: 0.3, ease: 'power2.in' });
+                gsap.to(mobileSidebar, {
+                    x: '-100%',
+                    duration: 0.3,
+                    ease: 'power2.in'
+                });
             });
 
             // Modal handling
@@ -916,7 +960,12 @@ if (isset($_POST['logout'])) {
                 }
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
-                gsap.to(modalContent, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' });
+                gsap.to(modalContent, {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
             }
 
             function closeModal() {
@@ -962,16 +1011,23 @@ if (isset($_POST['logout'])) {
                     if (matchSearch && matchArea) {
                         card.style.display = '';
                         visibleCount++;
-                        gsap.fromTo(card,
-                            { opacity: 0, y: 20 },
-                            { opacity: 1, y: 0, duration: 0.3, delay: index * 0.05 }
-                        );
+                        gsap.fromTo(card, {
+                            opacity: 0,
+                            y: 20
+                        }, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.3,
+                            delay: index * 0.05
+                        });
                     } else {
                         gsap.to(card, {
                             opacity: 0,
                             y: 20,
                             duration: 0.3,
-                            onComplete: () => { card.style.display = 'none'; }
+                            onComplete: () => {
+                                card.style.display = 'none';
+                            }
                         });
                     }
                 });
@@ -1005,7 +1061,13 @@ if (isset($_POST['logout'])) {
 
             // Editar empresa
             window.editarEmpresa = (id, nome, perfil, endereco, telefone) => {
-                openModal(true, { id, nome, perfil, endereco, telefone });
+                openModal(true, {
+                    id,
+                    nome,
+                    perfil,
+                    endereco,
+                    telefone
+                });
             };
 
             // Excluir empresa
@@ -1035,7 +1097,12 @@ if (isset($_POST['logout'])) {
                 `;
                 document.body.appendChild(confirmDialog);
                 const confirmModalContent = confirmDialog.querySelector('.candidatura-modal');
-                gsap.to(confirmModalContent, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' });
+                gsap.to(confirmModalContent, {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
 
                 confirmDialog.querySelector('#cancelExcluir').addEventListener('click', () => {
                     gsap.to(confirmModalContent, {
@@ -1051,41 +1118,41 @@ if (isset($_POST['logout'])) {
 
                 confirmDialog.querySelector('#confirmarExcluir').addEventListener('click', () => {
                     fetch('excluir_empresa.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `id=${id}`
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        document.body.removeChild(confirmDialog);
-                        if (data.success) {
-                            const card = document.querySelector(`[data-empresa-id="${id}"]`);
-                            if (card) {
-                                gsap.to(card, {
-                                    opacity: 0,
-                                    y: -20,
-                                    duration: 0.3,
-                                    onComplete: () => {
-                                        card.remove();
-                                        showToast('Empresa excluída com sucesso!', 'success');
-                                        const remainingCards = document.querySelectorAll('.empresa-card');
-                                        if (remainingCards.length === 0) {
-                                            window.location.reload();
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: `id=${id}`
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            document.body.removeChild(confirmDialog);
+                            if (data.success) {
+                                const card = document.querySelector(`[data-empresa-id="${id}"]`);
+                                if (card) {
+                                    gsap.to(card, {
+                                        opacity: 0,
+                                        y: -20,
+                                        duration: 0.3,
+                                        onComplete: () => {
+                                            card.remove();
+                                            showToast('Empresa excluída com sucesso!', 'success');
+                                            const remainingCards = document.querySelectorAll('.empresa-card');
+                                            if (remainingCards.length === 0) {
+                                                window.location.reload();
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
+                            } else {
+                                showToast(`Erro ao excluir empresa: ${data.message}`, 'error');
                             }
-                        } else {
-                            showToast(`Erro ao excluir empresa: ${data.message}`, 'error');
-                        }
-                    })
-                    .catch(error => {
-                        document.body.removeChild(confirmDialog);
-                        console.error('Erro:', error);
-                        showToast('Erro ao excluir empresa. Tente novamente.', 'error');
-                    });
+                        })
+                        .catch(error => {
+                            document.body.removeChild(confirmDialog);
+                            console.error('Erro:', error);
+                            showToast('Erro ao excluir empresa. Tente novamente.', 'error');
+                        });
                 });
             };
 
@@ -1116,4 +1183,5 @@ if (isset($_POST['logout'])) {
         });
     </script>
 </body>
+
 </html>

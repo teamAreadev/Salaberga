@@ -4,6 +4,7 @@ $select_model = new select_model();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -103,7 +104,7 @@ $select_model = new select_model();
             background-image: linear-gradient(to bottom, #2d2d2d, #222222);
             border-right: 1px solid rgba(0, 122, 51, 0.2);
             transition: all 0.3s ease;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar-link {
@@ -459,27 +460,54 @@ $select_model = new select_model();
 
         /* Animations */
         @keyframes scaleIn {
-            0% { transform: translate(-50%, -50%) scale(0); }
-            100% { transform: translate(-50%, -50%) scale(1); }
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        .slide-up { animation: slideUp 0.4s ease-out forwards; }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.4s ease-out forwards;
+        }
 
         /* Responsive adjustments */
         @media (max-width: 640px) {
-            .custom-input { min-width: 100% !important; }
-            .table-container { padding: 0.5rem; }
+            .custom-input {
+                min-width: 100% !important;
+            }
+
+            .table-container {
+                padding: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -718,15 +746,37 @@ $select_model = new select_model();
             const mobileSidebar = document.getElementById('mobileSidebar');
 
             // Dados simulados para vagas e empresas (substituir por dados reais do backend)
-            const vagas = [
-                { id: 1, titulo: "Desenvolvedor Front-end", empresa: 1, area: "Desenvolvimento" },
-                { id: 2, titulo: "Designer Gráfico", empresa: 2, area: "Design" },
-                { id: 3, titulo: "Técnico de Redes", empresa: 3, area: "Redes/Suporte" }
+            const vagas = [{
+                    id: 1,
+                    titulo: "Desenvolvedor Front-end",
+                    empresa: 1,
+                    area: "Desenvolvimento"
+                },
+                {
+                    id: 2,
+                    titulo: "Designer Gráfico",
+                    empresa: 2,
+                    area: "Design"
+                },
+                {
+                    id: 3,
+                    titulo: "Técnico de Redes",
+                    empresa: 3,
+                    area: "Redes/Suporte"
+                }
             ];
-            const empresas = [
-                { id: 1, nome: "TechCorp Solutions" },
-                { id: 2, nome: "Mídia Digital" },
-                { id: 3, nome: "Redes & Cia" }
+            const empresas = [{
+                    id: 1,
+                    nome: "TechCorp Solutions"
+                },
+                {
+                    id: 2,
+                    nome: "Mídia Digital"
+                },
+                {
+                    id: 3,
+                    nome: "Redes & Cia"
+                }
             ];
 
             // Obter ID da vaga da URL
@@ -745,17 +795,41 @@ $select_model = new select_model();
             }
 
             // GSAP Animations
-            gsap.from('.vaga-info-card', { opacity: 0, y: 50, duration: 0.6, ease: 'power3.out' });
-            gsap.from('.table-container', { opacity: 0, y: 50, duration: 0.6, delay: 0.2, ease: 'power3.out' });
-            gsap.from('.action-bar', { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' });
+            gsap.from('.vaga-info-card', {
+                opacity: 0,
+                y: 50,
+                duration: 0.6,
+                ease: 'power3.out'
+            });
+            gsap.from('.table-container', {
+                opacity: 0,
+                y: 50,
+                duration: 0.6,
+                delay: 0.2,
+                ease: 'power3.out'
+            });
+            gsap.from('.action-bar', {
+                opacity: 0,
+                y: 20,
+                duration: 0.5,
+                ease: 'power2.out'
+            });
 
             // Sidebar mobile toggle
             sidebarToggle.addEventListener('click', () => {
-                gsap.to(mobileSidebar, { x: 0, duration: 0.3, ease: 'power2.out' });
+                gsap.to(mobileSidebar, {
+                    x: 0,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
             });
 
             closeSidebar.addEventListener('click', () => {
-                gsap.to(mobileSidebar, { x: '-100%', duration: 0.3, ease: 'power2.in' });
+                gsap.to(mobileSidebar, {
+                    x: '-100%',
+                    duration: 0.3,
+                    ease: 'power2.in'
+                });
             });
 
             // Aplicar filtros na tabela
@@ -775,16 +849,23 @@ $select_model = new select_model();
                     if (matchSearch && matchArea) {
                         row.style.display = '';
                         hasVisible = true;
-                        gsap.fromTo(row,
-                            { opacity: 0, y: 20 },
-                            { opacity: 1, y: 0, duration: 0.3, delay: index * 0.05 }
-                        );
+                        gsap.fromTo(row, {
+                            opacity: 0,
+                            y: 20
+                        }, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.3,
+                            delay: index * 0.05
+                        });
                     } else {
                         gsap.to(row, {
                             opacity: 0,
                             y: 20,
                             duration: 0.3,
-                            onComplete: () => { row.style.display = 'none'; }
+                            onComplete: () => {
+                                row.style.display = 'none';
+                            }
                         });
                     }
                 });
@@ -802,6 +883,7 @@ $select_model = new select_model();
 
             // Selecionar/Deselecionar todos os alunos
             let todosSelecionados = false;
+
             function toggleSelectAll() {
                 todosSelecionados = !todosSelecionados;
                 const checkboxes = document.querySelectorAll('#alunosTableBody input[type="checkbox"]');
@@ -842,4 +924,5 @@ $select_model = new select_model();
         });
     </script>
 </body>
+
 </html>
