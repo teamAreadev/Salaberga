@@ -820,19 +820,19 @@ if (isset($_POST['layout'])) {
                         <label class="block text-sm font-medium text-gray-300">Área de Atuação</label>
                         <div class="mt-2 space-y-2">
                             <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="areas" value="desenvolvimento">
+                                <input type="checkbox" class="custom-checkbox" name="dev" value="desenvolvimento">
                                 <span class="ml-2 text-gray-300">Desenvolvimento</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="areas" value="tutoria">
+                                <input type="checkbox" class="custom-checkbox" name="tut" value="tutoria">
                                 <span class="ml-2 text-gray-300">Tutoria</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="areas" value="mídia/design">
+                                <input type="checkbox" class="custom-checkbox" name="des" value="mídia/design">
                                 <span class="ml-2 text-gray-300">Design/Mídia</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="areas" value="suporte">
+                                <input type="checkbox" class="custom-checkbox" name="sup" value="suporte">
                                 <span class="ml-2 text-gray-300">Redes/Suporte</span>
                             </label>
                         </div>
