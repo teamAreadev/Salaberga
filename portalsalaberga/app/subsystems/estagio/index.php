@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#4A90E2">
     <meta name="description" content="Resultados da Seleção - STGM">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <title>Resultados da Seleção - STGM</title>
 </head>
 <script>
@@ -282,7 +283,7 @@
                         <i class="fas fa-sign-in-alt mr-2"></i>
                         Login
                     </a>
-                   
+
                 </nav>
 
             </div>
@@ -334,56 +335,257 @@
 
     <script>
         // Dados dos candidatos
-        const candidates = [
-            { id: 1, name: "ALEXANDRE NETO DANTAS DA SILVA", status: "waiting" },
-            { id: 2, name: "ANA CLARA CAVALCANTE LIMA", status: "waiting" },
-            { id: 3, name: "ANGELA MICHELE DOS SANTOS LIMA", status: "waiting" },
-            { id: 4, name: "ANTONIO FELIPE GOMES MOREIRA", status: "waiting" },
-            { id: 5, name: "ATHILA SILVEIRA DA SILVA", status: "waiting" },
-            { id: 6, name: "BIANCA VIEIRA GOMES", status: "waiting" },
-            { id: 7, name: "CARLOS EDUARDO CARDOSO HOLANDA", status: "waiting" },
-            { id: 8, name: "CARLOS EDUARDO DA COSTA LIMA", status: "waiting" },
-            { id: 9, name: "CARLOS FRED ABREU PIRES", status: "waiting" },
-            { id: 10, name: "CHRISTIAN UNIAS DOS SANTOS SIQUEIRA", status: "approved", area: "suporte", company: "Mallory" },
-            { id: 11, name: "CLARICE ROCHA DE NOJOSA OLIVEIRA", status: "waiting" },
-            { id: 12, name: "ELPIDIO THOMAS DE FREITAS BEZERRA", status: "waiting" },
-            { id: 13, name: "FRANCISCO DENILSON ANDRADE COSTA", status: "waiting" },
-            { id: 14, name: "FRANCISCO ERICK ALVES DE PINHO", status: "waiting" },
-            { id: 15, name: "FRANCISCO ERICK HONORIO DE OLIVEIRA", status: "waiting" },
-            { id: 16, name: "FRANCISCO KAUA MUNIZ DA SILVA", status: "waiting" },
-            { id: 17, name: "FRANCISCO LAVOSIER SILVA NASCIMENTO", status: "waiting" },
-            { id: 18, name: "FRANCISCO LUCAS DIAMANTE SOUZA", status: "waiting" },
-            { id: 19, name: "FRANCISCO WEVERTON CIRILO MARQUES", status: "waiting" },
-            { id: 20, name: "GIOVANNA THAYLA CARDOSO VIANA", status: "waiting" },
-            { id: 21, name: "IAN LUCAS FREITAS DA SILVA DE ARAUJO", status: "waiting" },
-            { id: 22, name: "JEFFERSON CASTRO DA SILVA", status: "waiting" },
-            { id: 23, name: "JENNYFER NICOLY SOUSA MARQUES", status: "approved", area: "suporte", company: "Mallory" },
-            { id: 24, name: "JOAO GABRIEL COSTA CORREIA", status: "waiting" },
-            { id: 25, name: "JOÃO PAULO ARAUJO DA SILVA", status: "waiting" },
-            { id: 26, name: "JOSE ARIMATEIA MACIEL DE SOUSA", status: "waiting" },
-            { id: 27, name: "JULIA FROTA DE OLIVEIRA", status: "waiting" },
-            { id: 28, name: "JULIO CEZAR TARGINO DA SILVA FILHO", status: "waiting" },
-            { id: 29, name: "LARISSA MOURA DA SILVA", status: "waiting" },
-            { id: 30, name: "LETICIA BARBOSA OLIVEIRA", status: "waiting" },
-            { id: 31, name: "LETYCIA SANTOS DE SOUSA", status: "waiting" },
-            { id: 32, name: "MARCELA DOS SANTOS COSTA", status: "waiting" },
-            { id: 33, name: "MARCOS LUAN VIEIRA DA SILVA", status: "waiting" },
-            { id: 34, name: "MARIA JOISSEANNE DA SILVA NASCIMENTO", status: "waiting" },
-            { id: 35, name: "MARIA MAYSA DA SILVA ROCHA", status: "approved", area: "midia", company: "Fenix Soluções" },
-            { id: 36, name: "MATHEUS FELIX LOPES", status: "waiting" },
-            { id: 37, name: "MATHEUS MACHADO FERNANDES", status: "waiting" },
-            { id: 38, name: "MILLENA DA SILVA ANDRADE FREIRES", status: "waiting" },
-            { id: 39, name: "NATYELLEN FRANCA DE SOUSA", status: "waiting" },
-            { id: 40, name: "NICOLE KELLY DE OLIVEIRA LOPES", status: "waiting" },
-            { id: 41, name: "PAULO VITOR LIMA DUARTE", status: "waiting" },
-            { id: 42, name: "PEDRO UCHOA DE ABREU", status: "waiting" },
-            { id: 43, name: "RAFAEL MARTINS DOS SANTOS", status: "waiting" },
-            { id: 44, name: "RAMON NUNES MENDONCA", status: "waiting" },
-            { id: 45, name: "RAYSSA BEZERRA VAZ", status: "waiting" },
-            { id: 46, name: "RODRIGO FRANCO CAMPOS", status: "waiting" },
-            { id: 47, name: "ROGER SILVA CAVALCANTE", status: "waiting" },
-            { id: 48, name: "SARAH HELLEN TOME DE OLIVEIRA", status: "waiting" },
-            { id: 49, name: "YUDI BEZERRA BARBOSA", status: "waiting" }
+        const candidates = [{
+                id: 1,
+                name: "ALEXANDRE NETO DANTAS DA SILVA",
+                status: "waiting"
+            },
+            {
+                id: 2,
+                name: "ANA CLARA CAVALCANTE LIMA",
+                status: "waiting"
+            },
+            {
+                id: 3,
+                name: "ANGELA MICHELE DOS SANTOS LIMA",
+                status: "waiting"
+            },
+            {
+                id: 4,
+                name: "ANTONIO FELIPE GOMES MOREIRA",
+                status: "waiting"
+            },
+            {
+                id: 5,
+                name: "ATHILA SILVEIRA DA SILVA",
+                status: "waiting"
+            },
+            {
+                id: 6,
+                name: "BIANCA VIEIRA GOMES",
+                status: "waiting"
+            },
+            {
+                id: 7,
+                name: "CARLOS EDUARDO CARDOSO HOLANDA",
+                status: "waiting"
+            },
+            {
+                id: 8,
+                name: "CARLOS EDUARDO DA COSTA LIMA",
+                status: "waiting"
+            },
+            {
+                id: 9,
+                name: "CARLOS FRED ABREU PIRES",
+                status: "waiting"
+            },
+            {
+                id: 10,
+                name: "CHRISTIAN UNIAS DOS SANTOS SIQUEIRA",
+                status: "approved",
+                area: "suporte",
+                company: "Mallory"
+            },
+            {
+                id: 11,
+                name: "CLARICE ROCHA DE NOJOSA OLIVEIRA",
+                status: "waiting"
+            },
+            {
+                id: 12,
+                name: "ELPIDIO THOMAS DE FREITAS BEZERRA",
+                status: "waiting"
+            },
+            {
+                id: 13,
+                name: "FRANCISCO DENILSON ANDRADE COSTA",
+                status: "waiting"
+            },
+            {
+                id: 14,
+                name: "FRANCISCO ERICK ALVES DE PINHO",
+                status: "waiting"
+            },
+            {
+                id: 15,
+                name: "FRANCISCO ERICK HONORIO DE OLIVEIRA",
+                status: "waiting"
+            },
+            {
+                id: 16,
+                name: "FRANCISCO KAUA MUNIZ DA SILVA",
+                status: "waiting"
+            },
+            {
+                id: 17,
+                name: "FRANCISCO LAVOSIER SILVA NASCIMENTO",
+                status: "waiting"
+            },
+            {
+                id: 18,
+                name: "FRANCISCO LUCAS DIAMANTE SOUZA",
+                status: "waiting"
+            },
+            {
+                id: 19,
+                name: "FRANCISCO WEVERTON CIRILO MARQUES",
+                status: "waiting"
+            },
+            {
+                id: 20,
+                name: "GIOVANNA THAYLA CARDOSO VIANA",
+                status: "waiting"
+            },
+            {
+                id: 21,
+                name: "IAN LUCAS FREITAS DA SILVA DE ARAUJO",
+                status: "waiting"
+            },
+            {
+                id: 22,
+                name: "JEFFERSON CASTRO DA SILVA",
+                status: "waiting"
+            },
+            {
+                id: 23,
+                name: "JENNYFER NICOLY SOUSA MARQUES",
+                status: "approved",
+                area: "suporte",
+                company: "Mallory"
+            },
+            {
+                id: 24,
+                name: "JOAO GABRIEL COSTA CORREIA",
+                status: "waiting"
+            },
+            {
+                id: 25,
+                name: "JOÃO PAULO ARAUJO DA SILVA",
+                status: "waiting"
+            },
+            {
+                id: 26,
+                name: "JOSE ARIMATEIA MACIEL DE SOUSA",
+                status: "waiting"
+            },
+            {
+                id: 27,
+                name: "JULIA FROTA DE OLIVEIRA",
+                status: "waiting"
+            },
+            {
+                id: 28,
+                name: "JULIO CEZAR TARGINO DA SILVA FILHO",
+                status: "waiting"
+            },
+            {
+                id: 29,
+                name: "LARISSA MOURA DA SILVA",
+                status: "waiting"
+            },
+            {
+                id: 30,
+                name: "LETICIA BARBOSA OLIVEIRA",
+                status: "waiting"
+            },
+            {
+                id: 31,
+                name: "LETYCIA SANTOS DE SOUSA",
+                status: "waiting"
+            },
+            {
+                id: 32,
+                name: "MARCELA DOS SANTOS COSTA",
+                status: "waiting"
+            },
+            {
+                id: 33,
+                name: "MARCOS LUAN VIEIRA DA SILVA",
+                status: "waiting"
+            },
+            {
+                id: 34,
+                name: "MARIA JOISSEANNE DA SILVA NASCIMENTO",
+                status: "waiting"
+            },
+            {
+                id: 35,
+                name: "MARIA MAYSA DA SILVA ROCHA",
+                status: "approved",
+                area: "midia",
+                company: "Fenix Soluções"
+            },
+            {
+                id: 36,
+                name: "MATHEUS FELIX LOPES",
+                status: "waiting"
+            },
+            {
+                id: 37,
+                name: "MATHEUS MACHADO FERNANDES",
+                status: "waiting"
+            },
+            {
+                id: 38,
+                name: "MILLENA DA SILVA ANDRADE FREIRES",
+                status: "waiting"
+            },
+            {
+                id: 39,
+                name: "NATYELLEN FRANCA DE SOUSA",
+                status: "waiting"
+            },
+            {
+                id: 40,
+                name: "NICOLE KELLY DE OLIVEIRA LOPES",
+                status: "waiting"
+            },
+            {
+                id: 41,
+                name: "PAULO VITOR LIMA DUARTE",
+                status: "waiting"
+            },
+            {
+                id: 42,
+                name: "PEDRO UCHOA DE ABREU",
+                status: "waiting"
+            },
+            {
+                id: 43,
+                name: "RAFAEL MARTINS DOS SANTOS",
+                status: "waiting"
+            },
+            {
+                id: 44,
+                name: "RAMON NUNES MENDONCA",
+                status: "waiting"
+            },
+            {
+                id: 45,
+                name: "RAYSSA BEZERRA VAZ",
+                status: "waiting"
+            },
+            {
+                id: 46,
+                name: "RODRIGO FRANCO CAMPOS",
+                status: "waiting"
+            },
+            {
+                id: 47,
+                name: "ROGER SILVA CAVALCANTE",
+                status: "waiting"
+            },
+            {
+                id: 48,
+                name: "SARAH HELLEN TOME DE OLIVEIRA",
+                status: "waiting"
+            },
+            {
+                id: 49,
+                name: "YUDI BEZERRA BARBOSA",
+                status: "waiting"
+            }
         ];
 
         // Função para renderizar os candidatos
@@ -404,10 +606,10 @@
             filteredCandidates.forEach(candidate => {
                 const card = document.createElement('div');
                 card.className = `candidate-card ${candidate.status}`;
-                
+
                 // Tradução do status
                 let statusText = '';
-                switch(candidate.status) {
+                switch (candidate.status) {
                     case 'approved':
                         statusText = 'Aprovado';
                         break;
@@ -415,7 +617,7 @@
                         statusText = 'Em espera';
                         break;
                 }
-                
+
                 let cardContent = `
                     <div class="flex justify-between items-start">
                         <div>
@@ -423,7 +625,7 @@
                             <div class="mt-2 flex flex-wrap gap-2">
                                 <span class="status-badge ${candidate.status}">${statusText}</span>
                 `;
-                
+
                 // Adicionar área e empresa apenas para aprovados
                 if (candidate.status === 'approved') {
                     cardContent += `
@@ -431,14 +633,14 @@
                                 <span class="company-badge">${candidate.company}</span>
                     `;
                 }
-                
+
                 cardContent += `
                             </div>
                         </div>
                         <div class="text-sm text-gray-500">#${candidate.id.toString().padStart(2, '0')}</div>
                     </div>
                 `;
-                
+
                 card.innerHTML = cardContent;
                 container.appendChild(card);
             });
@@ -448,24 +650,24 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Renderizar candidatos iniciais
             renderCandidates();
-            
+
             // Configurar busca
             const searchInput = document.getElementById('search-input');
             const clearButton = document.getElementById('clear-search');
-            
+
             searchInput.addEventListener('input', function() {
                 const searchTerm = this.value.toLowerCase().trim();
                 clearButton.style.display = searchTerm ? 'block' : 'none';
-                
+
                 filterCandidates();
             });
-            
+
             clearButton.addEventListener('click', function() {
                 searchInput.value = '';
                 clearButton.style.display = 'none';
                 filterCandidates();
             });
-            
+
             // Configurar filtros de status
             const statusFilters = document.querySelectorAll('.status-filter');
             statusFilters.forEach(button => {
@@ -475,34 +677,34 @@
                     filterCandidates();
                 });
             });
-            
+
             // Função para aplicar todos os filtros
             function filterCandidates() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
                 const activeStatusFilter = document.querySelector('.status-filter.active').dataset.filter;
-                
+
                 const filtered = candidates.filter(candidate => {
                     // Filtro de busca
                     const matchesSearch = candidate.name.toLowerCase().includes(searchTerm);
-                    
+
                     // Filtro de status
                     const matchesStatus = activeStatusFilter === 'all' || candidate.status === activeStatusFilter;
-                    
+
                     return matchesSearch && matchesStatus;
                 });
-                
+
                 renderCandidates(filtered);
             }
-            
-           
-            
+
+
+
             // Animação para os cards
             const animateCards = () => {
                 const cards = document.querySelectorAll('.candidate-card');
                 cards.forEach((card, index) => {
                     card.style.opacity = '0';
                     card.style.transform = 'translateY(20px)';
-                    
+
                     setTimeout(() => {
                         card.style.transition = 'all 0.3s ease-out';
                         card.style.opacity = '1';
@@ -510,14 +712,16 @@
                     }, index * 50);
                 });
             };
-            
+
             animateCards();
-            
+
             // Atualizar animação quando os filtros mudam
             const observer = new MutationObserver(animateCards);
-            observer.observe(document.getElementById('candidates-container'), { childList: true });
+            observer.observe(document.getElementById('candidates-container'), {
+                childList: true
+            });
         });
-        
+
         // Função para atualizar o status de um candidato (para uso administrativo)
         function updateCandidateStatus(id, newStatus, area = null, company = null) {
             const candidate = candidates.find(c => c.id === id);
@@ -530,4 +734,5 @@
         }
     </script>
 </body>
+
 </html>

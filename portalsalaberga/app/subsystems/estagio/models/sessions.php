@@ -1,21 +1,20 @@
 <?php
-/*session_start();
+session_start();
 
 class sessions
 {
 
     function autenticar_session()
     {
-        if (!isset($_SESSION['email']) == true && !isset($_SESSION['senha']) == true) {
+        if (!isset($_SESSION['email']) == true) {
 
             unset($_SESSION['email']);
-            unset($_SESSION['senha']);
             header('location:../views/login.php');
             exit();
         }
         $logado = $_SESSION['email'];
     }
-    function tempo_session($tempo)
+    function tempo_session($tempo = 600)
     {
         if (isset($_SESSION['ultimo_acesso'])) {
 
@@ -37,4 +36,3 @@ class sessions
         exit();
     }
 }
-*/

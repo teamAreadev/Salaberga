@@ -2,14 +2,13 @@
 require_once('../models/select_model.php');
 require_once('../models/sessions.php');
 $select_model = new select_model();
-/*$session = new sessions;
-
-$session->tempo_session(600);
+$session = new sessions;
+$session->tempo_session();
 $session->autenticar_session();
 
-if (isset($_POST['logout'])) {
+if (isset($_POST['layout'])) {
     $session->quebra_session();
-}*/
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -56,7 +55,7 @@ if (isset($_POST['logout'])) {
         --sidebar-active: rgba(0, 179, 72, 0.2);
     }
 
- 
+
     * {
         margin: 0;
         padding: 0;
@@ -154,10 +153,12 @@ if (isset($_POST['logout'])) {
                         <i class="fas fa-cog w-5 mr-3"></i>
                         Configurações
                     </a>
-                    <a href="login.php" class="sidebar-link text-danger">
-                        <i class="fas fa-sign-out-alt w-5 mr-3"></i>
-                        Sair
-                    </a>
+                    <form action="" method="post">
+                        <button type="submit" name="layout" class="sidebar-link text-red-400 hover:text-red-300">
+                            <i class="fas fa-sign-out-alt w-5 mr-3"></i>
+                            Sair
+                        </button>
+                    </form>
                 </div>
             </div>
         </aside>
@@ -210,10 +211,12 @@ if (isset($_POST['logout'])) {
                         <i class="fas fa-cog w-5 mr-3"></i>
                         Configurações
                     </a>
-                    <a href="login.php" class="sidebar-link text-danger">
-                        <i class="fas fa-sign-out-alt w-5 mr-3"></i>
-                        Sair
-                    </a>
+                    <form action="" method="post">
+                        <button type="submit" name="layout" class="sidebar-link text-red-400 hover:text-red-300">
+                            <i class="fas fa-sign-out-alt w-5 mr-3"></i>
+                            Sair
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -227,8 +230,8 @@ if (isset($_POST['logout'])) {
                 </div>
 
                 <div class="mt-4 md:mt-0 flex items-center">
-                   
-                    
+
+
                     <div class="flex items-center">
                         <div class="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
                             A
@@ -280,7 +283,7 @@ if (isset($_POST['logout'])) {
                             $dados = $select_model->total_vagas();
                             foreach ($dados as $dado) {
                             ?>
-                                <p class="text-3xl font-bold mt-2 text-secondary"><?= $dado ?></p>
+                                <p class="text-3xl font-bold mt-2 text-secondary"><?= $dado ?? 0 ?></p>
                             <?php
                             }
                             ?>
@@ -352,7 +355,7 @@ if (isset($_POST['logout'])) {
                                 $dados = $select_model->total_vagas_dev();
                                 foreach ($dados as $dado) {
                                 ?>
-                                    <p class="text-2xl font-bold"><?= $dado ?></p>
+                                    <p class="text-2xl font-bold"><?= $dado ?? 0?></p>
                                 <?php } ?>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Vagas</span>
                             </div>
@@ -361,11 +364,11 @@ if (isset($_POST['logout'])) {
                         <div class="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                             <h4 class="font-medium text-purple-600 dark:text-purple-400">Design</h4>
                             <div class="mt-2 flex justify-between items-end">
-                            <?php
-                                $dados = $select_model->total_vagas_suporte();
+                                <?php
+                                $dados = $select_model->total_vagas_sup();
                                 foreach ($dados as $dado) {
                                 ?>
-                                    <p class="text-2xl font-bold"><?= $dado ?></p>
+                                    <p class="text-2xl font-bold"><?= $dado ?? 0 ?></p>
                                 <?php } ?>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Vagas</span>
                             </div>
@@ -374,18 +377,17 @@ if (isset($_POST['logout'])) {
                         <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                             <h4 class="font-medium text-green-600 dark:text-green-400">Mídia</h4>
                             <div class="mt-2 flex justify-between items-end">
-                            <?php
-                                $dados = $select_model->total_vagas_design();
-                                if($dados == 0){
+                                <?php
+                                $dados = $select_model->total_vagas_des();
+                                if ($dados == 0) {
+                                } else {
 
-                                    
-                                }else{
 
-                
-                                foreach ($dados as $dado) {
+                                    foreach ($dados as $dado) {
                                 ?>
-                                    <p class="text-2xl font-bold"><?= $dado ?></p>
-                                <?php } }?>
+                                        <p class="text-2xl font-bold"><?= $dado ?? 0 ?></p>
+                                <?php }
+                                } ?>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Vagas</span>
                             </div>
                         </div>
@@ -393,11 +395,11 @@ if (isset($_POST['logout'])) {
                         <div class="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
                             <h4 class="font-medium text-orange-600 dark:text-orange-400">Redes/Suporte</h4>
                             <div class="mt-2 flex justify-between items-end">
-                            <?php
-                                $dados = $select_model->total_vagas_tutoria();
+                                <?php
+                                $dados = $select_model->total_vagas_tut();
                                 foreach ($dados as $dado) {
                                 ?>
-                                    <p class="text-2xl font-bold"><?= $dado ?></p>
+                                    <p class="text-2xl font-bold"><?= $dado ?? 0 ?></p>
                                 <?php } ?>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Vagas</span>
                             </div>
@@ -411,8 +413,8 @@ if (isset($_POST['logout'])) {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Configurar modo escuro
-          
-            
+
+
             // Mobile sidebar toggle
             const sidebarToggle = document.getElementById('sidebarToggle');
             const closeSidebar = document.getElementById('closeSidebar');

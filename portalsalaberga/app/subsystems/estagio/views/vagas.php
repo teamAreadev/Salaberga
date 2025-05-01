@@ -1,12 +1,14 @@
 <?php
-/*require_once('../models/sessions.php');
+require_once('../models/select_model.php');
+require_once('../models/sessions.php');
+$select_model = new select_model();
 $session = new sessions;
-$session->tempo_session(600);
+$session->tempo_session();
 $session->autenticar_session();
 
-if (isset($_POST['logout'])) {
+if (isset($_POST['layout'])) {
     $session->quebra_session();
-}*/
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -99,7 +101,7 @@ if (isset($_POST['logout'])) {
             background-image:
                 radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.05) 0%, rgba(0, 122, 51, 0) 20%),
                 radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.05) 0%, rgba(255, 165, 0, 0) 20%),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23007A33' fill-opacity='0.03' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23007A33' fill-opacity='0.03' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2  Almighty 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
             transition: all 0.3s ease;
         }
 
@@ -495,7 +497,7 @@ if (isset($_POST['logout'])) {
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="./aluno_vaga.php" class="sidebar-link">
+                    <a href="./alunos_vaga.php" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -505,10 +507,12 @@ if (isset($_POST['logout'])) {
                         <i class="fas fa-cog w-5 mr-3"></i>
                         Configurações
                     </a>
-                    <a href="#" class="sidebar-link text-red-400 hover:text-red-300">
-                        <i class="fas fa-sign-out-alt w-5 mr-3"></i>
-                        Sair
-                    </a>
+                    <form action="" method="post">
+                        <button type="submit" name="layout" class="sidebar-link text-red-400 hover:text-red-300">
+                            <i class="fas fa-sign-out-alt w-5 mr-3"></i>
+                            Sair
+                        </button>
+                    </form>
                 </div>
             </div>
         </aside>
@@ -575,7 +579,7 @@ if (isset($_POST['logout'])) {
             <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6 sm:py-8 w-full">
                 <!-- Breadcrumbs -->
                 <div class="text-sm text-gray-400 mb-6 flex items-center">
-                    <a href="./dashboard.php" class="hover:text-primary-400 transition-colors">Dashboard</a>
+                    <a href="./-page.php" class="hover:text-primary-400 transition-colors">Dashboard</a>
                     <span class="mx-2 text-gray-600">/</span>
                     <span class="text-white">Vagas</span>
                 </div>
@@ -620,44 +624,16 @@ if (isset($_POST['logout'])) {
                 <!-- Grid de Vagas -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="vagasGrid">
                     <!-- Vaga Exemplo -->
-                    <div class="vaga-card slide-up" data-empresa-id="1" data-vaga-id="1">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="vaga-title">Desenvolvedor Front-end</h3>
-                                <p class="text-sm text-gray-400 mt-1">TechCorp Solutions</p>
-                                <div class="mt-2">
-                                    <span class="area-chip area-desenvolvimento">desenvolvimento</span>
-                                </div>
-                            </div>
-                            <div class="flex gap-2">
-                                <button class="edit-vaga-btn text-gray-400 hover:text-primary-400 transition-colors" data-vaga-id="1">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="delete-vaga-btn text-gray-400 hover:text-red-400 transition-colors" data-vaga-id="1">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="mt-4 space-y-2">
-                            <p class="text-sm text-gray-300">Desenvolvimento de interfaces web modernas.</p>
-                            <div class="pt-4 border-t border-gray-700">
-                                <h4 class="text-sm font-medium text-white mb-2">Requisitos:</h4>
-                                <ul class="text-sm text-gray-300 list-disc list-inside">
-                                    <li>HTML, CSS, JavaScript</li>
-                                    <li>React ou Vue.js</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex justify-between items-center pt-4 border-t border-gray-700">
-                            <div>
-                                <p class="text-sm text-gray-400">30h semanais</p>
-                            </div>
-                            <a href="./alunos_vaga.php?vaga_id=1" class="custom-btn custom-btn-primary">
-                                <i class="fas fa-user-graduate btn-icon"></i>
-                                <span>Selecionar Aluno</span>
-                            </a>
-                        </div>
-                    </div>
+                    <?php 
+                        $dados = $select_model->vagas();
+
+                        foreach($dados as $dado){
+                    ?>
+                    <p><?=$dado['nome_vaga']?></p>
+                    <p><?=$dado['nome_empresa']?></p>
+                    <p><?=$dado['nome_perfil']?></p>
+                    <p><?=$dado['quantidade']?></p>
+                    <?php }?>
                     <!-- Adicione mais vagas dinamicamente via PHP ou JavaScript -->
                 </div>
             </main>
@@ -667,53 +643,48 @@ if (isset($_POST['logout'])) {
         <div id="vagaModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
             <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
                 <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white slide-up">Nova Vaga</h2>
-                <form id="vagaForm" class="space-y-4">
+                <form action="../controllers/controller.php" method="post" id="vagaForm" class="space-y-4">
                     <input type="hidden" id="vagaId" name="vaga_id" value="">
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Título da Vaga</label>
-                        <input type="text" id="vagaTitulo" name="titulo" class="custom-input mt-1" required>
+                        <input type="text" id="vagaTitulo" name="nome" class="custom-input mt-1" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Nome da Empresa</label>
-                        <select id="vagaEmpresa" name="empresa_id" class="custom-input mt-1" required>
-                            <option value="">Selecione uma empresa</option>
-                            <option value="1">TechCorp Solutions</option>
-                            <option value="2">Mídia Digital</option>
-                            <option value="3">Redes & Cia</option>
+                        <select id="vagaEmpresa" name="empresa" class="custom-input mt-1" required>
+                            <option value="" selected disabled>Selecione uma empresa</option>
+                            <?php 
+                            $dados = $select_model->concedentes();
+                            foreach($dados as $dado){
+                            ?>
+                            <option value="<?=$dado['id']?>"><?=$dado['nome']?></option>
+                            <?php }?>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Áreas de Atuação</label>
                         <div class="mt-2 space-y-2">
                             <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="areas" value="desenvolvimento">
+                                <input type="radio" class="custom-checkbox" name="areas" value="1">
                                 <span class="ml-2 text-gray-300">Desenvolvimento</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="areas" value="design">
-                                <span class="ml-2 text-gray-300">Design</span>
+                                <input type="radio" class="custom-checkbox" name="areas" value="2">
+                                <span class="ml-2 text-gray-300">Design/Mídia</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="areas" value="midia">
-                                <span class="ml-2 text-gray-300">Mídia</span>
+                                <input type="radio" class="custom-checkbox" name="areas" value="4">
+                                <span class="ml-2 text-gray-300">Tutoria</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="areas" value="redes">
+                                <input type="radio" class="custom-checkbox" name="areas" value="3">
                                 <span class="ml-2 text-gray-300">Redes/Suporte</span>
                             </label>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300">Endereço</label>
-                        <input type="text" id="vagaEndereco" name="endereco" class="custom-input mt-1">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Telefone</label>
-                        <input type="tel" id="vagaTelefone" name="telefone" class="custom-input mt-1">
-                    </div>
-                    <div>
                         <label class="block text-sm font-medium text-gray-300">Vagas Disponíveis</label>
-                        <input type="number" id="vagaVagasDisponiveis" name="vagas_disponiveis" min="1" class="custom-input mt-1" required>
+                        <input type="number" id="vagaVagasDisponiveis" name="quantidades" min="1" class="custom-input mt-1" required>
                     </div>
                     <div class="mt-6 flex justify-end space-x-4">
                         <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">
@@ -743,7 +714,6 @@ if (isset($_POST['logout'])) {
             const mobileSidebar = document.getElementById('mobileSidebar');
             const searchInput = document.getElementById('searchVaga');
             const filterArea = document.getElementById('filterArea');
-            const telefoneInput = document.getElementById('vagaTelefone');
 
             // GSAP Animations
             gsap.from('.action-bar', { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' });
@@ -755,23 +725,8 @@ if (isset($_POST['logout'])) {
                 ease: 'power3.out'
             });
 
-            // Máscara de telefone
-            telefoneInput.addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 11) {
-                    value = value.slice(0, 11);
-                }
-                if (value.length <= 10) {
-                    value = value.replace(/(\d{2})(\d{0,4})(\d{0,4})/, '($1) $2-$3');
-                } else {
-                    value = value.replace(/(\d{2})(\d{0,5})(\d{0,4})/, '($1) $2-$3');
-                }
-                e.target.value = value.trim();
-            });
-
-            // Limpar caracteres não numéricos antes de enviar o formulário
+            // Manipulação do formulário
             vagaForm.addEventListener('submit', (e) => {
-                telefoneInput.value = telefoneInput.value.replace(/\D/g, '');
                 const submitBtn = e.submitter;
                 if (submitBtn) {
                     gsap.to(submitBtn, {
@@ -799,7 +754,7 @@ if (isset($_POST['logout'])) {
                 vagaForm.reset();
                 document.getElementById('vagaId').value = '';
                 document.getElementById('modalTitle').textContent = 'Nova Vaga';
-                const checkboxes = document.querySelectorAll('input[name="area"]');
+                const checkboxes = document.querySelectorAll('input[name="areas"]');
                 checkboxes.forEach(cb => cb.checked = false);
             }
 
@@ -810,9 +765,8 @@ if (isset($_POST['logout'])) {
                     document.getElementById('vagaId').value = vaga.id;
                     document.getElementById('vagaTitulo').value = vaga.titulo;
                     document.getElementById('vagaEmpresa').value = vaga.empresa_id;
-                    document.getElementById('vagaRequisitos').value = vaga.requisitos || '';
-                    document.getElementById('vagaTelefone').value = vaga.telefone || '';
-                    const checkboxes = document.querySelectorAll('input[name="area"]');
+                    document.getElementById('vagaVagasDisponiveis').value = vaga.vagas_disponiveis || '';
+                    const checkboxes = document.querySelectorAll('input[name="areas"]');
                     checkboxes.forEach(cb => {
                         cb.checked = vaga.area === cb.value;
                     });
@@ -857,7 +811,7 @@ if (isset($_POST['logout'])) {
                 let visibleCount = 0;
 
                 vagaCards.forEach((card, index) => {
-                    const titulo = card.querySelector('.vaga-card-title').textContent.toLowerCase();
+                    const titulo = card.querySelector('.vaga-title').textContent.toLowerCase();
                     const area = card.dataset.area;
                     const matchSearch = titulo.includes(searchTerm);
                     const matchArea = !areaFiltro || area === areaFiltro;
@@ -907,8 +861,8 @@ if (isset($_POST['logout'])) {
             filterArea.addEventListener('change', aplicarFiltros);
 
             // Editar vaga
-            window.editarVaga = (id, titulo, area, empresa_id, requisitos, telefone) => {
-                openModal(true, { id, titulo, area, empresa_id, requisitos, telefone });
+            window.editarVaga = (id, titulo, area, empresa_id, vagas_disponiveis) => {
+                openModal(true, { id, titulo, area, empresa_id, vagas_disponiveis });
             };
 
             // Excluir vaga

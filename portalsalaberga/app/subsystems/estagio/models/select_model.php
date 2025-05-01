@@ -19,43 +19,56 @@ class select_model extends connect
     }
     function total_vagas()
     {
-        $stmt_vagas = $this->connect->query("SELECT sum(numero_vagas) FROM concedentes");
+        $stmt_vagas = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas");
         $result = $stmt_vagas->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+    function total_vagas_des()
+    {
+        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas WHERE id_perfil = 2");
+        $result = $stmt_empresa->fetch(PDO::FETCH_ASSOC);
 
         return $result;
     }
     function total_vagas_dev()
     {
-        $stmt_vagas_dev = $this->connect->query("SELECT numero_vagas FROM concedentes WHERE perfil = 'desenvolvedor'");
-        $result = $stmt_vagas_dev->fetch(PDO::FETCH_ASSOC);
-
-        return $result;
-    }
-    function total_vagas_suporte()
-    {
-        $stmt_empresa = $this->connect->query("SELECT numero_vagas FROM concedentes WHERE perfil = 'suporte'");
+        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas WHERE id_perfil = 1");
         $result = $stmt_empresa->fetch(PDO::FETCH_ASSOC);
 
         return $result;
     }
-    function total_vagas_design()
+    function total_vagas_tut()
     {
-        $stmt_empresa = $this->connect->query("SELECT numero_vagas FROM concedentes WHERE perfil = 'design'");
+        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas WHERE id_perfil = 4");
         $result = $stmt_empresa->fetch(PDO::FETCH_ASSOC);
 
         return $result;
     }
-    function total_vagas_tutoria()
+    function total_vagas_sup()
     {
-        $stmt_empresa = $this->connect->query("SELECT numero_vagas FROM concedentes WHERE perfil = 'tutoria'");
+        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas WHERE id_perfil = 3");
         $result = $stmt_empresa->fetch(PDO::FETCH_ASSOC);
 
         return $result;
     }
     function concedentes()
     {
-        $stmt_empresa = $this->connect->query("SELECT * FROM concedentes");
-        $result = $stmt_empresa->fetchAll(PDO::FETCH_ASSOC); 
+        $stmt_empresa = $this->connect->query(
+            "SELECT 
+                c.id AS id,
+                c.nome AS nome,
+                GROUP_CONCAT(p.nome_perfil) AS perfis,
+                c.endereco,
+                c.contato
+            FROM 
+                concedentes c
+                INNER JOIN concedentes_perfis cp ON c.id = cp.concedente_id
+                INNER JOIN perfis p ON cp.perfil_id = p.id
+            GROUP BY 
+                c.id, c.nome, c.endereco, c.contato;"
+        );
+        $result = $stmt_empresa->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;
     }
@@ -66,13 +79,20 @@ class select_model extends connect
 
         return $result;
     }
-    function alunos_aptos_curso($perfil1, $perfil2){
-
-        $stmt_alunos = $this->connect->prepare("SELECT * FROM aluno WHERE perfil_opc1 IS NOT NULL AND :perfil1 OR perfil_opc2 IS NOT NULL AND :perfil2 ORDER BY medias DESC, COALESCE(ocorrencia, 0) ASC;");
-        $stmt_alunos->bindValue(':perfil1', $perfil1);
-        $stmt_alunos->bindValue(':perfil2', $perfil2);
-        $stmt_alunos->execute();
-        $result = $stmt_alunos->fetchAll(PDO::FETCH_ASSOC);
+    function vagas()
+    {
+        $stmt_vagas = $this->connect->query(
+            "SELECT 
+                v.nome_vaga AS nome_vaga,
+                c.nome AS nome_empresa,
+                p.nome_perfil AS nome_perfil,
+                v.quantidade AS quantidade
+            FROM 
+                vagas v
+            INNER JOIN concedentes c ON v.id_concedente = c.id
+            INNER JOIN perfis p ON v.id_perfil = p.id;"
+        );
+        $result = $stmt_vagas->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;
     }

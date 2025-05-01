@@ -1,6 +1,14 @@
 <?php
 require_once('../models/select_model.php');
+require_once('../models/sessions.php');
 $select_model = new select_model();
+$session = new sessions;
+$session->tempo_session();
+$session->autenticar_session();
+
+if (isset($_POST['layout'])) {
+    $session->quebra_session();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -526,7 +534,7 @@ $select_model = new select_model();
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="relatorios.php" class="sidebar-link">
+                    <a href="alunos_vaga.php" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -536,10 +544,12 @@ $select_model = new select_model();
                         <i class="fas fa-cog w-5 mr-3"></i>
                         Configurações
                     </a>
-                    <a href="login.php" class="sidebar-link text-red-400 hover:text-red-300">
-                        <i class="fas fa-sign-out-alt w-5 mr-3"></i>
-                        Sair
-                    </a>
+                    <form action="" method="post">
+                        <button type="submit" name="layout" class="sidebar-link text-red-400 hover:text-red-300">
+                            <i class="fas fa-sign-out-alt w-5 mr-3"></i>
+                            Sair
+                        </button>
+                    </form>
                 </div>
             </div>
         </aside>
@@ -580,7 +590,7 @@ $select_model = new select_model();
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="relatorios.php" class="sidebar-link">
+                    <a href="alunos_vaga.php" class="sidebar-link">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -590,10 +600,12 @@ $select_model = new select_model();
                         <i class="fas fa-cog w-5 mr-3"></i>
                         Configurações
                     </a>
-                    <a href="login.php" class="sidebar-link text-red-400 hover:text-red-300">
-                        <i class="fas fa-sign-out-alt w-5 mr-3"></i>
-                        Sair
-                    </a>
+                    <form action="" method="post">
+                        <button type="submit" name="layout" class="sidebar-link text-red-400 hover:text-red-300">
+                            <i class="fas fa-sign-out-alt w-5 mr-3"></i>
+                            Sair
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -854,7 +866,7 @@ $select_model = new select_model();
         // Dados dos alunos
         let alunos = [
             <?php foreach ($dados as $dado) { ?>
-                {
+                
                     id: <?= $dado['id'] ?>,
                     nome: "<?= addslashes($dado['nome']) ?>",
                     contato: "<?= addslashes($dado['contato'] ?: '-') ?>",
@@ -865,7 +877,7 @@ $select_model = new select_model();
                     perfil_opc2: "<?= addslashes($dado['perfil_opc2']) ?>",
                     ocorrencia: "<?= addslashes($dado['ocorrencia'] ?: '-') ?>",
                     custeio: <?= $dado['custeio'] ?>
-                },
+                
             <?php } ?>
         ];
 
