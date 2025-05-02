@@ -876,7 +876,7 @@ if (isset($_POST['layout'])) {
             foreach ($dados as $dado) {
                 $index++;
             ?>
-                {
+                
                     id: <?= $dado['id'] ?>,
                     nome: "<?= addslashes($dado['nome']) ?>",
                     contato: "<?= addslashes($dado['contato'] ?: '-') ?>",
@@ -887,7 +887,7 @@ if (isset($_POST['layout'])) {
                     perfil_opc2: "<?= addslashes($dado['perfil_opc2']) ?>",
                     ocorrencia: "<?= addslashes($dado['ocorrencia'] ?: '-') ?>",
                     custeio: <?= $dado['custeio'] ?>
-                }<?= $index < $total ? ',' : '' ?>
+                <?= $index < $total ? ',' : '' ?>
             <?php } ?>
         ];
 
