@@ -1,4 +1,4 @@
-<?php
+ <?php
 require_once('../models/select_model.php');
 require_once('../models/sessions.php');
 $select_model = new select_model();
@@ -136,6 +136,210 @@ if (isset($_POST['layout'])) {
             font-weight: 600;
             box-shadow: 0 2px 8px rgba(0, 122, 51, 0.15);
         }
+
+
+        /* Vaga card styling */
+.vaga-card {
+    background: linear-gradient(135deg, rgba(49, 49, 49, 0.95) 0%, rgba(37, 37, 37, 0.95) 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.vaga-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #00FF6B, #007A33);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.vaga-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(0, 122, 51, 0.2);
+}
+
+.vaga-card:hover::before {
+    opacity: 1;
+    width: 6px;
+}
+
+.vaga-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.vaga-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(90deg, #ffffff, #e0e0e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.vaga-card:hover .vaga-card-title {
+    background: linear-gradient(90deg, #ffffff, #00FF6B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.vaga-card-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.vaga-card-action {
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.05);
+    color: #9ca3af;
+}
+
+.vaga-card-action:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.vaga-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.vaga-card-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    color: #d1d5db;
+    padding: 0.5rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.3s ease;
+}
+
+.vaga-card-info-item i {
+    color: #007A33;
+    transition: all 0.3s ease;
+}
+
+.vaga-card:hover .vaga-card-info-item i {
+    color: #00FF6B;
+}
+
+/* Area chips styling */
+.area-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: capitalize;
+    transition: all 0.3s ease;
+    background: rgba(0, 0, 0, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.area-chip:hover {
+    transform: translateY(-1px);
+    background: rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.area-desenvolvimento {
+    background: rgba(59, 130, 246, 0.15);
+    color: #93c5fd;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.area-desenvolvimento:hover {
+    background: rgba(59, 130, 246, 0.25);
+}
+
+.area-design {
+    background: rgba(168, 85, 247, 0.15);
+    color: #c4b5fd;
+    border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.area-design:hover {
+    background: rgba(168, 85, 247, 0.25);
+}
+
+.area-midia {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.area-midia:hover {
+    background: rgba(16, 185, 129, 0.25);
+}
+
+.area-redes {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fcd34d;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.area-redes:hover {
+    background: rgba(245, 158, 11, 0.25);
+}
+
+.area-tutoria {
+    background: rgba(168, 85, 247, 0.15);
+    color: #c4b5fd;
+    border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.area-tutoria:hover {
+    background: rgba(168, 85, 247, 0.25);
+}
+
+/* Ver detalhes link styling */
+.ver-detalhes-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 122, 51, 0.1);
+    border-radius: 6px;
+    color: #00C250;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.ver-detalhes-link:hover {
+    background: rgba(0, 122, 51, 0.2);
+    transform: translateX(3px);
+}
+
+.ver-detalhes-link i {
+    transition: transform 0.3s ease;
+}
+
+.ver-detalhes-link:hover i {
+    transform: translateX(3px);
+}
 
         /* Vaga card styling */
         .vaga-card {
@@ -621,21 +825,85 @@ if (isset($_POST['layout'])) {
                     </div>
                 </div>
 
-                <!-- Grid de Vagas -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="vagasGrid">
-                    <!-- Vaga Exemplo -->
-                    <?php 
-                        $dados = $select_model->vagas();
-
-                        foreach($dados as $dado){
-                    ?>
-                    <p><?=$dado['nome_vaga']?></p>
-                    <p><?=$dado['nome_empresa']?></p>
-                    <p><?=$dado['nome_perfil']?></p>
-                    <p><?=$dado['quantidade']?></p>
-                    <?php }?>
-                    <!-- Adicione mais vagas dinamicamente via PHP ou JavaScript -->
+              <!-- Grid de Vagas -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="vagasGrid">
+    <?php 
+    $dados = $select_model->vagas();
+    if (empty($dados)): ?>
+        <div class="col-span-3 text-center py-16 text-gray-400 fade-in">
+            <i class="fas fa-briefcase text-5xl mb-4 text-gray-600 opacity-30"></i>
+            <p class="text-xl">Nenhuma vaga cadastrada no momento.</p>
+            <button id="firstVagaBtn" class="mt-6 custom-btn custom-btn-primary">
+                <i class="fas fa-plus btn-icon"></i>
+                <span>Cadastrar Primeira Vaga</span>
+            </button>
+        </div>
+    <?php else: ?>
+        <?php
+        $delay = 0;
+        foreach($dados as $dado):
+            $delay += 100;
+            // Safely handle the area value
+            $area = isset($dado['nome_perfil']) && !empty($dado['nome_perfil']) ? strtolower($dado['nome_perfil']) : 'desenvolvimento';
+            if ($area === 'design/mídia') {
+                $area = 'design';
+            }
+            // Sanitize all PHP outputs
+            $vagaId = isset($dado['id']) ? htmlspecialchars($dado['id'], ENT_QUOTES, 'UTF-8') : '';
+            $vagaTitle = isset($dado['nome_vaga']) ? htmlspecialchars($dado['nome_vaga'], ENT_QUOTES, 'UTF-8') : 'Título não informado';
+            $empresaName = isset($dado['nome_empresa']) ? htmlspecialchars($dado['nome_empresa'], ENT_QUOTES, 'UTF-8') : 'Não informado';
+            $quantidade = isset($dado['quantidade']) ? htmlspecialchars($dado['quantidade'], ENT_QUOTES, 'UTF-8') : '0';
+            $nomePerfil = isset($dado['nome_perfil']) ? htmlspecialchars($dado['nome_perfil'], ENT_QUOTES, 'UTF-8') : 'Área não informada';
+            $empresaId = isset($dado['id_empresa']) ? htmlspecialchars($dado['id_empresa'], ENT_QUOTES, 'UTF-8') : '';
+        ?>
+            <div class="vaga-card slide-up" style="animation-delay: <?php echo $delay; ?>ms;" data-vaga-id="<?php echo $vagaId; ?>" data-area="<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>">
+                <div class="vaga-card-header">
+                    <h3 class="vaga-card-title"><?php echo $vagaTitle; ?></h3>
+                    <div class="vaga-card-actions">
+                        <button class="vaga-card-action hover:text-primary-400" onclick="editarVaga(<?php echo $vagaId ? $vagaId : '0'; ?>, '<?php echo $vagaTitle; ?>', '<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>', '<?php echo $empresaId; ?>', '<?php echo $quantidade; ?>')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="vaga-card-action hover:text-red-400" onclick="excluirVaga(<?php echo $vagaId ? $vagaId : '0'; ?>)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="area-chip area-<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>">
+                        <?php if ($area === 'desenvolvimento'): ?>
+                            <i class="fas fa-code mr-1 text-xs"></i>
+                        <?php elseif ($area === 'tutoria'): ?>
+                            <i class="fas fa-chalkboard-teacher mr-1 text-xs"></i>
+                        <?php elseif ($area === 'design'): ?>
+                            <i class="fas fa-paint-brush mr-1 text-xs"></i>
+                        <?php elseif ($area === 'redes'): ?>
+                            <i class="fas fa-network-wired mr-1 text-xs"></i>
+                        <?php else: ?>
+                            <i class="fas fa-question mr-1 text-xs"></i>
+                        <?php endif; ?>
+                        <?php echo $nomePerfil; ?>
+                    </span>
+                </div>
+                <div class="vaga-card-info">
+                    <div class="vaga-card-info-item">
+                        <i class="fas fa-building w-5"></i>
+                        <span><?php echo $empresaName; ?></span>
+                    </div>
+                    <div class="vaga-card-info-item">
+                        <i class="fas fa-users w-5"></i>
+                        <span><?php echo $quantidade; ?> vaga(s) disponível(is)</span>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <a href="./vaga_detalhes.php?vaga_id=<?php echo $vagaId; ?>" class="ver-detalhes-link">
+                        <span>Ver detalhes</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
             </main>
         </div>
 

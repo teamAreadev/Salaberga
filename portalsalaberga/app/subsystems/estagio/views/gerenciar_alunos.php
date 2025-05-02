@@ -352,6 +352,10 @@ if (isset($_POST['layout'])) {
             overflow-y: auto;
         }
 
+        .modal-show {
+            display: flex !important;
+        }
+
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -865,8 +869,14 @@ if (isset($_POST['layout'])) {
     <script>
         // Dados dos alunos
         let alunos = [
-            <?php foreach ($dados as $dado) { ?>
-                
+            <?php 
+            $dados = $select_model->alunos_aptos();
+            $total = count($dados);
+            $index = 0;
+            foreach ($dados as $dado) {
+                $index++;
+            ?>
+                {
                     id: <?= $dado['id'] ?>,
                     nome: "<?= addslashes($dado['nome']) ?>",
                     contato: "<?= addslashes($dado['contato'] ?: '-') ?>",
@@ -877,7 +887,7 @@ if (isset($_POST['layout'])) {
                     perfil_opc2: "<?= addslashes($dado['perfil_opc2']) ?>",
                     ocorrencia: "<?= addslashes($dado['ocorrencia'] ?: '-') ?>",
                     custeio: <?= $dado['custeio'] ?>
-                
+                }<?= $index < $total ? ',' : '' ?>
             <?php } ?>
         ];
 
