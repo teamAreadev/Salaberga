@@ -11,7 +11,6 @@ if (isset($_POST['layout'])) {
     $session->quebra_session();
 }
 ?>
-?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 
@@ -830,11 +829,11 @@ if (isset($_POST['layout'])) {
                                 <span class="ml-2 text-gray-300">Tutoria</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="des" value="mídia/design">
+                                <input type="checkbox" class="custom-checkbox" name="des" value="Design/Mídia">
                                 <span class="ml-2 text-gray-300">Design/Mídia</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="sup" value="suporte">
+                                <input type="checkbox" class="custom-checkbox" name="sup" value="Redes/Suporte">
                                 <span class="ml-2 text-gray-300">Redes/Suporte</span>
                             </label>
                         </div>

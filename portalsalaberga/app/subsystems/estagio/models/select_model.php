@@ -58,13 +58,13 @@ class select_model extends connect
             "SELECT 
                 c.id AS id,
                 c.nome AS nome,
-                GROUP_CONCAT(p.nome_perfil) AS perfis,
+                COALESCE(GROUP_CONCAT(p.nome_perfil), '') AS perfis,
                 c.endereco,
                 c.contato
             FROM 
                 concedentes c
-                INNER JOIN concedentes_perfis cp ON c.id = cp.concedente_id
-                INNER JOIN perfis p ON cp.perfil_id = p.id
+            LEFT JOIN concedentes_perfis cp ON c.id = cp.concedente_id
+            LEFT JOIN perfis p ON cp.perfil_id = p.id
             GROUP BY 
                 c.id, c.nome, c.endereco, c.contato;"
         );
