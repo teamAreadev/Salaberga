@@ -105,14 +105,21 @@ class UsuarioController {
      * Cadastra um novo usuário
      */
     public function cadastrar() {
-        header('Content-Type: application/json');
+        // Armazena as mensagens de erro/log ao invés de exibi-las
+        $log = [];
+        
+        // Buffer de saída para evitar que qualquer saída interfira com o JSON
+        ob_start();
         
         try {
             // Debug - Registrar o início da função e os dados recebidos
-            error_log("Iniciando método cadastrar()");
-            error_log("POST: " . print_r($_POST, true));
+            $log[] = "Iniciando método cadastrar()";
+            $log[] = "POST: " . print_r($_POST, true);
             
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                // Limpa o buffer para garantir que nada seja enviado antes do JSON
+                ob_end_clean();
+                header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => 'Método não permitido']);
                 return;
             }
@@ -125,7 +132,11 @@ class UsuarioController {
             // Verificar campos obrigatórios
             foreach ($camposObrigatorios as $campo) {
                 if (!isset($_POST[$campo]) || empty($_POST[$campo])) {
-                    error_log("Campo obrigatório não informado: {$campo}");
+                    $log[] = "Campo obrigatório não informado: {$campo}";
+                    
+                    // Limpa o buffer para garantir que nada seja enviado antes do JSON
+                    ob_end_clean();
+                    header('Content-Type: application/json');
                     echo json_encode(['success' => false, 'message' => "Campo {$campo} é obrigatório"]);
                     return;
                 }
@@ -146,33 +157,63 @@ class UsuarioController {
             
             // Validar email
             if (!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) {
-                error_log("Email inválido: {$dados['email']}");
+                $log[] = "Email inválido: {$dados['email']}";
+                
+                // Limpa o buffer para garantir que nada seja enviado antes do JSON
+                ob_end_clean();
+                header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => 'Email inválido']);
                 return;
             }
             
             // Validar comprimento do telefone (se fornecido)
             if (!empty($dados['telefone']) && strlen($dados['telefone']) < 10) {
-                error_log("Telefone inválido: {$dados['telefone']}");
+                $log[] = "Telefone inválido: {$dados['telefone']}";
+                
+                // Limpa o buffer para garantir que nada seja enviado antes do JSON
+                ob_end_clean();
+                header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => 'Telefone inválido, deve ter no mínimo 10 dígitos']);
                 return;
             }
             
             // Cadastrar usuário
-            error_log("Tentando cadastrar usuário com os dados: " . print_r($dados, true));
+            $log[] = "Tentando cadastrar usuário com os dados: " . print_r($dados, true);
             $resultado = $this->model->cadastrarUsuario($dados);
-            error_log("Resultado do cadastro: " . print_r($resultado, true));
+            $log[] = "Resultado do cadastro: " . print_r($resultado, true);
+            
+            // Armazena os logs em um arquivo para depuração
+            foreach ($log as $message) {
+                error_log("[CADASTRO] " . $message);
+            }
+            
+            // Limpa o buffer para garantir que nada seja enviado antes do JSON
+            ob_end_clean();
+            header('Content-Type: application/json');
             echo json_encode($resultado);
                 
         } catch (PDOException $e) {
+            $log[] = "PDOException no cadastro: " . $e->getMessage();
             error_log("PDOException no cadastro: " . $e->getMessage());
+            
+            // Limpa o buffer para garantir que nada seja enviado antes do JSON
+            ob_end_clean();
+            header('Content-Type: application/json');
             echo json_encode([
                 'success' => false,
                 'message' => 'Erro no banco de dados: ' . $e->getMessage()
             ]);
         } catch (Exception $e) {
-            error_log("Erro no cadastro de usuário: " . $e->getMessage());
-            error_log("Trace: " . $e->getTraceAsString());
+            $log[] = "Erro no cadastro de usuário: " . $e->getMessage();
+            $log[] = "Trace: " . $e->getTraceAsString();
+            
+            foreach ($log as $message) {
+                error_log("[CADASTRO] " . $message);
+            }
+            
+            // Limpa o buffer para garantir que nada seja enviado antes do JSON
+            ob_end_clean();
+            header('Content-Type: application/json');
             echo json_encode([
                 'success' => false,
                 'message' => 'Erro interno do servidor ao processar o cadastro: ' . $e->getMessage()

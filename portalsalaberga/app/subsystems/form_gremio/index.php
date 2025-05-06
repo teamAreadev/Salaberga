@@ -453,20 +453,10 @@
                 const responseText = await response.text();
                 console.log('Resposta do servidor (texto):', responseText);
                 
-                // Tentar extrair apenas o JSON da resposta
-                let jsonStr = responseText;
-                const jsonStart = responseText.indexOf('{');
-                const jsonEnd = responseText.lastIndexOf('}');
-                
-                if (jsonStart >= 0 && jsonEnd >= 0) {
-                    // Extrair apenas a parte JSON da resposta
-                    jsonStr = responseText.substring(jsonStart, jsonEnd + 1);
-                }
-                
                 // Tentar parsear como JSON
                 let data;
                 try {
-                    data = JSON.parse(jsonStr);
+                    data = JSON.parse(responseText);
                     console.log('Resposta do servidor (JSON):', data);
                 } catch (jsonError) {
                     console.error('Erro ao parsear JSON:', jsonError);
