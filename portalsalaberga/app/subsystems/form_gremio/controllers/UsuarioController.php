@@ -1,15 +1,25 @@
 <?php
-require_once '../model/UsuarioModel.php';
+require_once dirname(__FILE__) . '/../model/UsuarioModel.php';
+require_once dirname(__FILE__) . '/../config/init_db.php';
 
 class UsuarioController {
     private $model;
 
     public function __construct() {
-        $this->model = new UsuarioModel();
-        
-        // Iniciar sessão se ainda não estiver iniciada
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
+        try {
+            // Inicializar o banco de dados quando necessário
+            $initializer = new DatabaseInitializer();
+            $initializer->initialize();
+            
+            $this->model = new UsuarioModel();
+            
+            // Iniciar sessão se ainda não estiver iniciada
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+        } catch (Exception $e) {
+            error_log("Erro na inicialização do UsuarioController: " . $e->getMessage());
+            throw $e;
         }
     }
 
@@ -98,38 +108,74 @@ class UsuarioController {
         header('Content-Type: application/json');
         
         try {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            echo json_encode(['success' => false, 'message' => 'Método não permitido']);
-            return;
-        }
-
-        // Validar dados obrigatórios
-        $campos = ['nome', 'email', 'telefone', 'ano', 'turma'];
-        $dados = [];
-        
-        foreach ($campos as $campo) {
-            if (!isset($_POST[$campo]) || empty($_POST[$campo])) {
-                echo json_encode(['success' => false, 'message' => 'Todos os campos são obrigatórios']);
+            // Debug - Registrar o início da função e os dados recebidos
+            error_log("Iniciando método cadastrar()");
+            error_log("POST: " . print_r($_POST, true));
+            
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                echo json_encode(['success' => false, 'message' => 'Método não permitido']);
                 return;
             }
-            $dados[$campo] = $_POST[$campo];
-        }
-        
-        // Validar email
-        if (!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) {
-            echo json_encode(['success' => false, 'message' => 'Email inválido']);
-            return;
-        }
-        
-        // Cadastrar usuário
-        $resultado = $this->model->cadastrarUsuario($dados);
-        echo json_encode($resultado);
+
+            // Validar dados obrigatórios (nome e email são os únicos obrigatórios de acordo com o schema)
+            $camposObrigatorios = ['nome', 'email'];
+            $camposOpcionais = ['telefone', 'ano', 'turma'];
+            $dados = [];
             
-        } catch (Exception $e) {
-            error_log("Erro no cadastro de usuário: " . $e->getMessage());
+            // Verificar campos obrigatórios
+            foreach ($camposObrigatorios as $campo) {
+                if (!isset($_POST[$campo]) || empty($_POST[$campo])) {
+                    error_log("Campo obrigatório não informado: {$campo}");
+                    echo json_encode(['success' => false, 'message' => "Campo {$campo} é obrigatório"]);
+                    return;
+                }
+                $dados[$campo] = $_POST[$campo];
+            }
+            
+            // Preencher campos opcionais
+            foreach ($camposOpcionais as $campo) {
+                $dados[$campo] = $_POST[$campo] ?? null;
+            }
+            
+            // Limpar e formatar dados
+            $dados['nome'] = trim($dados['nome']);
+            $dados['email'] = trim($dados['email']);
+            if ($dados['telefone']) {
+                $dados['telefone'] = preg_replace('/\D/', '', $dados['telefone']);
+            }
+            
+            // Validar email
+            if (!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) {
+                error_log("Email inválido: {$dados['email']}");
+                echo json_encode(['success' => false, 'message' => 'Email inválido']);
+                return;
+            }
+            
+            // Validar comprimento do telefone (se fornecido)
+            if (!empty($dados['telefone']) && strlen($dados['telefone']) < 10) {
+                error_log("Telefone inválido: {$dados['telefone']}");
+                echo json_encode(['success' => false, 'message' => 'Telefone inválido, deve ter no mínimo 10 dígitos']);
+                return;
+            }
+            
+            // Cadastrar usuário
+            error_log("Tentando cadastrar usuário com os dados: " . print_r($dados, true));
+            $resultado = $this->model->cadastrarUsuario($dados);
+            error_log("Resultado do cadastro: " . print_r($resultado, true));
+            echo json_encode($resultado);
+                
+        } catch (PDOException $e) {
+            error_log("PDOException no cadastro: " . $e->getMessage());
             echo json_encode([
                 'success' => false,
-                'message' => 'Erro interno do servidor ao processar o cadastro'
+                'message' => 'Erro no banco de dados: ' . $e->getMessage()
+            ]);
+        } catch (Exception $e) {
+            error_log("Erro no cadastro de usuário: " . $e->getMessage());
+            error_log("Trace: " . $e->getTraceAsString());
+            echo json_encode([
+                'success' => false,
+                'message' => 'Erro interno do servidor ao processar o cadastro: ' . $e->getMessage()
             ]);
         }
     }

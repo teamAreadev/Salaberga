@@ -10,107 +10,111 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-    
+
     :root {
         --primary-500: #007d40;
         --primary-600: #006a36;
         --primary-700: #005A24;
     }
-    
+
     body {
         font-family: 'Poppins', sans-serif;
         background-color: #f8fafc;
     }
-    
+
     .gradient-header {
         background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-500) 100%);
     }
-    
+
     .gradient-btn {
         background: linear-gradient(to right, var(--primary-600), var(--primary-500));
         transition: all 0.3s ease;
     }
-    
+
     .gradient-btn:hover {
         background: linear-gradient(to right, var(--primary-700), var(--primary-600));
         transform: translateY(-2px);
         box-shadow: 0 4px 15px rgba(0, 90, 36, 0.3);
     }
-    
+
     .input-focus {
         transition: all 0.3s ease;
     }
-    
+
     .input-focus:focus {
-        border-color: var(--primary-500);
-        box-shadow: 0 0 0 3px rgba(51, 151, 102, 0.2);
+        border-color: #d1d5db; /* border-gray-300 */
+        box-shadow: none;
+        outline: none;
     }
-    
+
     .card {
         transition: all 0.3s ease;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     }
-    
+
     .card:hover {
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
-    
+
     .animate-fade-in {
         animation: fadeIn 0.6s ease-out forwards;
     }
-    
+
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
-    
+
     .toast {
         animation: toastIn 0.3s ease-out forwards;
     }
-    
+
     @keyframes toastIn {
         from { transform: translateY(100px); opacity: 0; }
         to { transform: translateY(0); opacity: 1; }
     }
-    
+
     .toast-out {
         animation: toastOut 0.3s ease-in forwards;
     }
-    
+
     @keyframes toastOut {
         from { transform: translateY(0); opacity: 1; }
         to { transform: translateY(100px); opacity: 0; }
     }
-    
+
     .dropdown-enter {
         animation: dropdownOpen 0.2s ease-out forwards;
     }
-    
+
     @keyframes dropdownOpen {
         from { opacity: 0; transform: translateY(-10px); }
         to { opacity: 1; transform: translateY(0); }
     }
-    
-    /* Estilizar selects para combinar com inputs */
+
     select {
         height: 48px;
         line-height: 1.5;
         background-color: #fff;
         cursor: pointer;
+        border-color: #d1d5db; /* border-gray-300 */
     }
-    
-    /* Ajustar o ícone do select para alinhar com os outros */
+
+    select:focus {
+        border-color: #d1d5db; /* border-gray-300 */
+        box-shadow: none;
+        outline: none;
+    }
+
     .select-icon {
         top: 50%;
         transform: translateY(-50%);
     }
-    
-    /* Remover seta nativa do select */
+
     select::-ms-expand {
         display: none;
     }
-    
-    /* Estilo das opções do select */
+
     select option {
         font-size: 0.875rem;
         color: #1f2937;
@@ -198,7 +202,7 @@
         <span>Cadastro de Usuário</span>
     </h3>
     
-    <form id="cadastroForm" method="post" action="controllers/UsuarioController.php" novalidate>
+    <form id="cadastroForm" method="post" novalidate>
         <input type="hidden" name="action" value="cadastrar">
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -424,12 +428,50 @@
             
             try {
                 const formData = new FormData(form);
-                const response = await fetch('controllers/UsuarioController.php', {
+                
+                // Garante que o campo action seja incluído
+                formData.set('action', 'cadastrar');
+                
+                // Log para depuração
+                console.log('Enviando dados:');
+                for (let pair of formData.entries()) {
+                    console.log(pair[0] + ': ' + pair[1]);
+                }
+                
+                // Use um caminho absoluto para o controlador
+                const controllerPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1) + 'controllers/UsuarioController.php';
+                console.log('Enviando para:', controllerPath);
+                
+                const response = await fetch(controllerPath, {
                     method: 'POST',
                     body: formData
                 });
                 
-                const data = await response.json();
+                console.log('Status da resposta:', response.status);
+                
+                // Tentar obter a resposta como texto primeiro para depuração
+                const responseText = await response.text();
+                console.log('Resposta do servidor (texto):', responseText);
+                
+                // Tentar extrair apenas o JSON da resposta
+                let jsonStr = responseText;
+                const jsonStart = responseText.indexOf('{');
+                const jsonEnd = responseText.lastIndexOf('}');
+                
+                if (jsonStart >= 0 && jsonEnd >= 0) {
+                    // Extrair apenas a parte JSON da resposta
+                    jsonStr = responseText.substring(jsonStart, jsonEnd + 1);
+                }
+                
+                // Tentar parsear como JSON
+                let data;
+                try {
+                    data = JSON.parse(jsonStr);
+                    console.log('Resposta do servidor (JSON):', data);
+                } catch (jsonError) {
+                    console.error('Erro ao parsear JSON:', jsonError);
+                    throw new Error('Resposta inválida do servidor: ' + responseText);
+                }
                 
                 if (data.success) {
                     // Show success message
