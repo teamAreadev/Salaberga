@@ -1,7 +1,27 @@
 <?php
 require_once('../models/model.php');
 
-if (isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) && !empty($_POST['senha'])) {
+if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga']) && !empty($_POST['id_vaga'])) {
+
+    $id_aluno = $_POST['id_alunos'];
+    $alunos = $_POST['alunos'];
+
+    $model = new main_model;
+    $result = $model->selecao($alunos, $id_vaga);
+
+    switch ($result) {
+
+        case 1:
+            header('location:../views/dashboard.php');
+            exit();
+        case 2:
+            header('location:../views/login.php?erro');
+            exit();
+        default:
+            header('location:../index.php');
+            exit();
+    }
+} else if (isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) && !empty($_POST['senha'])) {
 
     $email = $_POST['email'];
     $senha = $_POST['senha'];
@@ -87,7 +107,7 @@ if (isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) 
             header('location:../views/vagas.php?existe');
             exit();
     }
-} else {
-    header('location:../views/login.php?session');
+} /*else {
+    header('location:../views/login.php?erro');
     exit();
-}
+}*/

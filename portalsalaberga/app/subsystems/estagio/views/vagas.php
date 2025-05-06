@@ -806,9 +806,9 @@ if (isset($_POST['layout'])) {
                                 <select id="filterArea" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
                                     <option value="">Todas as áreas</option>
                                     <option value="desenvolvimento">Desenvolvimento</option>
-                                    <option value="design">Design</option>
-                                    <option value="midia">Mídia</option>
-                                    <option value="redes">Redes/Suporte</option>
+                                    <option value="design">Design/Social media</option>
+                                    <option value="midia">Tutoria</option>
+                                    <option value="redes">Suporte/Redes</option>
                                 </select>
                                 <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
                             </div>
@@ -895,8 +895,8 @@ if (isset($_POST['layout'])) {
                     </div>
                 </div>
                 <div class="mt-4">
-                    <a href="./vaga_detalhes.php?vaga_id=<?php echo $vagaId; ?>" class="ver-detalhes-link">
-                        <span>Ver detalhes</span>
+                    <a href="./alunos_vaga.php?nome_perfil=<?=$dado['nome_perfil']?>&id_vaga=<?=$dado['id']?>" class="ver-detalhes-link">
+                        <span>Selecionar aluno</span>
                         <i class="fas fa-arrow-right ml-2"></i>
                     </a>
                 </div>
@@ -938,7 +938,7 @@ if (isset($_POST['layout'])) {
                             </label>
                             <label class="inline-flex items-center">
                                 <input type="radio" class="custom-checkbox" name="areas" value="2">
-                                <span class="ml-2 text-gray-300">Design/Mídia</span>
+                                <span class="ml-2 text-gray-300">Design/Social media</span>
                             </label>
                             <label class="inline-flex items-center">
                                 <input type="radio" class="custom-checkbox" name="areas" value="4">
@@ -946,7 +946,7 @@ if (isset($_POST['layout'])) {
                             </label>
                             <label class="inline-flex items-center">
                                 <input type="radio" class="custom-checkbox" name="areas" value="3">
-                                <span class="ml-2 text-gray-300">Redes/Suporte</span>
+                                <span class="ml-2 text-gray-300">Suporte/Redes</span>
                             </label>
                         </div>
                     </div>

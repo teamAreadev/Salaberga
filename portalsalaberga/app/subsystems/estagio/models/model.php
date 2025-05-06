@@ -128,4 +128,21 @@ class main_model extends connect
             return 3;
         }
     }
+
+    function selecao($alunos, id_vaga){
+
+        foreach($alunos as $aluno){
+
+            $stmt = $this->connect->query("INSERT INTO selecao VALUES(null, '$aluno', '$id_vaga', DEFAULT)");
+
+            
+        }
+        if($stmt){
+
+            return 1;
+        }{
+
+            return 2;
+        }
+    }
 }

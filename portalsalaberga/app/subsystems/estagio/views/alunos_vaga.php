@@ -676,8 +676,8 @@ $select_model = new select_model();
                 </div>
 
                 <!-- Tabela de Alunos -->
-                <div class="table-container slide-up">
-                    <form id="alunosForm">
+                <form action="../controllers/controller.php" method="post">
+                    <div class="table-container slide-up">
                         <table class="custom-table">
                             <thead>
                                 <tr>
@@ -694,45 +694,77 @@ $select_model = new select_model();
                             </thead>
                             <tbody id="alunosTableBody">
                                 <?php
-                                $dados = $select_model->alunos_aptos();
-                                foreach ($dados as $index => $dado) {
+                                if (isset($_GET['nome_perfil'])) {
+
+                                    $nome_perfil = $_GET['nome_perfil'];
+                                    $id_vaga = $_GET['id_vaga'];
+                                    $dados = $select_model->alunos_aptos($nome_perfil);
+                                    foreach ($dados as $index => $dado) {
                                 ?>
-                                    <tr class="slide-up" style="animation-delay: <?= $index * 0.1 ?>s;">
-                                        <td class="text-center"><?= $index + 1 ?></td>
-                                        <td class="text-center">
-                                            <input type="checkbox" class="custom-checkbox" id="aluno_<?= $dado['id'] ?>" name="alunos[]" value="<?= $dado['id'] ?>">
-                                        </td>
-                                        <td><?= htmlspecialchars($dado['nome']) ?></td>
-                                        <td class="text-center"><?= number_format($dado['medias'], 1) ?></td>
-                                        <td><?= htmlspecialchars($dado['projetos'] ?? '-') ?></td>
-                                        <td><?= htmlspecialchars($dado['perfil_opc1']) ?></td>
-                                        <td><?= htmlspecialchars($dado['perfil_opc2'] ?? '-') ?></td>
-                                        <td class="text-center">
-                                            <?php
-                                            $ocorrencias = $dado['ocorrencia'];
-                                            $chipClass = $ocorrencias == 0 ? 'chip-green' : ($ocorrencias == 1 ? 'chip-yellow' : 'chip-red');
-                                            echo "<span class='chip $chipClass'>$ocorrencias</span>";
-                                            ?>
-                                        </td>
-                                        <td><?= htmlspecialchars($dado['custeio']) ?></td>
-                                    </tr>
+                                <input type="hidden" name="id_vaga" value="<?=$id_vaga?>">
+                                        <tr class="slide-up" style="animation-delay: <?= $index * 0.1 ?>s;">
+                                            <td class="text-center"><?= $index + 1 ?></td>
+                                            <td class="text-center">
+                                                <input type="checkbox" class="custom-checkbox" id="aluno_<?= $dado['id'] ?>" name="alunos[]" value="<?= $dado['id'] ?>">
+                                            </td>
+                                            <td><?= htmlspecialchars($dado['nome']) ?></td>
+                                            <td class="text-center"><?= number_format($dado['medias'], 1) ?></td>
+                                            <td><?= htmlspecialchars($dado['projetos'] ?? '-') ?></td>
+                                            <td><?= htmlspecialchars($dado['perfil_opc1']) ?></td>
+                                            <td><?= htmlspecialchars($dado['perfil_opc2'] ?? '-') ?></td>
+                                            <td class="text-center">
+                                                <?php
+                                                $ocorrencias = $dado['ocorrencia'];
+                                                $chipClass = $ocorrencias == 0 ? 'chip-green' : ($ocorrencias == 1 ? 'chip-yellow' : 'chip-red');
+                                                echo "<span class='chip $chipClass'>$ocorrencias</span>";
+                                                ?>
+                                            </td>
+                                            <td><?= htmlspecialchars($dado['custeio']) ?></td>
+                                        </tr>
+                                    <?php }
+                                } else {
+                                    $dados = $select_model->alunos_aptos();
+                                    foreach ($dados as $index => $dado) {
+                                    ?>
+
+                                        <tr class="slide-up" style="animation-delay: <?= $index * 0.1 ?>s;">
+                                            <td class="text-center"><?= $index + 1 ?></td>
+                                            <td class="text-center">
+                                                
+                                                <input type="checkbox" class="custom-checkbox" id="aluno_<?= $dado['id'] ?>" name="alunos[]" value="<?= $dado['id'] ?>">
+                                            </td>
+                                            <td><?= htmlspecialchars($dado['nome']) ?></td>
+                                            <td class="text-center"><?= number_format($dado['medias'], 1) ?></td>
+                                            <td><?= htmlspecialchars($dado['projetos'] ?? '-') ?></td>
+                                            <td><?= htmlspecialchars($dado['perfil_opc1']) ?></td>
+                                            <td><?= htmlspecialchars($dado['perfil_opc2'] ?? '-') ?></td>
+                                            <td class="text-center">
+                                                <?php
+                                                $ocorrencias = $dado['ocorrencia'];
+                                                $chipClass = $ocorrencias == 0 ? 'chip-green' : ($ocorrencias == 1 ? 'chip-yellow' : 'chip-red');
+                                                echo "<span class='chip $chipClass'>$ocorrencias</span>";
+                                                ?>
+                                            </td>
+                                            <td><?= htmlspecialchars($dado['custeio']) ?></td>
+                                        </tr>
+                                    <?php } ?>
                                 <?php } ?>
                             </tbody>
                         </table>
-                    </form>
-                </div>
+                    </div>
 
-                <!-- Botões de Ação -->
-                <div class="mt-6 flex justify-end space-x-4 fade-in">
-                    <a href="vagas.php" class="custom-btn custom-btn-secondary">
-                        <i class="fas fa-times btn-icon"></i>
-                        <span>Cancelar</span>
-                    </a>
-                    <button id="confirmarSelecaoBtn" class="custom-btn custom-btn-primary">
-                        <i class="fas fa-check btn-icon"></i>
-                        <span>Confirmar Seleção</span>
-                    </button>
-                </div>
+                    <!-- Botões de Ação -->
+                    <div class="mt-6 flex justify-end space-x-4 fade-in">
+                        <a href="vagas.php" class="custom-btn custom-btn-secondary">
+                            <i class="fas fa-times btn-icon"></i>
+                            <span>Cancelar</span>
+                        </a>
+                        <button type="submit" class="custom-btn custom-btn-primary">
+                            <i class="fas fa-check btn-icon"></i>
+                            <span>Confirmar Seleção</span>
+                        </button>
+                    </div>
+                </form>
             </main>
         </div>
     </div>
@@ -742,7 +774,6 @@ $select_model = new select_model();
             const searchAluno = document.getElementById('searchAluno');
             const filterArea = document.getElementById('filterArea');
             const selectAllBtn = document.getElementById('selectAllBtn');
-            const confirmarSelecaoBtn = document.getElementById('confirmarSelecaoBtn');
             const sidebarToggle = document.getElementById('sidebarToggle');
             const closeSidebar = document.getElementById('closeSidebar');
             const mobileSidebar = document.getElementById('mobileSidebar');
@@ -893,25 +924,6 @@ $select_model = new select_model();
                     checkbox.checked = todosSelecionados;
                 });
                 selectAllBtn.querySelector('span').textContent = todosSelecionados ? 'Desmarcar Todos' : 'Selecionar Todos';
-            }
-
-            // Confirmar seleção de alunos
-            function confirmarSelecao() {
-                const checkboxes = document.querySelectorAll('#alunosTableBody input[type="checkbox"]:checked');
-                const alunosSelecionados = Array.from(checkboxes).map(cb => ({
-                    id: parseInt(cb.value),
-                    nome: cb.closest('tr').querySelector('td:nth-child(3)').textContent
-                }));
-
-                if (alunosSelecionados.length === 0) {
-                    alert('Por favor, selecione pelo menos um aluno.');
-                    return;
-                }
-
-                const vaga = vagas.find(v => v.id === vagaId);
-                const alunosNomes = alunosSelecionados.map(aluno => aluno.nome).join(', ');
-                alert(`Alunos selecionados para a vaga "${vaga.titulo}":\n${alunosNomes}`);
-                window.location.href = 'vagas.php';
             }
 
             // Event listeners
