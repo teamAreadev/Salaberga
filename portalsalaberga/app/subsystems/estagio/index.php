@@ -2,6 +2,11 @@
 require_once('./models/select_model.php');
 $select_model = new select_model();
 $dados = $select_model->alunos_aptos();
+$aprovados = [];
+$stmt = $select_model->getConnection()->query("SELECT id_aluno FROM selecionado");
+if ($stmt) {
+    $aprovados = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -346,7 +351,7 @@ $dados = $select_model->alunos_aptos();
             $index = 0;
             foreach ($dados as $dado) {
                 $index++;
-                $status = $dado['status'] ?? 'waiting';
+                $status = in_array($dado['id'], $aprovados) ? 'approved' : 'waiting';
                 $area = $dado['area'] ?? null;
                 $empresa = $dado['empresa'] ?? null;
             ?>
