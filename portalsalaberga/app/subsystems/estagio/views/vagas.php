@@ -929,27 +929,33 @@ if (isset($_POST['layout'])) {
                         <span><?php echo $quantidade; ?> candidatos(s) disponível(is)</span>
                     </div>
                     <div class="vaga-card-info-item">
-                        <i class="fas fa-users w-5"></i>
+                        <i class="fas fa-calendar w-5"></i>
                         <span><?=$dado['data'] ?></span>
+                        <span class="mx-2">|</span>
                         <span><?=$dado['hora'] ?></span>
                     </div>
                     <div class="vaga-card-info-item">
-                        <i class="fas fa-users w-5"></i>
+                        <i class="fas fa-briefcase w-5"></i>
                         <span><?=$dado['tipo_vaga'] ?></span>
                     </div>
                     <div class="vaga-card-info-item">
-                        <?php 
-                        $id_vaga = $dado['id'];
-                        $alunos = $select_model->alunos_selecionados($id_vaga);
-
-
-                        foreach($alunos as $aluno){
-                        ?>
-                        <i class="fas fa-users w-5"></i>
-                        <span><?=$aluno['nome'] ?? 'Nenhum aluno selecionado'?></span>
-                        <?php }?>
+                        <i class="fas fa-user-graduate w-5"></i>
+                        <div class="flex flex-col gap-1">
+                            <?php 
+                            $id_vaga = $dado['id'];
+                            $alunos = $select_model->alunos_selecionados($id_vaga);
+                            
+                            if (empty($alunos)): ?>
+                                <span class="text-gray-500">Nenhum aluno selecionado</span>
+                            <?php else: ?>
+                                <?php foreach($alunos as $aluno): ?>
+                                    <span class="text-sm text-gray-300">
+                                        <?= htmlspecialchars($aluno['nome']) ?>
+                                    </span>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
                     </div>
-                    
                 </div>
                 <div class="mt-4">
                     <a href="./alunos_vaga.php?nome_perfil=<?=$dado['nome_perfil']?>&id_vaga=<?=$dado['id']?>&nome_empresa=<?=$dado['nome_empresa']?>&nome_baga=<?=$dado['id']?>" class="ver-detalhes-link">
@@ -968,11 +974,11 @@ if (isset($_POST['layout'])) {
         <div id="vagaModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
             <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
                 <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white slide-up">Nova Vaga</h2>
-                <form action="../controllers/controller.php" method="post" id="vagaForm" class="space-y-4">
+                <form action="../controllers/controller.php" method="post" id="vagaForm" class="space-y-6">
                     <input type="hidden" id="vagaId" name="vaga_id" value="">
                     <div>
-                        <label class="block text-sm font-medium text-gray-300">Nome da Empresa</label>
-                        <select id="vagaEmpresa" name="empresa" class="custom-input mt-1" required>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Nome da Empresa</label>
+                        <select id="vagaEmpresa" name="empresa" class="custom-input mt-1 w-full" required>
                             <option value="" selected disabled>Selecione uma empresa</option>
                             <?php 
                             $dados = $select_model->concedentes();
@@ -983,48 +989,50 @@ if (isset($_POST['layout'])) {
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300">Áreas de Atuação</label>
-                        <div class="mt-2 space-y-2">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Áreas de Atuação</label>
+                        <div class="mt-2 space-y-3">
                             <label class="inline-flex items-center">
                                 <input type="radio" class="custom-checkbox" name="areas" value="1">
-                                <span class="ml-2 text-gray-300">Desenvolvimento</span>
+                                <span class="ml-3 text-gray-300">Desenvolvimento</span>
                             </label>
                             <label class="inline-flex items-center">
                                 <input type="radio" class="custom-checkbox" name="areas" value="2">
-                                <span class="ml-2 text-gray-300">Design/Social media</span>
+                                <span class="ml-3 text-gray-300">Design/Social media</span>
                             </label>
                             <label class="inline-flex items-center">
                                 <input type="radio" class="custom-checkbox" name="areas" value="4">
-                                <span class="ml-2 text-gray-300">Tutoria</span>
+                                <span class="ml-3 text-gray-300">Tutoria</span>
                             </label>
                             <label class="inline-flex items-center">
                                 <input type="radio" class="custom-checkbox" name="areas" value="3">
-                                <span class="ml-2 text-gray-300">Suporte/Redes</span>
+                                <span class="ml-3 text-gray-300">Suporte/Redes</span>
                             </label>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300">Vagas Disponíveis</label>
-                        <input type="number" id="vagaVagasDisponiveis" name="quantidades" min="1" class="custom-input mt-1" required>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Vagas Disponíveis</label>
+                        <input type="number" id="vagaVagasDisponiveis" name="quantidades" min="1" class="custom-input mt-1 w-full" required>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300">Data</label>
-                        <select name="tipo_vaga" id="" required>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Tipo de Vaga</label>
+                        <select name="tipo_vaga" class="custom-input mt-1 w-full" required>
                             <option value="" selected disabled>Selecione o tipo de vaga</option>
-                            <option value="Hibrido">Hibrido</option>
+                            <option value="Hibrido">Híbrido</option>
                             <option value="Presencial">Presencial</option>
-                            <option value="HomeOffice">HomeOffice</option>
+                            <option value="HomeOffice">Home Office</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Data</label>
-                        <input type="date" id="vagaVagasDisponiveis" name="data" min="1" class="custom-input mt-1">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Data</label>
+                            <input type="date" name="data" class="custom-input mt-1 w-full" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Hora</label>
+                            <input type="time" name="hora" class="custom-input mt-1 w-full" required>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Hora</label>
-                        <input type="time" id="vagaVagasDisponiveis" name="hora" min="1" class="custom-input mt-1">
-                    </div>
-                    <div class="mt-6 flex justify-end space-x-4">
+                    <div class="mt-8 flex justify-end space-x-4">
                         <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">
                             <i class="fas fa-times btn-icon"></i>
                             <span>Cancelar</span>
