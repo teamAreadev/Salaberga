@@ -898,12 +898,14 @@ if (isset($_POST['layout'])) {
                         $id_vaga = $dado['id'];
                         $alunos = $select_model->alunos_selecionados($id_vaga);
 
+
                         foreach($alunos as $aluno){
                         ?>
                         <i class="fas fa-users w-5"></i>
-                        <span><?=$aluno ?? 'nenhum aluno na vaga'?></span>
+                        <span><?=$aluno['nome'] ?? 'Nenhum aluno selecionado'?></span>
                         <?php }?>
                     </div>
+                    
                 </div>
                 <div class="mt-4">
                     <a href="./alunos_vaga.php?nome_perfil=<?=$dado['nome_perfil']?>&id_vaga=<?=$dado['id']?>" class="ver-detalhes-link">

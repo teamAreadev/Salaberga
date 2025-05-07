@@ -683,6 +683,7 @@ $select_model = new select_model();
                                 <tr>
                                     <th width="40px" class="text-center">#</th>
                                     <th width="50px" class="text-center"></th>
+                                    <th>Scores</th>
                                     <th>Nome</th>
                                     <th width="80px" class="text-center">Média</th>
                                     <th>Projetos</th>
@@ -690,6 +691,7 @@ $select_model = new select_model();
                                     <th width="100px">Área 2</th>
                                     <th width="100px" class="text-center">Ocorrências</th>
                                     <th width="100px">Custeio</th>
+                                    <th width="100px">Entraga</th>
                                 </tr>
                             </thead>
                             <tbody id="alunosTableBody">
@@ -707,6 +709,7 @@ $select_model = new select_model();
                                             <td class="text-center">
                                                 <input type="checkbox" class="custom-checkbox" id="aluno_<?= $dado['id'] ?>" name="alunos[]" value="<?= $dado['id'] ?>">
                                             </td>
+                                            <td><?= htmlspecialchars($dado['score']) ?></td>
                                             <td><?= htmlspecialchars($dado['nome']) ?></td>
                                             <td class="text-center"><?= number_format($dado['medias'], 1) ?></td>
                                             <td><?= htmlspecialchars($dado['projetos'] ?? '-') ?></td>
@@ -719,7 +722,8 @@ $select_model = new select_model();
                                                 echo "<span class='chip $chipClass'>$ocorrencias</span>";
                                                 ?>
                                             </td>
-                                            <td><?= htmlspecialchars($dado['custeio']) ?></td>
+                                            <td><?= htmlspecialchars($dado['custeio'] = $dado['custeio'] == 0 ? "Não" : "Sim") ?></td>
+                                            <td><?= htmlspecialchars($dado['entregas'] = $dado['entregas'] == 0 ? "Não" : "Sim") ?></td>
                                         </tr>
                                     <?php }
                                 } else {
@@ -733,6 +737,7 @@ $select_model = new select_model();
                                                 
                                                 <input type="checkbox" class="custom-checkbox" id="aluno_<?= $dado['id'] ?>" name="alunos[]" value="<?= $dado['id'] ?>">
                                             </td>
+                                            <td><?= htmlspecialchars( $dado['score']) ?></td>
                                             <td><?= htmlspecialchars($dado['nome']) ?></td>
                                             <td class="text-center"><?= number_format($dado['medias'], 1) ?></td>
                                             <td><?= htmlspecialchars($dado['projetos'] ?? '-') ?></td>
@@ -745,7 +750,8 @@ $select_model = new select_model();
                                                 echo "<span class='chip $chipClass'>$ocorrencias</span>";
                                                 ?>
                                             </td>
-                                            <td><?= htmlspecialchars($dado['custeio']) ?></td>
+                                            <td><?= htmlspecialchars($dado['custeio'] = $dado['custeio'] == 0 ? "Não" : "Sim") ?></td>
+                                            <td><?= htmlspecialchars($dado['entregas'] = $dado['entregas'] == 0 ? "Não" : "Sim") ?></td>
                                         </tr>
                                     <?php } ?>
                                 <?php } ?>
