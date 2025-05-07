@@ -47,6 +47,29 @@
                 radial-gradient(circle at 85% 85%, rgba(255, 165, 0, 0.08) 0%, transparent 25%);
             color: var(--text-primary);
             padding: 1.5rem;
+            position: relative;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary-light);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s;
+            z-index: 10;
+        }
+
+        .back-link i {
+            margin-right: 0.5rem;
+        }
+
+        .back-link:hover {
+            color: var(--secondary-light);
         }
 
         .login-container {
@@ -99,7 +122,7 @@
 
         .system-title {
             font-size: 1.8rem;
-            font-weight: 700;
+<|control442|>            font-weight: 700;
             margin-bottom: 0.5rem;
             background: linear-gradient(90deg, var(--primary-light), var(--secondary-light));
             -webkit-background-clip: text;
@@ -121,11 +144,11 @@
         }
 
         .form-group {
-    margin-bottom: 1.5rem;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
 
         .form-label {
             display: block;
@@ -135,19 +158,20 @@
             font-size: 0.95rem;
             transition: color 0.3s;
         }
-.form-input {
-    width: 100%;
-    padding: 0.7rem 2.5rem; /* Ajustado para padding simétrico */
-    border-radius: 12px;
-    border: 2px solid var(--surface-light);
-    background: rgba(30, 30, 30, 0.7);
-    color: var(--text-primary);
-    font-size: 1rem;
-    transition: all 0.3s;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    line-height: 1.5; /* Ajustado para melhor alinhamento vertical */
-    height: 48px; /* Altura fixa para consistência */
-}
+
+        .form-input {
+            width: 100%;
+            padding: 0.7rem 2.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--surface-light);
+            background: rgba(30, 30, 30, 0.7);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            line-height: 1.5;
+            height: 48px;
+        }
 
         .form-input:focus {
             outline: none;
@@ -165,11 +189,11 @@
         .input-icon {
             position: absolute;
             left: 1rem;
-            top: 2.7rem; /* Posição fixa em relação ao topo do form-group */
+            top: 2.7rem;
             color: var(--text-secondary);
             transition: color 0.3s;
             pointer-events: none;
-            font-size: 1rem; /* Tamanho fixo para o ícone */
+            font-size: 1rem;
             line-height: 1;
         }
 
@@ -180,7 +204,7 @@
         .toggle-password {
             position: absolute;
             right: 1rem;
-            top: 2.7rem; /* Posição fixa em relação ao topo do form-group */
+            top: 2.7rem;
             background: none;
             border: none;
             color: var(--text-secondary);
@@ -305,9 +329,14 @@
             .logo {
                 height: 70px;
             }
+
+            .back-link {
+                top: 1rem;
+                left: 1rem;
+                font-size: 0.9rem;
+            }
         }
 
-        /* Acessibilidade */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -320,7 +349,6 @@
             border-width: 0;
         }
 
-        /* Animação de carregamento para o botão */
         .login-button.loading {
             pointer-events: none;
             opacity: 0.8;
@@ -346,6 +374,9 @@
 </head>
 
 <body>
+    <a href="../index.php" class="back-link">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
     <div class="login-container">
         <div class="login-card">
             <div class="logo-container">
@@ -412,7 +443,6 @@
     </div>
 
     <script>
-        // Função para alternar visibilidade da senha
         function togglePassword() {
             const input = document.getElementById('password');
             const icon = document.getElementById('togglePasswordIcon');
@@ -428,14 +458,11 @@
             }
         }
 
-        // Adicionar efeito de carregamento ao botão quando o formulário for enviado
         document.getElementById('loginForm').addEventListener('submit', function() {
             const button = document.getElementById('loginBtn');
             button.classList.add('loading');
             button.innerHTML = '';
             
-            // Simular um pequeno atraso para mostrar o efeito de carregamento
-            // Em produção, você pode remover este setTimeout
             setTimeout(() => {
                 return true;
             }, 300);

@@ -1,3 +1,8 @@
+<?php
+require_once('./models/select_model.php');
+$select_model = new select_model();
+$dados = $select_model->alunos_aptos();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -335,257 +340,28 @@
 
     <script>
         // Dados dos candidatos
-        const candidates = [{
-                id: 1,
-                name: "ALEXANDRE NETO DANTAS DA SILVA",
-                status: "waiting"
-            },
+        const candidates = [
+            <?php 
+            $total = count($dados);
+            $index = 0;
+            foreach ($dados as $dado) {
+                $index++;
+                $status = $dado['status'] ?? 'waiting';
+                $area = $dado['area'] ?? null;
+                $empresa = $dado['empresa'] ?? null;
+            ?>
             {
-                id: 2,
-                name: "ANA CLARA CAVALCANTE LIMA",
-                status: "waiting"
-            },
-            {
-                id: 3,
-                name: "ANGELA MICHELE DOS SANTOS LIMA",
-                status: "waiting"
-            },
-            {
-                id: 4,
-                name: "ANTONIO FELIPE GOMES MOREIRA",
-                status: "waiting"
-            },
-            {
-                id: 5,
-                name: "ATHILA SILVEIRA DA SILVA",
-                status: "waiting"
-            },
-            {
-                id: 6,
-                name: "BIANCA VIEIRA GOMES",
-                status: "waiting"
-            },
-            {
-                id: 7,
-                name: "CARLOS EDUARDO CARDOSO HOLANDA",
-                status: "waiting"
-            },
-            {
-                id: 8,
-                name: "CARLOS EDUARDO DA COSTA LIMA",
-                status: "waiting"
-            },
-            {
-                id: 9,
-                name: "CARLOS FRED ABREU PIRES",
-                status: "waiting"
-            },
-            {
-                id: 10,
-                name: "CHRISTIAN UNIAS DOS SANTOS SIQUEIRA",
-                status: "approved",
-                area: "suporte",
-                company: "Mallory"
-            },
-            {
-                id: 11,
-                name: "CLARICE ROCHA DE NOJOSA OLIVEIRA",
-                status: "waiting"
-            },
-            {
-                id: 12,
-                name: "ELPIDIO THOMAS DE FREITAS BEZERRA",
-                status: "waiting"
-            },
-            {
-                id: 13,
-                name: "FRANCISCO DENILSON ANDRADE COSTA",
-                status: "waiting"
-            },
-            {
-                id: 14,
-                name: "FRANCISCO ERICK ALVES DE PINHO",
-                status: "waiting"
-            },
-            {
-                id: 15,
-                name: "FRANCISCO ERICK HONORIO DE OLIVEIRA",
-                status: "waiting"
-            },
-            {
-                id: 16,
-                name: "FRANCISCO KAUA MUNIZ DA SILVA",
-                status: "waiting"
-            },
-            {
-                id: 17,
-                name: "FRANCISCO LAVOSIER SILVA NASCIMENTO",
-                status: "waiting"
-            },
-            {
-                id: 18,
-                name: "FRANCISCO LUCAS DIAMANTE SOUZA",
-                status: "waiting"
-            },
-            {
-                id: 19,
-                name: "FRANCISCO WEVERTON CIRILO MARQUES",
-                status: "waiting"
-            },
-            {
-                id: 20,
-                name: "GIOVANNA THAYLA CARDOSO VIANA",
-                status: "waiting"
-            },
-            {
-                id: 21,
-                name: "IAN LUCAS FREITAS DA SILVA DE ARAUJO",
-                status: "waiting"
-            },
-            {
-                id: 22,
-                name: "JEFFERSON CASTRO DA SILVA",
-                status: "waiting"
-            },
-            {
-                id: 23,
-                name: "JENNYFER NICOLY SOUSA MARQUES",
-                status: "approved",
-                area: "suporte",
-                company: "Mallory"
-            },
-            {
-                id: 24,
-                name: "JOAO GABRIEL COSTA CORREIA",
-                status: "waiting"
-            },
-            {
-                id: 25,
-                name: "JOÃO PAULO ARAUJO DA SILVA",
-                status: "waiting"
-            },
-            {
-                id: 26,
-                name: "JOSE ARIMATEIA MACIEL DE SOUSA",
-                status: "waiting"
-            },
-            {
-                id: 27,
-                name: "JULIA FROTA DE OLIVEIRA",
-                status: "waiting"
-            },
-            {
-                id: 28,
-                name: "JULIO CEZAR TARGINO DA SILVA FILHO",
-                status: "waiting"
-            },
-            {
-                id: 29,
-                name: "LARISSA MOURA DA SILVA",
-                status: "waiting"
-            },
-            {
-                id: 30,
-                name: "LETICIA BARBOSA OLIVEIRA",
-                status: "waiting"
-            },
-            {
-                id: 31,
-                name: "LETYCIA SANTOS DE SOUSA",
-                status: "waiting"
-            },
-            {
-                id: 32,
-                name: "MARCELA DOS SANTOS COSTA",
-                status: "waiting"
-            },
-            {
-                id: 33,
-                name: "MARCOS LUAN VIEIRA DA SILVA",
-                status: "waiting"
-            },
-            {
-                id: 34,
-                name: "MARIA JOISSEANNE DA SILVA NASCIMENTO",
-                status: "waiting"
-            },
-            {
-                id: 35,
-                name: "MARIA MAYSA DA SILVA ROCHA",
-                status: "approved",
-                area: "midia",
-                company: "Fenix Soluções"
-            },
-            {
-                id: 36,
-                name: "MATHEUS FELIX LOPES",
-                status: "waiting"
-            },
-            {
-                id: 37,
-                name: "MATHEUS MACHADO FERNANDES",
-                status: "waiting"
-            },
-            {
-                id: 38,
-                name: "MILLENA DA SILVA ANDRADE FREIRES",
-                status: "waiting"
-            },
-            {
-                id: 39,
-                name: "NATYELLEN FRANCA DE SOUSA",
-                status: "waiting"
-            },
-            {
-                id: 40,
-                name: "NICOLE KELLY DE OLIVEIRA LOPES",
-                status: "waiting"
-            },
-            {
-                id: 41,
-                name: "PAULO VITOR LIMA DUARTE",
-                status: "waiting"
-            },
-            {
-                id: 42,
-                name: "PEDRO UCHOA DE ABREU",
-                status: "waiting"
-            },
-            {
-                id: 43,
-                name: "RAFAEL MARTINS DOS SANTOS",
-                status: "waiting"
-            },
-            {
-                id: 44,
-                name: "RAMON NUNES MENDONCA",
-                status: "waiting"
-            },
-            {
-                id: 45,
-                name: "RAYSSA BEZERRA VAZ",
-                status: "waiting"
-            },
-            {
-                id: 46,
-                name: "RODRIGO FRANCO CAMPOS",
-                status: "waiting"
-            },
-            {
-                id: 47,
-                name: "ROGER SILVA CAVALCANTE",
-                status: "waiting"
-            },
-            {
-                id: 48,
-                name: "SARAH HELLEN TOME DE OLIVEIRA",
-                status: "waiting"
-            },
-            {
-                id: 49,
-                name: "YUDI BEZERRA BARBOSA",
-                status: "waiting"
-            }
+                id: <?= $dado['id'] ?>,
+                name: "<?= addslashes($dado['nome']) ?>",
+                status: "<?= $status ?>",
+                <?php if ($area): ?>
+                area: "<?= addslashes($area) ?>",
+                <?php endif; ?>
+                <?php if ($empresa): ?>
+                company: "<?= addslashes($empresa) ?>"
+                <?php endif; ?>
+            }<?= $index < $total ? ',' : '' ?>
+            <?php } ?>
         ];
 
         // Função para renderizar os candidatos

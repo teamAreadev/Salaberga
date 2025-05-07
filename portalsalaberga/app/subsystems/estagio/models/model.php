@@ -101,17 +101,15 @@ class main_model extends connect
     }
     function cadastrar_vaga($id_empresa, $id_area, $quantidade)
     {
-        $stmt_cadastrar_vagas = $this->connect->prepare("INSERT INTO vagas VALUES (null, :id_concedente, :id_perfil, :quantidade)");
+        $stmt_cadastrar_vagas = $this->connect->prepare("INSERT INTO vagas (id, id_concedente, id_perfil, quantidade) VALUES (null, :id_concedente, :id_perfil, :quantidade)");
         $stmt_cadastrar_vagas->bindValue(':id_perfil', $id_area);
         $stmt_cadastrar_vagas->bindValue(':id_concedente', $id_empresa);
         $stmt_cadastrar_vagas->bindValue(':quantidade', $quantidade);
         $stmt_cadastrar_vagas->execute();
 
         if ($stmt_cadastrar_vagas) {
-
             return 1;
         } else {
-
             return 2;
         }
     }

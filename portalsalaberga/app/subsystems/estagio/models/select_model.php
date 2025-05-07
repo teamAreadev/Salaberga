@@ -1,5 +1,5 @@
 <?php
-require_once('../config/connect.php');
+require_once(__DIR__ . '/../config/connect.php');
 
 class select_model extends connect
 {
@@ -75,37 +75,50 @@ class select_model extends connect
     function alunos_aptos($nome_perfil = 0)
     {
         if ($nome_perfil == 0) {
-
             $stmt_alunos = $this->connect->query(
-                "SELECT * FROM aluno WHERE perfil_opc1 IS NOT NULL OR perfil_opc2 IS NOT NULL 
-            ORDER BY medias DESC,
-            COALESCE(ocorrencia, 0) ASC;"
+                "SELECT 
+                    a.*,
+                    CASE 
+                        WHEN s.id IS NOT NULL THEN 'approved'
+                        ELSE 'waiting'
+                    END as status,
+                    p.nome_perfil as area,
+                    c.nome as empresa
+                FROM aluno a
+                LEFT JOIN selecao s ON a.id = s.id_aluno
+                LEFT JOIN vagas v ON s.id_vaga = v.id
+                LEFT JOIN perfis p ON v.id_perfil = p.id
+                LEFT JOIN concedentes c ON v.id_concedente = c.id
+                WHERE a.perfil_opc1 IS NOT NULL OR a.perfil_opc2 IS NOT NULL 
+                ORDER BY a.medias DESC,
+                COALESCE(a.ocorrencia, 0) ASC;"
             );
             $result = $stmt_alunos->fetchAll(PDO::FETCH_ASSOC);
 
             return $result;
         } else {
-
             $stmt_alunos = $this->connect->query(
                 "SELECT 
-                            id,
-                            nome,
-                            medias,
-                            projetos,
-                            ocorrencia,
-                            entregas,
-                            perfil_opc1,
-                            perfil_opc2,
-                            custeio,
-                            (
-                                medias + 
-                                (CASE WHEN projetos != '' THEN 5 ELSE 0 END) -
-                                (ocorrencia * 0.5) +
-                                (entregas * 5)
-                            ) AS score
-                        FROM aluno
-                        WHERE perfil_opc1 = '$nome_perfil' OR perfil_opc2 = '$nome_perfil'
-                        ORDER BY score DESC, medias DESC, COALESCE(ocorrencia, 0) ASC;"
+                    a.*,
+                    CASE 
+                        WHEN s.id IS NOT NULL THEN 'approved'
+                        ELSE 'waiting'
+                    END as status,
+                    p.nome_perfil as area,
+                    c.nome as empresa,
+                    (
+                        a.medias + 
+                        (CASE WHEN a.projetos != '' THEN 5 ELSE 0 END) -
+                        (a.ocorrencia * 0.5) +
+                        (a.entregas * 5)
+                    ) AS score
+                FROM aluno a
+                LEFT JOIN selecao s ON a.id = s.id_aluno
+                LEFT JOIN vagas v ON s.id_vaga = v.id
+                LEFT JOIN perfis p ON v.id_perfil = p.id
+                LEFT JOIN concedentes c ON v.id_concedente = c.id
+                WHERE a.perfil_opc1 = '$nome_perfil' OR a.perfil_opc2 = '$nome_perfil'
+                ORDER BY score DESC, a.medias DESC, COALESCE(a.ocorrencia, 0) ASC;"
             );
             $result = $stmt_alunos->fetchAll(PDO::FETCH_ASSOC);
 

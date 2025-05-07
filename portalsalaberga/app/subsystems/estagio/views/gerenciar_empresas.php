@@ -633,23 +633,26 @@ if (isset($_POST['layout'])) {
                     </div>
                 </div>
                 <nav class="flex-1">
-                    <a href="./dashboard.php" class="sidebar-link">
+                    <a href="dashboard.php" class="sidebar-link">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="./gerenciar_alunos.php" class="sidebar-link">
+                    <a href="gerenciar_alunos.php" class="sidebar-link">
                         <i class="fas fa-user-graduate w-5 mr-3"></i>
                         Gerenciar Alunos
                     </a>
-                    <a href="./gerenciar_empresas.php" class="sidebar-link active">
+                    <a href="gerenciar_empresas.php" class="sidebar-link active">
                         <i class="fas fa-building w-5 mr-3"></i>
                         Gerenciar Empresas
                     </a>
-                    <a href="./vagas.php" class="sidebar-link">
+                    <a href="vagas.php" class="sidebar-link">
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-
+                    <a href="selecionados.php" class="sidebar-link">
+                        <i class="fas fa-check-circle w-5 mr-3"></i>
+                        Selecionados
+                    </a>
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
@@ -686,27 +689,39 @@ if (isset($_POST['layout'])) {
                     </button>
                 </div>
                 <nav class="flex-1">
-                    <a href="./dashboard.php" class="sidebar-link">
+                    <a href="dashboard.php" class="sidebar-link">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="./gerenciar_alunos.php" class="sidebar-link">
+                    <a href="gerenciar_alunos.php" class="sidebar-link">
                         <i class="fas fa-user-graduate w-5 mr-3"></i>
                         Gerenciar Alunos
                     </a>
-                    <a href="./gerenciar_empresas.php" class="sidebar-link active">
+                    <a href="gerenciar_empresas.php" class="sidebar-link active">
                         <i class="fas fa-building w-5 mr-3"></i>
                         Gerenciar Empresas
                     </a>
-                    <a href="./vagas.php" class="sidebar-link">
+                    <a href="vagas.php" class="sidebar-link">
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="./alunos_vaga.php" class="sidebar-link">
-                        <i class="fas fa-chart-bar w-5 mr-3"></i>
-                        Relatórios
+                    <a href="selecionados.php" class="sidebar-link">
+                        <i class="fas fa-check-circle w-5 mr-3"></i>
+                        Selecionados
                     </a>
                 </nav>
+                <div class="mt-auto pt-4 border-t border-gray-700">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-cog w-5 mr-3"></i>
+                        Configurações
+                    </a>
+                    <form action="" method="post">
+                        <button type="submit" name="layout" class="sidebar-link text-red-400 hover:text-red-300">
+                            <i class="fas fa-sign-out-alt w-5 mr-3"></i>
+                            Sair
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -944,19 +959,20 @@ if (isset($_POST['layout'])) {
 
             // Sidebar mobile toggle
             sidebarToggle.addEventListener('click', () => {
-                gsap.to(mobileSidebar, {
-                    x: 0,
-                    duration: 0.3,
-                    ease: 'power2.out'
-                });
+                mobileSidebar.classList.remove('-translate-x-full');
+                document.body.style.overflow = 'hidden';
             });
 
             closeSidebar.addEventListener('click', () => {
-                gsap.to(mobileSidebar, {
-                    x: '-100%',
-                    duration: 0.3,
-                    ease: 'power2.in'
-                });
+                mobileSidebar.classList.add('-translate-x-full');
+                document.body.style.overflow = 'auto';
+            });
+
+            mobileSidebar.addEventListener('click', (e) => {
+                if (e.target === mobileSidebar) {
+                    mobileSidebar.classList.add('-translate-x-full');
+                    document.body.style.overflow = 'auto';
+                }
             });
 
             // Modal handling

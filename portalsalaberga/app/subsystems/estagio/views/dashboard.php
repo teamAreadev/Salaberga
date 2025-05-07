@@ -72,9 +72,11 @@ if (isset($_POST['layout'])) {
     }
 
     .sidebar {
-        background-color: var(--sidebar-bg);
-        border-right: 1px solid rgba(0, 122, 51, 0.1);
+        background-color: rgba(45, 45, 45, 0.95);
+        background-image: linear-gradient(to bottom, #2d2d2d, #222222);
+        border-right: 1px solid rgba(0, 122, 51, 0.2);
         transition: all 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.2);
     }
 
     .sidebar-link {
@@ -84,18 +86,20 @@ if (isset($_POST['layout'])) {
         border-radius: 8px;
         margin-bottom: 0.5rem;
         transition: all 0.2s ease;
-        color: var(--text-color);
+        color: #ffffff;
     }
 
     .sidebar-link:hover {
-        background-color: var(--sidebar-active);
-        color: var(--header-color);
+        background-color: rgba(0, 122, 51, 0.2);
+        color: #00C250;
+        transform: translateX(5px);
     }
 
     .sidebar-link.active {
-        background-color: var(--sidebar-active);
-        color: var(--header-color);
+        background-color: rgba(0, 122, 51, 0.3);
+        color: #00FF6B;
         font-weight: 600;
+        box-shadow: 0 2px 8px rgba(0, 122, 51, 0.15);
     }
 
     .dashboard-card {
@@ -120,13 +124,12 @@ if (isset($_POST['layout'])) {
                 <div class="flex items-center gap-2 mb-6">
                     <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="h-10 w-auto">
                     <div>
-                        <h1 class="text-lg font-bold text-primary">Sistema <span class="text-secondary">STGM</span></h1>
-                        <div class="h-0.5 bg-primary/20 rounded-full mt-1"></div>
+                        <h1 class="text-lg font-bold text-primary-400">Sistema <span class="text-secondary">STGM</span></h1>
+                        <div class="h-0.5 bg-primary-500/20 rounded-full mt-1"></div>
                     </div>
                 </div>
-
                 <nav class="flex-1">
-                    <a href="#" class="sidebar-link active">
+                    <a href="dashboard.php" class="sidebar-link active">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
@@ -142,9 +145,12 @@ if (isset($_POST['layout'])) {
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
+                    <a href="selecionados.php" class="sidebar-link">
+                        <i class="fas fa-check-circle w-5 mr-3"></i>
+                        Selecionados
+                    </a>
                 </nav>
-
-                <div class="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
                         <i class="fas fa-cog w-5 mr-3"></i>
                         Configurações
@@ -161,8 +167,8 @@ if (isset($_POST['layout'])) {
 
         <!-- Mobile Sidebar Toggle -->
         <div class="md:hidden fixed top-4 left-4 z-50">
-            <button id="sidebarToggle" class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-md">
-                <i class="fas fa-bars text-primary"></i>
+            <button id="sidebarToggle" class="bg-dark-50 p-2 rounded-lg shadow-md hover:bg-dark-100 transition-all">
+                <i class="fas fa-bars text-primary-400"></i>
             </button>
         </div>
 
@@ -172,15 +178,14 @@ if (isset($_POST['layout'])) {
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center gap-2">
                         <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="h-10 w-auto">
-                        <h1 class="text-lg font-bold text-primary">Sistema <span class="text-secondary">STGM</span></h1>
+                        <h1 class="text-lg font-bold text-primary-400">Sistema <span class="text-secondary">STGM</span></h1>
                     </div>
-                    <button id="closeSidebar" class="p-2">
+                    <button id="closeSidebar" class="p-2 text-gray-400 hover:text-white transition-colors">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-
                 <nav class="flex-1">
-                    <a href="#" class="sidebar-link active">
+                    <a href="dashboard.php" class="sidebar-link active">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
@@ -196,13 +201,12 @@ if (isset($_POST['layout'])) {
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="./alunos_vaga.php" class="sidebar-link">
-                        <i class="fas fa-chart-bar w-5 mr-3"></i>
-                        Relatórios
+                    <a href="selecionados.php" class="sidebar-link">
+                        <i class="fas fa-check-circle w-5 mr-3"></i>
+                        Selecionados
                     </a>
                 </nav>
-
-                <div class="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
                         <i class="fas fa-cog w-5 mr-3"></i>
                         Configurações
@@ -416,12 +420,21 @@ if (isset($_POST['layout'])) {
             const closeSidebar = document.getElementById('closeSidebar');
             const mobileSidebar = document.getElementById('mobileSidebar');
 
-            sidebarToggle.addEventListener('click', function() {
+            sidebarToggle.addEventListener('click', () => {
                 mobileSidebar.classList.remove('-translate-x-full');
+                document.body.style.overflow = 'hidden';
             });
 
-            closeSidebar.addEventListener('click', function() {
+            closeSidebar.addEventListener('click', () => {
                 mobileSidebar.classList.add('-translate-x-full');
+                document.body.style.overflow = 'auto';
+            });
+
+            mobileSidebar.addEventListener('click', (e) => {
+                if (e.target === mobileSidebar) {
+                    mobileSidebar.classList.add('-translate-x-full');
+                    document.body.style.overflow = 'auto';
+                }
             });
         });
     </script>

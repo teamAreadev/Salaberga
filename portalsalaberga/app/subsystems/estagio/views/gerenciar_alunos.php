@@ -45,7 +45,8 @@ if (isset($_POST['layout'])) {
                     perfil_opc1: "<?= addslashes($dado['perfil_opc1']) ?>",
                     perfil_opc2: "<?= addslashes($dado['perfil_opc2']) ?>",
                     ocorrencia: "<?= addslashes($dado['ocorrencia'] ?: '-') ?>",
-                    custeio: <?= $dado['custeio'] ?>
+                    custeio: <?= $dado['custeio'] ?>,
+                    entregas: <?= $dado['entregas'] ?: 'null' ?>
                 }<?= $index < $total ? ',' : '' ?>
             <?php } ?>
         ];
@@ -118,6 +119,10 @@ if (isset($_POST['layout'])) {
                         <span class="mobile-card-label">Custeio:</span>
                         <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
                     </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Entregas:</span>
+                        <span class="mobile-card-value">${aluno.entregas || '-'}</span>
+                    </div>
                 `;
                 const modal = document.getElementById('detalhesModal');
                 modal.classList.add('show');
@@ -138,7 +143,7 @@ if (isset($_POST['layout'])) {
                 document.getElementById('alunoOpc2').value = aluno.perfil_opc2;
                 document.getElementById('alunoOcorrencia').value = aluno.ocorrencia;
                 document.getElementById('alunoCusteio').value = aluno.custeio;
-
+                document.getElementById('entregajs').value = aluno.entregas || '';
 
                 const modal = document.getElementById('alunoModal');
                 modal.classList.add('show');
@@ -247,6 +252,10 @@ if (isset($_POST['layout'])) {
                     <div class="mobile-card-item">
                         <span class="mobile-card-label">Custeio:</span>
                         <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Entregas:</span>
+                        <span class="mobile-card-value">${aluno.entregas || '-'}</span>
                     </div>
                     <div class="mobile-card-actions flex space-x-2 mt-4">
                         <button onclick="editarAluno(${aluno.id})" class="edit-btn flex-1">
@@ -915,7 +924,10 @@ if (isset($_POST['layout'])) {
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-
+                    <a href="selecionados.php" class="sidebar-link">
+                        <i class="fas fa-check-circle w-5 mr-3"></i>
+                        Selecionados
+                    </a>
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
@@ -968,9 +980,9 @@ if (isset($_POST['layout'])) {
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="alunos_vaga.php" class="sidebar-link">
-                        <i class="fas fa-chart-bar w-5 mr-3"></i>
-                        Relatórios
+                    <a href="selecionados.php" class="sidebar-link">
+                        <i class="fas fa-check-circle w-5 mr-3"></i>
+                        Selecionados
                     </a>
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
@@ -1134,6 +1146,10 @@ if (isset($_POST['layout'])) {
                                 <span class="mobile-card-label">Custeio:</span>
                                 <span class="mobile-card-value"><?= $dado['custeio'] == "1" ? 'Sim' : 'Não' ?></span>
                             </div>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Entregas:</span>
+                                <span class="mobile-card-value"><?= htmlspecialchars($dado['entregas'] ?: '-') ?></span>
+                            </div>
                             <div class="mobile-card-actions flex space-x-2 mt-4">
                                 <button onclick="editarAluno(${dado.id})" class="edit-btn flex-1">
                                     <i class="fas fa-edit"></i> Editar
@@ -1202,7 +1218,7 @@ if (isset($_POST['layout'])) {
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Entregas</label>
-                        <input type="number" name="entregas" id="entregajs" required>
+                        <input type="number" name="entregas" id="entregajs" class="custom-input mt-1" placeholder="-">
                     </div>
                     <div class="mt-6 flex justify-end space-x-4">
                         <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">
