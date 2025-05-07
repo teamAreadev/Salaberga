@@ -6,23 +6,39 @@ $session = new sessions;
 $session->tempo_session();
 $session->autenticar_session();
 
+// --- COLOQUE O CÓDIGO AQUI ---
+if (isset($_POST['aprovar']) && !empty($_POST['selecionados'])) {
+    $selecionados = [];
+    foreach ($_POST['selecionados'] as $valor) {
+        list($id_aluno, $id_vaga, $nome) = explode('|', $valor);
+        $selecionados[] = [
+            'id_aluno' => $id_aluno,
+            'id_vaga' => $id_vaga,
+            'nome' => $nome
+        ];
+    }
+    $qtd = $select_model->aprovar_selecionados($selecionados);
+    echo "<div class='text-green-500 font-bold mb-4'>{$qtd} aluno(s) aprovado(s) com sucesso!</div>";
+}
+// --- FIM DO CÓDIGO ---
+
 if (isset($_POST['layout'])) {
     $session->quebra_session();
 }
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
-
+<!-- ...restante do seu HTML... -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a1a1a">
     <meta name="description" content="Alunos Selecionados - Sistema de Estágio">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <title>Alunos Selecionados - Sistema de Estágio</title>
 
     <script>
@@ -90,8 +106,8 @@ if (isset($_POST['layout'])) {
             background-color: #1a1a1a;
             color: #ffffff;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%), 
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%),
                 radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.03) 0%, rgba(255, 165, 0, 0) 20%);
         }
 
@@ -100,7 +116,7 @@ if (isset($_POST['layout'])) {
             background-image: linear-gradient(to bottom, #2d2d2d, #222222);
             border-right: 1px solid rgba(0, 122, 51, 0.2);
             transition: all 0.3s ease;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar-link {
@@ -282,17 +298,34 @@ if (isset($_POST['layout'])) {
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        .slide-up { animation: slideUp 0.4s ease-out forwards; }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.4s ease-out forwards;
+        }
 
         .custom-checkbox {
             appearance: none;
@@ -333,12 +366,12 @@ if (isset($_POST['layout'])) {
             .custom-table {
                 margin: 0;
             }
-            
+
             .custom-table th,
             .custom-table td {
                 padding: 0.5rem;
             }
-            
+
             .custom-card {
                 padding: 0.75rem;
                 margin: 0 -1rem;
@@ -477,143 +510,60 @@ if (isset($_POST['layout'])) {
                 </div>
 
                 <!-- Tabela de Alunos Selecionados -->
+                <form method="post" action="">
                 <div class="custom-card fade-in">
-                    <!-- Vaga 1 -->
-                    <div class="mb-4">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                            <div>
-                                <h3 class="text-lg font-semibold text-white">Desenvolvedor Front-end</h3>
-                                <p class="text-sm text-gray-400">Mallory</p>
+                    <?php
+                    $vagas = $select_model->vagas_com_alunos();
+                    foreach ($vagas as $vaga) {
+                        $id_vaga = $vaga['id_vaga'];
+                        $alunos = $select_model->alunos_selecionados_estagio($id_vaga);
+                        $nome_empresa = $select_model->nome_empresa_por_vaga($id_vaga);
+                    ?>
+                        <div class="custom-card fade-in mb-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-white">
+                                        <?php echo htmlspecialchars($nome_empresa); ?>
+                                    </h3>
+                                </div>
+                                <span class="custom-badge badge-info self-start sm:self-center">
+                                    <i class="fas fa-code text-xs mr-1"></i>
+                                    Alunos Selecionados
+                                </span>
                             </div>
-                            <span class="custom-badge badge-info self-start sm:self-center">
-                                <i class="fas fa-code text-xs mr-1"></i>
-                                Desenvolvimento
-                            </span>
-                        </div>
-                        <div class="overflow-x-auto -mx-4 sm:mx-0">
-                            <div class="min-w-full inline-block align-middle">
-                                <table class="custom-table">
-                                    <thead>
-                                        <tr>
-                                            <th class="w-10">
-                                                <input type="checkbox" class="custom-checkbox" id="selectAll1">
-                                            </th>
-                                            <th>Aluno</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox" class="custom-checkbox" name="alunos[]" value="1">
-                                            </td>
-                                            <td>
-                                                <div class="flex items-center gap-2">
-                                                    <div class="w-8 h-8 rounded-full bg-primary-500/10 flex items-center justify-center">
-                                                        <i class="fas fa-user text-primary-400 text-sm"></i>
-                                                    </div>
-                                                    <div>
-                                                        <p class="font-medium">João Silva</p>
-                                                        <p class="text-xs text-gray-400">#12345</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="custom-badge badge-warning">
-                                                    <i class="fas fa-clock text-xs mr-1"></i>
-                                                    Aguardando
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox" class="custom-checkbox" name="alunos[]" value="2">
-                                            </td>
-                                            <td>
-                                                <div class="flex items-center gap-2">
-                                                    <div class="w-8 h-8 rounded-full bg-primary-500/10 flex items-center justify-center">
-                                                        <i class="fas fa-user text-primary-400 text-sm"></i>
-                                                    </div>
-                                                    <div>
-                                                        <p class="font-medium">Maria Santos</p>
-                                                        <p class="text-xs text-gray-400">#12346</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="custom-badge badge-warning">
-                                                    <i class="fas fa-clock text-xs mr-1"></i>
-                                                    Aguardando
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="overflow-x-auto -mx-4 sm:mx-0">
+                                <div class="min-w-full inline-block align-middle">
+                                    <table class="custom-table">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Aluno</th>
+                                                <th>ID</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($alunos as $aluno) { ?>
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" name="selecionados[]" value="<?php echo $aluno['id'] . '|' . $id_vaga . '|' . htmlspecialchars($aluno['nome']); ?>">
+                                                    </td>
+                                                    <td><?php echo htmlspecialchars($aluno['nome']); ?></td>
+                                                    <td><?php echo htmlspecialchars($aluno['id']); ?></td>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Vaga 2 -->
-                    <div class="mb-4">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                            <div>
-                                <h3 class="text-lg font-semibold text-white">Designer UI/UX</h3>
-                                <p class="text-sm text-gray-400">Fenix Soluções</p>
-                            </div>
-                            <span class="custom-badge badge-info self-start sm:self-center">
-                                <i class="fas fa-paint-brush text-xs mr-1"></i>
-                                Design
-                            </span>
-                        </div>
-                        <div class="overflow-x-auto -mx-4 sm:mx-0">
-                            <div class="min-w-full inline-block align-middle">
-                                <table class="custom-table">
-                                    <thead>
-                                        <tr>
-                                            <th class="w-10">
-                                                <input type="checkbox" class="custom-checkbox" id="selectAll2">
-                                            </th>
-                                            <th>Aluno</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox" class="custom-checkbox" name="alunos[]" value="3">
-                                            </td>
-                                            <td>
-                                                <div class="flex items-center gap-2">
-                                                    <div class="w-8 h-8 rounded-full bg-primary-500/10 flex items-center justify-center">
-                                                        <i class="fas fa-user text-primary-400 text-sm"></i>
-                                                    </div>
-                                                    <div>
-                                                        <p class="font-medium">Pedro Oliveira</p>
-                                                        <p class="text-xs text-gray-400">#12347</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="custom-badge badge-warning">
-                                                    <i class="fas fa-clock text-xs mr-1"></i>
-                                                    Aguardando
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Botão de Aprovar Selecionados -->
-                    <div class="flex justify-end mt-4">
-                        <button class="custom-btn custom-btn-primary">
-                            <i class="fas fa-check-double"></i>
-                            Aprovar Selecionados
-                        </button>
-                    </div>
+                    <?php
+                    }
+                    ?>
+                    <button type="submit" name="aprovar" class="custom-btn custom-btn-primary mt-4">
+                        Aprovar Selecionados
+                    </button>
                 </div>
+                </form>
             </main>
         </div>
     </div>
@@ -654,4 +604,4 @@ if (isset($_POST['layout'])) {
     </script>
 </body>
 
-</html> 
+</html>

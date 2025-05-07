@@ -159,4 +159,46 @@ class select_model extends connect
 
         return $result;
     }
+    function alunos_selecionados_estagio($id_vaga)
+    {
+        $stmt = $this->connect->query("SELECT aluno.nome, aluno.id FROM aluno 
+            INNER JOIN selecao ON aluno.id = selecao.id_aluno 
+            WHERE selecao.id_vaga = '$id_vaga' 
+            AND aluno.id NOT IN (
+                SELECT s.id_aluno FROM selecionado s WHERE s.id_vaga = '$id_vaga'
+            )");
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    function vagas_com_alunos()
+{
+    $stmt = $this->connect->query("SELECT DISTINCT id_vaga FROM selecao");
+    $vagas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $vagas;
+}
+
+    function nome_empresa_por_vaga($id_vaga)
+    {
+        $stmt = $this->connect->prepare("SELECT c.nome FROM vagas v INNER JOIN concedentes c ON v.id_concedente = c.id WHERE v.id = :id_vaga LIMIT 1");
+        $stmt->bindValue(':id_vaga', $id_vaga, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['nome'] : null;
+    }
+
+    function aprovar_selecionados($selecionados)
+    {
+        $count = 0;
+        foreach ($selecionados as $item) {
+            $stmt = $this->connect->prepare("INSERT INTO selecionado (id_aluno, id_vaga, nome) VALUES (?, ?, ?)");
+            if ($stmt->execute([$item['id_aluno'], $item['id_vaga'], $item['nome']])) {
+                $count++;
+            }
+        }
+        return $count;
+    }
+    public function getConnection() {
+        return $this->connect;
+    }
 }
