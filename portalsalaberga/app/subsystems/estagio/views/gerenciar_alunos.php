@@ -1217,8 +1217,12 @@ if (isset($_POST['layout'])) {
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300">Entregas</label>
-                        <input type="number" name="entregas" id="entregajs" class="custom-input mt-1" placeholder="-">
+                        <label class="block text-sm font-medium text-gray-300">Entregas individuais</label>
+                        <input type="number" name="entregas_individuais" class="custom-input mt-1" placeholder="-">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Entregas grupo</label>
+                        <input type="number" name="entregas_grupo" class="custom-input mt-1" placeholder="-">
                     </div>
                     <div class="mt-6 flex justify-end space-x-4">
                         <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">

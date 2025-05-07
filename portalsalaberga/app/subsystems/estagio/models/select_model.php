@@ -116,7 +116,8 @@ class select_model extends connect
                         a.medias + 
                         (CASE WHEN a.projetos != '' THEN 5 ELSE 0 END) -
                         (a.ocorrencia * 0.5) +
-                        (a.entregas * 5)
+                        (a.entradas_individuais * 5)+
+                        (a.entradas_grupo * 5)
                     ) AS score
                 FROM aluno a
                 LEFT JOIN selecao s ON a.id = s.id_aluno

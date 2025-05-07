@@ -142,10 +142,10 @@ class main_model extends connect
             return 2;
         }
     }
-    function editar_aluno($id, $nome, $contato, $medias, $email, $projetos, $perfil_opc1, $perfil_opc2, $ocorrencia, $custeio, $entregas)
+    function editar_aluno($id, $nome, $contato, $medias, $email, $projetos, $perfil_opc1, $perfil_opc2, $ocorrencia, $custeio, $entregas_individuais, $entregas_grupo)
     {
 
-        $stmt = $this->connect->prepare("UPDATE `aluno` SET `nome`=:nome, `contato`=:contato, `medias`=:medias, `email`=:email, `projetos`=:projetos, `perfil_opc1`=:opc1, `perfil_opc2`=:opc2, `ocorrencia`=:ocorrencia, `custeio`=:custeio, `entregas`=:entrega WHERE id = :id");
+        $stmt = $this->connect->prepare("UPDATE `aluno` SET `nome`=:nome, `contato`=:contato, `medias`=:medias, `email`=:email, `projetos`=:projetos, `perfil_opc1`=:opc1, `perfil_opc2`=:opc2, `ocorrencia`=:ocorrencia, `custeio`=:custeio,  `entregas_individuais`=:entrega_individuais, `entregas_grupo`=:entrega_grupo WHERE id = :id");
 
         $stmt->bindValue(':nome', $nome);
         $stmt->bindValue(':contato', $contato);
@@ -156,7 +156,8 @@ class main_model extends connect
         $stmt->bindValue(':opc2', $perfil_opc2);
         $stmt->bindValue(':ocorrencia', $ocorrencia);
         $stmt->bindValue(':custeio', $custeio);
-        $stmt->bindValue(':entrega', $entregas);
+        $stmt->bindValue(':entrega_individuais', $entregas_individuais);
+        $stmt->bindValue(':entrega_grupo', $entregas_grupo);
         $stmt->bindValue(':id', $id);
 
         $stmt->execute();
