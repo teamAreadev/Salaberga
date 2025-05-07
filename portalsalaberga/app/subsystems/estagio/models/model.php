@@ -116,10 +116,10 @@ class main_model extends connect
             $stmt_cadastrar_vagas->bindValue(':quantidade', $quantidade);
             $stmt_cadastrar_vagas->execute();
 
-            if($stmt_cadastrar_vagas){
+            if ($stmt_cadastrar_vagas) {
 
                 return 1;
-            }else{
+            } else {
 
                 return 2;
             }
@@ -129,18 +129,29 @@ class main_model extends connect
         }
     }
 
-    function selecao($alunos, id_vaga){
+    function selecao($alunos, $id_vaga)
+    {
 
-        foreach($alunos as $aluno){
+
+        foreach ($alunos as $aluno) {
+            $stmt = $this->connect->query("SELECT * FROM selecao WHERE id_aluno = '$aluno' AND id_vaga = '$id_vaga'");
+
+            if ($stmt->rowCount() > 0) {
+
+                return 3;
+            }
+        }
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        foreach ($alunos as $aluno) {
 
             $stmt = $this->connect->query("INSERT INTO selecao VALUES(null, '$aluno', '$id_vaga', DEFAULT)");
-
-            
         }
-        if($stmt){
+        if ($stmt) {
 
             return 1;
-        }{
+        } {
 
             return 2;
         }
