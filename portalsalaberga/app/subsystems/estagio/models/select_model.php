@@ -72,17 +72,35 @@ class select_model extends connect
 
         return $result;
     }
-    function alunos_aptos()
+    function alunos_aptos($nome_perfil = 0)
     {
-        $stmt_alunos = $this->connect->query("SELECT * FROM aluno WHERE perfil_opc1 IS NOT NULL OR perfil_opc2 IS NOT NULL ORDER BY medias DESC, COALESCE(ocorrencia, 0) ASC;");
-        $result = $stmt_alunos->fetchAll(PDO::FETCH_ASSOC);
+        if ($nome_perfil == 0) {
 
-        return $result;
+            $stmt_alunos = $this->connect->query(
+                "SELECT * FROM aluno WHERE perfil_opc1 IS NOT NULL OR perfil_opc2 IS NOT NULL 
+            ORDER BY medias DESC,
+            COALESCE(ocorrencia, 0) ASC;"
+            );
+            $result = $stmt_alunos->fetchAll(PDO::FETCH_ASSOC);
+
+            return $result;
+        } else {
+
+            $stmt_alunos = $this->connect->query(
+                "SELECT * FROM aluno WHERE perfil_opc1 = '$nome_perfil' || perfil_opc2 = '$$nome_perfil'  
+            ORDER BY medias DESC,
+            COALESCE(ocorrencia, 0) ASC;"
+            );
+            $result = $stmt_alunos->fetchAll(PDO::FETCH_ASSOC);
+
+            return $result;
+        }
     }
     function vagas()
     {
         $stmt_vagas = $this->connect->query(
             "SELECT 
+                v.id as id,
                 v.nome_vaga AS nome_vaga,
                 c.nome AS nome_empresa,
                 p.nome_perfil AS nome_perfil,
@@ -93,6 +111,13 @@ class select_model extends connect
             INNER JOIN perfis p ON v.id_perfil = p.id;"
         );
         $result = $stmt_vagas->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+    function alunos_selecionados($id_vaga){
+
+        $stmt = $this->connect->query("SELECT aluno.nome FROM aluno inner join selecao on aluno.id = selecao.id_aluno WHERE id_vaga = '$id_vaga'");
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $result;
     }

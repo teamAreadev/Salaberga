@@ -729,8 +729,8 @@ if (isset($_POST['layout'])) {
                                     <option value="">Todas as áreas</option>
                                     <option value="desenvolvimento">Desenvolvimento</option>
                                     <option value="tutoria">Tutoria</option>
-                                    <option value="mídia/design">Design/Mídia</option>
-                                    <option value="suporte">Redes/Suporte</option>
+                                    <option value="mídia/design">Design/Social media</option>
+                                    <option value="suporte">Suporte/Redes</option>
                                 </select>
                                 <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
                             </div>
@@ -829,12 +829,12 @@ if (isset($_POST['layout'])) {
                                 <span class="ml-2 text-gray-300">Tutoria</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="des" value="Design/Mídia">
-                                <span class="ml-2 text-gray-300">Design/Mídia</span>
+                                <input type="checkbox" class="custom-checkbox" name="des" value="Design/Social media">
+                                <span class="ml-2 text-gray-300">Design/Social media</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="sup" value="Redes/Suporte">
-                                <span class="ml-2 text-gray-300">Redes/Suporte</span>
+                                <input type="checkbox" class="custom-checkbox" name="sup" value="Suporte/Redes">
+                                <span class="ml-2 text-gray-300">Suporte/Redes</span>
                             </label>
                         </div>
                     </div>
