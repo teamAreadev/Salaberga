@@ -88,24 +88,24 @@ class select_model extends connect
 
             $stmt_alunos = $this->connect->query(
                 "SELECT 
-    id,
-    nome,
-    medias,
-    projetos,
-    ocorrencia,
-    entregas,
-    perfil_opc1,
-    perfil_opc2,
-    custeio,
-    (
-        medias + 
-        (CASE WHEN projetos != '' THEN 5 ELSE 0 END) -
-        (ocorrencia * 0.5) +
-        (entregas + 5)
-    ) AS score
-FROM aluno
-WHERE perfil_opc1 = '$nome_perfil' OR perfil_opc2 = '$nome_perfil'
-ORDER BY score DESC, medias DESC, COALESCE(ocorrencia, 0) ASC;"
+                            id,
+                            nome,
+                            medias,
+                            projetos,
+                            ocorrencia,
+                            entregas,
+                            perfil_opc1,
+                            perfil_opc2,
+                            custeio,
+                            (
+                                medias + 
+                                (CASE WHEN projetos != '' THEN 5 ELSE 0 END) -
+                                (ocorrencia * 0.5) +
+                                (entregas + 5)
+                            ) AS score
+                        FROM aluno
+                        WHERE perfil_opc1 = '$nome_perfil' OR perfil_opc2 = '$nome_perfil'
+                        ORDER BY score DESC, medias DESC, COALESCE(ocorrencia, 0) ASC;"
             );
             $result = $stmt_alunos->fetchAll(PDO::FETCH_ASSOC);
 

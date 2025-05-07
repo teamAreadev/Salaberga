@@ -632,17 +632,17 @@ $select_model = new select_model();
 
                 <!-- Info da Vaga -->
                 <div class="vaga-info-card mb-8 slide-up">
-                    <h2 id="vagaTitulo" class="vaga-info-title mb-3">Carregando...</h2>
+                    <h2 id="vagaTitulo" class="vaga-info-title mb-3"><?php echo $_GET['Nome_perfil']?></h2>
                     <div class="flex flex-wrap gap-4 text-sm">
                         <div class="flex items-center gap-2">
                             <i class="fas fa-building text-primary-400"></i>
                             <span class="text-gray-400">Empresa:</span>
-                            <span id="vagaEmpresa" class="text-white">Carregando...</span>
+                            <span id="vagaEmpresa" class="text-white"><?php echo $_GET['Nome_perfil']?></span>
                         </div>
                         <div class="flex items-center gap-2">
                             <i class="fas fa-tag text-primary-400"></i>
                             <span class="text-gray-400">Área:</span>
-                            <span id="vagaArea" class="text-white">Carregando...</span>
+                            <span id="vagaArea" class="text-white"><?php echo $_GET['Nome_perfil']?></span>
                         </div>
                     </div>
                 </div>
