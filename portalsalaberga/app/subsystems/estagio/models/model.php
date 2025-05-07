@@ -99,7 +99,7 @@ class main_model extends connect
             return 3; // Empresa já existe
         }
     }
-    function cadastrar_vaga($nome, $id_empresa, $id_area, $quantidade)
+    function cadastrar_vaga($id_empresa, $id_area, $quantidade)
     {
         $stmt_check = $this->connect->prepare("SELECT * FROM vagas WHERE nome_vaga = :nome");
         $stmt_check->bindValue(':nome', $nome);

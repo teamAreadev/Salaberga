@@ -667,7 +667,7 @@ $select_model = new select_model();
 
                 <!-- Info da Vaga -->
                 <div class="vaga-info-card mb-8 slide-up">
-                    <h2 id="vagaTitulo" class="vaga-info-title mb-3"><?php echo $_GET['nome_vaga']?></h2>
+                
                     <div class="flex flex-wrap gap-4 text-sm">
                         <div class="flex items-center gap-2">
                             <i class="fas fa-building text-primary-400"></i>
@@ -755,7 +755,7 @@ $select_model = new select_model();
                                                 ?>
                                             </td>
                                             <td><?= htmlspecialchars($dado['custeio'] = $dado['custeio'] == 0 ? "Não" : "Sim") ?></td>
-                                            <td><?= htmlspecialchars($dado['entregas'] = $dado['entregas'] == 0 ? "Não" : "Sim") ?></td>
+                                            <td><?= htmlspecialchars($dado['entregas']) ?></td>
                                         </tr>
                                     <?php }
                                 } else {
@@ -783,7 +783,7 @@ $select_model = new select_model();
                                                 ?>
                                             </td>
                                             <td><?= htmlspecialchars($dado['custeio'] = $dado['custeio'] == 0 ? "Não" : "Sim") ?></td>
-                                            <td><?= htmlspecialchars($dado['entregas'] = $dado['entregas'] == 0 ? "Não" : "Sim") ?></td>
+                                            <td><?= htmlspecialchars($dado['entregas']) ?></td>
                                         </tr>
                                     <?php } ?>
                                 <?php } ?>

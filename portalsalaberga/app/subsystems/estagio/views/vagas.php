@@ -929,7 +929,7 @@ if (isset($_POST['layout'])) {
                     
                 </div>
                 <div class="mt-4">
-                    <a href="./alunos_vaga.php?nome_perfil=<?=$dado['nome_perfil']?>&id_vaga=<?=$dado['id']?>&nome_vaga=<?=$dado['nome_vaga']?>&nome_empresa=<?=$dado['nome_empresa']?>&nome_baga=<?=$dado['id']?>" class="ver-detalhes-link">
+                    <a href="./alunos_vaga.php?nome_perfil=<?=$dado['nome_perfil']?>&id_vaga=<?=$dado['id']?>&nome_empresa=<?=$dado['nome_empresa']?>&nome_baga=<?=$dado['id']?>" class="ver-detalhes-link">
                         <span>Selecionar aluno</span>
                         <i class="fas fa-arrow-right ml-2"></i>
                     </a>
@@ -947,10 +947,6 @@ if (isset($_POST['layout'])) {
                 <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white slide-up">Nova Vaga</h2>
                 <form action="../controllers/controller.php" method="post" id="vagaForm" class="space-y-4">
                     <input type="hidden" id="vagaId" name="vaga_id" value="">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Título da Vaga</label>
-                        <input type="text" id="vagaTitulo" name="nome" class="custom-input mt-1" required>
-                    </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Nome da Empresa</label>
                         <select id="vagaEmpresa" name="empresa" class="custom-input mt-1" required>

@@ -101,7 +101,7 @@ class select_model extends connect
                                 medias + 
                                 (CASE WHEN projetos != '' THEN 5 ELSE 0 END) -
                                 (ocorrencia * 0.5) +
-                                (entregas + 5)
+                                (entregas * 5)
                             ) AS score
                         FROM aluno
                         WHERE perfil_opc1 = '$nome_perfil' OR perfil_opc2 = '$nome_perfil'
@@ -117,7 +117,6 @@ class select_model extends connect
         $stmt_vagas = $this->connect->query(
             "SELECT 
                 v.id as id,
-                v.nome_vaga AS nome_vaga,
                 c.nome AS nome_empresa,
                 p.nome_perfil AS nome_perfil,
                 v.quantidade AS quantidade
