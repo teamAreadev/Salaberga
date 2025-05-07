@@ -307,6 +307,23 @@ if (isset($_POST['layout'])) {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.3) 100%);
         }
 
+        .area-design {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(126, 34, 206, 0.2) 100%);
+            color: #c4b5fd;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        .area-design:hover {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(126, 34, 206, 0.3) 100%);
+        }
+        .area-redes {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.2) 100%);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .area-redes:hover {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.3) 100%);
+        }
+
         /* Ver vagas link styling */
         .ver-vagas-link {
             display: inline-flex;
@@ -809,15 +826,41 @@ if (isset($_POST['layout'])) {
                                     </div>
                                 </div>
                                 <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="area-chip area-<?= htmlspecialchars($dado['perfis']) ?>">
-                                        <?php if ($dado['perfis'] === 'desenvolvimento'): ?>
-                                            <i class="fas fa-code text-xs"></i>
-                                        <?php elseif ($dado['perfis'] === 'tutoria'): ?>
-                                            <i class="fas fa-chalkboard-teacher text-xs"></i>
-                                        <?php elseif ($dado['perfis'] === 'mídia/design'): ?>
-                                            <i class="fas fa-paint-brush text-xs"></i>
-                                        <?php elseif ($dado['perfis'] === 'suporte'): ?>
-                                            <i class="fas fa-network-wired text-xs"></i>
+                                    <span class="area-chip <?php 
+                                        $area = strtolower($dado['perfis']);
+                                        $areas = preg_split('/[,\/|]+/', $area);
+                                        $areaClass = '';
+                                        if (count($areas) > 1) {
+                                            $areaClass = 'area-multi';
+                                        } else if (
+                                            $area === 'mídia/design' || $area === 'design/mídia' || $area === 'design/social media' || $area === 'design/midia' || $area === 'mídia' || $area === 'midia'
+                                        ) {
+                                            $areaClass = 'area-design';
+                                        } else if ($area === 'tutoria') {
+                                            $areaClass = 'area-tutoria';
+                                        } else if ($area === 'desenvolvimento') {
+                                            $areaClass = 'area-desenvolvimento';
+                                        } else if (
+                                            $area === 'suporte' || $area === 'redes' || $area === 'suporte/redes'
+                                        ) {
+                                            $areaClass = 'area-redes';
+                                        } else {
+                                            $areaClass = 'area-desenvolvimento';
+                                        }
+                                        echo $areaClass;
+                                    ?>">
+                                        <?php if (count($areas) > 1): ?>
+                                            <i class="fas fa-layer-group mr-1 text-xs"></i>
+                                        <?php elseif ($areaClass === 'area-desenvolvimento'): ?>
+                                            <i class="fas fa-code mr-1 text-xs"></i>
+                                        <?php elseif ($areaClass === 'area-tutoria'): ?>
+                                            <i class="fas fa-chalkboard-teacher mr-1 text-xs"></i>
+                                        <?php elseif ($areaClass === 'area-design'): ?>
+                                            <i class="fas fa-paint-brush mr-1 text-xs"></i>
+                                        <?php elseif ($areaClass === 'area-redes'): ?>
+                                            <i class="fas fa-network-wired mr-1 text-xs"></i>
+                                        <?php else: ?>
+                                            <i class="fas fa-question mr-1 text-xs"></i>
                                         <?php endif; ?>
                                         <?= htmlspecialchars($dado['perfis']) ?>
                                     </span>
@@ -1177,25 +1220,24 @@ if (isset($_POST['layout'])) {
                                         duration: 0.3,
                                         onComplete: () => {
                                             card.remove();
-                                            showToast('Empresa excluída com sucesso!', 'success');
-                                            const remainingCards = document.querySelectorAll('.empresa-card');
-                                            if (remainingCards.length === 0) {
-                                                window.location.reload();
-                                            }
-                                        }
-                                    });
+                                    showToast('Empresa excluída com sucesso!', 'success');
+                                    const remainingCards = document.querySelectorAll('.empresa-card');
+                                    if (remainingCards.length === 0) {
+                                        window.location.reload();
+                                    }
                                 }
-                            } else {
-                                showToast(`Erro ao excluir empresa: ${data.message}`, 'error');
-                            }
-                        })
-                        .catch(error => {
-                            document.body.removeChild(confirmDialog);
-                            console.error('Erro:', error);
-                            showToast('Erro ao excluir empresa. Tente novamente.', 'error');
-                        });
+                            });
+                        }
+                    } else {
+                        showToast(`Erro ao excluir empresa: ${data.message}`, 'error');
+                    }
+                })
+                .catch(error => {
+                    document.body.removeChild(confirmDialog);
+                    console.error('Erro:', error);
+                    showToast('Erro ao excluir empresa. Tente novamente.', 'error');
                 });
-            };
+            });
 
             // Função para exibir toast
             function showToast(message, type) {
