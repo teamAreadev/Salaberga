@@ -535,5 +535,8 @@
             });
         });
     </script>
+    <footer class="w-full text-center py-4 bg-gray-100 text-gray-600 text-sm mt-8">
+        Desenvolvido por Matheus Felix
+    </footer>
 </body>
 </html>

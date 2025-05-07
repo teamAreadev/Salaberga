@@ -209,6 +209,13 @@ $valor_inscricao = $modalidades_aprovadas >= 3 ? '3,00' : '5,00';
                                     <?php echo $inscricao['nome_equipe'] ? $inscricao['nome_equipe'] : 'Individual'; ?>
                                 </p>
                             </div>
+                            <?php if (!$inscricao['nome_equipe']): // Se for individual ?>
+                                <button type="button"
+                                    class="mt-2 w-full bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md flex items-center justify-center gap-2 text-sm"
+                                    onclick="abrirPagamentoIndividual('<?php echo ucfirst($inscricao['modalidade']); ?>', '<?php echo $valor_inscricao; ?>')">
+                                    <i class="fas fa-money-bill-wave mr-1"></i> Ver informações de pagamento
+                                </button>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -223,6 +230,7 @@ $valor_inscricao = $modalidades_aprovadas >= 3 ? '3,00' : '5,00';
                             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Categoria</th>
                             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Equipe</th>
                             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Status</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Pagamento</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -235,6 +243,15 @@ $valor_inscricao = $modalidades_aprovadas >= 3 ? '3,00' : '5,00';
                                     <span class="px-2 py-1 text-xs rounded-full <?php echo $inscricao['status'] == 'aprovado' ? 'bg-green-100 text-green-700' : ($inscricao['status'] == 'reprovado' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'); ?>">
                                         <?php echo ucfirst($inscricao['status']); ?>
                                     </span>
+                                </td>
+                                <td class="px-4 py-2 text-sm">
+                                    <?php if (!$inscricao['nome_equipe']): // Se for individual ?>
+                                        <button type="button"
+                                            class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-1 rounded-md flex items-center justify-center gap-2 text-xs"
+                                            onclick="abrirPagamentoIndividual('<?php echo ucfirst($inscricao['modalidade']); ?>', '<?php echo $valor_inscricao; ?>')">
+                                            <i class="fas fa-money-bill-wave mr-1"></i> Pagamento
+                                        </button>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -517,6 +534,13 @@ $valor_inscricao = $modalidades_aprovadas >= 3 ? '3,00' : '5,00';
             setTimeout(() => {
                 toast.classList.add('hidden');
             }, 3000);
+        }
+
+        function abrirPagamentoIndividual(modalidade, valor) {
+            document.getElementById('modalNomeModalidade').textContent = modalidade;
+            document.getElementById('modalValorTotal').textContent = valor;
+            document.getElementById('btnWhatsApp').onclick = () => enviarComprovante(modalidade, valor);
+            openModal('paymentModal');
         }
     </script>
 </body>

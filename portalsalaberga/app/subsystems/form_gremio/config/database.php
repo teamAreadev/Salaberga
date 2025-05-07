@@ -1,17 +1,18 @@
 <?php
 class Database {
+    
     private $host = 'localhost';
     private $db_name = 'copa_gremio';
     private $username = 'root';
     private $password = '';
     private $conn;
-    /*
+  /*
     private $host = 'localhost';
     private $db_name = 'u750204740_formcpgremio';
     private $username = 'u750204740_formcpgremio';
     private $password = 'Gremio@25!';
     private $conn;
-    */
+*/
     public function getConnection() {
         $this->conn = null;
 
