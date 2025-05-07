@@ -11,13 +11,13 @@ if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga
     switch ($result) {
 
         case 1:
-            header('location:../views/alunos_vaga.php?true');
+            header('location:../views/vagas.php?true');
             exit();
         case 2:
-            header('location:../views/alunos_vaga.php?erro');
+            header('location:../views/vagas.php?erro');
             exit();
         default:
-            header('location:../views/alunos_vaga.php?existe');
+            header('location:../views/vagas.php?existe');
             exit();
     }
 } else if (isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) && !empty($_POST['senha'])) {
