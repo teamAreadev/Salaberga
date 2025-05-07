@@ -321,13 +321,17 @@ $select_model = new select_model();
             border: 2px solid rgba(61, 61, 61, 0.8) !important;
             border-radius: 10px !important;
             color: #ffffff !important;
-            padding: 0.75rem 1rem !important;
+            padding: 0.75rem 2.5rem 0.75rem 1rem !important;
             width: 100% !important;
             font-size: 0.95rem !important;
             transition: all 0.3s ease !important;
             backdrop-filter: blur(5px) !important;
             -webkit-backdrop-filter: blur(5px) !important;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            min-width: 180px !important;
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: unset !important;
         }
 
         .custom-input:focus {
@@ -339,6 +343,22 @@ $select_model = new select_model();
 
         .custom-input::placeholder {
             color: rgba(255, 255, 255, 0.4) !important;
+        }
+
+        select.custom-input {
+            min-width: 180px !important;
+            max-width: 100% !important;
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: unset !important;
+        }
+
+        .relative select.custom-input {
+            padding-right: 2.5rem !important;
+        }
+
+        .relative {
+            min-width: 180px;
         }
 
         /* Search input styling */
@@ -501,12 +521,12 @@ $select_model = new select_model();
 
         /* Responsive adjustments */
         @media (max-width: 640px) {
-            .custom-input {
+            .custom-input, select.custom-input {
                 min-width: 100% !important;
+                font-size: 1rem !important;
             }
-
-            .table-container {
-                padding: 0.5rem;
+            .relative {
+                min-width: 100%;
             }
         }
     </style>
@@ -537,11 +557,11 @@ $select_model = new select_model();
                         <i class="fas fa-building w-5 mr-3"></i>
                         Gerenciar Empresas
                     </a>
-                    <a href="vagas.php" class="sidebar-link active">
+                    <a href="vagas.php" class="sidebar-link">
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="alunos_vaga.php" class="sidebar-link">
+                    <a href="alunos_vaga.php" class="sidebar-link active">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
@@ -593,15 +613,27 @@ $select_model = new select_model();
                         <i class="fas fa-building w-5 mr-3"></i>
                         Gerenciar Empresas
                     </a>
-                    <a href="vagas.php" class="sidebar-link active">
+                    <a href="vagas.php" class="sidebar-link">
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="alunos_vaga.php" class="sidebar-link">
+                    <a href="alunos_vaga.php" class="sidebar-link active">
                         <i class="fas fa-chart-bar w-5 mr-3"></i>
                         Relatórios
                     </a>
                 </nav>
+                <div class="mt-auto pt-4 border-t border-gray-700">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-cog w-5 mr-3"></i>
+                        Configurações
+                    </a>
+                    <form action="" method="post">
+                        <button type="submit" name="layout" class="sidebar-link text-red-400 hover:text-red-300">
+                            <i class="fas fa-sign-out-alt w-5 mr-3"></i>
+                            Sair
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -667,10 +699,7 @@ $select_model = new select_model();
                                 </select>
                                 <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
                             </div>
-                            <button id="selectAllBtn" class="custom-btn custom-btn-primary w-full sm:w-auto">
-                                <i class="fas fa-check-square btn-icon"></i>
-                                <span>Selecionar Todos</span>
-                            </button>
+                           
                         </div>
                     </div>
                 </div>

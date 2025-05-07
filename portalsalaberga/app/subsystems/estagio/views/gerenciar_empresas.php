@@ -356,13 +356,39 @@ if (isset($_POST['layout'])) {
             border: 2px solid rgba(61, 61, 61, 0.8) !important;
             border-radius: 10px !important;
             color: #ffffff !important;
-            padding: 0.75rem 1rem !important;
+            padding: 0.75rem 2.5rem 0.75rem 1rem !important;
             width: 100% !important;
             font-size: 0.95rem !important;
             transition: all 0.3s ease !important;
             backdrop-filter: blur(5px) !important;
             -webkit-backdrop-filter: blur(5px) !important;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            min-width: 180px !important;
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: unset !important;
+        }
+        select.custom-input {
+            min-width: 180px !important;
+            max-width: 100% !important;
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: unset !important;
+        }
+        .relative select.custom-input {
+            padding-right: 2.5rem !important;
+        }
+        .relative {
+            min-width: 180px;
+        }
+        @media (max-width: 640px) {
+            .custom-input, select.custom-input {
+                min-width: 100% !important;
+                font-size: 1rem !important;
+            }
+            .relative {
+                min-width: 100%;
+            }
         }
 
         .custom-input:focus {

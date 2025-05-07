@@ -1,4 +1,4 @@
- <?php
+<?php
 require_once('../models/select_model.php');
 require_once('../models/sessions.php');
 $select_model = new select_model();
@@ -464,24 +464,39 @@ if (isset($_POST['layout'])) {
             border: 2px solid rgba(61, 61, 61, 0.8) !important;
             border-radius: 10px !important;
             color: #ffffff !important;
-            padding: 0.75rem 1rem !important;
+            padding: 0.75rem 2.5rem 0.75rem 1rem !important;
             width: 100% !important;
             font-size: 0.95rem !important;
             transition: all 0.3s ease !important;
             backdrop-filter: blur(5px) !important;
             -webkit-backdrop-filter: blur(5px) !important;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            min-width: 180px !important;
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: unset !important;
         }
-
-        .custom-input:focus {
-            border-color: #007A33 !important;
-            box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-            outline: none !important;
-            background-color: rgba(40, 40, 40, 0.9) !important;
+        select.custom-input {
+            min-width: 180px !important;
+            max-width: 100% !important;
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: unset !important;
         }
-
-        .custom-input::placeholder {
-            color: rgba(255, 255, 255, 0.4) !important;
+        .relative select.custom-input {
+            padding-right: 2.5rem !important;
+        }
+        .relative {
+            min-width: 180px;
+        }
+        @media (max-width: 640px) {
+            .custom-input, select.custom-input {
+                min-width: 100% !important;
+                font-size: 1rem !important;
+            }
+            .relative {
+                min-width: 100%;
+            }
         }
 
         /* Search input styling */
@@ -669,6 +684,13 @@ if (isset($_POST['layout'])) {
             .custom-input { min-width: 100% !important; }
             .mobile-stack { flex-direction: column; }
         }
+
+        .custom-input:focus {
+            border-color: #00C250 !important;
+            box-shadow: 0 0 0 2px rgba(0, 194, 80, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            outline: none !important;
+            background-color: rgba(40, 40, 40, 0.9) !important;
+        }
     </style>
 </head>
 
@@ -815,9 +837,11 @@ if (isset($_POST['layout'])) {
                             <div class="relative">
                                 <select id="filterEmpresa" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
                                     <option value="">Todas as empresas</option>
-                                    <option value="1">TechCorp Solutions</option>
-                                    <option value="2">Mídia Digital</option>
-                                    <option value="3">Redes & Cia</option>
+                                    <?php 
+                                    $empresas = $select_model->concedentes();
+                                    foreach($empresas as $empresa){ ?>
+                                        <option value="<?= $empresa['id'] ?>"><?= htmlspecialchars($empresa['nome']) ?></option>
+                                    <?php } ?>
                                 </select>
                                 <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
                             </div>

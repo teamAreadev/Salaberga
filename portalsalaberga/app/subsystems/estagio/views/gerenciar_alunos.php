@@ -26,6 +26,336 @@ if (isset($_POST['layout'])) {
     <title>Gerenciar Alunos - Sistema de Estágio</title>
 
     <script>
+        // Dados dos alunos
+        let alunos = [
+            <?php 
+            $dados = $select_model->alunos_aptos();
+            $total = count($dados);
+            $index = 0;
+            foreach ($dados as $dado) {
+                $index++;
+            ?>
+                {
+                    id: <?= $dado['id'] ?>,
+                    nome: "<?= addslashes($dado['nome']) ?>",
+                    contato: "<?= addslashes($dado['contato'] ?: '-') ?>",
+                    medias: "<?= addslashes($dado['medias'] ?: '-') ?>",
+                    email: "<?= addslashes($dado['email'] ?: '-') ?>",
+                    projetos: "<?= addslashes($dado['projetos'] ?: '-') ?>",
+                    perfil_opc1: "<?= addslashes($dado['perfil_opc1']) ?>",
+                    perfil_opc2: "<?= addslashes($dado['perfil_opc2']) ?>",
+                    ocorrencia: "<?= addslashes($dado['ocorrencia'] ?: '-') ?>",
+                    custeio: <?= $dado['custeio'] ?>
+                }<?= $index < $total ? ',' : '' ?>
+            <?php } ?>
+        ];
+
+        // Funções dos modais
+        function verDetalhes(id) {
+            const aluno = alunos.find(a => a.id === id);
+            if (aluno) {
+                const detalhesContent = document.getElementById('detalhesContent');
+                const areaClassOpc1 = aluno.perfil_opc1.toLowerCase();
+                const areaClassOpc2 = aluno.perfil_opc2.toLowerCase();
+                detalhesContent.innerHTML = `
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">ID:</span>
+                        <span class="mobile-card-value">${aluno.id}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Nome:</span>
+                        <span class="mobile-card-value font-medium">${aluno.nome}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Contato:</span>
+                        <span class="mobile-card-value">${aluno.contato}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Médias:</span>
+                        <span class="mobile-card-value">${aluno.medias}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Email:</span>
+                        <span class="mobile-card-value">${aluno.email}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Projetos:</span>
+                        <span class="mobile-card-value">${aluno.projetos}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Opção 1:</span>
+                        <span class="mobile-card-value">
+                            <span class="status-pill area-${areaClassOpc1}">
+                                <i class="fas fa-${
+                                    aluno.perfil_opc1 === 'desenvolvimento' ? 'code' :
+                                    aluno.perfil_opc1 === 'design' ? 'paint-brush' :
+                                    aluno.perfil_opc1 === 'midia' ? 'video' :
+                                    'network-wired'
+                                } text-xs mr-1"></i>
+                                ${aluno.perfil_opc1}
+                            </span>
+                        </span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Opção 2:</span>
+                        <span class="mobile-card-value">
+                            <span class="status-pill area-${areaClassOpc2}">
+                                <i class="fas fa-${
+                                    aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
+                                    aluno.perfil_opc2 === 'design' ? 'paint-brush' :
+                                    aluno.perfil_opc2 === 'midia' ? 'video' :
+                                    'network-wired'
+                                } text-xs mr-1"></i>
+                                ${aluno.perfil_opc2}
+                            </span>
+                        </span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Ocorrência:</span>
+                        <span class="mobile-card-value">${aluno.ocorrencia}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Custeio:</span>
+                        <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
+                    </div>
+                `;
+                const modal = document.getElementById('detalhesModal');
+                modal.classList.add('show');
+            }
+        }
+
+        function editarAluno(id) {
+            const aluno = alunos.find(a => a.id === id);
+            if (aluno) {
+                document.getElementById('modalTitle').textContent = 'Editar Aluno';
+                document.getElementById('alunoId').value = aluno.id;
+                document.getElementById('alunoNome').value = aluno.nome;
+                document.getElementById('alunoContato').value = aluno.contato;
+                document.getElementById('alunoMedias').value = aluno.medias;
+                document.getElementById('alunoEmail').value = aluno.email;
+                document.getElementById('alunoProjetos').value = aluno.projetos;
+                document.getElementById('alunoOpc1').value = aluno.perfil_opc1;
+                document.getElementById('alunoOpc2').value = aluno.perfil_opc2;
+                document.getElementById('alunoOcorrencia').value = aluno.ocorrencia;
+                document.getElementById('alunoCusteio').value = aluno.custeio;
+
+                document.getElementById('alunoNome').disabled = true;
+                document.getElementById('alunoMedias').disabled = true;
+                document.getElementById('alunoOpc1').disabled = true;
+                document.getElementById('alunoOpc2').disabled = true;
+
+                const modal = document.getElementById('alunoModal');
+                modal.classList.add('show');
+            }
+        }
+
+        // Função para renderizar a tabela de alunos (desktop)
+        function renderizarTabelaDesktop(alunosFiltrados = alunos) {
+            const tbody = document.getElementById('alunosTableBody');
+            tbody.innerHTML = '';
+
+            alunosFiltrados.forEach((aluno, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-dark-50 transition-colors slide-up';
+                tr.style.animationDelay = `${index * 50}ms`;
+                tr.innerHTML = `
+                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
+                        <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button onclick="editarAluno(${aluno.id})" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Função para renderizar os cards de alunos (mobile)
+        function renderizarCardsMobile(alunosFiltrados = alunos) {
+            const container = document.getElementById('alunosMobileCards');
+            container.innerHTML = '';
+
+            alunosFiltrados.forEach(aluno => {
+                const card = document.createElement('div');
+                card.className = 'mobile-card bg-dark-300 rounded-lg p-4 shadow-md';
+
+                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'area-desenvolvimento' : 
+                                    aluno.perfil_opc1 === 'design' ? 'area-design' : 
+                                    aluno.perfil_opc1 === 'midia' ? 'area-midia' : 
+                                    'area-redes';
+                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'area-desenvolvimento' : 
+                                    aluno.perfil_opc2 === 'design' ? 'area-design' : 
+                                    aluno.perfil_opc2 === 'midia' ? 'area-midia' : 
+                                    'area-redes';
+
+                card.innerHTML = `
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">ID:</span>
+                        <span class="mobile-card-value">${aluno.id}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Nome:</span>
+                        <span class="mobile-card-value font-medium">${aluno.nome}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Contato:</span>
+                        <span class="mobile-card-value">${aluno.contato}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Médias:</span>
+                        <span class="mobile-card-value">${aluno.medias}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Email:</span>
+                        <span class="mobile-card-value">${aluno.email}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Projetos:</span>
+                        <span class="mobile-card-value">${aluno.projetos}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Opção 1:</span>
+                        <span class="mobile-card-value">
+                            <span class="status-pill ${areaClassOpc1}">
+                                <i class="fas fa-${
+                                    aluno.perfil_opc1 === 'desenvolvimento' ? 'code' :
+                                    aluno.perfil_opc1 === 'design' ? 'paint-brush' :
+                                    aluno.perfil_opc1 === 'midia' ? 'video' :
+                                    'network-wired'
+                                } text-xs mr-1"></i>
+                                ${aluno.perfil_opc1}
+                            </span>
+                        </span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Opção 2:</span>
+                        <span class="mobile-card-value">
+                            <span class="status-pill ${areaClassOpc2}">
+                                <i class="fas fa-${
+                                    aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
+                                    aluno.perfil_opc2 === 'design' ? 'paint-brush' :
+                                    aluno.perfil_opc2 === 'midia' ? 'video' :
+                                    'network-wired'
+                                } text-xs mr-1"></i>
+                                ${aluno.perfil_opc2}
+                            </span>
+                        </span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Ocorrência:</span>
+                        <span class="mobile-card-value">${aluno.ocorrencia}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Custeio:</span>
+                        <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
+                    </div>
+                    <div class="mobile-card-actions flex space-x-2 mt-4">
+                        <button onclick="editarAluno(${aluno.id})" class="edit-btn flex-1">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Função para aplicar filtros
+        function aplicarFiltros() {
+            const searchTerm = document.getElementById('searchAluno').value.toLowerCase();
+            const areaFiltro = document.getElementById('filterArea').value;
+            const statusFiltro = document.getElementById('filterStatus').value;
+
+            const alunosFiltrados = alunos.filter(aluno => {
+                const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
+                const matchArea = !areaFiltro || aluno.perfil_opc1 === areaFiltro || aluno.perfil_opc2 === areaFiltro;
+                const matchStatus = !statusFiltro || (statusFiltro === 'ativo' && aluno.custeio == 1) || (statusFiltro === 'inativo' && aluno.custeio == 0) || (statusFiltro === 'estagiando' && aluno.ocorrencia.toLowerCase().includes('estagiando'));
+                return matchSearch && matchArea && matchStatus;
+            });
+
+            renderizarTabelaDesktop(alunosFiltrados);
+            renderizarCardsMobile(alunosFiltrados);
+        }
+
+        // Inicialização quando o documento estiver pronto
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar tabela e cards
+            renderizarTabelaDesktop();
+            renderizarCardsMobile();
+
+            // Event listeners para filtros
+            document.getElementById('searchAluno').addEventListener('input', aplicarFiltros);
+            document.getElementById('filterArea').addEventListener('change', aplicarFiltros);
+            document.getElementById('filterStatus').addEventListener('change', aplicarFiltros);
+
+            // Modal de Edição
+            const alunoModal = document.getElementById('alunoModal');
+            const cancelarBtn = document.getElementById('cancelarBtn');
+            const alunoForm = document.getElementById('alunoForm');
+
+            cancelarBtn.addEventListener('click', () => {
+                alunoModal.classList.remove('show');
+            });
+
+            alunoModal.addEventListener('click', (e) => {
+                if (e.target === alunoModal) {
+                    alunoModal.classList.remove('show');
+                }
+            });
+
+            alunoForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const id = parseInt(document.getElementById('alunoId').value);
+                const alunoIndex = alunos.findIndex(a => a.id === id);
+                if (alunoIndex !== -1) {
+                    alunos[alunoIndex] = {
+                        ...alunos[alunoIndex],
+                        contato: document.getElementById('alunoContato').value,
+                        email: document.getElementById('alunoEmail').value,
+                        projetos: document.getElementById('alunoProjetos').value,
+                        ocorrencia: document.getElementById('alunoOcorrencia').value,
+                        custeio: parseInt(document.getElementById('alunoCusteio').value)
+                    };
+                    aplicarFiltros();
+                    alert('Alterações salvas com sucesso!');
+                    alunoModal.classList.remove('show');
+                }
+            });
+
+            // Modal de Detalhes
+            const detalhesModal = document.getElementById('detalhesModal');
+            const fecharDetalhesBtn = document.getElementById('fecharDetalhesBtn');
+
+            fecharDetalhesBtn.addEventListener('click', () => {
+                detalhesModal.classList.remove('show');
+            });
+
+            detalhesModal.addEventListener('click', (e) => {
+                if (e.target === detalhesModal) {
+                    detalhesModal.classList.remove('show');
+                }
+            });
+
+            // Verificar tamanho da tela e ajustar renderização
+            function checkScreenSize() {
+                if (window.innerWidth < 768) {
+                    document.querySelector('.desktop-table').style.display = 'none';
+                    document.querySelector('.mobile-cards-container').style.display = 'block';
+                } else {
+                    document.querySelector('.desktop-table').style.display = 'block';
+                    document.querySelector('.mobile-cards-container').style.display = 'none';
+                }
+            }
+            
+            window.addEventListener('resize', checkScreenSize);
+            checkScreenSize();
+        });
+    </script>
+
+    <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
@@ -227,13 +557,39 @@ if (isset($_POST['layout'])) {
             background-color: #232323 !important;
             border-color: #3d3d3d !important;
             color: #ffffff !important;
-            padding: 0.75rem 1rem !important;
+            padding: 0.75rem 2.5rem 0.75rem 1rem !important;
             width: 100% !important;
             font-size: 0.95rem !important;
             transition: all 0.3s ease !important;
             backdrop-filter: blur(5px) !important;
             -webkit-backdrop-filter: blur(5px) !important;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            min-width: 180px !important;
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: unset !important;
+        }
+        select.custom-input {
+            min-width: 180px !important;
+            max-width: 100% !important;
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: unset !important;
+        }
+        .relative select.custom-input {
+            padding-right: 2.5rem !important;
+        }
+        .relative {
+            min-width: 180px;
+        }
+        @media (max-width: 640px) {
+            input, select, .custom-input {
+                min-width: 100% !important;
+                font-size: 1rem !important;
+            }
+            .relative {
+                min-width: 100%;
+            }
         }
 
         input:focus, select:focus, textarea:focus {
@@ -350,10 +706,14 @@ if (isset($_POST['layout'])) {
             -webkit-backdrop-filter: blur(10px);
             max-height: 90vh;
             overflow-y: auto;
+            position: relative;
+            z-index: 1000;
         }
 
         .modal-show {
             display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         ::-webkit-scrollbar {
@@ -390,22 +750,27 @@ if (isset($_POST['layout'])) {
         .mobile-card-item {
             display: flex;
             justify-content: space-between;
-            padding: 0.5rem 0;
+            padding: 0.75rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mobile-card-item:last-child {
+            border-bottom: none;
         }
 
         .mobile-card-label {
             font-weight: 500;
             color: #a0aec0;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
         .mobile-card-value {
             font-weight: 400;
             color: #ffffff;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             text-align: right;
             flex: 1;
+            margin-left: 1rem;
         }
 
         .mobile-card-actions {
@@ -505,6 +870,39 @@ if (isset($_POST['layout'])) {
             .table-container.desktop-table {
                 display: block;
             }
+        }
+
+        /* Estilos para os modais */
+        .modal-base {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .modal-base.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(49, 49, 49, 0.95) 0%, rgba(37, 37, 37, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 1000;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 32rem;
+            margin: 1rem;
         }
     </style>
 </head>
@@ -691,9 +1089,6 @@ if (isset($_POST['layout'])) {
                                         <button onclick="editarAluno(<?= $dado['id'] ?>)" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button onclick="excluirAluno(<?= $dado['id'] ?>)" class="text-red-500 hover:text-red-400 transition-colors">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -764,14 +1159,8 @@ if (isset($_POST['layout'])) {
                                 <span class="mobile-card-value"><?= $dado['custeio'] == "1" ? 'Sim' : 'Não' ?></span>
                             </div>
                             <div class="mobile-card-actions flex space-x-2 mt-4">
-                                <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="info-btn flex-1">
-                                    <i class="fas fa-info-circle"></i> Detalhes
-                                </button>
-                                <button onclick="editarAluno(<?= $dado['id'] ?>)" class="edit-btn flex-1">
+                                <button onclick="editarAluno(${dado.id})" class="edit-btn flex-1">
                                     <i class="fas fa-edit"></i> Editar
-                                </button>
-                                <button onclick="excluirAluno(<?= $dado['id'] ?>)" class="delete-btn flex-1">
-                                    <i class="fas fa-trash"></i> Excluir
                                 </button>
                             </div>
                         </div>
@@ -781,9 +1170,9 @@ if (isset($_POST['layout'])) {
         </div>
 
         <!-- Modal de Edição -->
-        <div id="alunoModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
-            <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
-                <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white slide-up">Editar Aluno</h2>
+        <div id="alunoModal" class="modal-base">
+            <div class="modal-content">
+                <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white">Editar Aluno</h2>
                 <form id="alunoForm" class="space-y-4">
                     <input type="hidden" id="alunoId">
                     <div>
@@ -850,9 +1239,9 @@ if (isset($_POST['layout'])) {
         </div>
 
         <!-- Modal de Detalhes -->
-        <div id="detalhesModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
-            <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
-                <h2 class="text-2xl font-bold mb-6 text-white slide-up">Detalhes do Aluno</h2>
+        <div id="detalhesModal" class="modal-base">
+            <div class="modal-content">
+                <h2 class="text-2xl font-bold mb-6 text-white">Detalhes do Aluno</h2>
                 <div id="detalhesContent" class="space-y-4 text-sm">
                     <!-- Conteúdo será preenchido via JavaScript -->
                 </div>
@@ -867,266 +1256,6 @@ if (isset($_POST['layout'])) {
     </div>
 
     <script>
-        // Dados dos alunos
-        let alunos = [
-            <?php 
-            $dados = $select_model->alunos_aptos();
-            $total = count($dados);
-            $index = 0;
-            foreach ($dados as $dado) {
-                $index++;
-            ?>
-                
-                    id: <?= $dado['id'] ?>,
-                    nome: "<?= addslashes($dado['nome']) ?>",
-                    contato: "<?= addslashes($dado['contato'] ?: '-') ?>",
-                    medias: "<?= addslashes($dado['medias'] ?: '-') ?>",
-                    email: "<?= addslashes($dado['email'] ?: '-') ?>",
-                    projetos: "<?= addslashes($dado['projetos'] ?: '-') ?>",
-                    perfil_opc1: "<?= addslashes($dado['perfil_opc1']) ?>",
-                    perfil_opc2: "<?= addslashes($dado['perfil_opc2']) ?>",
-                    ocorrencia: "<?= addslashes($dado['ocorrencia'] ?: '-') ?>",
-                    custeio: <?= $dado['custeio'] ?>
-                <?= $index < $total ? ',' : '' ?>
-            <?php } ?>
-        ];
-
-        // Função para renderizar a tabela de alunos (desktop)
-        function renderizarTabelaDesktop(alunosFiltrados = alunos) {
-            const tbody = document.getElementById('alunosTableBody');
-            tbody.innerHTML = '';
-
-            alunosFiltrados.forEach((aluno, index) => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-dark-50 transition-colors slide-up';
-                tr.style.animationDelay = `${index * 50}ms`;
-                tr.innerHTML = `
-                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
-                    <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
-                        <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
-                            <i class="fas fa-info-circle"></i>
-                        </button>
-                        <button onclick="editarAluno(${aluno.id})" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button onclick="excluirAluno(${aluno.id})" class="text-red-500 hover:text-red-400 transition-colors">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        // Função para renderizar os cards de alunos (mobile)
-        function renderizarCardsMobile(alunosFiltrados = alunos) {
-            const container = document.getElementById('alunosMobileCards');
-            container.innerHTML = '';
-
-            alunosFiltrados.forEach(aluno => {
-                const card = document.createElement('div');
-                card.className = 'mobile-card bg-dark-300 rounded-lg p-4 shadow-md';
-
-                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'area-desenvolvimento' : 
-                                    aluno.perfil_opc1 === 'design' ? 'area-design' : 
-                                    aluno.perfil_opc1 === 'midia' ? 'area-midia' : 
-                                    'area-redes';
-                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'area-desenvolvimento' : 
-                                    aluno.perfil_opc2 === 'design' ? 'area-design' : 
-                                    aluno.perfil_opc2 === 'midia' ? 'area-midia' : 
-                                    'area-redes';
-
-                card.innerHTML = `
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">ID:</span>
-                        <span class="mobile-card-value">${aluno.id}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Nome:</span>
-                        <span class="mobile-card-value font-medium">${aluno.nome}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Contato:</span>
-                        <span class="mobile-card-value">${aluno.contato}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Médias:</span>
-                        <span class="mobile-card-value">${aluno.medias}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Email:</span>
-                        <span class="mobile-card-value">${aluno.email}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Projetos:</span>
-                        <span class="mobile-card-value">${aluno.projetos}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Opção 1:</span>
-                        <span class="mobile-card-value">
-                            <span class="status-pill ${areaClassOpc1}">
-                                <i class="fas fa-${
-                                    aluno.perfil_opc1 === 'desenvolvimento' ? 'code' :
-                                    aluno.perfil_opc1 === 'design' ? 'paint-brush' :
-                                    aluno.perfil_opc1 === 'midia' ? 'video' :
-                                    'network-wired'
-                                } text-xs mr-1"></i>
-                                ${aluno.perfil_opc1}
-                            </span>
-                        </span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Opção 2:</span>
-                        <span class="mobile-card-value">
-                            <span class="status-pill ${areaClassOpc2}">
-                                <i class="fas fa-${
-                                    aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
-                                    aluno.perfil_opc2 === 'design' ? 'paint-brush' :
-                                    aluno.perfil_opc2 === 'midia' ? 'video' :
-                                    'network-wired'
-                                } text-xs mr-1"></i>
-                                ${aluno.perfil_opc2}
-                            </span>
-                        </span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Ocorrência:</span>
-                        <span class="mobile-card-value">${aluno.ocorrencia}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Custeio:</span>
-                        <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
-                    </div>
-                    <div class="mobile-card-actions flex space-x-2 mt-4">
-                        <button onclick="verDetalhes(${aluno.id})" class="info-btn flex-1">
-                            <i class="fas fa-info-circle"></i> Detalhes
-                        </button>
-                        <button onclick="editarAluno(${aluno.id})" class="edit-btn flex-1">
-                            <i class="fas fa-edit"></i> Editar
-                        </button>
-                        <button onclick="excluirAluno(${aluno.id})" class="delete-btn flex-1">
-                            <i class="fas fa-trash"></i> Excluir
-                        </button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        // Função para mostrar detalhes do aluno
-        function verDetalhes(id) {
-            const aluno = alunos.find(a => a.id === id);
-            if (aluno) {
-                const detalhesContent = document.getElementById('detalhesContent');
-                const areaClassOpc1 = aluno.perfil_opc1.toLowerCase();
-                const areaClassOpc2 = aluno.perfil_opc2.toLowerCase();
-                detalhesContent.innerHTML = `
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">ID:</span>
-                        <span class="mobile-card-value">${aluno.id}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Nome:</span>
-                        <span class="mobile-card-value font-medium">${aluno.nome}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Contato:</span>
-                        <span class="mobile-card-value">${aluno.contato}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Médias:</span>
-                        <span class="mobile-card-value">${aluno.medias}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Email:</span>
-                        <span class="mobile-card-value">${aluno.email}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Projetos:</span>
-                        <span class="mobile-card-value">${aluno.projetos}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Opção 1:</span>
-                        <span class="mobile-card-value">
-                            <span class="status-pill area-${areaClassOpc1}">
-                                <i class="fas fa-${
-                                    aluno.perfil_opc1 === 'desenvolvimento' ? 'code' :
-                                    aluno.perfil_opc1 === 'design' ? 'paint-brush' :
-                                    aluno.perfil_opc1 === 'midia' ? 'video' :
-                                    'network-wired'
-                                } text-xs mr-1"></i>
-                                ${aluno.perfil_opc1}
-                            </span>
-                        </span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Opção 2:</span>
-                        <span class="mobile-card-value">
-                            <span class="status-pill area-${areaClassOpc2}">
-                                <i class="fas fa-${
-                                    aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
-                                    aluno.perfil_opc2 === 'design' ? 'paint-brush' :
-                                    aluno.perfil_opc2 === 'midia' ? 'video' :
-                                    'network-wired'
-                                } text-xs mr-1"></i>
-                                ${aluno.perfil_opc2}
-                            </span>
-                        </span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Ocorrência:</span>
-                        <span class="mobile-card-value">${aluno.ocorrencia}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Custeio:</span>
-                        <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
-                    </div>
-                `;
-                const modal = document.getElementById('detalhesModal');
-                modal.classList.remove('hidden');
-                modal.style.display = 'flex';
-            }
-        }
-
-        // Função para editar aluno
-        function editarAluno(id) {
-            const aluno = alunos.find(a => a.id === id);
-            if (aluno) {
-                document.getElementById('modalTitle').textContent = 'Editar Aluno';
-                document.getElementById('alunoId').value = aluno.id;
-                document.getElementById('alunoNome').value = aluno.nome;
-                document.getElementById('alunoContato').value = aluno.contato;
-                document.getElementById('alunoMedias').value = aluno.medias;
-                document.getElementById('alunoEmail').value = aluno.email;
-                document.getElementById('alunoProjetos').value = aluno.projetos;
-                document.getElementById('alunoOpc1').value = aluno.perfil_opc1;
-                document.getElementById('alunoOpc2').value = aluno.perfil_opc2;
-                document.getElementById('alunoOcorrencia').value = aluno.ocorrencia;
-                document.getElementById('alunoCusteio').value = aluno.custeio;
-
-                document.getElementById('alunoNome').disabled = true;
-                document.getElementById('alunoMedias').disabled = true;
-                document.getElementById('alunoOpc1').disabled = true;
-                document.getElementById('alunoOpc2').disabled = true;
-
-                const modal = document.getElementById('alunoModal');
-                modal.classList.remove('hidden');
-                modal.style.display = 'flex';
-            }
-        }
-
-        // Função para excluir aluno
-        function excluirAluno(id) {
-            if (confirm('Tem certeza que deseja excluir este aluno?')) {
-                const index = alunos.findIndex(a => a.id === id);
-                if (index !== -1) {
-                    alunos.splice(index, 1);
-                    aplicarFiltros();
-                    alert('Aluno excluído com sucesso!');
-                }
-            }
-        }
-
         // Sidebar mobile toggle
         const sidebarToggle = document.getElementById('sidebarToggle');
         const closeSidebar = document.getElementById('closeSidebar');
@@ -1148,123 +1277,6 @@ if (isset($_POST['layout'])) {
                 document.body.style.overflow = 'auto';
             }
         });
-
-        // Modal de Edição
-        const modal = document.getElementById('alunoModal');
-        const cancelarBtn = document.getElementById('cancelarBtn');
-        const alunoForm = document.getElementById('alunoForm');
-
-        cancelarBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
-            modal.style.display = 'none';
-        });
-
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
-                modal.style.display = 'none';
-            }
-        });
-
-        alunoForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const id = parseInt(document.getElementById('alunoId').value);
-            const alunoIndex = alunos.findIndex(a => a.id === id);
-            if (alunoIndex !== -1) {
-                alunos[alunoIndex] = {
-                    ...alunos[alunoIndex],
-                    contato: document.getElementById('alunoContato').value,
-                    email: document.getElementById('alunoEmail').value,
-                    projetos: document.getElementById('alunoProjetos').value,
-                    ocorrencia: document.getElementById('alunoOcorrencia').value,
-                    custeio: parseInt(document.getElementById('alunoCusteio').value)
-                };
-                aplicarFiltros();
-                alert('Alterações salvas com sucesso!');
-                modal.classList.add('hidden');
-                modal.style.display = 'none';
-            }
-        });
-
-        // Modal de Detalhes
-        const detalhesModal = document.getElementById('detalhesModal');
-        const fecharDetalhesBtn = document.getElementById('fecharDetalhesBtn');
-
-        fecharDetalhesBtn.addEventListener('click', () => {
-            detalhesModal.classList.add('hidden');
-            detalhesModal.style.display = 'none';
-        });
-
-        detalhesModal.addEventListener('click', (e) => {
-            if (e.target === detalhesModal) {
-                detalhesModal.classList.add('hidden');
-                detalhesModal.style.display = 'none';
-            }
-        });
-
-        // Busca e Filtros
-        function aplicarFiltros() {
-            const searchTerm = document.getElementById('searchAluno').value.toLowerCase();
-            const areaFiltro = document.getElementById('filterArea').value;
-            const statusFiltro = document.getElementById('filterStatus').value;
-
-            const alunosFiltrados = alunos.filter(aluno => {
-                const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
-                const matchArea = !areaFiltro || aluno.perfil_opc1 === areaFiltro || aluno.perfil_opc2 === areaFiltro;
-                const matchStatus = !statusFiltro || (statusFiltro === 'ativo' && aluno.custeio == 1) || (statusFiltro === 'inativo' && aluno.custeio == 0) || (statusFiltro === 'estagiando' && aluno.ocorrencia.toLowerCase().includes('estagiando'));
-                return matchSearch && matchArea && matchStatus;
-            });
-
-            renderizarTabelaDesktop(alunosFiltrados);
-            renderizarCardsMobile(alunosFiltrados);
-
-            const noResultsMessage = document.getElementById('noResultsMessage');
-            if (alunosFiltrados.length === 0 && !noResultsMessage) {
-                const message = document.createElement('div');
-                message.id = 'noResultsMessage';
-                message.className = 'col-span-3 text-center py-8 text-gray-400 fade-in';
-                message.innerHTML = `
-                    <i class="fas fa-search text-4xl mb-4 text-gray-600 opacity-30"></i>
-                    <p class="text-lg">Nenhum aluno encontrado com os filtros atuais.</p>
-                    <button id="clearFiltersBtn" class="mt-4 custom-btn custom-btn-secondary">
-                        <i class="fas fa-times-circle btn-icon"></i>
-                        <span>Limpar Filtros</span>
-                    </button>
-                `;
-                document.getElementById('alunosMobileCards').insertAdjacentElement('afterend', message);
-                document.getElementById('clearFiltersBtn').addEventListener('click', () => {
-                    document.getElementById('searchAluno').value = '';
-                    document.getElementById('filterArea').value = '';
-                    document.getElementById('filterStatus').value = '';
-                    aplicarFiltros();
-                });
-            } else if (alunosFiltrados.length > 0 && noResultsMessage) {
-                noResultsMessage.remove();
-            }
-        }
-
-        document.getElementById('searchAluno').addEventListener('input', aplicarFiltros);
-        document.getElementById('filterArea').addEventListener('change', aplicarFiltros);
-        document.getElementById('filterStatus').addEventListener('change', aplicarFiltros);
-
-        // Inicializar tabela e cards
-        renderizarTabelaDesktop();
-        renderizarCardsMobile();
-        
-        // Verificar tamanho da tela e ajustar renderização
-        function checkScreenSize() {
-            if (window.innerWidth < 768) {
-                document.querySelector('.desktop-table').style.display = 'none';
-                document.querySelector('.mobile-cards-container').style.display = 'block';
-            } else {
-                document.querySelector('.desktop-table').style.display = 'block';
-                document.querySelector('.mobile-cards-container').style.display = 'none';
-            }
-        }
-        
-        window.addEventListener('resize', checkScreenSize);
-        checkScreenSize();
     </script>
 </body>
 </html>
