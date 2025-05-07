@@ -87,7 +87,7 @@ class select_model extends connect
         } else {
 
             $stmt_alunos = $this->connect->query(
-                "SELECT * FROM aluno WHERE perfil_opc1 = '$nome_perfil' || perfil_opc2 = '$$nome_perfil'  
+                "SELECT * FROM aluno WHERE perfil_opc1 = '$nome_perfil' OR perfil_opc2 = '$nome_perfil'  
             ORDER BY medias DESC,
             COALESCE(ocorrencia, 0) ASC;"
             );

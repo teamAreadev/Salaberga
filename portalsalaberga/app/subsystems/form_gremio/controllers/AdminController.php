@@ -252,6 +252,18 @@ class AdminController {
             exit;
         }
     }
+
+    public function excluirInscricao() {
+        $this->verificarAutenticacao();
+        header('Content-Type: application/json');
+        $inscricaoId = $_POST['inscricao_id'] ?? '';
+        if (empty($inscricaoId)) {
+            echo json_encode(['success' => false, 'message' => 'ID da inscrição não fornecido']);
+            return;
+        }
+        $resultado = $this->inscricaoModel->cancelarInscricao($inscricaoId);
+        echo json_encode($resultado);
+    }
 }
 
 // Se chamado diretamente, determina qual método executar
@@ -281,6 +293,9 @@ if (basename($_SERVER['SCRIPT_FILENAME']) == basename(__FILE__)) {
             break;
         case 'atualizar-status':
             $controller->atualizarStatusInscricao();
+            break;
+        case 'excluir-inscricao':
+            $controller->excluirInscricao();
             break;
         default:
             header('Content-Type: application/json');
