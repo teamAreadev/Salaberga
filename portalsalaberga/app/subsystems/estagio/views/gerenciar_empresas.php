@@ -809,61 +809,20 @@ if (isset($_POST['layout'])) {
                     <?php else: ?>
                         <?php
                         $delay = 0;
-                        $dados = $select_model->concedentes();
                         foreach ($dados as $dado):
                             $delay += 100;
                         ?>
-                            <div class="empresa-card slide-up" style="animation-delay: <?= $delay ?>ms;" data-empresa-id="<?= htmlspecialchars($dado['id']) ?>" data-area="<?= htmlspecialchars($dado['perfis']) ?>">
+                            <div class="empresa-card slide-up" style="animation-delay: <?= $delay ?>ms;" data-empresa-id="<?= htmlspecialchars($dado['id']) ?>">
                                 <div class="empresa-card-header">
                                     <h3 class="empresa-card-title"><?= htmlspecialchars($dado['nome']) ?></h3>
                                     <div class="empresa-card-actions">
-                                        <button class="empresa-card-action text-gray-400 hover:text-primary-400" onclick="editarEmpresa(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome']) ?>', '<?= htmlspecialchars($dado['nome']) ?>', '<?= htmlspecialchars($dado['endereco']) ?>', '<?= htmlspecialchars($dado['contato']) ?>')">
+                                        <button class="empresa-card-action text-gray-400 hover:text-primary-400" onclick="editarEmpresa(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome']) ?>', '<?= htmlspecialchars($dado['endereco']) ?>', '<?= htmlspecialchars($dado['contato']) ?>')">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button class="empresa-card-action text-red-500 hover:text-red-400" onclick="excluirEmpresa(<?= $dado['id'] ?>)">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
-                                </div>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="area-chip <?php 
-                                        $area = strtolower($dado['perfis']);
-                                        $areas = preg_split('/[,\/|]+/', $area);
-                                        $areaClass = '';
-                                        if (count($areas) > 1) {
-                                            $areaClass = 'area-multi';
-                                        } else if (
-                                            $area === 'mídia/design' || $area === 'design/mídia' || $area === 'design/social media' || $area === 'design/midia' || $area === 'mídia' || $area === 'midia'
-                                        ) {
-                                            $areaClass = 'area-design';
-                                        } else if ($area === 'tutoria') {
-                                            $areaClass = 'area-tutoria';
-                                        } else if ($area === 'desenvolvimento') {
-                                            $areaClass = 'area-desenvolvimento';
-                                        } else if (
-                                            $area === 'suporte' || $area === 'redes' || $area === 'suporte/redes'
-                                        ) {
-                                            $areaClass = 'area-redes';
-                                        } else {
-                                            $areaClass = 'area-desenvolvimento';
-                                        }
-                                        echo $areaClass;
-                                    ?>">
-                                        <?php if (count($areas) > 1): ?>
-                                            <i class="fas fa-layer-group mr-1 text-xs"></i>
-                                        <?php elseif ($areaClass === 'area-desenvolvimento'): ?>
-                                            <i class="fas fa-code mr-1 text-xs"></i>
-                                        <?php elseif ($areaClass === 'area-tutoria'): ?>
-                                            <i class="fas fa-chalkboard-teacher mr-1 text-xs"></i>
-                                        <?php elseif ($areaClass === 'area-design'): ?>
-                                            <i class="fas fa-paint-brush mr-1 text-xs"></i>
-                                        <?php elseif ($areaClass === 'area-redes'): ?>
-                                            <i class="fas fa-network-wired mr-1 text-xs"></i>
-                                        <?php else: ?>
-                                            <i class="fas fa-question mr-1 text-xs"></i>
-                                        <?php endif; ?>
-                                        <?= htmlspecialchars($dado['perfis']) ?>
-                                    </span>
                                 </div>
                                 <div class="empresa-card-info">
                                     <div class="empresa-card-info-item">
@@ -897,27 +856,6 @@ if (isset($_POST['layout'])) {
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Nome da Empresa</label>
                         <input type="text" id="empresaNome" name="nome" class="custom-input mt-1" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Área de Atuação</label>
-                        <div class="mt-2 space-y-2">
-                            <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="dev" value="desenvolvimento">
-                                <span class="ml-2 text-gray-300">Desenvolvimento</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="tut" value="tutoria">
-                                <span class="ml-2 text-gray-300">Tutoria</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="des" value="Design/Mídia">
-                                <span class="ml-2 text-gray-300">Design/Mídia</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="checkbox" class="custom-checkbox" name="sup" value="Suporte/Redes">
-                                <span class="ml-2 text-gray-300">Suporte/Redes</span>
-                            </label>
-                        </div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Endereço Completo</label>
@@ -1025,8 +963,6 @@ if (isset($_POST['layout'])) {
                 empresaForm.reset();
                 document.getElementById('empresaId').value = '';
                 document.getElementById('modalTitle').textContent = 'Nova Empresa';
-                const checkboxes = document.querySelectorAll('input[name="areas"]');
-                checkboxes.forEach(cb => cb.checked = false);
             }
 
             function openModal(isEdit = false, empresa = null) {
@@ -1037,10 +973,6 @@ if (isset($_POST['layout'])) {
                     document.getElementById('empresaNome').value = empresa.nome;
                     document.getElementById('empresaEndereco').value = empresa.endereco || '';
                     document.getElementById('empresaTelefone').value = empresa.telefone || '';
-                    const checkboxes = document.querySelectorAll('input[name="areas"]');
-                    checkboxes.forEach(cb => {
-                        cb.checked = empresa.perfil === cb.value;
-                    });
                 }
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
@@ -1066,7 +998,10 @@ if (isset($_POST['layout'])) {
                 });
             }
 
-            addEmpresaBtn.addEventListener('click', () => openModal());
+            addEmpresaBtn.addEventListener('click', () => {
+                openModal();
+            });
+
             if (firstEmpresaBtn) {
                 firstEmpresaBtn.addEventListener('click', () => openModal());
             }
@@ -1088,9 +1023,8 @@ if (isset($_POST['layout'])) {
 
                 empresaCards.forEach((card, index) => {
                     const nome = card.querySelector('.empresa-card-title').textContent.toLowerCase();
-                    const area = card.dataset.area;
                     const matchSearch = nome.includes(searchTerm);
-                    const matchArea = !areaFiltro || area === areaFiltro;
+                    const matchArea = !areaFiltro; // Ignorar filtro de área, já que data-area não está presente
 
                     if (matchSearch && matchArea) {
                         card.style.display = '';
@@ -1144,11 +1078,10 @@ if (isset($_POST['layout'])) {
             filterArea.addEventListener('change', aplicarFiltros);
 
             // Editar empresa
-            window.editarEmpresa = (id, nome, perfil, endereco, telefone) => {
+            window.editarEmpresa = (id, nome, endereco, telefone) => {
                 openModal(true, {
                     id,
                     nome,
-                    perfil,
                     endereco,
                     telefone
                 });
@@ -1220,24 +1153,25 @@ if (isset($_POST['layout'])) {
                                         duration: 0.3,
                                         onComplete: () => {
                                             card.remove();
-                                    showToast('Empresa excluída com sucesso!', 'success');
-                                    const remainingCards = document.querySelectorAll('.empresa-card');
-                                    if (remainingCards.length === 0) {
-                                        window.location.reload();
-                                    }
+                                            showToast('Empresa excluída com sucesso!', 'success');
+                                            const remainingCards = document.querySelectorAll('.empresa-card');
+                                            if (remainingCards.length === 0) {
+                                                window.location.reload();
+                                            }
+                                        }
+                                    });
                                 }
-                            });
-                        }
-                    } else {
-                        showToast(`Erro ao excluir empresa: ${data.message}`, 'error');
-                    }
-                })
-                .catch(error => {
-                    document.body.removeChild(confirmDialog);
-                    console.error('Erro:', error);
-                    showToast('Erro ao excluir empresa. Tente novamente.', 'error');
+                            } else {
+                                showToast(`Erro ao excluir empresa: ${data.message}`, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            document.body.removeChild(confirmDialog);
+                            console.error('Erro:', error);
+                            showToast('Erro ao excluir empresa. Tente novamente.', 'error');
+                        });
                 });
-            });
+            };
 
             // Função para exibir toast
             function showToast(message, type) {

@@ -564,6 +564,10 @@ $select_model = new select_model();
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
+                    <a href="selecionados.php" class="sidebar-link">
+                        <i class="fas fa-check-circle w-5 mr-3"></i>
+                        Selecionados
+                    </a>
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
@@ -719,7 +723,8 @@ $select_model = new select_model();
                                     <th width="100px">Área 2</th>
                                     <th width="100px" class="text-center">Ocorrências</th>
                                     <th width="100px">Custeio</th>
-                                    <th width="100px">Entraga</th>
+                                    <th width="100px">Entregas individuais</th>
+                                    <th width="100px">Entregas do grupo</th>
                                 </tr>
                             </thead>
                             <tbody id="alunosTableBody">
@@ -751,7 +756,8 @@ $select_model = new select_model();
                                                 ?>
                                             </td>
                                             <td><?= htmlspecialchars($dado['custeio'] = $dado['custeio'] == 0 ? "Não" : "Sim") ?></td>
-                                            <td><?= htmlspecialchars($dado['entregas']) ?></td>
+                                            <td><?= htmlspecialchars($dado['entregas_individuais']) ?></td>
+                                            <td><?= htmlspecialchars($dado['entregas_grupo']) ?></td>
                                         </tr>
                                     <?php }
                                 } else {

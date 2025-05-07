@@ -46,33 +46,9 @@ if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga
     $nome = $_POST['nome'];
     $endereco = $_POST['endereco'];
     $telefone = $_POST['telefone'];
-    if (isset($_POST)) {
-        $perfis = array();
-
-        // Lista de possíveis posts
-        $possiveis = ['sup', 'des', 'dev', 'tut'];
-
-        // Conta quantos posts válidos existem
-        $count = 0;
-        foreach ($possiveis as $post) {
-            if (isset($_POST[$post]) && !empty($_POST[$post])) {
-                $count++;
-            }
-        }
-
-        // Adiciona apenas o número de posts correspondente à contagem
-        $adicionados = 0;
-        foreach ($possiveis as $post) {
-            if (isset($_POST[$post]) && !empty($_POST[$post]) && $adicionados < $count) {
-                $perfis[] = $_POST[$post];
-                $adicionados++;
-            }
-        }
-    }
-
 
     $model = new main_model;
-    $result = $model->cadastrar_empresa($nome, $endereco, $telefone, $perfis);
+    $result = $model->cadastrar_empresa($nome, $endereco, $telefone);
     switch ($result) {
 
         case 1:

@@ -52,28 +52,16 @@ class select_model extends connect
 
         return $result;
     }
-    function estagios_ativas(){
+    function estagios_ativas()
+    {
 
-        $stmt_ativas = $this->connect->query("SELECT count(*) FROM selecao");
+        $stmt_ativas = $this->connect->query("SELECT count(*) FROM selecionado");
         $result =  $stmt_ativas->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
     function concedentes()
     {
-        $stmt_empresa = $this->connect->query(
-            "SELECT 
-                c.id AS id,
-                c.nome AS nome,
-                COALESCE(GROUP_CONCAT(p.nome_perfil), '') AS perfis,
-                c.endereco,
-                c.contato
-            FROM 
-                concedentes c
-            LEFT JOIN concedentes_perfis cp ON c.id = cp.concedente_id
-            LEFT JOIN perfis p ON cp.perfil_id = p.id
-            GROUP BY 
-                c.id, c.nome, c.endereco, c.contato;"
-        );
+        $stmt_empresa = $this->connect->query("SELECT * FROM concedentes");
         $result = $stmt_empresa->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;
@@ -116,8 +104,8 @@ class select_model extends connect
                         a.medias + 
                         (CASE WHEN a.projetos != '' THEN 5 ELSE 0 END) -
                         (a.ocorrencia * 0.5) +
-                        (a.entradas_individuais * 5)+
-                        (a.entradas_grupo * 5)
+                        (a.entregas_individuais * 5)+
+                        (a.entregas_grupo * 5)
                     ) AS score
                 FROM aluno a
                 LEFT JOIN selecao s ON a.id = s.id_aluno
@@ -173,11 +161,11 @@ class select_model extends connect
     }
 
     function vagas_com_alunos()
-{
-    $stmt = $this->connect->query("SELECT DISTINCT id_vaga FROM selecao");
-    $vagas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $vagas;
-}
+    {
+        $stmt = $this->connect->query("SELECT DISTINCT id_vaga FROM selecao");
+        $vagas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $vagas;
+    }
 
     function nome_empresa_por_vaga($id_vaga)
     {
@@ -199,7 +187,8 @@ class select_model extends connect
         }
         return $count;
     }
-    public function getConnection() {
+    public function getConnection()
+    {
         return $this->connect;
     }
 }
