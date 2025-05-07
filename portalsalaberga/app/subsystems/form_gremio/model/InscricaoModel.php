@@ -127,9 +127,14 @@ class InscricaoModel {
                      CASE 
                          WHEN i.nome_equipe IS NOT NULL THEN 'coletiva'
                          ELSE 'individual'
-                     END as tipo_inscricao
+                     END as tipo_inscricao,
+                     CASE 
+                         WHEN e.lider_id = a.id THEN 1
+                         ELSE 0
+                     END as is_lider
                      FROM alunos a
                      JOIN inscricoes i ON a.id = i.aluno_id
+                     LEFT JOIN equipes e ON i.nome_equipe = e.nome AND i.modalidade = e.modalidade
                      ORDER BY a.data_inscricao DESC, i.modalidade ASC";
             
             $stmt = $this->db->prepare($query);
