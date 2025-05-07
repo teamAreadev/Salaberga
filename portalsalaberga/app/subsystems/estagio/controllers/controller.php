@@ -84,14 +84,17 @@ if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga
             header('location:../views/gerenciar_empresas.php?existe');
             exit();
     }
-} else if (isset($_POST['empresa']) && !empty($_POST['empresa']) && isset($_POST['areas']) && !empty($_POST['areas']) && isset($_POST['quantidades']) && !empty($_POST['quantidades'])) {
+} else if (isset($_POST['empresa']) && !empty($_POST['empresa']) && isset($_POST['areas']) && !empty($_POST['areas']) && isset($_POST['quantidades']) && !empty($_POST['quantidades']) && isset($_POST['tipo_vaga']) && !empty($_POST['tipo_vaga'])) {
 
     $id_empresa = $_POST['empresa'];
     $id_area = $_POST['areas'];
     $quantidades = $_POST['quantidades'];
+    $data = $_POST['data'] ?? 0;
+    $tipo_vaga = $_POST['tipo_vaga'];
+    $hora = $_POST['hora'] ?? 0;
 
     $model = new main_model;
-    $result = $model->cadastrar_vaga($id_empresa, $id_area, $quantidades);
+    $result = $model->cadastrar_vaga($id_empresa, $id_area, $quantidades, $data,$tipo_vaga, $hora);
 
     switch ($result) {
 

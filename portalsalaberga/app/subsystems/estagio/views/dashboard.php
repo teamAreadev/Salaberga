@@ -294,7 +294,13 @@ if (isset($_POST['layout'])) {
                     <div class="flex items-center justify-between">
                         <div>
                             <h3 class="text-lg font-semibold">Estágios Ativos</h3>
-                            <p class="text-3xl font-bold mt-2 text-success">desatualido</p>
+                            <?php
+                            $dados = $select_model->estagios_ativas();
+
+                            foreach ($dados as $dado) {
+                            ?>
+                                <p class="text-3xl font-bold mt-2 text-success"><?=$dado ?? 0?></p>
+                            <?php } ?>
                         </div>
                         <div class="h-12 w-12 rounded-lg bg-success/10 flex items-center justify-center text-success">
                             <i class="fas fa-check-circle text-xl"></i>
@@ -351,7 +357,7 @@ if (isset($_POST['layout'])) {
                                 $dados = $select_model->total_vagas_dev();
                                 foreach ($dados as $dado) {
                                 ?>
-                                    <p class="text-2xl font-bold"><?= $dado ?? 0?></p>
+                                    <p class="text-2xl font-bold"><?= $dado ?? 0 ?></p>
                                 <?php } ?>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Vagas</span>
                             </div>

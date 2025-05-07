@@ -52,6 +52,12 @@ class select_model extends connect
 
         return $result;
     }
+    function estagios_ativas(){
+
+        $stmt_ativas = $this->connect->query("SELECT count(*) FROM selecao");
+        $result =  $stmt_ativas->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
     function concedentes()
     {
         $stmt_empresa = $this->connect->query(
@@ -119,7 +125,10 @@ class select_model extends connect
                 v.id as id,
                 c.nome AS nome_empresa,
                 p.nome_perfil AS nome_perfil,
-                v.quantidade AS quantidade
+                v.quantidade AS quantidade,
+                v.data as data,
+                v.hora as hora,
+                v.tipo_vaga as tipo_vaga
             FROM 
                 vagas v
             INNER JOIN concedentes c ON v.id_concedente = c.id

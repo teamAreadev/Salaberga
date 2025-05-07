@@ -871,7 +871,6 @@ if (isset($_POST['layout'])) {
             }
             // Sanitize all PHP outputs
             $vagaId = isset($dado['id']) ? htmlspecialchars($dado['id'], ENT_QUOTES, 'UTF-8') : '';
-            $vagaTitle = isset($dado['nome_vaga']) ? htmlspecialchars($dado['nome_vaga'], ENT_QUOTES, 'UTF-8') : 'Título não informado';
             $empresaName = isset($dado['nome_empresa']) ? htmlspecialchars($dado['nome_empresa'], ENT_QUOTES, 'UTF-8') : 'Não informado';
             $quantidade = isset($dado['quantidade']) ? htmlspecialchars($dado['quantidade'], ENT_QUOTES, 'UTF-8') : '0';
             $nomePerfil = isset($dado['nome_perfil']) ? htmlspecialchars($dado['nome_perfil'], ENT_QUOTES, 'UTF-8') : 'Área não informada';
@@ -879,7 +878,7 @@ if (isset($_POST['layout'])) {
         ?>
             <div class="vaga-card slide-up" style="animation-delay: <?php echo $delay; ?>ms;" data-vaga-id="<?php echo $vagaId; ?>" data-area="<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>">
                 <div class="vaga-card-header">
-                    <h3 class="vaga-card-title"><?php echo $vagaTitle; ?></h3>
+                    <h3 class="vaga-card-title"><?php echo $empresaName ?></h3>
                     <div class="vaga-card-actions">
                         <button class="vaga-card-action hover:text-primary-400" onclick="editarVaga(<?php echo $vagaId ? $vagaId : '0'; ?>, '<?php echo $vagaTitle; ?>', '<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>', '<?php echo $empresaId; ?>', '<?php echo $quantidade; ?>')">
                             <i class="fas fa-edit"></i>
@@ -912,7 +911,16 @@ if (isset($_POST['layout'])) {
                     </div>
                     <div class="vaga-card-info-item">
                         <i class="fas fa-users w-5"></i>
-                        <span><?php echo $quantidade; ?> vaga(s) disponível(is)</span>
+                        <span><?php echo $quantidade; ?> candidatos(s) disponível(is)</span>
+                    </div>
+                    <div class="vaga-card-info-item">
+                        <i class="fas fa-users w-5"></i>
+                        <span><?=$dado['data'] ?></span>
+                        <span><?=$dado['hora'] ?></span>
+                    </div>
+                    <div class="vaga-card-info-item">
+                        <i class="fas fa-users w-5"></i>
+                        <span><?=$dado['tipo_vaga'] ?></span>
                     </div>
                     <div class="vaga-card-info-item">
                         <?php 
@@ -983,6 +991,23 @@ if (isset($_POST['layout'])) {
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Vagas Disponíveis</label>
                         <input type="number" id="vagaVagasDisponiveis" name="quantidades" min="1" class="custom-input mt-1" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Data</label>
+                        <select name="tipo_vaga" id="" required>
+                            <option value="" selected disabled>Selecione o tipo de vaga</option>
+                            <option value="Hibrido">Hibrido</option>
+                            <option value="Presencial">Presencial</option>
+                            <option value="HomeOffice">HomeOffice</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Data</label>
+                        <input type="date" id="vagaVagasDisponiveis" name="data" min="1" class="custom-input mt-1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Hora</label>
+                        <input type="time" id="vagaVagasDisponiveis" name="hora" min="1" class="custom-input mt-1">
                     </div>
                     <div class="mt-6 flex justify-end space-x-4">
                         <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">
