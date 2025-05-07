@@ -139,10 +139,6 @@ if (isset($_POST['layout'])) {
                 document.getElementById('alunoOcorrencia').value = aluno.ocorrencia;
                 document.getElementById('alunoCusteio').value = aluno.custeio;
 
-                document.getElementById('alunoNome').disabled = true;
-                document.getElementById('alunoMedias').disabled = true;
-                document.getElementById('alunoOpc1').disabled = true;
-                document.getElementById('alunoOpc2').disabled = true;
 
                 const modal = document.getElementById('alunoModal');
                 modal.classList.add('show');
@@ -305,25 +301,8 @@ if (isset($_POST['layout'])) {
                 }
             });
 
-            alunoForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                const id = parseInt(document.getElementById('alunoId').value);
-                const alunoIndex = alunos.findIndex(a => a.id === id);
-                if (alunoIndex !== -1) {
-                    alunos[alunoIndex] = {
-                        ...alunos[alunoIndex],
-                        contato: document.getElementById('alunoContato').value,
-                        email: document.getElementById('alunoEmail').value,
-                        projetos: document.getElementById('alunoProjetos').value,
-                        ocorrencia: document.getElementById('alunoOcorrencia').value,
-                        custeio: parseInt(document.getElementById('alunoCusteio').value)
-                    };
-                    aplicarFiltros();
-                    alert('Alterações salvas com sucesso!');
-                    alunoModal.classList.remove('show');
-                }
-            });
+         
+  
 
             // Modal de Detalhes
             const detalhesModal = document.getElementById('detalhesModal');
@@ -1170,56 +1149,60 @@ if (isset($_POST['layout'])) {
         <div id="alunoModal" class="modal-base">
             <div class="modal-content">
                 <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white">Editar Aluno</h2>
-                <form id="alunoForm" class="space-y-4">
-                    <input type="hidden" id="alunoId">
+                <form id="alunoForm" action="../controllers/controller.php" method="post" class="space-y-4">
+                    <input type="hidden" name="id" id="alunoId">
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Nome</label>
-                        <input type="text" id="alunoNome" class="custom-input mt-1" disabled>
+                        <input type="text" name="nome" id="alunoNome" class="custom-input mt-1">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Contato</label>
-                        <input type="text" id="alunoContato" class="custom-input mt-1">
+                        <input type="text" name="contato" id="alunoContato" class="custom-input mt-1">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Médias</label>
-                        <input type="number" id="alunoMedias" min="0" max="10" step="0.1" class="custom-input mt-1" disabled>
+                        <input type="number" name="media" id="alunoMedias" min="0" max="10" step="0.1" class="custom-input mt-1">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Email</label>
-                        <input type="email" id="alunoEmail" class="custom-input mt-1">
+                        <input type="email" name="email" id="alunoEmail" class="custom-input mt-1">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Projetos Participados</label>
-                        <input type="text" id="alunoProjetos" class="custom-input mt-1">
+                        <input type="text" name="projetos" id="alunoProjetos" class="custom-input mt-1">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Opção 1</label>
-                        <select id="alunoOpc1" class="custom-select mt-1" disabled>
-                            <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="design">Design</option>
-                            <option value="midia">Mídia</option>
-                            <option value="redes">Redes/Suporte</option>
+                        <select id="alunoOpc1" name="opc1" class="custom-select mt-1">
+                            <option value="Desenvolvimento">Desenvolvimento</option>
+                            <option value="Design/Mídia">Design/Mídia</option>
+                            <option value="Tutoria">Tutoria</option>
+                            <option value="Suporte/Redes">Suporte/Redes</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Opção 2</label>
-                        <select id="alunoOpc2" class="custom-select mt-1" disabled>
-                            <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="design">Design</option>
-                            <option value="midia">Mídia</option>
-                            <option value="redes">Redes/Suporte</option>
+                        <select id="alunoOpc2" name="opc2" class="custom-select mt-1">
+                            <option value="Desenvolvimento">Desenvolvimento</option>
+                            <option value="Design/Mídia">Design/Mídia</option>
+                            <option value="Tutoria">Tutoria</option>
+                            <option value="Suporte/Redes">Suporte/Redes</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Ocorrência</label>
-                        <input type="text" id="alunoOcorrencia" class="custom-input mt-1">
+                        <input type="text" name="ocorrencia" id="alunoOcorrencia" class="custom-input mt-1">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Custeio</label>
-                        <select id="alunoCusteio" class="custom-select mt-1">
+                        <select id="alunoCusteio" name="custeio" class="custom-select mt-1">
                             <option value="1">Sim</option>
                             <option value="0">Não</option>
                         </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Entregas</label>
+                        <input type="number" name="entregas" id="entregajs" required>
                     </div>
                     <div class="mt-6 flex justify-end space-x-4">
                         <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">

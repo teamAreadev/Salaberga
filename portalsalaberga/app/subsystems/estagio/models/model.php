@@ -101,38 +101,23 @@ class main_model extends connect
     }
     function cadastrar_vaga($id_empresa, $id_area, $quantidade)
     {
-        $stmt_check = $this->connect->prepare("SELECT * FROM vagas WHERE nome_vaga = :nome");
-        $stmt_check->bindValue(':nome', $nome);
-        $stmt_check->execute();
-        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
+        $stmt_cadastrar_vagas = $this->connect->prepare("INSERT INTO vagas VALUES (null, :id_concedente, :id_perfil, :quantidade)");
+        $stmt_cadastrar_vagas->bindValue(':id_perfil', $id_area);
+        $stmt_cadastrar_vagas->bindValue(':id_concedente', $id_empresa);
+        $stmt_cadastrar_vagas->bindValue(':quantidade', $quantidade);
+        $stmt_cadastrar_vagas->execute();
 
-        if (empty($result)) {
+        if ($stmt_cadastrar_vagas) {
 
-            echo $id_empresa;
-            $stmt_cadastrar_vagas = $this->connect->prepare("INSERT INTO vagas VALUES (null,:nome_vaga, :id_concedente, :id_perfil, :quantidade)");
-            $stmt_cadastrar_vagas->bindValue(':nome_vaga', $nome);
-            $stmt_cadastrar_vagas->bindValue(':id_perfil', $id_area);
-            $stmt_cadastrar_vagas->bindValue(':id_concedente', $id_empresa);
-            $stmt_cadastrar_vagas->bindValue(':quantidade', $quantidade);
-            $stmt_cadastrar_vagas->execute();
-
-            if ($stmt_cadastrar_vagas) {
-
-                return 1;
-            } else {
-
-                return 2;
-            }
+            return 1;
         } else {
 
-            return 3;
+            return 2;
         }
     }
 
     function selecao($alunos, $id_vaga)
     {
-
-
         foreach ($alunos as $aluno) {
             $stmt = $this->connect->query("SELECT * FROM selecao WHERE id_aluno = '$aluno' AND id_vaga = '$id_vaga'");
 
@@ -152,6 +137,33 @@ class main_model extends connect
 
             return 1;
         } {
+
+            return 2;
+        }
+    }
+    function editar_aluno($id, $nome, $contato, $medias, $email, $projetos, $perfil_opc1, $perfil_opc2, $ocorrencia, $custeio, $entregas)
+    {
+
+        $stmt = $this->connect->prepare("UPDATE `aluno` SET `nome`=:nome, `contato`=:contato, `medias`=:medias, `email`=:email, `projetos`=:projetos, `perfil_opc1`=:opc1, `perfil_opc2`=:opc2, `ocorrencia`=:ocorrencia, `custeio`=:custeio, `entregas`=:entrega WHERE id = :id");
+
+        $stmt->bindValue(':nome', $nome);
+        $stmt->bindValue(':contato', $contato);
+        $stmt->bindValue(':medias', $medias);
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':projetos', $projetos);
+        $stmt->bindValue(':opc1', $perfil_opc1);
+        $stmt->bindValue(':opc2', $perfil_opc2);
+        $stmt->bindValue(':ocorrencia', $ocorrencia);
+        $stmt->bindValue(':custeio', $custeio);
+        $stmt->bindValue(':entrega', $entregas);
+        $stmt->bindValue(':id', $id);
+
+        $stmt->execute();
+
+        if ($stmt) {
+
+            return 1;
+        } else {
 
             return 2;
         }

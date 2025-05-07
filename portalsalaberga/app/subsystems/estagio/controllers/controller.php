@@ -1,6 +1,5 @@
 <?php
 require_once('../models/model.php');
-
 if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga']) && !empty($_POST['id_vaga'])) {
 
     $id_vaga = $_POST['id_vaga'];
@@ -106,7 +105,31 @@ if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga
             header('location:../views/vagas.php?existe');
             exit();
     }
-} /*else {
+} else if (isset($_POST['nome']) && isset($_POST['contato']) && isset($_POST['media']) && isset($_POST['email']) && isset($_POST['projetos']) && isset($_POST['opc1']) && isset($_POST['opc2']) && isset($_POST['ocorrencia']) && isset($_POST['custeio']) && isset($_POST['entregas']) && isset($_POST['id'])) {
+
+    $nome = $_POST['nome'];
+    $contato = $_POST['contato'];
+    $medias = $_POST['media'];
+    $email = $_POST['email'];
+    $projetos = $_POST['projetos'];
+    $perfil_opc1 = $_POST['opc1'];
+    $perfil_opc2 = $_POST['opc2'];
+    $ocorrencia = $_POST['ocorrencia'];
+    $custeio = $_POST['custeio'];
+    $entregas = $_POST['entregas'];
+    $id = $_POST['id'];
+
+    $model = new main_model;
+    $result = $model->editar_aluno($id, $nome, $contato, $medias, $email, $projetos, $perfil_opc1, $perfil_opc2, $ocorrencia, $custeio, $entregas);
+    switch ($result) {
+        case 1:
+            header('location:../views/vagas.php?certo');
+            exit();
+        case 2:
+            header('location:../views/vagas.php?erro');
+            exit();
+    }
+}/*else {
     header('location:../views/login.php?erro');
     exit();
 }*/
