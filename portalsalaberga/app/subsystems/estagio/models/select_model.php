@@ -114,4 +114,11 @@ class select_model extends connect
 
         return $result;
     }
+    function alunos_selecionados($id_vaga){
+
+        $stmt = $this->connect->query("SELECT aluno.nome FROM aluno inner join selecao on aluno.id = selecao.id_aluno WHERE id_vaga = '$id_vaga'");
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
 }

@@ -893,6 +893,17 @@ if (isset($_POST['layout'])) {
                         <i class="fas fa-users w-5"></i>
                         <span><?php echo $quantidade; ?> vaga(s) disponível(is)</span>
                     </div>
+                    <div class="vaga-card-info-item">
+                        <?php 
+                        $id_vaga = $dado['id'];
+                        $alunos = $select_model->alunos_selecionados($id_vaga);
+
+                        foreach($alunos as $aluno){
+                        ?>
+                        <i class="fas fa-users w-5"></i>
+                        <span><?=$aluno ?? 'nenhum aluno na vaga'?></span>
+                        <?php }?>
+                    </div>
                 </div>
                 <div class="mt-4">
                     <a href="./alunos_vaga.php?nome_perfil=<?=$dado['nome_perfil']?>&id_vaga=<?=$dado['id']?>" class="ver-detalhes-link">
