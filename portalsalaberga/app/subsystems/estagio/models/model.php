@@ -99,12 +99,15 @@ class main_model extends connect
             return 3; // Empresa já existe
         }
     }
-    function cadastrar_vaga($id_empresa, $id_area, $quantidade)
+    function cadastrar_vaga($id_empresa, $id_area, $quantidade, $data, $tipo_vaga, $hora)
     {
-        $stmt_cadastrar_vagas = $this->connect->prepare("INSERT INTO vagas (id, id_concedente, id_perfil, quantidade) VALUES (null, :id_concedente, :id_perfil, :quantidade)");
+        $stmt_cadastrar_vagas = $this->connect->prepare("INSERT INTO vagas VALUES (null, :id_concedente, :id_perfil, :quantidade, :data, :tipo_vaga, :hora)");
         $stmt_cadastrar_vagas->bindValue(':id_perfil', $id_area);
         $stmt_cadastrar_vagas->bindValue(':id_concedente', $id_empresa);
         $stmt_cadastrar_vagas->bindValue(':quantidade', $quantidade);
+        $stmt_cadastrar_vagas->bindValue(':data', $data);
+        $stmt_cadastrar_vagas->bindValue(':tipo_vaga', $tipo_vaga);
+        $stmt_cadastrar_vagas->bindValue(':hora', $hora);
         $stmt_cadastrar_vagas->execute();
 
         if ($stmt_cadastrar_vagas) {
@@ -129,7 +132,7 @@ class main_model extends connect
 
         foreach ($alunos as $aluno) {
 
-            $stmt = $this->connect->query("INSERT INTO selecao VALUES(null, '$aluno', '$id_vaga', DEFAULT)");
+            $stmt = $this->connect->query("INSERT INTO selecao VALUES(null, '$aluno', '$id_vaga')");
         }
         if ($stmt) {
 

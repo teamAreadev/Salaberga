@@ -564,10 +564,6 @@ $select_model = new select_model();
                         <i class="fas fa-briefcase w-5 mr-3"></i>
                         Vagas
                     </a>
-                    <a href="alunos_vaga.php" class="sidebar-link active">
-                        <i class="fas fa-chart-bar w-5 mr-3"></i>
-                        Relatórios
-                    </a>
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
