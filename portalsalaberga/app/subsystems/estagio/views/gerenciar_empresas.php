@@ -103,7 +103,7 @@ if (isset($_POST['layout'])) {
             background-image:
                 radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.05) 0%, rgba(0, 122, 51, 0) 20%),
                 radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.05) 0%, rgba(255, 165, 0, 0) 20%),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23007A33' fill-opacity='0.03' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23007A33' fill-opacity='0.03' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5z-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
             transition: all 0.3s ease;
         }
 
@@ -830,8 +830,15 @@ if (isset($_POST['layout'])) {
                                         <span><?= htmlspecialchars($dado['endereco']) ?: 'Não informado' ?></span>
                                     </div>
                                     <div class="empresa-card-info-item">
-                                        <i class="fas fa-phone w-5 text-center"></i>
-                                        <span><?= htmlspecialchars($dado['contato']) ?: 'Não informado' ?></span>
+                                        <i class="fab fa-whatsapp w-5 text-center text-green-400"></i>
+                                        <?php if (!empty($dado['contato'])): ?>
+                                            <?php $telefoneLimpo = preg_replace('/\D/', '', $dado['contato']); ?>
+                                            <a href="https://wa.me/55<?= $telefoneLimpo ?>" target="_blank" class="hover:underline text-green-400">
+                                                <?= htmlspecialchars($dado['contato']) ?>
+                                            </a>
+                                        <?php else: ?>
+                                            <span>Não informado</span>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="mt-5 pt-4 border-t border-gray-700/50">
@@ -1153,25 +1160,24 @@ if (isset($_POST['layout'])) {
                                         duration: 0.3,
                                         onComplete: () => {
                                             card.remove();
-                                            showToast('Empresa excluída com sucesso!', 'success');
-                                            const remainingCards = document.querySelectorAll('.empresa-card');
-                                            if (remainingCards.length === 0) {
-                                                window.location.reload();
-                                            }
-                                        }
-                                    });
+                                    showToast('Empresa excluída com sucesso!', 'success');
+                                    const remainingCards = document.querySelectorAll('.empresa-card');
+                                    if (remainingCards.length === 0) {
+                                        window.location.reload();
+                                    }
                                 }
-                            } else {
-                                showToast(`Erro ao excluir empresa: ${data.message}`, 'error');
-                            }
-                        })
-                        .catch(error => {
-                            document.body.removeChild(confirmDialog);
-                            console.error('Erro:', error);
-                            showToast('Erro ao excluir empresa. Tente novamente.', 'error');
-                        });
+                            });
+                        }
+                    } else {
+                        showToast(`Erro ao excluir empresa: ${data.message}`, 'error');
+                    }
+                })
+                .catch(error => {
+                    document.body.removeChild(confirmDialog);
+                    console.error('Erro:', error);
+                    showToast('Erro ao excluir empresa. Tente novamente.', 'error');
                 });
-            };
+            });
 
             // Função para exibir toast
             function showToast(message, type) {
@@ -1196,7 +1202,7 @@ if (isset($_POST['layout'])) {
                         }
                     });
                 }, type === 'success' ? 3000 : 4000);
-            }
+            }}
         });
     </script>
 </body>
