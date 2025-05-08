@@ -1,7 +1,15 @@
 <?php
 require_once('../models/main_model.php');
 
-if (isset($_POST['relatorio'])) {
+if (isset($_POST['titulo2']) && !empty($_POST['titulo2'])) {
+
+    $titulo2 = $_POST['titulo2'];
+
+    $select = new select_model();
+    $result = $select->select_livro_especifico($titulo2);
+
+    header('Location: ../views/QRCode/geradorQR_especifico_livro?');
+} else if (isset($_POST['relatorio'])) {
     $relatorio = $_POST['relatorio'];
 
     switch ($relatorio) {
@@ -19,9 +27,8 @@ if (isset($_POST['relatorio'])) {
             exit;
     }
 }
-
 // Ajustando a condição para tornar 'edicao' opcional
-if (
+else if (
     isset($_POST['nomesubGenero']) && !empty($_POST['nomesubGenero']) &&
     isset($_POST['nome']) && !empty($_POST['nome']) &&
     isset($_POST['sobrenome']) && !empty($_POST['sobrenome']) &&

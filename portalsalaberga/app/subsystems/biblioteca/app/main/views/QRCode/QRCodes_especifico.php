@@ -58,7 +58,7 @@ class qrCode1 extends connect
                     $edicao = ($cod_livro['edicao'] == 'ENI*' || empty($cod_livro['edicao'])) ? '0' : $cod_livro['edicao'];
 
                     // Dados do QR Code
-                    $dados = "https://salaberga.com/salaberga/portalsalaberga/app/subsystems/biblioteca/app/main/views/emprestimo/decisao.php?" . $cod_livro['id'] . "_" . $edicao . "_" . $i . "_" . $estante . "_" . $prateleira;
+                    $dados = "https://salaberga.com/salaberga/portalsalaberga/app/subsystems/biblioteca/app/main/views/emprestimo/decisao.php?id_livro=" . $cod_livro['id'] . "_" . $edicao . "_" . $i . "_" . $estante . "_" . $prateleira;
 
                     // Usar um nome de arquivo único para cada QR Code
                     $arquivo_qrcode = __DIR__ . "/qrcode_" . $cod_livro['id'] . "_" . $i . ".png";
