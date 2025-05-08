@@ -587,7 +587,7 @@ class EquipeModel {
             case 'xadrez':
                 return 2;
             case 'x2':
-                return 2;
+                return 3;
             default:
                 return 12;
         }
@@ -631,7 +631,8 @@ class EquipeModel {
                 'tenis_de_mesa' => 1,
                 'dama' => 1,
                 'xadrez' => 1,
-                'jiu-jitsu' => 1
+                'jiu-jitsu' => 1,
+                'x2' => 3
             ];
 
             // Busca os membros e suas modalidades
@@ -670,7 +671,13 @@ class EquipeModel {
 
             // Verifica se atingiu o número mínimo de membros
             $minimoNecessario = $minimosModalidade[$equipe['modalidade']] ?? 1;
-            $atingiuMinimo = $equipe['total_membros'] >= $minimoNecessario;
+            
+            // Para modalidade x2, só libera pagamento com exatamente 3 pessoas
+            if ($equipe['modalidade'] === 'x2') {
+                $atingiuMinimo = $equipe['total_membros'] === 3;
+            } else {
+                $atingiuMinimo = $equipe['total_membros'] >= $minimoNecessario;
+            }
 
             // Gera o PIX se atingiu o mínimo
             $pixInfo = null;

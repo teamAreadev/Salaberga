@@ -372,7 +372,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
                                                     <div class="flex items-center text-yellow-700">
                                                         <i class="fas fa-exclamation-triangle mr-2"></i>
-                                                        <p>Sua equipe precisa de pelo menos <?php echo $resultadoValor['minimo_necessario']; ?> membros para gerar o pagamento.</p>
+                                                        <p>
+                                                            <?php if ($equipe['modalidade'] === 'x2'): ?>
+                                                                Sua equipe precisa ter exatamente 3 membros para gerar o pagamento.
+                                                            <?php else: ?>
+                                                                Sua equipe precisa de pelo menos <?php echo $resultadoValor['minimo_necessario']; ?> membros para gerar o pagamento.
+                                                            <?php endif; ?>
+                                                        </p>
                                                     </div>
                                                     <p class="mt-2 text-sm text-yellow-600">
                                                         Atualmente: <?php echo $resultadoValor['total_membros']; ?>/<?php echo $resultadoValor['minimo_necessario']; ?> membros
@@ -468,7 +474,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="futmesa">Futmesa (Até 2 membros)</option>
                             <option value="teqball">Teqball (Até 2 membros)</option>
                             <option value="teqvolei">Teqvôlei (Até 2 membros)</option>
-                            <option value="x2">X2 (Até 2 membros)</option>
+                            <option value="x2">X2 (Até 3 membros)</option>
                         </select>
                     </div>
                     <div class="mb-4">

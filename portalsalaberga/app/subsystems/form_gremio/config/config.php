@@ -89,6 +89,11 @@ $MODALIDADES = [
         'limite_jogadores' => 1,
         'categorias' => ['misto']
     ],
+    'x2' => [
+        'nome' => 'X2',
+        'limite_jogadores' => 3,
+        'categorias' => ['masculino', 'feminino', 'misto']
+    ],
     'jiu-jitsu' => [
         'nome' => 'Jiu-Jitsu',
         'limite_jogadores' => 1,
