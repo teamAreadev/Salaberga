@@ -559,22 +559,38 @@ class EquipeModel {
      * @return int Limite de participantes ou false em caso de erro
      */
     private function getLimiteParticipantes($modalidade) {
-        $limites = [
-            'futsal' => 9,
-            'volei' => 12,
-            'queimada' => 12,
-            'futmesa' => 2,
-            'teqball' => 2,
-            'teqvolei' => 2,
-            'beach_tenis' => 2,
-            'volei_de_praia' => 2,
-            'tenis_de_mesa' => 1,
-            'dama' => 1,
-            'xadrez' => 1,
-            'jiu-jitsu' => 1
-        ];
-        
-        return isset($limites[$modalidade]) ? $limites[$modalidade] : false;
+        switch ($modalidade) {
+            case 'futsal':
+                return 12;
+            case 'volei':
+                return 12;
+            case 'basquete':
+                return 12;
+            case 'handebol':
+                return 12;
+            case 'queimada':
+                return 12;
+            case 'futmesa':
+                return 2;
+            case 'teqball':
+                return 2;
+            case 'teqvolei':
+                return 2;
+            case 'beach_tenis':
+                return 2;
+            case 'volei_de_praia':
+                return 4;
+            case 'tenis_de_mesa':
+                return 2;
+            case 'dama':
+                return 2;
+            case 'xadrez':
+                return 2;
+            case 'x2':
+                return 2;
+            default:
+                return 12;
+        }
     }
     
     /**

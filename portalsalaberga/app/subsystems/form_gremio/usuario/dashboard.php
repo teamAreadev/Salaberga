@@ -289,8 +289,7 @@ $valor_inscricao = $modalidades_aprovadas >= 3 ? '3,00' : '5,00';
                             <select id="modalidadeIndividual" name="modalidadeIndividual" required 
                                     class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary-500 bg-white appearance-none pr-10">
                                 <option value="">Selecione uma modalidade...</option>
-                                <option value="atletismo">Atletismo</option>
-                                <option value="natacao">Natação</option>
+                              
                                 <option value="tenis">Tênis de Mesa</option>
                                 <option value="xadrez">Xadrez</option>
                                 <option value="judo">Judô</option>
