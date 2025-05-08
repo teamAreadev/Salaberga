@@ -29,26 +29,34 @@ if (isset($_POST['layout'])) {
         // Dados dos alunos
         let alunos = [
             <?php 
-            $dados = $select_model->alunos_aptos();
-            $total = count($dados);
-            $index = 0;
-            foreach ($dados as $dado) {
-                $index++;
+            try {
+                $dados = $select_model->alunos_aptos();
+                if (empty($dados)) {
+                    echo "// Nenhum aluno encontrado";
+                } else {
+                    $total = count($dados);
+                    $index = 0;
+                    foreach ($dados as $dado) {
+                        $index++;
+                        echo "{
+                            id: " . $dado['id'] . ",
+                            nome: \"" . addslashes($dado['nome']) . "\",
+                            contato: \"" . addslashes($dado['contato'] ?: '-') . "\",
+                            medias: \"" . addslashes($dado['medias'] ?: '-') . "\",
+                            email: \"" . addslashes($dado['email'] ?: '-') . "\",
+                            projetos: \"" . addslashes($dado['projetos'] ?: '-') . "\",
+                            perfil_opc1: \"" . addslashes($dado['perfil_opc1']) . "\",
+                            perfil_opc2: \"" . addslashes($dado['perfil_opc2']) . "\",
+                            ocorrencia: \"" . addslashes($dado['ocorrencia'] ?: '-') . "\",
+                            custeio: " . $dado['custeio'] . ",
+                            entregas: " . (isset($dado['entregas']) ? $dado['entregas'] : 'null') . "
+                        }" . ($index < $total ? ',' : '');
+                    }
+                }
+            } catch (Exception $e) {
+                echo "// Erro ao buscar alunos: " . $e->getMessage();
+            }
             ?>
-                {
-                    id: <?= $dado['id'] ?>,
-                    nome: "<?= addslashes($dado['nome']) ?>",
-                    contato: "<?= addslashes($dado['contato'] ?: '-') ?>",
-                    medias: "<?= addslashes($dado['medias'] ?: '-') ?>",
-                    email: "<?= addslashes($dado['email'] ?: '-') ?>",
-                    projetos: "<?= addslashes($dado['projetos'] ?: '-') ?>",
-                    perfil_opc1: "<?= addslashes($dado['perfil_opc1']) ?>",
-                    perfil_opc2: "<?= addslashes($dado['perfil_opc2']) ?>",
-                    ocorrencia: "<?= addslashes($dado['ocorrencia'] ?: '-') ?>",
-                    custeio: <?= $dado['custeio'] ?>,
-                    entregas: <?= $dado['entregas'] ?: 'null' ?>
-                }<?= $index < $total ? ',' : '' ?>
-            <?php } ?>
         ];
 
         // Funções dos modais
@@ -121,11 +129,10 @@ if (isset($_POST['layout'])) {
                     </div>
                     <div class="mobile-card-item">
                         <span class="mobile-card-label">Entregas:</span>
-                        <span class="mobile-card-value">${aluno.entregas || '-'}</span>
+                        <span class="mobile-card-value">${aluno.entregas ?? '-'}</span>
                     </div>
                 `;
-                const modal = document.getElementById('detalhesModal');
-                modal.classList.add('show');
+                document.getElementById('detalhesModal').classList.add('show');
             }
         }
 
@@ -139,14 +146,12 @@ if (isset($_POST['layout'])) {
                 document.getElementById('alunoMedias').value = aluno.medias;
                 document.getElementById('alunoEmail').value = aluno.email;
                 document.getElementById('alunoProjetos').value = aluno.projetos;
-                document.getElementById('alunoOpc1').value = aluno.perfil_opc1;
-                document.getElementById('alunoOpc2').value = aluno.perfil_opc2;
+                document.getElementById('alunoOpc1').value = aluno.perfil_opc1.toLowerCase();
+                document.getElementById('alunoOpc2').value = aluno.perfil_opc2.toLowerCase();
                 document.getElementById('alunoOcorrencia').value = aluno.ocorrencia;
                 document.getElementById('alunoCusteio').value = aluno.custeio;
-                document.getElementById('entregajs').value = aluno.entregas || '';
-
-                const modal = document.getElementById('alunoModal');
-                modal.classList.add('show');
+                document.getElementById('alunoEntregas').value = aluno.entregas ?? '';
+                document.getElementById('alunoModal').classList.add('show');
             }
         }
 
@@ -165,9 +170,9 @@ if (isset($_POST['layout'])) {
                         <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
                             <i class="fas fa-info-circle"></i>
                         </button>
-                        <button onclick="editarAluno(${aluno.id})" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
+                        <a href="#" onclick="editarAluno(${aluno.id}); return false;" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
                             <i class="fas fa-edit"></i>
-                        </button>
+                        </a>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -193,74 +198,62 @@ if (isset($_POST['layout'])) {
                                     'area-redes';
 
                 card.innerHTML = `
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">ID:</span>
-                        <span class="mobile-card-value">${aluno.id}</span>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-white">${aluno.nome}</h3>
+                        <div class="flex items-center gap-2">
+                            <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 transition-colors">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                            <a href="#" onclick="editarAluno(${aluno.id}); return false;" class="text-green-400 hover:text-green-300 transition-colors">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Nome:</span>
-                        <span class="mobile-card-value font-medium">${aluno.nome}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Contato:</span>
-                        <span class="mobile-card-value">${aluno.contato}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Médias:</span>
-                        <span class="mobile-card-value">${aluno.medias}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Email:</span>
-                        <span class="mobile-card-value">${aluno.email}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Projetos:</span>
-                        <span class="mobile-card-value">${aluno.projetos}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Opção 1:</span>
-                        <span class="mobile-card-value">
-                            <span class="status-pill ${areaClassOpc1}">
-                                <i class="fas fa-${
-                                    aluno.perfil_opc1 === 'desenvolvimento' ? 'code' :
-                                    aluno.perfil_opc1 === 'design' ? 'paint-brush' :
-                                    aluno.perfil_opc1 === 'midia' ? 'video' :
-                                    'network-wired'
-                                } text-xs mr-1"></i>
-                                ${aluno.perfil_opc1}
-                            </span>
-                        </span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Opção 2:</span>
-                        <span class="mobile-card-value">
-                            <span class="status-pill ${areaClassOpc2}">
-                                <i class="fas fa-${
-                                    aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
-                                    aluno.perfil_opc2 === 'design' ? 'paint-brush' :
-                                    aluno.perfil_opc2 === 'midia' ? 'video' :
-                                    'network-wired'
-                                } text-xs mr-1"></i>
-                                ${aluno.perfil_opc2}
-                            </span>
-                        </span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Ocorrência:</span>
-                        <span class="mobile-card-value">${aluno.ocorrencia}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Custeio:</span>
-                        <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Entregas:</span>
-                        <span class="mobile-card-value">${aluno.entregas || '-'}</span>
-                    </div>
-                    <div class="mobile-card-actions flex space-x-2 mt-4">
-                        <button onclick="editarAluno(${aluno.id})" class="edit-btn flex-1">
-                            <i class="fas fa-edit"></i> Editar
-                        </button>
+                    <div id="detalhes-mobile-${aluno.id}" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <span class="text-gray-400 text-sm">Contato:</span>
+                                <p class="text-white">${aluno.contato}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Médias:</span>
+                                <p class="text-white">${aluno.medias}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Email:</span>
+                                <p class="text-white">${aluno.email}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Projetos:</span>
+                                <p class="text-white">${aluno.projetos}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Opção 2:</span>
+                                <p class="text-white">
+                                    <span class="status-pill ${areaClassOpc2}">
+                                        <i class="fas fa-${
+                                            aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
+                                            aluno.perfil_opc2 === 'design' ? 'paint-brush' :
+                                            aluno.perfil_opc2 === 'midia' ? 'video' :
+                                            'network-wired'
+                                        } text-xs mr-1"></i>
+                                        ${aluno.perfil_opc2}
+                                    </span>
+                                </p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Ocorrência:</span>
+                                <p class="text-white">${aluno.ocorrencia}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Custeio:</span>
+                                <p class="text-white">${aluno.custeio == 1 ? 'Sim' : 'Não'}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Entregas:</span>
+                                <p class="text-white">${aluno.entregas ?? '-'}</p>
+                            </div>
+                        </div>
                     </div>
                 `;
                 container.appendChild(card);
@@ -310,9 +303,6 @@ if (isset($_POST['layout'])) {
                 }
             });
 
-         
-  
-
             // Modal de Detalhes
             const detalhesModal = document.getElementById('detalhesModal');
             const fecharDetalhesBtn = document.getElementById('fecharDetalhesBtn');
@@ -341,6 +331,40 @@ if (isset($_POST['layout'])) {
             window.addEventListener('resize', checkScreenSize);
             checkScreenSize();
         });
+
+        // Função para alternar detalhes na tabela desktop
+        function toggleDetalhes(id) {
+            const detalhesRow = document.getElementById(`detalhes-${id}`);
+            const button = detalhesRow.previousElementSibling.querySelector('button');
+            const icon = button.querySelector('i');
+            
+            if (detalhesRow.classList.contains('hidden')) {
+                detalhesRow.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                detalhesRow.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+
+        // Função para alternar detalhes nos cards mobile
+        function toggleDetalhesMobile(id) {
+            const detalhesDiv = document.getElementById(`detalhes-mobile-${id}`);
+            const button = detalhesDiv.parentElement.querySelector('button');
+            const icon = button.querySelector('i');
+            
+            if (detalhesDiv.classList.contains('hidden')) {
+                detalhesDiv.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                detalhesDiv.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
     </script>
 
     <script>
@@ -892,6 +916,15 @@ if (isset($_POST['layout'])) {
             max-width: 32rem;
             margin: 1rem;
         }
+
+        .mobile-card .custom-btn-primary {
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            margin-top: 0.5rem;
+            width: 100%;
+            justify-content: center;
+        }
     </style>
 </head>
 
@@ -1067,6 +1100,11 @@ if (isset($_POST['layout'])) {
                             <?php
                             $dados = $select_model->alunos_aptos();
                             foreach ($dados as $index => $dado) {
+                                $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'area-desenvolvimento' : 
+                                                ($dado['perfil_opc1'] === 'design' ? 'area-design' : 
+                                                ($dado['perfil_opc1'] === 'midia' ? 'area-midia' : 'area-redes'));
+                                $statusClass = $dado['custeio'] == 1 ? 'status-ativo' : 
+                                             (strtolower($dado['ocorrencia']) === 'estagiando' ? 'status-estagiando' : 'status-inativo');
                             ?>
                                 <tr class="hover:bg-dark-50 transition-colors slide-up" style="animation-delay: <?= $index * 50 ?>ms;">
                                     <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
@@ -1074,9 +1112,52 @@ if (isset($_POST['layout'])) {
                                         <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
                                             <i class="fas fa-info-circle"></i>
                                         </button>
-                                        <button onclick="editarAluno(<?= $dado['id'] ?>)" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
+                                        <a href="#" onclick="editarAluno(<?= $dado['id'] ?>); return false;" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
                                             <i class="fas fa-edit"></i>
-                                        </button>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr id="detalhes-<?= $dado['id'] ?>" class="hidden bg-dark-50">
+                                    <td colspan="2" class="px-6 py-4">
+                                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                            <div>
+                                                <span class="text-gray-400 text-sm">Contato:</span>
+                                                <p class="text-white"><?= htmlspecialchars($dado['contato'] ?: '-') ?></p>
+                                            </div>
+                                            <div>
+                                                <span class="text-gray-400 text-sm">Médias:</span>
+                                                <p class="text-white"><?= htmlspecialchars($dado['medias'] ?: '-') ?></p>
+                                            </div>
+                                            <div>
+                                                <span class="text-gray-400 text-sm">Email:</span>
+                                                <p class="text-white"><?= htmlspecialchars($dado['email'] ?: '-') ?></p>
+                                            </div>
+                                            <div>
+                                                <span class="text-gray-400 text-sm">Projetos:</span>
+                                                <p class="text-white"><?= htmlspecialchars($dado['projetos'] ?: '-') ?></p>
+                                            </div>
+                                            <div>
+                                                <span class="text-gray-400 text-sm">Opção 2:</span>
+                                                <p class="text-white">
+                                                    <span class="status-pill <?= $areaClassOpc2 ?>">
+                                                        <i class="fas fa-<?= $dado['perfil_opc2'] === 'desenvolvimento' ? 'code' : ($dado['perfil_opc2'] === 'design' ? 'paint-brush' : ($dado['perfil_opc2'] === 'midia' ? 'video' : 'network-wired')) ?> text-xs mr-1"></i>
+                                                        <?= htmlspecialchars($dado['perfil_opc2']) ?>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <span class="text-gray-400 text-sm">Ocorrência:</span>
+                                                <p class="text-white"><?= htmlspecialchars($dado['ocorrencia'] ?: '-') ?></p>
+                                            </div>
+                                            <div>
+                                                <span class="text-gray-400 text-sm">Custeio:</span>
+                                                <p class="text-white"><?= $dado['custeio'] == 1 ? 'Sim' : 'Não' ?></p>
+                                            </div>
+                                            <div>
+                                                <span class="text-gray-400 text-sm">Entregas:</span>
+                                                <p class="text-white"><?= htmlspecialchars($dado['entregas'] ?? '-') ?></p>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -1094,66 +1175,66 @@ if (isset($_POST['layout'])) {
                         $areaClassOpc2 = $dado['perfil_opc2'] === 'desenvolvimento' ? 'area-desenvolvimento' : 
                                         ($dado['perfil_opc2'] === 'design' ? 'area-design' : 
                                         ($dado['perfil_opc2'] === 'midia' ? 'area-midia' : 'area-redes'));
+                        $statusClass = $dado['custeio'] == 1 ? 'status-ativo' : 
+                                     (strtolower($dado['ocorrencia']) === 'estagiando' ? 'status-estagiando' : 'status-inativo');
                     ?>
                         <div class="mobile-card bg-dark-300 rounded-lg p-4 shadow-md">
-                            <div class="mobile-card-item">
-                                <span class="mobile-card-label">ID:</span>
-                                <span class="mobile-card-value"><?= htmlspecialchars($dado['id']) ?></span>
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></h3>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 transition-colors">
+                                        <i class="fas fa-info-circle"></i>
+                                    </button>
+                                    <a href="#" onclick="editarAluno(<?= $dado['id'] ?>); return false;" class="text-green-400 hover:text-green-300 transition-colors">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </div>
                             </div>
-                            <div class="mobile-card-item">
-                                <span class="mobile-card-label">Nome:</span>
-                                <span class="mobile-card-value font-medium"><?= htmlspecialchars($dado['nome']) ?></span>
-                            </div>
-                            <div class="mobile-card-item">
-                                <span class="mobile-card-label">Contato:</span>
-                                <span class="mobile-card-value"><?= htmlspecialchars($dado['contato'] ?: '-') ?></span>
-                            </div>
-                            <div class="mobile-card-item">
-                                <span class="mobile-card-label">Médias:</span>
-                                <span class="mobile-card-value"><?= htmlspecialchars($dado['medias'] ?: '-') ?></span>
-                            </div>
-                            <div class="mobile-card-item">
-                                <span class="mobile-card-label">Email:</span>
-                                <span class="mobile-card-value"><?= htmlspecialchars($dado['email'] ?: '-') ?></span>
-                            </div>
-                            <div class="mobile-card-item">
-                                <span class="mobile-card-label">Projetos:</span>
-                                <span class="mobile-card-value"><?= htmlspecialchars($dado['projetos'] ?: '-') ?></span>
-                            </div>
-                            <div class="mobile-card-item">
-                                <span class="mobile-card-label">Opção 1:</span>
-                                <span class="mobile-card-value">
-                                    <span class="status-pill <?= $areaClassOpc1 ?>">
-                                        <i class="fas fa-<?= $dado['perfil_opc1'] === 'desenvolvimento' ? 'code' : ($dado['perfil_opc1'] === 'design' ? 'paint-brush' : ($dado['perfil_opc1'] === 'midia' ? 'video' : 'network-wired')) ?> text-xs mr-1"></i>
-                                        <?= htmlspecialchars($dado['perfil_opc1']) ?>
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="mobile-card-item">
-                                <span class="mobile-card-label">Opção 2:</span>
-                                <span class="mobile-card-value">
-                                    <span class="status-pill <?= $areaClassOpc2 ?>">
-                                        <i class="fas fa-<?= $dado['perfil_opc2'] === 'desenvolvimento' ? 'code' : ($dado['perfil_opc2'] === 'design' ? 'paint-brush' : ($dado['perfil_opc2'] === 'midia' ? 'video' : 'network-wired')) ?> text-xs mr-1"></i>
-                                        <?= htmlspecialchars($dado['perfil_opc2']) ?>
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="mobile-card-item">
-                                <span class="mobile-card-label">Ocorrência:</span>
-                                <span class="mobile-card-value"><?= htmlspecialchars($dado['ocorrencia'] ?: '-') ?></span>
-                            </div>
-                            <div class="mobile-card-item">
-                                <span class="mobile-card-label">Custeio:</span>
-                                <span class="mobile-card-value"><?= $dado['custeio'] == "1" ? 'Sim' : 'Não' ?></span>
-                            </div>
-                            <div class="mobile-card-item">
-                                <span class="mobile-card-label">Entregas:</span>
-                                <span class="mobile-card-value"><?= htmlspecialchars($dado['entregas'] ?: '-') ?></span>
-                            </div>
-                            <div class="mobile-card-actions flex space-x-2 mt-4">
-                                <button onclick="editarAluno(${dado.id})" class="edit-btn flex-1">
-                                    <i class="fas fa-edit"></i> Editar
-                                </button>
+                            <div id="detalhes-mobile-<?= $dado['id'] ?>" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <span class="text-gray-400 text-sm">Contato:</span>
+                                        <p class="text-white"><?= htmlspecialchars($dado['contato'] ?: '-') ?></p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-400 text-sm">Médias:</span>
+                                        <p class="text-white"><?= htmlspecialchars($dado['medias'] ?: '-') ?></p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-400 text-sm">Email:</span>
+                                        <p class="text-white"><?= htmlspecialchars($dado['email'] ?: '-') ?></p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-400 text-sm">Projetos:</span>
+                                        <p class="text-white"><?= htmlspecialchars($dado['projetos'] ?: '-') ?></p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-400 text-sm">Opção 2:</span>
+                                        <p class="text-white">
+                                            <span class="status-pill ${areaClassOpc2}">
+                                                <i class="fas fa-${
+                                                    dado['perfil_opc2'] === 'desenvolvimento' ? 'code' :
+                                                    dado['perfil_opc2'] === 'design' ? 'paint-brush' :
+                                                    dado['perfil_opc2'] === 'midia' ? 'video' :
+                                                    'network-wired'
+                                                } text-xs mr-1"></i>
+                                                <?= htmlspecialchars($dado['perfil_opc2']) ?>
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-400 text-sm">Ocorrência:</span>
+                                        <p class="text-white"><?= htmlspecialchars($dado['ocorrencia'] ?: '-') ?></p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-400 text-sm">Custeio:</span>
+                                        <p class="text-white"><?= $dado['custeio'] == 1 ? 'Sim' : 'Não' ?></p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-400 text-sm">Entregas:</span>
+                                        <p class="text-white"><?= htmlspecialchars($dado['entregas'] ?? '-') ?></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     <?php } ?>
@@ -1190,19 +1271,19 @@ if (isset($_POST['layout'])) {
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Opção 1</label>
                         <select id="alunoOpc1" name="opc1" class="custom-select mt-1">
-                            <option value="Desenvolvimento">Desenvolvimento</option>
-                            <option value="Design/Mídia">Design/Mídia</option>
-                            <option value="Tutoria">Tutoria</option>
-                            <option value="Suporte/Redes">Suporte/Redes</option>
+                            <option value="desenvolvimento">Desenvolvimento</option>
+                            <option value="design">Design</option>
+                            <option value="midia">Mídia</option>
+                            <option value="redes">Redes/Suporte</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Opção 2</label>
                         <select id="alunoOpc2" name="opc2" class="custom-select mt-1">
-                            <option value="Desenvolvimento">Desenvolvimento</option>
-                            <option value="Design/Mídia">Design/Mídia</option>
-                            <option value="Tutoria">Tutoria</option>
-                            <option value="Suporte/Redes">Suporte/Redes</option>
+                            <option value="desenvolvimento">Desenvolvimento</option>
+                            <option value="design">Design</option>
+                            <option value="midia">Mídia</option>
+                            <option value="redes">Redes/Suporte</option>
                         </select>
                     </div>
                     <div>
@@ -1217,12 +1298,8 @@ if (isset($_POST['layout'])) {
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300">Entregas individuais</label>
-                        <input type="number" name="entregas_individuais" class="custom-input mt-1" placeholder="-">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Entregas grupo</label>
-                        <input type="number" name="entregas_grupo" class="custom-input mt-1" placeholder="-">
+                        <label class="block text-sm font-medium text-gray-300">Entregas</label>
+                        <input type="number" name="entregas" id="alunoEntregas" class="custom-input mt-1" placeholder="-">
                     </div>
                     <div class="mt-6 flex justify-end space-x-4">
                         <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">
@@ -1275,6 +1352,60 @@ if (isset($_POST['layout'])) {
             if (e.target === mobileSidebar) {
                 mobileSidebar.classList.add('-translate-x-full');
                 document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Função para alternar detalhes na tabela desktop
+        function toggleDetalhes(id) {
+            const detalhesRow = document.getElementById(`detalhes-${id}`);
+            const button = detalhesRow.previousElementSibling.querySelector('button');
+            const icon = button.querySelector('i');
+            
+            if (detalhesRow.classList.contains('hidden')) {
+                detalhesRow.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                detalhesRow.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+
+        // Função para alternar detalhes nos cards mobile
+        function toggleDetalhesMobile(id) {
+            const detalhesDiv = document.getElementById(`detalhes-mobile-${id}`);
+            const button = detalhesDiv.parentElement.querySelector('button');
+            const icon = button.querySelector('i');
+            
+            if (detalhesDiv.classList.contains('hidden')) {
+                detalhesDiv.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                detalhesDiv.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+
+        document.getElementById('cancelarBtn').addEventListener('click', () => {
+            document.getElementById('alunoModal').classList.remove('show');
+        });
+
+        document.getElementById('alunoModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('alunoModal')) {
+                document.getElementById('alunoModal').classList.remove('show');
+            }
+        });
+
+        document.getElementById('fecharDetalhesBtn').addEventListener('click', () => {
+            document.getElementById('detalhesModal').classList.remove('show');
+        });
+
+        document.getElementById('detalhesModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('detalhesModal')) {
+                document.getElementById('detalhesModal').classList.remove('show');
             }
         });
     </script>

@@ -18,7 +18,6 @@ if (isset($_POST['aprovar']) && !empty($_POST['selecionados'])) {
         ];
     }
     $qtd = $select_model->aprovar_selecionados($selecionados);
-    echo "<div class='text-green-500 font-bold mb-4'>{$qtd} aluno(s) aprovado(s) com sucesso!</div>";
 }
 // --- FIM DO CÓDIGO ---
 
@@ -257,20 +256,18 @@ if (isset($_POST['layout'])) {
         }
 
         .custom-card {
-            background: rgba(45, 45, 45, 0.9);
-            border-radius: 12px;
-            padding: 1.25rem;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+            background: rgba(45, 45, 45, 0.97);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            border: 1.5px solid #007A3333;
+            transition: box-shadow 0.3s, border 0.3s;
         }
 
         .custom-card:hover {
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(0, 122, 51, 0.2);
+            box-shadow: 0 12px 32px rgba(0,122,51,0.18);
+            border: 1.5px solid #00FF6B;
         }
 
         .custom-badge {
@@ -373,9 +370,19 @@ if (isset($_POST['layout'])) {
             }
 
             .custom-card {
-                padding: 0.75rem;
-                margin: 0 -1rem;
-                border-radius: 0;
+                padding: 1rem;
+                border-radius: 10px;
+                margin: 0.5rem 0;
+            }
+            .custom-btn-primary {
+                position: fixed;
+                bottom: 1rem;
+                left: 1rem;
+                right: 1rem;
+                width: calc(100% - 2rem);
+                max-width: 400px;
+                margin: 0 auto;
+                z-index: 100;
             }
         }
     </style>
@@ -510,59 +517,70 @@ if (isset($_POST['layout'])) {
                 </div>
 
                 <!-- Tabela de Alunos Selecionados -->
+                <?php if (isset($qtd)) { ?>
+                    <div class="fixed top-8 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
+                        <i class="fas fa-check-circle"></i>
+                        <?= $qtd ?> aluno(s) aprovado(s) com sucesso!
+                    </div>
+                <?php } ?>
                 <form method="post" action="">
-                <div class="custom-card fade-in">
-                    <?php
-                    $vagas = $select_model->vagas_com_alunos();
-                    foreach ($vagas as $vaga) {
-                        $id_vaga = $vaga['id_vaga'];
-                        $alunos = $select_model->alunos_selecionados_estagio($id_vaga);
-                        $nome_empresa = $select_model->nome_empresa_por_vaga($id_vaga);
-                    ?>
-                        <div class="custom-card fade-in mb-4">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                                <div>
-                                    <h3 class="text-lg font-semibold text-white">
-                                        <?php echo htmlspecialchars($nome_empresa); ?>
-                                    </h3>
-                                </div>
-                                <span class="custom-badge badge-info self-start sm:self-center">
-                                    <i class="fas fa-code text-xs mr-1"></i>
-                                    Alunos Selecionados
-                                </span>
+                <?php
+                $vagas = $select_model->vagas_com_alunos();
+                foreach ($vagas as $vaga) {
+                    $id_vaga = $vaga['id_vaga'];
+                    $alunos = $select_model->alunos_selecionados_estagio($id_vaga);
+                    $nome_empresa = $select_model->nome_empresa_por_vaga($id_vaga);
+                ?>
+                    <div class="custom-card fade-in mb-6 shadow-lg border border-primary-500">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-building text-primary-400 text-xl"></i>
+                                <h3 class="text-lg font-bold text-primary-400"><?php echo htmlspecialchars($nome_empresa); ?></h3>
                             </div>
-                            <div class="overflow-x-auto -mx-4 sm:mx-0">
-                                <div class="min-w-full inline-block align-middle">
-                                    <table class="custom-table">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>Aluno</th>
-                                                <th>ID</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($alunos as $aluno) { ?>
-                                                <tr>
-                                                    <td>
-                                                        <input type="checkbox" name="selecionados[]" value="<?php echo $aluno['id'] . '|' . $id_vaga . '|' . htmlspecialchars($aluno['nome']); ?>">
-                                                    </td>
-                                                    <td><?php echo htmlspecialchars($aluno['nome']); ?></td>
-                                                    <td><?php echo htmlspecialchars($aluno['id']); ?></td>
-                                                </tr>
-                                            <?php } ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <span class="custom-badge badge-info">
+                                <i class="fas fa-users text-xs mr-1"></i>
+                                Alunos Selecionados
+                            </span>
                         </div>
-                    <?php
-                    }
-                    ?>
-                    <button type="submit" name="aprovar" class="custom-btn custom-btn-primary mt-4">
-                        Aprovar Selecionados
+                        <div class="overflow-x-auto rounded-lg">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th class="w-10"></th>
+                                        <th>Aluno</th>
+                                        <th class="w-20">ID</th>
+                                        <th class="w-24">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($alunos as $aluno) { ?>
+                                        <tr class="hover:bg-primary-900/10 transition-colors">
+                                            <td>
+                                                <?php if (isset($aluno['status']) && $aluno['status'] === 'approved'): ?>
+                                                    <i class="fas fa-check-circle text-green-500"></i>
+                                                <?php else: ?>
+                                                    <input type="checkbox" name="selecionados[]" value="<?php echo $aluno['id'] . '|' . $id_vaga . '|' . htmlspecialchars($aluno['nome']); ?>" class="custom-checkbox">
+                                                <?php endif; ?>
+                                            </td>
+                                            <td class="font-semibold text-white"><?php echo htmlspecialchars($aluno['nome']); ?></td>
+                                            <td class="text-xs text-gray-400"><?php echo htmlspecialchars($aluno['id']); ?></td>
+                                            <td>
+                                                <?php if (isset($aluno['status']) && $aluno['status'] === 'approved'): ?>
+                                                    <span class="inline-block px-2 py-1 text-xs rounded-full bg-green-600 text-white">Aprovado</span>
+                                                <?php else: ?>
+                                                    <span class="inline-block px-2 py-1 text-xs rounded-full bg-gray-600 text-white">Pendente</span>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <?php } ?>
+                    <button type="submit" name="aprovar" class="custom-btn custom-btn-primary mt-4 w-full md:w-auto fixed md:static bottom-4 left-0 right-0 mx-auto max-w-xs z-50 shadow-lg flex items-center justify-center gap-2">
+                        <i class="fas fa-check-circle"></i> Aprovar Selecionados
                     </button>
-                </div>
                 </form>
             </main>
         </div>

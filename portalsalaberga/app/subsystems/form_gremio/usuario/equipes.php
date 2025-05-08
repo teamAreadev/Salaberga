@@ -468,8 +468,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="futmesa">Futmesa (Até 2 membros)</option>
                             <option value="teqball">Teqball (Até 2 membros)</option>
                             <option value="teqvolei">Teqvôlei (Até 2 membros)</option>
-                            <option value="beach_tenis">Beach Tênis (Até 2 membros)</option>
-                            <option value="volei_de_praia">Vôlei de Praia (Até 2 membros)</option>
+                            <option value="x2">X2 (Até 2 membros)</option>
                         </select>
                     </div>
                     <div class="mb-4">

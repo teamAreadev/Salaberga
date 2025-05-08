@@ -848,14 +848,10 @@ if (isset($_POST['layout'])) {
                             </div>
                             <div class="relative">
                                 <select id="filterEmpresa" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
-                                    <option value="">Todas as empresas</option>
-                                    <?php 
-                                    $empresas = $select_model->concedentes();
-                                    foreach($empresas as $empresa){ ?>
-                                        <option value="<?= $empresa['id'] ?>"><?= htmlspecialchars($empresa['nome']) ?></option>
-                                    <?php } ?>
+                                  
+                                  
                                 </select>
-                                <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
+                              
                             </div>
                         </div>
                     </div>
@@ -879,23 +875,26 @@ if (isset($_POST['layout'])) {
         $delay = 0;
         foreach($dados as $dado):
             $delay += 100;
-            // Safely handle the area value
             $area = isset($dado['nome_perfil']) && !empty($dado['nome_perfil']) ? strtolower($dado['nome_perfil']) : 'desenvolvimento';
             if ($area === 'design/mídia') {
                 $area = 'design';
             }
-            // Sanitize all PHP outputs
             $vagaId = isset($dado['id']) ? htmlspecialchars($dado['id'], ENT_QUOTES, 'UTF-8') : '';
             $empresaName = isset($dado['nome_empresa']) ? htmlspecialchars($dado['nome_empresa'], ENT_QUOTES, 'UTF-8') : 'Não informado';
             $quantidade = isset($dado['quantidade']) ? htmlspecialchars($dado['quantidade'], ENT_QUOTES, 'UTF-8') : '0';
             $nomePerfil = isset($dado['nome_perfil']) ? htmlspecialchars($dado['nome_perfil'], ENT_QUOTES, 'UTF-8') : 'Área não informada';
             $empresaId = isset($dado['id_empresa']) ? htmlspecialchars($dado['id_empresa'], ENT_QUOTES, 'UTF-8') : '';
         ?>
-            <div class="vaga-card slide-up" style="animation-delay: <?php echo $delay; ?>ms;" data-vaga-id="<?php echo $vagaId; ?>" data-area="<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>">
+            <div class="vaga-card slide-up" 
+                style="animation-delay: <?php echo $delay; ?>ms;" 
+                data-vaga-id="<?php echo $vagaId; ?>" 
+                data-area="<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>"
+                data-empresa-id="<?php echo $empresaId; ?>"
+                data-empresa-nome="<?php echo $empresaName; ?>">
                 <div class="vaga-card-header">
                     <h3 class="vaga-card-title"><?php echo $empresaName ?></h3>
                     <div class="vaga-card-actions">
-                        <button class="vaga-card-action hover:text-primary-400" onclick="editarVaga(<?php echo $vagaId ? $vagaId : '0'; ?>, '<?php echo $vagaTitle; ?>', '<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>', '<?php echo $empresaId; ?>', '<?php echo $quantidade; ?>')">
+                        <button class="vaga-card-action hover:text-primary-400" onclick="editarVaga(<?php echo $vagaId ? $vagaId : '0'; ?>, '<?php echo $empresaName; ?>', '<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>', '<?php echo $empresaId; ?>', '<?php echo $quantidade; ?>')">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button class="vaga-card-action hover:text-red-400" onclick="excluirVaga(<?php echo $vagaId ? $vagaId : '0'; ?>)">
@@ -1025,11 +1024,11 @@ if (isset($_POST['layout'])) {
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Data</label>
-                            <input type="date" name="data" class="custom-input mt-1 w-full" required>
+                            <input type="date" name="data" class="custom-input mt-1 w-full" >
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Hora</label>
-                            <input type="time" name="hora" class="custom-input mt-1 w-full" required>
+                            <input type="time" name="hora" class="custom-input mt-1 w-full">
                         </div>
                     </div>
                     <div class="mt-8 flex justify-end space-x-4">
@@ -1060,6 +1059,7 @@ if (isset($_POST['layout'])) {
             const mobileSidebar = document.getElementById('mobileSidebar');
             const searchInput = document.getElementById('searchVaga');
             const filterArea = document.getElementById('filterArea');
+            const filterEmpresa = document.getElementById('filterEmpresa');
 
             // GSAP Animations
             gsap.from('.action-bar', { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' });
@@ -1118,7 +1118,6 @@ if (isset($_POST['layout'])) {
                 if (isEdit && vaga) {
                     document.getElementById('modalTitle').textContent = 'Editar Vaga';
                     document.getElementById('vagaId').value = vaga.id;
-                    document.getElementById('vagaTitulo').value = vaga.titulo;
                     document.getElementById('vagaEmpresa').value = vaga.empresa_id;
                     document.getElementById('vagaVagasDisponiveis').value = vaga.vagas_disponiveis || '';
                     const checkboxes = document.querySelectorAll('input[name="areas"]');
@@ -1160,18 +1159,25 @@ if (isset($_POST['layout'])) {
 
             // Filtragem de vagas
             function aplicarFiltros() {
-                const searchTerm = searchInput.value.toLowerCase();
+                const searchTerm = searchInput.value.toLowerCase().trim();
                 const areaFiltro = filterArea.value;
+                const empresaFiltro = filterEmpresa.value;
                 const vagaCards = document.querySelectorAll('.vaga-card');
                 let visibleCount = 0;
 
                 vagaCards.forEach((card, index) => {
-                    const titulo = card.querySelector('.vaga-title').textContent.toLowerCase();
+                    const titulo = card.querySelector('.vaga-card-title').textContent.toLowerCase();
                     const area = card.dataset.area;
-                    const matchSearch = titulo.includes(searchTerm);
-                    const matchArea = !areaFiltro || area === areaFiltro;
+                    const empresaId = card.dataset.empresaId;
+                    const empresaNome = card.dataset.empresaNome.toLowerCase();
+                    
+                    const matchSearch = searchTerm === '' || 
+                                      titulo.includes(searchTerm) || 
+                                      empresaNome.includes(searchTerm);
+                    const matchArea = areaFiltro === '' || area === areaFiltro;
+                    const matchEmpresa = empresaFiltro === '' || empresaId === empresaFiltro;
 
-                    if (matchSearch && matchArea) {
+                    if (matchSearch && matchArea && matchEmpresa) {
                         card.style.display = '';
                         visibleCount++;
                         gsap.fromTo(card,
@@ -1205,6 +1211,7 @@ if (isset($_POST['layout'])) {
                     document.getElementById('clearFiltersBtn').addEventListener('click', () => {
                         searchInput.value = '';
                         filterArea.value = '';
+                        filterEmpresa.value = '';
                         aplicarFiltros();
                     });
                 } else if (visibleCount > 0 && noResultsMessage) {
@@ -1212,8 +1219,17 @@ if (isset($_POST['layout'])) {
                 }
             }
 
-            searchInput.addEventListener('input', aplicarFiltros);
+            // Adicionar evento de input com debounce para melhor performance
+            let searchTimeout;
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    aplicarFiltros();
+                }, 300);
+            });
+
             filterArea.addEventListener('change', aplicarFiltros);
+            filterEmpresa.addEventListener('change', aplicarFiltros);
 
             // Editar vaga
             window.editarVaga = (id, titulo, area, empresa_id, vagas_disponiveis) => {
