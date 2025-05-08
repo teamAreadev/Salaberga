@@ -19,7 +19,7 @@ if (isset($_POST['turma']) && !empty($_POST['turma'])) {
             $turma = "3C";
             break;
         case 12:
-            $diretorio = '../assets/img/imgAlunos/img3';
+            $diretorio = '../assets/img/imgAlunos/img3D';
             $turma = "3D";
             break;
         default:

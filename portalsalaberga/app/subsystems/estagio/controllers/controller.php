@@ -71,7 +71,7 @@ if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga
     $hora = $_POST['hora'] ?? 0;
 
     $model = new main_model;
-    $result = $model->cadastrar_vaga($id_empresa, $id_area, $quantidades, $data,$tipo_vaga, $hora);
+    $result = $model->cadastrar_vaga($id_empresa, $id_area, $quantidades, $data, $tipo_vaga, $hora);
 
     switch ($result) {
 
@@ -110,7 +110,79 @@ if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga
             header('location:../views/vagas.php?erro');
             exit();
     }
-}/*else {
+} else if (isset($_POST['id_excluir_empresa'])) {
+
+    $id_empresa = $_POST['id_empresa'];
+    $model = new main_model;
+    $result = $model->excluir_empresa($id_empresa);
+
+    switch ($result) {
+
+        case 1:
+            header('location:../views/gerenciar_empresas.php?deletado');
+            exit();
+        case 2:
+            header('location:../views/gerenciar_empresas.php?erro');
+            exit();
+        case 3:
+            header('location:../views/gerenciar_empresas.php?erro_delete_vaga');
+            exit();
+    }
+} else if (isset($_POST['id_excluir_vaga'])) {
+
+    $id_empresa = $_POST['id_vaga'];
+    $model = new main_model;
+    $result = $model->excluir_vaga($id_empresa);
+
+    switch ($result) {
+
+        case 1:
+            header('location:../views/vagas.php?deletado');
+            exit();
+        case 2:
+            header('location:../views/vagas.php?erro');
+            exit();
+        case 3:
+            header('location:../views/vagas?erro_delete_vaga');
+            exit();
+    }
+} else if (isset($_POST['id_editar_empresa'])) {
+
+    $id_empresa = $_POST['id_vaga'];
+    $model = new main_model;
+    $result = $model->editar_empresa($id_empresa);
+
+    switch ($result) {
+
+        case 1:
+            header('location:../views/vagas.php?deletado');
+            exit();
+        case 2:
+            header('location:../views/vagas.php?erro');
+            exit();
+        case 3:
+            header('location:../views/vagas?erro_delete_vaga');
+            exit();
+    }
+} elseif (isset($_POST['id_editar_vaga'])) {
+
+    $id_empresa = $_POST['id_vaga'];
+    $model = new main_model;
+    $result = $model->editar_vaga($id_empresa);
+
+    switch ($result) {
+
+        case 1:
+            header('location:../views/vagas.php?deletado');
+            exit();
+        case 2:
+            header('location:../views/vagas.php?erro');
+            exit();
+        case 3:
+            header('location:../views/vagas?erro_delete_vaga');
+            exit();
+    }
+} else{
     header('location:../views/login.php?erro');
     exit();
-}*/
+}
