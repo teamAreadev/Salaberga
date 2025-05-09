@@ -31,22 +31,22 @@ $MODALIDADES = [
     ],
     'volei' => [
         'nome' => 'Vôlei',
-        'limite_jogadores' => 12,
+        'limite_jogadores' => 6,
         'categorias' => ['masculino', 'feminino', 'misto']
     ],
     'basquete' => [
         'nome' => 'Basquete',
-        'limite_jogadores' => 12,
+        'limite_jogadores' => 5,
         'categorias' => ['masculino', 'feminino']
     ],
     'handebol' => [
         'nome' => 'Handebol',
-        'limite_jogadores' => 14,
+        'limite_jogadores' => 7,
         'categorias' => ['masculino', 'feminino']
     ],
     'queimada' => [
         'nome' => 'Queimada',
-        'limite_jogadores' => 12,
+        'limite_jogadores' => 8,
         'categorias' => ['misto']
     ],
     'futmesa' => [

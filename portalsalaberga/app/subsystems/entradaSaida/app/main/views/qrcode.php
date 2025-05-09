@@ -83,7 +83,7 @@ class qrCode1
 
             // Gerar o QR code para o verso
             $arquivo_qrcode = __DIR__ . "/qrcode_" . $aluno['id_aluno'] . ".png";
-            QRcode::png("https://salaberga.com/salaberga/portalsalaberga/app/main/views/subsytem/subsistema.php?id_aluno=" . $aluno['id_aluno'], $arquivo_qrcode, QR_ECLEVEL_M, 4);
+            QRcode::png("https://salaberga.com/../../../../teste/salaberga/portalsalaberga/app/subsystems/entradasaida/index.php?id_aluno=" . $aluno['id_aluno'], $arquivo_qrcode, QR_ECLEVEL_M, 4);
 
             if (!file_exists($arquivo_qrcode) || !getimagesize($arquivo_qrcode)) {
                 die("Erro: QR Code não gerado para " . $aluno['nome']);
