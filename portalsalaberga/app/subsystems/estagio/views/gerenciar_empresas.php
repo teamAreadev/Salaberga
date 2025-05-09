@@ -816,10 +816,10 @@ if (isset($_POST['layout'])) {
                                 <div class="empresa-card-header">
                                     <h3 class="empresa-card-title"><?= htmlspecialchars($dado['nome']) ?></h3>
                                     <div class="empresa-card-actions">
-                                        <button class="empresa-card-action text-gray-400 hover:text-primary-400" onclick="editarEmpresa(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome']) ?>', '<?= htmlspecialchars($dado['endereco']) ?>', '<?= htmlspecialchars($dado['contato']) ?>')">
+                                        <button class="empresa-card-action text-gray-400 hover:text-primary-400 edit-btn" data-modal-id="editarEmpresaModal-<?= $dado['id'] ?>">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="empresa-card-action text-red-500 hover:text-red-400" onclick="excluirEmpresa(<?= $dado['id'] ?>)">
+                                        <button class="empresa-card-action text-red-500 hover:text-red-400 delete-btn" data-modal-id="excluirEmpresaModal-<?= $dado['id'] ?>">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -848,32 +848,91 @@ if (isset($_POST['layout'])) {
                                     </a>
                                 </div>
                             </div>
+
+                            <!-- Modal de Editar Empresa -->
+                            <div id="editarEmpresaModal-<?= $dado['id'] ?>" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+                                <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
+                                    <h2 class="text-2xl font-bold mb-6 text-white slide-up">Editar Empresa</h2>
+                                    <form action="../controllers/controller_editar_excluir.php" method="post" class="space-y-4">
+                                        <input type="hidden" name="id_editar_empresa" value="<?= htmlspecialchars($dado['id']) ?>">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300">Nome da Empresa</label>
+                                            <input type="text" name="nome_editar_empresa" value="<?= htmlspecialchars($dado['nome']) ?>" class="custom-input mt-1" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300">Endereço Completo</label>
+                                            <input type="text" name="endereco_editar_empresa" value="<?= htmlspecialchars($dado['endereco']) ?: '' ?>" class="custom-input mt-1" placeholder="Rua, número, cidade - UF">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300">Telefone de Contato</label>
+                                            <input type="tel" name="contato_editar_empresa" value="<?= htmlspecialchars($dado['contato']) ?: '' ?>" placeholder="(XX) XXXXX-XXXX" class="custom-input mt-1 telefone-input">
+                                        </div>
+                                        <div class="mt-6 flex justify-end space-x-4">
+                                            <button type="button" class="custom-btn custom-btn-secondary close-btn" data-modal-id="editarEmpresaModal-<?= $dado['id'] ?>">
+                                                <i class="fas fa-times btn-icon"></i>
+                                                <span>Cancelar</span>
+                                            </button>
+                                            <button type="submit" class="custom-btn custom-btn-primary">
+                                                <i class="fas fa-save btn-icon"></i>
+                                                <span>Salvar Empresa</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Modal de Excluir Empresa -->
+                            <div id="excluirEmpresaModal-<?= $dado['id'] ?>" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+                                <div class="candidatura-modal rounded-lg p-6 max-w-md w-full mx-4">
+                                    <div class="text-center mb-6">
+                                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/10 text-red-500 mb-4">
+                                            <i class="fas fa-exclamation-triangle text-2xl"></i>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-white slide-up">Confirmar Exclusão</h3>
+                                        <p class="text-gray-400 mt-2">Tem certeza que deseja excluir esta empresa? Esta ação não pode ser desfeita.</p>
+                                    </div>
+                                    <form action="../controllers/controller_editar_excluir.php" method="post">
+                                        <input type="hidden" name="id_excluir_empresa" value="<?= htmlspecialchars($dado['id']) ?>">
+                                        <div class="flex justify-center space-x-4">
+                                            <button type="button" class="custom-btn custom-btn-secondary close-btn" data-modal-id="excluirEmpresaModal-<?= $dado['id'] ?>">
+                                                <i class="fas fa-times btn-icon"></i>
+                                                <span>Cancelar</span>
+                                            </button>
+                                            <button type="submit" class="custom-btn bg-red-500 hover:bg-red-600 text-white">
+                                                <i class="fas fa-trash-alt btn-icon"></i>
+                                                <span>Excluir Empresa</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
             </main>
         </div>
 
-        <!-- Modal de Cadastro/Edição de Empresa -->
-        <div id="empresaModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+        <!-- Modal de Cadastro de Nova Empresa -->
+        <div id="novaEmpresaModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
             <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
-                <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white slide-up">Nova Empresa</h2>
-                <form action="../controllers/controller.php" id="empresaForm" method="post" class="space-y-4">
-                    <input type="hidden" id="empresaId" name="empresa_id" value="">
+                <h2 class="text-2xl font-bold mb-6 text-white slide-up">Nova Empresa</h2>
+                <form action="../controllers/controller.php" id="novaEmpresaForm" method="post" class="space-y-4">
+                    <input type="hidden" name="empresa_id" value="">
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Nome da Empresa</label>
-                        <input type="text" id="empresaNome" name="nome" class="custom-input mt-1" required>
+                        <input type="text" name="nome" class="custom-input mt-1" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Endereço Completo</label>
-                        <input type="text" id="empresaEndereco" name="endereco" class="custom-input mt-1" placeholder="Rua, número, cidade - UF">
+                        <input type="text" name="endereco" class="custom-input mt-1" placeholder="Rua, número, cidade - UF">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Telefone de Contato</label>
-                        <input type="tel" id="empresaTelefone" name="telefone" placeholder="(XX) XXXXX-XXXX" class="custom-input mt-1">
+                        <input type="tel" name="telefone" placeholder="(XX) XXXXX-XXXX" class="custom-input mt-1 telefone-input">
                     </div>
                     <div class="mt-6 flex justify-end space-x-4">
-                        <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">
+                        <button type="button" class="custom-btn custom-btn-secondary close-btn" data-modal-id="novaEmpresaModal">
                             <i class="fas fa-times btn-icon"></i>
                             <span>Cancelar</span>
                         </button>
@@ -889,18 +948,17 @@ if (isset($_POST['layout'])) {
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const modal = document.getElementById('empresaModal');
-            const modalContent = modal.querySelector('.candidatura-modal');
-            const empresaForm = document.getElementById('empresaForm');
+            const novaEmpresaModal = document.getElementById('novaEmpresaModal');
+            const novaEmpresaForm = document.getElementById('novaEmpresaForm');
             const addEmpresaBtn = document.getElementById('addEmpresaBtn');
             const firstEmpresaBtn = document.getElementById('firstEmpresaBtn');
-            const cancelarBtn = document.getElementById('cancelarBtn');
             const sidebarToggle = document.getElementById('sidebarToggle');
             const closeSidebar = document.getElementById('closeSidebar');
             const mobileSidebar = document.getElementById('mobileSidebar');
             const searchInput = document.getElementById('searchEmpresa');
             const filterArea = document.getElementById('filterArea');
-            const telefoneInput = document.getElementById('empresaTelefone');
+            const empresasGrid = document.getElementById('empresasGrid');
+            let currentModalId = null;
 
             // GSAP Animations
             gsap.from('.action-bar', {
@@ -917,32 +975,39 @@ if (isset($_POST['layout'])) {
                 ease: 'power3.out'
             });
 
-            // Máscara de telefone
-            telefoneInput.addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 11) {
-                    value = value.slice(0, 11);
-                }
-                if (value.length <= 10) {
-                    value = value.replace(/(\d{2})(\d{0,4})(\d{0,4})/, '($1) $2-$3');
-                } else {
-                    value = value.replace(/(\d{2})(\d{0,5})(\d{0,4})/, '($1) $2-$3');
-                }
-                e.target.value = value.trim();
+            // Máscara de telefone para todos os inputs de telefone
+            document.querySelectorAll('.telefone-input').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length > 11) {
+                        value = value.slice(0, 11);
+                    }
+                    if (value.length <= 10) {
+                        value = value.replace(/(\d{2})(\d{0,4})(\d{0,4})/, '($1) $2-$3');
+                    } else {
+                        value = value.replace(/(\d{2})(\d{0,5})(\d{0,4})/, '($1) $2-$3');
+                    }
+                    e.target.value = value.trim();
+                });
             });
 
-            // Limpar caracteres não numéricos antes de enviar o formulário
-            empresaForm.addEventListener('submit', (e) => {
-                telefoneInput.value = telefoneInput.value.replace(/\D/g, '');
-                const submitBtn = e.submitter;
-                if (submitBtn) {
-                    gsap.to(submitBtn, {
-                        scale: 0.95,
-                        duration: 0.1,
-                        yoyo: true,
-                        repeat: 1
-                    });
-                }
+            // Limpar caracteres não numéricos antes de enviar qualquer formulário
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    const telefoneInput = form.querySelector('input[name="telefone"]');
+                    if (telefoneInput) {
+                        telefoneInput.value = telefoneInput.value.replace(/\D/g, '');
+                    }
+                    const submitBtn = e.submitter;
+                    if (submitBtn) {
+                        gsap.to(submitBtn, {
+                            scale: 0.95,
+                            duration: 0.1,
+                            yoyo: true,
+                            repeat: 1
+                        });
+                    }
+                });
             });
 
             // Sidebar mobile toggle
@@ -964,61 +1029,109 @@ if (isset($_POST['layout'])) {
             });
 
             // Modal handling
-            function resetModal() {
-                modalContent.style.opacity = '0';
-                modalContent.style.transform = 'scale(0.9)';
-                empresaForm.reset();
-                document.getElementById('empresaId').value = '';
-                document.getElementById('modalTitle').textContent = 'Nova Empresa';
-            }
-
-            function openModal(isEdit = false, empresa = null) {
-                resetModal();
-                if (isEdit && empresa) {
-                    document.getElementById('modalTitle').textContent = 'Editar Empresa';
-                    document.getElementById('empresaId').value = empresa.id;
-                    document.getElementById('empresaNome').value = empresa.nome;
-                    document.getElementById('empresaEndereco').value = empresa.endereco || '';
-                    document.getElementById('empresaTelefone').value = empresa.telefone || '';
+            function openModal(modalId) {
+                console.log('Tentando abrir modal:', modalId); // Debug
+                if (currentModalId) {
+                    closeModal(currentModalId);
                 }
+
+                const modal = document.getElementById(modalId);
+                if (!modal) {
+                    console.error('Modal não encontrada para o ID:', modalId);
+                    return;
+                }
+
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
-                gsap.to(modalContent, {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 0.3,
-                    ease: 'power2.out'
-                });
+                const modalContent = modal.querySelector('.candidatura-modal');
+                if (modalContent) {
+                    gsap.fromTo(modalContent, {
+                        opacity: 0,
+                        scale: 0.9
+                    }, {
+                        opacity: 1,
+                        scale: 1,
+                        duration: 0.3,
+                        ease: 'power2.out'
+                    });
+                }
+
+                currentModalId = modalId;
             }
 
-            function closeModal() {
-                gsap.to(modalContent, {
-                    opacity: 0,
-                    scale: 0.9,
-                    duration: 0.3,
-                    ease: 'power2.in',
-                    onComplete: () => {
-                        modal.classList.add('hidden');
-                        modal.classList.remove('flex');
-                        resetModal();
-                    }
-                });
+            function closeModal(modalId) {
+                console.log('Fechando modal:', modalId); // Debug
+                const modal = document.getElementById(modalId);
+                if (!modal) {
+                    console.error('Modal não encontrada para o ID:', modalId);
+                    return;
+                }
+
+                const modalContent = modal.querySelector('.candidatura-modal');
+                if (modalContent) {
+                    gsap.to(modalContent, {
+                        opacity: 0,
+                        scale: 0.9,
+                        duration: 0.3,
+                        ease: 'power2.in',
+                        onComplete: () => {
+                            modal.classList.add('hidden');
+                            modal.classList.remove('flex');
+                            currentModalId = null;
+                        }
+                    });
+                } else {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    currentModalId = null;
+                }
             }
 
+            // Delegar eventos para botões de Editar e Excluir
+            empresasGrid.addEventListener('click', (e) => {
+                const editBtn = e.target.closest('.edit-btn');
+                const deleteBtn = e.target.closest('.delete-btn');
+                const closeBtn = e.target.closest('.close-btn');
+
+                if (editBtn) {
+                    const modalId = editBtn.getAttribute('data-modal-id');
+                    console.log('Botão Editar clicado, modalId:', modalId); // Debug
+                    openModal(modalId);
+                }
+
+                if (deleteBtn) {
+                    const modalId = deleteBtn.getAttribute('data-modal-id');
+                    console.log('Botão Excluir clicado, modalId:', modalId); // Debug
+                    openModal(modalId);
+                }
+
+                if (closeBtn) {
+                    const modalId = closeBtn.getAttribute('data-modal-id');
+                    console.log('Botão Fechar clicado, modalId:', modalId); // Debug
+                    closeModal(modalId);
+                }
+            });
+
+            // Nova Empresa Modal
             addEmpresaBtn.addEventListener('click', () => {
-                openModal();
+                console.log('Botão Nova Empresa clicado'); // Debug
+                openModal('novaEmpresaModal');
             });
 
             if (firstEmpresaBtn) {
-                firstEmpresaBtn.addEventListener('click', () => openModal());
+                firstEmpresaBtn.addEventListener('click', () => {
+                    console.log('Botão Cadastrar Primeira Empresa clicado'); // Debug
+                    openModal('novaEmpresaModal');
+                });
             }
 
-            cancelarBtn.addEventListener('click', closeModal);
-
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
+            // Fechar modais ao clicar fora
+            document.querySelectorAll('.fixed').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal && modal.id === currentModalId) {
+                        closeModal(modal.id);
+                    }
+                });
             });
 
             // Filtragem de empresas
@@ -1031,7 +1144,7 @@ if (isset($_POST['layout'])) {
                 empresaCards.forEach((card, index) => {
                     const nome = card.querySelector('.empresa-card-title').textContent.toLowerCase();
                     const matchSearch = nome.includes(searchTerm);
-                    const matchArea = !areaFiltro; // Ignorar filtro de área, já que data-area não está presente
+                    const matchArea = !areaFiltro;
 
                     if (matchSearch && matchArea) {
                         card.style.display = '';
@@ -1084,101 +1197,6 @@ if (isset($_POST['layout'])) {
             searchInput.addEventListener('input', aplicarFiltros);
             filterArea.addEventListener('change', aplicarFiltros);
 
-            // Editar empresa
-            window.editarEmpresa = (id, nome, endereco, telefone) => {
-                openModal(true, {
-                    id,
-                    nome,
-                    endereco,
-                    telefone
-                });
-            };
-
-            // Excluir empresa
-            window.excluirEmpresa = (id) => {
-                const confirmDialog = document.createElement('div');
-                confirmDialog.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50';
-                confirmDialog.innerHTML = `
-                    <div class="candidatura-modal rounded-lg p-6 max-w-md w-full mx-4">
-                        <div class="text-center mb-6">
-                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/10 text-red-500 mb-4">
-                                <i class="fas fa-exclamation-triangle text-2xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-white slide-up">Confirmar Exclusão</h3>
-                            <p class="text-gray-400 mt-2">Tem certeza que deseja excluir esta empresa? Esta ação não pode ser desfeita.</p>
-                        </div>
-                        <div class="flex justify-center space-x-4">
-                            <button id="cancelExcluir" class="custom-btn custom-btn-secondary">
-                                <i class="fas fa-times btn-icon"></i>
-                                <span>Cancelar</span>
-                            </button>
-                            <button id="confirmarExcluir" class="custom-btn bg-red-500 hover:bg-red-600 text-white">
-                                <i class="fas fa-trash-alt btn-icon"></i>
-                                <span>Excluir Empresa</span>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(confirmDialog);
-                const confirmModalContent = confirmDialog.querySelector('.candidatura-modal');
-                gsap.to(confirmModalContent, {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 0.3,
-                    ease: 'power2.out'
-                });
-
-                confirmDialog.querySelector('#cancelExcluir').addEventListener('click', () => {
-                    gsap.to(confirmModalContent, {
-                        opacity: 0,
-                        scale: 0.9,
-                        duration: 0.3,
-                        ease: 'power2.in',
-                        onComplete: () => {
-                            document.body.removeChild(confirmDialog);
-                        }
-                    });
-                });
-
-                confirmDialog.querySelector('#confirmarExcluir').addEventListener('click', () => {
-                    fetch('excluir_empresa.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                            },
-                            body: `id=${id}`
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            document.body.removeChild(confirmDialog);
-                            if (data.success) {
-                                const card = document.querySelector(`[data-empresa-id="${id}"]`);
-                                if (card) {
-                                    gsap.to(card, {
-                                        opacity: 0,
-                                        y: -20,
-                                        duration: 0.3,
-                                        onComplete: () => {
-                                            card.remove();
-                                    showToast('Empresa excluída com sucesso!', 'success');
-                                    const remainingCards = document.querySelectorAll('.empresa-card');
-                                    if (remainingCards.length === 0) {
-                                        window.location.reload();
-                                    }
-                                }
-                            });
-                        }
-                    } else {
-                        showToast(`Erro ao excluir empresa: ${data.message}`, 'error');
-                    }
-                })
-                .catch(error => {
-                    document.body.removeChild(confirmDialog);
-                    console.error('Erro:', error);
-                    showToast('Erro ao excluir empresa. Tente novamente.', 'error');
-                });
-            });
-
             // Função para exibir toast
             function showToast(message, type) {
                 const toast = document.createElement('div');
@@ -1202,7 +1220,7 @@ if (isset($_POST['layout'])) {
                         }
                     });
                 }, type === 'success' ? 3000 : 4000);
-            }}
+            }
         });
     </script>
 </body>

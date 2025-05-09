@@ -58,8 +58,6 @@ if ($stmt) {
         --card-border-hover: var(--accent-color);
     }
 
-
-
     * {
         margin: 0;
         padding: 0;
@@ -293,9 +291,7 @@ if ($stmt) {
                         <i class="fas fa-sign-in-alt mr-2"></i>
                         Login
                     </a>
-
                 </nav>
-
             </div>
         </div>
     </header>
@@ -344,30 +340,16 @@ if ($stmt) {
     </nav>
 
     <script>
-        // Dados dos candidatos
-        const candidates = [
-            <?php 
-            $total = count($dados);
-            $index = 0;
-            foreach ($dados as $dado) {
-                $index++;
-                $status = in_array($dado['id'], $aprovados) ? 'approved' : 'waiting';
-                $area = $dado['area'] ?? null;
-                $empresa = $dado['empresa'] ?? null;
-            ?>
-            {
-                id: <?= $dado['id'] ?>,
-                name: "<?= addslashes($dado['nome']) ?>",
-                status: "<?= $status ?>",
-                <?php if ($area): ?>
-                area: "<?= addslashes($area) ?>",
-                <?php endif; ?>
-                <?php if ($empresa): ?>
-                company: "<?= addslashes($empresa) ?>"
-                <?php endif; ?>
-            }<?= $index < $total ? ',' : '' ?>
-            <?php } ?>
-        ];
+        // Dados dos candidatos (convertido para JSON válido)
+        const candidates = <?php echo json_encode(array_map(function($dado) use ($aprovados) {
+            return [
+                'id' => $dado['id'],
+                'name' => $dado['nome'],
+                'status' => in_array($dado['id'], $aprovados) ? 'approved' : 'waiting',
+                'area' => $dado['perfil_opc1'] ?? null, // Usando perfil_opc1 como área
+                'company' => $dado['empresa'] ?? null // Adicione a empresa se disponível
+            ];
+        }, $dados)); ?>;
 
         // Função para renderizar os candidatos
         function renderCandidates(filteredCandidates = candidates) {
@@ -409,10 +391,8 @@ if ($stmt) {
 
                 // Adicionar área e empresa apenas para aprovados
                 if (candidate.status === 'approved') {
-                    cardContent += `
-                                <span class="area-badge">${candidate.area}</span>
-                                <span class="company-badge">${candidate.company}</span>
-                    `;
+                    if (candidate.area) cardContent += `<span class="area-badge">${candidate.area}</span>`;
+                    if (candidate.company) cardContent += `<span class="company-badge">${candidate.company}</span>`;
                 }
 
                 cardContent += `
@@ -476,8 +456,6 @@ if ($stmt) {
 
                 renderCandidates(filtered);
             }
-
-
 
             // Animação para os cards
             const animateCards = () => {

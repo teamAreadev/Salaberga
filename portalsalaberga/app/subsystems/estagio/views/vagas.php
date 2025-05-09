@@ -12,6 +12,7 @@ if (isset($_POST['layout'])) {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -101,7 +102,7 @@ if (isset($_POST['layout'])) {
             background-image:
                 radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.05) 0%, rgba(0, 122, 51, 0) 20%),
                 radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.05) 0%, rgba(255, 165, 0, 0) 20%),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23007A33' fill-opacity='0.03' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2  Almighty 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23007A33' fill-opacity='0.03' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
             transition: all 0.3s ease;
         }
 
@@ -111,7 +112,7 @@ if (isset($_POST['layout'])) {
             background-image: linear-gradient(to bottom, #2d2d2d, #222222);
             border-right: 1px solid rgba(0, 122, 51, 0.2);
             transition: all 0.3s ease;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar-link {
@@ -136,210 +137,6 @@ if (isset($_POST['layout'])) {
             font-weight: 600;
             box-shadow: 0 2px 8px rgba(0, 122, 51, 0.15);
         }
-
-
-        /* Vaga card styling */
-.vaga-card {
-    background: linear-gradient(135deg, rgba(49, 49, 49, 0.95) 0%, rgba(37, 37, 37, 0.95) 100%);
-    border-radius: 12px;
-    padding: 1.5rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-}
-
-.vaga-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(to bottom, #00FF6B, #007A33);
-    opacity: 0.7;
-    transition: all 0.3s ease;
-}
-
-.vaga-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(0, 122, 51, 0.2);
-}
-
-.vaga-card:hover::before {
-    opacity: 1;
-    width: 6px;
-}
-
-.vaga-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.vaga-card-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #ffffff;
-    background: linear-gradient(90deg, #ffffff, #e0e0e0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: all 0.3s ease;
-}
-
-.vaga-card:hover .vaga-card-title {
-    background: linear-gradient(90deg, #ffffff, #00FF6B);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.vaga-card-actions {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.vaga-card-action {
-    padding: 0.5rem;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    background: rgba(255, 255, 255, 0.05);
-    color: #9ca3af;
-}
-
-.vaga-card-action:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.vaga-card-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.vaga-card-info-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 0.875rem;
-    color: #d1d5db;
-    padding: 0.5rem;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.03);
-    transition: all 0.3s ease;
-}
-
-.vaga-card-info-item i {
-    color: #007A33;
-    transition: all 0.3s ease;
-}
-
-.vaga-card:hover .vaga-card-info-item i {
-    color: #00FF6B;
-}
-
-/* Area chips styling */
-.area-chip {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: capitalize;
-    transition: all 0.3s ease;
-    background: rgba(0, 0, 0, 0.1);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.area-chip:hover {
-    transform: translateY(-1px);
-    background: rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-.area-desenvolvimento {
-    background: rgba(59, 130, 246, 0.15);
-    color: #93c5fd;
-    border: 1px solid rgba(59, 130, 246, 0.2);
-}
-
-.area-desenvolvimento:hover {
-    background: rgba(59, 130, 246, 0.25);
-}
-
-.area-design {
-    background: rgba(168, 85, 247, 0.15);
-    color: #c4b5fd;
-    border: 1px solid rgba(168, 85, 247, 0.2);
-}
-
-.area-design:hover {
-    background: rgba(168, 85, 247, 0.25);
-}
-
-.area-midia {
-    background: rgba(16, 185, 129, 0.15);
-    color: #6ee7b7;
-    border: 1px solid rgba(16, 185, 129, 0.2);
-}
-
-.area-midia:hover {
-    background: rgba(16, 185, 129, 0.25);
-}
-
-.area-redes {
-    background: rgba(245, 158, 11, 0.15);
-    color: #fcd34d;
-    border: 1px solid rgba(245, 158, 11, 0.2);
-}
-
-.area-redes:hover {
-    background: rgba(245, 158, 11, 0.25);
-}
-
-.area-tutoria {
-    background: rgba(168, 85, 247, 0.15);
-    color: #c4b5fd;
-    border: 1px solid rgba(168, 85, 247, 0.2);
-}
-
-.area-tutoria:hover {
-    background: rgba(168, 85, 247, 0.25);
-}
-
-/* Ver detalhes link styling */
-.ver-detalhes-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: rgba(0, 122, 51, 0.1);
-    border-radius: 6px;
-    color: #00C250;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    text-decoration: none;
-}
-
-.ver-detalhes-link:hover {
-    background: rgba(0, 122, 51, 0.2);
-    transform: translateX(3px);
-}
-
-.ver-detalhes-link i {
-    transition: transform 0.3s ease;
-}
-
-.ver-detalhes-link:hover i {
-    transform: translateX(3px);
-}
 
         /* Vaga card styling */
         .vaga-card {
@@ -378,25 +175,69 @@ if (isset($_POST['layout'])) {
             box-shadow: 0 0 15px rgba(0, 255, 107, 0.4);
         }
 
-        .vaga-title {
+        .vaga-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .vaga-card-title {
             font-size: 1.25rem;
-            font-weight: 700;
+            font-weight: 600;
             color: #ffffff;
-            line-height: 1.2;
             background: linear-gradient(90deg, #ffffff, #e0e0e0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
             transition: all 0.3s ease;
         }
 
-        .vaga-card:hover .vaga-title {
+        .vaga-card:hover .vaga-card-title {
             background: linear-gradient(90deg, #ffffff, #00FF6B);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
+        }
+
+        .vaga-card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .vaga-card-action {
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .vaga-card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .vaga-card-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: #d1d5db;
+            padding: 0.5rem;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .vaga-card-info-item i {
+            color: #007A33;
+            transition: all 0.3s ease;
+        }
+
+        .vaga-card:hover .vaga-card-info-item i {
+            color: #00FF6B;
         }
 
         /* Area chips styling */
@@ -458,6 +299,43 @@ if (isset($_POST['layout'])) {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.3) 100%);
         }
 
+        .area-tutoria {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(126, 34, 206, 0.2) 100%);
+            color: #c4b5fd;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .area-tutoria:hover {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(126, 34, 206, 0.3) 100%);
+        }
+
+        /* Ver detalhes link styling */
+        .ver-detalhes-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 122, 51, 0.1);
+            border-radius: 6px;
+            color: #00C250;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .ver-detalhes-link:hover {
+            background: rgba(0, 122, 51, 0.2);
+            transform: translateX(3px);
+        }
+
+        .ver-detalhes-link i {
+            transition: transform 0.3s ease;
+        }
+
+        .ver-detalhes-link:hover i {
+            transform: translateX(3px);
+        }
+
         /* Custom input styling */
         .custom-input {
             background-color: rgba(35, 35, 35, 0.8) !important;
@@ -476,6 +354,7 @@ if (isset($_POST['layout'])) {
             overflow: visible !important;
             text-overflow: unset !important;
         }
+
         select.custom-input {
             min-width: 180px !important;
             max-width: 100% !important;
@@ -483,20 +362,33 @@ if (isset($_POST['layout'])) {
             overflow: visible !important;
             text-overflow: unset !important;
         }
+
         .relative select.custom-input {
             padding-right: 2.5rem !important;
         }
+
         .relative {
             min-width: 180px;
         }
+
         @media (max-width: 640px) {
-            .custom-input, select.custom-input {
+
+            .custom-input,
+            select.custom-input {
                 min-width: 100% !important;
                 font-size: 1rem !important;
             }
+
             .relative {
                 min-width: 100%;
             }
+        }
+
+        .custom-input:focus {
+            border-color: #00C250 !important;
+            box-shadow: 0 0 0 2px rgba(0, 194, 80, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            outline: none !important;
+            background-color: rgba(40, 40, 40, 0.9) !important;
         }
 
         /* Search input styling */
@@ -661,35 +553,58 @@ if (isset($_POST['layout'])) {
 
         /* Animations */
         @keyframes scaleIn {
-            0% { transform: translate(-50%, -50%) scale(0); }
-            100% { transform: translate(-50%, -50%) scale(1); }
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        .slide-up { animation: slideUp 0.4s ease-out forwards; }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.4s ease-out forwards;
+        }
 
         /* Responsive adjustments */
         @media (max-width: 640px) {
-            .vaga-card { padding: 1rem; }
-            .custom-input { min-width: 100% !important; }
-            .mobile-stack { flex-direction: column; }
-        }
+            .vaga-card {
+                padding: 1rem;
+            }
 
-        .custom-input:focus {
-            border-color: #00C250 !important;
-            box-shadow: 0 0 0 2px rgba(0, 194, 80, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-            outline: none !important;
-            background-color: rgba(40, 40, 40, 0.9) !important;
+            .custom-input {
+                min-width: 100% !important;
+            }
+
+            .mobile-stack {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -817,7 +732,7 @@ if (isset($_POST['layout'])) {
             <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6 sm:py-8 w-full">
                 <!-- Breadcrumbs -->
                 <div class="text-sm text-gray-400 mb-6 flex items-center">
-                    <a href="./-page.php" class="hover:text-primary-400 transition-colors">Dashboard</a>
+                    <a href="./dashboard.php" class="hover:text-primary-400 transition-colors">Dashboard</a>
                     <span class="mx-2 text-gray-600">/</span>
                     <span class="text-white">Vagas</span>
                 </div>
@@ -848,129 +763,245 @@ if (isset($_POST['layout'])) {
                             </div>
                             <div class="relative">
                                 <select id="filterEmpresa" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
-                                  
-                                  
+                                    <option value="">Todas as empresas</option>
+                                    <?php
+                                    $empresas = $select_model->concedentes();
+                                    foreach ($empresas as $empresa) {
+                                        echo "<option value='{$empresa['id']}'>" . htmlspecialchars($empresa['nome'], ENT_QUOTES, 'UTF-8') . "</option>";
+                                    }
+                                    ?>
                                 </select>
-                              
+                                <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
                             </div>
                         </div>
                     </div>
                 </div>
 
-              <!-- Grid de Vagas -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="vagasGrid">
-    <?php 
-    $dados = $select_model->vagas();
-    if (empty($dados)): ?>
-        <div class="col-span-3 text-center py-16 text-gray-400 fade-in">
-            <i class="fas fa-briefcase text-5xl mb-4 text-gray-600 opacity-30"></i>
-            <p class="text-xl">Nenhuma vaga cadastrada no momento.</p>
-            <button id="firstVagaBtn" class="mt-6 custom-btn custom-btn-primary">
-                <i class="fas fa-plus btn-icon"></i>
-                <span>Cadastrar Primeira Vaga</span>
-            </button>
-        </div>
-    <?php else: ?>
-        <?php
-        $delay = 0;
-        foreach($dados as $dado):
-            $delay += 100;
-            $area = isset($dado['nome_perfil']) && !empty($dado['nome_perfil']) ? strtolower($dado['nome_perfil']) : 'desenvolvimento';
-            if ($area === 'design/mídia') {
-                $area = 'design';
-            }
-            $vagaId = isset($dado['id']) ? htmlspecialchars($dado['id'], ENT_QUOTES, 'UTF-8') : '';
-            $empresaName = isset($dado['nome_empresa']) ? htmlspecialchars($dado['nome_empresa'], ENT_QUOTES, 'UTF-8') : 'Não informado';
-            $quantidade = isset($dado['quantidade']) ? htmlspecialchars($dado['quantidade'], ENT_QUOTES, 'UTF-8') : '0';
-            $nomePerfil = isset($dado['nome_perfil']) ? htmlspecialchars($dado['nome_perfil'], ENT_QUOTES, 'UTF-8') : 'Área não informada';
-            $empresaId = isset($dado['id_empresa']) ? htmlspecialchars($dado['id_empresa'], ENT_QUOTES, 'UTF-8') : '';
-        ?>
-            <div class="vaga-card slide-up" 
-                style="animation-delay: <?php echo $delay; ?>ms;" 
-                data-vaga-id="<?php echo $vagaId; ?>" 
-                data-area="<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>"
-                data-empresa-id="<?php echo $empresaId; ?>"
-                data-empresa-nome="<?php echo $empresaName; ?>">
-                <div class="vaga-card-header">
-                    <h3 class="vaga-card-title"><?php echo $empresaName ?></h3>
-                    <div class="vaga-card-actions">
-                        <button class="vaga-card-action hover:text-primary-400" onclick="editarVaga(<?php echo $vagaId ? $vagaId : '0'; ?>, '<?php echo $empresaName; ?>', '<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>', '<?php echo $empresaId; ?>', '<?php echo $quantidade; ?>')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="vaga-card-action hover:text-red-400" onclick="excluirVaga(<?php echo $vagaId ? $vagaId : '0'; ?>)">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="area-chip area-<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>">
-                        <?php if ($area === 'desenvolvimento'): ?>
-                            <i class="fas fa-code mr-1 text-xs"></i>
-                        <?php elseif ($area === 'tutoria'): ?>
-                            <i class="fas fa-chalkboard-teacher mr-1 text-xs"></i>
-                        <?php elseif ($area === 'design'): ?>
-                            <i class="fas fa-paint-brush mr-1 text-xs"></i>
-                        <?php elseif ($area === 'redes'): ?>
-                            <i class="fas fa-network-wired mr-1 text-xs"></i>
-                        <?php else: ?>
-                            <i class="fas fa-question mr-1 text-xs"></i>
-                        <?php endif; ?>
-                        <?php echo $nomePerfil; ?>
-                    </span>
-                </div>
-                <div class="vaga-card-info">
-                    <div class="vaga-card-info-item">
-                        <i class="fas fa-building w-5"></i>
-                        <span><?php echo $empresaName; ?></span>
-                    </div>
-                    <div class="vaga-card-info-item">
-                        <i class="fas fa-users w-5"></i>
-                        <span><?php echo $quantidade; ?> candidatos(s) disponível(is)</span>
-                    </div>
-                    <div class="vaga-card-info-item">
-                        <i class="fas fa-calendar w-5"></i>
-                        <span><?=$dado['data'] ?></span>
-                        <span class="mx-2">|</span>
-                        <span><?=$dado['hora'] ?></span>
-                    </div>
-                    <div class="vaga-card-info-item">
-                        <i class="fas fa-briefcase w-5"></i>
-                        <span><?=$dado['tipo_vaga'] ?></span>
-                    </div>
-                    <div class="vaga-card-info-item">
-                        <i class="fas fa-user-graduate w-5"></i>
-                        <div class="flex flex-col gap-1">
-                            <?php 
-                            $id_vaga = $dado['id'];
-                            $alunos = $select_model->alunos_selecionados($id_vaga);
-                            
-                            if (empty($alunos)): ?>
-                                <span class="text-gray-500">Nenhum aluno selecionado</span>
-                            <?php else: ?>
-                                <?php foreach($alunos as $aluno): ?>
-                                    <span class="text-sm text-gray-300">
-                                        <?= htmlspecialchars($aluno['nome']) ?>
-                                    </span>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
+                <!-- Grid de Vagas -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="vagasGrid">
+                    <?php
+                    $dados = $select_model->vagas();
+                    if (empty($dados)): ?>
+                        <div class="col-span-3 text-center py-16 text-gray-400 fade-in">
+                            <i class="fas fa-briefcase text-5xl mb-4 text-gray-600 opacity-30"></i>
+                            <p class="text-xl">Nenhuma vaga cadastrada no momento.</p>
+                            <button id="firstVagaBtn" class="mt-6 custom-btn custom-btn-primary">
+                                <i class="fas fa-plus btn-icon"></i>
+                                <span>Cadastrar Primeira Vaga</span>
+                            </button>
                         </div>
-                    </div>
+                    <?php else: ?>
+                        <?php
+                        $delay = 0;
+                        foreach ($dados as $dado):
+                            $delay += 100;
+                            $area = isset($dado['nome_perfil']) && !empty($dado['nome_perfil']) ? strtolower($dado['nome_perfil']) : 'desenvolvimento';
+                            if ($area === 'design/mídia') {
+                                $area = 'design';
+                            }
+                            $vagaId = isset($dado['id']) ? htmlspecialchars($dado['id'], ENT_QUOTES, 'UTF-8') : '';
+                            $empresaName = isset($dado['nome_empresa']) ? htmlspecialchars($dado['nome_empresa'], ENT_QUOTES, 'UTF-8') : 'Não informado';
+                            $quantidade = isset($dado['quantidade']) ? htmlspecialchars($dado['quantidade'], ENT_QUOTES, 'UTF-8') : '0';
+                            $nomePerfil = isset($dado['nome_perfil']) ? htmlspecialchars($dado['nome_perfil'], ENT_QUOTES, 'UTF-8') : 'Área não informada';
+                            $empresaId = isset($dado['id_empresa']) ? htmlspecialchars($dado['id_empresa'], ENT_QUOTES, 'UTF-8') : '';
+                            $data = isset($dado['data']) ? htmlspecialchars($dado['data'], ENT_QUOTES, 'UTF-8') : '';
+                            $hora = isset($dado['hora']) ? htmlspecialchars($dado['hora'], ENT_QUOTES, 'UTF-8') : '';
+                            $tipoVaga = isset($dado['tipo_vaga']) ? htmlspecialchars($dado['tipo_vaga'], ENT_QUOTES, 'UTF-8') : '';
+                        ?>
+                            <div class="vaga-card slide-up"
+                                style="animation-delay: <?php echo $delay; ?>ms;"
+                                data-vaga-id="<?php echo $vagaId; ?>"
+                                data-area="<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>"
+                                data-empresa-id="<?php echo $empresaId; ?>"
+                                data-empresa-nome="<?php echo $empresaName; ?>"
+                                data-quantidade="<?php echo $quantidade; ?>"
+                                data-data="<?php echo $data; ?>"
+                                data-hora="<?php echo $hora; ?>"
+                                data-tipo-vaga="<?php echo $tipoVaga; ?>">
+                                <div class="vaga-card-header">
+                                    <h3 class="vaga-card-title"><?php echo $empresaName ?></h3>
+                                    <div class="vaga-card-actions">
+                                        <button class="vaga-card-action text-gray-400 hover:text-primary-400 edit-btn" data-modal-id="editarVagaModal-<?php echo $vagaId; ?>">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="vaga-card-action text-red-500 hover:text-red-400 delete-btn" data-modal-id="excluirVagaModal-<?php echo $vagaId; ?>">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="area-chip area-<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>">
+                                        <?php if ($area === 'desenvolvimento'): ?>
+                                            <i class="fas fa-code mr-1 text-xs"></i>
+                                        <?php elseif ($area === 'tutoria'): ?>
+                                            <i class="fas fa-chalkboard-teacher mr-1 text-xs"></i>
+                                        <?php elseif ($area === 'design'): ?>
+                                            <i class="fas fa-paint-brush mr-1 text-xs"></i>
+                                        <?php elseif ($area === 'redes'): ?>
+                                            <i class="fas fa-network-wired mr-1 text-xs"></i>
+                                        <?php else: ?>
+                                            <i class="fas fa-question mr-1 text-xs"></i>
+                                        <?php endif; ?>
+                                        <?php echo $nomePerfil; ?>
+                                    </span>
+                                </div>
+                                <div class="vaga-card-info">
+                                    <div class="vaga-card-info-item">
+                                        <i class="fas fa-building w-5"></i>
+                                        <span><?php echo $empresaName; ?></span>
+                                    </div>
+                                    <div class="vaga-card-info-item">
+                                        <i class="fas fa-users w-5"></i>
+                                        <span><?php echo $quantidade; ?> candidatos(s) disponível(is)</span>
+                                    </div>
+                                    <div class="vaga-card-info-item">
+                                        <i class="fas fa-calendar w-5"></i>
+                                        <span><?= $dado['data'] ?></span>
+                                        <span class="mx-2">|</span>
+                                        <span><?= $dado['hora'] ?></span>
+                                    </div>
+                                    <div class="vaga-card-info-item">
+                                        <i class="fas fa-briefcase w-5"></i>
+                                        <span><?= $dado['tipo_vaga'] ?></span>
+                                    </div>
+                                    <div class="vaga-card-info-item">
+                                        <i class="fas fa-user-graduate w-5"></i>
+                                        <div class="flex flex-col gap-1">
+                                            <?php
+                                            $id_vaga = $dado['id'];
+                                            $alunos = $select_model->alunos_selecionados($id_vaga);
+
+                                            if (empty($alunos)): ?>
+                                                <span class="text-gray-500">Nenhum aluno selecionado</span>
+                                            <?php else: ?>
+                                                <?php foreach ($alunos as $aluno): ?>
+                                                    <span class="text-sm text-gray-300">
+                                                        <?= htmlspecialchars($aluno['nome']) ?>
+                                                    </span>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <a href="./alunos_vaga.php?nome_perfil=<?= $dado['nome_perfil'] ?>&id_vaga=<?= $dado['id'] ?>&nome_empresa=<?= $dado['nome_empresa'] ?>&nome_baga=<?= $dado['id'] ?>" class="ver-detalhes-link">
+                                        <span>Selecionar aluno</span>
+                                        <i class="fas fa-arrow-right ml-2"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Modal de Editar Vaga -->
+                            <div id="editarVagaModal-<?php echo $vagaId; ?>" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+                                <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
+                                    <h2 class="text-2xl font-bold mb-6 text-white slide-up">Editar Vaga</h2>
+                                    <form action="../controllers/controller_editar_excluir.php" method="post" class="space-y-6">
+                                        <input type="hidden" name="id_editar_vaga" value="<?php echo $vagaId; ?>">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300 mb-2">Nome da Empresa</label>
+                                            <select name="empresa_editar_vaga" class="custom-input mt-1 w-full" required>
+                                                <option value="" disabled>Selecione uma empresa</option>
+                                                <?php
+                                                $empresas = $select_model->concedentes();
+                                                foreach ($empresas as $empresa) {
+                                                    $selected = $empresa['id'] == $empresaId ? 'selected' : '';
+                                                    echo "<option value='{$empresa['id']}' $selected>" . htmlspecialchars($empresa['nome'], ENT_QUOTES, 'UTF-8') . "</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300 mb-2">Áreas de Atuação</label>
+                                            <div class="mt-2 space-y-3">
+                                                <label class="inline-flex items-center">
+                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="1" <?php echo $area === 'desenvolvimento' ? 'checked' : ''; ?>>
+                                                    <span class="ml-3 text-gray-300">Desenvolvimento</span>
+                                                </label>
+                                                <label class="inline-flex items-center">
+                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="2" <?php echo $area === 'design' ? 'checked' : ''; ?>>
+                                                    <span class="ml-3 text-gray-300">Design/Social media</span>
+                                                </label>
+                                                <label class="inline-flex items-center">
+                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="4" <?php echo $area === 'midia' ? 'checked' : ''; ?>>
+                                                    <span class="ml-3 text-gray-300">Tutoria</span>
+                                                </label>
+                                                <label class="inline-flex items-center">
+                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="3" <?php echo $area === 'redes' ? 'checked' : ''; ?>>
+                                                    <span class="ml-3 text-gray-300">Suporte/Redes</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300 mb-2">Vagas Disponíveis</label>
+                                            <input type="number" name="quantidade_editar_vaga" min="1" value="<?php echo $quantidade; ?>" class="custom-input mt-1 w-full" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300 mb-2">Tipo de Vaga</label>
+                                            <select name="tipo_editar_vaga" class="custom-input mt-1 w-full" required>
+                                                <option value="" disabled>Selecione o tipo de vaga</option>
+                                                <option value="Hibrido" <?php echo $tipoVaga === 'Hibrido' ? 'selected' : ''; ?>>Híbrido</option>
+                                                <option value="Presencial" <?php echo $tipoVaga === 'Presencial' ? 'selected' : ''; ?>>Presencial</option>
+                                                <option value="HomeOffice" <?php echo $tipoVaga === 'HomeOffice' ? 'selected' : ''; ?>>Home Office</option>
+                                            </select>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-300 mb-2">Data</label>
+                                                <input type="date" name="data_editar_vaga" value="<?php echo $data; ?>" class="custom-input mt-1 w-full">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-300 mb-2">Hora</label>
+                                                <input type="time" name="hora_editar_vaga" value="<?php echo $hora; ?>" class="custom-input mt-1 w-full">
+                                            </div>
+                                        </div>
+                                        <div class="mt-8 flex justify-end space-x-4">
+                                            <button type="button" class="custom-btn custom-btn-secondary close-btn" data-modal-id="editarVagaModal-<?php echo $vagaId; ?>">
+                                                <i class="fas fa-times btn-icon"></i>
+                                                <span>Cancelar</span>
+                                            </button>
+                                            <button type="submit" class="custom-btn custom-btn-primary">
+                                                <i class="fas fa-save btn-icon"></i>
+                                                <span>Salvar</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Modal de Excluir Vaga -->
+                            <div id="excluirVagaModal-<?php echo $vagaId; ?>" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+                                <div class="candidatura-modal rounded-lg p-6 max-w-md w-full mx-4">
+                                    <div class="text-center mb-6">
+                                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/10 text-red-500 mb-4">
+                                            <i class="fas fa-exclamation-triangle text-2xl"></i>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-white slide-up">Confirmar Exclusão</h3>
+                                        <p class="text-gray-400 mt-2">Tem certeza que deseja excluir esta vaga? Esta ação não pode ser desfeita.</p>
+                                    </div>
+                                    <form action="../controllers/controller_editar_excluir.php" method="post">
+                                        <input type="hidden" name="id_excluir_vaga" value="<?php echo $vagaId; ?>">
+                                        <div class="flex justify-center space-x-4">
+                                            <button type="button" class="custom-btn custom-btn-secondary close-btn" data-modal-id="excluirVagaModal-<?php echo $vagaId; ?>">
+                                                <i class="fas fa-times btn-icon"></i>
+                                                <span>Cancelar</span>
+                                            </button>
+                                            <button type="submit" class="custom-btn bg-red-500 hover:bg-red-600 text-white">
+                                                <i class="fas fa-trash-alt btn-icon"></i>
+                                                <span>Excluir Vaga</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
-                <div class="mt-4">
-                    <a href="./alunos_vaga.php?nome_perfil=<?=$dado['nome_perfil']?>&id_vaga=<?=$dado['id']?>&nome_empresa=<?=$dado['nome_empresa']?>&nome_baga=<?=$dado['id']?>" class="ver-detalhes-link">
-                        <span>Selecionar aluno</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
-</div>
             </main>
         </div>
 
-        <!-- Modal de Cadastro/Edição de Vaga -->
-        <div id="vagaModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+        <!-- Modal de Cadastro de Nova Vaga -->
+        <div id="novaVagaModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
             <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
                 <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white slide-up">Nova Vaga</h2>
                 <form action="../controllers/controller.php" method="post" id="vagaForm" class="space-y-6">
@@ -979,12 +1010,12 @@ if (isset($_POST['layout'])) {
                         <label class="block text-sm font-medium text-gray-300 mb-2">Nome da Empresa</label>
                         <select id="vagaEmpresa" name="empresa" class="custom-input mt-1 w-full" required>
                             <option value="" selected disabled>Selecione uma empresa</option>
-                            <?php 
-                            $dados = $select_model->concedentes();
-                            foreach($dados as $dado){
+                            <?php
+                            $empresas = $select_model->concedentes();
+                            foreach ($empresas as $empresa) {
                             ?>
-                            <option value="<?=$dado['id']?>"><?=$dado['nome']?></option>
-                            <?php }?>
+                                <option value="<?= $empresa['id'] ?>"><?= $empresa['nome'] ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                     <div>
@@ -1024,7 +1055,7 @@ if (isset($_POST['layout'])) {
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Data</label>
-                            <input type="date" name="data" class="custom-input mt-1 w-full" >
+                            <input type="date" name="data" class="custom-input mt-1 w-full">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Hora</label>
@@ -1032,7 +1063,7 @@ if (isset($_POST['layout'])) {
                         </div>
                     </div>
                     <div class="mt-8 flex justify-end space-x-4">
-                        <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">
+                        <button type="button" class="custom-btn custom-btn-secondary close-btn" data-modal-id="novaVagaModal">
                             <i class="fas fa-times btn-icon"></i>
                             <span>Cancelar</span>
                         </button>
@@ -1048,21 +1079,26 @@ if (isset($_POST['layout'])) {
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const modal = document.getElementById('vagaModal');
-            const modalContent = modal.querySelector('.candidatura-modal');
+            const novaVagaModal = document.getElementById('novaVagaModal');
             const vagaForm = document.getElementById('vagaForm');
             const addVagaBtn = document.getElementById('addVagaBtn');
             const firstVagaBtn = document.getElementById('firstVagaBtn');
-            const cancelarBtn = document.getElementById('cancelarBtn');
             const sidebarToggle = document.getElementById('sidebarToggle');
             const closeSidebar = document.getElementById('closeSidebar');
             const mobileSidebar = document.getElementById('mobileSidebar');
             const searchInput = document.getElementById('searchVaga');
             const filterArea = document.getElementById('filterArea');
             const filterEmpresa = document.getElementById('filterEmpresa');
+            const vagasGrid = document.getElementById('vagasGrid');
+            let currentModalId = null;
 
             // GSAP Animations
-            gsap.from('.action-bar', { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' });
+            gsap.from('.action-bar', {
+                opacity: 0,
+                y: 20,
+                duration: 0.5,
+                ease: 'power2.out'
+            });
             gsap.from('.vaga-card', {
                 opacity: 0,
                 y: 50,
@@ -1103,58 +1139,109 @@ if (isset($_POST['layout'])) {
             });
 
             // Modal handling
-            function resetModal() {
-                modalContent.style.opacity = '0';
-                modalContent.style.transform = 'scale(0.9)';
-                vagaForm.reset();
-                document.getElementById('vagaId').value = '';
-                document.getElementById('modalTitle').textContent = 'Nova Vaga';
-                const checkboxes = document.querySelectorAll('input[name="areas"]');
-                checkboxes.forEach(cb => cb.checked = false);
-            }
-
-            function openModal(isEdit = false, vaga = null) {
-                resetModal();
-                if (isEdit && vaga) {
-                    document.getElementById('modalTitle').textContent = 'Editar Vaga';
-                    document.getElementById('vagaId').value = vaga.id;
-                    document.getElementById('vagaEmpresa').value = vaga.empresa_id;
-                    document.getElementById('vagaVagasDisponiveis').value = vaga.vagas_disponiveis || '';
-                    const checkboxes = document.querySelectorAll('input[name="areas"]');
-                    checkboxes.forEach(cb => {
-                        cb.checked = vaga.area === cb.value;
-                    });
+            function openModal(modalId) {
+                console.log('Tentando abrir modal:', modalId);
+                if (currentModalId) {
+                    closeModal(currentModalId);
                 }
+
+                const modal = document.getElementById(modalId);
+                if (!modal) {
+                    console.error('Modal não encontrada para o ID:', modalId);
+                    return;
+                }
+
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
-                gsap.to(modalContent, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' });
+                const modalContent = modal.querySelector('.candidatura-modal');
+                if (modalContent) {
+                    gsap.fromTo(modalContent, {
+                        opacity: 0,
+                        scale: 0.9
+                    }, {
+                        opacity: 1,
+                        scale: 1,
+                        duration: 0.3,
+                        ease: 'power2.out'
+                    });
+                }
+
+                currentModalId = modalId;
             }
 
-            function closeModal() {
-                gsap.to(modalContent, {
-                    opacity: 0,
-                    scale: 0.9,
-                    duration: 0.3,
-                    ease: 'power2.in',
-                    onComplete: () => {
-                        modal.classList.add('hidden');
-                        modal.classList.remove('flex');
-                        resetModal();
-                    }
+            function closeModal(modalId) {
+                console.log('Fechando modal:', modalId);
+                const modal = document.getElementById(modalId);
+                if (!modal) {
+                    console.error('Modal não encontrada para o ID:', modalId);
+                    return;
+                }
+
+                const modalContent = modal.querySelector('.candidatura-modal');
+                if (modalContent) {
+                    gsap.to(modalContent, {
+                        opacity: 0,
+                        scale: 0.9,
+                        duration: 0.3,
+                        ease: 'power2.in',
+                        onComplete: () => {
+                            modal.classList.add('hidden');
+                            modal.classList.remove('flex');
+                            currentModalId = null;
+                        }
+                    });
+                } else {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    currentModalId = null;
+                }
+            }
+
+            // Delegar eventos para botões de Editar e Excluir
+            vagasGrid.addEventListener('click', (e) => {
+                const editBtn = e.target.closest('.edit-btn');
+                const deleteBtn = e.target.closest('.delete-btn');
+                const closeBtn = e.target.closest('.close-btn');
+
+                if (editBtn) {
+                    const modalId = editBtn.getAttribute('data-modal-id');
+                    console.log('Botão Editar clicado, modalId:', modalId);
+                    openModal(modalId);
+                }
+
+                if (deleteBtn) {
+                    const modalId = deleteBtn.getAttribute('data-modal-id');
+                    console.log('Botão Excluir clicado, modalId:', modalId);
+                    openModal(modalId);
+                }
+
+                if (closeBtn) {
+                    const modalId = closeBtn.getAttribute('data-modal-id');
+                    console.log('Botão Fechar clicado, modalId:', modalId);
+                    closeModal(modalId);
+                }
+            });
+
+            // Nova Vaga Modal
+            addVagaBtn.addEventListener('click', () => {
+                console.log('Botão Nova Vaga clicado');
+                openModal('novaVagaModal');
+            });
+
+            if (firstVagaBtn) {
+                firstVagaBtn.addEventListener('click', () => {
+                    console.log('Botão Cadastrar Primeira Vaga clicado');
+                    openModal('novaVagaModal');
                 });
             }
 
-            addVagaBtn.addEventListener('click', () => openModal());
-            if (firstVagaBtn) {
-                firstVagaBtn.addEventListener('click', () => openModal());
-            }
-
-            cancelarBtn.addEventListener('click', closeModal);
-
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
+            // Fechar modais ao clicar fora
+            document.querySelectorAll('.fixed').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal && modal.id === currentModalId) {
+                        closeModal(modal.id);
+                    }
+                });
             });
 
             // Filtragem de vagas
@@ -1170,26 +1257,33 @@ if (isset($_POST['layout'])) {
                     const area = card.dataset.area;
                     const empresaId = card.dataset.empresaId;
                     const empresaNome = card.dataset.empresaNome.toLowerCase();
-                    
-                    const matchSearch = searchTerm === '' || 
-                                      titulo.includes(searchTerm) || 
-                                      empresaNome.includes(searchTerm);
+
+                    const matchSearch = searchTerm === '' ||
+                        titulo.includes(searchTerm) ||
+                        empresaNome.includes(searchTerm);
                     const matchArea = areaFiltro === '' || area === areaFiltro;
                     const matchEmpresa = empresaFiltro === '' || empresaId === empresaFiltro;
 
                     if (matchSearch && matchArea && matchEmpresa) {
                         card.style.display = '';
                         visibleCount++;
-                        gsap.fromTo(card,
-                            { opacity: 0, y: 20 },
-                            { opacity: 1, y: 0, duration: 0.3, delay: index * 0.05 }
-                        );
+                        gsap.fromTo(card, {
+                            opacity: 0,
+                            y: 20
+                        }, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.3,
+                            delay: index * 0.05
+                        });
                     } else {
                         gsap.to(card, {
                             opacity: 0,
                             y: 20,
                             duration: 0.3,
-                            onComplete: () => { card.style.display = 'none'; }
+                            onComplete: () => {
+                                card.style.display = 'none';
+                            }
                         });
                     }
                 });
@@ -1231,92 +1325,6 @@ if (isset($_POST['layout'])) {
             filterArea.addEventListener('change', aplicarFiltros);
             filterEmpresa.addEventListener('change', aplicarFiltros);
 
-            // Editar vaga
-            window.editarVaga = (id, titulo, area, empresa_id, vagas_disponiveis) => {
-                openModal(true, { id, titulo, area, empresa_id, vagas_disponiveis });
-            };
-
-            // Excluir vaga
-            window.excluirVaga = (id) => {
-                const confirmDialog = document.createElement('div');
-                confirmDialog.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50';
-                confirmDialog.innerHTML = `
-                    <div class="candidatura-modal rounded-lg p-6 max-w-md w-full mx-4">
-                        <div class="text-center mb-6">
-                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/10 text-red-500 mb-4">
-                                <i class="fas fa-exclamation-triangle text-2xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-white slide-up">Confirmar Exclusão</h3>
-                            <p class="text-gray-400 mt-2">Tem certeza que deseja excluir esta vaga? Esta ação não pode ser desfeita.</p>
-                        </div>
-                        <div class="flex justify-center space-x-4">
-                            <button id="cancelExcluir" class="custom-btn custom-btn-secondary">
-                                <i class="fas fa-times btn-icon"></i>
-                                <span>Cancelar</span>
-                            </button>
-                            <button id="confirmarExcluir" class="custom-btn bg-red-500 hover:bg-red-600 text-white">
-                                <i class="fas fa-trash-alt btn-icon"></i>
-                                <span>Excluir Vaga</span>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(confirmDialog);
-                const confirmModalContent = confirmDialog.querySelector('.candidatura-modal');
-                gsap.to(confirmModalContent, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' });
-
-                confirmDialog.querySelector('#cancelExcluir').addEventListener('click', () => {
-                    gsap.to(confirmModalContent, {
-                        opacity: 0,
-                        scale: 0.9,
-                        duration: 0.3,
-                        ease: 'power2.in',
-                        onComplete: () => {
-                            document.body.removeChild(confirmDialog);
-                        }
-                    });
-                });
-
-                confirmDialog.querySelector('#confirmarExcluir').addEventListener('click', () => {
-                    fetch('excluir_vaga.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `id=${id}`
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        document.body.removeChild(confirmDialog);
-                        if (data.success) {
-                            const card = document.querySelector(`[data-vaga-id="${id}"]`);
-                            if (card) {
-                                gsap.to(card, {
-                                    opacity: 0,
-                                    y: -20,
-                                    duration: 0.3,
-                                    onComplete: () => {
-                                        card.remove();
-                                        showToast('Vaga excluída com sucesso!', 'success');
-                                        const remainingCards = document.querySelectorAll('.vaga-card');
-                                        if (remainingCards.length === 0) {
-                                            window.location.reload();
-                                        }
-                                    }
-                                });
-                            }
-                        } else {
-                            showToast(`Erro ao excluir vaga: ${data.message}`, 'error');
-                        }
-                    })
-                    .catch(error => {
-                        document.body.removeChild(confirmDialog);
-                        console.error('Erro:', error);
-                        showToast('Erro ao excluir vaga. Tente novamente.', 'error');
-                    });
-                });
-            };
-
             // Função para exibir toast
             function showToast(message, type) {
                 const toast = document.createElement('div');
@@ -1344,4 +1352,5 @@ if (isset($_POST['layout'])) {
         });
     </script>
 </body>
+
 </html>

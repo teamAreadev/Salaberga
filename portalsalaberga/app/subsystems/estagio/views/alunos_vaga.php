@@ -1,9 +1,15 @@
 <?php
-if(isset($_POST['alunos']) && !empty($_POST['alunos'])){
 
-}
 require_once('../models/select_model.php');
+require_once('../models/sessions.php');
 $select_model = new select_model();
+$session = new sessions;
+$session->tempo_session();
+$session->autenticar_session();
+
+if (isset($_POST['layout'])) {
+    $session->quebra_session();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -733,7 +739,7 @@ $select_model = new select_model();
 
                                     $nome_perfil = $_GET['nome_perfil'];
                                     $id_vaga = $_GET['id_vaga'];
-                                    $dados = $select_model->alunos_aptos($nome_perfil);
+                                    $dados = $select_model->alunos($nome_perfil);
                                     foreach ($dados as $index => $dado) {
                                 ?>
                                 <input type="hidden" name="id_vaga" value="<?=$id_vaga?>">

@@ -124,9 +124,76 @@ class main_model extends connect
             return 2;
         }
     }
+    function editar_vaga($id, $empresa, $perfil, $quantidades_vagas, $tipo_vaga, $data, $hora)
+    {
+        $stmt_excluirEmpresa = $this->connect->prepare("UPDATE `vagas` SET `id_concedente`= :empresa,`id_perfil`= :perfil,`quantidade`= :quantidade,`data`= :data ,`tipo_vaga`= :tipo,`hora`= :hora WHERE id = :id");
+        $stmt_excluirEmpresa->bindValue(':id', $id);
+        $stmt_excluirEmpresa->bindValue(':empresa', $empresa);
+        $stmt_excluirEmpresa->bindValue(':perfil', $perfil);
+        $stmt_excluirEmpresa->bindValue(':quantidade', $quantidades_vagas);
+        $stmt_excluirEmpresa->bindValue(':data', $data);
+        $stmt_excluirEmpresa->bindValue(':tipo', $tipo_vaga);
+        $stmt_excluirEmpresa->bindValue(':hora', $hora);
+
+        $stmt_excluirEmpresa->execute();
+        if ($stmt_excluirEmpresa) {
+
+            return 1;
+        } else {
+
+            return 2;
+        }
+    }
+    function editar_empresa($id, $nome, $contato, $endereco)
+    {
+        $stmt_check = $this->connect->prepare("SELECT * FROM concedentes WHERE nome = :nome AND id = :id");
+        $stmt_check->bindValue(':nome', $nome);
+        $stmt_check->bindValue(':id', $id);
+        $stmt_check->execute();
+        $stmt_check->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($stmt_check->rowCount() == 0) {
+            $stmt_excluirEmpresa = $this->connect->prepare("UPDATE `concedentes` SET `nome`= :nome,`contato`= :contato,`endereco`= :endereco WHERE id = :id");
+            $stmt_excluirEmpresa->bindValue(':id', $id);
+            $stmt_excluirEmpresa->bindValue(':nome', $nome);
+            $stmt_excluirEmpresa->bindValue(':contato', $contato);
+            $stmt_excluirEmpresa->bindValue(':endereco', $endereco);
+
+            $stmt_excluirEmpresa->execute();
+            if ($stmt_excluirEmpresa) {
+
+                return 1;
+            } else {
+
+                return 2;
+            }
+        } else {
+            return 3;
+        }
+    }
+    function excluir_vaga($id_vaga)
+    {
+        $stmt_excluirVaga = $this->connect->query("DELETE FROM selecionado WHERE id_vaga = '$id_vaga'");
+        $stmt_excluirVaga = $this->connect->query("DELETE FROM selecao WHERE id_vaga = '$id_vaga'");
+        $stmt_excluirVaga = $this->connect->query("DELETE FROM vagas WHERE id = '$id_vaga'");
+
+
+        if ($stmt_excluirVaga) {
+
+            return 1;
+        } else {
+
+            return 2;
+        }
+    }
     function excluir_empresa($id_empresa)
     {
-
+        $stmt_id_vaga = $this->connect->query("SELECT id FROM vagas WHERE id_concedente = '$id_empresa'");
+        $id_vagas = $stmt_id_vaga->fetch(PDO::FETCH_ASSOC);
+        $id_vaga = $id_vagas['id'];
+        $stmt_excluirVaga = $this->connect->query("DELETE FROM selecionado WHERE id_vaga = '$id_vaga'");
+        $stmt_excluirVaga = $this->connect->query("DELETE FROM selecao WHERE id_vaga = '$id_vaga'");
+        $stmt_excluirVaga = $this->connect->query("DELETE FROM vagas WHERE id = '$id_vaga'");
         $stmt_excluirVaga = $this->connect->query("DELETE FROM vagas WHERE id_concedente = '$id_empresa'");
 
         if ($stmt_excluirVaga) {
@@ -142,45 +209,6 @@ class main_model extends connect
         } else {
 
             return 3;
-        }
-    }
-    function editar_vaga($id, $nome, $contato, $enderco)
-    {
-
-        $stmt_excluirVaga = $this->connect->query("UPDATE `concedentes` SET `nome`='$nome',`contato`='$contato',`endereco`='$enderco' WHERE id = '$id'");
-
-        if ($stmt_excluirVaga) {
-
-            return 1;
-        } else {
-
-            return 2;
-        }
-    }
-    function editar_empresa($id, $nome, $contato, $enderco)
-    {
-
-        $stmt_excluirVaga = $this->connect->query("UPDATE `vagas` SET `id_concedente`='',`id_perfil`='[value-3]',`quantidade`='[value-4]',`data`='[value-5]',`tipo_vaga`='[value-6]',`hora`='[value-7]' WHERE 1");
-
-        if ($stmt_excluirVaga) {
-
-            return 1;
-        } else {
-
-            return 2;
-        }
-    }
-    function excluir_vaga($id_empresa)
-    {
-
-        $stmt_excluirVaga = $this->connect->query("DELETE FROM vagas WHERE id_concedente = '$id_empresa'");
-
-        if ($stmt_excluirVaga) {
-
-            return 1;
-        } else {
-
-            return 2;
         }
     }
 }
