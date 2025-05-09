@@ -122,7 +122,7 @@
 
         .system-title {
             font-size: 1.8rem;
-<|control442|>            font-weight: 700;
+            font-weight: 700;
             margin-bottom: 0.5rem;
             background: linear-gradient(90deg, var(--primary-light), var(--secondary-light));
             -webkit-background-clip: text;
