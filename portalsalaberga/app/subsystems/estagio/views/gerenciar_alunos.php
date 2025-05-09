@@ -49,7 +49,8 @@ if (isset($_POST['layout'])) {
                             perfil_opc2: \"" . addslashes($dado['perfil_opc2']) . "\",
                             ocorrencia: \"" . addslashes($dado['ocorrencia'] ?: '-') . "\",
                             custeio: " . $dado['custeio'] . ",
-                            entregas: " . (isset($dado['entregas']) ? $dado['entregas'] : 'null') . "
+                            entregas_individuais: \"" . (isset($dado['entregas_individuais']) ? addslashes($dado['entregas_individuais']) : '-') . "\",
+                            entregas_grupo: \"" . (isset($dado['entregas_grupo']) ? addslashes($dado['entregas_grupo']) : '-') . "\"
                         }" . ($index < $total ? ',' : '');
                     }
                 }
@@ -128,8 +129,12 @@ if (isset($_POST['layout'])) {
                         <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
                     </div>
                     <div class="mobile-card-item">
-                        <span class="mobile-card-label">Entregas:</span>
-                        <span class="mobile-card-value">${aluno.entregas ?? '-'}</span>
+                        <span class="mobile-card-label">Entregas Individuais:</span>
+                        <span class="mobile-card-value">${aluno.entregas_individuais}</span>
+                    </div>
+                    <div class="mobile-card-item">
+                        <span class="mobile-card-label">Entregas do Grupo:</span>
+                        <span class="mobile-card-value">${aluno.entregas_grupo}</span>
                     </div>
                 `;
                 document.getElementById('detalhesModal').classList.add('show');
@@ -150,7 +155,8 @@ if (isset($_POST['layout'])) {
                 document.getElementById('alunoOpc2').value = aluno.perfil_opc2.toLowerCase();
                 document.getElementById('alunoOcorrencia').value = aluno.ocorrencia;
                 document.getElementById('alunoCusteio').value = aluno.custeio;
-                document.getElementById('alunoEntregas').value = aluno.entregas ?? '';
+                document.getElementById('alunoEntregasIndividuais').value = aluno.entregas_individuais ?? '';
+                document.getElementById('alunoEntregasGrupo').value = aluno.entregas_grupo ?? '';
                 document.getElementById('alunoModal').classList.add('show');
             }
         }
@@ -250,8 +256,12 @@ if (isset($_POST['layout'])) {
                                 <p class="text-white">${aluno.custeio == 1 ? 'Sim' : 'Não'}</p>
                             </div>
                             <div>
-                                <span class="text-gray-400 text-sm">Entregas:</span>
-                                <p class="text-white">${aluno.entregas ?? '-'}</p>
+                                <span class="text-gray-400 text-sm">Entregas Individuais:</span>
+                                <p class="text-white">${aluno.entregas_individuais}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Entregas do Grupo:</span>
+                                <p class="text-white">${aluno.entregas_grupo}</p>
                             </div>
                         </div>
                     </div>
@@ -1080,6 +1090,9 @@ if (isset($_POST['layout'])) {
                                 $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'area-desenvolvimento' : 
                                                 ($dado['perfil_opc1'] === 'design' ? 'area-design' : 
                                                 ($dado['perfil_opc1'] === 'midia' ? 'area-midia' : 'area-redes'));
+                                $areaClassOpc2 = $dado['perfil_opc2'] === 'desenvolvimento' ? 'area-desenvolvimento' : 
+                                                ($dado['perfil_opc2'] === 'design' ? 'area-design' : 
+                                                ($dado['perfil_opc2'] === 'midia' ? 'area-midia' : 'area-redes'));
                                 $statusClass = $dado['custeio'] == 1 ? 'status-ativo' : 
                                              (strtolower($dado['ocorrencia']) === 'estagiando' ? 'status-estagiando' : 'status-inativo');
                             ?>
@@ -1131,8 +1144,12 @@ if (isset($_POST['layout'])) {
                                                 <p class="text-white"><?= $dado['custeio'] == 1 ? 'Sim' : 'Não' ?></p>
                                             </div>
                                             <div>
-                                                <span class="text-gray-400 text-sm">Entregas:</span>
-                                                <p class="text-white"><?= htmlspecialchars($dado['entregas'] ?? '-') ?></p>
+                                                <span class="text-gray-400 text-sm">Entregas Individuais:</span>
+                                                <p class="text-white"><?= htmlspecialchars($dado['entregas_individuais'] ?? '-') ?></p>
+                                            </div>
+                                            <div>
+                                                <span class="text-gray-400 text-sm">Entregas do Grupo:</span>
+                                                <p class="text-white"><?= htmlspecialchars($dado['entregas_grupo'] ?? '-') ?></p>
                                             </div>
                                         </div>
                                     </td>
@@ -1208,8 +1225,12 @@ if (isset($_POST['layout'])) {
                                         <p class="text-white"><?= $dado['custeio'] == 1 ? 'Sim' : 'Não' ?></p>
                                     </div>
                                     <div>
-                                        <span class="text-gray-400 text-sm">Entregas:</span>
-                                        <p class="text-white"><?= htmlspecialchars($dado['entregas'] ?? '-') ?></p>
+                                        <span class="text-gray-400 text-sm">Entregas Individuais:</span>
+                                        <p class="text-white"><?= htmlspecialchars($dado['entregas_individuais'] ?? '-') ?></p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-400 text-sm">Entregas do Grupo:</span>
+                                        <p class="text-white"><?= htmlspecialchars($dado['entregas_grupo'] ?? '-') ?></p>
                                     </div>
                                 </div>
                             </div>
@@ -1227,27 +1248,27 @@ if (isset($_POST['layout'])) {
                     <input type="hidden" name="id" id="alunoId">
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Nome</label>
-                        <input type="text" name="nome" id="alunoNome" class="custom-input mt-1">
+                        <input type="text" name="nome" id="alunoNome" class="custom-input mt-1" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Contato</label>
-                        <input type="text" name="contato" id="alunoContato" class="custom-input mt-1">
+                        <input type="text" name="contato" id="alunoContato" class="custom-input mt-1" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Médias</label>
-                        <input type="number" name="media" id="alunoMedias" min="0" max="10" step="0.1" class="custom-input mt-1">
+                        <input type="number" name="media" id="alunoMedias" min="0" max="10" step="0.1" class="custom-input mt-1" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Email</label>
-                        <input type="email" name="email" id="alunoEmail" class="custom-input mt-1">
+                        <input type="email" name="email" id="alunoEmail" class="custom-input mt-1" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Projetos Participados</label>
-                        <input type="text" name="projetos" id="alunoProjetos" class="custom-input mt-1">
+                        <input type="text" name="projetos" id="alunoProjetos" class="custom-input mt-1" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Opção 1</label>
-                        <select id="alunoOpc1" name="opc1" class="custom-select mt-1">
+                        <select id="alunoOpc1" name="opc1" class="custom-select mt-1" required>
                             <option value="desenvolvimento">Desenvolvimento</option>
                             <option value="design">Design</option>
                             <option value="midia">Mídia</option>
@@ -1256,7 +1277,7 @@ if (isset($_POST['layout'])) {
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Opção 2</label>
-                        <select id="alunoOpc2" name="opc2" class="custom-select mt-1">
+                        <select id="alunoOpc2" name="opc2" class="custom-select mt-1" required>
                             <option value="desenvolvimento">Desenvolvimento</option>
                             <option value="design">Design</option>
                             <option value="midia">Mídia</option>
@@ -1265,18 +1286,22 @@ if (isset($_POST['layout'])) {
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Ocorrência</label>
-                        <input type="text" name="ocorrencia" id="alunoOcorrencia" class="custom-input mt-1">
+                        <input type="text" name="ocorrencia" id="alunoOcorrencia" class="custom-input mt-1" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Custeio</label>
-                        <select id="alunoCusteio" name="custeio" class="custom-select mt-1">
+                        <select id="alunoCusteio" name="custeio" class="custom-select mt-1" required>
                             <option value="1">Sim</option>
                             <option value="0">Não</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300">Entregas</label>
-                        <input type="number" name="entregas" id="alunoEntregas" class="custom-input mt-1" placeholder="-">
+                        <label class="block text-sm font-medium text-gray-300">Entregas Individuais</label>
+                        <input type="number" name="entregas_individuais" id="alunoEntregasIndividuais" class="custom-input mt-1" placeholder="-" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Entregas do Grupo</label>
+                        <input type="number" name="entregas_grupo" id="alunoEntregasGrupo" class="custom-input mt-1" placeholder="-" required>
                     </div>
                     <div class="mt-6 flex justify-end space-x-4">
                         <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">

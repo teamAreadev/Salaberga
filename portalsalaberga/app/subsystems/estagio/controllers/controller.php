@@ -1,6 +1,6 @@
 <?php
 require_once('../models/model.php');
-
+print_r($_POST);
 if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga']) && !empty($_POST['id_vaga'])) {
 
     $id_vaga = $_POST['id_vaga'];
@@ -85,7 +85,20 @@ if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga
             header('location:../views/vagas.php?existe');
             exit();
     }
-} else if (isset($_POST['nome']) && isset($_POST['contato']) && isset($_POST['media']) && isset($_POST['email']) && isset($_POST['projetos']) && isset($_POST['opc1']) && isset($_POST['opc2']) && isset($_POST['ocorrencia']) && isset($_POST['custeio']) && isset($_POST['entregas_individuais']) && isset($_POST['id']) && isset($_POST['entregas_grupo'])) {
+} else if (
+    isset($_POST['nome']) &&
+    isset($_POST['contato']) &&
+    isset($_POST['media']) &&
+    isset($_POST['email']) &&
+    isset($_POST['projetos']) &&
+    isset($_POST['opc1']) &&
+    isset($_POST['opc2']) &&
+    isset($_POST['ocorrencia']) &&
+    isset($_POST['custeio']) &&
+    isset($_POST['entregas_individuais']) &&
+    isset($_POST['entregas_grupo']) &&
+    isset($_POST['id'])
+) {
 
     $nome = $_POST['nome'];
     $contato = $_POST['contato'];
@@ -100,17 +113,18 @@ if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga
     $entregas_grupo = $_POST['entregas_grupo'];
     $id = $_POST['id'];
 
+
     $model = new main_model;
     $result = $model->editar_aluno($id, $nome, $contato, $medias, $email, $projetos, $perfil_opc1, $perfil_opc2, $ocorrencia, $custeio, $entregas_individuais, $entregas_grupo);
     switch ($result) {
         case 1:
-            header('location:../views/vagas.php?certo');
+            header('location:../views/gerenciar_alunos.php?certo');
             exit();
         case 2:
-            header('location:../views/vagas.php?erro');
+            header('location:../views/gerenciar_alunos.php?erro');
             exit();
     }
-} else {
-    header('location:../views/login.php?erro');
+} /*else {
+    header('location:../views/login.php?session');
     exit();
-}
+}*/
