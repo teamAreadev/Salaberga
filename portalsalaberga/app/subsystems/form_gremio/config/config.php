@@ -26,7 +26,7 @@ define('UPLOAD_DIR', __DIR__ . '/../uploads/');
 $MODALIDADES = [
     'futsal' => [
         'nome' => 'Futsal',
-        'limite_jogadores' => 12,
+        'limite_jogadores' => 9,
         'categorias' => ['masculino', 'feminino']
     ],
     'volei' => [

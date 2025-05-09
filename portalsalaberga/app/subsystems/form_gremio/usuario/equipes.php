@@ -243,162 +243,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             <?php
                             $resultadoMembros = $equipeModel->listarMembrosEquipe($equipe['id']);
-                            $resultadoValor = $equipeModel->calcularValorInscricao($equipe['id']);
+                            $resultadoValor = $equipeModel->calcularValorInscricao($equipe['id'], $alunoId);
                             ?>
-                            <div class="border-t pt-4">
-                                <div class="flex mb-4">
-                                    <button onclick="showTab('membros-<?php echo $equipe['id']; ?>', this)" class="px-4 py-2 text-sm font-medium text-primary-700 border-b-2 border-primary-500">Membros</button>
-                                    <button onclick="showTab('valores-<?php echo $equipe['id']; ?>', this)" class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-primary-700 border-b-2 border-transparent hover:border-primary-200">Valores</button>
+                            <div class="mt-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="text-sm font-medium text-gray-700">Membros da Equipe</h4>
+                                    <span class="text-xs text-gray-500"><?php echo $equipe['total_membros']; ?> / <?php echo $equipe['limite_membros']; ?> membros</span>
                                 </div>
-                                <div id="membros-<?php echo $equipe['id']; ?>" class="tab-content table-responsive">
+                                <div class="bg-gray-50 p-3 rounded-lg">
                                     <?php if ($resultadoMembros['success']): ?>
-                                        <div class="hidden md:block"> <!-- Tabela apenas para desktop -->
-                                            <table class="min-w-full bg-white border rounded-md">
-                                                <thead class="bg-gray-50">
-                                                    <tr>
-                                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Nome</th>
-                                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Turma</th>
-                                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Modalidades</th>
-                                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Função</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php foreach ($resultadoMembros['membros'] as $membro): ?>
-                                                        <tr class="hover:bg-gray-50">
-                                                            <td class="px-4 py-2 text-sm"><?php echo htmlspecialchars($membro['nome']); ?></td>
-                                                            <td class="px-4 py-2 text-sm"><?php echo htmlspecialchars($membro['ano'] . 'º ' . $membro['turma']); ?></td>
-                                                            <td class="px-4 py-2 text-sm"><?php echo $membro['total_modalidades']; ?></td>
-                                                            <td class="px-4 py-2 text-sm">
-                                                                <span class="px-2 py-1 text-xs rounded-full <?php echo $membro['is_lider'] ? 'bg-primary-100 text-primary-800' : 'bg-gray-100 text-gray-800'; ?>">
-                                                                    <?php echo $membro['is_lider'] ? 'Líder' : 'Membro'; ?>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                        <!-- Cards para mobile -->
-                                        <div class="md:hidden space-y-3">
-                                            <?php foreach ($resultadoMembros['membros'] as $membro): ?>
-                                                <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-                                                    <div class="flex justify-between items-start mb-2">
-                                                        <div>
-                                                            <h4 class="font-medium text-gray-800"><?php echo htmlspecialchars($membro['nome']); ?></h4>
-                                                            <p class="text-sm text-gray-500"><?php echo htmlspecialchars($membro['ano'] . 'º ' . $membro['turma']); ?></p>
-                                                        </div>
-                                                        <span class="px-2 py-1 text-xs rounded-full <?php echo $membro['is_lider'] ? 'bg-primary-100 text-primary-800' : 'bg-gray-100 text-gray-800'; ?>">
-                                                            <?php echo $membro['is_lider'] ? 'Líder' : 'Membro'; ?>
-                                                        </span>
-                                                    </div>
-                                                    <div class="flex items-center gap-2 text-sm text-gray-600">
-                                                        <i class="fas fa-trophy"></i>
-                                                        <span>Modalidades: <?php echo $membro['total_modalidades']; ?></span>
-                                                    </div>
+                                        <?php foreach ($resultadoMembros['membros'] as $membro): ?>
+                                            <div class="flex justify-between items-center mb-2">
+                                                <div>
+                                                    <p class="font-medium text-gray-800"><?php echo htmlspecialchars($membro['nome']); ?></p>
+                                                    <p class="text-xs text-gray-500"><?php echo htmlspecialchars($membro['ano']); ?>º <?php echo htmlspecialchars($membro['turma']); ?></p>
                                                 </div>
-                                            <?php endforeach; ?>
-                                        </div>
+                                                <?php if ($membro['is_lider']): ?>
+                                                    <span class="bg-primary-500 text-white text-xs px-2 py-1 rounded-full">Líder</span>
+                                                <?php endif; ?>
+                                            </div>
+                                        <?php endforeach; ?>
                                     <?php else: ?>
                                         <p class="text-yellow-600"><?php echo htmlspecialchars($resultadoMembros['message']); ?></p>
                                     <?php endif; ?>
                                 </div>
-                                <div id="valores-<?php echo $equipe['id']; ?>" class="tab-content hidden">
-                                    <?php if ($resultadoValor['success']): ?>
-                                        <div class="mt-4">
-                                            <!-- Tabela de valores para desktop -->
-                                            <div class="hidden md:block">
-                                                <table class="min-w-full bg-white border rounded-md">
-                                                    <thead class="bg-gray-50">
-                                                        <tr>
-                                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Nome</th>
-                                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Modalidades</th>
-                                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Valor por Modalidade</th>
-                                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Valor Total</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php foreach ($resultadoValor['detalhes'] as $detalhe): ?>
-                                                            <tr class="hover:bg-gray-50">
-                                                                <td class="px-4 py-2 text-sm"><?php echo htmlspecialchars($detalhe['nome']); ?></td>
-                                                                <td class="px-4 py-2 text-sm"><?php echo $detalhe['total_modalidades']; ?></td>
-                                                                <td class="px-4 py-2 text-sm">R$ <?php echo number_format($detalhe['valor_modalidade'], 2, ',', '.'); ?></td>
-                                                                <td class="px-4 py-2 text-sm">R$ <?php echo number_format($detalhe['valor_total'], 2, ',', '.'); ?></td>
-                                                            </tr>
-                                                        <?php endforeach; ?>
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr class="bg-primary-50">
-                                                            <td colspan="3" class="px-4 py-2 text-right font-medium text-primary-800">Total:</td>
-                                                            <td class="px-4 py-2 font-bold text-primary-800">R$ <?php echo number_format($resultadoValor['valor_total'], 2, ',', '.'); ?></td>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
-                                            </div>
-
-                                            <!-- Cards de valores para mobile -->
-                                            <div class="md:hidden space-y-3">
-                                                <?php foreach ($resultadoValor['detalhes'] as $detalhe): ?>
-                                                    <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-                                                        <div class="flex justify-between items-start mb-3">
-                                                            <h4 class="font-medium text-gray-800"><?php echo htmlspecialchars($detalhe['nome']); ?></h4>
-                                                            <span class="font-bold text-primary-700">
-                                                                R$ <?php echo number_format($detalhe['valor_total'], 2, ',', '.'); ?>
-                                                            </span>
-                                                        </div>
-                                                        <div class="space-y-2 text-sm">
-                                                            <div class="flex justify-between text-gray-600">
-                                                                <span>Modalidades:</span>
-                                                                <span><?php echo $detalhe['total_modalidades']; ?></span>
-                                                            </div>
-                                                            <div class="flex justify-between text-gray-600">
-                                                                <span>Valor por modalidade:</span>
-                                                                <span>R$ <?php echo number_format($detalhe['valor_modalidade'], 2, ',', '.'); ?></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                <?php endforeach; ?>
-
-                                                <!-- Total geral para mobile -->
-                                                <div class="bg-primary-50 rounded-lg p-4 flex justify-between items-center">
-                                                    <span class="font-medium text-primary-800">Total Geral:</span>
-                                                    <span class="font-bold text-lg text-primary-800">
-                                                        R$ <?php echo number_format($resultadoValor['valor_total'], 2, ',', '.'); ?>
-                                                    </span>
+                            </div>
+                            <?php if ($equipe['is_lider'] && $resultadoValor['success']): ?>
+                                <div class="mt-4">
+                                    <h4 class="text-sm font-medium text-gray-700 mb-2">Valores</h4>
+                                    <div class="bg-gray-50 p-3 rounded-lg">
+                                        <?php foreach ($resultadoValor['detalhes'] as $detalhe): ?>
+                                            <div class="flex justify-between items-center mb-2">
+                                                <div>
+                                                    <p class="font-medium text-gray-800"><?php echo htmlspecialchars($detalhe['nome']); ?></p>
+                                                    <p class="text-xs text-gray-500"><?php echo $detalhe['total_modalidades']; ?> modalidade(s)</p>
+                                                </div>
+                                                <div class="text-right">
+                                                    <p class="font-medium text-gray-800">R$ <?php echo number_format($detalhe['valor_total'], 2, ',', '.'); ?></p>
+                                                    <p class="text-xs text-gray-500">R$ <?php echo number_format($detalhe['valor_modalidade'], 2, ',', '.'); ?> por modalidade</p>
                                                 </div>
                                             </div>
-
-                                            <?php if (!$resultadoValor['atingiu_minimo']): ?>
-                                                <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-                                                    <div class="flex items-center text-yellow-700">
-                                                        <i class="fas fa-exclamation-triangle mr-2"></i>
-                                                        <p>
-                                                            <?php if ($equipe['modalidade'] === 'x2'): ?>
-                                                                Sua equipe precisa ter exatamente 3 membros para gerar o pagamento.
-                                                            <?php else: ?>
-                                                                Sua equipe precisa de pelo menos <?php echo $resultadoValor['minimo_necessario']; ?> membros para gerar o pagamento.
-                                                            <?php endif; ?>
-                                                        </p>
-                                                    </div>
-                                                    <p class="mt-2 text-sm text-yellow-600">
-                                                        Atualmente: <?php echo $resultadoValor['total_membros']; ?>/<?php echo $resultadoValor['minimo_necessario']; ?> membros
-                                                    </p>
-                                                </div>
-                                            <?php else: ?>
-                                                <div class="mt-4">
-                                                    <button onclick="abrirModalPagamento(<?php echo htmlspecialchars(json_encode($resultadoValor['pix_info'])); ?>, '<?php echo $equipe['nome']; ?>', <?php echo $resultadoValor['valor_total']; ?>)" 
-                                                            class="w-full bg-primary-600 hover:bg-primary-700 text-white px-4 py-3 rounded-md flex items-center justify-center">
-                                                        <i class="fas fa-money-bill-wave mr-2"></i>
-                                                        Realizar Pagamento
-                                                    </button>
-                                                </div>
-                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                        <div class="border-t border-gray-200 mt-2 pt-2">
+                                            <div class="flex justify-between items-center">
+                                                <p class="font-medium text-gray-800">Total</p>
+                                                <p class="font-medium text-gray-800">R$ <?php echo number_format($resultadoValor['valor_total'], 2, ',', '.'); ?></p>
+                                            </div>
+                                        </div>
+                                        <?php if ($resultadoValor['atingiu_minimo']): ?>
+                                            <div class="mt-4">
+                                                <button onclick="gerarPix(<?php echo $equipe['id']; ?>)" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center justify-center">
+                                                    <i class="fas fa-qrcode mr-2"></i> Gerar PIX
+                                                </button>
+                                            </div>
                                         <?php else: ?>
-                                            <p class="text-yellow-600"><?php echo htmlspecialchars($resultadoValor['message']); ?></p>
+                                            <div class="mt-4 text-center">
+                                                <p class="text-yellow-600">
+                                                    É necessário ter pelo menos <?php echo $resultadoValor['minimo_necessario']; ?> membros para gerar o PIX
+                                                </p>
+                                            </div>
                                         <?php endif; ?>
                                     </div>
                                 </div>
-                            </div>
+                            <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
                 </div>

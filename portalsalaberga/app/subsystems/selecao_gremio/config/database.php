@@ -1,18 +1,18 @@
 <?php
 class Database {
-
+    /*
     private $host = "localhost";
     private $db_name = "u750204740_selecao_gremio";
     private $username = "u750204740_selecao_gremio";
     private $password = "paoComOvo123!";
-    public $conn;
-    /*
+    public $conn;  
+*/
     private $host = "localhost";
     private $db_name = "selecao_gremio";
     private $username = "root";
     private $password = "";
     public $conn;
-*/
+
     public function getConnection() {
         $this->conn = null;
 
