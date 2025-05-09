@@ -312,7 +312,7 @@ if (!isset($_SESSION['admin_id']) ||
                             <div class="mt-4">
                                 <div class="flex justify-between items-center mb-2">
                                     <h4 class="text-sm font-medium text-gray-700">Membros da Equipe</h4>
-                                    <span class="text-xs text-gray-500">${equipe.membros.length} / ${getLimiteModalidade(equipe.modalidade)} membros</span>
+                                    <span class="text-xs text-gray-500">${equipe.membros.length} / 12 membros</span>
                                 </div>
                                 <div class="bg-gray-50 p-3 rounded-lg">
                                     ${equipe.membros.map(membro => `
@@ -578,27 +578,6 @@ if (!isset($_SESSION['admin_id']) ||
                     }
                 });
             };
-
-            // Adicionar função para obter limite por modalidade
-            function getLimiteModalidade(modalidade) {
-                const limites = {
-                    'futsal': 9,
-                    'volei': 12,
-                    'basquete': 12,
-                    'handebol': 14,
-                    'queimada': 12,
-                    'futmesa': 2,
-                    'teqball': 2,
-                    'teqvolei': 2,
-                    'beach_tenis': 2,
-                    'volei_de_praia': 2,
-                    'tenis_de_mesa': 1,
-                    'dama': 1,
-                    'xadrez': 1,
-                    'x2': 3
-                };
-                return limites[modalidade] || 12;
-            }
 
             // Event listeners para filtros
             searchInput.addEventListener('input', filtrarInscricoes);
