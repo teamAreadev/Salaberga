@@ -272,15 +272,10 @@ if (isset($_POST['layout'])) {
 
         // Função para aplicar filtros
         function aplicarFiltros() {
-            const searchTerm = document.getElementById('searchAluno').value.toLowerCase();
-            const areaFiltro = document.getElementById('filterArea').value;
-            const statusFiltro = document.getElementById('filterStatus').value;
-
+            const searchTerm = document.getElementById('searchAluno').value.toLowerCase().trim();
             const alunosFiltrados = alunos.filter(aluno => {
                 const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
-                const matchArea = !areaFiltro || aluno.perfil_opc1 === areaFiltro || aluno.perfil_opc2 === areaFiltro;
-                const matchStatus = !statusFiltro || (statusFiltro === 'ativo' && aluno.custeio == 1) || (statusFiltro === 'inativo' && aluno.custeio == 0) || (statusFiltro === 'estagiando' && aluno.ocorrencia.toLowerCase().includes('estagiando'));
-                return matchSearch && matchArea && matchStatus;
+                return matchSearch;
             });
 
             renderizarTabelaDesktop(alunosFiltrados);
@@ -294,9 +289,13 @@ if (isset($_POST['layout'])) {
             renderizarCardsMobile();
 
             // Event listeners para filtros
-            document.getElementById('searchAluno').addEventListener('input', aplicarFiltros);
-            document.getElementById('filterArea').addEventListener('change', aplicarFiltros);
-            document.getElementById('filterStatus').addEventListener('change', aplicarFiltros);
+            let searchTimeout;
+            document.getElementById('searchAluno').addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    aplicarFiltros();
+                }, 300);
+            });
 
             // Modal de Edição
             const alunoModal = document.getElementById('alunoModal');
@@ -1073,30 +1072,8 @@ if (isset($_POST['layout'])) {
                             <i class="fas fa-search search-icon"></i>
                             <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="custom-input pl-10 pr-4 py-2.5 w-full">
                         </div>
-                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
-                            <div class="relative">
-                                <select id="filterArea" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
-                                    <option value="">Todas as áreas</option>
-                                    <option value="desenvolvimento">Desenvolvimento</option>
-                                    <option value="design">Design</option>
-                                    <option value="midia">Mídia</option>
-                                    <option value="redes">Redes/Suporte</option>
-                                </select>
-                                <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
-                            </div>
-                            <div class="relative">
-                                <select id="filterStatus" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
-                                    <option value="">Todos os status</option>
-                                    <option value="ativo">Ativo</option>
-                                    <option value="inativo">Inativo</option>
-                                    <option value="estagiando">Estagiando</option>
-                                </select>
-                                <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
-                            </div>
-                        </div>
                     </div>
                 </div>
-
                 <!-- Table Desktop -->
                 <div class="table-container desktop-table overflow-x-auto slide-up">
                     <table class="min-w-full divide-y divide-gray-700 text-sm">
