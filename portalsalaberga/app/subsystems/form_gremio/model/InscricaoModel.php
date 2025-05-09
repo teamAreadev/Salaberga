@@ -193,21 +193,63 @@ class InscricaoModel {
 
     public function atualizarStatusInscricao($inscricaoId, $status) {
         try {
-            $query = "UPDATE inscricoes SET status = :status, data_aprovacao = NOW() WHERE id = :id";
-            $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':status', $status);
-            $stmt->bindParam(':id', $inscricaoId);
+            // Primeiro, verificar se a inscrição é de um líder de equipe
+            $queryVerificar = "SELECT i.*, e.lider_id 
+                             FROM inscricoes i 
+                             LEFT JOIN equipes e ON i.equipe_id = e.id 
+                             WHERE i.id = :id";
+            $stmtVerificar = $this->db->prepare($queryVerificar);
+            $stmtVerificar->bindParam(':id', $inscricaoId);
+            $stmtVerificar->execute();
             
-            if ($stmt->execute()) {
-                return [
-                    'success' => true,
-                    'message' => 'Status atualizado com sucesso'
-                ];
-            } else {
+            $inscricao = $stmtVerificar->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$inscricao) {
                 return [
                     'success' => false,
-                    'message' => 'Erro ao atualizar status'
+                    'message' => 'Inscrição não encontrada'
                 ];
+            }
+            
+            // Se for uma inscrição de equipe e o aluno for o líder
+            if ($inscricao['equipe_id'] && $inscricao['aluno_id'] == $inscricao['lider_id']) {
+                // Atualizar status de todos os membros da equipe
+                $query = "UPDATE inscricoes SET status = :status, data_aprovacao = NOW() 
+                         WHERE equipe_id = :equipe_id";
+                $stmt = $this->db->prepare($query);
+                $stmt->bindParam(':status', $status);
+                $stmt->bindParam(':equipe_id', $inscricao['equipe_id']);
+                
+                if ($stmt->execute()) {
+                    return [
+                        'success' => true,
+                        'message' => 'Status da equipe atualizado com sucesso',
+                        'affected_rows' => $stmt->rowCount()
+                    ];
+                } else {
+                    return [
+                        'success' => false,
+                        'message' => 'Erro ao atualizar status da equipe'
+                    ];
+                }
+            } else {
+                // Atualizar apenas a inscrição individual
+                $query = "UPDATE inscricoes SET status = :status, data_aprovacao = NOW() WHERE id = :id";
+                $stmt = $this->db->prepare($query);
+                $stmt->bindParam(':status', $status);
+                $stmt->bindParam(':id', $inscricaoId);
+                
+                if ($stmt->execute()) {
+                    return [
+                        'success' => true,
+                        'message' => 'Status atualizado com sucesso'
+                    ];
+                } else {
+                    return [
+                        'success' => false,
+                        'message' => 'Erro ao atualizar status'
+                    ];
+                }
             }
         } catch(PDOException $e) {
             return [

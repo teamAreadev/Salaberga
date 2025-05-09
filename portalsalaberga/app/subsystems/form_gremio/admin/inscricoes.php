@@ -217,17 +217,31 @@ if (!isset($_SESSION['admin_id']) ||
             // Função para carregar todas as inscrições
             async function carregarInscricoes() {
                 try {
+                    inscricoesContainer.innerHTML = `
+                        <div class="flex justify-center items-center py-12">
+                            <i class="fas fa-spinner fa-spin mr-3 text-green-600 text-xl"></i>
+                            <span class="text-gray-500">Carregando inscrições...</span>
+                        </div>
+                    `;
+                    
                     const response = await fetch('../controllers/AdminController.php?action=listar-inscricoes');
                     const data = await response.json();
                         
                     if (data.success) {
                         inscricoes = data.inscricoes;
-                        filtrarInscricoes();
+                        renderizarInscricoes(inscricoes);
+                        atualizarContadores(inscricoes);
                     } else {
                         throw new Error(data.message || 'Erro ao carregar inscrições');
                     }
                 } catch (error) {
                     console.error('Erro:', error);
+                    inscricoesContainer.innerHTML = `
+                        <div class="text-center text-red-500 py-8">
+                            <i class="fas fa-exclamation-circle text-2xl mb-2"></i>
+                            <p>Erro ao carregar inscrições</p>
+                        </div>
+                    `;
                     Swal.fire({
                         icon: 'error',
                         title: 'Erro',
@@ -269,7 +283,7 @@ if (!isset($_SESSION['admin_id']) ||
                 // Renderizar equipes coletivas
                 let html = Object.values(equipes).map(equipe => {
                     return `
-                    <div class="card bg-white rounded-lg border border-gray-200 p-4 mb-4">
+                    <div class="card bg-white rounded-lg border border-gray-200 p-4 mb-4" data-inscricao-id="${equipe.inscricao_id_lider}" data-equipe-id="${equipe.equipe_id}" data-status="${equipe.status}" data-modalidade="${equipe.modalidade}">
                         <div class="flex flex-col">
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
                                 <div>
@@ -500,9 +514,11 @@ if (!isset($_SESSION['admin_id']) ||
                 // Buscar o nome do inscrito/equipe no DOM
                 const card = document.querySelector(`[data-inscricao-id='${inscricaoId}']`);
                 let nome = '';
+                let equipeId = null;
                 if (card) {
                     const nomeEl = card.querySelector('h3');
                     if (nomeEl) nome = nomeEl.textContent.trim();
+                    equipeId = card.getAttribute('data-equipe-id');
                 }
                 Swal.fire({
                     title: 'Confirmar Exclusão',
@@ -523,17 +539,8 @@ if (!isset($_SESSION['admin_id']) ||
                     buttonsStyling: false,
                     customClass: {
                         popup: 'rounded-xl shadow-2xl p-6 max-w-md',
-                        title: 'text-xl font-bold text-gray-800 mb-4',
-                        htmlContainer: 'text-gray-600',
-                        confirmButton: 'bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200 flex items-center',
-                        cancelButton: 'bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200 flex items-center',
-                        actions: 'mt-4 flex justify-end gap-4' // Aumentei o gap aqui para mais espaço
-                    },
-                    showClass: {
-                        popup: 'animate__animated animate__fadeInDown animate__faster'
-                    },
-                    hideClass: {
-                        popup: 'animate__animated animate__fadeOutUp animate__faster'
+                        confirmButton: 'px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors',
+                        cancelButton: 'px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors'
                     }
                 }).then(async (result) => {
                     if (result.isConfirmed) {
@@ -547,6 +554,11 @@ if (!isset($_SESSION['admin_id']) ||
                             });
                             const data = await response.json();
                             if (data.success) {
+                                // Remover o card da inscrição
+                                if (card) {
+                                    card.remove();
+                                }
+                                // Atualizar contadores e lista
                                 await carregarInscricoes();
                                 Swal.fire({
                                     icon: 'success',
