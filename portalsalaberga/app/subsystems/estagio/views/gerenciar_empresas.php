@@ -778,18 +778,6 @@ if (isset($_POST['layout'])) {
                                 <input type="text" id="searchEmpresa" placeholder="Buscar empresa..." class="custom-input pl-10 pr-4 py-2.5 w-full">
                             </div>
                         </div>
-                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
-                            <div class="relative">
-                                <select id="filterArea" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
-                                    <option value="">Todas as áreas</option>
-                                    <option value="desenvolvimento">Desenvolvimento</option>
-                                    <option value="tutoria">Tutoria</option>
-                                    <option value="mídia/design">Design/Social media</option>
-                                    <option value="suporte">Suporte/Redes</option>
-                                </select>
-                                <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -956,7 +944,6 @@ if (isset($_POST['layout'])) {
             const closeSidebar = document.getElementById('closeSidebar');
             const mobileSidebar = document.getElementById('mobileSidebar');
             const searchInput = document.getElementById('searchEmpresa');
-            const filterArea = document.getElementById('filterArea');
             const empresasGrid = document.getElementById('empresasGrid');
             let currentModalId = null;
 
@@ -1136,17 +1123,21 @@ if (isset($_POST['layout'])) {
 
             // Filtragem de empresas
             function aplicarFiltros() {
-                const searchTerm = searchInput.value.toLowerCase();
-                const areaFiltro = filterArea.value;
+                const searchTerm = searchInput.value.toLowerCase().trim();
                 const empresaCards = document.querySelectorAll('.empresa-card');
                 let visibleCount = 0;
 
                 empresaCards.forEach((card, index) => {
                     const nome = card.querySelector('.empresa-card-title').textContent.toLowerCase();
-                    const matchSearch = nome.includes(searchTerm);
-                    const matchArea = !areaFiltro;
+                    const endereco = card.querySelector('.empresa-card-info-item:first-child span').textContent.toLowerCase();
+                    const contato = card.querySelector('.empresa-card-info-item:last-child span, .empresa-card-info-item:last-child a').textContent.toLowerCase();
 
-                    if (matchSearch && matchArea) {
+                    const matchSearch = searchTerm === '' || 
+                        nome.includes(searchTerm) || 
+                        endereco.includes(searchTerm) || 
+                        contato.includes(searchTerm);
+
+                    if (matchSearch) {
                         card.style.display = '';
                         visibleCount++;
                         gsap.fromTo(card, {
@@ -1186,7 +1177,6 @@ if (isset($_POST['layout'])) {
                     document.getElementById('empresasGrid').appendChild(message);
                     document.getElementById('clearFiltersBtn').addEventListener('click', () => {
                         searchInput.value = '';
-                        filterArea.value = '';
                         aplicarFiltros();
                     });
                 } else if (visibleCount > 0 && noResultsMessage) {
@@ -1194,8 +1184,14 @@ if (isset($_POST['layout'])) {
                 }
             }
 
-            searchInput.addEventListener('input', aplicarFiltros);
-            filterArea.addEventListener('change', aplicarFiltros);
+            // Adicionar evento de input com debounce para melhor performance
+            let searchTimeout;
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    aplicarFiltros();
+                }, 300);
+            });
 
             // Função para exibir toast
             function showToast(message, type) {

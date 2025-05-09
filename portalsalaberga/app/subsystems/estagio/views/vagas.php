@@ -766,8 +766,10 @@ if (isset($_POST['layout'])) {
                                     <option value="">Todas as empresas</option>
                                     <?php
                                     $empresas = $select_model->concedentes();
+                                    $empresa_selecionada = isset($_GET['empresa']) ? $_GET['empresa'] : '';
                                     foreach ($empresas as $empresa) {
-                                        echo "<option value='{$empresa['id']}'>" . htmlspecialchars($empresa['nome'], ENT_QUOTES, 'UTF-8') . "</option>";
+                                        $selected = ($empresa['id'] == $empresa_selecionada) ? 'selected' : '';
+                                        echo "<option value='{$empresa['id']}' {$selected}>" . htmlspecialchars($empresa['nome'], ENT_QUOTES, 'UTF-8') . "</option>";
                                     }
                                     ?>
                                 </select>
@@ -780,7 +782,8 @@ if (isset($_POST['layout'])) {
                 <!-- Grid de Vagas -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="vagasGrid">
                     <?php
-                    $dados = $select_model->vagas();
+                    $empresa_filtro = isset($_GET['empresa']) ? $_GET['empresa'] : '';
+                    $dados = $select_model->vagas('', '', $empresa_filtro);
                     if (empty($dados)): ?>
                         <div class="col-span-3 text-center py-16 text-gray-400 fade-in">
                             <i class="fas fa-briefcase text-5xl mb-4 text-gray-600 opacity-30"></i>
@@ -1251,6 +1254,21 @@ if (isset($_POST['layout'])) {
                 const empresaFiltro = filterEmpresa.value;
                 const vagaCards = document.querySelectorAll('.vaga-card');
                 let visibleCount = 0;
+
+                // Atualizar URL com os filtros
+                const urlParams = new URLSearchParams(window.location.search);
+                if (empresaFiltro && empresaFiltro !== '') {
+                    urlParams.set('empresa', empresaFiltro);
+                    window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
+                } else {
+                    window.history.replaceState({}, '', window.location.pathname);
+                }
+
+                // Se houver filtro de empresa específico, recarregar a página
+                if (empresaFiltro && empresaFiltro !== '') {
+                    window.location.href = `${window.location.pathname}?empresa=${empresaFiltro}`;
+                    return;
+                }
 
                 vagaCards.forEach((card, index) => {
                     const titulo = card.querySelector('.vaga-card-title').textContent.toLowerCase();
