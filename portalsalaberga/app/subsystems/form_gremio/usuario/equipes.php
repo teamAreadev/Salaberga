@@ -243,9 +243,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             <?php
                             $resultadoMembros = $equipeModel->listarMembrosEquipe($equipe['id']);
-                            $resultadoValor = $equipeModel->calcularValorInscricao($equipe['id']);
+                            $resultadoValor = $equipeModel->calcularValorInscricao($equipe['id'], $alunoId);
                             ?>
-                            <div class="border-t pt-4">
+                            <div class="mt-4">
                                 <div class="flex mb-4">
                                     <button onclick="showTab('membros-<?php echo $equipe['id']; ?>', this)" class="px-4 py-2 text-sm font-medium text-primary-700 border-b-2 border-primary-500">Membros</button>
                                     <button onclick="showTab('valores-<?php echo $equipe['id']; ?>', this)" class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-primary-700 border-b-2 border-transparent hover:border-primary-200">Valores</button>
@@ -372,7 +372,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
                                                     <div class="flex items-center text-yellow-700">
                                                         <i class="fas fa-exclamation-triangle mr-2"></i>
-                                                        <p>Sua equipe precisa de pelo menos <?php echo $resultadoValor['minimo_necessario']; ?> membros para gerar o pagamento.</p>
+                                                        <p>
+                                                            <?php if ($equipe['modalidade'] === 'x2'): ?>
+                                                                Sua equipe precisa ter exatamente 3 membros para gerar o pagamento.
+                                                            <?php else: ?>
+                                                                Sua equipe precisa de pelo menos <?php echo $resultadoValor['minimo_necessario']; ?> membros para gerar o pagamento.
+                                                            <?php endif; ?>
+                                                        </p>
                                                     </div>
                                                     <p class="mt-2 text-sm text-yellow-600">
                                                         Atualmente: <?php echo $resultadoValor['total_membros']; ?>/<?php echo $resultadoValor['minimo_necessario']; ?> membros
@@ -387,10 +393,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     </button>
                                                 </div>
                                             <?php endif; ?>
-                                        <?php else: ?>
-                                            <p class="text-yellow-600"><?php echo htmlspecialchars($resultadoValor['message']); ?></p>
-                                        <?php endif; ?>
-                                    </div>
+                                        </div>
+                                    <?php else: ?>
+                                        <p class="text-yellow-600"><?php echo htmlspecialchars($resultadoValor['message']); ?></p>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -468,7 +474,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="futmesa">Futmesa (Até 2 membros)</option>
                             <option value="teqball">Teqball (Até 2 membros)</option>
                             <option value="teqvolei">Teqvôlei (Até 2 membros)</option>
-                            <option value="x2">X2 (Até 2 membros)</option>
+                            <option value="x2">X2 (Até 3 membros)</option>
                         </select>
                     </div>
                     <div class="mb-4">
@@ -513,30 +519,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <!-- Modal de Pagamento -->
-    <div id="modalPagamento" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden modal modal-hidden">
-        <div class="bg-white rounded-lg w-full max-w-sm mx-4 p-4">
-            <div class="flex justify-between items-center mb-3 sticky top-0 bg-white">
-                <h3 class="text-lg font-bold text-primary-700">Pagamento</h3>
-                <button onclick="fecharModalPagamento()" class="text-gray-600 hover:text-gray-800 p-1">
+    <div id="modalPagamento" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-md mx-4 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-primary-700">Pagamento da Equipe</h3>
+                <button onclick="closeModal('modalPagamento')" class="text-gray-500 hover:text-gray-700">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
             <div class="space-y-4">
-                <!-- Resumo da Equipe -->
-                <div class="bg-gray-50 p-3 rounded-lg">
-                    <div class="space-y-1">
-                        <p class="text-center font-medium"><span id="modalNomeEquipe" class="text-primary-700"></span></p>
-                        <p class="text-center text-xl font-bold text-primary-800">R$ <span id="modalValorTotal"></span></p>
+                <!-- Resumo do Pagamento -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="text-center">
+                        <h4 class="font-medium text-gray-800" id="modalNomeEquipe"></h4>
+                        <p class="text-2xl font-bold text-primary-700 mt-2">R$ <span id="modalValorTotal"></span></p>
                     </div>
                 </div>
 
                 <!-- Chave PIX -->
-                <div class="bg-white border rounded-lg p-3">
+                <div class="bg-white border rounded-lg p-4">
                     <div class="space-y-2">
                         <span class="text-sm text-gray-700">Chave PIX:</span>
                         <div class="flex items-center gap-2">
-                            <span id="modalChavePix" class="font-mono bg-gray-50 px-3 py-2 rounded border text-sm flex-1 overflow-x-auto whitespace-nowrap"><?php echo PIX_CHAVE; ?></span>
+                            <span id="modalChavePix" class="font-mono bg-gray-50 px-3 py-2 rounded border text-sm flex-1 overflow-x-auto whitespace-nowrap"></span>
                             <button onclick="copiarPix(document.getElementById('modalChavePix').textContent)" 
                                     class="bg-primary-600 hover:bg-primary-700 text-white p-2 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-105">
                                 <i class="fas fa-copy"></i>
@@ -549,9 +555,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <!-- Instruções -->
-                <div class="bg-primary-50 p-3 rounded-lg">
-                    <h4 class="font-medium text-primary-800 mb-2 text-sm">Como pagar:</h4>
-                    <ol class="list-decimal list-inside space-y-1 text-primary-700 text-sm">
+                <div class="bg-primary-50 p-4 rounded-lg">
+                    <h4 class="font-medium text-primary-800 mb-2">Como pagar:</h4>
+                    <ol class="list-decimal list-inside space-y-1 text-primary-700">
                         <li>Copie a chave PIX</li>
                         <li>Abra seu app do banco</li>
                         <li>Faça a transferência</li>
@@ -585,22 +591,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
-            modal.classList.add('modal-hidden');
-            setTimeout(() => modal.classList.add('hidden'), 300);
+            modal.classList.add('hidden');
         }
 
         // Tab Functions
-        function showTab(tabId, buttonEl) {
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(tab => tab.classList.add('hidden'));
+        function showTab(tabId, button) {
+            // Esconder todas as tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.add('hidden'));
+            
+            // Mostrar a tab selecionada
             document.getElementById(tabId).classList.remove('hidden');
-
-            const tabButtons = buttonEl.parentElement.querySelectorAll('button');
-            tabButtons.forEach(button => {
-                button.classList.remove('text-primary-700', 'border-primary-500');
-                button.classList.add('text-gray-500', 'border-transparent');
+            
+            // Atualizar botões
+            const buttons = button.parentElement.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.classList.remove('text-primary-700', 'border-primary-500');
+                btn.classList.add('text-gray-500', 'border-transparent');
             });
-            buttonEl.classList.add('text-primary-700', 'border-primary-500');
+            
+            // Atualizar botão clicado
+            button.classList.remove('text-gray-500', 'border-transparent');
+            button.classList.add('text-primary-700', 'border-primary-500');
         }
 
         // Auto-dismiss Toast
@@ -652,53 +664,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             document.getElementById('modalChavePix').textContent = pixInfo.chave;
 
             // Configurar botão do WhatsApp
-            document.getElementById('btnWhatsApp').onclick = () => enviarComprovante(
-                pixInfo.identificador,
-                valorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 }),
-                nomeEquipe
-            );
-
-            // Exibir modal
-            modal.classList.remove('hidden', 'modal-hidden');
-            setTimeout(() => modal.classList.remove('modal-hidden'), 10);
-        }
-
-        function fecharModalPagamento() {
-            const modal = document.getElementById('modalPagamento');
-            modal.classList.add('modal-hidden');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        }
-
-        // Fechar modal ao clicar fora
-        document.getElementById('modalPagamento').addEventListener('click', function(e) {
-            if (e.target === this) {
-                fecharModalPagamento();
-            }
-        });
-
-        // Ajustar tabelas em dispositivos móveis
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabelasResponsivas = document.querySelectorAll('.table-responsive');
+            document.getElementById('btnWhatsApp').onclick = () => enviarComprovante(pixInfo.identificador, valorTotal, nomeEquipe);
             
-            tabelasResponsivas.forEach(tabela => {
-                // Remover altura máxima fixa
-                tabela.style.maxHeight = 'none';
-                
-                // Adicionar indicador de scroll apenas se necessário
-                if (tabela.scrollWidth > tabela.clientWidth) {
-                    const scrollHint = document.createElement('div');
-                    scrollHint.className = 'text-xs text-gray-500 text-center mt-2 mb-1 animate-pulse';
-                    scrollHint.innerHTML = '<i class="fas fa-arrows-left-right mr-1"></i> Deslize para ver mais informações';
-                    tabela.parentNode.insertBefore(scrollHint, tabela.nextSibling);
-                }
-                
-                // Adicionar eventos de scroll para mostrar/ocultar gradiente
-                tabela.addEventListener('scroll', function() {
-                    const isAtEnd = this.scrollLeft + this.clientWidth >= this.scrollWidth;
-                    this.style.setProperty('--gradient-opacity', isAtEnd ? '0' : '1');
-                });
-            });
-        });
+            // Abrir modal
+            modal.classList.remove('hidden');
+        }
     </script>
 </body>
 </html>

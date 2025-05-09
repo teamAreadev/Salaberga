@@ -561,13 +561,13 @@ class EquipeModel {
     private function getLimiteParticipantes($modalidade) {
         switch ($modalidade) {
             case 'futsal':
-                return 12;
+                return 9;
             case 'volei':
                 return 12;
             case 'basquete':
                 return 12;
             case 'handebol':
-                return 12;
+                return 14;
             case 'queimada':
                 return 12;
             case 'futmesa':
@@ -579,15 +579,15 @@ class EquipeModel {
             case 'beach_tenis':
                 return 2;
             case 'volei_de_praia':
-                return 4;
+                return 2;
             case 'tenis_de_mesa':
-                return 2;
+                return 1;
             case 'dama':
-                return 2;
+                return 1;
             case 'xadrez':
-                return 2;
+                return 1;
             case 'x2':
-                return 2;
+                return 3;
             default:
                 return 12;
         }
@@ -598,7 +598,7 @@ class EquipeModel {
      * @param int $equipeId ID da equipe
      * @return array Resultado com o valor total e detalhes
      */
-    public function calcularValorInscricao($equipeId) {
+    public function calcularValorInscricao($equipeId, $alunoId = null) {
         try {
             // Primeiro verifica se a equipe existe
             $queryEquipe = "SELECT e.*, 
@@ -618,6 +618,16 @@ class EquipeModel {
 
             $equipe = $stmtEquipe->fetch(PDO::FETCH_ASSOC);
             
+            // Se um alunoId foi fornecido, verificar se é o líder
+            if ($alunoId !== null) {
+                if ($equipe['lider_id'] != $alunoId) {
+                    return [
+                        'success' => false,
+                        'message' => 'Apenas o líder da equipe pode realizar o pagamento'
+                    ];
+                }
+            }
+            
             // Define o número mínimo de membros por modalidade
             $minimosModalidade = [
                 'futsal' => 5,
@@ -631,7 +641,8 @@ class EquipeModel {
                 'tenis_de_mesa' => 1,
                 'dama' => 1,
                 'xadrez' => 1,
-                'jiu-jitsu' => 1
+                'jiu-jitsu' => 1,
+                'x2' => 3
             ];
 
             // Busca os membros e suas modalidades
@@ -670,7 +681,13 @@ class EquipeModel {
 
             // Verifica se atingiu o número mínimo de membros
             $minimoNecessario = $minimosModalidade[$equipe['modalidade']] ?? 1;
-            $atingiuMinimo = $equipe['total_membros'] >= $minimoNecessario;
+            
+            // Para modalidade x2, só libera pagamento com exatamente 3 pessoas
+            if ($equipe['modalidade'] === 'x2') {
+                $atingiuMinimo = $equipe['total_membros'] === 3;
+            } else {
+                $atingiuMinimo = $equipe['total_membros'] >= $minimoNecessario;
+            }
 
             // Gera o PIX se atingiu o mínimo
             $pixInfo = null;
