@@ -18,6 +18,19 @@ class VotoModel {
             $stmtVoto->bindParam(':voto', $voto);
             $stmtVoto->execute();
 
+            // Verificar se existe registro na tabela resultados
+            $queryVerificar = "SELECT COUNT(*) as total FROM resultados";
+            $stmtVerificar = $this->db->prepare($queryVerificar);
+            $stmtVerificar->execute();
+            $resultado = $stmtVerificar->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado['total'] == 0) {
+                // Inserir registro inicial se não existir
+                $queryInserir = "INSERT INTO resultados (total_votos, votos_sim, votos_nao) VALUES (0, 0, 0)";
+                $stmtInserir = $this->db->prepare($queryInserir);
+                $stmtInserir->execute();
+            }
+
             // Atualizar resultados
             $queryAtualizar = "UPDATE resultados SET 
                 total_votos = total_votos + 1,
@@ -72,9 +85,15 @@ class VotoModel {
                 ];
             }
 
+            // Retornar chaves padrão com valores zerados caso não haja resultado
             return [
-                'success' => false,
-                'message' => 'Nenhum resultado encontrado.'
+                'success' => true,
+                'total_votos' => 0,
+                'votos_sim' => 0,
+                'votos_nao' => 0,
+                'percentual_sim' => 0,
+                'percentual_nao' => 0,
+                'data_atualizacao' => null
             ];
 
         } catch(PDOException $e) {

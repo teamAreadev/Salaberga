@@ -9,7 +9,8 @@ $tipoMensagem = '';
 // Processar voto
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['voto'])) {
     $voto = $_POST['voto'];
-    if ($votoModel->registrarVoto(null, $voto)) {
+    $alunoId = isset($_SESSION['aluno_id']) ? $_SESSION['aluno_id'] : null;
+    if ($votoModel->registrarVoto($alunoId, $voto)) {
         header("Location: sucesso.php");
         exit();
     } else {
