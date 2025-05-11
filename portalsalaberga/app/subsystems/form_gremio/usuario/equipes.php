@@ -165,13 +165,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
+                    <a href="../assets/img/Copa Grêmio 2025 1.0 - Edital.pdf" download class="flex items-center space-x-2 text-white hover:text-primary-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10 font-semibold">
+                        <i class="fas fa-file-pdf text-red-400 text-lg"></i>
+                        <span>Edital</span>
+                    </a>
                     <button id="mobile-menu-btn" class="md:hidden focus:outline-none">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
                     <ul id="nav-menu" class="hidden md:flex space-x-4">
                         <li><a href="dashboard.php" class="text-white hover:text-primary-200 px-3 py-2">Início</a></li>
                         <li><a href="equipes.php" class="text-primary-200 border-b-2 border-primary-400 px-3 py-2">Equipes</a></li>
-                    
+                        <li><a href="../assets/img/Copa Grêmio 2025 1.0 - Edital.pdf" download class="flex items-center text-red-200 hover:text-white px-3 py-2 rounded-lg font-semibold transition-colors"><i class="fas fa-file-pdf mr-2"></i> Edital</a></li>
                         <li><a href="logout.php" class="text-white hover:text-primary-200 px-3 py-2">Sair</a></li>
                     </ul>
                 </div>
@@ -648,6 +652,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function enviarComprovante(identificador, valor, nomeEquipe) {
             const mensagem = `Olá! Segue o comprovante de pagamento:\n\n` +
+                            `*Nome:* ${nomeEquipe}\n` +
                             `*Equipe:* ${nomeEquipe}\n` +
                             `*Valor:* R$ ${valor}`;
             

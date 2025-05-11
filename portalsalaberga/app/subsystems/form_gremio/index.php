@@ -142,6 +142,10 @@
             
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex items-center space-x-6">
+                <a href="assets/img/Copa Grêmio 2025 1.0 - Edital.pdf" download class="flex items-center space-x-2 text-white hover:text-green-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10 font-semibold">
+                    <i class="fas fa-file-pdf text-red-400 text-lg"></i>
+                    <span>Edital</span>
+                </a>
                 <div class="relative group">
                     <button id="loginDropdown" class="flex items-center space-x-2 text-white hover:text-green-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">
                         <i class="fas fa-sign-in-alt text-lg"></i>
@@ -170,6 +174,9 @@
     <div id="mobile-menu" class="hidden md:hidden bg-green-800/95 backdrop-blur-sm">
         <div class="container mx-auto px-4 py-2">
             <div class="flex flex-col space-y-1">
+                <a href="assets/img/Copa Grêmio 2025 1.0 - Edital.pdf" download class="flex items-center text-red-200 hover:text-white px-3 py-3 rounded-lg font-semibold transition-colors">
+                    <i class="fas fa-file-pdf mr-2"></i> Edital
+                </a>
                 <button id="mobile-loginDropdown" class="flex items-center justify-between w-full text-white px-3 py-3 rounded-lg hover:bg-white/10 transition-colors">
                     <div class="flex items-center">
                         <i class="fas fa-sign-in-alt mr-3 text-lg"></i>
@@ -294,6 +301,29 @@
     <div id="toast" class="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 hidden flex items-center">
         <i class="fas fa-check-circle mr-2"></i>
         <span id="toastMessage"></span>
+    </div>
+
+    <!-- Popup do Edital -->
+    <div id="editalPopup" class="fixed bottom-4 right-4 bg-white rounded-xl shadow-2xl p-4 max-w-sm transform transition-all duration-300 translate-y-0 opacity-100 z-50 border border-green-100 hover:border-green-200">
+        <div class="flex items-start">
+            <div class="flex-shrink-0 bg-red-50 p-2 rounded-lg">
+                <i class="fas fa-file-pdf text-red-500 text-2xl"></i>
+            </div>
+            <div class="ml-3 flex-1">
+                <h3 class="text-base font-semibold text-gray-900">Edital da Copa Grêmio 2025</h3>
+                <p class="mt-1 text-sm text-gray-600">Confira todas as regras e informações importantes do torneio.</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                    <a href="assets\img\Copa Grêmio 2025 1.0 - Edital.pdf" download class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                        <i class="fas fa-download mr-2"></i>
+                        Baixar Edital
+                    </a>
+                    <button onclick="fecharPopup()" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200">
+                        <i class="fas fa-times mr-2"></i>
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -534,6 +564,52 @@
                 input.classList.add('animate-fade-in');
             });
         });
+
+        function fecharPopup() {
+            const popup = document.getElementById('editalPopup');
+            popup.style.transform = 'translateY(100%)';
+            popup.style.opacity = '0';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 300);
+        }
+
+        // Mostrar popup após 3 segundos
+        setTimeout(() => {
+            const popup = document.getElementById('editalPopup');
+            popup.style.display = 'block';
+            
+            // Adicionar animação de entrada
+            popup.style.transform = 'translateY(100%)';
+            popup.style.opacity = '0';
+            
+            // Forçar reflow
+            popup.offsetHeight;
+            
+            // Animar entrada
+            popup.style.transform = 'translateY(0)';
+            popup.style.opacity = '1';
+        }, 3000);
+
+        // Ajustar posição da popup em telas menores
+        function ajustarPosicaoPopup() {
+            const popup = document.getElementById('editalPopup');
+            if (window.innerWidth < 640) { // sm breakpoint do Tailwind
+                popup.classList.remove('right-4');
+                popup.classList.add('right-2', 'left-2', 'bottom-2');
+                popup.classList.remove('max-w-sm');
+            } else {
+                popup.classList.add('right-4');
+                popup.classList.remove('right-2', 'left-2', 'bottom-2');
+                popup.classList.add('max-w-sm');
+            }
+        }
+
+        // Ajustar posição inicial
+        ajustarPosicaoPopup();
+
+        // Ajustar posição quando a janela for redimensionada
+        window.addEventListener('resize', ajustarPosicaoPopup);
     </script>
     <footer class="w-full text-center py-4 bg-gray-100 text-gray-600 text-sm mt-8">
         Desenvolvido por Matheus Felix

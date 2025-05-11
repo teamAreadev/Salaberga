@@ -118,6 +118,10 @@ $valor_inscricao = $modalidades_aprovadas >= 3 ? '3,00' : '5,00';
                         </a>
                     </li>
                 </ul>
+                <a href="../assets/img/Copa Grêmio 2025 1.0 - Edital.pdf" download class="flex items-center space-x-2 text-white hover:text-primary-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10 font-semibold">
+                    <i class="fas fa-file-pdf text-red-400 text-lg"></i>
+                    <span>Edital</span>
+                </a>
             </nav>
             
             <!-- Mobile Menu Button -->
@@ -144,6 +148,11 @@ $valor_inscricao = $modalidades_aprovadas >= 3 ? '3,00' : '5,00';
                 <li>
                     <a href="logout.php" class="text-white px-3 py-2.5 block hover:bg-white/10 transition-colors">
                         Sair
+                    </a>
+                </li>
+                <li>
+                    <a href="../assets/img/Copa Grêmio 2025 1.0 - Edital.pdf" download class="flex items-center text-red-200 hover:text-white px-3 py-3 rounded-lg font-semibold transition-colors">
+                        <i class="fas fa-file-pdf mr-2"></i> Edital
                     </a>
                 </li>
             </ul>
@@ -460,6 +469,7 @@ $valor_inscricao = $modalidades_aprovadas >= 3 ? '3,00' : '5,00';
 
         function enviarComprovante(modalidade, valor) {
             const mensagem = `Olá! Segue o comprovante de pagamento:\n\n` +
+                            `*Nome:* ${modalidade}\n` +
                             `*Modalidade:* ${modalidade}\n` +
                             `*Valor:* R$ ${valor}`;
             

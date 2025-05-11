@@ -78,6 +78,10 @@ if (!isset($_SESSION['admin_id']) ||
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Sair</span>
                 </a>
+                <a href="assets/img/Copa Grêmio 2025 1.0 - Edital.pdf" download class="flex items-center space-x-2 text-white hover:text-green-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10 font-semibold">
+                    <i class="fas fa-file-pdf text-red-400 text-lg"></i>
+                    <span>Edital</span>
+                </a>
             </div>
         </div>
     </header>

@@ -107,6 +107,10 @@ $inscricoes = $_SESSION['usuario_inscricoes'] ?? [];
                     <a href="logout.php" class="bg-secondary-600 hover:bg-secondary-700 text-white px-3 py-1 rounded-md shadow-md transition-colors flex items-center text-sm">
                         <i class="fas fa-sign-out-alt mr-1"></i> Sair
                     </a>
+                    <a href="../assets/img/Copa Grêmio 2025 1.0 - Edital.pdf" download class="flex items-center space-x-2 text-white hover:text-primary-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10 font-semibold">
+                        <i class="fas fa-file-pdf text-red-400 text-lg"></i>
+                        <span>Edital</span>
+                    </a>
                 </div>
             </div>
         </header>
