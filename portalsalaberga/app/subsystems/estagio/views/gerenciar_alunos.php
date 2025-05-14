@@ -60,6 +60,9 @@ if (isset($_POST['layout'])) {
             ?>
         ];
 
+        // ID do aluno a ser excluído
+        let alunoIdParaExcluir = null;
+
         // Funções dos modais
         function verDetalhes(id) {
             const aluno = alunos.find(a => a.id === id);
@@ -145,6 +148,8 @@ if (isset($_POST['layout'])) {
             const aluno = alunos.find(a => a.id === id);
             if (aluno) {
                 document.getElementById('modalTitle').textContent = 'Editar Aluno';
+                document.getElementById('alunoForm').reset(); // Limpa o formulário antes de preencher
+                document.getElementById('formAcao').value = 'editar_aluno'; // Define a ação para editar
                 document.getElementById('alunoId').value = aluno.id;
                 document.getElementById('alunoNome').value = aluno.nome;
                 document.getElementById('alunoContato').value = aluno.contato;
@@ -161,6 +166,45 @@ if (isset($_POST['layout'])) {
             }
         }
 
+        function abrirModalCadastro() {
+            document.getElementById('modalTitle').textContent = 'Cadastrar Novo Aluno';
+            document.getElementById('alunoForm').reset(); // Limpa o formulário
+            document.getElementById('formAcao').value = 'cadastrar_aluno'; // Define a ação para cadastrar
+            document.getElementById('alunoId').value = ''; // Garante que não há ID para cadastro
+            document.getElementById('alunoModal').classList.add('show');
+        }
+
+        function confirmarExclusao(id) {
+            alunoIdParaExcluir = id;
+            // Opcional: pode-se adicionar o nome do aluno no modal de confirmação
+            // const aluno = alunos.find(a => a.id === id);
+            // if(aluno) { document.getElementById('nomeAlunoParaExcluir').textContent = aluno.nome; }
+            document.getElementById('confirmacaoExclusaoModal').classList.add('show');
+        }
+
+        function efetivarExclusaoAluno() {
+            if (alunoIdParaExcluir === null) return;
+
+            console.log('Simulando exclusão do aluno com ID:', alunoIdParaExcluir);
+            // TODO: Implementar chamada AJAX para o backend para excluir o aluno
+            // Exemplo: fetch('../controllers/controller.php', { 
+            // method: 'POST', 
+            // headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            // body: `acao=excluir_aluno&id=${alunoIdParaExcluir}`
+            // })
+            // .then(response => response.json())
+            // .then(data => { console.log(data); /* Tratar resposta */ });
+
+            // Atualiza a lista de alunos na interface (simulação)
+            alunos = alunos.filter(a => a.id !== alunoIdParaExcluir);
+            aplicarFiltros(); // Re-renderiza a tabela/cards
+            
+            document.getElementById('confirmacaoExclusaoModal').classList.remove('show');
+            alunoIdParaExcluir = null;
+            // Opcional: Adicionar um toast de sucesso
+            // showToast('Aluno excluído com sucesso!', 'success'); 
+        }
+
         // Função para renderizar a tabela de alunos (desktop)
         function renderizarTabelaDesktop(alunosFiltrados = alunos) {
             const tbody = document.getElementById('alunosTableBody');
@@ -173,12 +217,15 @@ if (isset($_POST['layout'])) {
                 tr.innerHTML = `
                     <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
                     <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
-                        <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
+                        <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors" title="Ver Detalhes">
                             <i class="fas fa-info-circle"></i>
                         </button>
-                        <a href="#" onclick="editarAluno(${aluno.id}); return false;" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
+                        <a href="#" onclick="editarAluno(${aluno.id}); return false;" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors" title="Editar Aluno">
                             <i class="fas fa-edit"></i>
                         </a>
+                        <button onclick="confirmarExclusao(${aluno.id})" class="text-red-500 hover:text-red-400 transition-colors" title="Excluir Aluno">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -207,12 +254,15 @@ if (isset($_POST['layout'])) {
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-medium text-white">${aluno.nome}</h3>
                         <div class="flex items-center gap-2">
-                            <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 transition-colors">
+                            <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 transition-colors" title="Ver Detalhes">
                                 <i class="fas fa-info-circle"></i>
                             </button>
-                            <a href="#" onclick="editarAluno(${aluno.id}); return false;" class="text-green-400 hover:text-green-300 transition-colors">
+                            <a href="#" onclick="editarAluno(${aluno.id}); return false;" class="text-green-400 hover:text-green-300 transition-colors" title="Editar Aluno">
                                 <i class="fas fa-edit"></i>
                             </a>
+                            <button onclick="confirmarExclusao(${aluno.id})" class="text-red-500 hover:text-red-400 transition-colors" title="Excluir Aluno">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                     </div>
                     <div id="detalhes-mobile-${aluno.id}" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
@@ -323,6 +373,23 @@ if (isset($_POST['layout'])) {
             detalhesModal.addEventListener('click', (e) => {
                 if (e.target === detalhesModal) {
                     detalhesModal.classList.remove('show');
+                }
+            });
+
+            // Event listener para o botão "Cadastrar Novo Aluno"
+            document.getElementById('btnCadastrarAluno').addEventListener('click', abrirModalCadastro);
+
+            // Event listeners para o modal de confirmação de exclusão
+            const confirmacaoModal = document.getElementById('confirmacaoExclusaoModal');
+            document.getElementById('cancelarExclusaoBtn').addEventListener('click', () => {
+                confirmacaoModal.classList.remove('show');
+                alunoIdParaExcluir = null;
+            });
+            document.getElementById('confirmarExclusaoBtn').addEventListener('click', efetivarExclusaoAluno);
+            confirmacaoModal.addEventListener('click', (e) => {
+                if (e.target === confirmacaoModal) {
+                    confirmacaoModal.classList.remove('show');
+                    alunoIdParaExcluir = null;
                 }
             });
 
@@ -1072,6 +1139,10 @@ if (isset($_POST['layout'])) {
                             <i class="fas fa-search search-icon"></i>
                             <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="custom-input pl-10 pr-4 py-2.5 w-full">
                         </div>
+                        <button id="btnCadastrarAluno" class="custom-btn custom-btn-primary">
+                            <i class="fas fa-plus mr-2"></i>
+                            Cadastrar Novo Aluno
+                        </button>
                     </div>
                 </div>
                 <!-- Table Desktop -->
@@ -1099,12 +1170,15 @@ if (isset($_POST['layout'])) {
                                 <tr class="hover:bg-dark-50 transition-colors slide-up" style="animation-delay: <?= $index * 50 ?>ms;">
                                     <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
                                     <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
-                                        <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
+                                        <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors" title="Ver Detalhes">
                                             <i class="fas fa-info-circle"></i>
                                         </button>
-                                        <a href="#" onclick="editarAluno(<?= $dado['id'] ?>); return false;" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
+                                        <a href="#" onclick="editarAluno(<?= $dado['id'] ?>); return false;" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors" title="Editar Aluno">
                                             <i class="fas fa-edit"></i>
                                         </a>
+                                        <button onclick="confirmarExclusao(<?= $dado['id'] ?>)" class="text-red-500 hover:text-red-400 transition-colors" title="Excluir Aluno">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr id="detalhes-<?= $dado['id'] ?>" class="hidden bg-dark-50">
@@ -1176,12 +1250,15 @@ if (isset($_POST['layout'])) {
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-lg font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></h3>
                                 <div class="flex items-center gap-2">
-                                    <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 transition-colors">
+                                    <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 transition-colors" title="Ver Detalhes">
                                         <i class="fas fa-info-circle"></i>
                                     </button>
-                                    <a href="#" onclick="editarAluno(<?= $dado['id'] ?>); return false;" class="text-green-400 hover:text-green-300 transition-colors">
+                                    <a href="#" onclick="editarAluno(<?= $dado['id'] ?>); return false;" class="text-green-400 hover:text-green-300 transition-colors" title="Editar Aluno">
                                         <i class="fas fa-edit"></i>
                                     </a>
+                                    <button onclick="confirmarExclusao(<?= $dado['id'] ?>)" class="text-red-500 hover:text-red-400 transition-colors" title="Excluir Aluno">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div id="detalhes-mobile-<?= $dado['id'] ?>" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
@@ -1246,6 +1323,7 @@ if (isset($_POST['layout'])) {
                 <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white">Editar Aluno</h2>
                 <form id="alunoForm" action="../controllers/controller.php" method="post" class="space-y-4">
                     <input type="hidden" name="id" id="alunoId">
+                    <input type="hidden" name="acao" id="formAcao" value="editar_aluno"> <!-- Campo para diferenciar ação -->
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Nome</label>
                         <input type="text" name="nome" id="alunoNome" class="custom-input mt-1" required>
@@ -1328,6 +1406,21 @@ if (isset($_POST['layout'])) {
                     <button id="fecharDetalhesBtn" class="custom-btn custom-btn-secondary">
                         <i class="fas fa-times btn-icon"></i>
                         <span>Fechar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Confirmação de Exclusão -->
+        <div id="confirmacaoExclusaoModal" class="modal-base">
+            <div class="modal-content max-w-md">
+                <h2 class="text-xl font-bold mb-4 text-white">Confirmar Exclusão</h2>
+                <p class="text-gray-300 mb-6">Tem certeza que deseja excluir este aluno?</p>
+                <input type="hidden" id="alunoIdParaExcluir">
+                <div class="flex justify-end space-x-3">
+                    <button id="cancelarExclusaoBtn" class="custom-btn custom-btn-secondary">Cancelar</button>
+                    <button id="confirmarExclusaoBtn" class="custom-btn bg-red-600 hover:bg-red-700 text-white">
+                        <i class="fas fa-trash-alt mr-2"></i>Excluir
                     </button>
                 </div>
             </div>
