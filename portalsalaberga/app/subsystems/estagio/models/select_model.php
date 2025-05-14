@@ -128,12 +128,47 @@ class select_model extends connect
                     a.id, 
                     a.nome, 
                     a.perfil_opc1, 
-                    c.nome AS empresa
+                    c.nome AS empresa,
+                    p.nome_perfil AS perfil_empresa,
+                    'approved' as status
                 FROM selecionado s
                 INNER JOIN aluno a ON s.id_aluno = a.id
                 INNER JOIN vagas v ON s.id_vaga = v.id
                 INNER JOIN concedentes c ON v.id_concedente = c.id
-                ORDER BY a.nome ASC";
+                INNER JOIN perfis p ON v.id_perfil = p.id
+                
+                UNION
+                
+                SELECT 
+                    a.id, 
+                    a.nome, 
+                    a.perfil_opc1, 
+                    c.nome AS empresa,
+                    p.nome_perfil AS perfil_empresa,
+                    'waiting' as status
+                FROM selecao se
+                INNER JOIN aluno a ON se.id_aluno = a.id
+                INNER JOIN vagas v ON se.id_vaga = v.id
+                INNER JOIN concedentes c ON v.id_concedente = c.id
+                INNER JOIN perfis p ON v.id_perfil = p.id
+                LEFT JOIN selecionado s ON se.id_aluno = s.id_aluno AND se.id_vaga = s.id_vaga
+                WHERE s.id_aluno IS NULL
+                
+                UNION
+                
+                SELECT 
+                    a.id, 
+                    a.nome, 
+                    a.perfil_opc1, 
+                    NULL AS empresa,
+                    NULL AS perfil_empresa,
+                    'no_interview' as status
+                FROM aluno a
+                LEFT JOIN selecao se ON a.id = se.id_aluno
+                LEFT JOIN selecionado s ON a.id = s.id_aluno
+                WHERE se.id_aluno IS NULL AND s.id_aluno IS NULL
+                
+                ORDER BY nome ASC";
         $stmt = $this->connect->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
