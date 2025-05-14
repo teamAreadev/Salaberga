@@ -3,7 +3,7 @@
 session_start();
 
 
-require_once '../config/Database.php';
+//require_once '../config/Database.php';
 
 class UserAuth
 {
@@ -96,9 +96,8 @@ class RegistroAluno
             return false;
         }
     }
-
-
-    public function registrarSaidaEstagio($aluno, $date_time)
+        
+        public function registrarSaidaEstagio($aluno, $date_time)
     {
         try {
             // Conexão com o banco de dados
@@ -131,7 +130,7 @@ class RegistroAluno
 
                 return true; // Sucesso
             } else {
-                echo "Erro: Aluno não encontrado na tabela aluno.";
+                echo "Erro: O usuário ". $aluno ." o aluno não encontrado na tabela aluno.";
                 return false;
             }
         } catch (PDOException $e) {
@@ -140,7 +139,6 @@ class RegistroAluno
             return false;
         }
     }
-
 
      public function fpdf (){
 
