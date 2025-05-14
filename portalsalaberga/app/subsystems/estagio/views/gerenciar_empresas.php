@@ -654,6 +654,10 @@ if (isset($_POST['layout'])) {
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
+                    <a href="resultado_selecionados.php" class="sidebar-link">
+                        <i class="fa fa-user-circle w-5 mr-3"></i>
+                        Resultados da Seleção
+                    </a>
                     <a href="gerenciar_alunos.php" class="sidebar-link">
                         <i class="fas fa-user-graduate w-5 mr-3"></i>
                         Gerenciar Alunos
@@ -706,9 +710,13 @@ if (isset($_POST['layout'])) {
                     </button>
                 </div>
                 <nav class="flex-1">
-                    <a href="dashboard.php" class="sidebar-link">
+                <a href="dashboard.php" class="sidebar-link">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
+                    </a>
+                    <a href="resultado_selecionados.php" class="sidebar-link">
+                        <i class="fa fa-user-circle w-5 mr-3"></i>
+                        Resultados da Seleção
                     </a>
                     <a href="gerenciar_alunos.php" class="sidebar-link">
                         <i class="fas fa-user-graduate w-5 mr-3"></i>
