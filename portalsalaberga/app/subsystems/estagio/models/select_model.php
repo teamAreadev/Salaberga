@@ -95,29 +95,45 @@ class select_model extends connect
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    function alunos($nome_perfil = 0, $search = '', $filtro = '')
+   function alunos($nome_perfil = 0, $search = '', $filtro = '')
+{
+    $sql = "SELECT 
+                id,
+                nome,
+                medias,
+                projetos,
+                ocorrencia,
+                entregas_individuais,
+                entregas_grupo,
+                perfil_opc1,
+                perfil_opc2,
+                custeio,
+                (
+                    medias + 
+                    (CASE WHEN projetos != '' THEN 5 ELSE 0 END) -
+                    (ocorrencia * 0.5) +
+                    (entregas_individuais * 5) +
+                    (entregas_grupo * 5)
+                ) AS score,
+                CASE 
+                    WHEN perfil_opc1 = '$nome_perfil' THEN 1
+                    WHEN perfil_opc2 = '$nome_perfil' THEN 2
+                    ELSE 3
+                END AS priority_group
+            FROM aluno
+            WHERE perfil_opc1 = '$nome_perfil' OR perfil_opc2 = '$nome_perfil'
+            ORDER BY 
+                priority_group ASC,  -- First sort by priority group (1 for first option, 2 for second option)
+                score DESC,          -- Then by score descending within each group
+                medias DESC,         -- Then by medias descending
+                COALESCE(ocorrencia, 0) ASC;";
+    $stmt = $this->connect->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+   function alunos_aptos_curso($nome_perfil = 0, $search = '', $filtro = '')
     {
-        $sql = "SELECT 
-                    id,
-                    nome,
-                    medias,
-                    projetos,
-                    ocorrencia,
-                    entregas_individuais,
-                    entregas_grupo,
-                    perfil_opc1,
-                    perfil_opc2,
-                    custeio,
-                    (
-                        medias + 
-                        (CASE WHEN projetos != '' THEN 5 ELSE 0 END) -
-                        (ocorrencia * 0.5) +
-                        (entregas_individuais * 5) +
-                        (entregas_grupo * 5)
-                    ) AS score
-                FROM aluno
-                WHERE perfil_opc1 = '$nome_perfil' OR perfil_opc2 = '$nome_perfil'
-                ORDER BY score DESC, medias DESC, COALESCE(ocorrencia, 0) ASC;";
+        $sql = "SELECT * FROM aluno";
         $stmt = $this->connect->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -276,5 +292,14 @@ class select_model extends connect
     public function getConnection()
     {
         return $this->connect;
+    }
+
+    public function total_alunos(){
+
+        $stmt_alunos = $this->connect->query('SELECT count(*) FROM aluno');
+        $result = $stmt_alunos->fetch(PDO::FETCH_ASSOC);
+        foreach($result as $dado){
+            return $dado;
+        }
     }
 }

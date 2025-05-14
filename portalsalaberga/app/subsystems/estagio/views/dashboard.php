@@ -249,7 +249,9 @@ if (isset($_POST['layout'])) {
                     <div class="flex items-center justify-between">
                         <div>
                             <h3 class="text-lg font-semibold">Alunos</h3>
-                            <p class="text-3xl font-bold mt-2 text-primary">49</p>
+                            <p class="text-3xl font-bold mt-2 text-primary"><?php 
+                            echo $dados = $select_model->total_alunos();
+                            ?></p>
                         </div>
                         <div class="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                             <i class="fas fa-user-graduate text-xl"></i>
@@ -318,16 +320,6 @@ if (isset($_POST['layout'])) {
                 <div class="dashboard-card lg:col-span-1">
                     <h3 class="text-lg font-semibold mb-4">Ações Rápidas</h3>
                     <div class="space-y-3">
-                        <a href="gerenciar_alunos.php" class="flex items-center p-3 rounded-lg hover:bg-primary/10 transition-colors">
-                            <div class="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary mr-3">
-                                <i class="fas fa-user-plus"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-medium">Cadastrar Aluno</h4>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Adicionar novo aluno ao sistema</p>
-                            </div>
-                        </a>
-
                         <a href="gerenciar_empresas.php" class="flex items-center p-3 rounded-lg hover:bg-info/10 transition-colors">
                             <div class="h-10 w-10 rounded-lg bg-info/10 flex items-center justify-center text-info mr-3">
                                 <i class="fas fa-building"></i>

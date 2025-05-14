@@ -30,7 +30,7 @@ if (isset($_POST['layout'])) {
         let alunos = [
             <?php 
             try {
-                $dados = $select_model->alunos_aptos();
+                $dados = $select_model->alunos_aptos_curso();
                 if (empty($dados)) {
                     echo "// Nenhum aluno encontrado";
                 } else {
@@ -60,9 +60,9 @@ if (isset($_POST['layout'])) {
             ?>
         ];
 
-        // Funções dos modais
+        // Função para ver detalhes
         function verDetalhes(id) {
-            const aluno = alunos.find(a => a.id === id);
+            const aluno = alunos.find(a => a.id === parseInt(id));
             if (aluno) {
                 const detalhesContent = document.getElementById('detalhesContent');
                 const areaClassOpc1 = aluno.perfil_opc1.toLowerCase();
@@ -137,27 +137,51 @@ if (isset($_POST['layout'])) {
                         <span class="mobile-card-value">${aluno.entregas_grupo}</span>
                     </div>
                 `;
-                document.getElementById('detalhesModal').classList.add('show');
+                const modal = document.getElementById('detalhesModal');
+                modal.classList.add('show');
+                modal.style.display = 'flex';
+            } else {
+                console.error(`Aluno com ID ${id} não encontrado.`);
             }
         }
 
+        // Função para abrir o modal de edição
         function editarAluno(id) {
-            const aluno = alunos.find(a => a.id === id);
+            const aluno = alunos.find(a => a.id === parseInt(id));
             if (aluno) {
-                document.getElementById('modalTitle').textContent = 'Editar Aluno';
-                document.getElementById('alunoId').value = aluno.id;
-                document.getElementById('alunoNome').value = aluno.nome;
-                document.getElementById('alunoContato').value = aluno.contato;
-                document.getElementById('alunoMedias').value = aluno.medias;
-                document.getElementById('alunoEmail').value = aluno.email;
-                document.getElementById('alunoProjetos').value = aluno.projetos;
-                document.getElementById('alunoOpc1').value = aluno.perfil_opc1.toLowerCase();
-                document.getElementById('alunoOpc2').value = aluno.perfil_opc2.toLowerCase();
-                document.getElementById('alunoOcorrencia').value = aluno.ocorrencia;
-                document.getElementById('alunoCusteio').value = aluno.custeio;
-                document.getElementById('alunoEntregasIndividuais').value = aluno.entregas_individuais ?? '';
-                document.getElementById('alunoEntregasGrupo').value = aluno.entregas_grupo ?? '';
-                document.getElementById('alunoModal').classList.add('show');
+                document.getElementById('editAlunoId').value = aluno.id;
+                document.getElementById('editNome').value = aluno.nome;
+                document.getElementById('editContato').value = aluno.contato === '-' ? '' : aluno.contato;
+                document.getElementById('editMedias').value = aluno.medias === '-' ? '' : aluno.medias;
+                document.getElementById('editEmail').value = aluno.email === '-' ? '' : aluno.email;
+                document.getElementById('editProjetos').value = aluno.projetos === '-' ? '' : aluno.projetos;
+                document.getElementById('editPerfilOpc1').value = aluno.perfil_opc1;
+                document.getElementById('editPerfilOpc2').value = aluno.perfil_opc2;
+                document.getElementById('editOcorrencia').value = aluno.ocorrencia === '-' ? '' : aluno.ocorrencia;
+                document.getElementById('editCusteio').value = aluno.custeio.toString();
+                document.getElementById('editEntregasIndividuais').value = aluno.entregas_individuais === '-' ? '' : aluno.entregas_individuais;
+                document.getElementById('editEntregasGrupo').value = aluno.entregas_grupo === '-' ? '' : aluno.entregas_grupo;
+
+                const modal = document.getElementById('editarAlunoModal');
+                modal.classList.add('show');
+                modal.style.display = 'flex';
+            } else {
+                console.error(`Aluno com ID ${id} não encontrado.`);
+            }
+        }
+
+        // Função para abrir o modal de adicionar aluno
+        function abrirAdicionarAluno() {
+            document.getElementById('addAlunoForm').reset();
+            const modal = document.getElementById('adicionarAlunoModal');
+            modal.classList.add('show');
+            modal.style.display = 'flex';
+        }
+
+        // Função para deletar aluno
+        function deletarAluno(id) {
+            if (confirm('Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita.')) {
+                window.location.href = `../controllers/controller.php?acao=deletar&id=${id}`;
             }
         }
 
@@ -173,12 +197,15 @@ if (isset($_POST['layout'])) {
                 tr.innerHTML = `
                     <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
                     <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
-                        <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
+                        <button class="ver-detalhes-btn text-blue-400 hover:text-blue-300 mr-2 transition-colors" data-id="${aluno.id}">
                             <i class="fas fa-info-circle"></i>
                         </button>
-                        <a href="#" onclick="editarAluno(${aluno.id}); return false;" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
+                        <button class="editar-aluno-btn text-primary-400 hover:text-primary-300 mr-2 transition-colors" data-id="${aluno.id}">
                             <i class="fas fa-edit"></i>
-                        </a>
+                        </button>
+                        <button class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="${aluno.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -207,12 +234,15 @@ if (isset($_POST['layout'])) {
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-medium text-white">${aluno.nome}</h3>
                         <div class="flex items-center gap-2">
-                            <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 transition-colors">
+                            <button class="ver-detalhes-btn text-blue-400 hover:text-blue-300 transition-colors" data-id="${aluno.id}">
                                 <i class="fas fa-info-circle"></i>
                             </button>
-                            <a href="#" onclick="editarAluno(${aluno.id}); return false;" class="text-green-400 hover:text-green-300 transition-colors">
+                            <button class="editar-aluno-btn text-green-400 hover:text-green-300 transition-colors" data-id="${aluno.id}">
                                 <i class="fas fa-edit"></i>
-                            </a>
+                            </button>
+                            <button class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="${aluno.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                     </div>
                     <div id="detalhes-mobile-${aluno.id}" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
@@ -297,32 +327,92 @@ if (isset($_POST['layout'])) {
                 }, 300);
             });
 
-            // Modal de Edição
-            const alunoModal = document.getElementById('alunoModal');
-            const cancelarBtn = document.getElementById('cancelarBtn');
-            const alunoForm = document.getElementById('alunoForm');
+            // Event delegation for desktop table
+            document.getElementById('alunosTableBody').addEventListener('click', (e) => {
+                const verDetalhesBtn = e.target.closest('.ver-detalhes-btn');
+                const editarAlunoBtn = e.target.closest('.editar-aluno-btn');
+                const deletarAlunoBtn = e.target.closest('.deletar-aluno-btn');
 
-            cancelarBtn.addEventListener('click', () => {
-                alunoModal.classList.remove('show');
+                if (verDetalhesBtn) {
+                    const id = verDetalhesBtn.getAttribute('data-id');
+                    verDetalhes(id);
+                }
+
+                if (editarAlunoBtn) {
+                    const id = editarAlunoBtn.getAttribute('data-id');
+                    editarAluno(id);
+                }
+
+                if (deletarAlunoBtn) {
+                    const id = deletarAlunoBtn.getAttribute('data-id');
+                    deletarAluno(id);
+                }
             });
 
-            alunoModal.addEventListener('click', (e) => {
-                if (e.target === alunoModal) {
-                    alunoModal.classList.remove('show');
+            // Event delegation for mobile cards
+            document.getElementById('alunosMobileCards').addEventListener('click', (e) => {
+                const verDetalhesBtn = e.target.closest('.ver-detalhes-btn');
+                const editarAlunoBtn = e.target.closest('.editar-aluno-btn');
+                const deletarAlunoBtn = e.target.closest('.deletar-aluno-btn');
+
+                if (verDetalhesBtn) {
+                    const id = verDetalhesBtn.getAttribute('data-id');
+                    verDetalhes(id);
+                }
+
+                if (editarAlunoBtn) {
+                    const id = editarAlunoBtn.getAttribute('data-id');
+                    editarAluno(id);
+                }
+
+                if (deletarAlunoBtn) {
+                    const id = deletarAlunoBtn.getAttribute('data-id');
+                    deletarAluno(id);
                 }
             });
 
             // Modal de Detalhes
-            const detalhesModal = document.getElementById('detalhesModal');
-            const fecharDetalhesBtn = document.getElementById('fecharDetalhesBtn');
-
-            fecharDetalhesBtn.addEventListener('click', () => {
-                detalhesModal.classList.remove('show');
+            document.getElementById('fecharDetalhesBtn').addEventListener('click', () => {
+                const modal = document.getElementById('detalhesModal');
+                modal.classList.remove('show');
+                modal.style.display = 'none';
             });
 
-            detalhesModal.addEventListener('click', (e) => {
-                if (e.target === detalhesModal) {
-                    detalhesModal.classList.remove('show');
+            document.getElementById('detalhesModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('detalhesModal')) {
+                    const modal = document.getElementById('detalhesModal');
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Modal de Edição
+            document.getElementById('fecharEditarBtn').addEventListener('click', () => {
+                const modal = document.getElementById('editarAlunoModal');
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+            });
+
+            document.getElementById('editarAlunoModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('editarAlunoModal')) {
+                    const modal = document.getElementById('editarAlunoModal');
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Modal de Adicionar
+            document.getElementById('fecharAdicionarBtn').addEventListener('click', () => {
+                const modal = document.getElementById('adicionarAlunoModal');
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+            });
+
+            document.getElementById('adicionarAlunoModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('adicionarAlunoModal')) {
+                    const modal = document.getElementById('adicionarAlunoModal');
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
                 }
             });
 
@@ -340,40 +430,6 @@ if (isset($_POST['layout'])) {
             window.addEventListener('resize', checkScreenSize);
             checkScreenSize();
         });
-
-        // Função para alternar detalhes na tabela desktop
-        function toggleDetalhes(id) {
-            const detalhesRow = document.getElementById(`detalhes-${id}`);
-            const button = detalhesRow.previousElementSibling.querySelector('button');
-            const icon = button.querySelector('i');
-            
-            if (detalhesRow.classList.contains('hidden')) {
-                detalhesRow.classList.remove('hidden');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
-            } else {
-                detalhesRow.classList.add('hidden');
-                icon.classList.remove('fa-chevron-up');
-                icon.classList.add('fa-chevron-down');
-            }
-        }
-
-        // Função para alternar detalhes nos cards mobile
-        function toggleDetalhesMobile(id) {
-            const detalhesDiv = document.getElementById(`detalhes-mobile-${id}`);
-            const button = detalhesDiv.parentElement.querySelector('button');
-            const icon = button.querySelector('i');
-            
-            if (detalhesDiv.classList.contains('hidden')) {
-                detalhesDiv.classList.remove('hidden');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
-            } else {
-                detalhesDiv.classList.add('hidden');
-                icon.classList.remove('fa-chevron-up');
-                icon.classList.add('fa-chevron-down');
-            }
-        }
     </script>
 
     <script>
@@ -1072,6 +1128,10 @@ if (isset($_POST['layout'])) {
                             <i class="fas fa-search search-icon"></i>
                             <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="custom-input pl-10 pr-4 py-2.5 w-full">
                         </div>
+                        <button onclick="abrirAdicionarAluno()" class="custom-btn custom-btn-primary">
+                            <i class="fas fa-plus btn-icon"></i>
+                            <span>Adicionar Aluno</span>
+                        </button>
                     </div>
                 </div>
                 <!-- Table Desktop -->
@@ -1085,7 +1145,7 @@ if (isset($_POST['layout'])) {
                         </thead>
                         <tbody id="alunosTableBody">
                             <?php
-                            $dados = $select_model->alunos_aptos();
+                            $dados = $select_model->alunos_aptos_curso();
                             foreach ($dados as $index => $dado) {
                                 $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'area-desenvolvimento' : 
                                                 ($dado['perfil_opc1'] === 'design' ? 'area-design' : 
@@ -1099,12 +1159,15 @@ if (isset($_POST['layout'])) {
                                 <tr class="hover:bg-dark-50 transition-colors slide-up" style="animation-delay: <?= $index * 50 ?>ms;">
                                     <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
                                     <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
-                                        <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
+                                        <button class="ver-detalhes-btn text-blue-400 hover:text-blue-300 mr-2 transition-colors" data-id="<?= $dado['id'] ?>">
                                             <i class="fas fa-info-circle"></i>
                                         </button>
-                                        <a href="#" onclick="editarAluno(<?= $dado['id'] ?>); return false;" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
+                                        <button class="editar-aluno-btn text-primary-400 hover:text-primary-300 mr-2 transition-colors" data-id="<?= $dado['id'] ?>">
                                             <i class="fas fa-edit"></i>
-                                        </a>
+                                        </button>
+                                        <button class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="<?= $dado['id'] ?>">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr id="detalhes-<?= $dado['id'] ?>" class="hidden bg-dark-50">
@@ -1176,12 +1239,15 @@ if (isset($_POST['layout'])) {
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-lg font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></h3>
                                 <div class="flex items-center gap-2">
-                                    <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 transition-colors">
+                                    <button class="ver-detalhes-btn text-blue-400 hover:text-blue-300 transition-colors" data-id="<?= $dado['id'] ?>">
                                         <i class="fas fa-info-circle"></i>
                                     </button>
-                                    <a href="#" onclick="editarAluno(<?= $dado['id'] ?>); return false;" class="text-green-400 hover:text-green-300 transition-colors">
+                                    <button class="editar-aluno-btn text-green-400 hover:text-green-300 transition-colors" data-id="<?= $dado['id'] ?>">
                                         <i class="fas fa-edit"></i>
-                                    </a>
+                                    </button>
+                                    <button class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="<?= $dado['id'] ?>">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div id="detalhes-mobile-<?= $dado['id'] ?>" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
@@ -1205,11 +1271,11 @@ if (isset($_POST['layout'])) {
                                     <div>
                                         <span class="text-gray-400 text-sm">Opção 2:</span>
                                         <p class="text-white">
-                                            <span class="status-pill ${areaClassOpc2}">
+                                            <span class="status-pill <?= $areaClassOpc2 ?>">
                                                 <i class="fas fa-${
-                                                    dado['perfil_opc2'] === 'desenvolvimento' ? 'code' :
-                                                    dado['perfil_opc2'] === 'design' ? 'paint-brush' :
-                                                    dado['perfil_opc2'] === 'midia' ? 'video' :
+                                                    $dado['perfil_opc2'] === 'desenvolvimento' ? 'code' :
+                                                    $dado['perfil_opc2'] === 'design' ? 'paint-brush' :
+                                                    $dado['perfil_opc2'] === 'midia' ? 'video' :
                                                     'network-wired'
                                                 } text-xs mr-1"></i>
                                                 <?= htmlspecialchars($dado['perfil_opc2']) ?>
@@ -1240,83 +1306,6 @@ if (isset($_POST['layout'])) {
             </main>
         </div>
 
-        <!-- Modal de Edição -->
-        <div id="alunoModal" class="modal-base">
-            <div class="modal-content">
-                <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white">Editar Aluno</h2>
-                <form id="alunoForm" action="../controllers/controller.php" method="post" class="space-y-4">
-                    <input type="hidden" name="id" id="alunoId">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Nome</label>
-                        <input type="text" name="nome" id="alunoNome" class="custom-input mt-1" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Contato</label>
-                        <input type="text" name="contato" id="alunoContato" class="custom-input mt-1" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Médias</label>
-                        <input type="number" name="media" id="alunoMedias" min="0" max="10" step="0.1" class="custom-input mt-1" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Email</label>
-                        <input type="email" name="email" id="alunoEmail" class="custom-input mt-1" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Projetos Participados</label>
-                        <input type="text" name="projetos" id="alunoProjetos" class="custom-input mt-1" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Opção 1</label>
-                        <select id="alunoOpc1" name="opc1" class="custom-select mt-1" required>
-                            <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="Design/Mídia">Design/Mídia</option>
-                            <option value="Tutoria">Tutoria</option>
-                            <option value="Suporte/Redes">Suporte/Redes</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Opção 2</label>
-                        <select id="alunoOpc2" name="opc2" class="custom-select mt-1" required>
-                            <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="Design/Mídia">Design/Mídia</option>
-                            <option value="Tutoria">Tutoria</option>
-                            <option value="Suporte/Redes">Suporte/Redes</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Ocorrência</label>
-                        <input type="text" name="ocorrencia" id="alunoOcorrencia" class="custom-input mt-1" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Custeio</label>
-                        <select id="alunoCusteio" name="custeio" class="custom-select mt-1" required>
-                            <option value="1">Sim</option>
-                            <option value="0">Não</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Entregas Individuais</label>
-                        <input type="number" name="entregas_individuais" id="alunoEntregasIndividuais" class="custom-input mt-1" placeholder="-" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Entregas do Grupo</label>
-                        <input type="number" name="entregas_grupo" id="alunoEntregasGrupo" class="custom-input mt-1" placeholder="-" required>
-                    </div>
-                    <div class="mt-6 flex justify-end space-x-4">
-                        <button type="button" id="cancelarBtn" class="custom-btn custom-btn-secondary">
-                            <i class="fas fa-times btn-icon"></i>
-                            <span>Cancelar</span>
-                        </button>
-                        <button type="submit" class="custom-btn custom-btn-primary">
-                            <i class="fas fa-save btn-icon"></i>
-                            <span>Salvar Alterações</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
         <!-- Modal de Detalhes -->
         <div id="detalhesModal" class="modal-base">
             <div class="modal-content">
@@ -1330,6 +1319,161 @@ if (isset($_POST['layout'])) {
                         <span>Fechar</span>
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Modal de Edição -->
+        <div id="editarAlunoModal" class="modal-base">
+            <div class="modal-content">
+                <h2 class="text-2xl font-bold mb-6 text-white">Editar Aluno</h2>
+                <form action="../controllers/controller.php" method="post" class="space-y-4">
+                    <input type="hidden" name="acao" value="editar">
+                    <input type="hidden" id="editAlunoId" name="id">
+                    <div>
+                        <label for="editNome" class="block text-sm font-medium text-gray-300">Nome</label>
+                        <input type="text" id="editNome" name="nome" required class="custom-input">
+                    </div>
+                    <div>
+                        <label for="editContato" class="block text-sm font-medium text-gray-300">Contato</label>
+                        <input type="text" id="editContato" name="contato" required class="custom-input">
+                    </div>
+                    <div>
+                        <label for="editMedias" class="block text-sm font-medium text-gray-300">Médias</label>
+                        <input type="number" id="editMedias" name="medias" min="0" max="10" step="0.1" required class="custom-input">
+                    </div>
+                    <div>
+                        <label for="editEmail" class="block text-sm font-medium text-gray-300">Email</label>
+                        <input type="email" id="editEmail" name="email" required class="custom-input">
+                    </div>
+                    <div>
+                        <label for="editProjetos" class="block text-sm font-medium text-gray-300">Projetos Participados</label>
+                        <input type="text" id="editProjetos" name="projetos" required class="custom-input">
+                    </div>
+                    <div>
+                        <label for="editPerfilOpc1" class="block text-sm font-medium text-gray-300">Opção 1</label>
+                        <select id="editPerfilOpc1" name="perfil_opc1" required class="custom-input">
+                            <option value="desenvolvimento">Desenvolvimento</option>
+                            <option value="design">Design/Mídia</option>
+                            <option value="tutoria">Tutoria</option>
+                            <option value="suporte/redes">Suporte/Redes</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="editPerfilOpc2" class="block text-sm font-medium text-gray-300">Opção 2</label>
+                        <select id="editPerfilOpc2" name="perfil_opc2" required class="custom-input">
+                            <option value="desenvolvimento">Desenvolvimento</option>
+                            <option value="design">Design/Mídia</option>
+                            <option value="tutoria">Tutoria</option>
+                            <option value="suporte/redes">Suporte/Redes</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="editOcorrencia" class="block text-sm font-medium text-gray-300">Ocorrência</label>
+                        <input type="text" id="editOcorrencia" name="ocorrencia" class="custom-input">
+                    </div>
+                    <div>
+                        <label for="editCusteio" class="block text-sm font-medium text-gray-300">Custeio</label>
+                        <select id="editCusteio" name="custeio" required class="custom-input">
+                            <option value="1">Sim</option>
+                            <option value="0">Não</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="editEntregasIndividuais" class="block text-sm font-medium text-gray-300">Entregas Individuais</label>
+                        <input type="text" id="editEntregasIndividuais" name="entregas_individuais" class="custom-input">
+                    </div>
+                    <div>
+                        <label for="editEntregasGrupo" class="block text-sm font-medium text-gray-300">Entregas do Grupo</label>
+                        <input type="text" id="editEntregasGrupo" name="entregas_grupo" class="custom-input">
+                    </div>
+                    <div class="mt-6 flex justify-end gap-3">
+                        <button type="button" id="fecharEditarBtn" class="custom-btn custom-btn-secondary">
+                            <i class="fas fa-times btn-icon"></i>
+                            <span>Cancelar</span>
+                        </button>
+                        <button type="submit" class="custom-btn custom-btn-primary">
+                            <i class="fas fa-save btn-icon"></i>
+                            <span>Salvar</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal de Adicionar Aluno -->
+        <div id="adicionarAlunoModal" class="modal-base">
+            <div class="modal-content">
+                <h2 class="text-2xl font-bold mb-6 text-white">Adicionar Aluno</h2>
+                <form id="addAlunoForm" action="../controllers/controller.php" method="post" class="space-y-4">
+                    <input type="hidden" name="acao" value="adicionar">
+                    <div>
+                        <label for="addNome" class="block text-sm font-medium text-gray-300">Nome</label>
+                        <input type="text" id="addNome" name="nome" required class="custom-input">
+                    </div>
+                    <div>
+                        <label for="addContato" class="block text-sm font-medium text-gray-300">Contato</label>
+                        <input type="text" id="addContato" name="contato" required class="custom-input">
+                    </div>
+                    <div>
+                        <label for="addMedias" class="block text-sm font-medium text-gray-300">Médias</label>
+                        <input type="number" id="addMedias" name="medias" min="0" max="10" step="0.1" required class="custom-input">
+                    </div>
+                    <div>
+                        <label for="addEmail" class="block text-sm font-medium text-gray-300">Email</label>
+                        <input type="email" id="addEmail" name="email" required class="custom-input">
+                    </div>
+                    <div>
+                        <label for="addProjetos" class="block text-sm font-medium text-gray-300">Projetos Participados</label>
+                        <input type="text" id="addProjetos" name="projetos" required class="custom-input">
+                    </div>
+                    <div>
+                        <label for="addPerfilOpc1" class="block text-sm font-medium text-gray-300">Opção 1</label>
+                        <select id="addPerfilOpc1" name="perfil_opc1" required class="custom-input">
+                            <option value="desenvolvimento">Desenvolvimento</option>
+                            <option value="design">Design/Mídia</option>
+                            <option value="tutoria">Tutoria</option>
+                            <option value="suporte/redes">Suporte/Redes</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="addPerfilOpc2" class="block text-sm font-medium text-gray-300">Opção 2</label>
+                        <select id="addPerfilOpc2" name="perfil_opc2" required class="custom-input">
+                            <option value="desenvolvimento">Desenvolvimento</option>
+                            <option value="design">Design/Mídia</option>
+                            <option value="tutoria">Tutoria</option>
+                            <option value="suporte/redes">Suporte/Redes</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="addOcorrencia" class="block text-sm font-medium text-gray-300">Ocorrência</label>
+                        <input type="text" id="addOcorrencia" name="ocorrencia" class="custom-input">
+                    </div>
+                    <div>
+                        <label for="addCusteio" class="block text-sm font-medium text-gray-300">Custeio</label>
+                        <select id="addCusteio" name="custeio" required class="custom-input">
+                            <option value="1">Sim</option>
+                            <option value="0">Não</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="addEntregasIndividuais" class="block text-sm font-medium text-gray-300">Entregas Individuais</label>
+                        <input type="text" id="addEntregasIndividuais" name="entregas_individuais" class="custom-input">
+                    </div>
+                    <div>
+                        <label for="addEntregasGrupo" class="block text-sm font-medium text-gray-300">Entregas do Grupo</label>
+                        <input type="text" id="addEntregasGrupo" name="entregas_grupo" class="custom-input">
+                    </div>
+                    <div class="mt-6 flex justify-end gap-3">
+                        <button type="button" id="fecharAdicionarBtn" class="custom-btn custom-btn-secondary">
+                            <i class="fas fa-times btn-icon"></i>
+                            <span>Cancelar</span>
+                        </button>
+                        <button type="submit" class="custom-btn custom-btn-primary">
+                            <i class="fas fa-plus btn-icon"></i>
+                            <span>Adicionar</span>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -1354,60 +1498,6 @@ if (isset($_POST['layout'])) {
             if (e.target === mobileSidebar) {
                 mobileSidebar.classList.add('-translate-x-full');
                 document.body.style.overflow = 'auto';
-            }
-        });
-
-        // Função para alternar detalhes na tabela desktop
-        function toggleDetalhes(id) {
-            const detalhesRow = document.getElementById(`detalhes-${id}`);
-            const button = detalhesRow.previousElementSibling.querySelector('button');
-            const icon = button.querySelector('i');
-            
-            if (detalhesRow.classList.contains('hidden')) {
-                detalhesRow.classList.remove('hidden');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
-            } else {
-                detalhesRow.classList.add('hidden');
-                icon.classList.remove('fa-chevron-up');
-                icon.classList.add('fa-chevron-down');
-            }
-        }
-
-        // Função para alternar detalhes nos cards mobile
-        function toggleDetalhesMobile(id) {
-            const detalhesDiv = document.getElementById(`detalhes-mobile-${id}`);
-            const button = detalhesDiv.parentElement.querySelector('button');
-            const icon = button.querySelector('i');
-            
-            if (detalhesDiv.classList.contains('hidden')) {
-                detalhesDiv.classList.remove('hidden');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
-            } else {
-                detalhesDiv.classList.add('hidden');
-                icon.classList.remove('fa-chevron-up');
-                icon.classList.add('fa-chevron-down');
-            }
-        }
-
-        document.getElementById('cancelarBtn').addEventListener('click', () => {
-            document.getElementById('alunoModal').classList.remove('show');
-        });
-
-        document.getElementById('alunoModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('alunoModal')) {
-                document.getElementById('alunoModal').classList.remove('show');
-            }
-        });
-
-        document.getElementById('fecharDetalhesBtn').addEventListener('click', () => {
-            document.getElementById('detalhesModal').classList.remove('show');
-        });
-
-        document.getElementById('detalhesModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('detalhesModal')) {
-                document.getElementById('detalhesModal').classList.remove('show');
             }
         });
     </script>

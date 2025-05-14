@@ -2,7 +2,7 @@
 
 // Configurações do banco de dados local
 define('LOCAL_HOST', 'localhost');
-define('LOCAL_DATABASE', 'u750204740_estagio2k25');
+define('LOCAL_DATABASE', 'estagio');
 define('LOCAL_USER', 'root');
 define('LOCAL_PASSWORD', '');
 

@@ -1,4 +1,7 @@
 <?php
+
+use LDAP\Result;
+
 require_once('../config/connect.php');
 
 
@@ -199,6 +202,68 @@ class main_model extends connect
         if ($stmt_excluirVaga) {
 
             $stmt_excluirEmpresa = $this->connect->query("DELETE FROM concedentes WHERE id = '$id_empresa'");
+            if ($stmt_excluirEmpresa) {
+
+                return 1;
+            } else {
+
+                return 2;
+            }
+        } else {
+
+            return 3;
+        }
+    }
+
+    function criar_aluno($nome, $contato, $medias, $email, $projetos, $perfil_opc1, $perfil_opc2, $ocorrencia, $custeio, $entregas_individuais, $entregas_grupo)
+    {
+        $stmt_check = $this->connect->prepare("SELECT * FROM aluno WHERE nome = :nome");
+        $stmt_check->bindValue(':nome', $nome);
+        $stmt_check->execute();
+        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
+        if (empty($result)) {
+
+
+            $stmt = $this->connect->prepare("INSERT INTO `aluno` VALUES(`nome`=:nome, `contato`=:contato, `medias`=:medias, `email`=:email, `projetos`=:projetos, `perfil_opc1`=:opc1, `perfil_opc2`=:opc2, `ocorrencia`=:ocorrencia, `custeio`=:custeio,  `entregas_individuais`=:entrega_individuais, `entregas_grupo`=:entrega_grupo)");
+
+            $stmt->bindValue(':nome', $nome);
+            $stmt->bindValue(':contato', $contato);
+            $stmt->bindValue(':medias', $medias);
+            $stmt->bindValue(':email', $email);
+            $stmt->bindValue(':projetos', $projetos);
+            $stmt->bindValue(':opc1', $perfil_opc1);
+            $stmt->bindValue(':opc2', $perfil_opc2);
+            $stmt->bindValue(':ocorrencia', $ocorrencia);
+            $stmt->bindValue(':custeio', $custeio);
+            $stmt->bindValue(':entrega_individuais', $entregas_individuais);
+            $stmt->bindValue(':entrega_grupo', $entregas_grupo);
+
+            $stmt->execute();
+
+            if ($stmt) {
+
+                return 1;
+            } else {
+
+                return 2;
+            }
+
+            return 3;
+        }
+    }
+    function excluir_aluno($id_aluno)
+    {
+        $stmt_id_vaga = $this->connect->query("SELECT id FROM vagas WHERE id_concedente = '$id_aluno'");
+        $id_vagas = $stmt_id_vaga->fetch(PDO::FETCH_ASSOC);
+        $id_vaga = $id_vagas['id'];
+        $stmt_excluirVaga = $this->connect->query("DELETE FROM selecionado WHERE id_vaga = '$id_vaga'");
+        $stmt_excluirVaga = $this->connect->query("DELETE FROM selecao WHERE id_vaga = '$id_vaga'");
+        $stmt_excluirVaga = $this->connect->query("DELETE FROM vagas WHERE id = '$id_vaga'");
+        $stmt_excluirVaga = $this->connect->query("DELETE FROM vagas WHERE id_concedente = '$id_aluno'");
+
+        if ($stmt_excluirVaga) {
+
+            $stmt_excluirEmpresa = $this->connect->query("DELETE FROM concedentes WHERE id = '$id_aluno'");
             if ($stmt_excluirEmpresa) {
 
                 return 1;
