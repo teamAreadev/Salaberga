@@ -919,9 +919,9 @@ if (isset($_POST['layout'])) {
 
                 let hasVisible = false;
                 rows.forEach((row, index) => {
-                    const nome = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-                    const area1 = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
-                    const area2 = row.querySelector('td:nth-child(7)').textContent.toLowerCase();
+                    const nome = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                    const area1 = row.querySelector('td:nth-child(7)').textContent.toLowerCase();
+                    const area2 = row.querySelector('td:nth-child(8)').textContent.toLowerCase();
                     const matchSearch = nome.includes(searchTerm);
                     const matchArea = !areaFiltro || area1 === areaFiltro || area2 === areaFiltro;
 

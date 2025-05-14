@@ -185,6 +185,45 @@ if (isset($_POST['layout'])) {
             }
         }
 
+        function abrirModalCadastro() {
+            document.getElementById('modalTitle').textContent = 'Cadastrar Novo Aluno';
+            document.getElementById('alunoForm').reset(); // Limpa o formulário
+            document.getElementById('formAcao').value = 'cadastrar_aluno'; // Define a ação para cadastrar
+            document.getElementById('alunoId').value = ''; // Garante que não há ID para cadastro
+            document.getElementById('alunoModal').classList.add('show');
+        }
+
+        function confirmarExclusao(id) {
+            alunoIdParaExcluir = id;
+            // Opcional: pode-se adicionar o nome do aluno no modal de confirmação
+            // const aluno = alunos.find(a => a.id === id);
+            // if(aluno) { document.getElementById('nomeAlunoParaExcluir').textContent = aluno.nome; }
+            document.getElementById('confirmacaoExclusaoModal').classList.add('show');
+        }
+
+        function efetivarExclusaoAluno() {
+            if (alunoIdParaExcluir === null) return;
+
+            console.log('Simulando exclusão do aluno com ID:', alunoIdParaExcluir);
+            // TODO: Implementar chamada AJAX para o backend para excluir o aluno
+            // Exemplo: fetch('../controllers/controller.php', { 
+            // method: 'POST', 
+            // headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            // body: `acao=excluir_aluno&id=${alunoIdParaExcluir}`
+            // })
+            // .then(response => response.json())
+            // .then(data => { console.log(data); /* Tratar resposta */ });
+
+            // Atualiza a lista de alunos na interface (simulação)
+            alunos = alunos.filter(a => a.id !== alunoIdParaExcluir);
+            aplicarFiltros(); // Re-renderiza a tabela/cards
+            
+            document.getElementById('confirmacaoExclusaoModal').classList.remove('show');
+            alunoIdParaExcluir = null;
+            // Opcional: Adicionar um toast de sucesso
+            // showToast('Aluno excluído com sucesso!', 'success'); 
+        }
+
         // Função para renderizar a tabela de alunos (desktop)
         function renderizarTabelaDesktop(alunosFiltrados = alunos) {
             const tbody = document.getElementById('alunosTableBody');
@@ -413,6 +452,23 @@ if (isset($_POST['layout'])) {
                     const modal = document.getElementById('adicionarAlunoModal');
                     modal.classList.remove('show');
                     modal.style.display = 'none';
+                }
+            });
+
+            // Event listener para o botão "Cadastrar Novo Aluno"
+            document.getElementById('btnCadastrarAluno').addEventListener('click', abrirModalCadastro);
+
+            // Event listeners para o modal de confirmação de exclusão
+            const confirmacaoModal = document.getElementById('confirmacaoExclusaoModal');
+            document.getElementById('cancelarExclusaoBtn').addEventListener('click', () => {
+                confirmacaoModal.classList.remove('show');
+                alunoIdParaExcluir = null;
+            });
+            document.getElementById('confirmarExclusaoBtn').addEventListener('click', efetivarExclusaoAluno);
+            confirmacaoModal.addEventListener('click', (e) => {
+                if (e.target === confirmacaoModal) {
+                    confirmacaoModal.classList.remove('show');
+                    alunoIdParaExcluir = null;
                 }
             });
 
