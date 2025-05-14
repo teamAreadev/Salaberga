@@ -29,30 +29,66 @@ if ($stmt) {
     <title>Resultados da Seleção - STGM</title>
 </head>
 <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    primary: '#007A33',
-                    secondary: '#FFA500',
-                    success: '#10B981',
-                    danger: '#EF4444',
-                    warning: '#F59E0B',
-                    info: '#3B82F6'
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#007A33',
+                            '50': '#00FF6B',
+                            '100': '#00EB61',
+                            '200': '#00C250',
+                            '300': '#00993F',
+                            '400': '#00802F',
+                            '500': '#007A33',
+                            '600': '#00661F',
+                            '700': '#00521A',
+                            '800': '#003D15',
+                            '900': '#002910'
+                        },
+                        secondary: {
+                            DEFAULT: '#FFA500',
+                            '50': '#FFE9C0',
+                            '100': '#FFE1AB',
+                            '200': '#FFD183',
+                            '300': '#FFC15A',
+                            '400': '#FFB232',
+                            '500': '#FFA500',
+                            '600': '#C78000',
+                            '700': '#8F5C00',
+                            '800': '#573800',
+                            '900': '#1F1400'
+                        },
+                        dark: {
+                            DEFAULT: '#1a1a1a',
+                            '50': '#2d2d2d',
+                            '100': '#272727',
+                            '200': '#232323',
+                            '300': '#1f1f1f',
+                            '400': '#1a1a1a',
+                            '500': '#171717',
+                            '600': '#14',
+                            '700': '#111111',
+                            '800': '#0e0e0e',
+                            '900': '#0a0a0a'
+                        }
+                    }
                 }
             }
         }
-    }
-</script>
+    </script>
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
         font-family: 'Inter', sans-serif;
     }
+
     body {
         background-color: #1a1a1a;
         color: #fff;
@@ -60,42 +96,51 @@ if ($stmt) {
         background-image: radial-gradient(circle at 10% 20%, rgba(52, 152, 219, 0.05) 0%, rgba(52, 152, 219, 0) 20%), radial-gradient(circle at 90% 80%, rgba(46, 204, 113, 0.05) 0%, rgba(46, 204, 113, 0) 20%);
         transition: background-color 0.3s ease;
     }
+
     .sidebar {
-        background: linear-gradient(to bottom, #232323, #1a1a1a);
-        border-right: 1px solid #222;
-        box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+        background-color: rgba(45, 45, 45, 0.95);
+        background-image: linear-gradient(to bottom, #2d2d2d, #222222);
+        border-right: 1px solid rgba(0, 122, 51, 0.2);
+        transition: all 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
     }
+
     .sidebar-link {
         display: flex;
         align-items: center;
         padding: 0.75rem 1rem;
         border-radius: 8px;
         margin-bottom: 0.5rem;
-        color: #fff;
-        transition: all 0.2s;
-        font-weight: 500;
+        transition: all 0.2s ease;
+        color: #ffffff;
     }
+
     .sidebar-link:hover {
-        background: rgba(0, 122, 51, 0.15);
+        background-color: rgba(0, 122, 51, 0.2);
         color: #00C250;
         transform: translateX(5px);
     }
+
     .sidebar-link.active {
-        background: rgba(0, 122, 51, 0.25);
+        background-color: rgba(0, 122, 51, 0.3);
         color: #00FF6B;
         font-weight: 600;
-        box-shadow: 0 2px 8px rgba(0, 122, 51, 0.10);
+        box-shadow: 0 2px 8px rgba(0, 122, 51, 0.15);
     }
-    .main-header, header.bg-dark-50 {
+
+    .main-header,
+    header.bg-dark-50 {
         background: #232323;
         border-bottom: 1px solid #222;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
+
     .search-container {
         max-width: 500px;
         margin: 2rem auto 1.5rem auto;
         position: relative;
     }
+
     .search-bar {
         width: 100%;
         padding: 1rem 1.5rem;
@@ -106,11 +151,13 @@ if ($stmt) {
         font-size: 1rem;
         transition: border-color 0.2s;
     }
+
     .search-bar:focus {
         outline: none;
         border-color: #00b348;
         box-shadow: 0 2px 8px rgba(0, 179, 72, 0.08);
     }
+
     .clear-search {
         position: absolute;
         right: 30px;
@@ -124,10 +171,12 @@ if ($stmt) {
         opacity: 0.7;
         transition: color 0.2s;
     }
+
     .clear-search:hover {
         color: #00b348;
         opacity: 1;
     }
+
     .filter-button {
         padding: 0.5rem 1.5rem;
         border-radius: 9999px;
@@ -139,32 +188,46 @@ if ($stmt) {
         margin: 0 0.25rem;
         transition: background 0.2s, color 0.2s;
     }
+
     .filter-button.active {
         background: #00b348;
         color: #fff;
     }
+
     .filter-button:not(.active):hover {
         background: #222;
         color: #00b348;
     }
+
     .candidate-card {
         background: #232323;
         border-radius: 14px;
         padding: 1.25rem 1.5rem;
         margin-bottom: 1rem;
         border-left: 5px solid transparent;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         transition: box-shadow 0.2s, border-color 0.2s;
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
     }
-    .candidate-card.approved { border-left-color: #10B981; }
-    .candidate-card.waiting { border-left-color: #F59E0B; }
-    .candidate-card.no_interview { border-left-color: #EF4444; }
-    .candidate-card:hover {
-        box-shadow: 0 6px 18px rgba(0,0,0,0.13);
+
+    .candidate-card.approved {
+        border-left-color: #10B981;
     }
+
+    .candidate-card.waiting {
+        border-left-color: #F59E0B;
+    }
+
+    .candidate-card.no_interview {
+        border-left-color: #EF4444;
+    }
+
+    .candidate-card:hover {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.13);
+    }
+
     .status-badge {
         display: inline-flex;
         align-items: center;
@@ -174,10 +237,24 @@ if ($stmt) {
         font-weight: 600;
         margin-right: 0.5rem;
     }
-    .status-badge.approved { background: rgba(16,185,129,0.12); color: #10B981; }
-    .status-badge.waiting { background: rgba(245,158,11,0.12); color: #F59E0B; }
-    .status-badge.no_interview { background: rgba(239,68,68,0.12); color: #EF4444; }
-    .area-badge, .company-badge {
+
+    .status-badge.approved {
+        background: rgba(16, 185, 129, 0.12);
+        color: #10B981;
+    }
+
+    .status-badge.waiting {
+        background: rgba(245, 158, 11, 0.12);
+        color: #F59E0B;
+    }
+
+    .status-badge.no_interview {
+        background: rgba(239, 68, 68, 0.12);
+        color: #EF4444;
+    }
+
+    .area-badge,
+    .company-badge {
         display: inline-flex;
         align-items: center;
         padding: 0.3rem 1rem;
@@ -185,21 +262,40 @@ if ($stmt) {
         font-size: 0.85rem;
         font-weight: 500;
         margin-right: 0.5rem;
-        background: rgba(59,130,246,0.10);
+        background: rgba(59, 130, 246, 0.10);
         color: #3B82F6;
     }
+
     .company-badge {
-        background: rgba(139,92,246,0.10);
+        background: rgba(139, 92, 246, 0.10);
         color: #8B5CF6;
     }
+
     @media (max-width: 900px) {
-        .candidate-card { flex-direction: column; align-items: flex-start; }
+        .candidate-card {
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
+
     @media (max-width: 640px) {
-        .sidebar { width: 100vw; min-width: unset; }
-        .main-header, header.bg-dark-50 { padding: 0.5rem 1rem; }
-        .candidate-card { padding: 1rem; }
-        .search-container { margin: 1rem auto; }
+        .sidebar {
+            width: 100vw;
+            min-width: unset;
+        }
+
+        .main-header,
+        header.bg-dark-50 {
+            padding: 0.5rem 1rem;
+        }
+
+        .candidate-card {
+            padding: 1rem;
+        }
+
+        .search-container {
+            margin: 1rem auto;
+        }
     }
 </style>
 
@@ -276,7 +372,7 @@ if ($stmt) {
                     </button>
                 </div>
                 <nav class="flex-1">
-                <a href="dashboard.php" class="sidebar-link">
+                    <a href="dashboard.php" class="sidebar-link">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
@@ -319,7 +415,7 @@ if ($stmt) {
         <!-- Conteúdo principal -->
         <div class="flex-1 flex flex-col overflow-y-auto bg-dark-400">
             <!-- Header -->
-            <header class="bg-dark-50 shadow-md sticky top-0 z-30 border-b border-gray-800">
+            <header class="shadow-md sticky top-0 z-30 border-b border-gray-800" style="background-color: rgba(45, 45, 45, 0.95);">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <h1 class="text-xl font-bold text-white text-center sm:text-left w-full">Resultados da Seleção</h1>
                     <div class="flex items-center gap-3">
@@ -339,100 +435,100 @@ if ($stmt) {
                     <span class="text-white">Resultados da Seleção</span>
                 </div>
 
-        <!-- Header -->
-       
+                <!-- Header -->
 
-        <main class="container mx-auto px-4 py-8">
-            <div class="max-w-4xl mx-auto">
-                <div class="mb-8 text-center">
-                    <h1 class="text-3xl font-bold mb-2">Resultados da Seleção</h1>
-                    <p class="text-gray-600 dark:text-gray-400">Confira abaixo os resultados do processo seletivo</p>
-                </div>
 
-                <div class="search-container mb-6">
-                    <input type="text" id="search-input" class="search-bar" placeholder="Buscar por nome...">
-                    <button id="clear-search" class="clear-search" style="display: none;"></button>
-                </div>
+                <main class="container mx-auto px-4 py-8">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="mb-8 text-center">
+                            <h1 class="text-3xl font-bold mb-2">Resultados da Seleção</h1>
+                            <p class="text-gray-600 dark:text-gray-400">Confira abaixo os resultados do processo seletivo</p>
+                        </div>
 
-                <div class="mb-6">
-                    <div class="flex flex-wrap gap-2 justify-center">
-                        <button class="filter-button status-filter active" data-filter="all">Todos</button>
-                        <button class="filter-button status-filter" data-filter="approved">Aprovados</button>
-                        <button class="filter-button status-filter" data-filter="waiting">Aguardando</button>
+                        <div class="search-container mb-6">
+                            <input type="text" id="search-input" class="search-bar" placeholder="Buscar por nome...">
+                            <button id="clear-search" class="clear-search" style="display: none;"></button>
+                        </div>
+
+                        <div class="mb-6">
+                            <div class="flex flex-wrap gap-2 justify-center">
+                                <button class="filter-button status-filter active" data-filter="all">Todos</button>
+                                <button class="filter-button status-filter" data-filter="approved">Aprovados</button>
+                                <button class="filter-button status-filter" data-filter="waiting">Aguardando</button>
+                            </div>
+                        </div>
+
+                        <div class="grid gap-4" id="candidates-container">
+                            <!-- Os candidatos serão inseridos aqui via JavaScript -->
+                        </div>
                     </div>
-                </div>
+                </main>
 
-                <div class="grid gap-4" id="candidates-container">
-                    <!-- Os candidatos serão inseridos aqui via JavaScript -->
-                </div>
-            </div>
-        </main>
+                <nav class="mobile-nav md:hidden mobile-nav-enter">
+                    <div class="flex justify-around items-center">
+                        <a href="#" class="nav-link">
+                            <i class="fa-solid fa-home text-xl"></i>
+                            <span class="text-xs">Início</span>
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="fa-solid fa-sign-in-alt text-xl"></i>
+                            <span class="text-xs">Login</span>
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="fa-solid fa-sign-out-alt text-xl"></i>
+                            <span class="text-xs">Sair</span>
+                        </a>
+                    </div>
+                </nav>
+        </div>
 
-        <nav class="mobile-nav md:hidden mobile-nav-enter">
-            <div class="flex justify-around items-center">
-                <a href="#" class="nav-link">
-                    <i class="fa-solid fa-home text-xl"></i>
-                    <span class="text-xs">Início</span>
-                </a>
-                <a href="#" class="nav-link">
-                    <i class="fa-solid fa-sign-in-alt text-xl"></i>
-                    <span class="text-xs">Login</span>
-                </a>
-                <a href="#" class="nav-link">
-                    <i class="fa-solid fa-sign-out-alt text-xl"></i>
-                    <span class="text-xs">Sair</span>
-                </a>
-            </div>
-        </nav>
-    </div>
+        <script>
+            // Dados dos candidatos (convertido para JSON válido)
+            const candidates = <?php echo json_encode(array_map(function ($dado) {
+                                    return [
+                                        'id' => $dado['id'],
+                                        'name' => $dado['nome'],
+                                        'status' => $dado['status'],
+                                        'area' => $dado['perfil_opc1'] ?? null, // Usando perfil_opc1 como área
+                                        'company' => $dado['empresa'] ?? null, // Nome da empresa
+                                        'perfil_empresa' => $dado['perfil_empresa'] ?? null // Perfil da vaga/empresa
+                                    ];
+                                }, $dados)); ?>;
 
-    <script>
-        // Dados dos candidatos (convertido para JSON válido)
-        const candidates = <?php echo json_encode(array_map(function ($dado) {
-                                return [
-                                    'id' => $dado['id'],
-                                    'name' => $dado['nome'],
-                                    'status' => $dado['status'],
-                                    'area' => $dado['perfil_opc1'] ?? null, // Usando perfil_opc1 como área
-                                    'company' => $dado['empresa'] ?? null, // Nome da empresa
-                                    'perfil_empresa' => $dado['perfil_empresa'] ?? null // Perfil da vaga/empresa
-                                ];
-                            }, $dados)); ?>;
+            // Função para renderizar os candidatos
+            function renderCandidates(filteredCandidates = candidates) {
+                const container = document.getElementById('candidates-container');
+                container.innerHTML = '';
 
-        // Função para renderizar os candidatos
-        function renderCandidates(filteredCandidates = candidates) {
-            const container = document.getElementById('candidates-container');
-            container.innerHTML = '';
-
-            if (filteredCandidates.length === 0) {
-                container.innerHTML = `
+                if (filteredCandidates.length === 0) {
+                    container.innerHTML = `
                     <div class="text-center py-8">
                         <i class="fas fa-search text-4xl text-gray-300 mb-4"></i>
                         <p class="text-gray-500">Nenhum candidato encontrado com os filtros selecionados.</p>
                     </div>
                 `;
-                return;
-            }
-
-            filteredCandidates.forEach(candidate => {
-                const card = document.createElement('div');
-                card.className = `candidate-card ${candidate.status}`;
-
-                // Tradução do status
-                let statusText = '';
-                switch (candidate.status) {
-                    case 'approved':
-                        statusText = 'Aprovado';
-                        break;
-                    case 'waiting':
-                        statusText = 'Aguardando';
-                        break;
-                    case 'no_interview':
-                        statusText = 'Em espera';
-                        break;
+                    return;
                 }
 
-                let cardContent = `
+                filteredCandidates.forEach(candidate => {
+                    const card = document.createElement('div');
+                    card.className = `candidate-card ${candidate.status}`;
+
+                    // Tradução do status
+                    let statusText = '';
+                    switch (candidate.status) {
+                        case 'approved':
+                            statusText = 'Aprovado';
+                            break;
+                        case 'waiting':
+                            statusText = 'Aguardando';
+                            break;
+                        case 'no_interview':
+                            statusText = 'Em espera';
+                            break;
+                    }
+
+                    let cardContent = `
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="font-semibold">${candidate.name}</h3>
@@ -440,107 +536,107 @@ if ($stmt) {
                                 <span class="status-badge ${candidate.status}">${statusText}</span>
                 `;
 
-                // Adicionar área, empresa e perfil da empresa para todos
+                    // Adicionar área, empresa e perfil da empresa para todos
 
-                if (candidate.area && candidate.area !== candidate.perfil_empresa) cardContent += `<span class="area-badge">${candidate.area}</span>`;
-                if (candidate.perfil_empresa) cardContent += `<span class="company-badge">${candidate.perfil_empresa}</span>`;
-                if (candidate.company) cardContent += `<span class="company-badge">${candidate.company}</span>`;
+                    if (candidate.area && candidate.area !== candidate.perfil_empresa) cardContent += `<span class="area-badge">${candidate.area}</span>`;
+                    if (candidate.perfil_empresa) cardContent += `<span class="company-badge">${candidate.perfil_empresa}</span>`;
+                    if (candidate.company) cardContent += `<span class="company-badge">${candidate.company}</span>`;
 
-                cardContent += `
+                    cardContent += `
                             </div>
                         </div>
                         <div class="text-sm text-gray-500">#${candidate.id.toString().padStart(2, '0')}</div>
                     </div>
                 `;
 
-                card.innerHTML = cardContent;
-                container.appendChild(card);
-            });
-        }
+                    card.innerHTML = cardContent;
+                    container.appendChild(card);
+                });
+            }
 
-        // Inicializar a página
-        document.addEventListener('DOMContentLoaded', function() {
-            // Renderizar candidatos iniciais
-            renderCandidates();
+            // Inicializar a página
+            document.addEventListener('DOMContentLoaded', function() {
+                // Renderizar candidatos iniciais
+                renderCandidates();
 
-            // Configurar busca
-            const searchInput = document.getElementById('search-input');
-            const clearButton = document.getElementById('clear-search');
+                // Configurar busca
+                const searchInput = document.getElementById('search-input');
+                const clearButton = document.getElementById('clear-search');
 
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase().trim();
-                clearButton.style.display = searchTerm ? 'block' : 'none';
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase().trim();
+                    clearButton.style.display = searchTerm ? 'block' : 'none';
 
-                filterCandidates();
-            });
-
-            clearButton.addEventListener('click', function() {
-                searchInput.value = '';
-                clearButton.style.display = 'none';
-                filterCandidates();
-            });
-
-            // Configurar filtros de status
-            const statusFilters = document.querySelectorAll('.status-filter');
-            statusFilters.forEach(button => {
-                button.addEventListener('click', function() {
-                    statusFilters.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
                     filterCandidates();
                 });
-            });
 
-            // Função para aplicar todos os filtros
-            function filterCandidates() {
-                const searchTerm = searchInput.value.toLowerCase().trim();
-                const activeStatusFilter = document.querySelector('.status-filter.active').dataset.filter;
-
-                const filtered = candidates.filter(candidate => {
-                    const matchesSearch = candidate.name.toLowerCase().includes(searchTerm);
-                    if (activeStatusFilter === 'all') return matchesSearch;
-                    if (activeStatusFilter === 'approved') return matchesSearch && candidate.status === 'approved';
-                    if (activeStatusFilter === 'waiting') return matchesSearch && candidate.status === 'waiting';
-                    return false;
+                clearButton.addEventListener('click', function() {
+                    searchInput.value = '';
+                    clearButton.style.display = 'none';
+                    filterCandidates();
                 });
 
-                renderCandidates(filtered);
-            }
-
-            // Animação para os cards
-            const animateCards = () => {
-                const cards = document.querySelectorAll('.candidate-card');
-                cards.forEach((card, index) => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(20px)';
-
-                    setTimeout(() => {
-                        card.style.transition = 'all 0.3s ease-out';
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, index * 50);
+                // Configurar filtros de status
+                const statusFilters = document.querySelectorAll('.status-filter');
+                statusFilters.forEach(button => {
+                    button.addEventListener('click', function() {
+                        statusFilters.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+                        filterCandidates();
+                    });
                 });
-            };
 
-            animateCards();
+                // Função para aplicar todos os filtros
+                function filterCandidates() {
+                    const searchTerm = searchInput.value.toLowerCase().trim();
+                    const activeStatusFilter = document.querySelector('.status-filter.active').dataset.filter;
 
-            // Atualizar animação quando os filtros mudam
-            const observer = new MutationObserver(animateCards);
-            observer.observe(document.getElementById('candidates-container'), {
-                childList: true
+                    const filtered = candidates.filter(candidate => {
+                        const matchesSearch = candidate.name.toLowerCase().includes(searchTerm);
+                        if (activeStatusFilter === 'all') return matchesSearch;
+                        if (activeStatusFilter === 'approved') return matchesSearch && candidate.status === 'approved';
+                        if (activeStatusFilter === 'waiting') return matchesSearch && candidate.status === 'waiting';
+                        return false;
+                    });
+
+                    renderCandidates(filtered);
+                }
+
+                // Animação para os cards
+                const animateCards = () => {
+                    const cards = document.querySelectorAll('.candidate-card');
+                    cards.forEach((card, index) => {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+
+                        setTimeout(() => {
+                            card.style.transition = 'all 0.3s ease-out';
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, index * 50);
+                    });
+                };
+
+                animateCards();
+
+                // Atualizar animação quando os filtros mudam
+                const observer = new MutationObserver(animateCards);
+                observer.observe(document.getElementById('candidates-container'), {
+                    childList: true
+                });
             });
-        });
 
-        // Função para atualizar o status de um candidato (para uso administrativo)
-        function updateCandidateStatus(id, newStatus, area = null, company = null) {
-            const candidate = candidates.find(c => c.id === id);
-            if (candidate) {
-                candidate.status = newStatus;
-                if (area) candidate.area = area;
-                if (company) candidate.company = company;
-                renderCandidates();
+            // Função para atualizar o status de um candidato (para uso administrativo)
+            function updateCandidateStatus(id, newStatus, area = null, company = null) {
+                const candidate = candidates.find(c => c.id === id);
+                if (candidate) {
+                    candidate.status = newStatus;
+                    if (area) candidate.area = area;
+                    if (company) candidate.company = company;
+                    renderCandidates();
+                }
             }
-        }
-    </script>
+        </script>
 </body>
 
 </html>
