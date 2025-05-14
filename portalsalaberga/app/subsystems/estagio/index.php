@@ -202,6 +202,10 @@ if ($stmt) {
         border-left-color: #F59E0B;
     }
 
+    .candidate-card.no_interview {
+        border-left-color: #EF4444;
+    }
+
     .candidate-card:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -224,6 +228,11 @@ if ($stmt) {
     .status-badge.waiting {
         background-color: rgba(245, 158, 11, 0.1);
         color: #F59E0B;
+    }
+
+    .status-badge.no_interview {
+        background-color: rgba(239, 68, 68, 0.1);
+        color: #EF4444;
     }
 
     .area-badge {
@@ -312,7 +321,7 @@ if ($stmt) {
                 <div class="flex flex-wrap gap-2 justify-center">
                     <button class="filter-button status-filter active" data-filter="all">Todos</button>
                     <button class="filter-button status-filter" data-filter="approved">Aprovados</button>
-                    <button class="filter-button status-filter" data-filter="waiting">Em espera</button>
+                    <button class="filter-button status-filter" data-filter="waiting">Aguardando</button>
                 </div>
             </div>
 
@@ -341,13 +350,14 @@ if ($stmt) {
 
     <script>
         // Dados dos candidatos (convertido para JSON válido)
-        const candidates = <?php echo json_encode(array_map(function($dado) use ($aprovados) {
+        const candidates = <?php echo json_encode(array_map(function($dado) {
             return [
                 'id' => $dado['id'],
                 'name' => $dado['nome'],
-                'status' => in_array($dado['id'], $aprovados) ? 'approved' : 'waiting',
+                'status' => $dado['status'],
                 'area' => $dado['perfil_opc1'] ?? null, // Usando perfil_opc1 como área
-                'company' => $dado['empresa'] ?? null // Adicione a empresa se disponível
+                'company' => $dado['empresa'] ?? null, // Nome da empresa
+                'perfil_empresa' => $dado['perfil_empresa'] ?? null // Perfil da vaga/empresa
             ];
         }, $dados)); ?>;
 
@@ -377,6 +387,9 @@ if ($stmt) {
                         statusText = 'Aprovado';
                         break;
                     case 'waiting':
+                        statusText = 'Aguardando';
+                        break;
+                    case 'no_interview':
                         statusText = 'Em espera';
                         break;
                 }
@@ -389,11 +402,11 @@ if ($stmt) {
                                 <span class="status-badge ${candidate.status}">${statusText}</span>
                 `;
 
-                // Adicionar área e empresa apenas para aprovados
-                if (candidate.status === 'approved') {
-                    if (candidate.area) cardContent += `<span class="area-badge">${candidate.area}</span>`;
-                    if (candidate.company) cardContent += `<span class="company-badge">${candidate.company}</span>`;
-                }
+                // Adicionar área, empresa e perfil da empresa para todos
+                
+                if (candidate.area && candidate.area !== candidate.perfil_empresa) cardContent += `<span class="area-badge">${candidate.area}</span>`;
+                if (candidate.perfil_empresa) cardContent += `<span class="company-badge">${candidate.perfil_empresa}</span>`;
+                if (candidate.company) cardContent += `<span class="company-badge">${candidate.company}</span>`;
 
                 cardContent += `
                             </div>
@@ -445,13 +458,11 @@ if ($stmt) {
                 const activeStatusFilter = document.querySelector('.status-filter.active').dataset.filter;
 
                 const filtered = candidates.filter(candidate => {
-                    // Filtro de busca
                     const matchesSearch = candidate.name.toLowerCase().includes(searchTerm);
-
-                    // Filtro de status
-                    const matchesStatus = activeStatusFilter === 'all' || candidate.status === activeStatusFilter;
-
-                    return matchesSearch && matchesStatus;
+                    if (activeStatusFilter === 'all') return matchesSearch;
+                    if (activeStatusFilter === 'approved') return matchesSearch && candidate.status === 'approved';
+                    if (activeStatusFilter === 'waiting') return matchesSearch && candidate.status === 'waiting';
+                    return false;
                 });
 
                 renderCandidates(filtered);
