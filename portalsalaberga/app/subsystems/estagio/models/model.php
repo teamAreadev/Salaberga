@@ -253,7 +253,7 @@ class main_model extends connect
     }
     function excluir_aluno($id_aluno)
     {
-        $stmt_id_aluno = $this->connect->query("SELECT id FROM vagas WHERE id_concedente = '$id_aluno'");
+        $stmt_id_aluno = $this->connect->query("SELECT id FROM aluno WHERE id = '$id_aluno'");
         $id_aluno = $stmt_id_aluno->fetch(PDO::FETCH_ASSOC);
         $id_aluno = $id_aluno['id'];
         $stmt_exclir_aluno = $this->connect->query("DELETE FROM selecionado WHERE id_aluno = '$id_aluno'");
@@ -261,7 +261,7 @@ class main_model extends connect
 
         if ($stmt_exclir_aluno) {
 
-            $stmt_exclir_aluno = $this->connect->query("DELETE FROM aluno WHERE aluno = '$id_aluno'");
+            $stmt_exclir_aluno = $this->connect->query("DELETE FROM aluno WHERE id = '$id_aluno'");
             if ($stmt_exclir_aluno) {
 
                 return 1;

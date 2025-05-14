@@ -88,11 +88,11 @@ if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga
 } else if (
     isset($_POST['nome']) &&
     isset($_POST['contato']) &&
-    isset($_POST['media']) &&
+    isset($_POST['medias']) &&
     isset($_POST['email']) &&
     isset($_POST['projetos']) &&
-    isset($_POST['opc1']) &&
-    isset($_POST['opc2']) &&
+    isset($_POST['perfil_opc1']) &&
+    isset($_POST['perfil_opc2']) &&
     isset($_POST['ocorrencia']) &&
     isset($_POST['custeio']) &&
     isset($_POST['entregas_individuais']) &&
@@ -102,11 +102,11 @@ if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga
 
     $nome = $_POST['nome'];
     $contato = $_POST['contato'];
-    $medias = $_POST['media'];
+    $medias = $_POST['medias'];
     $email = $_POST['email'];
     $projetos = $_POST['projetos'];
-    $perfil_opc1 = $_POST['opc1'];
-    $perfil_opc2 = $_POST['opc2'];
+    $perfil_opc1 = $_POST['perfil_opc1'];
+    $perfil_opc2 = $_POST['perfil_opc2'];
     $ocorrencia = $_POST['ocorrencia'];
     $custeio = $_POST['custeio'];
     $entregas_individuais = $_POST['entregas_individuais'];

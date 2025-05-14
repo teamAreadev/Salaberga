@@ -91,12 +91,12 @@ if (isset($_POST['id_excluir_empresa']) && !empty($_POST['id_excluir_empresa']))
             header('location:../views/vagas.php?ja_existe');
             exit();
     }
-} else if( isset($_POST['id_aluno']) && !empty($_POST['id_aluno'])){
+} else if( isset($_GET['id_aluno']) && !empty($_GET['id_aluno'])){
 
-     $hora = $_POST['id_aluno'];
+     $id_aluno = $_GET['id_aluno'];
 
     $model = new main_model;
-    $result = $model->excluir_aluno($isaluno);
+    $result = $model->excluir_aluno($id_aluno);
 
     switch ($result) {
         case 1:

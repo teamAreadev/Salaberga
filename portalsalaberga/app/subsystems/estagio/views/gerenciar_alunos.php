@@ -178,7 +178,7 @@ if (isset($_POST['layout'])) {
         // Função para deletar aluno
         function deletarAluno(id) {
             if (confirm('Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita.')) {
-                window.location.href = `../controllers/controller.php?acao=deletar&id=${id}`;
+                window.location.href = `../controllers/controller_editar_excluir.php?id_aluno=${id}`;
             }
         }
 
@@ -1382,7 +1382,7 @@ if (isset($_POST['layout'])) {
                     </div>
                     <div>
                         <label for="editContato" class="block text-sm font-medium text-gray-300">Contato</label>
-                        <input type="text" id="editContato" name="contato" required class="custom-input">
+                        <input type="text" id="editContato" name="contato" class="custom-input">
                     </div>
                     <div>
                         <label for="editMedias" class="block text-sm font-medium text-gray-300">Médias</label>
@@ -1394,7 +1394,7 @@ if (isset($_POST['layout'])) {
                     </div>
                     <div>
                         <label for="editProjetos" class="block text-sm font-medium text-gray-300">Projetos Participados</label>
-                        <input type="text" id="editProjetos" name="projetos" required class="custom-input">
+                        <input type="text" id="editProjetos" name="projetos" class="custom-input">
                     </div>
                     <div>
                         <label for="editPerfilOpc1" class="block text-sm font-medium text-gray-300">Opção 1</label>
@@ -1451,7 +1451,7 @@ if (isset($_POST['layout'])) {
         <div id="adicionarAlunoModal" class="modal-base">
             <div class="modal-content">
                 <h2 class="text-2xl font-bold mb-6 text-white">Adicionar Aluno</h2>
-                <form id="addAlunoForm" action="../controllers/controller.php" method="post" class="space-y-4">
+                <form id="addAlunoForm" action="../controllers/controller_adicionar.php" method="post" class="space-y-4">
                     <input type="hidden" name="acao" value="adicionar">
                     <div>
                         <label for="addNome" class="block text-sm font-medium text-gray-300">Nome</label>
@@ -1459,7 +1459,7 @@ if (isset($_POST['layout'])) {
                     </div>
                     <div>
                         <label for="addContato" class="block text-sm font-medium text-gray-300">Contato</label>
-                        <input type="text" id="addContato" name="contato" required class="custom-input">
+                        <input type="text" id="addContato" name="contato" class="custom-input">
                     </div>
                     <div>
                         <label for="addMedias" class="block text-sm font-medium text-gray-300">Médias</label>
@@ -1471,7 +1471,7 @@ if (isset($_POST['layout'])) {
                     </div>
                     <div>
                         <label for="addProjetos" class="block text-sm font-medium text-gray-300">Projetos Participados</label>
-                        <input type="text" id="addProjetos" name="projetos" required class="custom-input">
+                        <input type="text" id="addProjetos" name="projetos" class="custom-input">
                     </div>
                     <div>
                         <label for="addPerfilOpc1" class="block text-sm font-medium text-gray-300">Opção 1</label>
