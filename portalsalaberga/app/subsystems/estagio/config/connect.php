@@ -6,13 +6,13 @@ define('LOCAL_DATABASE', 'u750204740_estagio2k25');
 define('LOCAL_USER', 'root');
 define('LOCAL_PASSWORD', '');
 
-/*
+
 // Configurações do banco de dados remoto
 define('REMOTE_HOST', 'localhost');
 define('REMOTE_DATABASE', 'u750204740_estagio2k25');
 define('REMOTE_USER', 'u750204740_estagio2k25');
 define('REMOTE_PASSWORD', 'paoComOvo123!@##');
-*/
+
 
 class connect
 {
@@ -29,7 +29,7 @@ class connect
         try {
             $this->connect = new PDO('mysql:host=' . LOCAL_HOST . ';dbname=' . LOCAL_DATABASE, LOCAL_USER, LOCAL_PASSWORD);
         } catch (PDOException $e) {
-            echo "Falha ao conectar ao banco de dados local: " . $e->getMessage();
+
 
             // Se a conexão local falhar, tenta conectar ao banco de dados remoto
             try {
