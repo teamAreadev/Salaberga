@@ -91,7 +91,26 @@ if (isset($_POST['id_excluir_empresa']) && !empty($_POST['id_excluir_empresa']))
             header('location:../views/vagas.php?ja_existe');
             exit();
     }
-} /*else {
+} else if( isset($_POST['id_aluno']) && !empty($_POST['id_aluno'])){
+
+     $hora = $_POST['id_aluno'];
+
+    $model = new main_model;
+    $result = $model->excluir_aluno($isaluno);
+
+    switch ($result) {
+        case 1:
+            header('location:../views/gerenciar_alunos.php?deletado');
+            exit();
+        case 2:
+            header('location:../views/gerenciar_alunos.php?erro');
+            exit();
+        case 3:
+            header('location:../views/gerenciar_alunos.php?erro2');
+            exit();
+    }
+}else{
     header('location:../views/login.php?erro');
     exit();
-}*/
+}
+
