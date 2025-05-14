@@ -282,8 +282,14 @@ class select_model extends connect
     {
         $count = 0;
         foreach ($selecionados as $item) {
+            // Verifica se já existe
+            $check = $this->connect->prepare("SELECT 1 FROM selecionado WHERE id_aluno = ? AND id_vaga = ?");
+            $check->execute([$item['id_aluno'], $item['id_vaga']]);
+            if ($check->fetch()) {
+                continue; // Já existe, não insere
+            }
             $stmt = $this->connect->prepare("INSERT INTO selecionado (id_aluno, id_vaga, nome) VALUES (?, ?, ?)");
-            if ($stmt->execute([$item['id_aluno'], $item['id_vaga'], $item['nome']])) {
+            if ($stmt->execute([$item['id_aluno'], $item['id_vaga'], $item['nome'] ?? ''])) {
                 $count++;
             }
         }
