@@ -224,7 +224,7 @@ class main_model extends connect
         if (empty($result)) {
 
 
-            $stmt = $this->connect->prepare("INSERT INTO `aluno` VALUES(`nome`=:nome, `contato`=:contato, `medias`=:medias, `email`=:email, `projetos`=:projetos, `perfil_opc1`=:opc1, `perfil_opc2`=:opc2, `ocorrencia`=:ocorrencia, `custeio`=:custeio,  `entregas_individuais`=:entrega_individuais, `entregas_grupo`=:entrega_grupo)");
+            $stmt = $this->connect->prepare("INSERT INTO `aluno` VALUES(null,:nome, :contato, :medias, :email, :projetos, :opc1, :opc2, :ocorrencia, :custeio,  :entrega_individuais, :entrega_grupo)");
 
             $stmt->bindValue(':nome', $nome);
             $stmt->bindValue(':contato', $contato);
@@ -253,18 +253,16 @@ class main_model extends connect
     }
     function excluir_aluno($id_aluno)
     {
-        $stmt_id_vaga = $this->connect->query("SELECT id FROM vagas WHERE id_concedente = '$id_aluno'");
-        $id_vagas = $stmt_id_vaga->fetch(PDO::FETCH_ASSOC);
-        $id_vaga = $id_vagas['id'];
-        $stmt_excluirVaga = $this->connect->query("DELETE FROM selecionado WHERE id_vaga = '$id_vaga'");
-        $stmt_excluirVaga = $this->connect->query("DELETE FROM selecao WHERE id_vaga = '$id_vaga'");
-        $stmt_excluirVaga = $this->connect->query("DELETE FROM vagas WHERE id = '$id_vaga'");
-        $stmt_excluirVaga = $this->connect->query("DELETE FROM vagas WHERE id_concedente = '$id_aluno'");
+        $stmt_id_aluno = $this->connect->query("SELECT id FROM vagas WHERE id_concedente = '$id_aluno'");
+        $id_aluno = $stmt_id_aluno->fetch(PDO::FETCH_ASSOC);
+        $id_aluno = $id_aluno['id'];
+        $stmt_exclir_aluno = $this->connect->query("DELETE FROM selecionado WHERE id_aluno = '$id_aluno'");
+        $stmt_exclir_aluno = $this->connect->query("DELETE FROM selecao WHERE id_aluno = '$id_aluno'");
 
-        if ($stmt_excluirVaga) {
+        if ($stmt_exclir_aluno) {
 
-            $stmt_excluirEmpresa = $this->connect->query("DELETE FROM concedentes WHERE id = '$id_aluno'");
-            if ($stmt_excluirEmpresa) {
+            $stmt_exclir_aluno = $this->connect->query("DELETE FROM aluno WHERE aluno = '$id_aluno'");
+            if ($stmt_exclir_aluno) {
 
                 return 1;
             } else {
