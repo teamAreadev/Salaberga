@@ -125,20 +125,15 @@ class select_model extends connect
     function alunos_aptos($nome_perfil = 0, $search = '', $filtro = '')
     {
         $sql = "SELECT 
-                    id, 
-                    nome, 
-                    contato, 
-                    medias, 
-                    email, 
-                    projetos, 
-                    perfil_opc1, 
-                    perfil_opc2, 
-                    ocorrencia, 
-                    custeio, 
-                    entregas_individuais, 
-                    entregas_grupo
-                FROM aluno
-                ORDER BY nome ASC";
+                    a.id, 
+                    a.nome, 
+                    a.perfil_opc1, 
+                    c.nome AS empresa
+                FROM selecionado s
+                INNER JOIN aluno a ON s.id_aluno = a.id
+                INNER JOIN vagas v ON s.id_vaga = v.id
+                INNER JOIN concedentes c ON v.id_concedente = c.id
+                ORDER BY a.nome ASC";
         $stmt = $this->connect->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
