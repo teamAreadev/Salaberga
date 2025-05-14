@@ -139,7 +139,6 @@ if (isset($_POST['layout'])) {
                 `;
                 const modal = document.getElementById('detalhesModal');
                 modal.classList.add('show');
-                modal.style.display = 'flex';
             } else {
                 console.error(`Aluno com ID ${id} não encontrado.`);
             }
@@ -164,7 +163,6 @@ if (isset($_POST['layout'])) {
 
                 const modal = document.getElementById('editarAlunoModal');
                 modal.classList.add('show');
-                modal.style.display = 'flex';
             } else {
                 console.error(`Aluno com ID ${id} não encontrado.`);
             }
@@ -175,7 +173,6 @@ if (isset($_POST['layout'])) {
             document.getElementById('addAlunoForm').reset();
             const modal = document.getElementById('adicionarAlunoModal');
             modal.classList.add('show');
-            modal.style.display = 'flex';
         }
 
         // Função para deletar aluno
@@ -414,14 +411,12 @@ if (isset($_POST['layout'])) {
             document.getElementById('fecharDetalhesBtn').addEventListener('click', () => {
                 const modal = document.getElementById('detalhesModal');
                 modal.classList.remove('show');
-                modal.style.display = 'none';
             });
 
             document.getElementById('detalhesModal').addEventListener('click', (e) => {
                 if (e.target === document.getElementById('detalhesModal')) {
                     const modal = document.getElementById('detalhesModal');
                     modal.classList.remove('show');
-                    modal.style.display = 'none';
                 }
             });
 
@@ -429,14 +424,12 @@ if (isset($_POST['layout'])) {
             document.getElementById('fecharEditarBtn').addEventListener('click', () => {
                 const modal = document.getElementById('editarAlunoModal');
                 modal.classList.remove('show');
-                modal.style.display = 'none';
             });
 
             document.getElementById('editarAlunoModal').addEventListener('click', (e) => {
                 if (e.target === document.getElementById('editarAlunoModal')) {
                     const modal = document.getElementById('editarAlunoModal');
                     modal.classList.remove('show');
-                    modal.style.display = 'none';
                 }
             });
 
@@ -444,14 +437,12 @@ if (isset($_POST['layout'])) {
             document.getElementById('fecharAdicionarBtn').addEventListener('click', () => {
                 const modal = document.getElementById('adicionarAlunoModal');
                 modal.classList.remove('show');
-                modal.style.display = 'none';
             });
 
             document.getElementById('adicionarAlunoModal').addEventListener('click', (e) => {
                 if (e.target === document.getElementById('adicionarAlunoModal')) {
                     const modal = document.getElementById('adicionarAlunoModal');
                     modal.classList.remove('show');
-                    modal.style.display = 'none';
                 }
             });
 
