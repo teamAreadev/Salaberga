@@ -18,17 +18,17 @@ if (isset($_POST['layout'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a1a1a">
     <meta name="description" content="Gerenciamento de Alunos - Sistema de Estágio">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <title>Gerenciar Alunos - Sistema de Estágio</title>
 
     <script>
         // Dados dos alunos
         let alunos = [
-            <?php 
+            <?php
             try {
                 $dados = $select_model->alunos_aptos_curso();
                 if (empty($dados)) {
@@ -214,7 +214,7 @@ if (isset($_POST['layout'])) {
             // Atualiza a lista de alunos na interface (simulação)
             alunos = alunos.filter(a => a.id !== alunoIdParaExcluir);
             aplicarFiltros(); // Re-renderiza a tabela/cards
-            
+
             document.getElementById('confirmacaoExclusaoModal').classList.remove('show');
             alunoIdParaExcluir = null;
             // Opcional: Adicionar um toast de sucesso
@@ -257,14 +257,14 @@ if (isset($_POST['layout'])) {
                 const card = document.createElement('div');
                 card.className = 'mobile-card bg-dark-300 rounded-lg p-4 shadow-md';
 
-                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'area-desenvolvimento' : 
-                                    aluno.perfil_opc1 === 'design' ? 'area-design' : 
-                                    aluno.perfil_opc1 === 'midia' ? 'area-midia' : 
-                                    'area-redes';
-                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'area-desenvolvimento' : 
-                                    aluno.perfil_opc2 === 'design' ? 'area-design' : 
-                                    aluno.perfil_opc2 === 'midia' ? 'area-midia' : 
-                                    'area-redes';
+                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'area-desenvolvimento' :
+                    aluno.perfil_opc1 === 'design' ? 'area-design' :
+                    aluno.perfil_opc1 === 'midia' ? 'area-midia' :
+                    'area-redes';
+                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'area-desenvolvimento' :
+                    aluno.perfil_opc2 === 'design' ? 'area-design' :
+                    aluno.perfil_opc2 === 'midia' ? 'area-midia' :
+                    'area-redes';
 
                 card.innerHTML = `
                     <div class="flex justify-between items-center mb-4">
@@ -473,10 +473,44 @@ if (isset($_POST['layout'])) {
                     document.querySelector('.mobile-cards-container').style.display = 'none';
                 }
             }
-            
+
             window.addEventListener('resize', checkScreenSize);
             checkScreenSize();
         });
+
+        // Função para alternar detalhes na tabela desktop
+        function toggleDetalhes(id) {
+            const detalhesRow = document.getElementById(`detalhes-${id}`);
+            const button = detalhesRow.previousElementSibling.querySelector('button');
+            const icon = button.querySelector('i');
+            
+            if (detalhesRow.classList.contains('hidden')) {
+                detalhesRow.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                detalhesRow.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+
+        // Função para alternar detalhes nos cards mobile
+        function toggleDetalhesMobile(id) {
+            const detalhesDiv = document.getElementById(`detalhes-mobile-${id}`);
+            const button = detalhesDiv.parentElement.querySelector('button');
+            const icon = button.querySelector('i');
+            
+            if (detalhesDiv.classList.contains('hidden')) {
+                detalhesDiv.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                detalhesDiv.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
     </script>
 
     <script>
@@ -551,8 +585,8 @@ if (isset($_POST['layout'])) {
             background-color: #1a1a1a;
             color: #ffffff;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%), 
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%),
                 radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.03) 0%, rgba(255, 165, 0, 0) 20%);
             transition: all 0.3s ease;
         }
@@ -562,7 +596,7 @@ if (isset($_POST['layout'])) {
             background-image: linear-gradient(to bottom, #2d2d2d, #222222);
             border-right: 1px solid rgba(0, 122, 51, 0.2);
             transition: all 0.3s ease;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar-link {
@@ -588,7 +622,8 @@ if (isset($_POST['layout'])) {
             box-shadow: 0 2px 8px rgba(0, 122, 51, 0.15);
         }
 
-        .dashboard-card, .table-container {
+        .dashboard-card,
+        .table-container {
             background-color: #2d2d2d;
             border-radius: 12px;
             padding: 1.5rem;
@@ -601,7 +636,8 @@ if (isset($_POST['layout'])) {
             -webkit-backdrop-filter: blur(5px);
         }
 
-        .dashboard-card:hover, .table-container:hover {
+        .dashboard-card:hover,
+        .table-container:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(0, 122, 51, 0.2);
@@ -621,7 +657,8 @@ if (isset($_POST['layout'])) {
             background-color: rgba(0, 122, 51, 0.1);
         }
 
-        .status-pill, .mobile-badge {
+        .status-pill,
+        .mobile-badge {
             padding: 0.35rem 1rem;
             border-radius: 30px;
             font-size: 0.75rem;
@@ -677,7 +714,9 @@ if (isset($_POST['layout'])) {
             border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             background-color: #232323 !important;
             border-color: #3d3d3d !important;
             color: #ffffff !important;
@@ -693,6 +732,7 @@ if (isset($_POST['layout'])) {
             overflow: visible !important;
             text-overflow: unset !important;
         }
+
         select.custom-input {
             min-width: 180px !important;
             max-width: 100% !important;
@@ -700,23 +740,32 @@ if (isset($_POST['layout'])) {
             overflow: visible !important;
             text-overflow: unset !important;
         }
+
         .relative select.custom-input {
             padding-right: 2.5rem !important;
         }
+
         .relative {
             min-width: 180px;
         }
+
         @media (max-width: 640px) {
-            input, select, .custom-input {
+
+            input,
+            select,
+            .custom-input {
                 min-width: 100% !important;
                 font-size: 1rem !important;
             }
+
             .relative {
                 min-width: 100%;
             }
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             border-color: #007A33 !important;
             box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
             outline: none !important;
@@ -947,23 +996,40 @@ if (isset($_POST['layout'])) {
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        .slide-up { animation: slideUp 0.4s ease-out forwards; }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.4s ease-out forwards;
+        }
 
         @media (max-width: 768px) {
             .table-container.desktop-table {
                 display: none;
             }
-            
+
             .mobile-cards-container {
                 display: block;
             }
@@ -990,7 +1056,7 @@ if (isset($_POST['layout'])) {
             .mobile-cards-container {
                 display: none;
             }
-            
+
             .table-container.desktop-table {
                 display: block;
             }
@@ -1057,6 +1123,10 @@ if (isset($_POST['layout'])) {
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
+                    <a href="resultado_selecionados.php" class="sidebar-link">
+                        <i class="fa fa-user-circle w-5 mr-3"></i>
+                        Resultados da Seleção
+                    </a>
                     <a href="gerenciar_alunos.php" class="sidebar-link active">
                         <i class="fas fa-user-graduate w-5 mr-3"></i>
                         Gerenciar Alunos
@@ -1112,6 +1182,10 @@ if (isset($_POST['layout'])) {
                     <a href="dashboard.php" class="sidebar-link">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
+                    </a>
+                    <a href="resultado_selecionados.php" class="sidebar-link">
+                        <i class="fa fa-user-circle w-5 mr-3"></i>
+                        Resultados da Seleção
                     </a>
                     <a href="gerenciar_alunos.php" class="sidebar-link active">
                         <i class="fas fa-user-graduate w-5 mr-3"></i>
@@ -1194,14 +1268,9 @@ if (isset($_POST['layout'])) {
                             <?php
                             $dados = $select_model->alunos_aptos_curso();
                             foreach ($dados as $index => $dado) {
-                                $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'area-desenvolvimento' : 
-                                                ($dado['perfil_opc1'] === 'design' ? 'area-design' : 
-                                                ($dado['perfil_opc1'] === 'midia' ? 'area-midia' : 'area-redes'));
-                                $areaClassOpc2 = $dado['perfil_opc2'] === 'desenvolvimento' ? 'area-desenvolvimento' : 
-                                                ($dado['perfil_opc2'] === 'design' ? 'area-design' : 
-                                                ($dado['perfil_opc2'] === 'midia' ? 'area-midia' : 'area-redes'));
-                                $statusClass = $dado['custeio'] == 1 ? 'status-ativo' : 
-                                             (strtolower($dado['ocorrencia']) === 'estagiando' ? 'status-estagiando' : 'status-inativo');
+                                $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'area-desenvolvimento' : ($dado['perfil_opc1'] === 'design' ? 'area-design' : ($dado['perfil_opc1'] === 'midia' ? 'area-midia' : 'area-redes'));
+                                $areaClassOpc2 = $dado['perfil_opc2'] === 'desenvolvimento' ? 'area-desenvolvimento' : ($dado['perfil_opc2'] === 'design' ? 'area-design' : ($dado['perfil_opc2'] === 'midia' ? 'area-midia' : 'area-redes'));
+                                $statusClass = $dado['custeio'] == 1 ? 'status-ativo' : (strtolower($dado['ocorrencia']) === 'estagiando' ? 'status-estagiando' : 'status-inativo');
                             ?>
                                 <tr class="hover:bg-dark-50 transition-colors slide-up" style="animation-delay: <?= $index * 50 ?>ms;">
                                     <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
@@ -1273,14 +1342,9 @@ if (isset($_POST['layout'])) {
                 <div id="alunosMobileCards" class="mobile-cards-container space-y-4">
                     <?php
                     foreach ($dados as $dado) {
-                        $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'area-desenvolvimento' : 
-                                        ($dado['perfil_opc1'] === 'design' ? 'area-design' : 
-                                        ($dado['perfil_opc1'] === 'midia' ? 'area-midia' : 'area-redes'));
-                        $areaClassOpc2 = $dado['perfil_opc2'] === 'desenvolvimento' ? 'area-desenvolvimento' : 
-                                        ($dado['perfil_opc2'] === 'design' ? 'area-design' : 
-                                        ($dado['perfil_opc2'] === 'midia' ? 'area-midia' : 'area-redes'));
-                        $statusClass = $dado['custeio'] == 1 ? 'status-ativo' : 
-                                     (strtolower($dado['ocorrencia']) === 'estagiando' ? 'status-estagiando' : 'status-inativo');
+                        $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'area-desenvolvimento' : ($dado['perfil_opc1'] === 'design' ? 'area-design' : ($dado['perfil_opc1'] === 'midia' ? 'area-midia' : 'area-redes'));
+                        $areaClassOpc2 = $dado['perfil_opc2'] === 'desenvolvimento' ? 'area-desenvolvimento' : ($dado['perfil_opc2'] === 'design' ? 'area-design' : ($dado['perfil_opc2'] === 'midia' ? 'area-midia' : 'area-redes'));
+                        $statusClass = $dado['custeio'] == 1 ? 'status-ativo' : (strtolower($dado['ocorrencia']) === 'estagiando' ? 'status-estagiando' : 'status-inativo');
                     ?>
                         <div class="mobile-card bg-dark-300 rounded-lg p-4 shadow-md">
                             <div class="flex justify-between items-center mb-4">
@@ -1547,6 +1611,61 @@ if (isset($_POST['layout'])) {
                 document.body.style.overflow = 'auto';
             }
         });
+
+        // Função para alternar detalhes na tabela desktop
+        function toggleDetalhes(id) {
+            const detalhesRow = document.getElementById(`detalhes-${id}`);
+            const button = detalhesRow.previousElementSibling.querySelector('button');
+            const icon = button.querySelector('i');
+            
+            if (detalhesRow.classList.contains('hidden')) {
+                detalhesRow.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                detalhesRow.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+
+        // Função para alternar detalhes nos cards mobile
+        function toggleDetalhesMobile(id) {
+            const detalhesDiv = document.getElementById(`detalhes-mobile-${id}`);
+            const button = detalhesDiv.parentElement.querySelector('button');
+            const icon = button.querySelector('i');
+            
+            if (detalhesDiv.classList.contains('hidden')) {
+                detalhesDiv.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                detalhesDiv.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+
+        document.getElementById('cancelarBtn').addEventListener('click', () => {
+            document.getElementById('alunoModal').classList.remove('show');
+        });
+
+        document.getElementById('alunoModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('alunoModal')) {
+                document.getElementById('alunoModal').classList.remove('show');
+            }
+        });
+
+        document.getElementById('fecharDetalhesBtn').addEventListener('click', () => {
+            document.getElementById('detalhesModal').classList.remove('show');
+        });
+
+        document.getElementById('detalhesModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('detalhesModal')) {
+                document.getElementById('detalhesModal').classList.remove('show');
+            }
+        });
     </script>
 </body>
+
 </html>
