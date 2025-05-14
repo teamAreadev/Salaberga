@@ -4,6 +4,14 @@ define('HOST', 'localhost');
 define('DATABASE', 'estagio');
 define('USER', 'root');
 define('PASSWORD', '');
+/*
+
+define('HOST', 'localhost');
+define('DATABASE', 'u750204740_estagio2k25');
+define('USER', 'u750204740_estagio2k25');
+define('PASSWORD', 'paoComOvo123!@##');
+*/
+
 class connect
 {
     protected $connect;

@@ -1078,7 +1078,6 @@ if (isset($_POST['layout'])) {
             empresasGrid.addEventListener('click', (e) => {
                 const editBtn = e.target.closest('.edit-btn');
                 const deleteBtn = e.target.closest('.delete-btn');
-                const closeBtn = e.target.closest('.close-btn');
 
                 if (editBtn) {
                     const modalId = editBtn.getAttribute('data-modal-id');
@@ -1091,11 +1090,17 @@ if (isset($_POST['layout'])) {
                     console.log('Botão Excluir clicado, modalId:', modalId); // Debug
                     openModal(modalId);
                 }
+            });
 
+            // Adicionar um event listener global para todos os botões de fechar modal
+            document.addEventListener('click', function(e) {
+                const closeBtn = e.target.closest('.close-btn');
                 if (closeBtn) {
                     const modalId = closeBtn.getAttribute('data-modal-id');
-                    console.log('Botão Fechar clicado, modalId:', modalId); // Debug
-                    closeModal(modalId);
+                    if (modalId) {
+                        console.log('Botão Fechar global clicado, modalId:', modalId); // Debug
+                        closeModal(modalId);
+                    }
                 }
             });
 
@@ -1113,10 +1118,10 @@ if (isset($_POST['layout'])) {
             }
 
             // Fechar modais ao clicar fora
-            document.querySelectorAll('.fixed').forEach(modal => {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal && modal.id === currentModalId) {
-                        closeModal(modal.id);
+            document.querySelectorAll('.fixed.inset-0').forEach(modalContainer => {
+                modalContainer.addEventListener('click', (e) => {
+                    if (e.target === modalContainer && currentModalId === modalContainer.id) {
+                        closeModal(modalContainer.id);
                     }
                 });
             });

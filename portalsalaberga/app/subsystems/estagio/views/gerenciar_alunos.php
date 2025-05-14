@@ -1270,18 +1270,18 @@ if (isset($_POST['layout'])) {
                         <label class="block text-sm font-medium text-gray-300">Opção 1</label>
                         <select id="alunoOpc1" name="opc1" class="custom-select mt-1" required>
                             <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="design">Design</option>
-                            <option value="midia">Mídia</option>
-                            <option value="redes">Redes/Suporte</option>
+                            <option value="Design/Mídia">Design/Mídia</option>
+                            <option value="Tutoria">Tutoria</option>
+                            <option value="Suporte/Redes">Suporte/Redes</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Opção 2</label>
                         <select id="alunoOpc2" name="opc2" class="custom-select mt-1" required>
                             <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="design">Design</option>
-                            <option value="midia">Mídia</option>
-                            <option value="redes">Redes/Suporte</option>
+                            <option value="Design/Mídia">Design/Mídia</option>
+                            <option value="Tutoria">Tutoria</option>
+                            <option value="Suporte/Redes">Suporte/Redes</option>
                         </select>
                     </div>
                     <div>
