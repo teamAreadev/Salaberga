@@ -141,23 +141,57 @@ if (isset($_POST['layout'])) {
             }
         }
 
-        function editarAluno(id) {
+        function abrirModalAluno(id = null) {
+            const modal = document.getElementById('alunoModal');
+            const form = document.getElementById('alunoForm');
+            const modalTitle = document.getElementById('modalTitle');
+            const acaoAlunoInput = document.getElementById('acaoAluno');
+            const alunoIdInput = document.getElementById('alunoId');
+            const submitButton = form.querySelector('button[type="submit"]');
+
+            form.reset(); // Limpa o formulário
+
+            if (id) { // Modo Edição
+                const aluno = alunos.find(a => a.id === id);
+                if (aluno) {
+                    modalTitle.textContent = 'Editar Aluno';
+                    acaoAlunoInput.value = 'editar_aluno';
+                    alunoIdInput.value = aluno.id;
+                    document.getElementById('alunoNome').value = aluno.nome;
+                    document.getElementById('alunoContato').value = aluno.contato;
+                    document.getElementById('alunoMedias').value = aluno.medias;
+                    document.getElementById('alunoEmail').value = aluno.email;
+                    document.getElementById('alunoProjetos').value = aluno.projetos;
+                    document.getElementById('alunoOpc1').value = aluno.perfil_opc1.toLowerCase();
+                    document.getElementById('alunoOpc2').value = aluno.perfil_opc2.toLowerCase();
+                    document.getElementById('alunoOcorrencia').value = aluno.ocorrencia;
+                    document.getElementById('alunoCusteio').value = aluno.custeio;
+                    document.getElementById('alunoEntregasIndividuais').value = aluno.entregas_individuais ?? '';
+                    document.getElementById('alunoEntregasGrupo').value = aluno.entregas_grupo ?? '';
+                    submitButton.innerHTML = '<i class="fas fa-save btn-icon"></i> <span>Salvar Alterações</span>';
+                }
+            } else { // Modo Cadastro
+                modalTitle.textContent = 'Novo Aluno';
+                acaoAlunoInput.value = 'cadastrar_aluno';
+                alunoIdInput.value = ''; // Garante que não há ID para cadastro
+                // Limpar campos específicos que o reset pode não pegar ou para definir padrões
+                document.getElementById('alunoOpc1').value = 'desenvolvimento'; // Exemplo de padrão
+                document.getElementById('alunoOpc2').value = 'desenvolvimento'; // Exemplo de padrão
+                document.getElementById('alunoCusteio').value = '0'; // Exemplo de padrão
+                submitButton.innerHTML = '<i class="fas fa-plus btn-icon"></i> <span>Cadastrar Aluno</span>';
+            }
+            modal.classList.add('show');
+        }
+
+        function abrirModalExcluirAluno(id) {
             const aluno = alunos.find(a => a.id === id);
             if (aluno) {
-                document.getElementById('modalTitle').textContent = 'Editar Aluno';
-                document.getElementById('alunoId').value = aluno.id;
-                document.getElementById('alunoNome').value = aluno.nome;
-                document.getElementById('alunoContato').value = aluno.contato;
-                document.getElementById('alunoMedias').value = aluno.medias;
-                document.getElementById('alunoEmail').value = aluno.email;
-                document.getElementById('alunoProjetos').value = aluno.projetos;
-                document.getElementById('alunoOpc1').value = aluno.perfil_opc1.toLowerCase();
-                document.getElementById('alunoOpc2').value = aluno.perfil_opc2.toLowerCase();
-                document.getElementById('alunoOcorrencia').value = aluno.ocorrencia;
-                document.getElementById('alunoCusteio').value = aluno.custeio;
-                document.getElementById('alunoEntregasIndividuais').value = aluno.entregas_individuais ?? '';
-                document.getElementById('alunoEntregasGrupo').value = aluno.entregas_grupo ?? '';
-                document.getElementById('alunoModal').classList.add('show');
+                document.getElementById('idAlunoParaExcluir').value = aluno.id;
+                const modal = document.getElementById('excluirAlunoModal');
+                modal.classList.add('show');
+                // Opcional: exibir nome do aluno no modal de confirmação
+                // const nomeAlunoConfirmacao = modal.querySelector('#nomeAlunoConfirmacao');
+                // if (nomeAlunoConfirmacao) nomeAlunoConfirmacao.textContent = aluno.nome;
             }
         }
 
@@ -176,9 +210,12 @@ if (isset($_POST['layout'])) {
                         <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
                             <i class="fas fa-info-circle"></i>
                         </button>
-                        <a href="#" onclick="editarAluno(${aluno.id}); return false;" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
+                        <a href="#" onclick="abrirModalAluno(${aluno.id}); return false;" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
                             <i class="fas fa-edit"></i>
                         </a>
+                        <button onclick="abrirModalExcluirAluno(${aluno.id})" class="text-red-500 hover:text-red-400 transition-colors">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -210,9 +247,12 @@ if (isset($_POST['layout'])) {
                             <button onclick="verDetalhes(${aluno.id})" class="text-blue-400 hover:text-blue-300 transition-colors">
                                 <i class="fas fa-info-circle"></i>
                             </button>
-                            <a href="#" onclick="editarAluno(${aluno.id}); return false;" class="text-green-400 hover:text-green-300 transition-colors">
+                            <a href="#" onclick="abrirModalAluno(${aluno.id}); return false;" class="text-green-400 hover:text-green-300 transition-colors">
                                 <i class="fas fa-edit"></i>
                             </a>
+                            <button onclick="abrirModalExcluirAluno(${aluno.id})" class="text-red-500 hover:text-red-400 ml-2 transition-colors">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                     </div>
                     <div id="detalhes-mobile-${aluno.id}" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
@@ -300,7 +340,13 @@ if (isset($_POST['layout'])) {
             // Modal de Edição
             const alunoModal = document.getElementById('alunoModal');
             const cancelarBtn = document.getElementById('cancelarBtn');
-            const alunoForm = document.getElementById('alunoForm');
+            const addAlunoBtn = document.getElementById('addAlunoBtn'); // Botão Novo Aluno
+
+            if (addAlunoBtn) {
+                addAlunoBtn.addEventListener('click', () => {
+                    abrirModalAluno(); // Chama sem ID para modo cadastro
+                });
+            }
 
             cancelarBtn.addEventListener('click', () => {
                 alunoModal.classList.remove('show');
@@ -325,6 +371,25 @@ if (isset($_POST['layout'])) {
                     detalhesModal.classList.remove('show');
                 }
             });
+
+            // Modal de Excluir Aluno
+            const excluirAlunoModal = document.getElementById('excluirAlunoModal');
+            const cancelarExclusaoBtn = document.getElementById('cancelarExclusaoBtn');
+            // const excluirAlunoForm = document.getElementById('excluirAlunoForm'); // Se precisar manipular o form via JS
+
+            if (cancelarExclusaoBtn) {
+                cancelarExclusaoBtn.addEventListener('click', () => {
+                    excluirAlunoModal.classList.remove('show');
+                });
+            }
+            
+            if (excluirAlunoModal) {
+                excluirAlunoModal.addEventListener('click', (e) => {
+                    if (e.target === excluirAlunoModal) {
+                        excluirAlunoModal.classList.remove('show');
+                    }
+                });
+            }
 
             // Verificar tamanho da tela e ajustar renderização
             function checkScreenSize() {
@@ -1072,6 +1137,10 @@ if (isset($_POST['layout'])) {
                             <i class="fas fa-search search-icon"></i>
                             <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="custom-input pl-10 pr-4 py-2.5 w-full">
                         </div>
+                        <button id="addAlunoBtn" class="custom-btn custom-btn-primary w-full sm:w-auto">
+                            <i class="fas fa-plus btn-icon"></i>
+                            <span>Novo Aluno</span>
+                        </button>
                     </div>
                 </div>
                 <!-- Table Desktop -->
@@ -1102,9 +1171,12 @@ if (isset($_POST['layout'])) {
                                         <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 mr-2 transition-colors">
                                             <i class="fas fa-info-circle"></i>
                                         </button>
-                                        <a href="#" onclick="editarAluno(<?= $dado['id'] ?>); return false;" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
+                                        <a href="#" onclick="abrirModalAluno(<?= $dado['id'] ?>); return false;" class="text-primary-400 hover:text-primary-300 mr-2 transition-colors">
                                             <i class="fas fa-edit"></i>
                                         </a>
+                                        <button onclick="abrirModalExcluirAluno(<?= $dado['id'] ?>)" class="text-red-500 hover:text-red-400 transition-colors">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr id="detalhes-<?= $dado['id'] ?>" class="hidden bg-dark-50">
@@ -1179,9 +1251,12 @@ if (isset($_POST['layout'])) {
                                     <button onclick="verDetalhes(<?= $dado['id'] ?>)" class="text-blue-400 hover:text-blue-300 transition-colors">
                                         <i class="fas fa-info-circle"></i>
                                     </button>
-                                    <a href="#" onclick="editarAluno(<?= $dado['id'] ?>); return false;" class="text-green-400 hover:text-green-300 transition-colors">
+                                    <a href="#" onclick="abrirModalAluno(<?= $dado['id'] ?>); return false;" class="text-green-400 hover:text-green-300 transition-colors">
                                         <i class="fas fa-edit"></i>
                                     </a>
+                                    <button onclick="abrirModalExcluirAluno(<?= $dado['id'] ?>)" class="text-red-500 hover:text-red-400 ml-2 transition-colors">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div id="detalhes-mobile-<?= $dado['id'] ?>" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
@@ -1246,6 +1321,7 @@ if (isset($_POST['layout'])) {
                 <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-white">Editar Aluno</h2>
                 <form id="alunoForm" action="../controllers/controller.php" method="post" class="space-y-4">
                     <input type="hidden" name="id" id="alunoId">
+                    <input type="hidden" name="acao_aluno" id="acaoAluno" value="editar_aluno">
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Nome</label>
                         <input type="text" name="nome" id="alunoNome" class="custom-input mt-1" required>
@@ -1330,6 +1406,27 @@ if (isset($_POST['layout'])) {
                         <span>Fechar</span>
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Modal de Excluir Aluno -->
+        <div id="excluirAlunoModal" class="modal-base">
+            <div class="modal-content">
+                <h2 class="text-2xl font-bold mb-4 text-white">Confirmar Exclusão</h2>
+                <p class="text-gray-300 mb-6">Tem certeza que deseja excluir o aluno <span id="nomeAlunoConfirmacao" class="font-semibold"></span>? Esta ação não pode ser desfeita.</p>
+                <form id="excluirAlunoForm" action="../controllers/controller_editar_excluir.php" method="post">
+                    <input type="hidden" name="id_excluir_aluno" id="idAlunoParaExcluir">
+                    <div class="mt-8 flex justify-end space-x-4">
+                        <button type="button" id="cancelarExclusaoBtn" class="custom-btn custom-btn-secondary">
+                            <i class="fas fa-times btn-icon"></i>
+                            <span>Cancelar</span>
+                        </button>
+                        <button type="submit" class="custom-btn bg-red-600 hover:bg-red-700 text-white">
+                            <i class="fas fa-trash-alt btn-icon"></i>
+                            <span>Excluir Aluno</span>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
