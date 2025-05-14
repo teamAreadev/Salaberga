@@ -211,37 +211,4 @@ class main_model extends connect
             return 3;
         }
     }
-
-    function excluir_aluno($id_aluno)
-    {
-        try {
-            // Excluir referências na tabela 'selecao'
-            $stmt_delete_selecao = $this->connect->prepare("DELETE FROM selecao WHERE id_aluno = :id_aluno");
-            $stmt_delete_selecao->bindValue(':id_aluno', $id_aluno);
-            $stmt_delete_selecao->execute();
-
-            // Excluir referências na tabela 'selecionado' (se existir e for relevante)
-            // Supondo que a coluna seja id_aluno. Ajuste se o nome da coluna for diferente.
-            $stmt_delete_selecionado = $this->connect->prepare("DELETE FROM selecionado WHERE id_aluno = :id_aluno");
-            $stmt_delete_selecionado->bindValue(':id_aluno', $id_aluno);
-            $stmt_delete_selecionado->execute();
-
-            // Excluir o aluno da tabela 'aluno'
-            $stmt_delete_aluno = $this->connect->prepare("DELETE FROM aluno WHERE id = :id_aluno");
-            $stmt_delete_aluno->bindValue(':id_aluno', $id_aluno);
-            $stmt_delete_aluno->execute();
-
-            if ($stmt_delete_aluno->rowCount() > 0) {
-                return 1; // Sucesso na exclusão do aluno
-            } else {
-                // Aluno não encontrado ou não excluído, mas as referências podem ter sido limpas
-                // Pode ser que o aluno já não existisse mas as referências sim.
-                // Se as querys de selecao/selecionado rodaram, consideramos um tipo de sucesso parcial ou completo.
-                return 1; // Ou um código específico como 4 se desejar diferenciar
-            }
-        } catch (Exception $e) {
-            // Loggar o erro $e->getMessage() seria uma boa prática aqui
-            return 2; // Erro na execução
-        }
-    }
 }
