@@ -8,17 +8,30 @@ class ConcedenteController {
     }
 
     private function connectDB() {
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "form_concedentes";
+        // Configurações de conexão local
+        $local_servername = "localhost";
+        $local_username = "root";
+        $local_password = "";
+        $local_dbname = "form_concedentes";
 
-        // Criar conexão
-        $this->conn = new mysqli($servername, $username, $password, $dbname);
+        // Configurações de conexão na hospedagem
+        $hosted_servername = "localhost";
+        $hosted_username = "u750204740_form_concedent";
+        $hosted_password = "paoComOvo123!@##";
+        $hosted_dbname = "u750204740_form_concedent";
 
-        // Verificar conexão
+        // Tentar conexão local
+        $this->conn = new mysqli($local_servername, $local_username, $local_password, $local_dbname);
+
+        // Verificar conexão local
         if ($this->conn->connect_error) {
-            die("Conexão falhou: " . $this->conn->connect_error);
+            // Tentar conexão na hospedagem
+            $this->conn = new mysqli($hosted_servername, $hosted_username, $hosted_password, $hosted_dbname);
+
+            // Verificar conexão na hospedagem
+            if ($this->conn->connect_error) {
+                die("Conexão falhou: " . $this->conn->connect_error);
+            }
         }
     }
 
