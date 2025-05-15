@@ -1102,7 +1102,7 @@ if (isset($_GET['sair'])) {
             <a href="../form_concedentes.php">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/CMX7vRKh/aviso-1.png" alt="Gestão de Estágio" class="app-icon">
+                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
                     <h3 class="app-name">Cadastro de Concedentes</h3>
                     <span class="category-tag">Formulário</span>
@@ -1112,7 +1112,7 @@ if (isset($_GET['sair'])) {
             <a href="../concedente/Modelo_TCE.pdf">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
+                        <img src="https://i.postimg.cc/vBRLTVhQ/1f4c4.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
                     <h3 class="app-name">Modelo de TCE</h3>
                     <span class="category-tag">Arquivo</span>
@@ -1122,7 +1122,7 @@ if (isset($_GET['sair'])) {
             <a href="../concedente/TRE_Modelo.pdf">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
+                        <img src="https://i.postimg.cc/vBRLTVhQ/1f4c4.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
                     <h3 class="app-name">Modelo de TRE</h3>
                     <span class="category-tag">Arquivo</span>

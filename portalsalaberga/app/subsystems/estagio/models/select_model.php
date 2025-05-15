@@ -308,4 +308,10 @@ class select_model extends connect
             return $dado;
         }
     }
+
+    function vaga_por_id($id_vaga) {
+        $stmt = $this->connect->prepare("SELECT * FROM vagas WHERE id = ? LIMIT 1");
+        $stmt->execute([$id_vaga]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

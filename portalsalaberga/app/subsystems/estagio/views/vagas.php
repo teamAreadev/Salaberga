@@ -682,7 +682,7 @@ if (isset($_POST['layout'])) {
                     </button>
                 </div>
                 <nav class="flex-1">
-                <a href="dashboard.php" class="sidebar-link">
+                    <a href="dashboard.php" class="sidebar-link">
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
@@ -900,6 +900,25 @@ if (isset($_POST['layout'])) {
                                         <i class="fas fa-arrow-right ml-2"></i>
                                     </a>
                                 </div>
+                                <div class="mt-4">
+                                    <a href="#" class="ver-detalhes-link" onclick="abrirModal(event, <?= $vagaId ?>)">
+                                        <span>Carta de Encaminhamento</span>
+                                        <i class="fas fa-arrow-right ml-2"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Modal Carta de Encaminhamento -->
+                            <div id="modalCarta-<?= $vagaId ?>" style="display:none;">
+                                <div class="modal-content">
+                                    <h2>Gerar Carta de Encaminhamento</h2>
+                                    <form id="formCarta-<?= $vagaId ?>" onsubmit="gerarCarta(event, <?= $vagaId ?>)">
+                                        <label for="responsavel-<?= $vagaId ?>">Nome do Responsável:</label>
+                                        <input type="text" id="responsavel-<?= $vagaId ?>" name="responsavel" required>
+                                        <button type="submit">Gerar Carta</button>
+                                        <button type="button" onclick="fecharModal(<?= $vagaId ?>)">Cancelar</button>
+                                    </form>
+                                </div>
                             </div>
 
                             <!-- Modal de Editar Vaga -->
@@ -1089,6 +1108,20 @@ if (isset($_POST['layout'])) {
     </div>
 
     <script>
+        function abrirModal(event, idVaga) {
+            event.preventDefault();
+            document.getElementById('modalCarta-' + idVaga).style.display = 'block';
+        }
+
+        function fecharModal(idVaga) {
+            document.getElementById('modalCarta-' + idVaga).style.display = 'none';
+        }
+
+        function gerarCarta(event, idVaga) {
+            event.preventDefault();
+            const responsavel = document.getElementById('responsavel-' + idVaga).value;
+            window.location.href = `relatorio/gerar_carta.php?id_vaga=${idVaga}&responsavel=${encodeURIComponent(responsavel)}`;
+        }
         document.addEventListener('DOMContentLoaded', () => {
             const novaVagaModal = document.getElementById('novaVagaModal');
             const vagaForm = document.getElementById('vagaForm');
