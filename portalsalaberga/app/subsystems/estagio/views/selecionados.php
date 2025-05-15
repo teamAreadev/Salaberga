@@ -10,11 +10,10 @@ $session->autenticar_session();
 if (isset($_POST['aprovar']) && !empty($_POST['selecionados'])) {
     $selecionados = [];
     foreach ($_POST['selecionados'] as $valor) {
-        list($id_aluno, $id_vaga, $nome) = explode('|', $valor);
+        list($id_aluno, $id_vaga) = explode('|', $valor);
         $selecionados[] = [
             'id_aluno' => $id_aluno,
-            'id_vaga' => $id_vaga,
-            'nome' => $nome
+            'id_vaga' => $id_vaga
         ];
     }
     $qtd = $select_model->aprovar_selecionados($selecionados);
@@ -567,7 +566,7 @@ if (isset($_POST['layout'])) {
                                                 <?php if (isset($aluno['status']) && $aluno['status'] === 'approved'): ?>
                                                     <i class="fas fa-check-circle text-green-500"></i>
                                                 <?php else: ?>
-                                                    <input type="checkbox" name="selecionados[]" value="<?php echo $aluno['id'] . '|' . $id_vaga . '|' . htmlspecialchars($aluno['nome']); ?>" class="custom-checkbox">
+                                                    <input type="checkbox" name="selecionados[]" value="<?php echo $aluno['id'] . '|' . $id_vaga; ?>" class="custom-checkbox">
                                                 <?php endif; ?>
                                             </td>
                                             <td class="font-semibold text-white"><?php echo htmlspecialchars($aluno['nome']); ?></td>
