@@ -266,7 +266,7 @@
             }
         }
     }
-    }" >
+    }">
     <script>
         //Adiciona um novo estado no histórico, assim o botão de voltar não vai sair da página atual
         window.history.pushState(null, '', window.location.href);
@@ -277,7 +277,7 @@
             window.location.href = ''; // Substitua pelo URL da página que você deseja
         };
     </script>
-  <!--x-show="showEditalMessage"
+    <!--x-show="showEditalMessage"
         x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0 transform translate-y-4 sm:translate-y-0 sm:scale-95"
         x-transition:enter-end="opacity-100 transform translate-y-0 sm:scale-100"
@@ -285,8 +285,8 @@
         x-transition:leave-start="opacity-100 transform translate-y-0 sm:scale-100"
         x-transition:leave-end="opacity-0 transform translate-y-4 sm:translate-y-0 sm:scale-95"
         class="fixed inset-0 flex items-center justify-center z-50 px-4 sm:px-0">-->
-       
-        <!-- class="absolute inset-0 bg-gray-900 bg-opacity-75 backdrop-filter backdrop-blur-sm"></div>
+
+    <!-- class="absolute inset-0 bg-gray-900 bg-opacity-75 backdrop-filter backdrop-blur-sm"></div>
 
        
         <div class="bg-white rounded-lg shadow-2xl p-6 sm:p-8 m-4 max-w-lg w-full relative z-10 border-t-4 border-ceara-green">
@@ -329,7 +329,7 @@
     </a>
 </div>
  -->
-        </div>
+    </div>
     </div>
     <script>
         function urlBase64ToUint8Array(base64String) {
@@ -619,7 +619,7 @@
                             </a>
 
                             <!-- Escolas Parceiras -->
-                           <!-- <a href="../escolas_parceiras/index.php"
+                            <!-- <a href="../escolas_parceiras/index.php"
                                 @click="mobileMenuOpen = false"
                                 class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
                                 <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
@@ -735,7 +735,7 @@
             speakText(message);
         }
 
-     
+
 
         function handleElementClick(event) {
             if (!isReading) return;
@@ -1211,6 +1211,20 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
 
+                <div class="bg-white rounded-lg shadow-lg p-6 hover-scale">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-user-graduate text-3xl text-ceara-orange mr-4"></i>
+                            <div>
+                                <h3 class="font-bold text-xl mb-1 text-ceara-green">Curso Google</h3>
+                                <p class="text-gray-600">15 de maio, 2025</p>
+                            </div>
+                        </div>
+                        <a href="https://www.coursera.org/programs/c-jovem-2025-cresca-com-o-google-13lv3" target="_blank"
+                            class="inline-block bg-ceara-white text-ceara-green border border-ceara-green hover:bg-ceara-green hover:text-ceara-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                            <i class="fas fa-file-alt mr-1"></i> Acesse aqui
+                        </a>
+
+                    </div>
                     <div class="bg-white rounded-lg shadow-lg p-6 hover-scale">
                         <div class="flex items-center mb-4">
                             <i class="fas fa-user-graduate text-3xl text-ceara-orange mr-4"></i>
@@ -1226,8 +1240,27 @@
                             <i class="fas fa-file-alt mr-1"></i> Acesse aqui
                         </a>
 
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6 hover-scale">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-user-graduate text-3xl text-ceara-orange mr-4"></i>
+                            <div>
+                                <h3 class="font-bold text-xl mb-1 text-ceara-green">Curso AWS</h3>
+                                <p class="text-gray-600">15 de maio, 2025</p>
+                            </div>
+                        </div>
+
+                        <a href="https://www.awsacademy.com/vforcesite/LMS_Login"
+                            class="inline-block bg-ceara-white text-ceara-green border border-ceara-green hover:bg-ceara-green hover:text-ceara-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                            <i class="fas fa-file-alt mr-1"></i> Acesse aqui
+                        </a>
+
+                    </div>
+
+
+
+                    
                 </div>
-            </div>
 
 
         </section>
