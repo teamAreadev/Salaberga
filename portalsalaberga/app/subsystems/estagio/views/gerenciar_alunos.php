@@ -11,7 +11,7 @@ if (isset($_POST['layout'])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -26,8 +26,37 @@ if (isset($_POST['layout'])) {
     <title>Gerenciar Alunos - Sistema de Estágio</title>
 
     <script>
+        // Funções globais
+        function abrirAdicionarAluno() {
+            console.log('Opening add student modal');
+            const modal = document.getElementById('adicionarAlunoModal');
+            if (!modal) {
+                console.error('Add student modal not found');
+                return;
+            }
+            
+            const form = document.getElementById('addAlunoForm');
+            if (form) {
+                console.log('Resetting form');
+                form.reset();
+            }
+            
+            console.log('Adding show class to modal');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharModais() {
+            console.log('Closing all modals');
+            document.querySelectorAll('.modal-base').forEach(modal => {
+                modal.classList.remove('show');
+            });
+            document.body.style.overflow = '';
+            alunoIdParaExcluir = null;
+        }
+
         // Dados dos alunos
-        let alunos = [
+        const alunos = [
             <?php
             try {
                 $dados = $select_model->alunos_aptos_curso();
@@ -40,17 +69,17 @@ if (isset($_POST['layout'])) {
                         $index++;
                         echo "{
                             id: " . $dado['id'] . ",
-                            nome: \"" . addslashes($dado['nome']) . "\",
-                            contato: \"" . addslashes($dado['contato'] ?: '-') . "\",
-                            medias: \"" . addslashes($dado['medias'] ?: '-') . "\",
-                            email: \"" . addslashes($dado['email'] ?: '-') . "\",
-                            projetos: \"" . addslashes($dado['projetos'] ?: '-') . "\",
-                            perfil_opc1: \"" . addslashes($dado['perfil_opc1']) . "\",
-                            perfil_opc2: \"" . addslashes($dado['perfil_opc2']) . "\",
-                            ocorrencia: \"" . addslashes($dado['ocorrencia'] ?: '-') . "\",
+                            nome: '" . addslashes($dado['nome']) . "',
+                            contato: '" . addslashes($dado['contato'] ?: '-') . "',
+                            medias: '" . addslashes($dado['medias'] ?: '-') . "',
+                            email: '" . addslashes($dado['email'] ?: '-') . "',
+                            projetos: '" . addslashes($dado['projetos'] ?: '-') . "',
+                            perfil_opc1: '" . addslashes($dado['perfil_opc1']) . "',
+                            perfil_opc2: '" . addslashes($dado['perfil_opc2']) . "',
+                            ocorrencia: '" . addslashes($dado['ocorrencia'] ?: '-') . "',
                             custeio: " . $dado['custeio'] . ",
-                            entregas_individuais: \"" . (isset($dado['entregas_individuais']) ? addslashes($dado['entregas_individuais']) : '-') . "\",
-                            entregas_grupo: \"" . (isset($dado['entregas_grupo']) ? addslashes($dado['entregas_grupo']) : '-') . "\"
+                            entregas_individuais: '" . (isset($dado['entregas_individuais']) ? addslashes($dado['entregas_individuais']) : '-') . "',
+                            entregas_grupo: '" . (isset($dado['entregas_grupo']) ? addslashes($dado['entregas_grupo']) : '-') . "'
                         }" . ($index < $total ? ',' : '');
                     }
                 }
@@ -60,8 +89,12 @@ if (isset($_POST['layout'])) {
             ?>
         ];
 
-        // Função para ver detalhes
+        // Variável global para controle de exclusão
+        let alunoIdParaExcluir = null;
+
+        // Função para ver detalhes do aluno
         function verDetalhes(id) {
+            console.log('Viewing details for ID:', id);
             const aluno = alunos.find(a => a.id === parseInt(id));
             if (aluno) {
                 const detalhesContent = document.getElementById('detalhesContent');
@@ -144,8 +177,9 @@ if (isset($_POST['layout'])) {
             }
         }
 
-        // Função para abrir o modal de edição
+        // Função para editar aluno
         function editarAluno(id) {
+            console.log('Editing student with ID:', id);
             const aluno = alunos.find(a => a.id === parseInt(id));
             if (aluno) {
                 document.getElementById('editAlunoId').value = aluno.id;
@@ -168,349 +202,118 @@ if (isset($_POST['layout'])) {
             }
         }
 
-        // Função para abrir o modal de adicionar aluno
-        function abrirAdicionarAluno() {
-            document.getElementById('addAlunoForm').reset();
-            const modal = document.getElementById('adicionarAlunoModal');
-            modal.classList.add('show');
-        }
-
-        // Função para deletar aluno
-        function deletarAluno(id) {
-            if (confirm('Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita.')) {
-                window.location.href = `../controllers/controller_editar_excluir.php?id_aluno=${id}`;
-            }
-        }
-
-        function abrirModalCadastro() {
-            document.getElementById('modalTitle').textContent = 'Cadastrar Novo Aluno';
-            document.getElementById('alunoForm').reset(); // Limpa o formulário
-            document.getElementById('formAcao').value = 'cadastrar_aluno'; // Define a ação para cadastrar
-            document.getElementById('alunoId').value = ''; // Garante que não há ID para cadastro
-            document.getElementById('alunoModal').classList.add('show');
-        }
-
+        // Função para confirmar exclusão
         function confirmarExclusao(id) {
+            console.log('Confirming deletion for ID:', id);
             alunoIdParaExcluir = id;
-            // Opcional: pode-se adicionar o nome do aluno no modal de confirmação
-            // const aluno = alunos.find(a => a.id === id);
-            // if(aluno) { document.getElementById('nomeAlunoParaExcluir').textContent = aluno.nome; }
             document.getElementById('confirmacaoExclusaoModal').classList.add('show');
         }
 
+        // Função para efetivar a exclusão
         function efetivarExclusaoAluno() {
-            if (alunoIdParaExcluir === null) return;
-
-            console.log('Simulando exclusão do aluno com ID:', alunoIdParaExcluir);
-            // TODO: Implementar chamada AJAX para o backend para excluir o aluno
-            // Exemplo: fetch('../controllers/controller.php', { 
-            // method: 'POST', 
-            // headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            // body: `acao=excluir_aluno&id=${alunoIdParaExcluir}`
-            // })
-            // .then(response => response.json())
-            // .then(data => { console.log(data); /* Tratar resposta */ });
-
-            // Atualiza a lista de alunos na interface (simulação)
-            alunos = alunos.filter(a => a.id !== alunoIdParaExcluir);
-            aplicarFiltros(); // Re-renderiza a tabela/cards
-
-            document.getElementById('confirmacaoExclusaoModal').classList.remove('show');
-            alunoIdParaExcluir = null;
-            // Opcional: Adicionar um toast de sucesso
-            // showToast('Aluno excluído com sucesso!', 'success'); 
+            console.log('Effecting deletion for ID:', alunoIdParaExcluir);
+            if (alunoIdParaExcluir) {
+                window.location.href = `../controllers/controller_editar_excluir.php?id_aluno=${alunoIdParaExcluir}`;
+            }
         }
 
-        // Função para renderizar a tabela de alunos (desktop)
-        function renderizarTabelaDesktop(alunosFiltrados = alunos) {
-            const tbody = document.getElementById('alunosTableBody');
-            tbody.innerHTML = '';
+        // Função para adicionar event listeners aos botões
+        function adicionarEventListeners() {
+            console.log('Adding event listeners to buttons');
+            
+            // Event listeners para os botões de ação na tabela desktop
+            document.querySelectorAll('.ver-detalhes-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.getAttribute('data-id');
+                    console.log('View details clicked for ID:', id);
+                    verDetalhes(id);
+                });
+            });
 
-            alunosFiltrados.forEach((aluno, index) => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-dark-50 transition-colors slide-up';
-                tr.style.animationDelay = `${index * 50}ms`;
-                tr.innerHTML = `
-                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
-                    <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
-                        <button class="ver-detalhes-btn text-blue-400 hover:text-blue-300 mr-2 transition-colors" data-id="${aluno.id}">
-                            <i class="fas fa-info-circle"></i>
-                        </button>
-                        <button class="editar-aluno-btn text-primary-400 hover:text-primary-300 mr-2 transition-colors" data-id="${aluno.id}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="${aluno.id}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
+            document.querySelectorAll('.editar-aluno-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.getAttribute('data-id');
+                    console.log('Edit clicked for ID:', id);
+                    editarAluno(id);
+                });
+            });
+
+            document.querySelectorAll('.deletar-aluno-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.getAttribute('data-id');
+                    console.log('Delete clicked for ID:', id);
+                    confirmarExclusao(id);
+                });
             });
         }
 
-        // Função para renderizar os cards de alunos (mobile)
-        function renderizarCardsMobile(alunosFiltrados = alunos) {
-            const container = document.getElementById('alunosMobileCards');
-            container.innerHTML = '';
-
-            alunosFiltrados.forEach(aluno => {
-                const card = document.createElement('div');
-                card.className = 'mobile-card bg-dark-300 rounded-lg p-4 shadow-md';
-
-                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'area-desenvolvimento' :
-                    aluno.perfil_opc1 === 'design' ? 'area-design' :
-                    aluno.perfil_opc1 === 'midia' ? 'area-midia' :
-                    'area-redes';
-                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'area-desenvolvimento' :
-                    aluno.perfil_opc2 === 'design' ? 'area-design' :
-                    aluno.perfil_opc2 === 'midia' ? 'area-midia' :
-                    'area-redes';
-
-                card.innerHTML = `
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-medium text-white">${aluno.nome}</h3>
-                        <div class="flex items-center gap-2">
-                            <button class="ver-detalhes-btn text-blue-400 hover:text-blue-300 transition-colors" data-id="${aluno.id}">
-                                <i class="fas fa-info-circle"></i>
-                            </button>
-                            <button class="editar-aluno-btn text-green-400 hover:text-green-300 transition-colors" data-id="${aluno.id}">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="${aluno.id}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div id="detalhes-mobile-${aluno.id}" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <span class="text-gray-400 text-sm">Contato:</span>
-                                <p class="text-white">${aluno.contato}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Médias:</span>
-                                <p class="text-white">${aluno.medias}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Email:</span>
-                                <p class="text-white">${aluno.email}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Projetos:</span>
-                                <p class="text-white">${aluno.projetos}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Opção 2:</span>
-                                <p class="text-white">
-                                    <span class="status-pill ${areaClassOpc2}">
-                                        <i class="fas fa-${
-                                            aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
-                                            aluno.perfil_opc2 === 'design' ? 'paint-brush' :
-                                            aluno.perfil_opc2 === 'midia' ? 'video' :
-                                            'network-wired'
-                                        } text-xs mr-1"></i>
-                                        ${aluno.perfil_opc2}
-                                    </span>
-                                </p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Ocorrência:</span>
-                                <p class="text-white">${aluno.ocorrencia}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Custeio:</span>
-                                <p class="text-white">${aluno.custeio == 1 ? 'Sim' : 'Não'}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Entregas Individuais:</span>
-                                <p class="text-white">${aluno.entregas_individuais}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Entregas do Grupo:</span>
-                                <p class="text-white">${aluno.entregas_grupo}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        // Função para aplicar filtros
-        function aplicarFiltros() {
-            const searchTerm = document.getElementById('searchAluno').value.toLowerCase().trim();
-            const alunosFiltrados = alunos.filter(aluno => {
-                const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
-                return matchSearch;
-            });
-
-            renderizarTabelaDesktop(alunosFiltrados);
-            renderizarCardsMobile(alunosFiltrados);
-        }
-
-        // Inicialização quando o documento estiver pronto
+        // Initialize when document is ready
         document.addEventListener('DOMContentLoaded', function() {
-            // Inicializar tabela e cards
-            renderizarTabelaDesktop();
-            renderizarCardsMobile();
-
-            // Event listeners para filtros
-            let searchTimeout;
-            document.getElementById('searchAluno').addEventListener('input', (e) => {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    aplicarFiltros();
-                }, 300);
-            });
-
-            // Event delegation for desktop table
-            document.getElementById('alunosTableBody').addEventListener('click', (e) => {
-                const verDetalhesBtn = e.target.closest('.ver-detalhes-btn');
-                const editarAlunoBtn = e.target.closest('.editar-aluno-btn');
-                const deletarAlunoBtn = e.target.closest('.deletar-aluno-btn');
-
-                if (verDetalhesBtn) {
-                    const id = verDetalhesBtn.getAttribute('data-id');
-                    verDetalhes(id);
-                }
-
-                if (editarAlunoBtn) {
-                    const id = editarAlunoBtn.getAttribute('data-id');
-                    editarAluno(id);
-                }
-
-                if (deletarAlunoBtn) {
-                    const id = deletarAlunoBtn.getAttribute('data-id');
-                    deletarAluno(id);
-                }
-            });
-
-            // Event delegation for mobile cards
-            document.getElementById('alunosMobileCards').addEventListener('click', (e) => {
-                const verDetalhesBtn = e.target.closest('.ver-detalhes-btn');
-                const editarAlunoBtn = e.target.closest('.editar-aluno-btn');
-                const deletarAlunoBtn = e.target.closest('.deletar-aluno-btn');
-
-                if (verDetalhesBtn) {
-                    const id = verDetalhesBtn.getAttribute('data-id');
-                    verDetalhes(id);
-                }
-
-                if (editarAlunoBtn) {
-                    const id = editarAlunoBtn.getAttribute('data-id');
-                    editarAluno(id);
-                }
-
-                if (deletarAlunoBtn) {
-                    const id = deletarAlunoBtn.getAttribute('data-id');
-                    deletarAluno(id);
-                }
-            });
-
-            // Modal de Detalhes
-            document.getElementById('fecharDetalhesBtn').addEventListener('click', () => {
-                const modal = document.getElementById('detalhesModal');
-                modal.classList.remove('show');
-            });
-
-            document.getElementById('detalhesModal').addEventListener('click', (e) => {
-                if (e.target === document.getElementById('detalhesModal')) {
-                    const modal = document.getElementById('detalhesModal');
-                    modal.classList.remove('show');
-                }
-            });
-
-            // Modal de Edição
-            document.getElementById('fecharEditarBtn').addEventListener('click', () => {
-                const modal = document.getElementById('editarAlunoModal');
-                modal.classList.remove('show');
-            });
-
-            document.getElementById('editarAlunoModal').addEventListener('click', (e) => {
-                if (e.target === document.getElementById('editarAlunoModal')) {
-                    const modal = document.getElementById('editarAlunoModal');
-                    modal.classList.remove('show');
-                }
-            });
-
-            // Modal de Adicionar
-            document.getElementById('fecharAdicionarBtn').addEventListener('click', () => {
-                const modal = document.getElementById('adicionarAlunoModal');
-                modal.classList.remove('show');
-            });
-
-            document.getElementById('adicionarAlunoModal').addEventListener('click', (e) => {
-                if (e.target === document.getElementById('adicionarAlunoModal')) {
-                    const modal = document.getElementById('adicionarAlunoModal');
-                    modal.classList.remove('show');
-                }
-            });
-
-            // Event listener para o botão "Cadastrar Novo Aluno"
-            document.getElementById('btnCadastrarAluno').addEventListener('click', abrirModalCadastro);
-
-            // Event listeners para o modal de confirmação de exclusão
-            const confirmacaoModal = document.getElementById('confirmacaoExclusaoModal');
-            document.getElementById('cancelarExclusaoBtn').addEventListener('click', () => {
-                confirmacaoModal.classList.remove('show');
-                alunoIdParaExcluir = null;
-            });
-            document.getElementById('confirmarExclusaoBtn').addEventListener('click', efetivarExclusaoAluno);
-            confirmacaoModal.addEventListener('click', (e) => {
-                if (e.target === confirmacaoModal) {
-                    confirmacaoModal.classList.remove('show');
-                    alunoIdParaExcluir = null;
-                }
-            });
-
-            // Verificar tamanho da tela e ajustar renderização
-            function checkScreenSize() {
-                if (window.innerWidth < 768) {
-                    document.querySelector('.desktop-table').style.display = 'none';
-                    document.querySelector('.mobile-cards-container').style.display = 'block';
-                } else {
-                    document.querySelector('.desktop-table').style.display = 'block';
-                    document.querySelector('.mobile-cards-container').style.display = 'none';
-                }
+            console.log('Document ready, initializing...');
+            
+            // Add event listener for the "Add Student" button
+            const addButton = document.getElementById('addAlunoBtn');
+            if (addButton) {
+                console.log('Add button found, adding listener');
+                addButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Add button clicked');
+                    abrirAdicionarAluno();
+                });
+            } else {
+                console.error('Add button not found');
             }
 
-            window.addEventListener('resize', checkScreenSize);
-            checkScreenSize();
+            // Initialize table and add event listeners
+            if (alunos && alunos.length > 0) {
+                console.log('Initializing tables with', alunos.length, 'students');
+                renderizarTabelaDesktop();
+                renderizarCardsMobile();
+            } else {
+                console.log('No students found in data');
+            }
+            
+            // Add event listeners for all close buttons
+            document.querySelectorAll('.close-modal, #fecharAdicionarBtn, #cancelarExclusaoBtn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Close button clicked');
+                    fecharModais();
+                });
+            });
+
+            // Add event listeners for modal background clicks
+            document.querySelectorAll('.modal-base').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        console.log('Modal background clicked');
+                        fecharModais();
+                    }
+                });
+            });
+
+            // Add ESC key listener
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    console.log('ESC key pressed');
+                    fecharModais();
+                }
+            });
+
+            // Initialize other event listeners
+            adicionarEventListeners();
         });
 
-        // Função para alternar detalhes na tabela desktop
-        function toggleDetalhes(id) {
-            const detalhesRow = document.getElementById(`detalhes-${id}`);
-            const button = detalhesRow.previousElementSibling.querySelector('button');
-            const icon = button.querySelector('i');
-            
-            if (detalhesRow.classList.contains('hidden')) {
-                detalhesRow.classList.remove('hidden');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
-            } else {
-                detalhesRow.classList.add('hidden');
-                icon.classList.remove('fa-chevron-up');
-                icon.classList.add('fa-chevron-down');
-            }
-        }
-
-        // Função para alternar detalhes nos cards mobile
-        function toggleDetalhesMobile(id) {
-            const detalhesDiv = document.getElementById(`detalhes-mobile-${id}`);
-            const button = detalhesDiv.parentElement.querySelector('button');
-            const icon = button.querySelector('i');
-            
-            if (detalhesDiv.classList.contains('hidden')) {
-                detalhesDiv.classList.remove('hidden');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
-            } else {
-                detalhesDiv.classList.add('hidden');
-                icon.classList.remove('fa-chevron-up');
-                icon.classList.add('fa-chevron-down');
-            }
-        }
+        // Expose functions to global scope
+        window.abrirAdicionarAluno = abrirAdicionarAluno;
+        window.fecharModais = fecharModais;
+        window.verDetalhes = verDetalhes;
+        window.editarAluno = editarAluno;
+        window.confirmarExclusao = confirmarExclusao;
+        window.efetivarExclusaoAluno = efetivarExclusaoAluno;
     </script>
 
     <script>
@@ -1064,38 +867,58 @@ if (isset($_POST['layout'])) {
 
         /* Estilos para os modais */
         .modal-base {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.7);
             display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 50;
-            transition: all 0.3s ease-in-out;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
         }
 
         .modal-base.show {
-            display: flex;
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         .modal-content {
-            background: linear-gradient(135deg, rgba(49, 49, 49, 0.95) 0%, rgba(37, 37, 37, 0.95) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
             max-height: 90vh;
             overflow-y: auto;
-            position: relative;
-            z-index: 1000;
-            border-radius: 12px;
-            padding: 2rem;
-            width: 100%;
-            max-width: 32rem;
-            margin: 1rem;
+        }
+
+        .modal-base.show .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.4s ease-out forwards;
         }
 
         .mobile-card .custom-btn-primary {
@@ -1106,6 +929,85 @@ if (isset($_POST['layout'])) {
             width: 100%;
             justify-content: center;
         }
+
+        /* Estilos para botões */
+        .custom-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+        }
+
+        .custom-btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+        }
+
+        .custom-btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+
+        .custom-btn-secondary {
+            background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+            color: white;
+        }
+
+        .custom-btn-secondary:hover {
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+        }
+
+        .custom-btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .custom-btn-danger:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+
+        .btn-icon {
+            font-size: 0.875rem;
+        }
+
+        /* Botões personalizados */
+        .custom-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .custom-btn-primary {
+            background: linear-gradient(135deg, #007A33 0%, #009940 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 122, 51, 0.3);
+        }
+
+        .custom-btn-primary:hover {
+            background: linear-gradient(135deg, #00993F 0%, #00B64B 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 122, 51, 0.4);
+        }
+
+        .custom-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
     </style>
 </head>
 
@@ -1252,7 +1154,7 @@ if (isset($_POST['layout'])) {
                             <i class="fas fa-search search-icon"></i>
                             <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="custom-input pl-10 pr-4 py-2.5 w-full">
                         </div>
-                        <button onclick="abrirAdicionarAluno()" class="custom-btn custom-btn-primary">
+                        <button type="button" class="custom-btn custom-btn-primary" id="addAlunoBtn">
                             <i class="fas fa-plus btn-icon"></i>
                             <span>Adicionar Aluno</span>
                         </button>
@@ -1278,13 +1180,13 @@ if (isset($_POST['layout'])) {
                                 <tr class="hover:bg-dark-50 transition-colors slide-up" style="animation-delay: <?= $index * 50 ?>ms;">
                                     <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
                                     <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
-                                        <button class="ver-detalhes-btn text-blue-400 hover:text-blue-300 mr-2 transition-colors" data-id="<?= $dado['id'] ?>">
+                                        <button type="button" class="ver-detalhes-btn text-blue-400 hover:text-blue-300 mr-2 transition-colors" data-id="<?= $dado['id'] ?>">
                                             <i class="fas fa-info-circle"></i>
                                         </button>
-                                        <button class="editar-aluno-btn text-primary-400 hover:text-primary-300 mr-2 transition-colors" data-id="<?= $dado['id'] ?>">
+                                        <button type="button" class="editar-aluno-btn text-primary-400 hover:text-primary-300 mr-2 transition-colors" data-id="<?= $dado['id'] ?>">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="<?= $dado['id'] ?>">
+                                        <button type="button" class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="<?= $dado['id'] ?>">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>
@@ -1421,28 +1323,32 @@ if (isset($_POST['layout'])) {
         </div>
 
         <!-- Modal de Detalhes -->
-        <div id="detalhesModal" class="modal-base">
-            <div class="modal-content">
-                <h2 class="text-2xl font-bold mb-6 text-white">Detalhes do Aluno</h2>
-                <div id="detalhesContent" class="space-y-4 text-sm">
-                    <!-- Conteúdo será preenchido via JavaScript -->
-                </div>
-                <div class="mt-6 flex justify-end">
-                    <button id="fecharDetalhesBtn" class="custom-btn custom-btn-secondary">
-                        <i class="fas fa-times btn-icon"></i>
-                        <span>Fechar</span>
+        <div id="detalhesModal" class="modal-base fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+            <div class="modal-content bg-dark-400 rounded-lg shadow-xl max-w-2xl mx-auto mt-20 p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">Detalhes do Aluno</h2>
+                    <button type="button" class="close-modal text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-times"></i>
                     </button>
+                </div>
+                <div id="detalhesContent" class="space-y-4">
+                    <!-- O conteúdo será preenchido dinamicamente -->
                 </div>
             </div>
         </div>
 
         <!-- Modal de Edição -->
-        <div id="editarAlunoModal" class="modal-base">
-            <div class="modal-content">
-                <h2 class="text-2xl font-bold mb-6 text-white">Editar Aluno</h2>
-                <form action="../controllers/controller.php" method="post" class="space-y-4">
+        <div id="editarAlunoModal" class="modal-base fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+            <div class="modal-content bg-dark-400 rounded-lg shadow-xl max-w-2xl mx-auto mt-20 p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">Editar Aluno</h2>
+                    <button type="button" class="close-modal text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="editAlunoForm" action="../controllers/controller_editar_excluir.php" method="post" class="space-y-4">
                     <input type="hidden" name="acao" value="editar">
-                    <input type="hidden" id="editAlunoId" name="id">
+                    <input type="hidden" id="editAlunoId" name="id_aluno">
                     <div>
                         <label for="editNome" class="block text-sm font-medium text-gray-300">Nome</label>
                         <input type="text" id="editNome" name="nome" required class="custom-input">
@@ -1501,12 +1407,12 @@ if (isset($_POST['layout'])) {
                         <input type="text" id="editEntregasGrupo" name="entregas_grupo" class="custom-input">
                     </div>
                     <div class="mt-6 flex justify-end gap-3">
-                        <button type="button" id="fecharEditarBtn" class="custom-btn custom-btn-secondary">
-                            <i class="fas fa-times btn-icon"></i>
+                        <button type="button" class="close-modal custom-btn custom-btn-secondary">
+                            <i class="fas fa-times"></i>
                             <span>Cancelar</span>
                         </button>
                         <button type="submit" class="custom-btn custom-btn-primary">
-                            <i class="fas fa-save btn-icon"></i>
+                            <i class="fas fa-save"></i>
                             <span>Salvar</span>
                         </button>
                     </div>
@@ -1515,9 +1421,14 @@ if (isset($_POST['layout'])) {
         </div>
 
         <!-- Modal de Adicionar Aluno -->
-        <div id="adicionarAlunoModal" class="modal-base">
-            <div class="modal-content">
-                <h2 class="text-2xl font-bold mb-6 text-white">Adicionar Aluno</h2>
+        <div id="adicionarAlunoModal" class="modal-base fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+            <div class="modal-content bg-dark-400 rounded-lg shadow-xl max-w-2xl mx-auto mt-20 p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">Adicionar Aluno</h2>
+                    <button type="button" class="close-modal text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
                 <form id="addAlunoForm" action="../controllers/controller_adicionar.php" method="post" class="space-y-4">
                     <input type="hidden" name="acao" value="adicionar">
                     <div>
@@ -1590,85 +1501,271 @@ if (isset($_POST['layout'])) {
                 </form>
             </div>
         </div>
+
+        <!-- Modal de Confirmação de Exclusão -->
+        <div id="confirmacaoExclusaoModal" class="modal-base fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+            <div class="modal-content bg-dark-400 rounded-lg shadow-xl max-w-md mx-auto mt-20 p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">Confirmar Exclusão</h2>
+                    <button type="button" class="close-modal text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <p class="text-gray-300 mb-6">Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita.</p>
+                <div class="flex justify-end gap-3">
+                    <button type="button" id="cancelarExclusaoBtn" class="custom-btn custom-btn-secondary">
+                        <i class="fas fa-times"></i>
+                        <span>Cancelar</span>
+                    </button>
+                    <button type="button" id="confirmarExclusaoBtn" class="custom-btn custom-btn-danger">
+                        <i class="fas fa-trash"></i>
+                        <span>Excluir</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Sidebar mobile toggle
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const closeSidebar = document.getElementById('closeSidebar');
-        const mobileSidebar = document.getElementById('mobileSidebar');
+        // Variável global para controle de exclusão
+        window.alunoIdParaExcluir = null;
 
-        sidebarToggle.addEventListener('click', () => {
-            mobileSidebar.classList.remove('-translate-x-full');
-            document.body.style.overflow = 'hidden';
-        });
+        // Função para adicionar event listeners aos botões
+        function adicionarEventListeners() {
+            // Event listeners para os botões de ação na tabela desktop
+            document.querySelectorAll('.ver-detalhes-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    window.verDetalhes(this.getAttribute('data-id'));
+                });
+            });
 
-        closeSidebar.addEventListener('click', () => {
-            mobileSidebar.classList.add('-translate-x-full');
-            document.body.style.overflow = 'auto';
-        });
+            document.querySelectorAll('.editar-aluno-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    window.editarAluno(this.getAttribute('data-id'));
+                });
+            });
 
-        mobileSidebar.addEventListener('click', (e) => {
-            if (e.target === mobileSidebar) {
-                mobileSidebar.classList.add('-translate-x-full');
-                document.body.style.overflow = 'auto';
+            document.querySelectorAll('.deletar-aluno-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    window.confirmarExclusao(this.getAttribute('data-id'));
+                });
+            });
+
+            // Event listeners para fechar modais
+            document.querySelectorAll('.modal-base').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        window.fecharModais();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', window.fecharModais);
+            });
+
+            // Event listener para o botão de confirmar exclusão
+            const confirmarExclusaoBtn = document.getElementById('confirmarExclusaoBtn');
+            if (confirmarExclusaoBtn) {
+                confirmarExclusaoBtn.addEventListener('click', window.efetivarExclusaoAluno);
             }
-        });
 
-        // Função para alternar detalhes na tabela desktop
-        function toggleDetalhes(id) {
-            const detalhesRow = document.getElementById(`detalhes-${id}`);
-            const button = detalhesRow.previousElementSibling.querySelector('button');
-            const icon = button.querySelector('i');
-            
-            if (detalhesRow.classList.contains('hidden')) {
-                detalhesRow.classList.remove('hidden');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
-            } else {
-                detalhesRow.classList.add('hidden');
-                icon.classList.remove('fa-chevron-up');
-                icon.classList.add('fa-chevron-down');
+            // Event listener para o botão de cancelar exclusão
+            const cancelarExclusaoBtn = document.getElementById('cancelarExclusaoBtn');
+            if (cancelarExclusaoBtn) {
+                cancelarExclusaoBtn.addEventListener('click', window.fecharModais);
             }
+
+            // Tecla ESC para fechar modais
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    window.fecharModais();
+                }
+            });
         }
 
-        // Função para alternar detalhes nos cards mobile
-        function toggleDetalhesMobile(id) {
-            const detalhesDiv = document.getElementById(`detalhes-mobile-${id}`);
-            const button = detalhesDiv.parentElement.querySelector('button');
-            const icon = button.querySelector('i');
-            
-            if (detalhesDiv.classList.contains('hidden')) {
-                detalhesDiv.classList.remove('hidden');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
-            } else {
-                detalhesDiv.classList.add('hidden');
-                icon.classList.remove('fa-chevron-up');
-                icon.classList.add('fa-chevron-down');
+        // Função para renderizar a tabela de alunos (desktop)
+        function renderizarTabelaDesktop(alunosFiltrados = alunos) {
+            console.log('Rendering desktop table');
+            const tbody = document.getElementById('alunosTableBody');
+            if (!tbody) {
+                console.error('Table body element not found');
+                return;
             }
+            
+            tbody.innerHTML = '';
+
+            if (!Array.isArray(alunosFiltrados) || alunosFiltrados.length === 0) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = '<td colspan="2" class="px-3 py-4 text-center text-sm text-gray-400">Nenhum aluno encontrado</td>';
+                tbody.appendChild(tr);
+                return;
+            }
+
+            alunosFiltrados.forEach((aluno, index) => {
+                if (!aluno || !aluno.nome) {
+                    console.error('Invalid student data:', aluno);
+                    return;
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-dark-50 transition-colors slide-up';
+                tr.style.animationDelay = `${index * 50}ms`;
+                tr.innerHTML = `
+                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
+                        <button type="button" class="ver-detalhes-btn text-blue-400 hover:text-blue-300 mr-2 transition-colors" data-id="${aluno.id}">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button type="button" class="editar-aluno-btn text-primary-400 hover:text-primary-300 mr-2 transition-colors" data-id="${aluno.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="${aluno.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Re-add event listeners after rendering
+            adicionarEventListeners();
         }
 
-        document.getElementById('cancelarBtn').addEventListener('click', () => {
-            document.getElementById('alunoModal').classList.remove('show');
-        });
+        // Função para renderizar os cards de alunos (mobile)
+        function renderizarCardsMobile(alunosFiltrados = alunos) {
+            console.log('Rendering mobile cards');
+            const container = document.getElementById('alunosMobileCards');
+            if (!container) {
+                console.error('Mobile cards container not found');
+                return;
+            }
+            container.innerHTML = '';
 
-        document.getElementById('alunoModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('alunoModal')) {
-                document.getElementById('alunoModal').classList.remove('show');
+            if (!Array.isArray(alunosFiltrados) || alunosFiltrados.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-400 py-4">Nenhum aluno encontrado</div>';
+                return;
+            }
+
+            alunosFiltrados.forEach(aluno => {
+                const card = document.createElement('div');
+                card.className = 'mobile-card bg-dark-300 rounded-lg p-4 shadow-md';
+
+                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'area-desenvolvimento' :
+                    aluno.perfil_opc1 === 'design' ? 'area-design' :
+                    aluno.perfil_opc1 === 'midia' ? 'area-midia' :
+                    'area-redes';
+                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'area-desenvolvimento' :
+                    aluno.perfil_opc2 === 'design' ? 'area-design' :
+                    aluno.perfil_opc2 === 'midia' ? 'area-midia' :
+                    'area-redes';
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-white">${aluno.nome}</h3>
+                        <div class="flex items-center gap-2">
+                            <button class="ver-detalhes-btn text-blue-400 hover:text-blue-300 transition-colors" data-id="${aluno.id}">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                            <button class="editar-aluno-btn text-green-400 hover:text-green-300 transition-colors" data-id="${aluno.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="${aluno.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="detalhes-mobile-${aluno.id}" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <span class="text-gray-400 text-sm">Contato:</span>
+                                <p class="text-white">${aluno.contato}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Médias:</span>
+                                <p class="text-white">${aluno.medias}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Email:</span>
+                                <p class="text-white">${aluno.email}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Projetos:</span>
+                                <p class="text-white">${aluno.projetos}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Opção 2:</span>
+                                <p class="text-white">
+                                    <span class="status-pill ${areaClassOpc2}">
+                                        <i class="fas fa-${
+                                            aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
+                                            aluno.perfil_opc2 === 'design' ? 'paint-brush' :
+                                            aluno.perfil_opc2 === 'midia' ? 'video' :
+                                            'network-wired'
+                                        } text-xs mr-1"></i>
+                                        ${aluno.perfil_opc2}
+                                    </span>
+                                </p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Ocorrência:</span>
+                                <p class="text-white">${aluno.ocorrencia}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Custeio:</span>
+                                <p class="text-white">${aluno.custeio == 1 ? 'Sim' : 'Não'}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Entregas Individuais:</span>
+                                <p class="text-white">${aluno.entregas_individuais}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Entregas do Grupo:</span>
+                                <p class="text-white">${aluno.entregas_grupo}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Re-add event listeners after rendering
+            adicionarEventListeners();
+        }
+
+        // Função para aplicar filtros
+        function aplicarFiltros() {
+            const searchTerm = document.getElementById('searchAluno').value.toLowerCase().trim();
+            const alunosFiltrados = alunos.filter(aluno => {
+                const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
+                return matchSearch;
+            });
+
+            renderizarTabelaDesktop(alunosFiltrados);
+            renderizarCardsMobile(alunosFiltrados);
+        }
+
+        // Event listener for search
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchAluno');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const termo = this.value.toLowerCase();
+                    const alunosFiltrados = alunos.filter(aluno => 
+                        aluno.nome.toLowerCase().includes(termo)
+                    );
+                    renderizarTabelaDesktop(alunosFiltrados);
+                    renderizarCardsMobile(alunosFiltrados);
+                });
             }
         });
 
-        document.getElementById('fecharDetalhesBtn').addEventListener('click', () => {
-            document.getElementById('detalhesModal').classList.remove('show');
-        });
-
-        document.getElementById('detalhesModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('detalhesModal')) {
-                document.getElementById('detalhesModal').classList.remove('show');
-            }
-        });
+        // Expose additional functions to global scope
+        window.renderizarTabelaDesktop = renderizarTabelaDesktop;
+        window.renderizarCardsMobile = renderizarCardsMobile;
+        window.aplicarFiltros = aplicarFiltros;
     </script>
 </body>
 
+</html>
 </html>
