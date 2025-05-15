@@ -64,7 +64,7 @@ class ConcedenteController {
         );
 
         if ($stmt->execute()) {
-            echo "Novo registro criado com sucesso";
+            header("Location: ../../views/success.php");
         } else {
             echo "Erro: " . $stmt->error;
         }
