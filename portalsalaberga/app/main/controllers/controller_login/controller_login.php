@@ -1,13 +1,11 @@
 <?php
+print_r($_POST);
 
-/*if (isset($_GET['login']) && $_GET['login'] == 'a') {
-    header('Location: ../../views/aluno/subsistema_aluno.php');
+if (isset($_POST['email']) && $_POST['email'] == 'concedente@concedente.com' && isset($_POST['senha']) && $_POST['senha'] == 'paocomovo') {
+    header('Location: ../../views/subsytem/subsistema_concedente.php');
     exit();
-} else if (isset($_GET['login']) && $_GET['login'] == 'p') {
-    header('Location: ../../views/professor/subsistema_professor.php');
-    exit();
-}*/
-
+}
+/*
 if (isset($_GET['sair'])) {
     // Guarda o valor da sessão 'recsenha'
     $recsenha = $_SESSION['recsenha'] ?? null;
@@ -42,5 +40,5 @@ if (isset($_POST['login']) && isset($_POST['email']) && isset($_POST['senha']) &
     header('Location: ../../views/autenticacao/login.php?login=erro');
     exit();
 } 
-
+*/
 ?>
