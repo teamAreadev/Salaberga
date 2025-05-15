@@ -13,5 +13,5 @@ try {
     $conexao = new PDO($dsn, $username, $password);
     
 } finally {
-    echo "Connection error: " . $exception->getMessage();
+    
 }

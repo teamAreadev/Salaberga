@@ -718,10 +718,7 @@
                         <textarea name="observacoes" class="custom-input w-full" rows="2" placeholder="Observações sobre a concedente"></textarea>
                     </div>
                     <div class="flex justify-end gap-4 mt-8">
-                        <button type="reset" class="custom-btn custom-btn-secondary">
-                            <i class="fas fa-times btn-icon"></i>
-                            Cancelar
-                        </button>
+                       
                         <button type="submit" class="custom-btn custom-btn-primary">
                             <i class="fas fa-save btn-icon"></i>
                             Salvar

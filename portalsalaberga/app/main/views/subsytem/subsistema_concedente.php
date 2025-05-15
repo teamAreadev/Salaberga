@@ -1105,7 +1105,7 @@ if (isset($_GET['sair'])) {
                         <img src="https://i.postimg.cc/CMX7vRKh/aviso-1.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
                     <h3 class="app-name">Cadastro de Concedentes</h3>
-                    <span class="category-tag">Carreira</span>
+                    <span class="category-tag">Formulário</span>
                 </div>
             </a>
 
@@ -1115,7 +1115,7 @@ if (isset($_GET['sair'])) {
                         <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
                     <h3 class="app-name">Modelo de TCE</h3>
-                    <span class="category-tag">Formulário</span>
+                    <span class="category-tag">Arquivo</span>
                 </div>
             </a>
 
@@ -1125,7 +1125,7 @@ if (isset($_GET['sair'])) {
                         <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
                     <h3 class="app-name">Modelo de TRE</h3>
-                    <span class="category-tag">Formulário</span>
+                    <span class="category-tag">Arquivo</span>
                 </div>
             </a>
             

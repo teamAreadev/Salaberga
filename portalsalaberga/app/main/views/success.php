@@ -219,7 +219,7 @@
       </div>
       <h1>Formulário enviado com sucesso!</h1>
       <p class="message">
-        <span class="congratulations">Parabéns!</span>
+        <span class="congratulations">Obrigado!</span>
         <br>
         Sua resposta foi processada e confirmada em nosso sistema.
       </p>
@@ -237,7 +237,7 @@
   <script>
     function redirect() {
       setTimeout(() => {
-        window.location = '../index.php';
+        window.location = 'subsytem/subsistema_concedente.php';
       }, 3000);
     }
     redirect();

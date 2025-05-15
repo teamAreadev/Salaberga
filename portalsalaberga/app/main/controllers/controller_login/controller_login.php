@@ -1,11 +1,11 @@
 <?php
-print_r($_POST);
+
 
 if (isset($_POST['email']) && $_POST['email'] == 'concedente@concedente.com' && isset($_POST['senha']) && $_POST['senha'] == 'paocomovo') {
     header('Location: ../../views/subsytem/subsistema_concedente.php');
     exit();
 }
-/*
+
 if (isset($_GET['sair'])) {
     // Guarda o valor da sessão 'recsenha'
     $recsenha = $_SESSION['recsenha'] ?? null;
@@ -13,7 +13,7 @@ if (isset($_GET['sair'])) {
     // Destroi todas as sessões
     session_unset();
 
-    // Restaura apenas a sessão 'recsenha' se ela existia
+    // Restaura apenas a sessão 'recsenha' se ela existias
     if ($recsenha !== null) {
         $_SESSION['recsenha'] = $recsenha;
     }
@@ -35,10 +35,13 @@ if (isset($_POST['login']) && isset($_POST['email']) && isset($_POST['senha']) &
     } else if ($login == 2){
         header('Location: ../../views/subsytem/subsistema_estagio.php');
         exit();
+    } else if ($login == 4){
+        header('Location: ../../views/autenticacao/login.php?login=erro');
+        exit();
     } 
 } else {
-    header('Location: ../../views/autenticacao/login.php?login=erro');
-    exit();
+   
 } 
-*/
+
+
 ?>
