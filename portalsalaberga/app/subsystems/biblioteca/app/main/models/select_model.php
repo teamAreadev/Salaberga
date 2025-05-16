@@ -59,17 +59,19 @@ class select_model extends connect
         return $nome;
     }
 
-    public function select_livro_especifico($titulo)
-    {
-        $titulo_array = explode("_", $titulo);
-        // Usar prepared statement para evitar SQL Injection
-        $select_dados_livro = $this->connect->prepare("SELECT * FROM catalogo WHERE titulo_livro = ? AND editora = ?");
-        $select_dados_livro->execute([$titulo_array[0], $titulo_array[1]]);
+    public function select_livro_especifico($titulos){
+        $array_dados = []; // Inicializar o array antes do loop
 
-        $dados_livros = $select_dados_livro->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($titulos as $titulo) {
+            // Usar prepared statement para evitar SQL Injection
+            $select_dados_livro = $this->connect->prepare("SELECT * FROM catalogo WHERE titulo_livro = ?");
+            $select_dados_livro->execute([$titulo]);
 
-        array_push($array_dados, $dados_livros);
-
+            $dados_livros = $select_dados_livro->fetchAll(PDO::FETCH_ASSOC);
+            
+            array_push($array_dados, $dados_livros);
+        }
+        
         return $array_dados;
     }
 }

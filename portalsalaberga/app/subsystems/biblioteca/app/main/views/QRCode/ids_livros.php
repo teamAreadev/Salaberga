@@ -98,7 +98,7 @@ if (isset($_POST['titulo2']) && !empty($_POST['titulo2'])) {
                                     <p class="text-lg font-semibold text-gray-800"><?= htmlspecialchars($dado['titulo_livro']) ?></p>
                                     <p class="text-sm text-gray-600">ID: <?= htmlspecialchars($dado['id']) ?></p>
                                     <p class="text-sm text-gray-600">Edição: <?= htmlspecialchars($dado['edicao']) ?></p>
-                                    <p class="text-sm text-gray-600">Número: <?= $i ?></p>
+                                    <p class="text-sm text-gray-600">Livro: <?= $i ?></p>
                                     <p class="text-sm text-gray-600">Estante: <?= htmlspecialchars($dado['estantes']) ?>, Prateleira: <?= htmlspecialchars($dado['prateleiras']) ?></p>
                                     <p class="text-sm text-gray-600">Status: <?= htmlspecialchars($dado['cativo']) ?></p>
                                 </div>
