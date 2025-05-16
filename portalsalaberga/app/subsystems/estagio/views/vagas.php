@@ -894,29 +894,49 @@ if (isset($_POST['layout'])) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mt-4">
-                                    <a href="./alunos_vaga.php?nome_perfil=<?= $dado['nome_perfil'] ?>&id_vaga=<?= $dado['id'] ?>&nome_empresa=<?= $dado['nome_empresa'] ?>&nome_baga=<?= $dado['id'] ?>" class="ver-detalhes-link">
-                                        <span>Selecionar aluno</span>
-                                        <i class="fas fa-arrow-right ml-2"></i>
-                                    </a>
-                                </div>
-                                <div class="mt-4">
-                                    <a href="#" class="ver-detalhes-link" onclick="abrirModal(event, <?= $vagaId ?>)">
-                                        <span>Carta de Encaminhamento</span>
-                                        <i class="fas fa-arrow-right ml-2"></i>
-                                    </a>
+                                <div class="mt-auto space-y-4">
+                                    <div>
+                                        <a href="./alunos_vaga.php?nome_perfil=<?= $dado['nome_perfil'] ?>&id_vaga=<?= $dado['id'] ?>&nome_empresa=<?= $dado['nome_empresa'] ?>&nome_baga=<?= $dado['id'] ?>" class="ver-detalhes-link">
+                                            <span>Selecionar aluno</span>
+                                            <i class="fas fa-arrow-right ml-2"></i>
+                                        </a>
+                                    </div>
+                                    <?php if (!empty($alunos)): ?>
+                                    <div>
+                                        <a href="#" class="ver-detalhes-link" onclick="abrirModal(event, <?= $vagaId ?>)">
+                                            <span>Carta de Encaminhamento</span>
+                                            <i class="fas fa-arrow-right ml-2"></i>
+                                        </a>
+                                    </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
 
                             <!-- Modal Carta de Encaminhamento -->
-                            <div id="modalCarta-<?= $vagaId ?>" style="display:none;">
-                                <div class="modal-content">
-                                    <h2>Gerar Carta de Encaminhamento</h2>
-                                    <form id="formCarta-<?= $vagaId ?>" onsubmit="gerarCarta(event, <?= $vagaId ?>)">
-                                        <label for="responsavel-<?= $vagaId ?>">Nome do Responsável:</label>
-                                        <input type="text" id="responsavel-<?= $vagaId ?>" name="responsavel" required>
-                                        <button type="submit">Gerar Carta</button>
-                                        <button type="button" onclick="fecharModal(<?= $vagaId ?>)">Cancelar</button>
+                            <div id="modalCarta-<?= $vagaId ?>" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+                                <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
+                                    <div class="text-center mb-6">
+                                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-500/10 text-primary-400 mb-4">
+                                            <i class="fas fa-file-alt text-2xl"></i>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-white slide-up">Gerar Carta de Encaminhamento</h3>
+                                        <p class="text-gray-400 mt-2">Preencha os dados para gerar a carta de encaminhamento.</p>
+                                    </div>
+                                    <form id="formCarta-<?= $vagaId ?>" onsubmit="gerarCarta(event, <?= $vagaId ?>)" class="space-y-6">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300 mb-2">Nome do Responsável</label>
+                                            <input type="text" id="responsavel-<?= $vagaId ?>" name="responsavel" class="custom-input mt-1 w-full" required>
+                                        </div>
+                                        <div class="mt-8 flex justify-end space-x-4">
+                                            <button type="button" class="custom-btn custom-btn-secondary" onclick="fecharModal(<?= $vagaId ?>)">
+                                                <i class="fas fa-times btn-icon"></i>
+                                                <span>Cancelar</span>
+                                            </button>
+                                            <button type="submit" class="custom-btn custom-btn-primary">
+                                                <i class="fas fa-file-download btn-icon"></i>
+                                                <span>Gerar Carta</span>
+                                            </button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -1110,16 +1130,54 @@ if (isset($_POST['layout'])) {
     <script>
         function abrirModal(event, idVaga) {
             event.preventDefault();
-            document.getElementById('modalCarta-' + idVaga).style.display = 'block';
+            const modal = document.getElementById('modalCarta-' + idVaga);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Animar a entrada do modal
+            const modalContent = modal.querySelector('.candidatura-modal');
+            gsap.fromTo(modalContent, {
+                opacity: 0,
+                scale: 0.9
+            }, {
+                opacity: 1,
+                scale: 1,
+                duration: 0.3,
+                ease: 'power2.out'
+            });
         }
 
         function fecharModal(idVaga) {
-            document.getElementById('modalCarta-' + idVaga).style.display = 'none';
+            const modal = document.getElementById('modalCarta-' + idVaga);
+            const modalContent = modal.querySelector('.candidatura-modal');
+            
+            // Animar a saída do modal
+            gsap.to(modalContent, {
+                opacity: 0,
+                scale: 0.9,
+                duration: 0.3,
+                ease: 'power2.in',
+                onComplete: () => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            });
         }
 
         function gerarCarta(event, idVaga) {
             event.preventDefault();
             const responsavel = document.getElementById('responsavel-' + idVaga).value;
+            
+            // Adicionar animação ao botão
+            const submitBtn = event.submitter;
+            gsap.to(submitBtn, {
+                scale: 0.95,
+                duration: 0.1,
+                yoyo: true,
+                repeat: 1
+            });
+            
+            // Redirecionar para a página de geração da carta
             window.location.href = `relatorio/gerar_carta.php?id_vaga=${idVaga}&responsavel=${encodeURIComponent(responsavel)}`;
         }
         document.addEventListener('DOMContentLoaded', () => {
