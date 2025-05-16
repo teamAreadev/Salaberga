@@ -367,276 +367,139 @@
     </style>
     </head>
 
-    <header x-data="{ mobileMenuOpen: false, mobileDropdownOpen: false, init() { this.$watch('mobileMenuOpen', value => { if (value) { document.body.classList.add('overflow-hidden'); } else { document.body.classList.remove('overflow-hidden'); } }); window.addEventListener('resize', () => { if (window.innerWidth >= 1024) { this.mobileMenuOpen = false; } }); } }" class="bg-ceara-green text-ceara-white sticky top-0 z-50 shadow-md">
-        <div class="container mx-auto px-4">
-            <nav class="flex items-center justify-between flex-wrap py-4">
-                <div class="flex items-center space-x-2">
-                    <span class="text-sm"><b>Acessibilidade</b></span>
-                    <button class="text-sm hover:text-ceara-orange transition duration-300 px-1" aria-label="Diminuir tamanho do texto">
-                        <i class="fa-solid fa-a"></i><b>-</b>
+   <header x-data="{ mobileMenuOpen: false, mobileDropdownOpen: false, init() { this.$watch('mobileMenuOpen', value => { if (value) { document.body.classList.add('overflow-hidden'); } else { document.body.classList.remove('overflow-hidden'); } }); window.addEventListener('resize', () => { if (window.innerWidth >= 1024) { this.mobileMenuOpen = false; } }); } }" class="bg-ceara-green text-ceara-white sticky top-0 z-50 shadow-md">
+    <div class="container mx-auto px-4">
+        <nav class="flex items-center justify-between flex-wrap py-4">
+            <div class="flex items-center space-x-2">
+                <span class="text-sm"><b>Acessibilidade</b></span>
+                <button class="text-sm hover:text-ceara-orange transition duration-300 px-1" aria-label="Diminuir tamanho do texto">
+                    <i class="fa-solid fa-a"></i><b>-</b>
+                </button>
+                <button class="text-sm hover:text-ceara-orange transition duration-300 px-1" aria-label="Tamanho padrão do texto">
+                    <i class="fa-solid fa-a"></i>
+                </button>
+                <button class="text-sm hover:text-ceara-orange transition duration-300 px-1" aria-label="Aumentar tamanho do texto">
+                    <i class="fa-solid fa-a"></i><b>+</b>
+                </button>
+                <button id="screenReaderBtn" class="text-sm hover:text-ceara-orange transition duration-300 px-1 flex items-center" aria-label="Ativar narração de tela">
+                    <i class="fa-solid fa-ear-listen mr-1"></i>
+                </button>
+                <div class="theme-toggle-container">
+                    <button class="theme-toggle-btn hover:text-ceara-orange transition duration-300 px-1" aria-label="Opções de visualização" aria-expanded="false">
+                        <i class="fa-solid fa-circle-half-stroke" style="color: white;"></i>
                     </button>
-                    <button class="text-sm hover:text-ceara-orange transition duration-300 px-1" aria-label="Tamanho padrão do texto">
-                        <i class="fa-solid fa-a"></i>
-                    </button>
-                    <button class="text-sm hover:text-ceara-orange transition duration-300 px-1" aria-label="Aumentar tamanho do texto">
-                        <i class="fa-solid fa-a"></i><b>+</b>
-                    </button>
-                    <button id="screenReaderBtn" class="text-sm hover:text-ceara-orange transition duration-300 px-1 flex items-center" aria-label="Ativar narração de tela">
-                        <i class="fa-solid fa-ear-listen mr-1"></i>
-                    </button>
-                    <div class="theme-toggle-container">
-                        <button class="theme-toggle-btn hover:text-ceara-orange transition duration-300 px-1" aria-label="Opções de visualização" aria-expanded="false">
-                            <i class="fa-solid fa-circle-half-stroke" style="color: white;"></i>
-                        </button>
-                        <div class="theme-options" style="color: #000000;">
-                            <!-- <button class="theme-option" data-theme="dark" aria-label="Alternar modo escuro">Modo Escuro</button> -->
-                            <button class="theme-option" data-theme="monochrome" aria-label="Ativar monocromático">Monocromático</button>
-                            <button class="theme-option" data-theme="inverted-grayscale" aria-label="Ativar escala de cinza invertida">Escala de cinza invertida</button>
-                            <button class="theme-option" data-theme="inverted-color" aria-label="Ativar cor invertida">Cor invertida</button>
-                            <button class="theme-option" data-theme="original" aria-label="Restaurar cores originais">Cores originais</button>
-                        </div>
-                    </div>
-                    <!-- <button id="vlibrasButton" class="hover:text-ceara-orange transition duration-300 px-1" aria-label="VLibras">
-                    <img src="../main/assets/img/libras.svg" alt="VLibras" style="border-radius: 14%; width: 24px; height: auto;" class="zoom">
-                </button> -->
-                </div>
-                <div class="flex items-center">
-                    <div class="hidden lg:flex space-x-4">
-                        <a href="#home" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
-                            <i class="fas fa-home mr-1"></i> Início
-                        </a>
-                        <a href="#sobre" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
-                            <i class="fas fa-info-circle mr-1"></i> Sobre
-                        </a>
-                        <a href="#cursos" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
-                            <i class="fas fa-book mr-1"></i> Cursos
-                        </a>
-                        <a href="#galeria" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
-                            <i class="fas fa-newspaper mr-1"></i> Galeria
-                        </a>
-                        <div class="relative group">
-                            <a href="#parceiros" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
-                                <i class="fas fa-images mr-1"></i> Parceiros
-                            </a>
-                        </div>
-                        <div class="relative" x-data="{ isOpen: false }">
-                            <!-- Botão do Dropdown -->
-                            <button @click="isOpen = !isOpen"
-                                @click.away="isOpen = false"
-                                type="button"
-                                class="group flex items-center space-x-2 text-ceara-white hover:text-ceara-orange transition-all duration-300 focus:outline-none">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-school transform group-hover:scale-110 transition-transform duration-200"></i>
-                                    <span class="font-medium">Entrar</span>
-                                </div>
-                                <i class="fas fa-chevron-down text-xs transition-all duration-300"
-                                    :class="{ 'transform rotate-180 text-ceara-orange': isOpen }"></i>
-                            </button>
-
-                            <!-- Dropdown Menu -->
-                            <div x-show="isOpen"
-                                x-transition:enter="transition ease-out duration-200"
-                                x-transition:enter-start="opacity-0 transform scale-95 translate-y-2"
-                                x-transition:enter-end="opacity-100 transform scale-100 translate-y-0"
-                                x-transition:leave="transition ease-in duration-150"
-                                x-transition:leave-start="opacity-100 transform scale-100 translate-y-0"
-                                x-transition:leave-end="opacity-0 transform scale-95 translate-y-2"
-                                class="absolute right-0 w-64 mt-2 origin-top-right bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 z-50 overflow-hidden"
-                                style="display: none;">
-
-                                <!-- Cabeçalho do Dropdown -->
-                                <div class="bg-gradient-to-r from-ceara-green to-ceara-orange px-4 py-3">
-                                    <h3 class="text-sm font-medium text-white">Nossas Escolas</h3>
-                                </div>
-
-                                <!-- Links do Dropdown -->
-                                <div class="divide-y divide-gray-100">
-                                    <!-- Link Salaberga -->
-                                    <a href="../main/views/autenticacao/login.php"
-                                        @click="isOpen = false"
-                                        class="group flex items-center px-4 py-3 hover:bg-gradient-to-r hover:from-ceara-green/5 hover:to-ceara-orange/5 transition-all duration-300">
-                                        <!-- Ícone -->
-                                        <div class="flex-shrink-0 mr-3">
-                                            <div class="w-10 h-10 flex items-center justify-center rounded-full bg-ceara-green/10 group-hover:bg-ceara-green/20 transition-all duration-200">
-                                                <i class="fas fa-school text-ceara-green duration-200"></i>
-                                            </div>
-                                        </div>
-                                        <!-- Texto -->
-                                        <div class="flex-1">
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-ceara-green transition-colors duration-200">
-                                                Salaberga
-                                            </p>
-                                            <p class="text-xs text-gray-500">Conheça nossa escola</p>
-                                        </div>
-                                        <!-- Seta -->
-                                        <i class="fas fa-arrow-right text-ceara-orange opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-200"></i>
-                                    </a>
-                                    <!--
-                                    <a href="../escolas_parceiras/index.php"
-                                        @click="isOpen = false"
-                                        class="group flex items-center px-4 py-3 hover:bg-gradient-to-r hover:from-ceara-green/5 hover:to-ceara-orange/5 transition-all duration-300">
-                                        <div class="flex-shrink-0 mr-3">
-                                            <div class="w-10 h-10 flex items-center justify-center rounded-full bg-ceara-green/10 group-hover:bg-ceara-green/20 transition-all duration-200">
-                                                <i class="fas fa-handshake text-ceara-green  duration-200"></i>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="flex-1">
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-ceara-green transition-colors duration-200">
-                                                Escolas Parceiras
-                                            </p>
-                                            <p class="text-xs text-gray-500">Conheça nossas parcerias</p>
-                                        </div>
-                                        -->
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="theme-options" style="color: #000000;">
+                        <button class="theme-option" data-theme="monochrome" aria-label="Ativar monocromático">Monocromático</button>
+                        <button class="theme-option" data-theme="inverted-grayscale" aria-label="Ativar escala de cinza invertida">Escala de cinza invertida</button>
+                        <button class="theme-option" data-theme="inverted-color" aria-label="Ativar cor invertida">Cor invertida</button>
+                        <button class="theme-option" data-theme="original" aria-label="Restaurar cores originais">Cores originais</button>
                     </div>
                 </div>
-                <div class="block lg:hidden">
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="flex items-center px-3 py-2 border rounded text-ceara-orange border-ceara-orange hover:text-ceara-white hover:border-ceara-white transition duration-300" aria-label="Toggle menu" :aria-expanded="mobileMenuOpen">
-                        <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <title>Menu</title>
-                            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-                        </svg>
-                    </button>
-                </div>
-        </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div x-show="mobileMenuOpen"
-            x-cloak
-            @click.away="mobileMenuOpen = false"
-            x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0 transform -translate-y-4"
-            x-transition:enter-end="opacity-100 transform translate-y-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 transform translate-y-0"
-            x-transition:leave-end="opacity-0 transform -translate-y-4"
-            class="fixed inset-0 z-50 lg:hidden bg-ceara-green/95 backdrop-blur-sm">
-
-            <!-- Container do Menu -->
-            <div class="min-h-screen px-4 py-6 overflow-y-auto">
-                <!-- Cabeçalho do Menu -->
-                <div class="flex items-center justify-between mb-8">
-                    <h2 class="text-xl font-semibold text-ceara-white">Menu</h2>
-                    <button @click="mobileMenuOpen = false"
-                        class="p-2 text-ceara-white hover:text-ceara-orange transition-colors duration-200">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-
-                <!-- Links do Menu -->
-                <nav class="space-y-6">
-                    <!-- Início -->
-                    <a href="#home"
-                        @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                            <i class="fas fa-home"></i>
-                        </div>
-                        <span class="text-lg font-medium">Início</span>
-                    </a>
-
-                    <!-- Sobre -->
-                    <a href="#sobre"
-                        @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                            <i class="fas fa-info-circle"></i>
-                        </div>
-                        <span class="text-lg font-medium">Sobre</span>
-                    </a>
-
-                    <!-- Cursos -->
-                    <a href="#cursos"
-                        @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                            <i class="fas fa-book"></i>
-                        </div>
-                        <span class="text-lg font-medium">Cursos</span>
-                    </a>
-
-                    <!-- Galeria -->
-                    <a href="#galeria"
-                        @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                            <i class="fas fa-newspaper"></i>
-                        </div>
-                        <span class="text-lg font-medium">Galeria</span>
-                    </a>
-
-                    <!-- Parceiros -->
-                    <a href="#parceiros"
-                        @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                            <i class="fas fa-images"></i>
-                        </div>
-                        <span class="text-lg font-medium">Parceiros</span>
-                    </a>
-
-                    <!-- Dropdown Escolas -->
-                    <div x-data="{ isOpen: false }" class="space-y-4">
-                        <!-- Botão do Dropdown -->
-                        <button @click="isOpen = !isOpen"
-                            class="group flex items-center justify-between w-full text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                                    <i class="fas fa-school"></i>
-                                </div>
-                                <span class="text-lg font-medium">Escolas</span>
-                            </div>
-                            <i class="fas fa-chevron-down transition-transform duration-300"
-                                :class="{ 'transform rotate-180': isOpen }"></i>
-                        </button>
-
-                        <!-- Conteúdo do Dropdown -->
-                        <div x-show="isOpen"
-                            x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0 transform -translate-y-4"
-                            x-transition:enter-end="opacity-100 transform translate-y-0"
-                            x-transition:leave="transition ease-in duration-150"
-                            x-transition:leave-start="opacity-100 transform translate-y-0"
-                            x-transition:leave-end="opacity-0 transform -translate-y-4"
-                            class="pl-13 space-y-4">
-
-                            <!-- Salaberga -->
-                            <a href="../main/views/autenticacao/login.php"
-                                @click="mobileMenuOpen = false"
-                                class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                                <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                                    <i class="fas fa-school"></i>
-                                </div>
-                                <div>
-                                    <span class="text-lg font-medium block">Salaberga</span>
-                                    <span class="text-sm text-white/70">Conheça nossa escola</span>
-                                </div>
-                            </a>
-
-                            <!-- Escolas Parceiras -->
-                            <!-- <a href="../escolas_parceiras/index.php"
-                                @click="mobileMenuOpen = false"
-                                class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                                <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                                    <i class="fas fa-handshake"></i>
-                                </div>
-                                <div>
-                                    <span class="text-lg font-medium block">Escolas Parceiras</span>
-                                    <span class="text-sm text-white/70">Conheça nossas parcerias</span>
-                                </div>
-                            </a>
-                            -->
-                        </div>
-                    </div>
-                </nav>
             </div>
+            <div class="flex items-center">
+                <div class="hidden lg:flex space-x-4">
+                    <a href="#home" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
+                        <i class="fas fa-home mr-1"></i> Início
+                    </a>
+                    <a href="#sobre" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
+                        <i class="fas fa-info-circle mr-1"></i> Sobre
+                    </a>
+                    <a href="#cursos" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
+                        <i class="fas fa-book mr-1"></i> Cursos
+                    </a>
+                    <a href="#galeria" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
+                        <i class="fas fa-newspaper mr-1"></i> Galeria
+                    </a>
+                    <a href="#parceiros" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
+                        <i class="fas fa-images mr-1"></i> Parceiros
+                    </a>
+                    <a href="../main/views/autenticacao/login.php" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
+                        <i class="fas fa-sign-in-alt mr-1"></i> Entrar
+                    </a>
+                </div>
+            </div>
+            <div class="block lg:hidden">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="flex items-center px-3 py-2 border rounded text-ceara-orange border-ceara-orange hover:text-ceara-white hover:border-ceara-white transition duration-300" aria-label="Toggle menu" :aria-expanded="mobileMenuOpen">
+                    <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <title>Menu</title>
+                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </div>
+    <!-- Mobile Menu -->
+    <div x-show="mobileMenuOpen"
+        x-cloak
+        @click.away="mobileMenuOpen = false"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 transform -translate-y-4"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 transform translate-y-0"
+        x-transition:leave-end="opacity-0 transform -translate-y-4"
+        class="fixed inset-0 z-50 lg:hidden bg-ceara-green/95 backdrop-blur-sm">
+        <div class="min-h-screen px-4 py-6 overflow-y-auto">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-xl font-semibold text-ceara-white">Menu</h2>
+                <button @click="mobileMenuOpen = false"
+                    class="p-2 text-ceara-white hover:text-ceara-orange transition-colors duration-200">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <nav class="space-y-6">
+                <a href="#home"
+                    @click="mobileMenuOpen = false"
+                    class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <span class="text-lg font-medium">Início</span>
+                </a>
+                <a href="#sobre"
+                    @click="mobileMenuOpen = false"
+                    class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <span class="text-lg font-medium">Sobre</span>
+                </a>
+                <a href="#cursos"
+                    @click="mobileMenuOpen = false"
+                    class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <span class="text-lg font-medium">Cursos</span>
+                </a>
+                <a href="#galeria"
+                    @click="mobileMenuOpen = false"
+                    class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <span class="text-lg font-medium">Galeria</span>
+                </a>
+                <a href="#parceiros"
+                    @click="mobileMenuOpen = false"
+                    class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+                        <i class="fas fa-images"></i>
+                    </div>
+                    <span class="text-lg font-medium">Parceiros</span>
+                </a>
+                <a href="../main/views/autenticacao/login.php"
+                    @click="mobileMenuOpen = false"
+                    class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+                        <i class="fas fa-sign-in-alt"></i>
+                    </div>
+                    <span class="text-lg font-medium">Entrar</span>
+                </a>
+            </nav>
         </div>
-    </header>
+    </div>
+</header>
 
 
     <script>
