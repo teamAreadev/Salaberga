@@ -46,8 +46,8 @@ class PDF extends FPDF
 $pdf = new PDF("L", "pt", "A4");
 $pdf->AliasNbPages();
 $pdf->AddPage();
-$pdo = new PDO("mysql:host=localhost;dbname=u750204740_sistBiblioteca;charset=utf8", "u750204740_sistBiblioteca", "paoComOvo123!@##");
-/*$pdo = new PDO("mysql:host=localhost;dbname=sist_biblioteca;charset=utf8", "root", "");*/
+/*$pdo = new PDO("mysql:host=localhost;dbname=u750204740_sistBiblioteca;charset=utf8", "u750204740_sistBiblioteca", "paoComOvo123!@##");*/
+$pdo = new PDO("mysql:host=localhost;dbname=sist_biblioteca;charset=utf8", "root", "");
 
 $acervo = $pdo->prepare("SELECT 
     c.id,
@@ -140,7 +140,7 @@ foreach ($livros as $i => $livro) {
     $alturaTotal = $numAutores > 1 ? $alturaLinha * $numAutores : $alturaLinha;
 
     $pdf->Cell($colunas[0]['largura'], $alturaTotal, $titulo, 1, 0, 'L', true);
-    
+
     $xAntesAutor = $pdf->GetX();
     $yAntesAutor = $pdf->GetY();
 
@@ -158,11 +158,15 @@ foreach ($livros as $i => $livro) {
 
     $totalLivros += (int)$quantidade;
 }
+if ($pdf->GetY() > $pdf->GetPageHeight() - 30) {
+    $pdf->AddPage();
+}
 
 $pdf->Ln(20);
 $pdf->SetX(20);
 $pdf->SetTextColor(0, 122, 51);
 $pdf->SetFont('Arial', 'B', 12);
 $pdf->Cell($pageWidth / 2, 10, 'ITENS EM ACERVO: ' . $totalLivros, 0, 0, 'L');
+
 
 $pdf->Output('relatorio_acervo.pdf', 'I');

@@ -51,21 +51,25 @@ class select_model extends connect
 
         return $nome;
     }
+    public function select_nome_livro_especifico()
+    {
+        $sql_nome_livro = $this->connect->query("SELECT DISTINCT titulo_livro FROM catalogo");
+        $nome = $sql_nome_livro->fetchAll(PDO::FETCH_ASSOC);
 
-    public function select_livro_especifico($titulos){
+        return $nome;
+    }
 
-        $array_dados = [];
-        foreach ($titulos as $titulo) {
-            $titulo_array = explode("_", $titulo);
-            // Usar prepared statement para evitar SQL Injection
-            $select_dados_livro = $this->connect->prepare("SELECT * FROM catalogo WHERE titulo_livro = ? AND editora = ?");
-            $select_dados_livro->execute([$titulo_array[0], $titulo_array[1]]);
+    public function select_livro_especifico($titulo)
+    {
+        $titulo_array = explode("_", $titulo);
+        // Usar prepared statement para evitar SQL Injection
+        $select_dados_livro = $this->connect->prepare("SELECT * FROM catalogo WHERE titulo_livro = ? AND editora = ?");
+        $select_dados_livro->execute([$titulo_array[0], $titulo_array[1]]);
 
-            $dados_livros = $select_dados_livro->fetchAll(PDO::FETCH_ASSOC);
-            
-            array_push($array_dados, $dados_livros);
-        }
-        
+        $dados_livros = $select_dados_livro->fetchAll(PDO::FETCH_ASSOC);
+
+        array_push($array_dados, $dados_livros);
+
         return $array_dados;
     }
 }
