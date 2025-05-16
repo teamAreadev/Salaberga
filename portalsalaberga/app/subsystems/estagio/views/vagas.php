@@ -150,6 +150,13 @@ if (isset($_POST['layout'])) {
             overflow: hidden;
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .vaga-card.single-link {
+            min-height: 320px;
         }
 
         .vaga-card::before {
@@ -217,6 +224,7 @@ if (isset($_POST['layout'])) {
             flex-direction: column;
             gap: 0.5rem;
             margin-bottom: 1rem;
+            flex-grow: 1; /* Ensure info section takes available space */
         }
 
         .vaga-card-info-item {
@@ -818,8 +826,9 @@ if (isset($_POST['layout'])) {
                             $data = isset($dado['data']) ? htmlspecialchars($dado['data'], ENT_QUOTES, 'UTF-8') : '';
                             $hora = isset($dado['hora']) ? htmlspecialchars($dado['hora'], ENT_QUOTES, 'UTF-8') : '';
                             $tipoVaga = isset($dado['tipo_vaga']) ? htmlspecialchars($dado['tipo_vaga'], ENT_QUOTES, 'UTF-8') : '';
-                        ?>
-                            <div class="vaga-card slide-up"
+                            $hasAlunos = !empty($select_model->alunos_selecionados($dado['id']));
+                            ?>
+                            <div class="vaga-card slide-up<?php echo !$hasAlunos ? ' single-link' : ''; ?>"
                                 style="animation-delay: <?php echo $delay; ?>ms;"
                                 data-vaga-id="<?php echo $vagaId; ?>"
                                 data-area="<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>"
@@ -894,14 +903,14 @@ if (isset($_POST['layout'])) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mt-auto space-y-4">
+                                <div class="mt-auto <?php echo $hasAlunos ? 'space-y-4' : ''; ?>">
                                     <div>
                                         <a href="./alunos_vaga.php?nome_perfil=<?= $dado['nome_perfil'] ?>&id_vaga=<?= $dado['id'] ?>&nome_empresa=<?= $dado['nome_empresa'] ?>&nome_baga=<?= $dado['id'] ?>" class="ver-detalhes-link">
                                             <span>Selecionar aluno</span>
                                             <i class="fas fa-arrow-right ml-2"></i>
                                         </a>
                                     </div>
-                                    <?php if (!empty($alunos)): ?>
+                                    <?php if ($hasAlunos): ?>
                                     <div>
                                         <a href="#" class="ver-detalhes-link" onclick="abrirModal(event, <?= $vagaId ?>)">
                                             <span>Carta de Encaminhamento</span>

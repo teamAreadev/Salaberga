@@ -44,8 +44,10 @@ if (isset($_POST['id_excluir_empresa']) && !empty($_POST['id_excluir_empresa']))
     $nome_empresa = $_POST['nome_editar_empresa'];
     $endereco_empresa = $_POST['endereco_editar_empresa'];
     $contato_empresa = $_POST['contato_editar_empresa'];
+    $nome_contato_empresa = $_POST['nome_contato_editar_empresa'] ?? '';
+
     $model = new main_model;
-    $result = $model->editar_empresa($id_empresa, $nome_empresa, $contato_empresa, $endereco_empresa);
+    $result = $model->editar_empresa($id_empresa, $nome_empresa, $contato_empresa, $endereco_empresa, $nome_contato_empresa);
 
     switch ($result) {
 
