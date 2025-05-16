@@ -73,6 +73,12 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
             });
             document.body.style.overflow = '';
             alunoIdParaExcluir = null;
+            
+            // Remover parâmetros da URL sem recarregar a página
+            const url = new URL(window.location.href);
+            url.searchParams.delete('modal');
+            url.searchParams.delete('id');
+            window.history.replaceState({}, '', url);
         }
 
         // Dados dos alunos
@@ -189,7 +195,10 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                 `;
                 
                 const modal = document.getElementById('detalhesModal');
-                modal.classList.add('show');
+                if (modal) {
+                    modal.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                }
             } else {
                 console.error(`Aluno com ID ${id} não encontrado.`);
             }
@@ -214,7 +223,10 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                 document.getElementById('editEntregasGrupo').value = aluno.entregas_grupo === '-' ? '' : aluno.entregas_grupo;
 
                 const modal = document.getElementById('editarAlunoModal');
-                modal.classList.add('show');
+                if (modal) {
+                    modal.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                }
             } else {
                 console.error(`Aluno com ID ${id} não encontrado.`);
             }
@@ -224,7 +236,11 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
         function confirmarExclusao(id) {
             console.log('Confirming deletion for ID:', id);
             alunoIdParaExcluir = id;
-            document.getElementById('confirmacaoExclusaoModal').classList.add('show');
+            const modal = document.getElementById('confirmacaoExclusaoModal');
+            if (modal) {
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
         }
 
         // Função para efetivar a exclusão
@@ -235,42 +251,35 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
             }
         }
 
-        // Função para adicionar event listeners aos botões
-        function adicionarEventListeners() {
-            console.log('Adding event listeners to buttons');
-            
-            // Event listeners para os botões de ação na tabela desktop
-            document.querySelectorAll('.ver-detalhes-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const id = this.getAttribute('data-id');
-                    console.log('View details clicked for ID:', id);
-                    verDetalhes(id);
-                });
-            });
+        // Função para verificar parâmetros da URL e abrir modais
+        function verificarParametrosURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const modal = urlParams.get('modal');
+            const id = urlParams.get('id');
 
-            document.querySelectorAll('.editar-aluno-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const id = this.getAttribute('data-id');
-                    console.log('Edit clicked for ID:', id);
-                    editarAluno(id);
-                });
-            });
+            console.log('Verificando parâmetros da URL:', { modal, id });
 
-            document.querySelectorAll('.deletar-aluno-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const id = this.getAttribute('data-id');
-                    console.log('Delete clicked for ID:', id);
-                    confirmarExclusao(id);
-                });
-            });
+            if (modal === 'adicionar') {
+                console.log('Abrindo modal de adicionar');
+                abrirAdicionarAluno();
+            } else if (modal === 'editar' && id) {
+                console.log('Abrindo modal de editar para ID:', id);
+                editarAluno(id);
+            } else if (modal === 'excluir' && id) {
+                console.log('Abrindo modal de excluir para ID:', id);
+                confirmarExclusao(id);
+            } else if (modal === 'ver' && id) {
+                console.log('Abrindo modal de ver para ID:', id);
+                verDetalhes(id);
+            }
         }
 
-        // Initialize when document is ready
+        // Inicializar quando o documento estiver pronto
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Document ready, initializing...');
+            
+            // Verificar parâmetros da URL
+            verificarParametrosURL();
             
             // Add event listener for the "Add Student" button
             const addButton = document.getElementById('addAlunoBtn');
@@ -332,6 +341,187 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
         window.editarAluno = editarAluno;
         window.confirmarExclusao = confirmarExclusao;
         window.efetivarExclusaoAluno = efetivarExclusaoAluno;
+
+        // Função para renderizar a tabela de alunos (desktop)
+        function renderizarTabelaDesktop(alunosFiltrados = alunos) {
+            console.log('Rendering desktop table');
+            const tbody = document.getElementById('alunosTableBody');
+            if (!tbody) {
+                console.error('Table body element not found');
+                return;
+            }
+            
+            tbody.innerHTML = '';
+
+            if (!Array.isArray(alunosFiltrados) || alunosFiltrados.length === 0) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = '<td colspan="2" class="px-3 py-4 text-center text-sm text-gray-400">Nenhum aluno encontrado</td>';
+                tbody.appendChild(tr);
+                return;
+            }
+
+            alunosFiltrados.forEach((aluno, index) => {
+                if (!aluno || !aluno.nome) {
+                    console.error('Invalid student data:', aluno);
+                    return;
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-dark-50 transition-colors slide-up';
+                tr.style.animationDelay = `${index * 50}ms`;
+                tr.innerHTML = `
+                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
+                        <button type="button" class="ver-detalhes-btn text-blue-400 hover:text-blue-300 mr-2 transition-colors" data-id="${aluno.id}">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button type="button" class="editar-aluno-btn text-primary-400 hover:text-primary-300 mr-2 transition-colors" data-id="${aluno.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="${aluno.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Re-add event listeners after rendering
+            adicionarEventListeners();
+        }
+
+        // Função para renderizar os cards de alunos (mobile)
+        function renderizarCardsMobile(alunosFiltrados = alunos) {
+            console.log('Rendering mobile cards');
+            const container = document.getElementById('alunosMobileCards');
+            if (!container) {
+                console.error('Mobile cards container not found');
+                return;
+            }
+            container.innerHTML = '';
+
+            if (!Array.isArray(alunosFiltrados) || alunosFiltrados.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-400 py-4">Nenhum aluno encontrado</div>';
+                return;
+            }
+
+            alunosFiltrados.forEach(aluno => {
+                const card = document.createElement('div');
+                card.className = 'mobile-card bg-dark-300 rounded-lg p-4 shadow-md';
+
+                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'area-desenvolvimento' :
+                    aluno.perfil_opc1 === 'design' ? 'area-design' :
+                    aluno.perfil_opc1 === 'midia' ? 'area-midia' :
+                    'area-redes';
+                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'area-desenvolvimento' :
+                    aluno.perfil_opc2 === 'design' ? 'area-design' :
+                    aluno.perfil_opc2 === 'midia' ? 'area-midia' :
+                    'area-redes';
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-white">${aluno.nome}</h3>
+                        <div class="flex items-center gap-2">
+                            <button class="ver-detalhes-btn text-blue-400 hover:text-blue-300 transition-colors" data-id="${aluno.id}">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                            <button class="editar-aluno-btn text-green-400 hover:text-green-300 transition-colors" data-id="${aluno.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="${aluno.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="detalhes-mobile-${aluno.id}" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <span class="text-gray-400 text-sm">Contato:</span>
+                                <p class="text-white">${aluno.contato}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Médias:</span>
+                                <p class="text-white">${aluno.medias}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Email:</span>
+                                <p class="text-white">${aluno.email}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Projetos:</span>
+                                <p class="text-white">${aluno.projetos}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Opção 2:</span>
+                                <p class="text-white">
+                                    <span class="status-pill ${areaClassOpc2}">
+                                        <i class="fas fa-${
+                                            aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
+                                            aluno.perfil_opc2 === 'design' ? 'paint-brush' :
+                                            aluno.perfil_opc2 === 'midia' ? 'video' :
+                                            'network-wired'
+                                        } text-xs mr-1"></i>
+                                        ${aluno.perfil_opc2}
+                                    </span>
+                                </p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Ocorrência:</span>
+                                <p class="text-white">${aluno.ocorrencia}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Custeio:</span>
+                                <p class="text-white">${aluno.custeio == 1 ? 'Sim' : 'Não'}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Entregas Individuais:</span>
+                                <p class="text-white">${aluno.entregas_individuais}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Entregas do Grupo:</span>
+                                <p class="text-white">${aluno.entregas_grupo}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Re-add event listeners after rendering
+            adicionarEventListeners();
+        }
+
+        // Função para aplicar filtros
+        function aplicarFiltros() {
+            const searchTerm = document.getElementById('searchAluno').value.toLowerCase().trim();
+            const alunosFiltrados = alunos.filter(aluno => {
+                const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
+                return matchSearch;
+            });
+
+            renderizarTabelaDesktop(alunosFiltrados);
+            renderizarCardsMobile(alunosFiltrados);
+        }
+
+        // Event listener for search
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchAluno');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const termo = this.value.toLowerCase();
+                    const alunosFiltrados = alunos.filter(aluno => 
+                        aluno.nome.toLowerCase().includes(termo)
+                    );
+                    renderizarTabelaDesktop(alunosFiltrados);
+                    renderizarCardsMobile(alunosFiltrados);
+                });
+            }
+        });
+
+        // Expose additional functions to global scope
+        window.renderizarTabelaDesktop = renderizarTabelaDesktop;
+        window.renderizarCardsMobile = renderizarCardsMobile;
+        window.aplicarFiltros = aplicarFiltros;
     </script>
 
     <script>
@@ -888,13 +1078,15 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
             display: none;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.75);
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             z-index: 50;
             align-items: center;
             justify-content: center;
@@ -908,22 +1100,22 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
         }
 
         .modal-content {
-            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
-            border-radius: 1rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, rgba(45, 45, 45, 0.9) 0%, rgba(26, 26, 26, 0.95) 100%);
+            border-radius: 1.2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 10px 20px -5px rgba(0, 0, 0, 0.3);
             width: 100%;
             max-width: 32rem;
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
             position: relative;
-            transform: translateY(20px);
+            transform: translateY(30px) scale(0.95);
             opacity: 0;
-            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease-out;
+            border: 1px solid rgba(0, 122, 51, 0.2);
         }
 
         .modal-base.show .modal-content {
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
             opacity: 1;
         }
 
@@ -931,27 +1123,38 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 1.8rem;
+            background: linear-gradient(to right, rgba(45, 45, 45, 0.95), rgba(35, 35, 35, 0.95));
+            border-bottom: 1px solid rgba(0, 122, 51, 0.15);
+            border-top-left-radius: 1.2rem;
+            border-top-right-radius: 1.2rem;
         }
 
         .modal-header h2 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 600;
             color: #ffffff;
             margin: 0;
+            background: linear-gradient(to right, #ffffff, #a0aec0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .modal-body {
-            padding: 1.5rem;
+            padding: 1.8rem;
+            background: linear-gradient(to bottom, rgba(45, 45, 45, 0.5), rgba(35, 35, 35, 0.5));
         }
 
         .modal-footer {
-            padding: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 1.8rem;
+            background: linear-gradient(to right, rgba(45, 45, 45, 0.95), rgba(35, 35, 35, 0.95));
+            border-top: 1px solid rgba(0, 122, 51, 0.15);
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
+            border-bottom-left-radius: 1.2rem;
+            border-bottom-right-radius: 1.2rem;
         }
 
         .close-modal {
@@ -960,11 +1163,19 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
             color: #9ca3af;
             cursor: pointer;
             padding: 0.5rem;
-            transition: color 0.2s ease;
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
         }
 
         .close-modal:hover {
             color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: rotate(90deg);
         }
 
         /* Ajustes específicos para cada tipo de modal */
@@ -973,241 +1184,130 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
         }
 
         .modal-content.editar {
-            max-width: 40rem;
+            max-width: 42rem;
         }
 
         .modal-content.adicionar {
-            max-width: 40rem;
+            max-width: 42rem;
         }
 
         .modal-content.excluir {
-            max-width: 28rem;
+            max-width: 30rem;
         }
 
         /* Estilização da barra de rolagem do modal */
         .modal-content::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         .modal-content::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            background: rgba(26, 26, 26, 0.5);
+            border-radius: 10px;
         }
 
         .modal-content::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
+            background: rgba(0, 122, 51, 0.4);
+            border-radius: 10px;
         }
 
         .modal-content::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 122, 51, 0.6);
         }
 
-        .mobile-card .custom-btn-primary {
-            display: flex !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            margin-top: 0.5rem;
-            width: 100%;
-            justify-content: center;
-        }
-
-        /* Estilos para botões */
-        .custom-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            border-radius: 0.375rem;
-            transition: all 0.2s;
-        }
-
-        .custom-btn-primary {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-        }
-
-        .custom-btn-primary:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-        }
-
-        .custom-btn-secondary {
-            background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
-            color: white;
-        }
-
-        .custom-btn-secondary:hover {
-            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
-        }
-
-        .custom-btn-danger {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            color: white;
-        }
-
-        .custom-btn-danger:hover {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-        }
-
-        .btn-icon {
-            font-size: 0.875rem;
-        }
-
-        /* Botões personalizados */
-        .custom-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            font-size: 0.875rem;
+        /* Melhorias nos botões dentro dos modais */
+        .modal-footer .custom-btn {
+            padding: 0.75rem 1.25rem;
             font-weight: 600;
             border-radius: 0.5rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
-        .custom-btn-primary {
-            background: linear-gradient(135deg, #007A33 0%, #009940 100%);
-            color: white;
-            border: none;
-            box-shadow: 0 4px 10px rgba(0, 122, 51, 0.3);
-        }
-
-        .custom-btn-primary:hover {
-            background: linear-gradient(135deg, #00993F 0%, #00B64B 100%);
+        .modal-footer .custom-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 122, 51, 0.4);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        .custom-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        .modal-footer .custom-btn-primary {
+            background: linear-gradient(to right, #007A33, #009940);
+            border: none;
         }
-        
-        /* Ajustes para os modais */
-        .modal-content {
-            max-height: 85vh;
-            overflow-y: auto;
+
+        .modal-footer .custom-btn-primary:hover {
+            background: linear-gradient(to right, #009940, #00B64B);
         }
-        
-        /* Grid para formulários */
+
+        .modal-footer .custom-btn-secondary {
+            background: linear-gradient(to right, #4B5563, #374151);
+            border: none;
+        }
+
+        .modal-footer .custom-btn-secondary:hover {
+            background: linear-gradient(to right, #374151, #4B5563);
+        }
+
+        .modal-footer .custom-btn-danger {
+            background: linear-gradient(to right, #DC2626, #991B1B);
+            border: none;
+        }
+
+        .modal-footer .custom-btn-danger:hover {
+            background: linear-gradient(to right, #991B1B, #DC2626);
+        }
+
+        /* Melhorias nos formulários dentro dos modais */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
         }
-        
+
+        .form-field {
+            margin-bottom: 1rem;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        .form-field:focus-within label {
+            color: #007A33;
+        }
+
         @media (max-width: 640px) {
             .form-grid {
                 grid-template-columns: 1fr;
             }
-        }
-        
-        /* Ajustes para campos de formulário */
-        .form-field {
-            margin-bottom: 0.75rem;
-        }
-        
-        .form-field label {
-            display: block;
-            margin-bottom: 0.25rem;
-            font-size: 0.875rem;
-        }
-        
-        /* Ajustes para o modal de detalhes */
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-        
-        @media (max-width: 640px) {
-            .details-grid {
-                grid-template-columns: 1fr;
-            }
-        }
 
-        /* Ajustes específicos para o modal de detalhes */
-        .modal-content.detalhes {
-            max-width: 36rem;
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
-
-        .detail-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .detail-label {
-            font-size: 0.875rem;
-            color: #9ca3af;
-            font-weight: 500;
-        }
-
-        .detail-value {
-            font-size: 1rem;
-            color: #ffffff;
-            word-break: break-word;
-        }
-
-        .detail-value.status-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        @media (max-width: 640px) {
-            .modal-content.detalhes {
+            .modal-content {
                 max-width: 100%;
-                margin: 1rem;
+                margin: 0.5rem;
+                max-height: 90vh;
             }
-
-            .details-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
+            
+            .modal-header {
+                padding: 1.25rem;
             }
-
-            .detail-item {
-                padding: 0.75rem;
-                background: rgba(255, 255, 255, 0.05);
-                border-radius: 0.5rem;
+            
+            .modal-body {
+                padding: 1.25rem;
             }
-
-            .detail-label {
-                font-size: 0.75rem;
+            
+            .modal-footer {
+                padding: 1.25rem;
+                flex-direction: column;
             }
-
-            .detail-value {
-                font-size: 0.875rem;
-            }
-        }
-
-        @media (min-width: 641px) and (max-width: 1024px) {
-            .modal-content.detalhes {
-                max-width: 90%;
-            }
-
-            .details-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.25rem;
+            
+            .modal-footer .custom-btn {
+                width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+                margin-bottom: 0.5rem;
             }
         }
     </style>
@@ -1382,7 +1482,7 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                                 <tr class="hover:bg-dark-50 transition-colors slide-up" style="animation-delay: <?= $index * 50 ?>ms;">
                                     <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
                                     <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
-                                        <button type="button" class="ver-detalhes-btn text-blue-400 hover:text-blue-300 mr-2 transition-colors" data-id="<?= $dado['id'] ?>">
+                                        <button type="button" class="ver-detalhes-btn text-blue-400 hover:text-blue-300 mr-2 transition-colors" data-id="${aluno.id}">
                                             <a href="?modal=ver&id=<?= $dado['id'] ?>" class="text-blue-400 hover:text-blue-300">
                                                 <i class="fas fa-info-circle"></i>
                                             </a>
@@ -1561,65 +1661,65 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                 <div class="modal-body">
                     <form id="editAlunoForm" action="../controllers/controller_editar_excluir.php" method="post" class="space-y-4">
                         <input type="hidden" name="acao" value="editar">
-                        <input type="hidden" id="editAlunoId" name="id_aluno" value="<?= $editAluno['id'] ?? '' ?>">
+                        <input type="hidden" id="editAlunoId" name="id_aluno" value="">
                         
                         <div class="form-grid">
                             <div class="form-field">
                                 <label for="editNome" class="block text-sm font-medium text-gray-300">Nome</label>
-                                <input type="text" id="editNome" name="nome" required class="custom-input" value="<?= htmlspecialchars($editAluno['nome'] ?? '') ?>">
+                                <input type="text" id="editNome" name="nome" required class="custom-input">
                             </div>
                             <div class="form-field">
                                 <label for="editContato" class="block text-sm font-medium text-gray-300">Contato</label>
-                                <input type="text" id="editContato" name="contato" class="custom-input" value="<?= htmlspecialchars($editAluno['contato'] ?? '') ?>">
+                                <input type="text" id="editContato" name="contato" class="custom-input">
                             </div>
                             <div class="form-field">
                                 <label for="editMedias" class="block text-sm font-medium text-gray-300">Médias</label>
-                                <input type="number" id="editMedias" name="medias" min="0" max="10" step="0.1" required class="custom-input" value="<?= htmlspecialchars($editAluno['medias'] ?? '') ?>">
+                                <input type="number" id="editMedias" name="medias" min="0" max="10" step="0.1" required class="custom-input">
                             </div>
                             <div class="form-field">
                                 <label for="editEmail" class="block text-sm font-medium text-gray-300">Email</label>
-                                <input type="email" id="editEmail" name="email" required class="custom-input" value="<?= htmlspecialchars($editAluno['email'] ?? '') ?>">
+                                <input type="email" id="editEmail" name="email" required class="custom-input">
                             </div>
                             <div class="form-field">
                                 <label for="editProjetos" class="block text-sm font-medium text-gray-300">Projetos</label>
-                                <input type="text" id="editProjetos" name="projetos" class="custom-input" value="<?= htmlspecialchars($editAluno['projetos'] ?? '') ?>">
+                                <input type="text" id="editProjetos" name="projetos" class="custom-input">
                             </div>
                             <div class="form-field">
                                 <label for="editPerfilOpc1" class="block text-sm font-medium text-gray-300">Opção 1</label>
                                 <select id="editPerfilOpc1" name="perfil_opc1" required class="custom-input">
-                                    <option value="desenvolvimento" <?= (isset($editAluno['perfil_opc1']) && $editAluno['perfil_opc1'] == 'desenvolvimento') ? 'selected' : '' ?>>Desenvolvimento</option>
-                                    <option value="design" <?= (isset($editAluno['perfil_opc1']) && $editAluno['perfil_opc1'] == 'design') ? 'selected' : '' ?>>Design/Mídia</option>
-                                    <option value="tutoria" <?= (isset($editAluno['perfil_opc1']) && $editAluno['perfil_opc1'] == 'tutoria') ? 'selected' : '' ?>>Tutoria</option>
-                                    <option value="suporte/redes" <?= (isset($editAluno['perfil_opc1']) && $editAluno['perfil_opc1'] == 'suporte/redes') ? 'selected' : '' ?>>Suporte/Redes</option>
+                                    <option value="desenvolvimento">Desenvolvimento</option>
+                                    <option value="design">Design/Mídia</option>
+                                    <option value="tutoria">Tutoria</option>
+                                    <option value="suporte/redes">Suporte/Redes</option>
                                 </select>
                             </div>
                             <div class="form-field">
                                 <label for="editPerfilOpc2" class="block text-sm font-medium text-gray-300">Opção 2</label>
                                 <select id="editPerfilOpc2" name="perfil_opc2" required class="custom-input">
-                                    <option value="desenvolvimento" <?= (isset($editAluno['perfil_opc2']) && $editAluno['perfil_opc2'] == 'desenvolvimento') ? 'selected' : '' ?>>Desenvolvimento</option>
-                                    <option value="design" <?= (isset($editAluno['perfil_opc2']) && $editAluno['perfil_opc2'] == 'design') ? 'selected' : '' ?>>Design/Mídia</option>
-                                    <option value="tutoria" <?= (isset($editAluno['perfil_opc2']) && $editAluno['perfil_opc2'] == 'tutoria') ? 'selected' : '' ?>>Tutoria</option>
-                                    <option value="suporte/redes" <?= (isset($editAluno['perfil_opc2']) && $editAluno['perfil_opc2'] == 'suporte/redes') ? 'selected' : '' ?>>Suporte/Redes</option>
+                                    <option value="desenvolvimento">Desenvolvimento</option>
+                                    <option value="design">Design/Mídia</option>
+                                    <option value="tutoria">Tutoria</option>
+                                    <option value="suporte/redes">Suporte/Redes</option>
                                 </select>
                             </div>
                             <div class="form-field">
                                 <label for="editOcorrencia" class="block text-sm font-medium text-gray-300">Ocorrência</label>
-                                <input type="text" id="editOcorrencia" name="ocorrencia" class="custom-input" value="<?= htmlspecialchars($editAluno['ocorrencia'] ?? '') ?>">
+                                <input type="text" id="editOcorrencia" name="ocorrencia" class="custom-input">
                             </div>
                             <div class="form-field">
                                 <label for="editCusteio" class="block text-sm font-medium text-gray-300">Custeio</label>
                                 <select id="editCusteio" name="custeio" required class="custom-input">
-                                    <option value="1" <?= (isset($editAluno['custeio']) && $editAluno['custeio'] == 1) ? 'selected' : '' ?>>Sim</option>
-                                    <option value="0" <?= (isset($editAluno['custeio']) && $editAluno['custeio'] == 0) ? 'selected' : '' ?>>Não</option>
+                                    <option value="1">Sim</option>
+                                    <option value="0">Não</option>
                                 </select>
                             </div>
                             <div class="form-field">
                                 <label for="editEntregasIndividuais" class="block text-sm font-medium text-gray-300">Entregas Individuais</label>
-                                <input type="text" id="editEntregasIndividuais" name="entregas_individuais" class="custom-input" value="<?= htmlspecialchars($editAluno['entregas_individuais'] ?? '') ?>">
+                                <input type="text" id="editEntregasIndividuais" name="entregas_individuais" class="custom-input">
                             </div>
                             <div class="form-field">
                                 <label for="editEntregasGrupo" class="block text-sm font-medium text-gray-300">Entregas do Grupo</label>
-                                <input type="text" id="editEntregasGrupo" name="entregas_grupo" class="custom-input" value="<?= htmlspecialchars($editAluno['entregas_grupo'] ?? '') ?>">
+                                <input type="text" id="editEntregasGrupo" name="entregas_grupo" class="custom-input">
                             </div>
                         </div>
                     </form>
@@ -1641,115 +1741,95 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
         <div id="adicionarAlunoModal" class="modal-base">
             <div class="modal-content adicionar">
                 <div class="modal-header">
-                    <h2>Adicionar Aluno</h2>
-                    <button type="button" class="close-modal">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <h2>Adicionar Novo Aluno</h2>
+                    <button type="button" class="close-modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form id="addAlunoForm" action="../controllers/controller_adicionar.php" method="post" class="space-y-4">
-                        <input type="hidden" name="acao" value="adicionar">
-                        
+                    <form id="formAdicionarAluno" method="POST" action="adicionar_aluno.php">
                         <div class="form-grid">
                             <div class="form-field">
-                                <label for="addNome" class="block text-sm font-medium text-gray-300">Nome</label>
-                                <input type="text" id="addNome" name="nome" required class="custom-input">
+                                <label for="nome">Nome Completo</label>
+                                <input type="text" id="nome" name="nome" required>
                             </div>
                             <div class="form-field">
-                                <label for="addContato" class="block text-sm font-medium text-gray-300">Contato</label>
-                                <input type="text" id="addContato" name="contato" class="custom-input">
+                                <label for="contato">Contato</label>
+                                <input type="text" id="contato" name="contato" required>
                             </div>
                             <div class="form-field">
-                                <label for="addMedias" class="block text-sm font-medium text-gray-300">Médias</label>
-                                <input type="number" id="addMedias" name="medias" min="0" max="10" step="0.1" required class="custom-input">
+                                <label for="notas">Notas</label>
+                                <input type="text" id="notas" name="notas" required>
                             </div>
                             <div class="form-field">
-                                <label for="addEmail" class="block text-sm font-medium text-gray-300">Email</label>
-                                <input type="email" id="addEmail" name="email" required class="custom-input">
+                                <label for="email">E-mail</label>
+                                <input type="email" id="email" name="email" required>
                             </div>
                             <div class="form-field">
-                                <label for="addProjetos" class="block text-sm font-medium text-gray-300">Projetos</label>
-                                <input type="text" id="addProjetos" name="projetos" class="custom-input">
+                                <label for="projetos">Projetos</label>
+                                <input type="text" id="projetos" name="projetos" required>
                             </div>
                             <div class="form-field">
-                                <label for="addPerfilOpc1" class="block text-sm font-medium text-gray-300">Opção 1</label>
-                                <select id="addPerfilOpc1" name="perfil_opc1" required class="custom-input">
-                                    <option value="desenvolvimento">Desenvolvimento</option>
-                                    <option value="design">Design/Mídia</option>
-                                    <option value="tutoria">Tutoria</option>
-                                    <option value="suporte/redes">Suporte/Redes</option>
+                                <label for="perfil1">Perfil 1</label>
+                                <select id="perfil1" name="perfil1" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="1">Perfil 1</option>
+                                    <option value="2">Perfil 2</option>
                                 </select>
                             </div>
                             <div class="form-field">
-                                <label for="addPerfilOpc2" class="block text-sm font-medium text-gray-300">Opção 2</label>
-                                <select id="addPerfilOpc2" name="perfil_opc2" required class="custom-input">
-                                    <option value="desenvolvimento">Desenvolvimento</option>
-                                    <option value="design">Design/Mídia</option>
-                                    <option value="tutoria">Tutoria</option>
-                                    <option value="suporte/redes">Suporte/Redes</option>
+                                <label for="perfil2">Perfil 2</label>
+                                <select id="perfil2" name="perfil2" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="1">Perfil 1</option>
+                                    <option value="2">Perfil 2</option>
                                 </select>
                             </div>
                             <div class="form-field">
-                                <label for="addOcorrencia" class="block text-sm font-medium text-gray-300">Ocorrência</label>
-                                <input type="text" id="addOcorrencia" name="ocorrencia" class="custom-input">
+                                <label for="ocorrencia">Ocorrência</label>
+                                <input type="text" id="ocorrencia" name="ocorrencia" required>
                             </div>
                             <div class="form-field">
-                                <label for="addCusteio" class="block text-sm font-medium text-gray-300">Custeio</label>
-                                <select id="addCusteio" name="custeio" required class="custom-input">
-                                    <option value="1">Sim</option>
-                                    <option value="0">Não</option>
-                                </select>
+                                <label for="financiamento">Financiamento</label>
+                                <input type="text" id="financiamento" name="financiamento" required>
                             </div>
                             <div class="form-field">
-                                <label for="addEntregasIndividuais" class="block text-sm font-medium text-gray-300">Entregas Individuais</label>
-                                <input type="text" id="addEntregasIndividuais" name="entregas_individuais" class="custom-input">
+                                <label for="entregas_individual">Entregas Individual</label>
+                                <input type="text" id="entregas_individual" name="entregas_individual" required>
                             </div>
                             <div class="form-field">
-                                <label for="addEntregasGrupo" class="block text-sm font-medium text-gray-300">Entregas do Grupo</label>
-                                <input type="text" id="addEntregasGrupo" name="entregas_grupo" class="custom-input">
+                                <label for="entregas_grupo">Entregas Grupo</label>
+                                <input type="text" id="entregas_grupo" name="entregas_grupo" required>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="custom-btn custom-btn-secondary close-modal">
-                        <i class="fas fa-times"></i>
-                        <span>Cancelar</span>
-                    </button>
-                    <button type="submit" form="addAlunoForm" class="custom-btn custom-btn-primary">
-                        <i class="fas fa-plus"></i>
-                        <span>Adicionar</span>
-                    </button>
+                    <button type="button" class="custom-btn custom-btn-secondary" onclick="fecharModais()">Cancelar</button>
+                    <button type="submit" form="formAdicionarAluno" class="custom-btn custom-btn-primary">Adicionar</button>
                 </div>
             </div>
         </div>
 
-        <!-- Modal de Confirmação de Exclusão -->
+        <!-- Modal Confirmar Exclusão -->
         <div id="confirmacaoExclusaoModal" class="modal-base">
             <div class="modal-content excluir">
                 <div class="modal-header">
                     <h2>Confirmar Exclusão</h2>
-                    <button type="button" class="close-modal">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <button type="button" class="close-modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p class="text-gray-300">Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita.</p>
+                    <p>Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita.</p>
+                    <form id="formExcluirAluno" method="POST" action="excluir_aluno.php">
+                        <input type="hidden" name="id" id="excluir_id">
+                    </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="custom-btn custom-btn-secondary close-modal">
-                        <i class="fas fa-times"></i>
-                        <span>Cancelar</span>
-                    </button>
-                    <button type="button" class="custom-btn custom-btn-danger" onclick="efetivarExclusaoAluno()">
-                        <i class="fas fa-trash"></i>
-                        <span>Excluir</span>
-                    </button>
+                    <button type="button" class="custom-btn custom-btn-secondary" onclick="fecharModais()">Cancelar</button>
+                    <button type="submit" form="formExcluirAluno" class="custom-btn custom-btn-danger">Excluir</button>
                 </div>
             </div>
         </div>
 
-        <!-- Modal de Ver Dados -->
+        <!-- Modal Ver Dados -->
         <?php if ($modal === 'ver' && $verAluno): ?>
         <div id="verDadosModal" class="modal-base fixed inset-0 bg-black bg-opacity-60 z-50 show flex items-center justify-center animate-fadeIn">
             <div class="modal-content bg-gradient-to-br from-dark-400 via-dark-300 to-dark-600 rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-6 border-2 border-primary-500 animate-slideUp relative">
@@ -1821,232 +1901,95 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
 
         // Função para adicionar event listeners aos botões
         function adicionarEventListeners() {
+            console.log('Adding event listeners to buttons');
+            
             // Event listeners para os botões de ação na tabela desktop
             document.querySelectorAll('.ver-detalhes-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    window.verDetalhes(this.getAttribute('data-id'));
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.getAttribute('data-id');
+                    console.log('View details clicked for ID:', id);
+                    verDetalhes(id);
                 });
             });
 
             document.querySelectorAll('.editar-aluno-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    window.editarAluno(this.getAttribute('data-id'));
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.getAttribute('data-id');
+                    console.log('Edit clicked for ID:', id);
+                    editarAluno(id);
                 });
             });
 
             document.querySelectorAll('.deletar-aluno-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    window.confirmarExclusao(this.getAttribute('data-id'));
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.getAttribute('data-id');
+                    console.log('Delete clicked for ID:', id);
+                    confirmarExclusao(id);
+                });
+            });
+        }
+
+        // Initialize when document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Document ready, initializing...');
+            
+            // Verificar parâmetros da URL
+            verificarParametrosURL();
+            
+            // Add event listener for the "Add Student" button
+            const addButton = document.getElementById('addAlunoBtn');
+            if (addButton) {
+                console.log('Add button found, adding listener');
+                addButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Add button clicked');
+                    abrirAdicionarAluno();
+                });
+            } else {
+                console.error('Add button not found');
+            }
+
+            // Initialize table and add event listeners
+            if (alunos && alunos.length > 0) {
+                console.log('Initializing tables with', alunos.length, 'students');
+                renderizarTabelaDesktop();
+                renderizarCardsMobile();
+            } else {
+                console.log('No students found in data');
+            }
+            
+            // Add event listeners for all close buttons
+            document.querySelectorAll('.close-modal, #fecharAdicionarBtn, #cancelarExclusaoBtn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Close button clicked');
+                    fecharModais();
                 });
             });
 
-            // Event listeners para fechar modais
+            // Add event listeners for modal background clicks
             document.querySelectorAll('.modal-base').forEach(modal => {
                 modal.addEventListener('click', function(e) {
                     if (e.target === this) {
-                        window.fecharModais();
+                        console.log('Modal background clicked');
+                        fecharModais();
                     }
                 });
             });
 
-            document.querySelectorAll('.close-modal').forEach(btn => {
-                btn.addEventListener('click', window.fecharModais);
-            });
-
-            // Event listener para o botão de confirmar exclusão
-            const confirmarExclusaoBtn = document.getElementById('confirmarExclusaoBtn');
-            if (confirmarExclusaoBtn) {
-                confirmarExclusaoBtn.addEventListener('click', window.efetivarExclusaoAluno);
-            }
-
-            // Event listener para o botão de cancelar exclusão
-            const cancelarExclusaoBtn = document.getElementById('cancelarExclusaoBtn');
-            if (cancelarExclusaoBtn) {
-                cancelarExclusaoBtn.addEventListener('click', window.fecharModais);
-            }
-
-            // Tecla ESC para fechar modais
+            // Add ESC key listener
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
-                    window.fecharModais();
+                    console.log('ESC key pressed');
+                    fecharModais();
                 }
             });
-        }
 
-        // Função para renderizar a tabela de alunos (desktop)
-        function renderizarTabelaDesktop(alunosFiltrados = alunos) {
-            console.log('Rendering desktop table');
-            const tbody = document.getElementById('alunosTableBody');
-            if (!tbody) {
-                console.error('Table body element not found');
-                return;
-            }
-            
-            tbody.innerHTML = '';
-
-            if (!Array.isArray(alunosFiltrados) || alunosFiltrados.length === 0) {
-                const tr = document.createElement('tr');
-                tr.innerHTML = '<td colspan="2" class="px-3 py-4 text-center text-sm text-gray-400">Nenhum aluno encontrado</td>';
-                tbody.appendChild(tr);
-                return;
-            }
-
-            alunosFiltrados.forEach((aluno, index) => {
-                if (!aluno || !aluno.nome) {
-                    console.error('Invalid student data:', aluno);
-                    return;
-                }
-
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-dark-50 transition-colors slide-up';
-                tr.style.animationDelay = `${index * 50}ms`;
-                tr.innerHTML = `
-                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
-                    <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
-                        <button type="button" class="ver-detalhes-btn text-blue-400 hover:text-blue-300 mr-2 transition-colors" data-id="${aluno.id}">
-                            <i class="fas fa-info-circle"></i>
-                        </button>
-                        <button type="button" class="editar-aluno-btn text-primary-400 hover:text-primary-300 mr-2 transition-colors" data-id="${aluno.id}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button type="button" class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="${aluno.id}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            // Re-add event listeners after rendering
+            // Initialize other event listeners
             adicionarEventListeners();
-        }
-
-        // Função para renderizar os cards de alunos (mobile)
-        function renderizarCardsMobile(alunosFiltrados = alunos) {
-            console.log('Rendering mobile cards');
-            const container = document.getElementById('alunosMobileCards');
-            if (!container) {
-                console.error('Mobile cards container not found');
-                return;
-            }
-            container.innerHTML = '';
-
-            if (!Array.isArray(alunosFiltrados) || alunosFiltrados.length === 0) {
-                container.innerHTML = '<div class="text-center text-gray-400 py-4">Nenhum aluno encontrado</div>';
-                return;
-            }
-
-            alunosFiltrados.forEach(aluno => {
-                const card = document.createElement('div');
-                card.className = 'mobile-card bg-dark-300 rounded-lg p-4 shadow-md';
-
-                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'area-desenvolvimento' :
-                    aluno.perfil_opc1 === 'design' ? 'area-design' :
-                    aluno.perfil_opc1 === 'midia' ? 'area-midia' :
-                    'area-redes';
-                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'area-desenvolvimento' :
-                    aluno.perfil_opc2 === 'design' ? 'area-design' :
-                    aluno.perfil_opc2 === 'midia' ? 'area-midia' :
-                    'area-redes';
-
-                card.innerHTML = `
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-medium text-white">${aluno.nome}</h3>
-                        <div class="flex items-center gap-2">
-                            <button class="ver-detalhes-btn text-blue-400 hover:text-blue-300 transition-colors" data-id="${aluno.id}">
-                                <i class="fas fa-info-circle"></i>
-                            </button>
-                            <button class="editar-aluno-btn text-green-400 hover:text-green-300 transition-colors" data-id="${aluno.id}">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="${aluno.id}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div id="detalhes-mobile-${aluno.id}" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <span class="text-gray-400 text-sm">Contato:</span>
-                                <p class="text-white">${aluno.contato}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Médias:</span>
-                                <p class="text-white">${aluno.medias}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Email:</span>
-                                <p class="text-white">${aluno.email}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Projetos:</span>
-                                <p class="text-white">${aluno.projetos}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Opção 2:</span>
-                                <p class="text-white">
-                                    <span class="status-pill ${areaClassOpc2}">
-                                        <i class="fas fa-${
-                                            aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
-                                            aluno.perfil_opc2 === 'design' ? 'paint-brush' :
-                                            aluno.perfil_opc2 === 'midia' ? 'video' :
-                                            'network-wired'
-                                        } text-xs mr-1"></i>
-                                        ${aluno.perfil_opc2}
-                                    </span>
-                                </p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Ocorrência:</span>
-                                <p class="text-white">${aluno.ocorrencia}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Custeio:</span>
-                                <p class="text-white">${aluno.custeio == 1 ? 'Sim' : 'Não'}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Entregas Individuais:</span>
-                                <p class="text-white">${aluno.entregas_individuais}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Entregas do Grupo:</span>
-                                <p class="text-white">${aluno.entregas_grupo}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-
-            // Re-add event listeners after rendering
-            adicionarEventListeners();
-        }
-
-        // Função para aplicar filtros
-        function aplicarFiltros() {
-            const searchTerm = document.getElementById('searchAluno').value.toLowerCase().trim();
-            const alunosFiltrados = alunos.filter(aluno => {
-                const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
-                return matchSearch;
-            });
-
-            renderizarTabelaDesktop(alunosFiltrados);
-            renderizarCardsMobile(alunosFiltrados);
-        }
-
-        // Event listener for search
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchAluno');
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const termo = this.value.toLowerCase();
-                    const alunosFiltrados = alunos.filter(aluno => 
-                        aluno.nome.toLowerCase().includes(termo)
-                    );
-                    renderizarTabelaDesktop(alunosFiltrados);
-                    renderizarCardsMobile(alunosFiltrados);
-                });
-            }
         });
 
         // Expose additional functions to global scope
@@ -2056,4 +1999,5 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
     </script>
 </body>
 
+</html>
 </html>
