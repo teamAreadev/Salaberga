@@ -9,6 +9,26 @@ $session->autenticar_session();
 if (isset($_POST['layout'])) {
     $session->quebra_session();
 }
+
+// Detectar modal aberto via GET
+$modal = isset($_GET['modal']) ? $_GET['modal'] : '';
+$editId = isset($_GET['id']) ? intval($_GET['id']) : null;
+$editAluno = null;
+$verAluno = null;
+if (($modal === 'editar' || $modal === 'ver') && $editId) {
+    // Buscar dados do aluno para edição ou visualização
+    $alunos = $select_model->alunos_aptos_curso();
+    foreach ($alunos as $a) {
+        if ($a['id'] == $editId) {
+            if ($modal === 'editar') {
+                $editAluno = $a;
+            } else {
+                $verAluno = $a;
+            }
+            break;
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -101,73 +121,75 @@ if (isset($_POST['layout'])) {
                 const areaClassOpc1 = aluno.perfil_opc1.toLowerCase();
                 const areaClassOpc2 = aluno.perfil_opc2.toLowerCase();
                 detalhesContent.innerHTML = `
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">ID:</span>
-                        <span class="mobile-card-value">${aluno.id}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Nome:</span>
-                        <span class="mobile-card-value font-medium">${aluno.nome}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Contato:</span>
-                        <span class="mobile-card-value">${aluno.contato}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Médias:</span>
-                        <span class="mobile-card-value">${aluno.medias}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Email:</span>
-                        <span class="mobile-card-value">${aluno.email}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Projetos:</span>
-                        <span class="mobile-card-value">${aluno.projetos}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Opção 1:</span>
-                        <span class="mobile-card-value">
-                            <span class="status-pill area-${areaClassOpc1}">
-                                <i class="fas fa-${
-                                    aluno.perfil_opc1 === 'desenvolvimento' ? 'code' :
-                                    aluno.perfil_opc1 === 'design' ? 'paint-brush' :
-                                    aluno.perfil_opc1 === 'midia' ? 'video' :
-                                    'network-wired'
-                                } text-xs mr-1"></i>
-                                ${aluno.perfil_opc1}
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">ID:</span>
+                            <span class="mobile-card-value">${aluno.id}</span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Nome:</span>
+                            <span class="mobile-card-value font-medium">${aluno.nome}</span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Contato:</span>
+                            <span class="mobile-card-value">${aluno.contato}</span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Médias:</span>
+                            <span class="mobile-card-value">${aluno.medias}</span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Email:</span>
+                            <span class="mobile-card-value">${aluno.email}</span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Projetos:</span>
+                            <span class="mobile-card-value">${aluno.projetos}</span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Opção 1:</span>
+                            <span class="mobile-card-value">
+                                <span class="status-pill area-${areaClassOpc1}">
+                                    <i class="fas fa-${
+                                        aluno.perfil_opc1 === 'desenvolvimento' ? 'code' :
+                                        aluno.perfil_opc1 === 'design' ? 'paint-brush' :
+                                        aluno.perfil_opc1 === 'midia' ? 'video' :
+                                        'network-wired'
+                                    } text-xs mr-1"></i>
+                                    ${aluno.perfil_opc1}
+                                </span>
                             </span>
-                        </span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Opção 2:</span>
-                        <span class="mobile-card-value">
-                            <span class="status-pill area-${areaClassOpc2}">
-                                <i class="fas fa-${
-                                    aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
-                                    aluno.perfil_opc2 === 'design' ? 'paint-brush' :
-                                    aluno.perfil_opc2 === 'midia' ? 'video' :
-                                    'network-wired'
-                                } text-xs mr-1"></i>
-                                ${aluno.perfil_opc2}
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Opção 2:</span>
+                            <span class="mobile-card-value">
+                                <span class="status-pill area-${areaClassOpc2}">
+                                    <i class="fas fa-${
+                                        aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
+                                        aluno.perfil_opc2 === 'design' ? 'paint-brush' :
+                                        aluno.perfil_opc2 === 'midia' ? 'video' :
+                                        'network-wired'
+                                    } text-xs mr-1"></i>
+                                    ${aluno.perfil_opc2}
+                                </span>
                             </span>
-                        </span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Ocorrência:</span>
-                        <span class="mobile-card-value">${aluno.ocorrencia}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Custeio:</span>
-                        <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Entregas Individuais:</span>
-                        <span class="mobile-card-value">${aluno.entregas_individuais}</span>
-                    </div>
-                    <div class="mobile-card-item">
-                        <span class="mobile-card-label">Entregas do Grupo:</span>
-                        <span class="mobile-card-value">${aluno.entregas_grupo}</span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Ocorrência:</span>
+                            <span class="mobile-card-value">${aluno.ocorrencia}</span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Custeio:</span>
+                            <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Entregas Individuais:</span>
+                            <span class="mobile-card-value">${aluno.entregas_individuais}</span>
+                        </div>
+                        <div class="mobile-card-item">
+                            <span class="mobile-card-label">Entregas do Grupo:</span>
+                            <span class="mobile-card-value">${aluno.entregas_grupo}</span>
+                        </div>
                     </div>
                 `;
                 const modal = document.getElementById('detalhesModal');
@@ -523,7 +545,7 @@ if (isset($_POST['layout'])) {
             background-color: #232323 !important;
             border-color: #3d3d3d !important;
             color: #ffffff !important;
-            padding: 0.75rem 2.5rem 0.75rem 1rem !important;
+            padding: 0.5rem 1rem !important;
             width: 100% !important;
             font-size: 0.95rem !important;
             transition: all 0.3s ease !important;
@@ -534,6 +556,7 @@ if (isset($_POST['layout'])) {
             white-space: normal !important;
             overflow: visible !important;
             text-overflow: unset !important;
+            border-radius: 0.375rem !important;
         }
 
         select.custom-input {
@@ -553,7 +576,6 @@ if (isset($_POST['layout'])) {
         }
 
         @media (max-width: 640px) {
-
             input,
             select,
             .custom-input {
@@ -726,7 +748,7 @@ if (isset($_POST['layout'])) {
         .mobile-card-item {
             display: flex;
             justify-content: space-between;
-            padding: 0.75rem 0;
+            padding: 0.5rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -1008,6 +1030,50 @@ if (isset($_POST['layout'])) {
             left: 0;
             width: 100%;
             height: 100%;
+        }
+        
+        /* Ajustes para os modais */
+        .modal-content {
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        /* Grid para formulários */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        @media (max-width: 640px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Ajustes para campos de formulário */
+        .form-field {
+            margin-bottom: 0.75rem;
+        }
+        
+        .form-field label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Ajustes para o modal de detalhes */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        @media (max-width: 640px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 
@@ -1028,14 +1094,6 @@ if (isset($_POST['layout'])) {
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="resultado_selecionados.php" class="sidebar-link">
-                        <i class="fa fa-user-circle w-5 mr-3"></i>
-                        Resultados da Seleção
-                    </a>
-                    <a href="gerenciar_alunos.php" class="sidebar-link active">
-                        <i class="fas fa-user-graduate w-5 mr-3"></i>
-                        Gerenciar Alunos
-                    </a>
                     <a href="gerenciar_empresas.php" class="sidebar-link">
                         <i class="fas fa-building w-5 mr-3"></i>
                         Gerenciar Empresas
@@ -1047,6 +1105,14 @@ if (isset($_POST['layout'])) {
                     <a href="selecionados.php" class="sidebar-link">
                         <i class="fas fa-check-circle w-5 mr-3"></i>
                         Selecionados
+                    </a>
+                    <a href="gerenciar_alunos.php" class="sidebar-link active">
+                        <i class="fas fa-user-graduate w-5 mr-3"></i>
+                        Gerenciar Alunos
+                    </a>
+                    <a href="resultado_selecionados.php" class="sidebar-link">
+                        <i class="fa fa-user-circle w-5 mr-3"></i>
+                        Resultados 
                     </a>
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
@@ -1088,14 +1154,6 @@ if (isset($_POST['layout'])) {
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="resultado_selecionados.php" class="sidebar-link">
-                        <i class="fa fa-user-circle w-5 mr-3"></i>
-                        Resultados da Seleção
-                    </a>
-                    <a href="gerenciar_alunos.php" class="sidebar-link active">
-                        <i class="fas fa-user-graduate w-5 mr-3"></i>
-                        Gerenciar Alunos
-                    </a>
                     <a href="gerenciar_empresas.php" class="sidebar-link">
                         <i class="fas fa-building w-5 mr-3"></i>
                         Gerenciar Empresas
@@ -1107,6 +1165,14 @@ if (isset($_POST['layout'])) {
                     <a href="selecionados.php" class="sidebar-link">
                         <i class="fas fa-check-circle w-5 mr-3"></i>
                         Selecionados
+                    </a>
+                    <a href="gerenciar_alunos.php" class="sidebar-link active">
+                        <i class="fas fa-user-graduate w-5 mr-3"></i>
+                        Gerenciar Alunos
+                    </a>
+                    <a href="resultado_selecionados.php" class="sidebar-link">
+                        <i class="fa fa-user-circle w-5 mr-3"></i>
+                        Resultados 
                     </a>
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
@@ -1154,10 +1220,10 @@ if (isset($_POST['layout'])) {
                             <i class="fas fa-search search-icon"></i>
                             <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="custom-input pl-10 pr-4 py-2.5 w-full">
                         </div>
-                        <button type="button" class="custom-btn custom-btn-primary" id="addAlunoBtn">
+                        <a href="?modal=adicionar" class="custom-btn custom-btn-primary" id="addAlunoBtn">
                             <i class="fas fa-plus btn-icon"></i>
                             <span>Adicionar Aluno</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
                 <!-- Table Desktop -->
@@ -1181,14 +1247,16 @@ if (isset($_POST['layout'])) {
                                     <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
                                     <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
                                         <button type="button" class="ver-detalhes-btn text-blue-400 hover:text-blue-300 mr-2 transition-colors" data-id="<?= $dado['id'] ?>">
-                                            <i class="fas fa-info-circle"></i>
+                                            <a href="?modal=ver&id=<?= $dado['id'] ?>" class="text-blue-400 hover:text-blue-300">
+                                                <i class="fas fa-info-circle"></i>
+                                            </a>
                                         </button>
-                                        <button type="button" class="editar-aluno-btn text-primary-400 hover:text-primary-300 mr-2 transition-colors" data-id="<?= $dado['id'] ?>">
+                                        <a href="?modal=editar&id=<?= $dado['id'] ?>" class="editar-aluno-btn text-primary-400 hover:text-primary-300 mr-2 transition-colors">
                                             <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors" data-id="<?= $dado['id'] ?>">
+                                        </a>
+                                        <a href="?modal=excluir&id=<?= $dado['id'] ?>" class="deletar-aluno-btn text-red-400 hover:text-red-300 transition-colors">
                                             <i class="fas fa-trash"></i>
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
                                 <tr id="detalhes-<?= $dado['id'] ?>" class="hidden bg-dark-50">
@@ -1338,80 +1406,84 @@ if (isset($_POST['layout'])) {
         </div>
 
         <!-- Modal de Edição -->
-        <div id="editarAlunoModal" class="modal-base fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-            <div class="modal-content bg-dark-400 rounded-lg shadow-xl max-w-2xl mx-auto mt-20 p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-white">Editar Aluno</h2>
-                    <button type="button" class="close-modal text-gray-400 hover:text-white transition-colors">
+        <div id="editarAlunoModal" class="modal-base fixed inset-0 bg-black bg-opacity-60 z-50<?= ($modal === 'editar' ? ' show flex items-center justify-center animate-fadeIn' : ' hidden') ?>">
+            <div class="modal-content bg-gradient-to-br from-dark-400 via-dark-300 to-dark-600 rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-6 border-2 border-primary-500 animate-slideUp relative">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-primary-400">Editar Aluno</h2>
+                    <a href="gerenciar_alunos.php" class="close-modal text-gray-400 hover:text-white transition-colors text-2xl">
                         <i class="fas fa-times"></i>
-                    </button>
+                    </a>
                 </div>
                 <form id="editAlunoForm" action="../controllers/controller_editar_excluir.php" method="post" class="space-y-4">
                     <input type="hidden" name="acao" value="editar">
-                    <input type="hidden" id="editAlunoId" name="id_aluno">
-                    <div>
-                        <label for="editNome" class="block text-sm font-medium text-gray-300">Nome</label>
-                        <input type="text" id="editNome" name="nome" required class="custom-input">
+                    <input type="hidden" id="editAlunoId" name="id_aluno" value="<?= $editAluno['id'] ?? '' ?>">
+                    
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label for="editNome" class="block text-sm font-medium text-gray-300">Nome</label>
+                            <input type="text" id="editNome" name="nome" required class="custom-input" value="<?= htmlspecialchars($editAluno['nome'] ?? '') ?>">
+                        </div>
+                        <div class="form-field">
+                            <label for="editContato" class="block text-sm font-medium text-gray-300">Contato</label>
+                            <input type="text" id="editContato" name="contato" class="custom-input" value="<?= htmlspecialchars($editAluno['contato'] ?? '') ?>">
+                        </div>
+                        <div class="form-field">
+                            <label for="editMedias" class="block text-sm font-medium text-gray-300">Médias</label>
+                            <input type="number" id="editMedias" name="medias" min="0" max="10" step="0.1" required class="custom-input" value="<?= htmlspecialchars($editAluno['medias'] ?? '') ?>">
+                        </div>
+                        <div class="form-field">
+                            <label for="editEmail" class="block text-sm font-medium text-gray-300">Email</label>
+                            <input type="email" id="editEmail" name="email" required class="custom-input" value="<?= htmlspecialchars($editAluno['email'] ?? '') ?>">
+                        </div>
+                        <div class="form-field">
+                            <label for="editProjetos" class="block text-sm font-medium text-gray-300">Projetos</label>
+                            <input type="text" id="editProjetos" name="projetos" class="custom-input" value="<?= htmlspecialchars($editAluno['projetos'] ?? '') ?>">
+                        </div>
+                        <div class="form-field">
+                            <label for="editPerfilOpc1" class="block text-sm font-medium text-gray-300">Opção 1</label>
+                            <select id="editPerfilOpc1" name="perfil_opc1" required class="custom-input">
+                                <option value="desenvolvimento" <?= (isset($editAluno['perfil_opc1']) && $editAluno['perfil_opc1'] == 'desenvolvimento') ? 'selected' : '' ?>>Desenvolvimento</option>
+                                <option value="design" <?= (isset($editAluno['perfil_opc1']) && $editAluno['perfil_opc1'] == 'design') ? 'selected' : '' ?>>Design/Mídia</option>
+                                <option value="tutoria" <?= (isset($editAluno['perfil_opc1']) && $editAluno['perfil_opc1'] == 'tutoria') ? 'selected' : '' ?>>Tutoria</option>
+                                <option value="suporte/redes" <?= (isset($editAluno['perfil_opc1']) && $editAluno['perfil_opc1'] == 'suporte/redes') ? 'selected' : '' ?>>Suporte/Redes</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="editPerfilOpc2" class="block text-sm font-medium text-gray-300">Opção 2</label>
+                            <select id="editPerfilOpc2" name="perfil_opc2" required class="custom-input">
+                                <option value="desenvolvimento" <?= (isset($editAluno['perfil_opc2']) && $editAluno['perfil_opc2'] == 'desenvolvimento') ? 'selected' : '' ?>>Desenvolvimento</option>
+                                <option value="design" <?= (isset($editAluno['perfil_opc2']) && $editAluno['perfil_opc2'] == 'design') ? 'selected' : '' ?>>Design/Mídia</option>
+                                <option value="tutoria" <?= (isset($editAluno['perfil_opc2']) && $editAluno['perfil_opc2'] == 'tutoria') ? 'selected' : '' ?>>Tutoria</option>
+                                <option value="suporte/redes" <?= (isset($editAluno['perfil_opc2']) && $editAluno['perfil_opc2'] == 'suporte/redes') ? 'selected' : '' ?>>Suporte/Redes</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="editOcorrencia" class="block text-sm font-medium text-gray-300">Ocorrência</label>
+                            <input type="text" id="editOcorrencia" name="ocorrencia" class="custom-input" value="<?= htmlspecialchars($editAluno['ocorrencia'] ?? '') ?>">
+                        </div>
+                        <div class="form-field">
+                            <label for="editCusteio" class="block text-sm font-medium text-gray-300">Custeio</label>
+                            <select id="editCusteio" name="custeio" required class="custom-input">
+                                <option value="1" <?= (isset($editAluno['custeio']) && $editAluno['custeio'] == 1) ? 'selected' : '' ?>>Sim</option>
+                                <option value="0" <?= (isset($editAluno['custeio']) && $editAluno['custeio'] == 0) ? 'selected' : '' ?>>Não</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="editEntregasIndividuais" class="block text-sm font-medium text-gray-300">Entregas Individuais</label>
+                            <input type="text" id="editEntregasIndividuais" name="entregas_individuais" class="custom-input" value="<?= htmlspecialchars($editAluno['entregas_individuais'] ?? '') ?>">
+                        </div>
+                        <div class="form-field">
+                            <label for="editEntregasGrupo" class="block text-sm font-medium text-gray-300">Entregas do Grupo</label>
+                            <input type="text" id="editEntregasGrupo" name="entregas_grupo" class="custom-input" value="<?= htmlspecialchars($editAluno['entregas_grupo'] ?? '') ?>">
+                        </div>
                     </div>
-                    <div>
-                        <label for="editContato" class="block text-sm font-medium text-gray-300">Contato</label>
-                        <input type="text" id="editContato" name="contato" class="custom-input">
-                    </div>
-                    <div>
-                        <label for="editMedias" class="block text-sm font-medium text-gray-300">Médias</label>
-                        <input type="number" id="editMedias" name="medias" min="0" max="10" step="0.1" required class="custom-input">
-                    </div>
-                    <div>
-                        <label for="editEmail" class="block text-sm font-medium text-gray-300">Email</label>
-                        <input type="email" id="editEmail" name="email" required class="custom-input">
-                    </div>
-                    <div>
-                        <label for="editProjetos" class="block text-sm font-medium text-gray-300">Projetos Participados</label>
-                        <input type="text" id="editProjetos" name="projetos" class="custom-input">
-                    </div>
-                    <div>
-                        <label for="editPerfilOpc1" class="block text-sm font-medium text-gray-300">Opção 1</label>
-                        <select id="editPerfilOpc1" name="perfil_opc1" required class="custom-input">
-                            <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="design">Design/Mídia</option>
-                            <option value="tutoria">Tutoria</option>
-                            <option value="suporte/redes">Suporte/Redes</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="editPerfilOpc2" class="block text-sm font-medium text-gray-300">Opção 2</label>
-                        <select id="editPerfilOpc2" name="perfil_opc2" required class="custom-input">
-                            <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="design">Design/Mídia</option>
-                            <option value="tutoria">Tutoria</option>
-                            <option value="suporte/redes">Suporte/Redes</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="editOcorrencia" class="block text-sm font-medium text-gray-300">Ocorrência</label>
-                        <input type="text" id="editOcorrencia" name="ocorrencia" class="custom-input">
-                    </div>
-                    <div>
-                        <label for="editCusteio" class="block text-sm font-medium text-gray-300">Custeio</label>
-                        <select id="editCusteio" name="custeio" required class="custom-input">
-                            <option value="1">Sim</option>
-                            <option value="0">Não</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="editEntregasIndividuais" class="block text-sm font-medium text-gray-300">Entregas Individuais</label>
-                        <input type="text" id="editEntregasIndividuais" name="entregas_individuais" class="custom-input">
-                    </div>
-                    <div>
-                        <label for="editEntregasGrupo" class="block text-sm font-medium text-gray-300">Entregas do Grupo</label>
-                        <input type="text" id="editEntregasGrupo" name="entregas_grupo" class="custom-input">
-                    </div>
+                    
                     <div class="mt-6 flex justify-end gap-3">
-                        <button type="button" class="close-modal custom-btn custom-btn-secondary">
+                        <a href="gerenciar_alunos.php" class="custom-btn custom-btn-secondary px-4 py-2 rounded-lg shadow-lg">
                             <i class="fas fa-times"></i>
                             <span>Cancelar</span>
-                        </button>
-                        <button type="submit" class="custom-btn custom-btn-primary">
+                        </a>
+                        <button type="submit" class="custom-btn custom-btn-primary px-4 py-2 rounded-lg shadow-lg">
                             <i class="fas fa-save"></i>
                             <span>Salvar</span>
                         </button>
@@ -1421,79 +1493,83 @@ if (isset($_POST['layout'])) {
         </div>
 
         <!-- Modal de Adicionar Aluno -->
-        <div id="adicionarAlunoModal" class="modal-base fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-            <div class="modal-content bg-dark-400 rounded-lg shadow-xl max-w-2xl mx-auto mt-20 p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-white">Adicionar Aluno</h2>
-                    <button type="button" class="close-modal text-gray-400 hover:text-white transition-colors">
+        <div id="adicionarAlunoModal" class="modal-base fixed inset-0 bg-black bg-opacity-60 z-50<?= ($modal === 'adicionar' ? ' show flex items-center justify-center animate-fadeIn' : ' hidden') ?>">
+            <div class="modal-content bg-gradient-to-br from-dark-400 via-dark-300 to-dark-600 rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-6 border-2 border-primary-500 animate-slideUp relative">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-primary-400">Adicionar Aluno</h2>
+                    <a href="gerenciar_alunos.php" class="close-modal text-gray-400 hover:text-white transition-colors text-2xl">
                         <i class="fas fa-times"></i>
-                    </button>
+                    </a>
                 </div>
                 <form id="addAlunoForm" action="../controllers/controller_adicionar.php" method="post" class="space-y-4">
                     <input type="hidden" name="acao" value="adicionar">
-                    <div>
-                        <label for="addNome" class="block text-sm font-medium text-gray-300">Nome</label>
-                        <input type="text" id="addNome" name="nome" required class="custom-input">
+                    
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label for="addNome" class="block text-sm font-medium text-gray-300">Nome</label>
+                            <input type="text" id="addNome" name="nome" required class="custom-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="addContato" class="block text-sm font-medium text-gray-300">Contato</label>
+                            <input type="text" id="addContato" name="contato" class="custom-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="addMedias" class="block text-sm font-medium text-gray-300">Médias</label>
+                            <input type="number" id="addMedias" name="medias" min="0" max="10" step="0.1" required class="custom-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="addEmail" class="block text-sm font-medium text-gray-300">Email</label>
+                            <input type="email" id="addEmail" name="email" required class="custom-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="addProjetos" class="block text-sm font-medium text-gray-300">Projetos</label>
+                            <input type="text" id="addProjetos" name="projetos" class="custom-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="addPerfilOpc1" class="block text-sm font-medium text-gray-300">Opção 1</label>
+                            <select id="addPerfilOpc1" name="perfil_opc1" required class="custom-input">
+                                <option value="desenvolvimento">Desenvolvimento</option>
+                                <option value="design">Design/Mídia</option>
+                                <option value="tutoria">Tutoria</option>
+                                <option value="suporte/redes">Suporte/Redes</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="addPerfilOpc2" class="block text-sm font-medium text-gray-300">Opção 2</label>
+                            <select id="addPerfilOpc2" name="perfil_opc2" required class="custom-input">
+                                <option value="desenvolvimento">Desenvolvimento</option>
+                                <option value="design">Design/Mídia</option>
+                                <option value="tutoria">Tutoria</option>
+                                <option value="suporte/redes">Suporte/Redes</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="addOcorrencia" class="block text-sm font-medium text-gray-300">Ocorrência</label>
+                            <input type="text" id="addOcorrencia" name="ocorrencia" class="custom-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="addCusteio" class="block text-sm font-medium text-gray-300">Custeio</label>
+                            <select id="addCusteio" name="custeio" required class="custom-input">
+                                <option value="1">Sim</option>
+                                <option value="0">Não</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="addEntregasIndividuais" class="block text-sm font-medium text-gray-300">Entregas Individuais</label>
+                            <input type="text" id="addEntregasIndividuais" name="entregas_individuais" class="custom-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="addEntregasGrupo" class="block text-sm font-medium text-gray-300">Entregas do Grupo</label>
+                            <input type="text" id="addEntregasGrupo" name="entregas_grupo" class="custom-input">
+                        </div>
                     </div>
-                    <div>
-                        <label for="addContato" class="block text-sm font-medium text-gray-300">Contato</label>
-                        <input type="text" id="addContato" name="contato" class="custom-input">
-                    </div>
-                    <div>
-                        <label for="addMedias" class="block text-sm font-medium text-gray-300">Médias</label>
-                        <input type="number" id="addMedias" name="medias" min="0" max="10" step="0.1" required class="custom-input">
-                    </div>
-                    <div>
-                        <label for="addEmail" class="block text-sm font-medium text-gray-300">Email</label>
-                        <input type="email" id="addEmail" name="email" required class="custom-input">
-                    </div>
-                    <div>
-                        <label for="addProjetos" class="block text-sm font-medium text-gray-300">Projetos Participados</label>
-                        <input type="text" id="addProjetos" name="projetos" class="custom-input">
-                    </div>
-                    <div>
-                        <label for="addPerfilOpc1" class="block text-sm font-medium text-gray-300">Opção 1</label>
-                        <select id="addPerfilOpc1" name="perfil_opc1" required class="custom-input">
-                            <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="design">Design/Mídia</option>
-                            <option value="tutoria">Tutoria</option>
-                            <option value="suporte/redes">Suporte/Redes</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="addPerfilOpc2" class="block text-sm font-medium text-gray-300">Opção 2</label>
-                        <select id="addPerfilOpc2" name="perfil_opc2" required class="custom-input">
-                            <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="design">Design/Mídia</option>
-                            <option value="tutoria">Tutoria</option>
-                            <option value="suporte/redes">Suporte/Redes</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="addOcorrencia" class="block text-sm font-medium text-gray-300">Ocorrência</label>
-                        <input type="text" id="addOcorrencia" name="ocorrencia" class="custom-input">
-                    </div>
-                    <div>
-                        <label for="addCusteio" class="block text-sm font-medium text-gray-300">Custeio</label>
-                        <select id="addCusteio" name="custeio" required class="custom-input">
-                            <option value="1">Sim</option>
-                            <option value="0">Não</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="addEntregasIndividuais" class="block text-sm font-medium text-gray-300">Entregas Individuais</label>
-                        <input type="text" id="addEntregasIndividuais" name="entregas_individuais" class="custom-input">
-                    </div>
-                    <div>
-                        <label for="addEntregasGrupo" class="block text-sm font-medium text-gray-300">Entregas do Grupo</label>
-                        <input type="text" id="addEntregasGrupo" name="entregas_grupo" class="custom-input">
-                    </div>
+                    
                     <div class="mt-6 flex justify-end gap-3">
-                        <button type="button" id="fecharAdicionarBtn" class="custom-btn custom-btn-secondary">
+                        <a href="gerenciar_alunos.php" class="custom-btn custom-btn-secondary px-4 py-2 rounded-lg shadow-lg">
                             <i class="fas fa-times btn-icon"></i>
                             <span>Cancelar</span>
-                        </button>
-                        <button type="submit" class="custom-btn custom-btn-primary">
+                        </a>
+                        <button type="submit" class="custom-btn custom-btn-primary px-4 py-2 rounded-lg shadow-lg">
                             <i class="fas fa-plus btn-icon"></i>
                             <span>Adicionar</span>
                         </button>
@@ -1503,27 +1579,92 @@ if (isset($_POST['layout'])) {
         </div>
 
         <!-- Modal de Confirmação de Exclusão -->
-        <div id="confirmacaoExclusaoModal" class="modal-base fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-            <div class="modal-content bg-dark-400 rounded-lg shadow-xl max-w-md mx-auto mt-20 p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-white">Confirmar Exclusão</h2>
-                    <button type="button" class="close-modal text-gray-400 hover:text-white transition-colors">
+        <div id="confirmacaoExclusaoModal" class="modal-base fixed inset-0 bg-black bg-opacity-60 z-50<?= ($modal === 'excluir' ? ' show flex items-center justify-center animate-fadeIn' : ' hidden') ?>">
+            <div class="modal-content bg-gradient-to-br from-dark-400 via-dark-300 to-dark-600 rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6 border-2 border-red-500 animate-slideUp relative">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-red-400">Confirmar Exclusão</h2>
+                    <a href="gerenciar_alunos.php" class="close-modal text-gray-400 hover:text-white transition-colors text-2xl">
                         <i class="fas fa-times"></i>
-                    </button>
+                    </a>
                 </div>
                 <p class="text-gray-300 mb-6">Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita.</p>
-                <div class="flex justify-end gap-3">
-                    <button type="button" id="cancelarExclusaoBtn" class="custom-btn custom-btn-secondary">
+                <div class="flex justify-end gap-3 mt-6">
+                    <a href="gerenciar_alunos.php" class="custom-btn custom-btn-secondary px-4 py-2 rounded-lg shadow-lg">
                         <i class="fas fa-times"></i>
                         <span>Cancelar</span>
-                    </button>
-                    <button type="button" id="confirmarExclusaoBtn" class="custom-btn custom-btn-danger">
+                    </a>
+                    <a href="../controllers/controller_editar_excluir.php?acao=excluir&id_aluno=<?= $editId ?>" class="custom-btn custom-btn-danger px-4 py-2 rounded-lg shadow-lg">
                         <i class="fas fa-trash"></i>
                         <span>Excluir</span>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
+
+        <!-- Modal de Ver Dados -->
+        <?php if ($modal === 'ver' && $verAluno): ?>
+        <div id="verDadosModal" class="modal-base fixed inset-0 bg-black bg-opacity-60 z-50 show flex items-center justify-center animate-fadeIn">
+            <div class="modal-content bg-gradient-to-br from-dark-400 via-dark-300 to-dark-600 rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-6 border-2 border-primary-500 animate-slideUp relative">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-primary-400">Dados do Aluno</h2>
+                    <a href="gerenciar_alunos.php" class="close-modal text-gray-400 hover:text-white transition-colors text-2xl">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </div>
+                <div class="details-grid">
+                    <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-gray-300 text-sm">Nome:</span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['nome']) ?></span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-gray-300 text-sm">Contato:</span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['contato'] ?: '-') ?></span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-gray-300 text-sm">Médias:</span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['medias'] ?: '-') ?></span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-gray-300 text-sm">Email:</span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['email'] ?: '-') ?></span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-gray-300 text-sm">Projetos:</span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['projetos'] ?: '-') ?></span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-gray-300 text-sm">Opção 1:</span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['perfil_opc1']) ?></span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-gray-300 text-sm">Opção 2:</span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['perfil_opc2']) ?></span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-gray-300 text-sm">Ocorrência:</span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['ocorrencia'] ?: '-') ?></span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-gray-300 text-sm">Custeio:</span>
+                        <span class="text-white"><?= $verAluno['custeio'] == 1 ? 'Sim' : 'Não' ?></span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-gray-300 text-sm">Entregas Individuais:</span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['entregas_individuais'] ?? '-') ?></span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-gray-300 text-sm">Entregas do Grupo:</span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['entregas_grupo'] ?? '-') ?></span>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <a href="gerenciar_alunos.php" class="custom-btn custom-btn-primary px-4 py-2 rounded-lg shadow-lg">
+                        <i class="fas fa-arrow-left mr-2"></i> Fechar
+                    </a>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
     </div>
 
     <script>
@@ -1767,5 +1908,4 @@ if (isset($_POST['layout'])) {
     </script>
 </body>
 
-</html>
 </html>

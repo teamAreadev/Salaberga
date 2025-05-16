@@ -316,14 +316,6 @@ if ($stmt) {
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="resultado_selecionados.php" class="sidebar-link">
-                        <i class="fa fa-user-circle w-5 mr-3"></i>
-                        Resultados da Seleção
-                    </a>
-                    <a href="gerenciar_alunos.php" class="sidebar-link">
-                        <i class="fas fa-user-graduate w-5 mr-3"></i>
-                        Gerenciar Alunos
-                    </a>
                     <a href="gerenciar_empresas.php" class="sidebar-link">
                         <i class="fas fa-building w-5 mr-3"></i>
                         Gerenciar Empresas
@@ -335,6 +327,14 @@ if ($stmt) {
                     <a href="selecionados.php" class="sidebar-link">
                         <i class="fas fa-check-circle w-5 mr-3"></i>
                         Selecionados
+                    </a>
+                    <a href="gerenciar_alunos.php" class="sidebar-link">
+                        <i class="fas fa-user-graduate w-5 mr-3"></i>
+                        Gerenciar Alunos
+                    </a>
+                    <a href="resultado_selecionados.php" class="sidebar-link active">
+                        <i class="fa fa-user-circle w-5 mr-3"></i>
+                        Resultados 
                     </a>
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
@@ -376,14 +376,6 @@ if ($stmt) {
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="resultado_selecionados.php" class="sidebar-link active">
-                        <i class="fa fa-user-circle w-5 mr-3"></i>
-                        Resultados da Seleção
-                    </a>
-                    <a href="gerenciar_alunos.php" class="sidebar-link">
-                        <i class="fas fa-user-graduate w-5 mr-3"></i>
-                        Gerenciar Alunos
-                    </a>
                     <a href="gerenciar_empresas.php" class="sidebar-link">
                         <i class="fas fa-building w-5 mr-3"></i>
                         Gerenciar Empresas
@@ -395,6 +387,14 @@ if ($stmt) {
                     <a href="selecionados.php" class="sidebar-link">
                         <i class="fas fa-check-circle w-5 mr-3"></i>
                         Selecionados
+                    </a>
+                    <a href="gerenciar_alunos.php" class="sidebar-link">
+                        <i class="fas fa-user-graduate w-5 mr-3"></i>
+                        Gerenciar Alunos
+                    </a>
+                    <a href="resultado_selecionados.php" class="sidebar-link active">
+                        <i class="fa fa-user-circle w-5 mr-3"></i>
+                        Resultados 
                     </a>
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
