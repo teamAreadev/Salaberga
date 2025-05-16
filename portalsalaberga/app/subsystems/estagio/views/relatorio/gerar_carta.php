@@ -129,14 +129,16 @@ foreach ($alunos as $aluno) {
 currículo."));
     $pdf->SetTextColor(0, 0, 0);
     $pdf->Ln(10);
-    $pdf->SetFont('Arial', '', 15);
+    $pdf->SetFont('Arial', '', 12);
     $pdf->Cell(0, 10, 'Cordialmente,', 0, 1);
-    $pdf->Cell(0, 30, '________________________________________________________________');
-    $pdf->Ln(40);
-    $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Ln(10);
-    $pdf->Cell(0, 0, utf8_decode('Prof. Francisco Otávio de Menezes Filho'), 0, 1);
-    $pdf->Cell(0, 10, utf8_decode('Coordenador do Curso em Informática'), 0, 1);
+    $pdf->Cell(0, 20, '________________________________________________________________________________');
+    $pdf->Ln(17);
+    $pdf->SetFont('Arial', '', 8);
+    
+    $pdf->Cell(0, 5, utf8_decode('Prof. Francisco Otávio de Menezes Filho '), 0, 1, 'L');
+    $pdf->Cell(0, 5, utf8_decode('Coordenador do Curso Técnico em Informática'), 0, 1, 'L');
+    $pdf->Cell(0, -5, utf8_decode('Av. Marta Carvalho Nojoza, S/Nº, Outra Banda - Maranguape - CE'), 0, 1, 'R');
+    $pdf->Cell(0, -5, utf8_decode('WhatsApp: (85) 3341-3990 / Email: 23091996@prof.ce.gov.br'), 0, 1, 'R');
 }
 
 $pdf->Output();
