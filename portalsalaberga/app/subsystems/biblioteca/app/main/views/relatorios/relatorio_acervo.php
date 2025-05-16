@@ -92,16 +92,30 @@ foreach ($result as $row) {
 }
 
 $pageWidth = $pdf->GetPageWidth() - 40;
-// Voltar às colunas originais, sem "EDITORA"
+// Ajustar as larguras das colunas para melhor distribuição
 $colunas = array(
-    array('largura' => $pageWidth * 0.34, 'texto' => utf8_decode('TÍTULO')),
-    array('largura' => $pageWidth * 0.28, 'texto' => 'AUTOR'),
-    array('largura' => $pageWidth * 0.10, 'texto' => utf8_decode('GÊNERO')),
+    array('largura' => $pageWidth * 0.35, 'texto' => utf8_decode('TÍTULO')),
+    array('largura' => $pageWidth * 0.25, 'texto' => 'AUTOR'),
+    array('largura' => $pageWidth * 0.12, 'texto' => utf8_decode('GÊNERO')),
     array('largura' => $pageWidth * 0.12, 'texto' => utf8_decode('SUBGÊNERO')),
     array('largura' => $pageWidth * 0.08, 'texto' => utf8_decode('EDIÇÃO')),
     array('largura' => $pageWidth * 0.08, 'texto' => 'QTD')
 );
 
+// Calcular o total de livros antes de exibir
+$totalLivros = 0;
+foreach ($livros as $livro) {
+    $totalLivros += (int)($livro['quantidade'] ?? 1);
+}
+
+// Adicionar ITENS EM ACERVO aqui, antes da listagem
+$pdf->SetX(20);
+$pdf->SetTextColor(0, 122, 51);
+$pdf->SetFont('Arial', 'B', 12);
+$pdf->Cell($pageWidth / 2, 10, 'ITENS EM ACERVO: ' . $totalLivros, 0, 1, 'L');
+$pdf->Ln(10);
+
+// Cabeçalho das colunas
 $pdf->SetX(20);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->SetFillColor(0, 122, 51);
@@ -112,11 +126,10 @@ foreach ($colunas as $coluna) {
 }
 $pdf->Ln();
 
-$totalLivros = 0;
-
+// Listagem dos livros
 $pdf->SetFont('Arial', '', 9);
 foreach ($livros as $i => $livro) {
-    $pdf->SetX(20);
+    $pdf->SetX(20); // Garantir que cada linha comece na mesma posição
     $cor = $livro['id'] % 2 == 0 ? 255 : 240;
     $pdf->SetFillColor($cor, $cor, $cor);
     $pdf->SetTextColor(0, 0, 0);
@@ -155,18 +168,6 @@ foreach ($livros as $i => $livro) {
     $pdf->Cell($colunas[3]['largura'], $alturaTotal, $subgenero, 1, 0, 'L', true);
     $pdf->Cell($colunas[4]['largura'], $alturaTotal, $edicao, 1, 0, 'C', true);
     $pdf->Cell($colunas[5]['largura'], $alturaTotal, $quantidade, 1, 1, 'C', true);
-
-    $totalLivros += (int)$quantidade;
 }
-if ($pdf->GetY() > $pdf->GetPageHeight() - 30) {
-    $pdf->AddPage();
-}
-
-$pdf->Ln(20);
-$pdf->SetX(20);
-$pdf->SetTextColor(0, 122, 51);
-$pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell($pageWidth / 2, 10, 'ITENS EM ACERVO: ' . $totalLivros, 0, 0, 'L');
-
 
 $pdf->Output('relatorio_acervo.pdf', 'I');
