@@ -30,7 +30,7 @@ class main_model extends connect
             return 2;
         }
     }
-    function cadastrar_empresa($nome, $endereco, $telefone)
+    function cadastrar_empresa($nome, $endereco, $telefone, $nome_contato = '')
     {
         // Verificar se a empresa já existe
         $stmt_check = $this->connect->prepare("SELECT * FROM concedentes WHERE nome = :nome");
@@ -42,8 +42,9 @@ class main_model extends connect
 
             try {
 
-                $stmt_cadastrar_empresa = $this->connect->prepare("INSERT INTO concedentes VALUES (null, :nome, :contato, :endereco)");
+                $stmt_cadastrar_empresa = $this->connect->prepare("INSERT INTO concedentes VALUES (null, :nome, :nome_contato, :contato, :endereco)");
                 $stmt_cadastrar_empresa->bindValue(':nome', $nome);
+                $stmt_cadastrar_empresa->bindValue(':nome_contato', $nome_contato);
                 $stmt_cadastrar_empresa->bindValue(':contato', $telefone);
                 $stmt_cadastrar_empresa->bindValue(':endereco', $endereco);
                 $stmt_cadastrar_empresa->execute();
@@ -147,7 +148,7 @@ class main_model extends connect
             return 2;
         }
     }
-    function editar_empresa($id, $nome, $contato, $endereco)
+    function editar_empresa($id, $nome, $contato, $endereco, $nome_contato = '')
     {
         $stmt_check = $this->connect->prepare("SELECT * FROM concedentes WHERE nome = :nome AND id = :id");
         $stmt_check->bindValue(':nome', $nome);
@@ -156,9 +157,10 @@ class main_model extends connect
         $stmt_check->fetchAll(PDO::FETCH_ASSOC);
 
         if ($stmt_check->rowCount() == 0) {
-            $stmt_excluirEmpresa = $this->connect->prepare("UPDATE `concedentes` SET `nome`= :nome,`contato`= :contato,`endereco`= :endereco WHERE id = :id");
+            $stmt_excluirEmpresa = $this->connect->prepare("UPDATE `concedentes` SET `nome`= :nome, `nome_contato`= :nome_contato, `contato`= :contato, `endereco`= :endereco WHERE id = :id");
             $stmt_excluirEmpresa->bindValue(':id', $id);
             $stmt_excluirEmpresa->bindValue(':nome', $nome);
+            $stmt_excluirEmpresa->bindValue(':nome_contato', $nome_contato);
             $stmt_excluirEmpresa->bindValue(':contato', $contato);
             $stmt_excluirEmpresa->bindValue(':endereco', $endereco);
 
