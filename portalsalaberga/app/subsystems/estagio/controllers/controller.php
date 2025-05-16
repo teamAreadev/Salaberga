@@ -1,6 +1,6 @@
 <?php
 require_once('../models/model.php');
-print_r($_POST);
+
 if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga']) && !empty($_POST['id_vaga'])) {
 
     $id_vaga = $_POST['id_vaga'];
