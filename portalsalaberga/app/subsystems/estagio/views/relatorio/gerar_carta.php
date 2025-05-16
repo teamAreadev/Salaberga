@@ -1,7 +1,7 @@
 <?php
 require('../../assets/fpdf/fpdf.php');
 require('../../models/select_model.php');
-require_once('../../config/connect.php'); // Use require_once!
+require_once('../../config/connect.php');
 
 // Pega o id_vaga da URL
 $id_vaga = isset($_GET['id_vaga']) ? $_GET['id_vaga'] : null;
@@ -13,7 +13,11 @@ if (!$id_vaga) {
 
 // Use a conexão já existente
 $conexao = new connect();
-$pdo = $conexao->connect_database();
+$pdo = $conexao->getConnection();
+
+if (!$pdo) {
+    die('Erro ao conectar ao banco de dados!');
+}
 
 $stmtVaga = $pdo->prepare('SELECT data, hora, id, id_concedente FROM vagas WHERE id = ? LIMIT 1');
 $stmtVaga->execute([$id_vaga]);
@@ -28,7 +32,7 @@ $stmtEmpresa->execute([$vaga['id_concedente']]);
 $empresa = $stmtEmpresa->fetch(PDO::FETCH_ASSOC);
 
 // Busca todos os alunos relacionados à vaga
-$stmtAlunos = $pdo->prepare('SELECT aluno.nome, aluno.ano, aluno.curso FROM aluno 
+$stmtAlunos = $pdo->prepare('SELECT aluno.nome FROM aluno 
     INNER JOIN selecao ON aluno.id = selecao.id_aluno 
     WHERE selecao.id_vaga = ?');
 $stmtAlunos->execute([$id_vaga]);
@@ -38,12 +42,13 @@ class PDF extends FPDF
 {
     function Header()
     {
-        // Adicionar cabeçalho se necessário
+        // Coloca o background em toda a página
+        $this->Image('./img/fundo.jpg', 0, 0, $this->w, $this->h);
     }
 
     function Footer()
     {
-        // Adicionar rodapé se necessário
+        // Se quiser rodapé, adicione aqui
     }
 }
 
@@ -52,7 +57,8 @@ function removerAcentos($string)
     return iconv('UTF-8', 'ASCII//TRANSLIT', $string);
 }
 
-function obterNomeMes($mesNumero) {
+function obterNomeMes($mesNumero)
+{
     switch ($mesNumero) {
         case 1:
             return 'janeiro';
@@ -97,15 +103,15 @@ foreach ($alunos as $aluno) {
     $dataExtenso = "$dia de $nomeMes de $ano";
 
     // Adicionar conteúdo da carta
-    $pdf->Cell(0, 10, 'Maranguape, ' . $dataExtenso . '.', 0, 1, 'R');
-    $pdf->Ln(10);
+    $pdf->Ln(35);
+    $pdf->Cell(0, 20, 'Maranguape, ' . $dataExtenso . '.', 0, 1, 'R');
     $pdf->Cell(0, 10, 'Prezado(a) Sr(a). ' . removerAcentos($responsavel), 0, 1);
+    $pdf->Ln(0);
+    $pdf->MultiCell(0, 10, utf8_decode("Ao cumprimentá-la, encaminhamos o(a) estudante " . removerAcentos(strtoupper($aluno['nome'])) . " para seleção na referida empresa, objetivando vaga para o cumprimento do estágio curricular obrigatório."));
+
     $pdf->Ln(10);
-    $pdf->MultiCell(0, 10, utf8_decode("Ao cumprimentá-la, encaminhamos o(a) estudante " . removerAcentos(strtoupper($aluno['nome'])) . ", matriculado(a) no " . $aluno['ano'] . " ano do curso Técnico em " . removerAcentos((strtoupper($aluno['curso']))) . ", para seleção na referida empresa, objetivando vaga para o cumprimento do estágio curricular obrigatório."));
-    
-    $pdf->Ln(10);
-    $pdf->Cell(0, 10, 'Empresa: ' . removerAcentos($empresa['nome']), 0, 1);
-    $pdf->Cell(0, 10, 'Endereco: ' . removerAcentos($empresa['endereco']), 0, 1);
+    $pdf->Cell(0, 10, 'Empresa: ' . utf8_decode($empresa['nome']), 0, 1);
+    $pdf->MultiCell(0, 10, 'Endereco: ' . utf8_decode($empresa['endereco']), 0, 1);
     $pdf->Cell(0, 10, 'Data: ' . date('d/m/Y', strtotime($data)), 0, 1);
     $pdf->Cell(0, 10, utf8_decode('Horário: ') . $horario, 0, 1);
     $pdf->Ln(10);
@@ -118,17 +124,17 @@ foreach ($alunos as $aluno) {
     $larguraTotal = $pdf->GetPageWidth() - $pdf->GetX() - 10; // Ajuste conforme necessário
 
     // Imprimir a linha completa
-    $pdf->Ln(10);
+
     $pdf->MultiCell(0, 10, utf8_decode("Obs.: O aluno deverá comparecer no horário marcado uniformizado, portando RG, CPF e
 currículo."));
-    $pdf->Ln(10);
     $pdf->SetTextColor(0, 0, 0);
-    $pdf->Ln(20);
+    $pdf->Ln(10);
     $pdf->SetFont('Arial', '', 15);
     $pdf->Cell(0, 10, 'Cordialmente,', 0, 1);
     $pdf->Cell(0, 30, '________________________________________________________________');
-    $pdf->Ln(30);
+    $pdf->Ln(40);
     $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Ln(10);
     $pdf->Cell(0, 0, utf8_decode('Prof. Francisco Otávio de Menezes Filho'), 0, 1);
     $pdf->Cell(0, 10, utf8_decode('Coordenador do Curso em Informática'), 0, 1);
 }
