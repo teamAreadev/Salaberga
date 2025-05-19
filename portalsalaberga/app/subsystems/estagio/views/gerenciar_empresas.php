@@ -312,14 +312,17 @@ if (isset($_POST['layout'])) {
             color: #c4b5fd;
             border: 1px solid rgba(168, 85, 247, 0.3);
         }
+
         .area-design:hover {
             background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(126, 34, 206, 0.3) 100%);
         }
+
         .area-redes {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.2) 100%);
             color: #fcd34d;
             border: 1px solid rgba(245, 158, 11, 0.3);
         }
+
         .area-redes:hover {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.3) 100%);
         }
@@ -385,6 +388,7 @@ if (isset($_POST['layout'])) {
             overflow: visible !important;
             text-overflow: unset !important;
         }
+
         select.custom-input {
             min-width: 180px !important;
             max-width: 100% !important;
@@ -392,17 +396,23 @@ if (isset($_POST['layout'])) {
             overflow: visible !important;
             text-overflow: unset !important;
         }
+
         .relative select.custom-input {
             padding-right: 2.5rem !important;
         }
+
         .relative {
             min-width: 180px;
         }
+
         @media (max-width: 640px) {
-            .custom-input, select.custom-input {
+
+            .custom-input,
+            select.custom-input {
                 min-width: 100% !important;
                 font-size: 1rem !important;
             }
+
             .relative {
                 min-width: 100%;
             }
@@ -672,7 +682,7 @@ if (isset($_POST['layout'])) {
                     </a>
                     <a href="resultado_selecionados.php" class="sidebar-link">
                         <i class="fa fa-user-circle w-5 mr-3"></i>
-                        Resultados 
+                        Resultados
                     </a>
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
@@ -732,7 +742,7 @@ if (isset($_POST['layout'])) {
                     </a>
                     <a href="resultado_selecionados.php" class="sidebar-link">
                         <i class="fa fa-user-circle w-5 mr-3"></i>
-                        Resultados 
+                        Resultados
                     </a>
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
@@ -830,10 +840,10 @@ if (isset($_POST['layout'])) {
                                         <span><?= htmlspecialchars($dado['endereco']) ?: 'Não informado' ?></span>
                                     </div>
                                     <?php if (!empty($dado['nome_contato'])): ?>
-                                    <div class="empresa-card-info-item">
-                                        <i class="fas fa-user w-5 text-center"></i>
-                                        <span><?= htmlspecialchars($dado['nome_contato']) ?></span>
-                                    </div>
+                                        <div class="empresa-card-info-item">
+                                            <i class="fas fa-user w-5 text-center"></i>
+                                            <span><?= htmlspecialchars($dado['nome_contato']) ?></span>
+                                        </div>
                                     <?php endif; ?>
                                     <div class="empresa-card-info-item">
                                         <i class="fab fa-whatsapp w-5 text-center text-green-400"></i>
@@ -962,8 +972,15 @@ if (isset($_POST['layout'])) {
         <!-- Modal de Relatório com Filtros -->
         <div id="relatorioEmpresasModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
             <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
-                <h2 class="text-2xl font-bold mb-6 text-white slide-up">Gerar Relatório de Empresas</h2>
+                
                 <form id="formRelatorioEmpresas" action="relatorio/relatorio_empresas.php" method="get" target="_blank" class="space-y-4">
+                    <div class="text-center mb-6">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-500/10 text-primary-400 mb-4">
+                            <i class="fas fa-file-pdf text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white slide-up">Gerar Relatório de Empresas</h3>
+                        <p class="text-gray-400 mt-2">Selecione as opções para gerar o relatório.</p>
+                    </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Empresa</label>
                         <select name="empresa_id" class="custom-input mt-1">
@@ -973,16 +990,6 @@ if (isset($_POST['layout'])) {
                             foreach ($dados as $dado): ?>
                                 <option value="<?= htmlspecialchars($dado['id']) ?>"><?= htmlspecialchars($dado['nome']) ?></option>
                             <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Perfil de Vaga</label>
-                        <select name="perfil" class="custom-input mt-1">
-                            <option value="">Todos os Perfis</option>
-                            <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="design">Design/Mídia</option>
-                            <option value="tutoria">Tutoria</option>
-                            <option value="suporte/redes">Suporte/Redes</option>
                         </select>
                     </div>
                     <div class="mt-6 flex justify-end space-x-4">
@@ -1211,9 +1218,9 @@ if (isset($_POST['layout'])) {
                     const endereco = card.querySelector('.empresa-card-info-item:first-child span').textContent.toLowerCase();
                     const contato = card.querySelector('.empresa-card-info-item:last-child span, .empresa-card-info-item:last-child a').textContent.toLowerCase();
 
-                    const matchSearch = searchTerm === '' || 
-                        nome.includes(searchTerm) || 
-                        endereco.includes(searchTerm) || 
+                    const matchSearch = searchTerm === '' ||
+                        nome.includes(searchTerm) ||
+                        endereco.includes(searchTerm) ||
                         contato.includes(searchTerm);
 
                     if (matchSearch) {
