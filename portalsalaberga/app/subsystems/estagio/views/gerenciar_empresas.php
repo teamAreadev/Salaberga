@@ -975,16 +975,7 @@ if (isset($_POST['layout'])) {
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300">Perfil de Vaga</label>
-                        <select name="perfil" class="custom-input mt-1">
-                            <option value="">Todos os Perfis</option>
-                            <option value="desenvolvimento">Desenvolvimento</option>
-                            <option value="design">Design/Mídia</option>
-                            <option value="tutoria">Tutoria</option>
-                            <option value="suporte/redes">Suporte/Redes</option>
-                        </select>
-                    </div>
+                  
                     <div class="mt-6 flex justify-end space-x-4">
                         <button type="button" class="custom-btn custom-btn-secondary close-btn" data-modal-id="relatorioEmpresasModal">
                             <i class="fas fa-times btn-icon"></i>
