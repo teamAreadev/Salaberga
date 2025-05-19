@@ -781,6 +781,10 @@ if (isset($_POST['layout'])) {
                                 <i class="fas fa-plus btn-icon"></i>
                                 <span>Nova Empresa</span>
                             </button>
+                            <button id="relatorioEmpresasBtn" class="custom-btn custom-btn-secondary w-full sm:w-auto">
+                                <i class="fas fa-file-alt btn-icon"></i>
+                                <span>Gerar Relatório</span>
+                            </button>
                             <div class="search-input-container relative w-full sm:w-64">
                                 <i class="fas fa-search search-icon"></i>
                                 <input type="text" id="searchEmpresa" placeholder="Buscar empresa..." class="custom-input pl-10 pr-4 py-2.5 w-full">
@@ -954,6 +958,46 @@ if (isset($_POST['layout'])) {
                 </form>
             </div>
         </div>
+
+        <!-- Modal de Relatório com Filtros -->
+        <div id="relatorioEmpresasModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+            <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
+                <h2 class="text-2xl font-bold mb-6 text-white slide-up">Gerar Relatório de Empresas</h2>
+                <form id="formRelatorioEmpresas" action="relatorio/relatorio_empresas.php" method="get" target="_blank" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Empresa</label>
+                        <select name="empresa_id" class="custom-input mt-1">
+                            <option value="">Todas as Empresas</option>
+                            <?php
+                            $dados = $select_model->concedentes();
+                            foreach ($dados as $dado): ?>
+                                <option value="<?= htmlspecialchars($dado['id']) ?>"><?= htmlspecialchars($dado['nome']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Perfil de Vaga</label>
+                        <select name="perfil" class="custom-input mt-1">
+                            <option value="">Todos os Perfis</option>
+                            <option value="desenvolvimento">Desenvolvimento</option>
+                            <option value="design">Design/Mídia</option>
+                            <option value="tutoria">Tutoria</option>
+                            <option value="suporte/redes">Suporte/Redes</option>
+                        </select>
+                    </div>
+                    <div class="mt-6 flex justify-end space-x-4">
+                        <button type="button" class="custom-btn custom-btn-secondary close-btn" data-modal-id="relatorioEmpresasModal">
+                            <i class="fas fa-times btn-icon"></i>
+                            <span>Cancelar</span>
+                        </button>
+                        <button type="submit" class="custom-btn custom-btn-primary">
+                            <i class="fas fa-file-alt btn-icon"></i>
+                            <span>Gerar Relatório</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -967,6 +1011,9 @@ if (isset($_POST['layout'])) {
             const mobileSidebar = document.getElementById('mobileSidebar');
             const searchInput = document.getElementById('searchEmpresa');
             const empresasGrid = document.getElementById('empresasGrid');
+            const relatorioEmpresasBtn = document.getElementById('relatorioEmpresasBtn');
+            const relatorioEmpresasModal = document.getElementById('relatorioEmpresasModal');
+            const formRelatorioEmpresas = document.getElementById('formRelatorioEmpresas');
             let currentModalId = null;
 
             // GSAP Animations
@@ -1146,6 +1193,11 @@ if (isset($_POST['layout'])) {
                         closeModal(modalContainer.id);
                     }
                 });
+            });
+
+            // Botão para abrir o modal de relatório
+            relatorioEmpresasBtn.addEventListener('click', () => {
+                openModal('relatorioEmpresasModal');
             });
 
             // Filtragem de empresas
