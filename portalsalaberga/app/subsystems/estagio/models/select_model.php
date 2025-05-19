@@ -47,7 +47,7 @@ class select_model extends connect
     }
     function total_vagas_sup()
     {
-        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas WHERE id_perfil = 3");
+        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) from vagas where id_perfil = 3; ");
         $result = $stmt_empresa->fetch(PDO::FETCH_ASSOC);
 
         return $result;
