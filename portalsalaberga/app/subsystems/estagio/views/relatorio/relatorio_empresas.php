@@ -162,7 +162,7 @@ class ModernEmpresasPDF extends FPDF {
             $nome_vspace = $max_lines - $nome_lines;
             $nome_y = $y + ($nome_vspace * 5) / 2;
             $this->SetXY($x + $w_id, $nome_y);
-            $this->MultiCell($w_nome, 5, $nome_texto, 0, 'C', true);
+            $this->MultiCell($w_nome, 5, $nome_texto, 0, 'L', true);
             $this->Rect($x + $w_id, $y, $w_nome, $h);
 
             // Contato
