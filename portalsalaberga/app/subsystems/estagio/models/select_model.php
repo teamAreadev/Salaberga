@@ -198,7 +198,9 @@ class select_model extends connect
                 v.quantidade AS quantidade,
                 v.data as data,
                 v.hora as hora,
-                v.tipo_vaga as tipo_vaga
+                v.tipo_vaga as tipo_vaga,
+                v.id_concedente as id_empresa,
+                v.id_perfil as id_perfil
             FROM 
                 vagas v
             INNER JOIN concedentes c ON v.id_concedente = c.id
@@ -215,12 +217,12 @@ class select_model extends connect
         }
 
         if (!empty($area)) {
-            $sql .= " AND p.nome_perfil = ?";
+            $sql .= " AND v.id_perfil = ?";
             $params[] = $area;
         }
 
         if (!empty($empresa)) {
-            $sql .= " AND c.id = ?";
+            $sql .= " AND v.id_concedente = ?";
             $params[] = $empresa;
         }
 
@@ -238,12 +240,30 @@ class select_model extends connect
     }
     function alunos_selecionados($id_vaga)
     {
-
-        $stmt = $this->connect->query("SELECT aluno.nome, aluno.id FROM aluno inner join selecao on aluno.id = selecao.id_aluno WHERE id_vaga = '$id_vaga'");
+        $stmt = $this->connect->query("
+            SELECT a.nome, a.id 
+            FROM aluno a
+            INNER JOIN selecionado s ON a.id = s.id_aluno
+            WHERE s.id_vaga = '$id_vaga'");
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;
     }
+
+    function alunos_espera($id_vaga)
+    {
+        $stmt = $this->connect->query("
+            SELECT DISTINCT a.nome, a.id 
+            FROM aluno a
+            INNER JOIN selecao s ON a.id = s.id_aluno
+            LEFT JOIN selecionado sel ON a.id = sel.id_aluno AND sel.id_vaga = '$id_vaga'
+            WHERE s.id_vaga = '$id_vaga' 
+            AND sel.id_aluno IS NULL");
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
     function alunos_selecionados_estagio($id_vaga)
     {
         $stmt = $this->connect->query("
@@ -323,3 +343,4 @@ class select_model extends connect
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
+

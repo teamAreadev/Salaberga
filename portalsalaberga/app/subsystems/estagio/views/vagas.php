@@ -761,6 +761,10 @@ if (isset($_POST['layout'])) {
                                 <i class="fas fa-plus btn-icon"></i>
                                 <span>Nova Vaga</span>
                             </button>
+                            <button id="relatorioVagasBtn" class="custom-btn custom-btn-secondary w-full sm:w-auto">
+                                <i class="fas fa-file-pdf btn-icon"></i>
+                                <span>Relatório de Vagas</span>
+                            </button>
                             <div class="search-input-container relative w-full sm:w-64">
                                 <i class="fas fa-search search-icon"></i>
                                 <input type="text" id="searchVaga" placeholder="Buscar vaga..." class="custom-input pl-10 pr-4 py-2.5 w-full">
@@ -1134,6 +1138,64 @@ if (isset($_POST['layout'])) {
                 </form>
             </div>
         </div>
+
+        <!-- Modal de Relatório de Vagas -->
+        <div id="relatorioVagasModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+            <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-500/10 text-primary-400 mb-4">
+                        <i class="fas fa-file-pdf text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white slide-up">Gerar Relatório de Vagas</h3>
+                    <p class="text-gray-400 mt-2">Selecione as opções para gerar o relatório.</p>
+                </div>
+                <form id="formRelatorio" action="../controllers/gerar_relatorio_vagas.php" method="get" target="_blank" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Empresa</label>
+                        <select name="empresa" class="custom-input mt-1 w-full">
+                            <option value="">Todas as empresas</option>
+                            <?php
+                            $empresas = $select_model->concedentes();
+                            $empresa_atual = isset($_GET['empresa']) ? $_GET['empresa'] : '';
+                            foreach ($empresas as $empresa) {
+                                $selected = ($empresa['id'] == $empresa_atual) ? 'selected' : '';
+                                echo "<option value='{$empresa['id']}' {$selected}>" . htmlspecialchars($empresa['nome'], ENT_QUOTES, 'UTF-8') . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Perfil</label>
+                        <select name="perfil" class="custom-input mt-1 w-full">
+                            <option value="">Todos os perfis</option>
+                            <?php
+                            $perfis = [
+                                '1' => 'Desenvolvimento',
+                                '2' => 'Design/Social media',
+                                '4' => 'Tutoria',
+                                '3' => 'Suporte/Redes'
+                            ];
+                            $perfil_atual = isset($_GET['perfil']) ? $_GET['perfil'] : '';
+                            foreach ($perfis as $id => $nome) {
+                                $selected = ($id == $perfil_atual) ? 'selected' : '';
+                                echo "<option value='{$id}' {$selected}>" . htmlspecialchars($nome, ENT_QUOTES, 'UTF-8') . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="mt-8 flex justify-end space-x-4">
+                        <button type="button" class="custom-btn custom-btn-secondary close-btn" data-modal-id="relatorioVagasModal">
+                            <i class="fas fa-times btn-icon"></i>
+                            <span>Cancelar</span>
+                        </button>
+                        <button type="submit" class="custom-btn custom-btn-primary">
+                            <i class="fas fa-file-download btn-icon"></i>
+                            <span>Gerar Relatório</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -1201,6 +1263,7 @@ if (isset($_POST['layout'])) {
             const filterArea = document.getElementById('filterArea');
             const filterEmpresa = document.getElementById('filterEmpresa');
             const vagasGrid = document.getElementById('vagasGrid');
+            const relatorioVagasBtn = document.getElementById('relatorioVagasBtn');
             let currentModalId = null;
 
             // GSAP Animations
@@ -1394,7 +1457,7 @@ if (isset($_POST['layout'])) {
                         empresaNome.includes(searchTerm);
                     const matchArea = areaFiltro === '' || area === areaFiltro;
                     const matchEmpresa = empresaFiltro === '' || empresaId === empresaFiltro;
-
+                    
                     if (matchSearch && matchArea && matchEmpresa) {
                         card.style.display = '';
                         visibleCount++;
@@ -1480,6 +1543,40 @@ if (isset($_POST['layout'])) {
                     });
                 }, type === 'success' ? 3000 : 4000);
             }
+
+            relatorioVagasBtn.addEventListener('click', () => {
+                openModal('relatorioVagasModal');
+                
+                // Atualiza os filtros do relatório com os filtros atuais
+                const empresaAtual = document.getElementById('filterEmpresa').value;
+                const perfilAtual = document.getElementById('filterArea').value;
+                
+                const formRelatorio = document.getElementById('formRelatorio');
+                const empresaRelatorio = formRelatorio.querySelector('[name="empresa"]');
+                const perfilRelatorio = formRelatorio.querySelector('[name="perfil"]');
+                
+                // Atualiza os valores dos selects
+                if (empresaAtual) {
+                    empresaRelatorio.value = empresaAtual;
+                } else {
+                    empresaRelatorio.value = '';
+                }
+                
+                if (perfilAtual) {
+                    perfilRelatorio.value = perfilAtual;
+                } else {
+                    perfilRelatorio.value = '';
+                }
+                
+                // Adiciona um listener para o submit do formulário
+                formRelatorio.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const url = new URL(this.action);
+                    url.searchParams.set('empresa', empresaRelatorio.value);
+                    url.searchParams.set('perfil', perfilRelatorio.value);
+                    window.open(url.toString(), '_blank');
+                });
+            });
         });
     </script>
 </body>
