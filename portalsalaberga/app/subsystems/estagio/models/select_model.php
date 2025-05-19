@@ -314,4 +314,12 @@ class select_model extends connect
         $stmt->execute([$id_vaga]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function concedente_por_id($empresa_id) {
+        $sql = "SELECT id, nome, nome_contato, contato, endereco FROM concedentes WHERE id = :empresa_id LIMIT 1";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->bindParam(':empresa_id', $empresa_id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
