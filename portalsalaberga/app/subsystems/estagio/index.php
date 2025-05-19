@@ -8,7 +8,7 @@ if ($stmt) {
     $aprovados = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 }
 session_start();
-print_r($_SESSION);
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
