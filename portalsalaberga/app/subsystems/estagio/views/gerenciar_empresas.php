@@ -825,6 +825,12 @@ if (isset($_POST['layout'])) {
                                         <i class="fas fa-map-marker-alt w-5 text-center"></i>
                                         <span><?= htmlspecialchars($dado['endereco']) ?: 'Não informado' ?></span>
                                     </div>
+                                    <?php if (!empty($dado['nome_contato'])): ?>
+                                    <div class="empresa-card-info-item">
+                                        <i class="fas fa-user w-5 text-center"></i>
+                                        <span><?= htmlspecialchars($dado['nome_contato']) ?></span>
+                                    </div>
+                                    <?php endif; ?>
                                     <div class="empresa-card-info-item">
                                         <i class="fab fa-whatsapp w-5 text-center text-green-400"></i>
                                         <?php if (!empty($dado['contato'])): ?>
@@ -854,6 +860,10 @@ if (isset($_POST['layout'])) {
                                         <div>
                                             <label class="block text-sm font-medium text-gray-300">Nome da Empresa</label>
                                             <input type="text" name="nome_editar_empresa" value="<?= htmlspecialchars($dado['nome']) ?>" class="custom-input mt-1" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300">Nome do Contato</label>
+                                            <input type="text" name="nome_contato_editar_empresa" value="<?= htmlspecialchars($dado['nome_contato']) ?: '' ?>" class="custom-input mt-1" placeholder="Nome da pessoa responsável">
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-300">Endereço Completo</label>
@@ -918,6 +928,10 @@ if (isset($_POST['layout'])) {
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Nome da Empresa</label>
                         <input type="text" name="nome" class="custom-input mt-1" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Nome do Contato</label>
+                        <input type="text" name="nome_contato" class="custom-input mt-1" placeholder="Nome da pessoa responsável">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300">Endereço Completo</label>

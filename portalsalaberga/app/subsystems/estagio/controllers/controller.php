@@ -46,9 +46,10 @@ if (isset($_POST['alunos']) && !empty($_POST['alunos']) && isset($_POST['id_vaga
     $nome = $_POST['nome'];
     $endereco = $_POST['endereco'];
     $telefone = $_POST['telefone'];
+    $nome_contato = $_POST['nome_contato'] ?? '';
 
     $model = new main_model;
-    $result = $model->cadastrar_empresa($nome, $endereco, $telefone);
+    $result = $model->cadastrar_empresa($nome, $endereco, $telefone, $nome_contato);
     switch ($result) {
 
         case 1:

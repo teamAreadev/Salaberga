@@ -7,12 +7,12 @@ define('LOCAL_USER', 'root');
 define('LOCAL_PASSWORD', '');
 
 
-/*
+
 define('REMOTE_HOST', 'localhost');
 define('REMOTE_DATABASE', 'u750204740_estagio2k25');
 define('REMOTE_USER', 'u750204740_estagio2k25');
 define('REMOTE_PASSWORD', 'paoComOvo123!@##');
-*/
+
 
 
 class connect
