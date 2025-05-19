@@ -781,6 +781,14 @@ if (isset($_POST['layout'])) {
                                 <i class="fas fa-plus btn-icon"></i>
                                 <span>Nova Empresa</span>
                             </button>
+                            <a href="relatorio_empresas.php" class="custom-btn custom-btn-secondary w-full sm:w-auto" target="_blank">
+                                <i class="fas fa-file-alt btn-icon"></i>
+                                <span>Relatório de Empresas</span>
+                            </a>
+                            <button id="filtroEmpresasBtn" class="custom-btn custom-btn-secondary w-full sm:w-auto" type="button">
+                                <i class="fas fa-filter btn-icon"></i>
+                                <span>Filtrar</span>
+                            </button>
                             <div class="search-input-container relative w-full sm:w-64">
                                 <i class="fas fa-search search-icon"></i>
                                 <input type="text" id="searchEmpresa" placeholder="Buscar empresa..." class="custom-input pl-10 pr-4 py-2.5 w-full">
@@ -954,6 +962,39 @@ if (isset($_POST['layout'])) {
                 </form>
             </div>
         </div>
+
+        <!-- Modal de Filtro de Empresas -->
+        <div id="filtroEmpresasModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+            <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
+                <h2 class="text-2xl font-bold mb-6 text-white slide-up">Filtrar Empresas</h2>
+                <form id="formFiltroEmpresas" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Empresa</label>
+                        <input type="text" id="filtroNomeEmpresa" class="custom-input mt-1" placeholder="Nome da empresa">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Perfil de Vaga</label>
+                        <select id="filtroPerfil" class="custom-input mt-1">
+                            <option value="">Todos</option>
+                            <option value="desenvolvimento">Desenvolvimento</option>
+                            <option value="design">Design/Mídia</option>
+                            <option value="tutoria">Tutoria</option>
+                            <option value="suporte/redes">Suporte/Redes</option>
+                        </select>
+                    </div>
+                    <div class="mt-6 flex justify-end space-x-4">
+                        <button type="button" class="custom-btn custom-btn-secondary close-btn" data-modal-id="filtroEmpresasModal">
+                            <i class="fas fa-times btn-icon"></i>
+                            <span>Cancelar</span>
+                        </button>
+                        <button type="submit" class="custom-btn custom-btn-primary">
+                            <i class="fas fa-filter btn-icon"></i>
+                            <span>Aplicar Filtro</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -967,6 +1008,11 @@ if (isset($_POST['layout'])) {
             const mobileSidebar = document.getElementById('mobileSidebar');
             const searchInput = document.getElementById('searchEmpresa');
             const empresasGrid = document.getElementById('empresasGrid');
+            const filtroEmpresasBtn = document.getElementById('filtroEmpresasBtn');
+            const filtroEmpresasModal = document.getElementById('filtroEmpresasModal');
+            const formFiltroEmpresas = document.getElementById('formFiltroEmpresas');
+            const filtroNomeEmpresa = document.getElementById('filtroNomeEmpresa');
+            const filtroPerfil = document.getElementById('filtroPerfil');
             let currentModalId = null;
 
             // GSAP Animations
@@ -1244,6 +1290,54 @@ if (isset($_POST['layout'])) {
                     });
                 }, type === 'success' ? 3000 : 4000);
             }
+
+            // Botão para abrir o modal de filtro
+            filtroEmpresasBtn.addEventListener('click', () => {
+                filtroEmpresasModal.classList.remove('hidden');
+                filtroEmpresasModal.classList.add('flex');
+            });
+
+            document.querySelectorAll('.close-btn[data-modal-id="filtroEmpresasModal"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filtroEmpresasModal.classList.add('hidden');
+                    filtroEmpresasModal.classList.remove('flex');
+                });
+            });
+
+            // Lógica de filtro
+            formFiltroEmpresas.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const nome = filtroNomeEmpresa.value.toLowerCase().trim();
+                const perfil = filtroPerfil.value.toLowerCase().trim();
+
+                const empresaCards = document.querySelectorAll('.empresa-card');
+                empresaCards.forEach(card => {
+                    const nomeEmpresa = card.querySelector('.empresa-card-title').textContent.toLowerCase();
+                    let matchNome = nome === '' || nomeEmpresa.includes(nome);
+
+                    // Verifica se a empresa tem vaga do perfil selecionado
+                    let matchPerfil = true;
+                    if (perfil !== '') {
+                        matchPerfil = false;
+                        // Busca as vagas dentro do card (ajuste conforme seu HTML)
+                        const vagas = card.querySelectorAll('.empresa-card-info-item');
+                        vagas.forEach(vaga => {
+                            if (vaga.textContent.toLowerCase().includes(perfil)) {
+                                matchPerfil = true;
+                            }
+                        });
+                    }
+
+                    if (matchNome && matchPerfil) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                filtroEmpresasModal.classList.add('hidden');
+                filtroEmpresasModal.classList.remove('flex');
+            });
         });
     </script>
 </body>
