@@ -55,7 +55,6 @@ if (isset($_POST['layout'])) {
         --sidebar-active: rgba(0, 179, 72, 0.2);
     }
 
-
     * {
         margin: 0;
         padding: 0;
@@ -87,6 +86,9 @@ if (isset($_POST['layout'])) {
         margin-bottom: 0.5rem;
         transition: all 0.2s ease;
         color: #ffffff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .sidebar-link:hover {
@@ -102,6 +104,13 @@ if (isset($_POST['layout'])) {
         box-shadow: 0 2px 8px rgba(0, 122, 51, 0.15);
     }
 
+    .sidebar-link i {
+        min-width: 20px;
+        margin-right: 12px;
+        display: inline-block;
+        text-align: center;
+    }
+
     .dashboard-card {
         background-color: var(--card-bg);
         border-radius: 12px;
@@ -113,6 +122,54 @@ if (isset($_POST['layout'])) {
     .dashboard-card:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .hamburger {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 60;
+        background: rgba(0, 122, 51, 0.3); /* Aumentei a opacidade do fundo */
+        border-radius: 10px;
+        border: 1px solid rgba(0, 122, 51, 0.5); /* Adicionei borda sutil */
+        padding: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra para destaque */
+    }
+    
+    .hamburger:hover {
+        background: rgba(0, 122, 51, 0.4); /* Fundo mais sólido no hover */
+        transform: scale(1.05);
+    }
+    
+    .hamburger:active {
+        background: rgba(0, 122, 51, 0.5); /* Ainda mais sólido quando pressionado */
+        transform: scale(0.98);
+    }
+    
+    .hamburger-bar {
+        width: 24px;
+        height: 2.5px; /* Linhas um pouco mais grossas */
+        background: #00FF6B; /* Cor mais vibrante */
+        margin: 4px 0; /* Espaçamento maior entre linhas */
+        border-radius: 2px;
+        transition: all 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Sombra sutil nas linhas */
+    }
+    
+    /* Overlay mais escuro */
+    .sidebar-overlay {
+        background: rgba(0, 0, 0, 0.7); /* Aumentei a opacidade do overlay */
+    }
+
+    .sidebar-overlay.active {
+        opacity: 1;
+        pointer-events: all;
     }
 </style>
 
@@ -171,22 +228,19 @@ if (isset($_POST['layout'])) {
 
         <!-- Mobile Sidebar Toggle -->
         <div class="md:hidden fixed top-4 left-4 z-50">
-            <button id="sidebarToggle" class="bg-dark-50 p-2 rounded-lg shadow-md hover:bg-dark-100 transition-all">
-                <i class="fas fa-bars text-primary-400"></i>
+            <button id="hamburgerMenu" class="hamburger" aria-label="Menu">
+                <div class="hamburger-bar bar1"></div>
+                <div class="hamburger-bar bar2"></div>
+                <div class="hamburger-bar bar3"></div>
             </button>
         </div>
 
         <!-- Mobile Sidebar -->
         <div id="mobileSidebar" class="fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden sidebar">
             <div class="p-4 flex flex-col h-full">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-2">
-                        <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="h-10 w-auto">
-                        <h1 class="text-lg font-bold text-primary-400">Sistema <span class="text-secondary">STGM</span></h1>
-                    </div>
-                    <button id="closeSidebar" class="p-2 text-gray-400 hover:text-white transition-colors">
-                        <i class="fas fa-times"></i>
-                    </button>
+                <div class="flex items-center gap-2 mb-6">
+                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="h-10 w-auto">
+                    <h1 class="text-lg font-bold text-primary-400">Sistema <span class="text-secondary">STGM</span></h1>
                 </div>
                 <nav class="flex-1">
                     <a href="dashboard.php" class="sidebar-link active">
@@ -229,6 +283,9 @@ if (isset($_POST['layout'])) {
             </div>
         </div>
 
+        <!-- Overlay para o menu mobile -->
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
         <!-- Main Content -->
         <main class="flex-1 overflow-y-auto p-4 md:p-8">
             <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
@@ -238,8 +295,6 @@ if (isset($_POST['layout'])) {
                 </div>
 
                 <div class="mt-4 md:mt-0 flex items-center">
-
-
                     <div class="flex items-center">
                         <div class="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
                             A
@@ -347,8 +402,6 @@ if (isset($_POST['layout'])) {
                         </div>
                     </div>
                 </div>
-
-
             </div>
 
             <div class="mt-8 grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -404,8 +457,6 @@ if (isset($_POST['layout'])) {
                                 $dados = $select_model->total_vagas_des();
                                 if ($dados == 0) {
                                 } else {
-
-
                                     foreach ($dados as $dado) {
                                 ?>
                                         <p class="text-lg text-gray-500 dark:text-gray-400"><?= $dado ?? 0 ?></p>
@@ -427,8 +478,6 @@ if (isset($_POST['layout'])) {
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Vagas</span>
                             </div>
                         </div>
-                        
-                        
                     </div>
                 </div>
             </div>
@@ -437,32 +486,25 @@ if (isset($_POST['layout'])) {
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Configurar modo escuro
-
-
-            // Mobile sidebar toggle
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const closeSidebar = document.getElementById('closeSidebar');
+            const hamburgerMenu = document.getElementById('hamburgerMenu');
             const mobileSidebar = document.getElementById('mobileSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-            sidebarToggle.addEventListener('click', () => {
-                mobileSidebar.classList.remove('-translate-x-full');
-                document.body.style.overflow = 'hidden';
+            hamburgerMenu.addEventListener('click', () => {
+                hamburgerMenu.classList.toggle('active');
+                mobileSidebar.classList.toggle('-translate-x-full');
+                sidebarOverlay.classList.toggle('active');
+                document.body.style.overflow = hamburgerMenu.classList.contains('active') ? 'hidden' : 'auto';
             });
 
-            closeSidebar.addEventListener('click', () => {
+            // Fecha o menu ao clicar no overlay ou fora
+            sidebarOverlay.addEventListener('click', () => {
+                hamburgerMenu.classList.remove('active');
                 mobileSidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.remove('active');
                 document.body.style.overflow = 'auto';
-            });
-
-            mobileSidebar.addEventListener('click', (e) => {
-                if (e.target === mobileSidebar) {
-                    mobileSidebar.classList.add('-translate-x-full');
-                    document.body.style.overflow = 'auto';
-                }
             });
         });
     </script>
 </body>
-
 </html>

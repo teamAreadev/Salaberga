@@ -147,8 +147,10 @@ class ModernEmpresasPDF extends FPDF {
             $w_telefone = 35;
             $w_endereco = 118;
 
-            $nome_lines = $this->NbLines($w_nome, utf8_decode($empresa['nome']));
-            $endereco_lines = $this->NbLines($w_endereco, utf8_decode($empresa['endereco']));
+            $nome_texto = utf8_decode(mb_strtoupper($empresa['nome'], 'UTF-8'));
+            $endereco_texto = utf8_decode($empresa['endereco']);
+            $nome_lines = $this->NbLines($w_nome, $nome_texto);
+            $endereco_lines = $this->NbLines($w_endereco, $endereco_texto);
             $max_lines = max($nome_lines, $endereco_lines, 1);
             $h = 5 * $max_lines;
 
@@ -156,9 +158,11 @@ class ModernEmpresasPDF extends FPDF {
             $this->SetXY($x, $y);
             $this->Cell($w_id, $h, $empresa['id'], 1, 0, 'C', true);
 
-            // Nome (MultiCell)
-            $this->SetXY($x + $w_id, $y);
-            $this->MultiCell($w_nome, 5, utf8_decode(mb_strtoupper($empresa['nome'], 'UTF-8')), 0, 'L', true);
+            // Nome (MultiCell) - alinhamento vertical centralizado
+            $nome_vspace = $max_lines - $nome_lines;
+            $nome_y = $y + ($nome_vspace * 5) / 2;
+            $this->SetXY($x + $w_id, $nome_y);
+            $this->MultiCell($w_nome, 5, $nome_texto, 0, 'L', true);
             $this->Rect($x + $w_id, $y, $w_nome, $h);
 
             // Contato
