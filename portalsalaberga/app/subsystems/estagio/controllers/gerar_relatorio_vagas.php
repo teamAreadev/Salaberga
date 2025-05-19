@@ -2,8 +2,19 @@
 require_once('../models/select_model.php');
 require_once('../assets/fpdf/fpdf.php');
 
+// Configura o fuso horário para São Paulo
+date_default_timezone_set('America/Sao_Paulo');
+
+// Classe FPDF com suporte a UTF-8
+class PDF extends FPDF {
+    function Cell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=false, $link='') {
+        $txt = iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $txt);
+        parent::Cell($w, $h, $txt, $border, $ln, $align, $fill, $link);
+    }
+}
+
 try {
-    class ModernPDF extends FPDF {
+    class ModernPDF extends PDF {
         // Configurações de cores
         private $cores = [
             'primaria' => [0, 122, 51],    // Verde institucional
@@ -26,6 +37,8 @@ try {
             $this->select_model = $select_model;
             $this->vagas = $vagas;
             $this->processarDados();
+            // Configura fonte padrão
+            $this->SetFont('Arial', '', 10);
         }
 
         private function processarDados() {
@@ -71,6 +84,18 @@ try {
             ];
         }
 
+        // Funções auxiliares
+        function ajustarTexto($texto, $largura_max) {
+            if ($this->GetStringWidth($texto) > $largura_max) {
+                $texto_cortado = mb_substr($texto, 0, 30, 'UTF-8');
+                if (mb_strlen($texto, 'UTF-8') > 30) {
+                    return $texto_cortado . '...';
+                }
+                return $texto_cortado;
+            }
+            return $texto;
+        }
+
         // Cabeçalho
         function Header() {
             if ($this->PageNo() == 1) {
@@ -82,12 +107,12 @@ try {
                 $this->SetFont('Arial', 'B', 18);
                 $this->SetTextColor(...$this->cores['primaria']);
                 $this->SetXY(45, 15);
-                $this->Cell(100, 10, utf8_decode('Relatório de Vagas'), 0, 0, 'L');
+                $this->Cell(100, 10, 'Relatório de Vagas', 0, 0, 'L');
                 
                 $this->SetFont('Arial', 'I', 9);
                 $this->SetTextColor(...$this->cores['subtitulo']);
                 $this->SetXY(45, 25);
-                $this->Cell(100, 5, utf8_decode('Gerado em: ' . date('d/m/Y H:i')), 0, 0, 'L');
+                $this->Cell(100, 5, 'Gerado em: ' . date('d/m/Y H:i'), 0, 0, 'L');
                 
                 $this->SetDrawColor(...$this->cores['primaria']);
                 $this->SetLineWidth(0.5);
@@ -108,8 +133,8 @@ try {
             $this->SetY(-18);
             $this->SetFont('Arial', 'I', 8);
             $this->SetTextColor(...$this->cores['subtitulo']);
-            $this->Cell(0, 5, utf8_decode('Página ' . $this->PageNo() . '/{nb}'), 0, 1, 'C');
-            $this->Cell(0, 5, utf8_decode('Sistema de Gestão de Vagas - Todos os direitos reservados'), 0, 0, 'C');
+            $this->Cell(0, 5, 'Página ' . $this->PageNo() . '/{nb}', 0, 1, 'C');
+            $this->Cell(0, 5, 'Sistema de Gestão de Vagas - Todos os direitos reservados', 0, 0, 'C');
         }
 
         // Tabela de Vagas
@@ -117,14 +142,14 @@ try {
             $this->Ln(10);
             $this->SetFont('Arial', 'B', 12);
             $this->SetTextColor(...$this->cores['primaria']);
-            $this->Cell(0, 10, utf8_decode('Vagas Disponíveis'), 0, 1, 'L');
+            $this->Cell(0, 10, 'Vagas Disponíveis', 0, 1, 'L');
             
             // Cabeçalho da tabela
             $this->SetFillColor(220, 240, 230);
             $this->SetFont('Arial', 'B', 10);
-            $this->Cell(70, 7, utf8_decode('Empresa'), 1, 0, 'C', true);
-            $this->Cell(70, 7, utf8_decode('Perfil'), 1, 0, 'C', true);
-            $this->Cell(40, 7, utf8_decode('Vagas'), 1, 1, 'C', true);
+            $this->Cell(70, 7, 'Empresa', 1, 0, 'C', true);
+            $this->Cell(50, 7, 'Perfil', 1, 0, 'C', true);
+            $this->Cell(70, 7, 'Alunos', 1, 1, 'C', true);
             
             // Dados da tabela
             $this->SetFont('Arial', '', 10);
@@ -132,24 +157,57 @@ try {
             
             $row_bg1 = [255, 255, 255];
             $row_bg2 = [245, 250, 245];
-            $fill = false;
+            $contador_linhas = 0;
             
             if (empty($this->vagas)) {
                 $bg = $row_bg1;
                 $this->SetFillColor($bg[0], $bg[1], $bg[2]);
                 $this->Cell(70, 7, '-', 1, 0, 'C', true);
-                $this->Cell(70, 7, '-', 1, 0, 'C', true);
-                $this->Cell(40, 7, '-', 1, 1, 'C', true);
+                $this->Cell(50, 7, '-', 1, 0, 'C', true);
+                $this->Cell(70, 7, '-', 1, 1, 'C', true);
             } else {
                 foreach ($this->vagas as $vaga) {
-                    $bg = $fill ? $row_bg2 : $row_bg1;
-                    $this->SetFillColor($bg[0], $bg[1], $bg[2]);
+                    // Busca alunos selecionados e em espera para esta vaga
+                    $alunos_selecionados = $this->select_model->alunos_selecionados($vaga['id']);
+                    $alunos_espera = $this->select_model->alunos_espera($vaga['id']);
                     
-                    $this->Cell(70, 7, utf8_decode($this->ajustarTexto($vaga['nome_empresa'] ?? '-', 35)), 1, 0, 'L', true);
-                    $this->Cell(70, 7, utf8_decode($this->ajustarTexto($vaga['nome_perfil'] ?? '-', 35)), 1, 0, 'L', true);
-                    $this->Cell(40, 7, $vaga['quantidade'] ?? '-', 1, 1, 'C', true);
-                    
-                    $fill = !$fill;
+                    // Se não houver alunos, mostra uma linha com traço
+                    if (empty($alunos_selecionados) && empty($alunos_espera)) {
+                        $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
+                        $this->SetFillColor($bg[0], $bg[1], $bg[2]);
+                        $this->Cell(70, 7, $this->ajustarTexto($vaga['nome_empresa'] ?? '-', 35), 1, 0, 'L', true);
+                        $this->Cell(50, 7, $this->ajustarTexto($vaga['nome_perfil'] ?? '-', 25), 1, 0, 'L', true);
+                        $this->Cell(70, 7, '-', 1, 1, 'C', true);
+                        $contador_linhas++;
+                    } else {
+                        // Lista alunos selecionados
+                        foreach ($alunos_selecionados as $aluno) {
+                            $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
+                            $this->SetFillColor($bg[0], $bg[1], $bg[2]);
+                            $this->Cell(70, 7, $this->ajustarTexto($vaga['nome_empresa'] ?? '-', 35), 1, 0, 'L', true);
+                            $this->Cell(50, 7, $this->ajustarTexto($vaga['nome_perfil'] ?? '-', 25), 1, 0, 'L', true);
+                            
+                            // Apenas o texto do aluno selecionado fica verde e negrito, fundo segue a alternância
+                            $this->SetTextColor(0, 122, 51); // Verde para selecionados
+                            $this->SetFont('Arial', 'B', 10); // Negrito para selecionados
+                            $this->Cell(70, 7, $this->ajustarTexto($aluno['nome'], 35), 1, 1, 'L', true);
+                            $this->SetTextColor(40, 40, 40);
+                            $this->SetFont('Arial', '', 10);
+                            $contador_linhas++;
+                        }
+                        
+                        // Lista alunos em espera
+                        foreach ($alunos_espera as $aluno) {
+                            $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
+                            $this->SetFillColor($bg[0], $bg[1], $bg[2]);
+                            $this->Cell(70, 7, $this->ajustarTexto($vaga['nome_empresa'] ?? '-', 35), 1, 0, 'L', true);
+                            $this->Cell(50, 7, $this->ajustarTexto($vaga['nome_perfil'] ?? '-', 25), 1, 0, 'L', true);
+                            $this->SetTextColor(100, 100, 100); // Cinza para em espera
+                            $this->Cell(70, 7, $this->ajustarTexto($aluno['nome'], 35), 1, 1, 'L', true);
+                            $this->SetTextColor(40, 40, 40); // Volta para cor padrão
+                            $contador_linhas++;
+                        }
+                    }
                 }
             }
         }
@@ -159,14 +217,14 @@ try {
             $this->Ln(10);
             $this->SetFont('Arial', 'B', 12);
             $this->SetTextColor(...$this->cores['primaria']);
-            $this->Cell(0, 10, utf8_decode('Alunos Selecionados'), 0, 1, 'L');
+            $this->Cell(0, 10, 'Alunos Selecionados', 0, 1, 'L');
             
             // Cabeçalho da tabela
             $this->SetFillColor(220, 240, 230);
             $this->SetFont('Arial', 'B', 10);
-            $this->Cell(60, 7, utf8_decode('Empresa'), 1, 0, 'C', true);
-            $this->Cell(60, 7, utf8_decode('Perfil'), 1, 0, 'C', true);
-            $this->Cell(70, 7, utf8_decode('Aluno Selecionado'), 1, 1, 'C', true);
+            $this->Cell(60, 7, 'Empresa', 1, 0, 'C', true);
+            $this->Cell(60, 7, 'Perfil', 1, 0, 'C', true);
+            $this->Cell(70, 7, 'Aluno Selecionado', 1, 1, 'C', true);
             
             // Dados da tabela
             $this->SetFont('Arial', '', 10);
@@ -192,9 +250,9 @@ try {
                     $bg = $fill ? $row_bg2 : $row_bg1;
                     $this->SetFillColor($bg[0], $bg[1], $bg[2]);
                     
-                    $this->Cell(60, 7, utf8_decode($this->ajustarTexto($aluno['empresa'] ?? '-', 30)), 1, 0, 'L', true);
-                    $this->Cell(60, 7, utf8_decode($this->ajustarTexto($aluno['perfil'] ?? '-', 30)), 1, 0, 'L', true);
-                    $this->Cell(70, 7, utf8_decode($this->ajustarTexto($aluno['nome'] ?? '-', 35)), 1, 1, 'L', true);
+                    $this->Cell(60, 7, $this->ajustarTexto($aluno['empresa'] ?? '-', 30), 1, 0, 'L', true);
+                    $this->Cell(60, 7, $this->ajustarTexto($aluno['perfil'] ?? '-', 30), 1, 0, 'L', true);
+                    $this->Cell(70, 7, $this->ajustarTexto($aluno['nome'] ?? '-', 35), 1, 1, 'L', true);
                     
                     $fill = !$fill;
                 }
@@ -252,13 +310,13 @@ try {
         function addTabelaResumo() {
             $this->SetFont('Arial', 'B', 12);
             $this->SetTextColor(...$this->cores['primaria']);
-            $this->Cell(0, 10, utf8_decode('Resumo'), 0, 1, 'L');
+            $this->Cell(0, 10, 'Resumo', 0, 1, 'L');
             
             // Cabeçalho da tabela
             $this->SetFillColor(220, 240, 230);
             $this->SetFont('Arial', 'B', 10);
-            $this->Cell(90, 7, utf8_decode('Item'), 1, 0, 'C', true);
-            $this->Cell(90, 7, utf8_decode('Quantidade'), 1, 1, 'C', true);
+            $this->Cell(90, 7, 'Item', 1, 0, 'C', true);
+            $this->Cell(90, 7, 'Quantidade', 1, 1, 'C', true);
             
             // Dados da tabela
             $this->SetFont('Arial', '', 10);
@@ -278,30 +336,84 @@ try {
                 $bg = $fill ? $row_bg2 : $row_bg1;
                 $this->SetFillColor($bg[0], $bg[1], $bg[2]);
                 
-                $this->Cell(90, 7, utf8_decode($item), 1, 0, 'L', true);
+                $this->Cell(90, 7, $item, 1, 0, 'L', true);
                 $this->Cell(90, 7, $valor ?: '-', 1, 1, 'C', true);
                 
                 $fill = !$fill;
             }
         }
 
-        // Funções auxiliares
-        function ajustarTexto($texto, $largura_max) {
-            if ($this->GetStringWidth($texto) > $largura_max) {
-                return substr($texto, 0, 30) . '...';
+        // Tabela de Resumo por Empresa
+        function addTabelaResumoEmpresas() {
+            $this->Ln(10);
+            $this->SetFont('Arial', 'B', 12);
+            $this->SetTextColor(...$this->cores['primaria']);
+            $this->Cell(0, 10, 'Resumo por Empresa', 0, 1, 'L');
+            
+            // Cabeçalho da tabela
+            $this->SetFillColor(220, 240, 230);
+            $this->SetFont('Arial', 'B', 10);
+            $this->Cell(70, 7, 'Empresa', 1, 0, 'C', true);
+            $this->Cell(50, 7, 'Perfil', 1, 0, 'C', true);
+            $this->Cell(70, 7, 'Total de Vagas', 1, 1, 'C', true);
+            
+            // Dados da tabela
+            $this->SetFont('Arial', '', 10);
+            $this->SetTextColor(40, 40, 40);
+            
+            $row_bg1 = [255, 255, 255];
+            $row_bg2 = [245, 250, 245];
+            $contador_linhas = 0;
+            
+            // Agrupa vagas por empresa e perfil
+            $vagas_por_empresa = [];
+            foreach ($this->vagas as $vaga) {
+                $chave = $vaga['nome_empresa'] . '|' . $vaga['nome_perfil'];
+                if (!isset($vagas_por_empresa[$chave])) {
+                    $vagas_por_empresa[$chave] = [
+                        'empresa' => $vaga['nome_empresa'],
+                        'perfil' => $vaga['nome_perfil'],
+                        'total' => 0
+                    ];
+                }
+                $vagas_por_empresa[$chave]['total'] += $vaga['quantidade'];
             }
-            return $texto;
+            
+            // Ordena por empresa e perfil
+            uasort($vagas_por_empresa, function($a, $b) {
+                $cmp = strcmp($a['empresa'], $b['empresa']);
+                if ($cmp === 0) {
+                    return strcmp($a['perfil'], $b['perfil']);
+                }
+                return $cmp;
+            });
+            
+            if (empty($vagas_por_empresa)) {
+                $bg = $row_bg1;
+                $this->SetFillColor($bg[0], $bg[1], $bg[2]);
+                $this->Cell(70, 7, '-', 1, 0, 'C', true);
+                $this->Cell(50, 7, '-', 1, 0, 'C', true);
+                $this->Cell(70, 7, '-', 1, 1, 'C', true);
+            } else {
+                foreach ($vagas_por_empresa as $vaga) {
+                    $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
+                    $this->SetFillColor($bg[0], $bg[1], $bg[2]);
+                    
+                    $this->Cell(70, 7, $this->ajustarTexto($vaga['empresa'], 35), 1, 0, 'L', true);
+                    $this->Cell(50, 7, $this->ajustarTexto($vaga['perfil'], 25), 1, 0, 'L', true);
+                    $this->Cell(70, 7, $vaga['total'], 1, 1, 'C', true);
+                    
+                    $contador_linhas++;
+                }
+            }
         }
 
         function gerarRelatorio() {
             $this->addTabelaResumo();
             $this->Ln(10);
+            $this->addTabelaResumoEmpresas();
+            $this->Ln(10);
             $this->addTabelaVagas();
-            
-            if (!empty($this->alunos_destaque)) {
-                $this->addTabelaAlunos();
-                $this->addTabelaAlunosNaoSelecionados();
-            }
         }
     }
 
