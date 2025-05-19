@@ -26,6 +26,12 @@ if (isset($_POST['titulo2']) && !empty($_POST['titulo2'])) {
             header('Location: ../views/relatorios/relatorios.php?erro=2');
             exit;
     }
+} else if (isset($_POST['estante']) && isset($_POST['prateleira'])) {
+
+    $estante = $_POST['estante'];
+    $prateleira = $_POST['prateleira'];
+
+    header('Location: ../views/relatorios/relatorio_pra_est.php?estante=' . $estante . '&prateleira=p' . $prateleira);
 }
 // Ajustando a condição para tornar 'edicao' opcional
 else if (
