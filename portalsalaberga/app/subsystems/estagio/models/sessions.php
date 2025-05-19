@@ -1,28 +1,31 @@
 <?php
 session_start();
 
+
 class sessions
 {
 
     function autenticar_session()
     {
-        if (!isset($_SESSION['email']) == true) {
+        // DEBUG: Remova depois de testar!
+        // error_log('SESSION: ' . print_r($_SESSION, true));
 
-            unset($_SESSION['email']);
-            header('location:../views/login.php');
+        if (!isset($_SESSION['login']) || $_SESSION['status'] != 2) {
+            unset($_SESSION['login']);
+            unset($_SESSION['status']);
+            header('location:../../../main/views/autenticacao/login.php');
             exit();
-        }
-        $logado = $_SESSION['email'];
+        } 
+        
+        // $logado = $_SESSION['Login']; // Só use se for necessário
     }
     function tempo_session($tempo = 600)
     {
         if (isset($_SESSION['ultimo_acesso'])) {
-
             if (time() - $_SESSION['ultimo_acesso'] > $tempo) {
-
                 session_unset();
                 session_destroy();
-                header('location:../views/login.php');
+                header('location:../../../main/views/autenticacao/login.php');
                 exit();
             }
         }
@@ -32,7 +35,7 @@ class sessions
     {
         session_unset();
         session_destroy();
-        header('location:../views/login.php');
+        header('location:../../../main/views/autenticacao/login.php');
         exit();
     }
 }

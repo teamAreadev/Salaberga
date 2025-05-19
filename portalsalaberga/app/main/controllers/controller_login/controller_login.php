@@ -28,14 +28,14 @@ if (isset($_POST['login']) && isset($_POST['email']) && isset($_POST['senha']) &
     require_once('../../models/model_dados.php');
     $login = login($email, $senha);
 
-    if ($login == 0 || $login == 1 || $login == 3 ) {
+    if ($_SESSION['status'] == 0 || $_SESSION['status'] == 1 || $_SESSION['status'] == 3 ) {
 
         header('location: ../../views/subsytem/subsistema.php');
         exit();
-    } else if ($login == 2){
+    } else if ($_SESSION['status'] == 2){
         header('Location: ../../views/subsytem/subsistema_estagio.php');
         exit();
-    } else if ($login == 4){
+    } else if ($_SESSION['status'] == 4){
         header('Location: ../../views/autenticacao/login.php?login=erro');
         exit();
     } 

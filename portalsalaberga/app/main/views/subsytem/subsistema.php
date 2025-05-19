@@ -31,7 +31,7 @@ if (isset($_GET['sair'])) {
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Portal Professores">
 
-    <title>Subsistemas STGM</title>
+    <title>Subsistema Alunos STGM</title>
 </head>
 <script>
     tailwind.config = {
@@ -522,7 +522,7 @@ if (isset($_GET['sair'])) {
                     <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo"
                         class="h-12 w-auto object-contain">
                     <div>
-                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Subsistemas <span
+                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Subsistema Alunos <span
                                 class="text-secondary">STGM</span>
                         </h1>
                         <div class="h-0.5 bg-primary/20 rounded-full mt-1"></div>
@@ -610,7 +610,7 @@ if (isset($_GET['sair'])) {
                             </div>
                         </div>
                     </div>
-
+                    <!--
                     <a href="../autenticacao/perfil.php">
                         <div class="flex items-center gap-3 cursor-pointer">
                             <div class="relative">
@@ -623,6 +623,7 @@ if (isset($_GET['sair'])) {
                         </div>
                     </a>
                 </nav>
+                
 
                 <div class="md:hidden">
                     <div class="relative">
@@ -635,6 +636,7 @@ if (isset($_GET['sair'])) {
                         </a>
                     </div>
                 </div>
+                -->
             </div>
         </div>
     </header>
@@ -1088,6 +1090,7 @@ if (isset($_GET['sair'])) {
     </div>
     <main class="container mx-auto px-4">
         <div class="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 md:gap-8 p-4 md:p-8 max-w-[1400px] mx-auto transition-all duration-300">
+
             <a href="https://salaberga.com" target="_blank">
                 <div class="app-card w-{100px} h-full h-4">
                     <div class="icon-wrapper">
@@ -1098,197 +1101,56 @@ if (isset($_GET['sair'])) {
                     <span class="category-tag">Sistema</span>
                 </div>
             </a>
-            <a href="https://aluno.seduc.ce.gov.br/">
+
+            <a href="../../../subsystems/estagio/index.php">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img , src="https://i.postimg.cc/MGhrtrk4/aluna.png" alt="Aluno Online" class="app-icon">
+                        <img src="https://i.postimg.cc/CMX7vRKh/aviso-1.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
-                    <h3 class="app-name">Aluno Online</h3>
-                    <span class="category-tag">Portal</span>
-                </div>
-            </a>
-
-            <a href="https://classroom.google.com/">
-                <div class="app-card w-{100px} h-full">
-
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/BQNdZvgK/image-1599078642807-removebg-preview.png"
-                            alt="Google Classroom" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Google Classroom</h3>
-                    <span class="category-tag">Aulas</span>
-                </div>
-            </a>
-
-
-
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/cJn3sprk/logout-15423241.png" alt="Entrada e Saída de Alunos"
-                            class="app-icon">
-                    </div>
-                    <h3 class="app-name">Entrada e Saída de Alunos</h3>
-                    <span class="category-tag">Administração</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/gjNXSdTj/diet-561611.png" alt="Gestão da Alimentação Escolar"
-                            class="app-icon">
-                    </div>
-                    <h3 class="app-name">Gestão da Alimentação Escolar</h3>
-                    <span class="category-tag">Nutrição</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/VNQ6Fdk4/racking-system-11392607.png"
-                            alt="Controle de Estoque de Materiais" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Controle de Estoque de Materiais</h3>
-                    <span class="category-tag">Logística</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Gestão de Estágio</h3>
+                    <h3 class="app-name">Selecionados Estágio 2025</h3>
                     <span class="category-tag">Carreira</span>
                 </div>
             </a>
 
-            <a href="#">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfGvkOCRltkaNwPD3b25bKnXMRrP7VMhKiu2YTq0_hHOch2vQ/viewform">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/d04BCPqs/suporte-tecnico.png" alt="Chamados de Suporte"
-                            class="app-icon">
+                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
-                    <h3 class="app-name">Chamados de Suporte</h3>
-                    <span class="category-tag">TI</span>
+                    <h3 class="app-name">Vagas Estágio</h3>
+                    <span class="category-tag">Formulário</span>
                 </div>
             </a>
 
-            <a href="#">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPxOcbRHApBMiUzETFePoVk3qFt5wN4wD5cQaRG8pMcrJnTw/viewform?fbzx=2231577792646554531">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/G2vvjWRT/manutencao.png" alt="Gerência de Espaços e Equipamentos"
-                            class="app-icon">
+                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
-                    <h3 class="app-name">Gerência de Espaços e Equipamentos</h3>
-                    <span class="category-tag">Infraestrutura</span>
+                    <h3 class="app-name">Custeio Maracanaú</h3>
+                    <span class="category-tag">Formulário</span>
                 </div>
             </a>
-
-            <a href="#">
+            
+             <a href="https://docs.google.com/forms/d/e/1FAIpQLSfP-eDUeU8KO20zQAP3LUEREfJTrK_kjTnaKSLuk8kAnZRQ-g/viewform">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/QdDknxCN/armazenamento-de-banco-de-dados.png"
-                            alt="Banco de Questões" class="app-icon">
+                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
-                    <h3 class="app-name">Banco de Questões</h3>
-                    <span class="category-tag">Educação</span>
+                    <h3 class="app-name">Perfil Estágio</h3>
+                    <span class="category-tag">Formulário</span>
                 </div>
             </a>
-
-            <a href="https://salaberga.com/salaberga/portalsalaberga/app/subsystems/biblioteca/app/main/index.php" target="_blank">
+            
+            <a href="https://forms.gle/rngcZ6MYSiraZYGT7">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/Ls3gGHcR/pilha-de-livros.png" alt="Biblioteca" class="app-icon">
+                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
-                    <h3 class="app-name">Biblioteca</h3>
-                    <span class="category-tag">Recursos</span>
+                    <h3 class="app-name">Dados da Apólice </h3>
+                    <span class="category-tag">Formulário</span>
                 </div>
             </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/8kFH70xG/pessoa.png" alt="Registros PCD" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Registros PCD</h3>
-                    <span class="category-tag">Inclusão</span>
-                </div>
-            </a>
-
-
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/C5VsTF74/scan-facial.png" alt="Sistema de patrimônios" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Sistema de patrimônios</h3>
-                    <span class="category-tag">Patrimônio</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/6qjqVc8G/profits-1571029.png" alt="Financeiro" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Financeiro</h3>
-                    <span class="category-tag">Economia</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/hjnXKfFh/businessman-1253671.png"
-                            alt="Professor Diretor de Turma" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Professor Diretor de Turma</h3>
-                    <span class="category-tag">Educação</span>
-                </div>
-            </a>
-
-
-
-            <a href="https://mural.seduc.ce.gov.br">
-                <div class="app-card w-{100px} h-full">
-
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/CMX7vRKh/aviso-1.png" alt="Mural de Avisos" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Mural de Avisos</h3>
-                    <span class="category-tag">Comunicação</span>
-                </div>
-            </a>
-
-            <a href="https://forms.google.com/">
-                <div class="app-card w-{100px} h-full">
-
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/Vkfm4T7j/png-transparent-g-suite-form-google-surveys-email-house-purple-violet-rectangle-removebg-preview.png"
-                            alt="Google Forms" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Google Forms</h3>
-                    <span class="category-tag">Atividades</span>
-                </div>
-            </a>
-
-            <a href="https://chat.openai.com/">
-                <div class="app-card w-{100px} h-full">
-
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/DZqM9f0m/download-4-removebg-preview.png" alt="Chat GPT"
-                            class="app-icon">
-                    </div>
-                    <h3 class="app-name">Chat GPT</h3>
-                    <span class="category-tag">Auxílio</span>
-                </div>
-            </a>
-
         </div>
     </main>
 </body>
