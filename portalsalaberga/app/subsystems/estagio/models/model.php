@@ -91,24 +91,27 @@ class main_model extends connect
             }
         }
 
-        // Busca o nome do aluno
-        $stmt_aluno = $this->connect->prepare("SELECT nome FROM aluno WHERE id = :id_aluno");
-        $stmt_aluno->execute([':id_aluno' => $alunos[0]]);
-        $aluno = $stmt_aluno->fetch(PDO::FETCH_ASSOC);
+        // Insere todos os alunos selecionados
+        foreach ($alunos as $aluno_id) {
+            // Busca o nome do aluno
+            $stmt_aluno = $this->connect->prepare("SELECT nome FROM aluno WHERE id = :id_aluno");
+            $stmt_aluno->execute([':id_aluno' => $aluno_id]);
+            $aluno = $stmt_aluno->fetch(PDO::FETCH_ASSOC);
 
-        // Insere na tabela selecionado
-        $stmt = $this->connect->prepare("INSERT INTO selecionado (id_aluno, id_vaga, nome) VALUES (:id_aluno, :id_vaga, :nome)");
-        $stmt->execute([
-            ':id_aluno' => $alunos[0],
-            ':id_vaga' => $id_vaga,
-            ':nome' => $aluno['nome']
-        ]);
+            // Insere na tabela selecionado
+            $stmt = $this->connect->prepare("INSERT INTO selecionado (id_aluno, id_vaga, nome) VALUES (:id_aluno, :id_vaga, :nome)");
+            $stmt->execute([
+                ':id_aluno' => $aluno_id,
+                ':id_vaga' => $id_vaga,
+                ':nome' => $aluno['nome']
+            ]);
 
-        if ($stmt) {
-            return 1;
-        } else {
-            return 2;
+            if (!$stmt) {
+                return 2; // Erro ao inserir
+            }
         }
+
+        return 1; // Sucesso
     }
     function editar_aluno($id, $nome, $contato, $medias, $email, $projetos, $perfil_opc1, $perfil_opc2, $ocorrencia, $custeio, $entregas_individuais, $entregas_grupo)
     {

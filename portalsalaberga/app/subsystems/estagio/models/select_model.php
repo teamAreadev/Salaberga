@@ -98,36 +98,39 @@ class select_model extends connect
    function alunos($nome_perfil = 0, $search = '', $filtro = '')
 {
     $sql = "SELECT 
-                id,
-                nome,
-                medias,
-                projetos,
-                ocorrencia,
-                entregas_individuais,
-                entregas_grupo,
-                perfil_opc1,
-                perfil_opc2,
-                custeio,
+                a.id,
+                a.nome,
+                a.medias,
+                a.projetos,
+                a.ocorrencia,
+                a.entregas_individuais,
+                a.entregas_grupo,
+                a.perfil_opc1,
+                a.perfil_opc2,
+                a.custeio,
                 (
-                    medias + 
-                    (CASE WHEN projetos != '' THEN 5 ELSE 0 END) -
-                    (ocorrencia * 0.5) +
-                    (entregas_individuais * 5) +
-                    (entregas_grupo * 5)
+                    a.medias + 
+                    (CASE WHEN a.projetos != '' THEN 5 ELSE 0 END) -
+                    (a.ocorrencia * 0.5) +
+                    (a.entregas_individuais * 5) +
+                    (a.entregas_grupo * 5)
                 ) AS score,
                 CASE 
-                    WHEN perfil_opc1 = '$nome_perfil' THEN 1
-                    WHEN perfil_opc2 = '$nome_perfil' THEN 2
+                    WHEN a.perfil_opc1 = :nome_perfil THEN 1
+                    WHEN a.perfil_opc2 = :nome_perfil THEN 2
                     ELSE 3
                 END AS priority_group
-            FROM aluno
-            WHERE perfil_opc1 = '$nome_perfil' OR perfil_opc2 = '$nome_perfil'
+            FROM aluno a
+            LEFT JOIN selecionado s ON a.id = s.id_aluno
+            WHERE (a.perfil_opc1 = :nome_perfil OR a.perfil_opc2 = :nome_perfil)
+            AND s.id_aluno IS NULL
             ORDER BY 
-                priority_group ASC,  -- First sort by priority group (1 for first option, 2 for second option)
-                score DESC,          -- Then by score descending within each group
-                medias DESC,         -- Then by medias descending
-                COALESCE(ocorrencia, 0) ASC;";
+                priority_group ASC,
+                score DESC,
+                a.medias DESC,
+                COALESCE(a.ocorrencia, 0) ASC";
     $stmt = $this->connect->prepare($sql);
+    $stmt->bindValue(':nome_perfil', $nome_perfil, PDO::PARAM_STR);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
