@@ -877,7 +877,7 @@ if (isset($_POST['layout'])) {
                                     </div>
                                     <div class="vaga-card-info-item">
                                         <i class="fas fa-users w-5"></i>
-                                        <span><?php echo $quantidade; ?> candidatos(s) disponível(is)</span>
+                                        <span><?php echo $quantidade; ?> vaga(s) disponível(is)</span>
                                     </div>
                                     <div class="vaga-card-info-item">
                                         <i class="fas fa-calendar w-5"></i>
