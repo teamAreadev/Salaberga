@@ -14,7 +14,7 @@ $session->autenticar_session();
   <meta name="description" content="Sistema SEEPS - Confirmação de Inscrição">
   <meta name="author" content="SEEPS">
 
-  <title>SEEPS - Confirmação</title>
+  <title>Logado - Confirmação</title>
 
   <link rel="shortcut icon" href="../assets/images/icone_salaberga.png" type="image">
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
