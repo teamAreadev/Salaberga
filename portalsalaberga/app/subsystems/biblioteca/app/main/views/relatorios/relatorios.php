@@ -92,29 +92,8 @@
             </div>
         <?php endif; ?>
 
-        <p class="text-ceara-green font-bold text-lg mb-5">Relatório geral</p>
         <form action="../../controllers/main_controller.php" method="post" class="space-y-5">
-            <div class="relative">
-                <select id="relatorioSelect" name="relatorio"
-                    class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green appearance-none bg-white text-gray-700 cursor-pointer shadow-sm transition-all duration-300">
-                    <option value="">Selecione o tipo de relatório</option>
-                    <option value="acervo">Relatório de Acervo</option>
-                    <option value="pra"></option>
-                </select>
-                <div class="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                    <i class="fas fa-chevron-down text-gray-400"></i>
-                </div>
-            </div>
-
-            <button type="submit"
-                class="w-full btn-gradient text-white py-3 rounded-lg font-medium flex items-center justify-center space-x-2">
-                <i class="fas fa-file-alt"></i>
-                <span>Gerar</span>
-            </button>
-        </form>
-        <p class="text-ceara-green font-bold text-lg mb-5">Relatório por estante e prateleira</p>
-        <form action="../../controllers/main_controller.php" method="post" class="space-y-5">
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4">
                 <div class="relative">
                     <select id="estanteSelect" name="estante" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green appearance-none bg-white text-gray-700 cursor-pointer shadow-sm transition-all duration-300">
                         <option value="" disabled selected>Selecione a estante</option>

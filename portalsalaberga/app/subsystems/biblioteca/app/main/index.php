@@ -159,7 +159,7 @@
       <div class="group h-full">
         <div class="bg-white rounded-xl shadow-sm hover:shadow-md overflow-hidden transition-all duration-300 h-full flex flex-col border border-gray-100 hover:border-ceara-green/20">
           <div class="h-1.5 bg-gradient-to-r from-ceara-green to-ceara-green/80"></div>
-          <a href="views/relatorios/relatorios.php" class="block p-6 flex-grow">
+          <a href="views/relatorios/decisao.php" class="block p-6 flex-grow">
             <div class="flex flex-col items-center text-center h-full">
               <div class="w-16 h-16 flex items-center justify-center bg-ceara-green/5 rounded-2xl mb-5 group-hover:bg-ceara-green/10 transition-all duration-300">
                 <i class="fas fa-chart-line text-ceara-green text-2xl"></i>
