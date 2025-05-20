@@ -78,39 +78,24 @@ class main_model extends connect
 
     function selecao($alunos, $id_vaga)
     {
-        foreach ($alunos as $aluno) {
-            // Verifica se já existe na tabela selecionado
-            $stmt = $this->connect->prepare("SELECT 1 FROM selecionado WHERE id_aluno = :id_aluno AND id_vaga = :id_vaga");
-            $stmt->execute([
-                ':id_aluno' => $aluno,
-                ':id_vaga' => $id_vaga
-            ]);
-
-            if ($stmt->rowCount() > 0) {
-                return 3; // Já existe
-            }
-        }
-
-        // Insere todos os alunos selecionados
         foreach ($alunos as $aluno_id) {
-            // Busca o nome do aluno
-            $stmt_aluno = $this->connect->prepare("SELECT nome FROM aluno WHERE id = :id_aluno");
-            $stmt_aluno->execute([':id_aluno' => $aluno_id]);
-            $aluno = $stmt_aluno->fetch(PDO::FETCH_ASSOC);
-
-            // Insere na tabela selecionado
-            $stmt = $this->connect->prepare("INSERT INTO selecionado (id_aluno, id_vaga, nome) VALUES (:id_aluno, :id_vaga, :nome)");
+            // Verifica se já existe na tabela selecao
+            $stmt = $this->connect->prepare("SELECT 1 FROM selecao WHERE id_aluno = :id_aluno AND id_vaga = :id_vaga");
             $stmt->execute([
                 ':id_aluno' => $aluno_id,
-                ':id_vaga' => $id_vaga,
-                ':nome' => $aluno['nome']
+                ':id_vaga' => $id_vaga
             ]);
-
-            if (!$stmt) {
-                return 2; // Erro ao inserir
+            if ($stmt->rowCount() > 0) {
+                continue; // Já existe
             }
-        }
 
+            // Insere na tabela selecao
+            $stmt = $this->connect->prepare("INSERT INTO selecao (id_aluno, id_vaga) VALUES (:id_aluno, :id_vaga)");
+            $stmt->execute([
+                ':id_aluno' => $aluno_id,
+                ':id_vaga' => $id_vaga
+            ]);
+        }
         return 1; // Sucesso
     }
     function editar_aluno($id, $nome, $contato, $medias, $email, $projetos, $perfil_opc1, $perfil_opc2, $ocorrencia, $custeio, $entregas_individuais, $entregas_grupo)

@@ -269,27 +269,39 @@ class select_model extends connect
 
     function alunos_selecionados_estagio($id_vaga)
     {
-        $stmt = $this->connect->query("
-            SELECT 
-                a.nome, 
-                a.id,
-                CASE 
-                    WHEN sel.id_aluno IS NOT NULL THEN 'approved'
-                    ELSE 'waiting'
-                END as status
+        $sql = "
+            SELECT a.nome, a.id, 'approved' as status
             FROM aluno a
-            INNER JOIN selecao s ON a.id = s.id_aluno 
-            LEFT JOIN selecionado sel ON a.id = sel.id_aluno AND sel.id_vaga = '$id_vaga'
-            WHERE s.id_vaga = '$id_vaga'");
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
+            INNER JOIN selecionado s ON a.id = s.id_aluno
+            WHERE s.id_vaga = :id_vaga
+
+            UNION
+
+            SELECT a.nome, a.id, 'waiting' as status
+            FROM aluno a
+            INNER JOIN selecao se ON a.id = se.id_aluno
+            LEFT JOIN selecionado s ON a.id = s.id_aluno AND s.id_vaga = :id_vaga
+            WHERE se.id_vaga = :id_vaga AND s.id_aluno IS NULL
+        ";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->bindValue(':id_vaga', $id_vaga, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     function vagas_com_alunos()
     {
-        $stmt = $this->connect->query("SELECT DISTINCT id_vaga FROM selecao");
-        $vagas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $vagas;
+        $stmt = $this->connect->prepare("
+            SELECT DISTINCT v.id as id_vaga 
+            FROM vagas v
+            INNER JOIN (
+                SELECT id_vaga FROM selecao
+                UNION
+                SELECT id_vaga FROM selecionado
+            ) as vagas_alunos ON v.id = vagas_alunos.id_vaga
+            ORDER BY v.data DESC, v.hora DESC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     function nome_empresa_por_vaga($id_vaga)
@@ -327,6 +339,12 @@ class select_model extends connect
                 ':id_vaga' => $item['id_vaga'],
                 ':nome' => $aluno['nome']
             ])) {
+                // Remove da tabela selecao
+                $del = $this->connect->prepare("DELETE FROM selecao WHERE id_aluno = :id_aluno AND id_vaga = :id_vaga");
+                $del->execute([
+                    ':id_aluno' => $item['id_aluno'],
+                    ':id_vaga' => $item['id_vaga']
+                ]);
                 $count++;
             }
         }

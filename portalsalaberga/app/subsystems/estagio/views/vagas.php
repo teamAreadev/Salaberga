@@ -907,7 +907,7 @@ if (isset($_POST['layout'])) {
                                         <div class="flex flex-col gap-1">
                                             <?php
                                             $id_vaga = $dado['id'];
-                                            $alunos = $select_model->alunos_selecionados($id_vaga);
+                                            $alunos = $select_model->alunos_selecionados_estagio($id_vaga);
 
                                             if (empty($alunos)): ?>
                                                 <span class="text-gray-500">Nenhum aluno selecionado</span>
