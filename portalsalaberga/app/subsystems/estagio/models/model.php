@@ -79,27 +79,39 @@ class main_model extends connect
     function selecao($alunos, $id_vaga)
     {
         foreach ($alunos as $aluno) {
-            $stmt = $this->connect->query("SELECT * FROM selecao WHERE id_aluno = '$aluno' AND id_vaga = '$id_vaga'");
+            // Verifica se já existe na tabela selecionado
+            $stmt = $this->connect->prepare("SELECT 1 FROM selecionado WHERE id_aluno = :id_aluno AND id_vaga = :id_vaga");
+            $stmt->execute([
+                ':id_aluno' => $aluno,
+                ':id_vaga' => $id_vaga
+            ]);
 
             if ($stmt->rowCount() > 0) {
-
-                return 3;
+                return 3; // Já existe
             }
         }
 
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Insere todos os alunos selecionados
+        foreach ($alunos as $aluno_id) {
+            // Busca o nome do aluno
+            $stmt_aluno = $this->connect->prepare("SELECT nome FROM aluno WHERE id = :id_aluno");
+            $stmt_aluno->execute([':id_aluno' => $aluno_id]);
+            $aluno = $stmt_aluno->fetch(PDO::FETCH_ASSOC);
 
-        foreach ($alunos as $aluno) {
+            // Insere na tabela selecionado
+            $stmt = $this->connect->prepare("INSERT INTO selecionado (id_aluno, id_vaga, nome) VALUES (:id_aluno, :id_vaga, :nome)");
+            $stmt->execute([
+                ':id_aluno' => $aluno_id,
+                ':id_vaga' => $id_vaga,
+                ':nome' => $aluno['nome']
+            ]);
 
-            $stmt = $this->connect->query("INSERT INTO selecao VALUES(null, '$aluno', '$id_vaga')");
+            if (!$stmt) {
+                return 2; // Erro ao inserir
+            }
         }
-        if ($stmt) {
 
-            return 1;
-        } {
-
-            return 2;
-        }
+        return 1; // Sucesso
     }
     function editar_aluno($id, $nome, $contato, $medias, $email, $projetos, $perfil_opc1, $perfil_opc2, $ocorrencia, $custeio, $entregas_individuais, $entregas_grupo)
     {
