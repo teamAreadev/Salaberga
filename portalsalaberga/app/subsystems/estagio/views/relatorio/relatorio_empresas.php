@@ -121,11 +121,10 @@ class ModernEmpresasPDF extends FPDF {
         $this->SetFont('Arial', 'B', 11);
         $this->SetFillColor(220, 240, 230);
         $this->SetTextColor(...$this->cores['primaria']);
-        $this->Cell(15, 10, 'ID', 1, 0, 'C', true);
         $this->Cell(60, 10, 'Nome', 1, 0, 'C', true);
         $this->Cell(50, 10, utf8_decode('Resposável'), 1, 0, 'C', true);
         $this->Cell(35, 10, 'Telefone', 1, 0, 'C', true);
-        $this->Cell(118, 10, utf8_decode('Endereço'), 1, 1, 'C', true);
+        $this->Cell(133, 10, utf8_decode('Endereço'), 1, 1, 'C', true);
 
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(40, 40, 40);
@@ -141,42 +140,34 @@ class ModernEmpresasPDF extends FPDF {
             $x = $this->GetX();
             $y = $this->GetY();
 
-            $w_id = 15;
             $w_nome = 60;
             $w_contato = 50;
             $w_telefone = 35;
-            $w_endereco = 118;
+            $w_endereco = 133;
 
             $nome_texto = utf8_decode(mb_strtoupper($empresa['nome'], 'UTF-8'));
             $endereco_texto = utf8_decode($empresa['endereco']);
-            $nome_lines = $this->NbLines($w_nome, $nome_texto);
-            $endereco_lines = $this->NbLines($w_endereco, $endereco_texto);
-            $max_lines = max($nome_lines, $endereco_lines, 1);
-            $h = 5 * $max_lines;
-
-            // ID
-            $this->SetXY($x, $y);
-            $this->Cell($w_id, $h, $empresa['id'], 1, 0, 'C', true);
+            
+            // Altura fixa de 2 linhas
+            $h = 10;
 
             // Nome (MultiCell) - alinhamento vertical centralizado
-            $nome_vspace = $max_lines - $nome_lines;
-            $nome_y = $y + ($nome_vspace * 5) / 2;
-            $this->SetXY($x + $w_id, $nome_y);
-            $this->MultiCell($w_nome, 5, $nome_texto, 0, 'L', true);
-            $this->Rect($x + $w_id, $y, $w_nome, $h);
+            $this->SetXY($x, $y);
+            $this->MultiCell($w_nome, 10, $nome_texto, 0, 'L', true);
+            $this->Rect($x, $y, $w_nome, $h);
 
             // Contato
-            $this->SetXY($x + $w_id + $w_nome, $y);
+            $this->SetXY($x + $w_nome, $y);
             $this->Cell($w_contato, $h, utf8_decode(mb_strtoupper($empresa['nome_contato'], 'UTF-8')), 1, 0, 'L', true);
 
             // Telefone
-            $this->SetXY($x + $w_id + $w_nome + $w_contato, $y);
+            $this->SetXY($x + $w_nome + $w_contato, $y);
             $this->Cell($w_telefone, $h, formatar_telefone($empresa['contato']), 1, 0, 'L', true);
 
             // Endereço (MultiCell)
-            $this->SetXY($x + $w_id + $w_nome + $w_contato + $w_telefone, $y);
-            $this->MultiCell($w_endereco, 5, utf8_decode($empresa['endereco']), 0, 'L', true);
-            $this->Rect($x + $w_id + $w_nome + $w_contato + $w_telefone, $y, $w_endereco, $h);
+            $this->SetXY($x + $w_nome + $w_contato + $w_telefone, $y);
+            $this->MultiCell($w_endereco, 10, $endereco_texto, 0, 'L', true);
+            $this->Rect($x + $w_nome + $w_contato + $w_telefone, $y, $w_endereco, $h);
 
             $this->SetXY($x, $y + $h);
             $fill = !$fill;
