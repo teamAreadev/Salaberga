@@ -137,7 +137,7 @@ try {
                 
                 $this->SetDrawColor(...$this->cores['primaria']);
                 $this->SetLineWidth(0.5);
-                $this->Line(15, 40, $this->GetPageWidth() - 15, 40);
+                $this->Line(15, 40, 255, 40);
                 
                 $this->SetY(45);
             } else {

@@ -766,10 +766,10 @@ if (isset($_POST['layout'])) {
                                 <i class="fas fa-file-pdf btn-icon"></i>
                                 <span>Relatório de Vagas</span>
                             </button>
-                            <a href="../controllers/relatorio_resumo_vagas.php" target="_blank" class="custom-btn custom-btn-primary group whitespace-nowrap w-full sm:w-auto">
-                                <i class="fas fa-file-alt btn-icon group-hover:rotate-12 transition-transform"></i>
+                            <button id="gerarRelatorioBtn" class="custom-btn custom-btn-secondary w-full sm:w-auto">
+                                <i class="fas fa-file-pdf btn-icon"></i>
                                 <span>Gerar Resumo</span>
-                            </a>
+                            </button>
                         </div>
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
                             <div class="relative">
@@ -1265,6 +1265,7 @@ if (isset($_POST['layout'])) {
             const filterEmpresa = document.getElementById('filterEmpresa');
             const vagasGrid = document.getElementById('vagasGrid');
             const relatorioVagasBtn = document.getElementById('relatorioVagasBtn');
+            const gerarRelatorioBtn = document.getElementById('gerarRelatorioBtn');
             let currentModalId = null;
 
             // GSAP Animations
@@ -1544,7 +1545,7 @@ if (isset($_POST['layout'])) {
             });
 
             // Botão de gerar relatório
-            document.getElementById('gerarRelatorioBtn').addEventListener('click', () => {
+            gerarRelatorioBtn.addEventListener('click', () => {
                 window.open('../controllers/relatorio_resumo_vagas.php', '_blank');
             });
         });
