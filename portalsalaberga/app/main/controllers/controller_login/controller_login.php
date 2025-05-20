@@ -32,6 +32,9 @@ if (isset($_POST['login']) && isset($_POST['email']) && isset($_POST['senha']) &
 
         header('location: ../../views/subsytem/subsistema.php');
         exit();
+    } else if ($_SESSION['status'] == 1) {
+        header('location: ../../views/subsytem/subsistema_professor.php');
+        exit();
     } else if ($_SESSION['status'] == 2) {
         header('Location: ../../views/subsytem/subsistema_estagio.php');
         exit();

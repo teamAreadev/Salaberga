@@ -31,7 +31,7 @@ if (isset($_GET['sair'])) {
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Portal Professores">
 
-    <title>Subsistema Alunos STGM</title>
+    <title>Subsistema Professores STGM</title>
 </head>
 <script>
     tailwind.config = {
@@ -522,7 +522,7 @@ if (isset($_GET['sair'])) {
                     <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo"
                         class="h-12 w-auto object-contain">
                     <div>
-                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Subsistema Alunos <span
+                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Subsistema Professores <span
                                 class="text-secondary">STGM</span>
                         </h1>
                         <div class="h-0.5 bg-primary/20 rounded-full mt-1"></div>
@@ -1102,56 +1102,15 @@ if (isset($_GET['sair'])) {
                 </div>
             </a>
 
-            <a href="../../../subsystems/estagio/index.php">
+            <a href="https://salaberga.com/salaberga/portalsalaberga/app/subsystems/biblioteca/app/main/index.php" target="_blank">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/CMX7vRKh/aviso-1.png" alt="Gestão de Estágio" class="app-icon">
+                        <img src="https://i.postimg.cc/Ls3gGHcR/pilha-de-livros.png" alt="Biblioteca" class="app-icon">
                     </div>
-                    <h3 class="app-name">Selecionados Estágio 2025</h3>
-                    <span class="category-tag">Carreira</span>
+                    <h3 class="app-name">Biblioteca</h3>
+                    <span class="category-tag">Recursos</span>
                 </div>
             </a>
-
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfGvkOCRltkaNwPD3b25bKnXMRrP7VMhKiu2YTq0_hHOch2vQ/viewform">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Vagas Estágio</h3>
-                    <span class="category-tag">Formulário</span>
-                </div>
-            </a>
-
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPxOcbRHApBMiUzETFePoVk3qFt5wN4wD5cQaRG8pMcrJnTw/viewform?fbzx=2231577792646554531">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Custeio Maracanaú</h3>
-                    <span class="category-tag">Formulário</span>
-                </div>
-            </a>
-
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfP-eDUeU8KO20zQAP3LUEREfJTrK_kjTnaKSLuk8kAnZRQ-g/viewform">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Perfil Estágio</h3>
-                    <span class="category-tag">Formulário</span>
-                </div>
-            </a>
-
-            <a href="https://forms.gle/rngcZ6MYSiraZYGT7">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Dados da Apólice </h3>
-                    <span class="category-tag">Formulário</span>
-                </div>
-            </a>
-
             <!-- <a href="../../subsystems/biblioteca/app/main/index.php">
             <a href="https://aluno.seduc.ce.gov.br/">
                 <div class="app-card w-{100px} h-full">
