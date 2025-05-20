@@ -5,6 +5,11 @@ $select_model = new select_model();
 $session = new sessions;
 $session->tempo_session();
 $session->autenticar_session();
+
+if (isset($_POST['layout'])) {
+    $session->quebra_session();
+}
+
 $select_model = new select_model();
 $dados = $select_model->alunos_aptos();
 $aprovados = [];

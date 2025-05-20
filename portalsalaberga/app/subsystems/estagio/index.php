@@ -7,6 +7,8 @@ $stmt = $select_model->getConnection()->query("SELECT id_aluno FROM selecionado"
 if ($stmt) {
     $aprovados = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 }
+session_start();
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -294,12 +296,7 @@ if ($stmt) {
                 </div>
 
                 <nav class="hidden md:flex items-center gap-5">
-                    <a href="#" class="nav-link">Início</a>
-                    <a href="#" class="nav-link">Sair</a>
-                    <a href="./views/login.php" class="inline-flex items-center justify-center px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors">
-                        <i class="fas fa-sign-in-alt mr-2"></i>
-                        Login
-                    </a>
+                    <a href="../../main/" class="nav-link">Sair</a>
                 </nav>
             </div>
         </div>

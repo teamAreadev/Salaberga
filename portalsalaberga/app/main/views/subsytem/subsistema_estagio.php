@@ -31,7 +31,7 @@ if (isset($_GET['sair'])) {
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Portal Professores">
 
-    <title>Subsistemas STGM</title>
+    <title>Subsistema Professores STGM</title>
 </head>
 <script>
     tailwind.config = {
@@ -522,7 +522,7 @@ if (isset($_GET['sair'])) {
                     <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo"
                         class="h-12 w-auto object-contain">
                     <div>
-                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Subsistemas <span
+                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Subsistema Professores <span
                                 class="text-secondary">STGM</span>
                         </h1>
                         <div class="h-0.5 bg-primary/20 rounded-full mt-1"></div>
@@ -1102,7 +1102,7 @@ if (isset($_GET['sair'])) {
                 </div>
             </a>
 
-            <a href="../../../subsystems/estagio/index.php">
+            <a href="../../../subsystems/estagio/default.php">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/CMX7vRKh/aviso-1.png" alt="Gestão de Estágio" class="app-icon">
