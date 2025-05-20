@@ -8,6 +8,7 @@ if (isset($_GET['estante']) && isset($_GET['prateleira'])) {
     header('Location: relatorios.php');
     exit();
 }
+
 class PDF extends FPDF
 {
     function Header()
@@ -53,7 +54,6 @@ class PDF extends FPDF
 $pdf = new PDF("L", "pt", "A4");
 $pdf->AliasNbPages();
 $pdf->AddPage();
-/*$pdo = new PDO("mysql:host=localhost;dbname=u750204740_sistBiblioteca;charset=utf8", "u750204740_sistBiblioteca", "paoComOvo123!@##");*/
 $pdo = new PDO("mysql:host=localhost;dbname=sist_biblioteca;charset=utf8", "root", "");
 
 $acervo = $pdo->prepare("SELECT 
@@ -82,14 +82,13 @@ $result = $acervo->fetchAll(PDO::FETCH_ASSOC);
 // Agrupar os dados por livro, edição e editora, consolidando os autores
 $livros = [];
 foreach ($result as $row) {
-    // Criar uma chave única combinando título, edição e editora (mas editora não será exibida)
     $chave = $row['titulo_livro'] . '|' . ($row['edicao'] ?? 'ENI*') . '|' . ($row['editora'] ?? 'N/A');
     if (!isset($livros[$chave])) {
         $livros[$chave] = [
             'id' => $row['id'],
             'titulo_livro' => $row['titulo_livro'],
             'edicao' => $row['edicao'],
-            'editora' => $row['editora'], // Mantido apenas para controle interno
+            'editora' => $row['editora'],
             'quantidade' => $row['quantidade'],
             'generos' => $row['generos'],
             'subgenero' => $row['subgenero'],
@@ -103,7 +102,6 @@ foreach ($result as $row) {
 }
 
 $pageWidth = $pdf->GetPageWidth() - 40;
-// Ajustar as larguras das colunas para melhor distribuição
 $colunas = array(
     array('largura' => $pageWidth * 0.35, 'texto' => utf8_decode('TÍTULO')),
     array('largura' => $pageWidth * 0.25, 'texto' => 'AUTOR'),
@@ -119,7 +117,7 @@ foreach ($livros as $livro) {
     $totalLivros += (int)($livro['quantidade'] ?? 1);
 }
 
-// Adicionar ITENS EM ACERVO aqui, antes da listagem
+// Adicionar ITENS EM ACERVO
 $pdf->SetX(20);
 $pdf->SetTextColor(0, 122, 51);
 $pdf->SetFont('Arial', 'B', 12);
@@ -139,12 +137,14 @@ $pdf->Ln();
 
 // Listagem dos livros
 $pdf->SetFont('Arial', '', 9);
-foreach ($livros as $i => $livro) {
+$rowCounter = 0; // Contador para alternar cores
+foreach ($livros as $livro) {
     for ($i = 1; $i <= $livro['quantidade']; $i++) {
         $pdf->SetX(20); // Garantir que cada linha comece na mesma posição
-        $cor = $livro['id'] % 2 == 0 ? 255 : 240;
-        $pdf->SetFillColor($cor, $cor, $cor);
-        $pdf->SetTextColor(0, 0, 0);
+        // Alternar cores: cinza claro (220, 220, 220) para par, branco (255, 255, 255) para ímpar
+        $cor = ($rowCounter % 2 == 0) ? 255 : 220; // Branco para par, cinza para ímpar
+        $pdf->SetFillColor($cor, $cor, $cor); // Define a cor de fundo da célula
+        $pdf->SetTextColor(0, 0, 0); // Texto preto para legibilidade
 
         $titulo = utf8_decode(mb_strtoupper($livro['titulo_livro'], 'UTF-8'));
         $genero = utf8_decode(mb_strtoupper($livro['generos'] ?? 'N/A', 'UTF-8'));
@@ -180,8 +180,10 @@ foreach ($livros as $i => $livro) {
         $pdf->Cell($colunas[3]['largura'], $alturaTotal, $subgenero, 1, 0, 'L', true);
         $pdf->Cell($colunas[4]['largura'], $alturaTotal, $edicao, 1, 0, 'C', true);
         $pdf->Cell($colunas[5]['largura'], $alturaTotal, $i, 1, 1, 'C', true);
+
+        $rowCounter++; // Incrementar o contador para a próxima linha
     }
-    
 }
 
 $pdf->Output('relatorio_acervo.pdf', 'I');
+?>

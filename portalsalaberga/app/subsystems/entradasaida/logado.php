@@ -1,3 +1,9 @@
+<?php
+
+require_once('../../main/models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -217,11 +223,11 @@
       <div class="success-icon">
         <i class="fas fa-check"></i>
       </div>
-      <h1>Saida realizada com sucesso!</h1>
+      <h1>Usuário logado com sucesso!</h1>
       <p class="message">
         <span class="congratulations">Parabéns!</span>
         <br>
-        Sua saida foi processada e confirmada em nosso sistema.
+        Seu login foi processada e confirmada em nosso sistema.
       </p>
       <div class="loading-indicator" style="margin-left: 30px">
         Redirecionando
@@ -233,15 +239,7 @@
       </div>
     </div>
   </div>
-
-  <script>
-    function redirect() {
-      setTimeout(() => {
-        window.location = 'logado.php';
-      }, 3000);
-    }
-    redirect();
-  </script>
+    
 </body>
 
 </html>

@@ -153,13 +153,17 @@ function login($email, $senha)
                     $_SESSION['status'] = 3;
                     return 3;
                     break;
+                case 'vigilante':
+                    $_SESSION['status'] = 4;
+                    return 4;
+                    break;
                 default:
                     # code...
                     break;
             }
             exit();
         } else {
-            return 4;
+            return 5;
         }
     } catch (PDOException $e) {
         error_log("Erro no banco de dados: " . $e->getMessage());
