@@ -183,11 +183,32 @@ $session = new sessions();
 $session->autenticar_session();
 
 // Gera o relatório
+
+// Desativa a exibição de erros para evitar saída prematura
+ini_set('display_errors', 0);
+error_reporting(0);
+
 try {
+    error_log('RelatorioResumoVagas: Inicializando o relatório...');
     $relatorio = new RelatorioResumoVagas();
+    error_log('RelatorioResumoVagas: Objeto RelatorioResumoVagas criado.');
+    
+    error_log('RelatorioResumoVagas: Chamando gerarRelatorio...');
     $relatorio->gerarRelatorio();
+    error_log('RelatorioResumoVagas: gerarRelatorio concluído.');
+    
+    // Limpa o buffer de saída antes de gerar o PDF
+    ob_clean();
+    error_log('RelatorioResumoVagas: Buffer de saída limpo. Chamando Output...');
+    
     $relatorio->Output('Relatorio_Resumo_Vagas.pdf', 'I');
+    error_log('RelatorioResumoVagas: Output chamado. Script deve terminar.');
+    exit;
 } catch (Exception $e) {
+    // Restaura a exibição de erros
+    ini_set('display_errors', 1);
+    error_reporting(E_ALL);
+    
     error_log('Erro ao gerar relatório: ' . $e->getMessage());
     header('Content-Type: text/html; charset=utf-8');
     echo '<div style="color: red; padding: 20px; font-family: Arial, sans-serif;">';

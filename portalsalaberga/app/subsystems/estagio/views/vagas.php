@@ -770,6 +770,19 @@ if (isset($_POST['layout'])) {
                                 <i class="fas fa-file-pdf btn-icon"></i>
                                 <span>Gerar Resumo</span>
                             </button>
+                            <script>
+                                console.log('Tentando encontrar o botão gerarRelatorioBtn para adicionar listener...');
+                                const resumoBtn = document.getElementById('gerarRelatorioBtn');
+                                if (resumoBtn) {
+                                    console.log('Botão gerarRelatorioBtn encontrado. Adicionando listener.');
+                                    resumoBtn.addEventListener('click', () => {
+                                        console.log('Botão Gerar Resumo clicado (via script isolado). Abrindo relatório...');
+                                        window.open('../controllers/relatorio_resumo_vagas.php', '_blank');
+                                    });
+                                } else {
+                                    console.error('Erro: Botão gerarRelatorioBtn NÃO encontrado no script isolado.');
+                                }
+                            </script>
                         </div>
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
                             <div class="relative">
@@ -1545,9 +1558,14 @@ if (isset($_POST['layout'])) {
             });
 
             // Botão de gerar relatório
-            gerarRelatorioBtn.addEventListener('click', () => {
-                window.open('../controllers/relatorio_resumo_vagas.php', '_blank');
-            });
+            if (gerarRelatorioBtn) {
+                gerarRelatorioBtn.addEventListener('click', () => {
+                    console.log('Botão Gerar Resumo clicado. Abrindo relatório...');
+                    window.open('../controllers/relatorio_resumo_vagas.php', '_blank');
+                });
+            } else {
+                console.error('Erro no script principal: Elemento com ID gerarRelatorioBtn não encontrado.');
+            }
         });
 
         // Funções para o modal de relatório
