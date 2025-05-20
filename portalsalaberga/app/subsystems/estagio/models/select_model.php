@@ -240,14 +240,14 @@ class select_model extends connect
     }
     function alunos_selecionados($id_vaga)
     {
-        $stmt = $this->connect->query("
+        $stmt = $this->connect->prepare("
             SELECT a.nome, a.id 
             FROM aluno a
             INNER JOIN selecionado s ON a.id = s.id_aluno
-            WHERE s.id_vaga = '$id_vaga'");
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        return $result;
+            WHERE s.id_vaga = :id_vaga");
+        $stmt->bindValue(':id_vaga', $id_vaga, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     function alunos_espera($id_vaga)
@@ -303,13 +303,27 @@ class select_model extends connect
         $count = 0;
         foreach ($selecionados as $item) {
             // Verifica se já existe
-            $check = $this->connect->prepare("SELECT 1 FROM selecionado WHERE id_aluno = ? AND id_vaga = ?");
-            $check->execute([$item['id_aluno'], $item['id_vaga']]);
+            $check = $this->connect->prepare("SELECT 1 FROM selecionado WHERE id_aluno = :id_aluno AND id_vaga = :id_vaga");
+            $check->execute([
+                ':id_aluno' => $item['id_aluno'],
+                ':id_vaga' => $item['id_vaga']
+            ]);
+            
             if ($check->fetch()) {
                 continue; // Já existe, não insere
             }
-            $stmt = $this->connect->prepare("INSERT INTO selecionado (id_aluno, id_vaga, nome) VALUES (?, ?, ?)");
-            if ($stmt->execute([$item['id_aluno'], $item['id_vaga'], $item['nome'] ?? ''])) {
+            
+            // Busca o nome do aluno
+            $stmt_aluno = $this->connect->prepare("SELECT nome FROM aluno WHERE id = :id_aluno");
+            $stmt_aluno->execute([':id_aluno' => $item['id_aluno']]);
+            $aluno = $stmt_aluno->fetch(PDO::FETCH_ASSOC);
+            
+            $stmt = $this->connect->prepare("INSERT INTO selecionado (id_aluno, id_vaga, nome) VALUES (:id_aluno, :id_vaga, :nome)");
+            if ($stmt->execute([
+                ':id_aluno' => $item['id_aluno'],
+                ':id_vaga' => $item['id_vaga'],
+                ':nome' => $aluno['nome']
+            ])) {
                 $count++;
             }
         }
