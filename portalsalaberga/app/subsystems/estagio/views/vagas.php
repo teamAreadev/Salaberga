@@ -734,11 +734,13 @@ if (isset($_POST['layout'])) {
             <!-- Header -->
             <header class="bg-dark-50 shadow-md sticky top-0 z-30 border-b border-gray-800">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <h1 class="text-xl font-bold text-white text-center sm:text-left w-full">Vagas Disponíveis</h1>
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs text-gray-400">
-                            <i class="fas fa-user-circle mr-1"></i> Admin
-                        </span>
+                    <div class="flex items-center justify-between w-full">
+                        <h1 class="text-xl font-bold text-white text-center sm:text-left w-full">Vagas Disponíveis</h1>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-gray-400">
+                                <i class="fas fa-user-circle mr-1"></i> Admin
+                            </span>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -764,10 +766,10 @@ if (isset($_POST['layout'])) {
                                 <i class="fas fa-file-pdf btn-icon"></i>
                                 <span>Relatório de Vagas</span>
                             </button>
-                            <div class="search-input-container relative w-full sm:w-64">
-                                <i class="fas fa-search search-icon"></i>
-                                <input type="text" id="searchVaga" placeholder="Buscar vaga..." class="custom-input pl-10 pr-4 py-2.5 w-full">
-                            </div>
+                            <a href="../controllers/relatorio_resumo_vagas.php" target="_blank" class="custom-btn custom-btn-primary group whitespace-nowrap w-full sm:w-auto">
+                                <i class="fas fa-file-alt btn-icon group-hover:rotate-12 transition-transform"></i>
+                                <span>Gerar Resumo</span>
+                            </a>
                         </div>
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
                             <div class="relative">
@@ -875,7 +877,7 @@ if (isset($_POST['layout'])) {
                                     </div>
                                     <div class="vaga-card-info-item">
                                         <i class="fas fa-users w-5"></i>
-                                        <span><?php echo $quantidade; ?> candidatos(s) disponível(is)</span>
+                                        <span><?php echo $quantidade; ?> vaga(s) disponível(is)</span>
                                     </div>
                                     <div class="vaga-card-info-item">
                                         <i class="fas fa-calendar w-5"></i>
@@ -1145,7 +1147,7 @@ if (isset($_POST['layout'])) {
                     <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-500/10 text-primary-400 mb-4">
                         <i class="fas fa-file-pdf text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white slide-up">Gerar Relatório de Vagas</h3>
+                    <h3 class="text-xl font-bold text-white">Gerar Relatório de Vagas</h3>
                     <p class="text-gray-400 mt-2">Selecione as opções para gerar o relatório.</p>
                 </div>
                 <form id="formRelatorio" action="../controllers/gerar_relatorio_vagas.php" method="get" target="_blank" class="space-y-6">
@@ -1183,7 +1185,7 @@ if (isset($_POST['layout'])) {
                         </select>
                     </div>
                     <div class="mt-8 flex justify-end space-x-4">
-                        <button type="button" class="custom-btn custom-btn-secondary close-btn" data-modal-id="relatorioVagasModal">
+                        <button type="button" class="custom-btn custom-btn-secondary" onclick="fecharModalRelatorio()">
                             <i class="fas fa-times btn-icon"></i>
                             <span>Cancelar</span>
                         </button>
@@ -1313,60 +1315,18 @@ if (isset($_POST['layout'])) {
 
             // Modal handling
             function openModal(modalId) {
-                console.log('Tentando abrir modal:', modalId);
-                if (currentModalId) {
-                    closeModal(currentModalId);
-                }
-
                 const modal = document.getElementById(modalId);
-                if (!modal) {
-                    console.error('Modal não encontrada para o ID:', modalId);
-                    return;
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
                 }
-
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                const modalContent = modal.querySelector('.candidatura-modal');
-                if (modalContent) {
-                    gsap.fromTo(modalContent, {
-                        opacity: 0,
-                        scale: 0.9
-                    }, {
-                        opacity: 1,
-                        scale: 1,
-                        duration: 0.3,
-                        ease: 'power2.out'
-                    });
-                }
-
-                currentModalId = modalId;
             }
 
             function closeModal(modalId) {
-                console.log('Fechando modal:', modalId);
                 const modal = document.getElementById(modalId);
-                if (!modal) {
-                    console.error('Modal não encontrada para o ID:', modalId);
-                    return;
-                }
-
-                const modalContent = modal.querySelector('.candidatura-modal');
-                if (modalContent) {
-                    gsap.to(modalContent, {
-                        opacity: 0,
-                        scale: 0.9,
-                        duration: 0.3,
-                        ease: 'power2.in',
-                        onComplete: () => {
-                            modal.classList.add('hidden');
-                            modal.classList.remove('flex');
-                            currentModalId = null;
-                        }
-                    });
-                } else {
+                if (modal) {
                     modal.classList.add('hidden');
                     modal.classList.remove('flex');
-                    currentModalId = null;
                 }
             }
 
@@ -1543,7 +1503,9 @@ if (isset($_POST['layout'])) {
                 }, type === 'success' ? 3000 : 4000);
             }
 
+            // Relatório de Vagas Modal
             relatorioVagasBtn.addEventListener('click', () => {
+                console.log('Botão Relatório de Vagas clicado');
                 openModal('relatorioVagasModal');
                 
                 // Atualiza os filtros do relatório com os filtros atuais
@@ -1566,16 +1528,61 @@ if (isset($_POST['layout'])) {
                 } else {
                     perfilRelatorio.value = '';
                 }
-                
-                // Adiciona um listener para o submit do formulário
-                formRelatorio.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const url = new URL(this.action);
-                    url.searchParams.set('empresa', empresaRelatorio.value);
-                    url.searchParams.set('perfil', perfilRelatorio.value);
-                    window.open(url.toString(), '_blank');
-                });
             });
+
+            // Adiciona um listener para o submit do formulário de relatório
+            document.getElementById('formRelatorio').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const url = new URL(this.action);
+                const empresaRelatorio = this.querySelector('[name="empresa"]').value;
+                const perfilRelatorio = this.querySelector('[name="perfil"]').value;
+                
+                url.searchParams.set('empresa', empresaRelatorio);
+                url.searchParams.set('perfil', perfilRelatorio);
+                window.open(url.toString(), '_blank');
+                closeModal('relatorioVagasModal');
+            });
+
+            // Botão de gerar relatório
+            document.getElementById('gerarRelatorioBtn').addEventListener('click', () => {
+                window.open('../controllers/relatorio_resumo_vagas.php', '_blank');
+            });
+        });
+
+        // Funções para o modal de relatório
+        function abrirModalRelatorio() {
+            const modal = document.getElementById('relatorioVagasModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function fecharModalRelatorio() {
+            const modal = document.getElementById('relatorioVagasModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Adicionar evento ao botão de relatório
+        document.getElementById('relatorioVagasBtn').addEventListener('click', abrirModalRelatorio);
+
+        // Fechar modal ao clicar fora
+        document.getElementById('relatorioVagasModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharModalRelatorio();
+            }
+        });
+
+        // Submit do formulário
+        document.getElementById('formRelatorio').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const url = new URL(this.action);
+            const empresa = this.querySelector('[name="empresa"]').value;
+            const perfil = this.querySelector('[name="perfil"]').value;
+            
+            url.searchParams.set('empresa', empresa);
+            url.searchParams.set('perfil', perfil);
+            window.open(url.toString(), '_blank');
+            fecharModalRelatorio();
         });
     </script>
 </body>
