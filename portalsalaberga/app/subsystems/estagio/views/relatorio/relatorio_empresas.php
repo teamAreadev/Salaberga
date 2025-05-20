@@ -42,7 +42,7 @@ class ModernEmpresasPDF extends FPDF {
             $this->SetFont('Arial', 'B', 18);
             $this->SetTextColor(...$this->cores['primaria']);
             $this->SetXY(45, 15);
-            $this->Cell(100, 10, utf8_decode('Relatório de Empresas'), 0, 0, 'L');
+            $this->Cell(100, 10, utf8_decode('Relatório de Concedentes'), 0, 0, 'L');
             $this->SetFont('Arial', 'I', 9);
             $this->SetTextColor(...$this->cores['subtitulo']);
             $this->SetXY(45, 25);
