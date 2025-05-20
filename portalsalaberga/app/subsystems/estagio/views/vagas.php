@@ -844,7 +844,7 @@ if (isset($_POST['layout'])) {
                             $data = isset($dado['data']) ? htmlspecialchars($dado['data'], ENT_QUOTES, 'UTF-8') : '';
                             $hora = isset($dado['hora']) ? htmlspecialchars($dado['hora'], ENT_QUOTES, 'UTF-8') : '';
                             $tipoVaga = isset($dado['tipo_vaga']) ? htmlspecialchars($dado['tipo_vaga'], ENT_QUOTES, 'UTF-8') : '';
-                            $hasAlunos = !empty($select_model->alunos_selecionados($dado['id']));
+                            $hasAlunos = !empty($select_model->alunos_selecionados_estagio($dado['id']));
                             ?>
                             <div class="vaga-card slide-up<?php echo !$hasAlunos ? ' single-link' : ''; ?>"
                                 style="animation-delay: <?php echo $delay; ?>ms;"
@@ -908,7 +908,7 @@ if (isset($_POST['layout'])) {
                                             <?php
                                             $id_vaga = $dado['id'];
                                             $alunos = $select_model->alunos_selecionados_estagio($id_vaga);
-
+                                            $hasAlunos = !empty($alunos);
                                             if (empty($alunos)): ?>
                                                 <span class="text-gray-500">Nenhum aluno selecionado</span>
                                             <?php else: ?>
