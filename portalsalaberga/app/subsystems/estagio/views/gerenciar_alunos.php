@@ -3,7 +3,6 @@ require_once('../models/select_model.php');
 require_once('../models/sessions.php');
 $select_model = new select_model();
 $session = new sessions;
-$session->tempo_session();
 $session->autenticar_session();
 
 if (isset($_POST['layout'])) {

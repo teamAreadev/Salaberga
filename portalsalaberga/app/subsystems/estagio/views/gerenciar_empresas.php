@@ -4,7 +4,6 @@ $select_model = new select_model;
 require_once('../models/sessions.php');
 
 $session = new sessions;
-$session->tempo_session();
 $session->autenticar_session();
 
 if (isset($_POST['layout'])) {
