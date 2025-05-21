@@ -29,7 +29,7 @@ class RelatorioResumoVagas extends PDF {
     ];
 
     public function __construct() {
-        parent::__construct('L', 'mm', 'A4');
+        parent::__construct('P', 'mm', 'A4');
         $this->SetAutoPageBreak(true, 25);
         $this->SetMargins(15, 15, 15);
         $this->select_model = new select_model();
@@ -55,7 +55,7 @@ class RelatorioResumoVagas extends PDF {
             
             $this->SetDrawColor(...$this->cores['primaria']);
             $this->SetLineWidth(0.5);
-            $this->Line(15, 40, 215, 40);
+            $this->Line(15, 40, 195, 40);
             
             $this->SetY(45);
         } else {
@@ -82,14 +82,21 @@ class RelatorioResumoVagas extends PDF {
         // Tabela de Resumo
         $this->SetFont('Arial', 'B', 12);
         $this->SetTextColor(...$this->cores['primaria']);
+        
+        // Adiciona espaço à esquerda para centralizar o título
+        $this->SetX(15 + (180 - 172) / 2);
         $this->Cell(0, 10, 'Resumo das Vagas', 0, 1, 'L');
         
         // Cabeçalho da tabela
         $this->SetFillColor(220, 240, 230);
         $this->SetFont('Arial', 'B', 10);
-        $this->Cell(80, 7, 'Empresa', 1, 0, 'L', true);
-        $this->Cell(60, 7, 'Perfil', 1, 0, 'L', true);
-        $this->Cell(60, 7, 'Quantidade', 1, 1, 'C', true);
+        
+        // Adiciona espaço à esquerda para centralizar a tabela
+        $this->SetX(15 + (180 - 170) / 2);
+        
+        $this->Cell(100, 7, 'Empresa', 1, 0, 'L', true);
+        $this->Cell(40, 7, 'Perfil', 1, 0, 'L', true);
+        $this->Cell(30, 7, 'Quantidade', 1, 1, 'C', true);
         
         // Dados da tabela
         $this->SetFont('Arial', '', 10);
@@ -142,9 +149,12 @@ class RelatorioResumoVagas extends PDF {
             $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
             $this->SetFillColor($bg[0], $bg[1], $bg[2]);
             
-            $this->Cell(80, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['empresa']), 40), 1, 0, 'L', true);
-            $this->Cell(60, 7, $this->ajustarTexto($vaga['perfil'], 30), 1, 0, 'L', true);
-            $this->Cell(60, 7, $vaga['quantidade'], 1, 1, 'C', true);
+            // Adiciona espaço à esquerda para centralizar a tabela
+            $this->SetX(15 + (180 - 170) / 2);
+            
+            $this->Cell(100, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['empresa']), 55), 1, 0, 'L', true);
+            $this->Cell(40, 7, $this->ajustarTexto($vaga['perfil'], 20), 1, 0, 'L', true);
+            $this->Cell(30, 7, $vaga['quantidade'], 1, 1, 'C', true);
             
             $contador_linhas++;
         }
@@ -153,17 +163,30 @@ class RelatorioResumoVagas extends PDF {
         $this->Ln(5);
         $this->SetFont('Arial', 'B', 10);
         $this->SetFillColor(220, 240, 230);
-        $this->Cell(140, 7, 'Total de Vagas:', 1, 0, 'L', true);
-        $this->Cell(60, 7, array_sum(array_column($vagas_agrupadas, 'quantidade')), 1, 1, 'C', true);
         
+        // Adiciona espaço à esquerda para centralizar os totalizadores
+        $this->SetX(15 + (180 - (140 + 30)) / 2); // 140mm + 30mm = 170mm (largura dos totalizadores)
+
+        $this->Cell(140, 7, 'Total de Vagas:', 1, 0, 'L', true);
+        $this->Cell(30, 7, array_sum(array_column($vagas_agrupadas, 'quantidade')), 1, 1, 'C', true);
+        
+        // Adiciona espaço à esquerda para centralizar os totalizadores
+        $this->SetX(15 + (180 - (140 + 30)) / 2);
+
         $this->Cell(140, 7, 'Total de Empresas:', 1, 0, 'L', true);
-        $this->Cell(60, 7, count(array_unique(array_column($vagas_agrupadas, 'empresa'))), 1, 1, 'C', true);
+        $this->Cell(30, 7, count(array_unique(array_column($vagas_agrupadas, 'empresa'))), 1, 1, 'C', true);
+
+        // Adiciona espaço à esquerda para centralizar os totalizadores
+        $this->SetX(15 + (180 - (140 + 30)) / 2);
 
         $this->Cell(140, 7, 'Total de Alunos Selecionados:', 1, 0, 'L', true);
-        $this->Cell(60, 7, $total_alunos_selecionados, 1, 1, 'C', true);
+        $this->Cell(30, 7, $total_alunos_selecionados, 1, 1, 'C', true);
+
+        // Adiciona espaço à esquerda para centralizar os totalizadores
+        $this->SetX(15 + (180 - (140 + 30)) / 2);
 
         $this->Cell(140, 7, 'Total de Alunos em Espera:', 1, 0, 'L', true);
-        $this->Cell(60, 7, $total_alunos_espera, 1, 1, 'C', true);
+        $this->Cell(30, 7, $total_alunos_espera, 1, 1, 'C', true);
     }
 
     private function ajustarTexto($texto, $tamanho) {
