@@ -278,7 +278,7 @@ if (isset($_POST['layout'])) {
 
         .area-design {
             background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(126, 34, 206, 0.2) 100%);
-            color: #c4b5fd;
+            color: #c4b5fd; /* Cor original para Design */
             border: 1px solid rgba(168, 85, 247, 0.3);
         }
 
@@ -789,7 +789,7 @@ if (isset($_POST['layout'])) {
                                 <select id="filterArea" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
                                     <option value="">Todas as áreas</option>
                                     <option value="desenvolvimento">Desenvolvimento</option>
-                                    <option value="design">Design/Social mídia</option>
+                                    <option value="design">Design/Mídia</option>
                                     <option value="midia">Tutoria</option>
                                     <option value="redes">Suporte/Redes</option>
                                 </select>
@@ -834,10 +834,12 @@ if (isset($_POST['layout'])) {
                             $delay += 100;
                             $nomePerfil = isset($dado['nome_perfil']) ? htmlspecialchars($dado['nome_perfil'], ENT_QUOTES, 'UTF-8') : 'Área não informada';
                             $area = strtolower($nomePerfil);
-                            if ($area === 'design/social mídia' || $area === 'design/mídia') {
+                            if ($area === 'design/social mídia' || $area === 'design/mídia' || $area === 'design') { // Considerar 'design' também
                                 $area = 'design';
                             } elseif ($nomePerfil === 'Suporte/Redes') {
                                 $area = 'redes';
+                            } elseif ($nomePerfil === 'Tutoria') { // Adicionar condição explícita para Tutoria
+                                $area = 'tutoria';
                             } elseif (empty($area) || $area === 'área não informada') {
                                 $area = 'desenvolvimento'; // Cor padrão se a área não for informada
                             }
@@ -891,7 +893,14 @@ if (isset($_POST['layout'])) {
                                         <?php else: ?>
                                             <i class="fas fa-question mr-1 text-xs"></i>
                                         <?php endif; ?>
-                                        <?php echo $nomePerfil; ?>
+                                        <?php
+                                        // Ajustar exibição do nome do perfil para Design/Mídia
+                                        if ($nomePerfil === 'Design/Social mídia') {
+                                            echo 'Design/Mídia';
+                                        } else {
+                                            echo $nomePerfil;
+                                        }
+                                        ?>
                                     </span>
                                 </div>
                                 <div class="vaga-card-info">
@@ -1019,7 +1028,7 @@ if (isset($_POST['layout'])) {
                                                 </label>
                                                 <label class="inline-flex items-center">
                                                     <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="2" <?php echo $nomePerfil === 'Design/Social mídia' ? 'checked' : ''; ?> style="vertical-align: middle;">
-                                                    <span class="ml-3 text-gray-300 lg:whitespace-nowrap" style="vertical-align: middle;">Design/Social mídia</span>
+                                                    <span class="ml-3 text-gray-300 lg:whitespace-nowrap" style="vertical-align: middle;">Design/Mídia</span>
                                                 </label>
                                                 <label class="inline-flex items-center">
                                                     <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="3" <?php echo $nomePerfil === 'Suporte/Redes' ? 'checked' : ''; ?> style="vertical-align: middle;">
@@ -1131,7 +1140,7 @@ if (isset($_POST['layout'])) {
                             </label>
                             <label class="inline-flex items-center">
                                 <input type="radio" class="custom-checkbox" name="areas" value="2" style="vertical-align: middle;">
-                                <span class="ml-3 text-gray-300 lg:whitespace-nowrap" style="vertical-align: middle;">Design/Social mídia</span>
+                                <span class="ml-3 text-gray-300 lg:whitespace-nowrap" style="vertical-align: middle;">Design/Mídia</span>
                             </label>
                             <label class="inline-flex items-center">
                                 <input type="radio" class="custom-checkbox" name="areas" value="3" style="vertical-align: middle;">
@@ -1216,7 +1225,7 @@ if (isset($_POST['layout'])) {
                             <?php
                             $perfis = [
                                 '1' => 'Desenvolvimento',
-                                '2' => 'Design/Social mídia',
+                                '2' => 'Design/Mídia',
                                 '4' => 'Tutoria',
                                 '3' => 'Suporte/Redes'
                             ];
