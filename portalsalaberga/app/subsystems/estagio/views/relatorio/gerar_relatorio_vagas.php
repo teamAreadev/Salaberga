@@ -1,7 +1,7 @@
 <?php
-require_once('../../../models/select_model.php');
-require_once('../../../sets/fpdf/fpdf.php');
-require_once('../../../models/sessions.php');
+require_once('../../models/select_model.php');
+require_once('../../assets/fpdf/fpdf.php');
+require_once('../../models/sessions.php');
 // Configura o fuso horário para São Paulo
 date_default_timezone_set('America/Sao_Paulo');
 
@@ -52,7 +52,7 @@ try {
             
             foreach ($this->vagas as $vaga) {
                 // Busca alunos selecionados para esta vaga
-                $alunos_selecionados = $this->select_model->alunos_selecionados($vaga['id']);
+                $alunos_selecionados = $this->select_model->alunos_selecionados_relatorio($vaga['id']);
                 
                 // Busca alunos em espera para esta vaga
                 $alunos_espera = $this->select_model->alunos_espera($vaga['id']);
@@ -194,7 +194,7 @@ try {
             } else {
                 foreach ($this->vagas as $vaga) {
                     // Busca alunos selecionados e em espera para esta vaga
-                    $alunos_selecionados = $this->select_model->alunos_selecionados($vaga['id']);
+                    $alunos_selecionados = $this->select_model->alunos_selecionados_relatorio($vaga['id']);
                     $alunos_espera = $this->select_model->alunos_espera($vaga['id']);
                     
                     $data_hora = ($this->formatarData($vaga['data'])) . ' | ' . ($vaga['hora'] ?? '-');
