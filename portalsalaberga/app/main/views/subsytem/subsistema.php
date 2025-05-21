@@ -1112,6 +1112,16 @@ if (isset($_GET['sair'])) {
                 </div>
             </a>
 
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfP-eDUeU8KO20zQAP3LUEREfJTrK_kjTnaKSLuk8kAnZRQ-g/viewform">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/jdwcgtg7/unnamed-removebg-preview.png" alt="Gestão de Estágio" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Padlet da Entrega das Equipes</h3>
+                    <span class="category-tag">Organização</span>
+                </div>
+            </a>
+
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSfGvkOCRltkaNwPD3b25bKnXMRrP7VMhKiu2YTq0_hHOch2vQ/viewform">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
@@ -1128,6 +1138,16 @@ if (isset($_GET['sair'])) {
                         <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
                     </div>
                     <h3 class="app-name">Custeio Maracanaú</h3>
+                    <span class="category-tag">Formulário</span>
+                </div>
+            </a>
+
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfP-eDUeU8KO20zQAP3LUEREfJTrK_kjTnaKSLuk8kAnZRQ-g/viewform">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Perfil Estágio</h3>
                     <span class="category-tag">Formulário</span>
                 </div>
             </a>

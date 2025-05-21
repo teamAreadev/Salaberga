@@ -58,12 +58,13 @@ class main_model extends connect
             return 3;
         }
     }
-    function cadastrar_vaga($id_empresa, $id_area, $quantidade, $data, $tipo_vaga, $hora)
+    function cadastrar_vaga($id_empresa, $id_area, $quant_vagas, $quant_candidatos, $data, $tipo_vaga, $hora)
     {
-        $stmt_cadastrar_vagas = $this->connect->prepare("INSERT INTO vagas VALUES (null, :id_concedente, :id_perfil, :quantidade, :data, :tipo_vaga, :hora)");
+        $stmt_cadastrar_vagas = $this->connect->prepare("INSERT INTO vagas VALUES (null, :id_concedente, :id_perfil, :quant_vagas, :quant_candidatos, :data, :tipo_vaga, :hora)");
         $stmt_cadastrar_vagas->bindValue(':id_perfil', $id_area);
         $stmt_cadastrar_vagas->bindValue(':id_concedente', $id_empresa);
-        $stmt_cadastrar_vagas->bindValue(':quantidade', $quantidade);
+        $stmt_cadastrar_vagas->bindValue(':quant_vagas', $quant_vagas);
+        $stmt_cadastrar_vagas->bindValue(':quant_candidatos', $quant_candidatos);
         $stmt_cadastrar_vagas->bindValue(':data', $data);
         $stmt_cadastrar_vagas->bindValue(':tipo_vaga', $tipo_vaga);
         $stmt_cadastrar_vagas->bindValue(':hora', $hora);
@@ -125,23 +126,22 @@ class main_model extends connect
             return 2;
         }
     }
-    function editar_vaga($id, $empresa, $perfil, $quantidades_vagas, $tipo_vaga, $data, $hora)
+    function editar_vaga($id, $empresa, $perfil, $quant_vaga, $quant_cand, $tipo_vaga, $data, $hora)
     {
-        $stmt_excluirEmpresa = $this->connect->prepare("UPDATE `vagas` SET `id_concedente`= :empresa,`id_perfil`= :perfil,`quantidade`= :quantidade,`data`= :data ,`tipo_vaga`= :tipo,`hora`= :hora WHERE id = :id");
+        $stmt_excluirEmpresa = $this->connect->prepare("UPDATE `vagas` SET `id_concedente`= :empresa,`id_perfil`= :perfil,`quant_vaga`= :quant_vaga,`quant_cand`= :quant_candidatos,`data`= :data ,`tipo_vaga`= :tipo,`hora`= :hora WHERE id = :id");
         $stmt_excluirEmpresa->bindValue(':id', $id);
         $stmt_excluirEmpresa->bindValue(':empresa', $empresa);
         $stmt_excluirEmpresa->bindValue(':perfil', $perfil);
-        $stmt_excluirEmpresa->bindValue(':quantidade', $quantidades_vagas);
+        $stmt_excluirEmpresa->bindValue(':quant_vaga', $quant_vaga);
+        $stmt_excluirEmpresa->bindValue(':quant_candidatos', $quant_cand);
         $stmt_excluirEmpresa->bindValue(':data', $data);
         $stmt_excluirEmpresa->bindValue(':tipo', $tipo_vaga);
         $stmt_excluirEmpresa->bindValue(':hora', $hora);
 
         $stmt_excluirEmpresa->execute();
         if ($stmt_excluirEmpresa) {
-
             return 1;
         } else {
-
             return 2;
         }
     }
@@ -223,54 +223,23 @@ class main_model extends connect
         if (empty($result)) {
 
 
-            $stmt = $this->connect->prepare("INSERT INTO `aluno` VALUES(null,:nome, :contato, :medias, :email, :projetos, :opc1, :opc2, :ocorrencia, :custeio,  :entrega_individuais, :entrega_grupo)");
-
+            $stmt = $this->connect->prepare("INSERT INTO `aluno` (`nome`, `contato`, `medias`, `email`, `projetos`, `perfil_opc1`, `perfil_opc2`, `ocorrencia`, `custeio`, `entregas_individuais`, `entregas_grupo`) VALUES (:nome, :contato, :medias, :email, :projetos, :perfil_opc1, :perfil_opc2, :ocorrencia, :custeio, :entrega_individuais, :entrega_grupo)");
             $stmt->bindValue(':nome', $nome);
             $stmt->bindValue(':contato', $contato);
             $stmt->bindValue(':medias', $medias);
             $stmt->bindValue(':email', $email);
             $stmt->bindValue(':projetos', $projetos);
-            $stmt->bindValue(':opc1', $perfil_opc1);
-            $stmt->bindValue(':opc2', $perfil_opc2);
+            $stmt->bindValue(':perfil_opc1', $perfil_opc1);
+            $stmt->bindValue(':perfil_opc2', $perfil_opc2);
             $stmt->bindValue(':ocorrencia', $ocorrencia);
             $stmt->bindValue(':custeio', $custeio);
             $stmt->bindValue(':entrega_individuais', $entregas_individuais);
             $stmt->bindValue(':entrega_grupo', $entregas_grupo);
-
             $stmt->execute();
 
-            if ($stmt) {
-
-                return 1;
-            } else {
-
-                return 2;
-            }
-
-            return 3;
-        }
-    }
-    function excluir_aluno($id_aluno)
-    {
-        $stmt_id_aluno = $this->connect->query("SELECT id FROM aluno WHERE id = '$id_aluno'");
-        $id_aluno = $stmt_id_aluno->fetch(PDO::FETCH_ASSOC);
-        $id_aluno = $id_aluno['id'];
-        $stmt_exclir_aluno = $this->connect->query("DELETE FROM selecionado WHERE id_aluno = '$id_aluno'");
-        $stmt_exclir_aluno = $this->connect->query("DELETE FROM selecao WHERE id_aluno = '$id_aluno'");
-
-        if ($stmt_exclir_aluno) {
-
-            $stmt_exclir_aluno = $this->connect->query("DELETE FROM aluno WHERE id = '$id_aluno'");
-            if ($stmt_exclir_aluno) {
-
-                return 1;
-            } else {
-
-                return 2;
-            }
+            return 1;
         } else {
-
-            return 3;
+            return 2;
         }
     }
 }
