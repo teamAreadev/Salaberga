@@ -162,12 +162,6 @@ class RelatorioResumoVagas extends PDF {
         $this->SetFillColor(220, 240, 230);
         
         // Adiciona espaço à esquerda para centralizar os totalizadores
-        $this->SetX(15 + (180 - (140 + 30)) / 2); // 140mm + 30mm = 170mm (largura dos totalizadores)
-
-        $this->Cell(140, 7, 'Total de Vagas:', 1, 0, 'L', true);
-        $this->Cell(30, 7, array_sum(array_column($vagas_agrupadas, 'quantidade')), 1, 1, 'C', true);
-        
-        // Adiciona espaço à esquerda para centralizar os totalizadores
         $this->SetX(15 + (180 - (140 + 30)) / 2);
 
         $this->Cell(140, 7, 'Total de Empresas:', 1, 0, 'L', true);
@@ -184,6 +178,45 @@ class RelatorioResumoVagas extends PDF {
 
         $this->Cell(140, 7, 'Total de Alunos em Espera:', 1, 0, 'L', true);
         $this->Cell(30, 7, $total_alunos_espera, 1, 1, 'C', true);
+
+        // Totais por perfil
+        $totais_perfil = [];
+        foreach ($vagas_agrupadas as $vaga) {
+            if (!isset($totais_perfil[$vaga['perfil']])) {
+                $totais_perfil[$vaga['perfil']] = 0;
+            }
+            $totais_perfil[$vaga['perfil']] += $vaga['quantidade'];
+        }
+
+        // Adiciona espaço à esquerda para centralizar os totalizadores
+        $this->SetX(15 + (180 - (140 + 30)) / 2);
+
+        $this->Cell(140, 7, 'Total Suporte/Redes:', 1, 0, 'L', true);
+        $this->Cell(30, 7, $totais_perfil['Suporte/Redes'] ?? 0, 1, 1, 'C', true);
+
+        // Adiciona espaço à esquerda para centralizar os totalizadores
+        $this->SetX(15 + (180 - (140 + 30)) / 2);
+
+        $this->Cell(140, 7, 'Total Design/Mídia:', 1, 0, 'L', true);
+        $this->Cell(30, 7, $totais_perfil['Design/Mídia'] ?? 0, 1, 1, 'C', true);
+
+        // Adiciona espaço à esquerda para centralizar os totalizadores
+        $this->SetX(15 + (180 - (140 + 30)) / 2);
+
+        $this->Cell(140, 7, 'Total Tutoria:', 1, 0, 'L', true);
+        $this->Cell(30, 7, $totais_perfil['Tutoria'] ?? 0, 1, 1, 'C', true);
+
+        // Adiciona espaço à esquerda para centralizar os totalizadores
+        $this->SetX(15 + (180 - (140 + 30)) / 2);
+
+        $this->Cell(140, 7, 'Total Desenvolvimento:', 1, 0, 'L', true);
+        $this->Cell(30, 7, $totais_perfil['Desenvolvimento'] ?? 0, 1, 1, 'C', true);
+
+        // Adiciona espaço à esquerda para centralizar os totalizadores
+        $this->SetX(15 + (180 - (140 + 30)) / 2);
+
+        $this->Cell(140, 7, 'Total de Vagas:', 1, 0, 'L', true);
+        $this->Cell(30, 7, array_sum(array_column($vagas_agrupadas, 'quantidade')), 1, 1, 'C', true);
     }
 
     private function ajustarTexto($texto, $tamanho) {
