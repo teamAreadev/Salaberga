@@ -101,7 +101,7 @@ if (isset($_POST['layout'])) {
             background-image:
                 radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.05) 0%, rgba(0, 122, 51, 0) 20%),
                 radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.05) 0%, rgba(255, 165, 0, 0) 20%),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23007A33' fill-opacity='0.03' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23007A33' fill-opacity='0.03' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
             transition: all 0.3s ease;
         }
 
@@ -307,13 +307,13 @@ if (isset($_POST['layout'])) {
         }
 
         .area-tutoria {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(126, 34, 206, 0.2) 100%);
-            color: #c4b5fd;
-            border: 1px solid rgba(168, 85, 247, 0.3);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%); /* Usando estilo de midia para tutoria */
+            color: #6ee7b7; /* Usando estilo de midia para tutoria */
+            border: none; /* Removendo a borda roxa */
         }
 
         .area-tutoria:hover {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(126, 34, 206, 0.3) 100%);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.3) 100%); /* Usando estilo de midia para tutoria */
         }
 
         /* Ver detalhes link styling */
@@ -808,7 +808,7 @@ if (isset($_POST['layout'])) {
                                     ?>
                                 </select>
                                 <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
-                            </div>
+                            </div>  
                         </div>
                     </div>
                 </div>
@@ -832,14 +832,18 @@ if (isset($_POST['layout'])) {
                         $delay = 0;
                         foreach ($dados as $dado):
                             $delay += 100;
-                            $area = isset($dado['nome_perfil']) && !empty($dado['nome_perfil']) ? strtolower($dado['nome_perfil']) : 'desenvolvimento';
-                            if ($area === 'design/mídia') {
+                            $nomePerfil = isset($dado['nome_perfil']) ? htmlspecialchars($dado['nome_perfil'], ENT_QUOTES, 'UTF-8') : 'Área não informada';
+                            $area = strtolower($nomePerfil);
+                            if ($area === 'design/social mídia' || $area === 'design/mídia') {
                                 $area = 'design';
+                            } elseif ($nomePerfil === 'Suporte/Redes') {
+                                $area = 'redes';
+                            } elseif (empty($area) || $area === 'área não informada') {
+                                $area = 'desenvolvimento'; // Cor padrão se a área não for informada
                             }
                             $vagaId = isset($dado['id']) ? htmlspecialchars($dado['id'], ENT_QUOTES, 'UTF-8') : '';
                             $empresaName = isset($dado['nome_empresa']) ? htmlspecialchars($dado['nome_empresa'], ENT_QUOTES, 'UTF-8') : 'Não informado';
                             $quantidade = isset($dado['quantidade']) ? htmlspecialchars($dado['quantidade'], ENT_QUOTES, 'UTF-8') : '0';
-                            $nomePerfil = isset($dado['nome_perfil']) ? htmlspecialchars($dado['nome_perfil'], ENT_QUOTES, 'UTF-8') : 'Área não informada';
                             $empresaId = isset($dado['id_empresa']) ? htmlspecialchars($dado['id_empresa'], ENT_QUOTES, 'UTF-8') : '';
                             $data = isset($dado['data']) ? htmlspecialchars($dado['data'], ENT_QUOTES, 'UTF-8') : '';
                             $hora = isset($dado['hora']) ? htmlspecialchars($dado['hora'], ENT_QUOTES, 'UTF-8') : '';
@@ -1002,22 +1006,22 @@ if (isset($_POST['layout'])) {
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-300 mb-2">Áreas de Atuação</label>
-                                            <div class="mt-2 space-y-3">
+                                            <div class="mt-2 grid lg:grid-cols-2 gap-y-3 gap-x-6 items-center">
                                                 <label class="inline-flex items-center">
-                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="1" <?php echo $nomePerfil === 'Desenvolvimento' ? 'checked' : ''; ?>>
-                                                    <span class="ml-3 text-gray-300">Desenvolvimento</span>
+                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="1" <?php echo $nomePerfil === 'Desenvolvimento' ? 'checked' : ''; ?> style="vertical-align: middle;">
+                                                    <span class="ml-3 text-gray-300" style="vertical-align: middle;">Desenvolvimento</span>
                                                 </label>
                                                 <label class="inline-flex items-center">
-                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="2" <?php echo $nomePerfil === 'Design/Social mídia' ? 'checked' : ''; ?>>
-                                                    <span class="ml-3 text-gray-300">Design/Social mídia</span>
+                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="2" <?php echo $nomePerfil === 'Design/Social mídia' ? 'checked' : ''; ?> style="vertical-align: middle;">
+                                                    <span class="ml-3 text-gray-300 lg:whitespace-nowrap" style="vertical-align: middle;">Design/Social mídia</span>
                                                 </label>
                                                 <label class="inline-flex items-center">
-                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="4" <?php echo $nomePerfil === 'Tutoria' ? 'checked' : ''; ?>>
-                                                    <span class="ml-3 text-gray-300">Tutoria</span>
+                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="3" <?php echo $nomePerfil === 'Suporte/Redes' ? 'checked' : ''; ?> style="vertical-align: middle;">
+                                                    <span class="ml-3 text-gray-300" style="vertical-align: middle;">Suporte/Redes</span>
                                                 </label>
-                                                <label class="inline-flex items-center">
-                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="3" <?php echo $nomePerfil === 'Suporte/Redes' ? 'checked' : ''; ?>>
-                                                    <span class="ml-3 text-gray-300">Suporte/Redes</span>
+                                                <label class="inline-flex items-center lg:-mt-px">
+                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="4" <?php echo $nomePerfil === 'Tutoria' ? 'checked' : ''; ?> style="vertical-align: middle;">
+                                                    <span class="ml-3 text-gray-300" style="vertical-align: middle; margin-top: -1px;">Tutoria</span>
                                                 </label>
                                             </div>
                                         </div>
@@ -1110,22 +1114,22 @@ if (isset($_POST['layout'])) {
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Áreas de Atuação</label>
-                        <div class="mt-2 space-y-3">
+                        <div class="mt-2 grid lg:grid-cols-2 gap-y-3 gap-x-6 items-center">
                             <label class="inline-flex items-center">
-                                <input type="radio" class="custom-checkbox" name="areas" value="1">
-                                <span class="ml-3 text-gray-300">Desenvolvimento</span>
+                                <input type="radio" class="custom-checkbox" name="areas" value="1" style="vertical-align: middle;">
+                                <span class="ml-3 text-gray-300" style="vertical-align: middle;">Desenvolvimento</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="radio" class="custom-checkbox" name="areas" value="2">
-                                <span class="ml-3 text-gray-300">Design/Social mídia</span>
+                                <input type="radio" class="custom-checkbox" name="areas" value="2" style="vertical-align: middle;">
+                                <span class="ml-3 text-gray-300 lg:whitespace-nowrap" style="vertical-align: middle;">Design/Social mídia</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="radio" class="custom-checkbox" name="areas" value="4">
-                                <span class="ml-3 text-gray-300">Tutoria</span>
+                                <input type="radio" class="custom-checkbox" name="areas" value="3" style="vertical-align: middle;">
+                                <span class="ml-3 text-gray-300" style="vertical-align: middle;">Suporte/Redes</span>
                             </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" class="custom-checkbox" name="areas" value="3">
-                                <span class="ml-3 text-gray-300">Suporte/Redes</span>
+                            <label class="inline-flex items-center lg:-mt-1">
+                                <input type="radio" class="custom-checkbox" name="areas" value="4" style="vertical-align: middle;">
+                                <span class="ml-3 text-gray-300" style="vertical-align: middle; margin-top: -1px;">Tutoria</span>
                             </label>
                         </div>
                     </div>
@@ -1402,7 +1406,7 @@ if (isset($_POST['layout'])) {
             // Fechar modais ao clicar fora
             document.querySelectorAll('.fixed.inset-0').forEach(modalContainer => { // Seletor mais específico
                 modalContainer.addEventListener('click', (e) => {
-                    if (e.target === modalContainer && currentModalId === modalContainer.id) {
+                    if (e.target === modalContainer) {
                         closeModal(modalContainer.id);
                     }
                 });
