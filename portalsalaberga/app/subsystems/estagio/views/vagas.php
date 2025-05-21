@@ -789,7 +789,7 @@ if (isset($_POST['layout'])) {
                                 <select id="filterArea" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
                                     <option value="">Todas as áreas</option>
                                     <option value="desenvolvimento">Desenvolvimento</option>
-                                    <option value="design">Design/Social media</option>
+                                    <option value="design">Design/Social mídia</option>
                                     <option value="midia">Tutoria</option>
                                     <option value="redes">Suporte/Redes</option>
                                 </select>
@@ -1004,19 +1004,19 @@ if (isset($_POST['layout'])) {
                                             <label class="block text-sm font-medium text-gray-300 mb-2">Áreas de Atuação</label>
                                             <div class="mt-2 space-y-3">
                                                 <label class="inline-flex items-center">
-                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="1" <?php echo $area === 'desenvolvimento' ? 'checked' : ''; ?>>
+                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="1" <?php echo $nomePerfil === 'Desenvolvimento' ? 'checked' : ''; ?>>
                                                     <span class="ml-3 text-gray-300">Desenvolvimento</span>
                                                 </label>
                                                 <label class="inline-flex items-center">
-                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="2" <?php echo $area === 'design' ? 'checked' : ''; ?>>
-                                                    <span class="ml-3 text-gray-300">Design/Social media</span>
+                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="2" <?php echo $nomePerfil === 'Design/Social mídia' ? 'checked' : ''; ?>>
+                                                    <span class="ml-3 text-gray-300">Design/Social mídia</span>
                                                 </label>
                                                 <label class="inline-flex items-center">
-                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="4" <?php echo $area === 'midia' ? 'checked' : ''; ?>>
+                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="4" <?php echo $nomePerfil === 'Tutoria' ? 'checked' : ''; ?>>
                                                     <span class="ml-3 text-gray-300">Tutoria</span>
                                                 </label>
                                                 <label class="inline-flex items-center">
-                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="3" <?php echo $area === 'redes' ? 'checked' : ''; ?>>
+                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="3" <?php echo $nomePerfil === 'Suporte/Redes' ? 'checked' : ''; ?>>
                                                     <span class="ml-3 text-gray-300">Suporte/Redes</span>
                                                 </label>
                                             </div>
@@ -1117,7 +1117,7 @@ if (isset($_POST['layout'])) {
                             </label>
                             <label class="inline-flex items-center">
                                 <input type="radio" class="custom-checkbox" name="areas" value="2">
-                                <span class="ml-3 text-gray-300">Design/Social media</span>
+                                <span class="ml-3 text-gray-300">Design/Social mídia</span>
                             </label>
                             <label class="inline-flex items-center">
                                 <input type="radio" class="custom-checkbox" name="areas" value="4">
@@ -1198,7 +1198,7 @@ if (isset($_POST['layout'])) {
                             <?php
                             $perfis = [
                                 '1' => 'Desenvolvimento',
-                                '2' => 'Design/Social media',
+                                '2' => 'Design/Social mídia',
                                 '4' => 'Tutoria',
                                 '3' => 'Suporte/Redes'
                             ];
