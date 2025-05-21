@@ -1,7 +1,7 @@
 <?php
-require_once('../models/select_model.php');
-require_once('../models/sessions.php');
-require_once('../assets/fpdf/fpdf.php');
+require_once('../../models/select_model.php');
+require_once('../../models/sessions.php');
+require_once('../../assets/fpdf/fpdf.php');
 
 // Classe FPDF com suporte a UTF-8
 class PDF extends FPDF {

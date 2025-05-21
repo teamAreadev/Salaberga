@@ -7,14 +7,13 @@ class sessions
 {
     function autenticar_session()
     {
-        if (!isset($_SESSION['Email']) == true && !isset($_SESSION['Senha']) == true) {
+        if (!$_SESSION['login']) {
             
-            unset($_SESSION['Email']);
-            unset($_SESSION['Senha']);
-            header('location:https://salaberga.com/salaberga/portalsalaberga/app/main/views/autenticacao/login.php');
+            unset($_SESSION['login']);
+            header('location:../autenticacao/login.php?login=erro');
             exit();
         }
-        $logado = $_SESSION['Email'];
+        $logado = $_SESSION['login'];
     }
     function tempo_session($tempo)
     {
