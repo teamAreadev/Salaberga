@@ -63,7 +63,8 @@ try {
                         'nome' => $aluno['nome'],
                         'empresa' => $vaga['nome_empresa'],
                         'perfil' => $vaga['nome_perfil'],
-                        'status' => 'Selecionado'
+                        'status' => 'Selecionado',
+                        'contato' => $aluno['contato'] ?? ''
                     ];
                     $total_alunos_selecionados++;
                 }
@@ -74,7 +75,8 @@ try {
                         'nome' => $aluno['nome'],
                         'empresa' => $vaga['nome_empresa'],
                         'perfil' => $vaga['nome_perfil'],
-                        'status' => 'Em Espera'
+                        'status' => 'Em Espera',
+                        'contato' => $aluno['contato'] ?? ''
                     ];
                     $total_alunos_espera++;
                 }
@@ -118,6 +120,28 @@ try {
             if (empty($data)) return '-';
             $data_obj = new DateTime($data);
             return $data_obj->format('d/m/Y');
+        }
+
+        function formatarNumeroWhatsApp($numero) {
+            // Remove todos os caracteres não numéricos
+            $numero = preg_replace('/[^0-9]/', '', $numero);
+            
+            // Se o número começar com 55, remove
+            if (substr($numero, 0, 2) === '55') {
+                $numero = substr($numero, 2);
+            }
+            
+            // Se o número começar com 0, remove
+            if (substr($numero, 0, 1) === '0') {
+                $numero = substr($numero, 1);
+            }
+            
+            // Adiciona o código do país (55) se não existir
+            if (strlen($numero) === 11) {
+                $numero = '55' . $numero;
+            }
+            
+            return $numero;
         }
 
         // Cabeçalho
@@ -171,10 +195,11 @@ try {
             // Cabeçalho da tabela
             $this->SetFillColor(220, 240, 230);
             $this->SetFont('Arial', 'B', 10);
-            $this->Cell(55, 7, 'Empresa', 1, 0, 'L', true);
+            $this->Cell(45, 7, 'Empresa', 1, 0, 'L', true);
             $this->Cell(30, 7, 'Perfil', 1, 0, 'L', true);
             $this->Cell(35, 7, 'Data | Hora', 1, 0, 'C', true);
-            $this->Cell(70, 7, 'Alunos', 1, 1, 'C', true);
+            $this->Cell(65, 7, 'Alunos', 1, 0, 'C', true);
+            $this->Cell(15, 7, 'Contato', 1, 1, 'C', true);
             
             // Dados da tabela
             $this->SetFont('Arial', '', 10);
@@ -187,10 +212,11 @@ try {
             if (empty($this->vagas)) {
                 $bg = $row_bg1;
                 $this->SetFillColor($bg[0], $bg[1], $bg[2]);
-                $this->Cell(55, 7, '-', 1, 0, 'C', true);
+                $this->Cell(45, 7, '-', 1, 0, 'C', true);
                 $this->Cell(30, 7, '-', 1, 0, 'C', true);
                 $this->Cell(35, 7, '-', 1, 0, 'C', true);
-                $this->Cell(70, 7, '-', 1, 1, 'C', true);
+                $this->Cell(65, 7, '-', 1, 0, 'C', true);
+                $this->Cell(15, 7, '-', 1, 1, 'C', true);
             } else {
                 foreach ($this->vagas as $vaga) {
                     // Busca alunos selecionados e em espera para esta vaga
@@ -204,26 +230,41 @@ try {
                     if (empty($alunos_selecionados) && empty($alunos_espera)) {
                         $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
                         $this->SetFillColor($bg[0], $bg[1], $bg[2]);
-                        $this->Cell(55, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 55), 1, 0, 'L', true);
+                        $this->Cell(45, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 45), 1, 0, 'L', true);
                         $this->Cell(30, 7, $this->ajustarTexto($vaga['nome_perfil'] ?? '-', 30), 1, 0, 'L', true);
                         $this->Cell(35, 7, $data_hora, 1, 0, 'C', true);
-                        $this->Cell(70, 7, '-', 1, 1, 'C', true);
+                        $this->Cell(65, 7, '-', 1, 0, 'C', true);
+                        $this->Cell(15, 7, '-', 1, 1, 'C', true);
                         $contador_linhas++;
                     } else {
                         // Lista alunos selecionados
                         foreach ($alunos_selecionados as $aluno) {
                             $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
                             $this->SetFillColor($bg[0], $bg[1], $bg[2]);
-                            $this->Cell(55, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 55), 1, 0, 'L', true);
+                            $this->Cell(45, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 45), 1, 0, 'L', true);
                             $this->Cell(30, 7, $this->ajustarTexto($vaga['nome_perfil'] ?? '-', 30), 1, 0, 'L', true);
                             $this->Cell(35, 7, $data_hora, 1, 0, 'C', true);
                             
                             // Apenas o texto do aluno selecionado fica verde e negrito, fundo segue a alternância
                             $this->SetTextColor(0, 122, 51); // Verde para selecionados
                             $this->SetFont('Arial', 'B', 10); // Negrito para selecionados
-                            $this->Cell(70, 7, $this->ajustarTexto($this->formatarNome($aluno['nome']), 70), 1, 1, 'L', true);
+                            
+                            // Adiciona o nome do aluno
+                            $nome_aluno = $this->ajustarTexto($this->formatarNome($aluno['nome']), 65);
+                            $this->Cell(65, 7, $nome_aluno, 1, 0, 'L', true);
+                            
+                            // Adiciona o contato
+                            if (!empty($aluno['contato'])) {
+                                $numero_whatsapp = $this->formatarNumeroWhatsApp($aluno['contato']);
+                                $this->Cell(15, 7, '>', 1, 0, 'C', true);
+                                $this->Link($this->GetX() - 15, $this->GetY(), 15, 7, "https://wa.me/{$numero_whatsapp}");
+                            } else {
+                                $this->Cell(15, 7, '<', 1, 0, 'C', true);
+                            }
+                            
                             $this->SetTextColor(40, 40, 40);
                             $this->SetFont('Arial', '', 10);
+                            $this->Ln(); // Adiciona uma quebra de linha após cada aluno
                             $contador_linhas++;
                         }
                         
@@ -231,12 +272,27 @@ try {
                         foreach ($alunos_espera as $aluno) {
                             $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
                             $this->SetFillColor($bg[0], $bg[1], $bg[2]);
-                            $this->Cell(55, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 55), 1, 0, 'L', true);
+                            $this->Cell(45, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 45), 1, 0, 'L', true);
                             $this->Cell(30, 7, $this->ajustarTexto($vaga['nome_perfil'] ?? '-', 30), 1, 0, 'L', true);
                             $this->Cell(35, 7, $data_hora, 1, 0, 'C', true);
                             $this->SetTextColor(100, 100, 100); // Cinza para em espera
-                            $this->Cell(70, 7, $this->ajustarTexto($this->formatarNome($aluno['nome']), 70), 1, 1, 'L', true);
-                            $this->SetTextColor(40, 40, 40); // Volta para cor padrão
+                            
+                            // Adiciona o nome do aluno
+                            $nome_aluno = $this->ajustarTexto($this->formatarNome($aluno['nome']), 65);
+                            $this->Cell(65, 7, $nome_aluno, 1, 0, 'L', true);
+                            
+                            // Adiciona o contato
+                            if (!empty($aluno['contato'])) {
+                                $numero_whatsapp = $this->formatarNumeroWhatsApp($aluno['contato']);
+                                $this->Cell(15, 7, '>', 1, 0, 'C', true);
+                                $this->Link($this->GetX() - 15, $this->GetY(), 15, 7, "https://wa.me/{$numero_whatsapp}");
+                            } else {
+                                $this->Cell(15, 7, '<', 1, 0, 'C', true);
+                            }
+                            
+                            $this->SetTextColor(40, 40, 40);
+                            $this->SetFont('Arial', '', 10);
+                            $this->Ln(); // Adiciona uma quebra de linha após cada aluno
                             $contador_linhas++;
                         }
                     }

@@ -568,7 +568,25 @@ if (isset($_POST['layout'])) {
                                                     <input type="checkbox" name="selecionados[]" value="<?php echo $aluno['id'] . '|' . $id_vaga; ?>" class="custom-checkbox">
                                                 <?php endif; ?>
                                             </td>
-                                            <td class="font-semibold text-white"><?php echo htmlspecialchars($aluno['nome']); ?></td>
+                                            <td class="font-semibold text-white">
+                                                <?php echo htmlspecialchars($aluno['nome']); ?>
+                                                <?php if (isset($aluno['contato']) && !empty($aluno['contato'])): ?>
+                                                    <?php 
+                                                    $numero_whatsapp = preg_replace('/\D/', '', $aluno['contato']);
+                                                    $mensagem = isset($aluno['status']) && $aluno['status'] === 'approved' 
+                                                        ? "Olá " . urlencode($aluno['nome']) . "! Parabéns! Você foi aprovado na entrevista da " . urlencode($nome_empresa)
+                                                        : "Olá " . urlencode($aluno['nome']) . ", infelizmente você não foi aprovado na entrevista da " . urlencode($nome_empresa);
+                                                    $link_whatsapp = "https://wa.me/55{$numero_whatsapp}?text={$mensagem}";
+                                                    ?>
+                                                    <a href="<?php echo $link_whatsapp; ?>" target="_blank" class="ml-2">
+                                                        <i class="fab fa-whatsapp <?php echo isset($aluno['status']) && $aluno['status'] === 'approved' ? 'text-green-500' : 'text-gray-500'; ?>"></i>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <span class="ml-2">
+                                                        <i class="fab fa-whatsapp text-gray-500"></i>
+                                                    </span>
+                                                <?php endif; ?>
+                                            </td>
                                             <td class="text-xs text-gray-400"><?php echo htmlspecialchars($aluno['id']); ?></td>
                                             <td>
                                                 <?php if (isset($aluno['status']) && $aluno['status'] === 'approved'): ?>

@@ -813,7 +813,7 @@ if (isset($_POST['layout'])) {
                     </div>
                 </div>
 
-                <!-- Grid de Vagas -->
+               
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="vagasGrid">
                     <?php
                     $empresa_filtro = isset($_GET['empresa']) ? $_GET['empresa'] : '';
@@ -862,12 +862,6 @@ if (isset($_POST['layout'])) {
                                 <div class="vaga-card-header">
                                     <h3 class="vaga-card-title">
                                         <?php echo $empresaName ?>
-                                        <a href="<?php echo $empresaContatoLink; ?>" target="_blank">
-                                            <i class="fab fa-whatsapp text-green-500 ml-2"></i>
-                                        </a>
-                                        <?php if (!$empresaContato): ?>
-                                            <span class="text-sm text-gray-500">(contato não informado)</span>
-                                        <?php endif; ?>
                                     </h3>
                                     <div class="vaga-card-actions">
                                         <button class="vaga-card-action text-gray-400 hover:text-primary-400 edit-btn" data-modal-id="editarVagaModal-<?php echo $vagaId; ?>">

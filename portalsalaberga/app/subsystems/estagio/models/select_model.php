@@ -258,7 +258,7 @@ class select_model extends connect
     function alunos_espera($id_vaga)
     {
         $stmt = $this->connect->query("
-            SELECT DISTINCT a.nome, a.id 
+            SELECT DISTINCT a.nome, a.id, a.contato 
             FROM aluno a
             INNER JOIN selecao s ON a.id = s.id_aluno
             LEFT JOIN selecionado sel ON a.id = sel.id_aluno AND sel.id_vaga = '$id_vaga'
