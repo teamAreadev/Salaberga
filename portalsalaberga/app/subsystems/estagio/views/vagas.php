@@ -1041,7 +1041,7 @@ if (isset($_POST['layout'])) {
                                             </div>
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-300 mb-2">Vagas Disponíveis</label>
+                                            <label class="block text-sm font-medium text-gray-300 mb-2">Quantidade de Vagas</label>
                                             <input type="number" name="quantidade_editar_vaga" min="1" value="<?php echo $quant_vaga; ?>" class="custom-input mt-1 w-full" required>
                                         </div>
                                         <div>
