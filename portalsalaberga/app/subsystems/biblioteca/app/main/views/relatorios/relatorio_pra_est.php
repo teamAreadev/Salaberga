@@ -27,6 +27,15 @@ class PDF extends FPDF
             $this->SetTextColor(255, 165, 0);
             $this->Cell($this->GetPageWidth() - 40, 20, "BIBLIOTECA STGM", 0, 1, 'C');
 
+            $this->SetX(20);
+            $this->SetFont('Arial', 'B', 10);
+            $this->SetTextColor(0, 122, 51);
+            // Alinhar Estante e Prateleira lado a lado
+            $estante = 'Estante: ' . $_GET['estante'];
+            $prateleira = 'Prateleira: ' . $_GET['prateleira'];
+            $texto = $estante . '    |    ' . $prateleira;
+            $this->Cell($this->GetPageWidth() - 38, 20, $texto, 0, 1, 'R');
+
             $pageWidth = $this->GetPageWidth() - 160;
             $texto = utf8_decode('*ENI: Edição Não Informada');
             $textoLargura = $this->GetStringWidth($texto);
@@ -36,7 +45,7 @@ class PDF extends FPDF
             $this->SetX($posX);
             $this->SetFont('Arial', 'B', 10);
             $this->SetTextColor(0, 122, 51);
-            $this->Cell($textoLargura, 10, $texto, 0, 1, 'R');
+            $this->Cell(195, 10, $texto, 0, 1, 'R');
 
             $this->Ln(10);
         }

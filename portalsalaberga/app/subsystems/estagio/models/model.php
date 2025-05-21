@@ -147,30 +147,20 @@ class main_model extends connect
     }
     function editar_empresa($id, $nome, $contato, $endereco, $nome_contato = '')
     {
-        $stmt_check = $this->connect->prepare("SELECT * FROM concedentes WHERE nome = :nome AND id = :id");
-        $stmt_check->bindValue(':nome', $nome);
-        $stmt_check->bindValue(':id', $id);
-        $stmt_check->execute();
-        $stmt_check->fetchAll(PDO::FETCH_ASSOC);
+        $stmt_excluirEmpresa = $this->connect->prepare("UPDATE `concedentes` SET `nome`= :nome, `nome_contato`= :nome_contato, `contato`= :contato, `endereco`= :endereco WHERE id = :id");
+        $stmt_excluirEmpresa->bindValue(':id', $id);
+        $stmt_excluirEmpresa->bindValue(':nome', $nome);
+        $stmt_excluirEmpresa->bindValue(':nome_contato', $nome_contato);
+        $stmt_excluirEmpresa->bindValue(':contato', $contato);
+        $stmt_excluirEmpresa->bindValue(':endereco', $endereco);
 
-        if ($stmt_check->rowCount() == 0) {
-            $stmt_excluirEmpresa = $this->connect->prepare("UPDATE `concedentes` SET `nome`= :nome, `nome_contato`= :nome_contato, `contato`= :contato, `endereco`= :endereco WHERE id = :id");
-            $stmt_excluirEmpresa->bindValue(':id', $id);
-            $stmt_excluirEmpresa->bindValue(':nome', $nome);
-            $stmt_excluirEmpresa->bindValue(':nome_contato', $nome_contato);
-            $stmt_excluirEmpresa->bindValue(':contato', $contato);
-            $stmt_excluirEmpresa->bindValue(':endereco', $endereco);
+        $stmt_excluirEmpresa->execute();
+        if ($stmt_excluirEmpresa) {
 
-            $stmt_excluirEmpresa->execute();
-            if ($stmt_excluirEmpresa) {
-
-                return 1;
-            } else {
-
-                return 2;
-            }
+            return 1;
         } else {
-            return 3;
+
+            return 2;
         }
     }
     function excluir_vaga($id_vaga)
