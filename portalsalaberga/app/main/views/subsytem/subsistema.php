@@ -1112,7 +1112,7 @@ if (isset($_GET['sair'])) {
                 </div>
             </a>
 
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfP-eDUeU8KO20zQAP3LUEREfJTrK_kjTnaKSLuk8kAnZRQ-g/viewform">
+            <a href="https://padlet.com/slavosier298/metas-semanais-lgz5dkmtd950ql6">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/jdwcgtg7/unnamed-removebg-preview.png" alt="Gestão de Estágio" class="app-icon">
