@@ -60,7 +60,7 @@
                 class="card-hover block w-full bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-between hover:bg-gray-100">
                 <span class="flex items-center">
                     <i class="fas fa-tags mr-4 text-xl text-ceara-green"></i>
-                    <span class="text-lg">Relatorio geral</span>
+                    <span class="text-lg">Relatório geral</span>
                 </span>
                 <i class="fas fa-chevron-right text-gray-400"></i>
             </a>
@@ -68,7 +68,7 @@
                 class="card-hover block w-full bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-between hover:bg-gray-100">
                 <span class="flex items-center">
                     <i class="fas fa-tags mr-4 text-xl text-ceara-green"></i>
-                    <span class="text-lg">Relatorio por estante e prateleira</span>
+                    <span class="text-lg">Relatório Partial</span>
                 </span>
                 <i class="fas fa-chevron-right text-gray-400"></i>
             </a>
