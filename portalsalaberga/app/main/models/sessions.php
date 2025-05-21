@@ -11,7 +11,7 @@ class sessions
             
             unset($_SESSION['Email']);
             unset($_SESSION['Senha']);
-            header('location:https://salaberga.com/salaberga/portalsalaberga/app/main/views/autenticacao/login.php');
+            header('location:../autenticacao/login.php');
             exit();
         }
         $logado = $_SESSION['Email'];
