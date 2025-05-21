@@ -764,11 +764,11 @@ if (isset($_POST['layout'])) {
                             </button>
                             <button id="relatorioVagasBtn" class="custom-btn custom-btn-secondary w-full sm:w-auto">
                                 <i class="fas fa-file-pdf btn-icon"></i>
-                                <span>Relatório de Vagas</span>
+                                <span>Relatório de seleção</span>
                             </button>
                             <button id="gerarRelatorioBtn" class="custom-btn custom-btn-secondary w-full sm:w-auto">
                                 <i class="fas fa-file-pdf btn-icon"></i>
-                                <span>Gerar Resumo</span>
+                                <span>Resumo de vagas </span>
                             </button>
                             <script>
                                 console.log('Tentando encontrar o botão gerarRelatorioBtn para adicionar listener...');
@@ -1160,7 +1160,7 @@ if (isset($_POST['layout'])) {
                     <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-500/10 text-primary-400 mb-4">
                         <i class="fas fa-file-pdf text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white">Gerar Relatório de Vagas</h3>
+                    <h3 class="text-xl font-bold text-white">Relatório de seleção</h3>
                     <p class="text-gray-400 mt-2">Selecione as opções para gerar o relatório.</p>
                 </div>
                 <form id="formRelatorio" action="../controllers/gerar_relatorio_vagas.php" method="get" target="_blank" class="space-y-6">

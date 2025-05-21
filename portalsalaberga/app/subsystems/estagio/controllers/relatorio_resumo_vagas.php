@@ -46,7 +46,7 @@ class RelatorioResumoVagas extends PDF {
             $this->SetFont('Arial', 'B', 18);
             $this->SetTextColor(...$this->cores['primaria']);
             $this->SetXY(45, 15);
-            $this->Cell(100, 10, 'Relatório de Resumo de Vagas', 0, 0, 'L');
+            $this->Cell(100, 10, ' Resumo de Vagas', 0, 0, 'L');
             
             $this->SetFont('Arial', 'I', 9);
             $this->SetTextColor(...$this->cores['subtitulo']);
@@ -82,10 +82,7 @@ class RelatorioResumoVagas extends PDF {
         // Tabela de Resumo
         $this->SetFont('Arial', 'B', 12);
         $this->SetTextColor(...$this->cores['primaria']);
-        
-        // Adiciona espaço à esquerda para centralizar o título
-        $this->SetX(15 + (180 - 172) / 2);
-        $this->Cell(0, 10, 'Resumo das Vagas', 0, 1, 'L');
+       
         
         // Cabeçalho da tabela
         $this->SetFillColor(220, 240, 230);

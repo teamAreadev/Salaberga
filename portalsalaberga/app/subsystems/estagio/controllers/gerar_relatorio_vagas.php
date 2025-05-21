@@ -125,7 +125,7 @@ try {
                 $this->SetFont('Arial', 'B', 18);
                 $this->SetTextColor(...$this->cores['primaria']);
                 $this->SetXY(45, 15);
-                $this->Cell(100, 10, 'Relatório de Vagas', 0, 0, 'L');
+                $this->Cell(100, 10, 'Relatório de seleção', 0, 0, 'L');
                 
                 $this->SetFont('Arial', 'I', 9);
                 $this->SetTextColor(...$this->cores['subtitulo']);
