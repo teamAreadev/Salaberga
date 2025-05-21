@@ -1027,7 +1027,7 @@ if (isset($_POST['layout'])) {
                                                     <span class="ml-3 text-gray-300" style="vertical-align: middle;">Desenvolvimento</span>
                                                 </label>
                                                 <label class="inline-flex items-center">
-                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="2" <?php echo $nomePerfil === 'Design/Social mídia' ? 'checked' : ''; ?> style="vertical-align: middle;">
+                                                    <input type="radio" class="custom-checkbox" name="perfil_editar_vaga" value="2" <?php echo ($nomePerfil === 'Design/Social mídia' || $nomePerfil === 'Design/Mídia' || $nomePerfil === 'Design') ? 'checked' : ''; ?> style="vertical-align: middle;">
                                                     <span class="ml-3 text-gray-300 lg:whitespace-nowrap" style="vertical-align: middle;">Design/Mídia</span>
                                                 </label>
                                                 <label class="inline-flex items-center">
