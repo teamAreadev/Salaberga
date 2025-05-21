@@ -1,7 +1,7 @@
 <?php
-require_once('../models/select_model.php');
-require_once('../assets/fpdf/fpdf.php');
-require_once('../models/sessions.php');
+require_once('../../../models/select_model.php');
+require_once('../../../sets/fpdf/fpdf.php');
+require_once('../../../models/sessions.php');
 // Configura o fuso horário para São Paulo
 date_default_timezone_set('America/Sao_Paulo');
 

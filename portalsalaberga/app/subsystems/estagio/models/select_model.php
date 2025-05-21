@@ -95,45 +95,47 @@ class select_model extends connect
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-   function alunos($nome_perfil = 0, $search = '', $filtro = '')
-{
-    $sql = "SELECT 
-                a.id,
-                a.nome,
-                a.medias,
-                a.projetos,
-                a.ocorrencia,
-                a.entregas_individuais,
-                a.entregas_grupo,
-                a.perfil_opc1,
-                a.perfil_opc2,
-                a.custeio,
-                (
-                    a.medias + 
-                    (CASE WHEN a.projetos != '' THEN 5 ELSE 0 END) -
-                    (a.ocorrencia * 0.5) +
-                    (a.entregas_individuais * 5) +
-                    (a.entregas_grupo * 5)
-                ) AS score,
-                CASE 
-                    WHEN a.perfil_opc1 = :nome_perfil THEN 1
-                    WHEN a.perfil_opc2 = :nome_perfil THEN 2
-                    ELSE 3
-                END AS priority_group
-            FROM aluno a
-            LEFT JOIN selecionado s ON a.id = s.id_aluno
-            WHERE (a.perfil_opc1 = :nome_perfil OR a.perfil_opc2 = :nome_perfil)
-            AND s.id_aluno IS NULL
-            ORDER BY 
-                priority_group ASC,
-                score DESC,
-                a.medias DESC,
-                COALESCE(a.ocorrencia, 0) ASC";
-    $stmt = $this->connect->prepare($sql);
-    $stmt->bindValue(':nome_perfil', $nome_perfil, PDO::PARAM_STR);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+    function alunos($nome_perfil = 0, $search = '', $filtro = '')
+    {
+        $sql = "SELECT 
+                    a.id,
+                    a.nome,
+                    a.medias,
+                    a.projetos,
+                    a.ocorrencia,
+                    a.entregas_individuais,
+                    a.entregas_grupo,
+                    a.perfil_opc1,
+                    a.perfil_opc2,
+                    a.custeio,
+                    (
+                        a.medias + 
+                        (CASE WHEN a.projetos != '' THEN 5 ELSE 0 END) -
+                        (a.ocorrencia * 0.5) +
+                        (a.entregas_individuais * 5) +
+                        (a.entregas_grupo * 5)
+                    ) AS score,
+                    CASE 
+                        WHEN a.perfil_opc1 = :nome_perfil THEN 1
+                        WHEN a.perfil_opc2 = :nome_perfil THEN 2
+                        ELSE 3
+                    END AS priority_group
+                FROM aluno a
+                LEFT JOIN selecionado s ON a.id = s.id_aluno
+                LEFT JOIN selecao se ON a.id = se.id_aluno
+                WHERE (a.perfil_opc1 = :nome_perfil OR a.perfil_opc2 = :nome_perfil)
+                AND s.id_aluno IS NULL
+                AND se.id_aluno IS NULL
+                ORDER BY 
+                    priority_group ASC,
+                    score DESC,
+                    a.medias DESC,
+                    COALESCE(a.ocorrencia, 0) ASC";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->bindValue(':nome_perfil', $nome_perfil, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
    function alunos_aptos_curso($nome_perfil = 0, $search = '', $filtro = '')
     {
         $sql = "SELECT * FROM aluno";
@@ -241,10 +243,10 @@ class select_model extends connect
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    function alunos_selecionados($id_vaga)
+    function alunos_selecionados_relatorio($id_vaga)
     {
         $stmt = $this->connect->prepare("
-            SELECT a.nome, a.id 
+            SELECT a.nome, a.id, a.contato
             FROM aluno a
             INNER JOIN selecionado s ON a.id = s.id_aluno
             WHERE s.id_vaga = :id_vaga");
@@ -270,14 +272,14 @@ class select_model extends connect
     function alunos_selecionados_estagio($id_vaga)
     {
         $sql = "
-            SELECT a.nome, a.id, 'approved' as status
+            SELECT a.nome, a.contato, a.id, 'approved' as status
             FROM aluno a
             INNER JOIN selecionado s ON a.id = s.id_aluno
             WHERE s.id_vaga = :id_vaga
 
             UNION
 
-            SELECT a.nome, a.id, 'waiting' as status
+            SELECT a.nome, a.contato, a.id, 'waiting' as status
             FROM aluno a
             INNER JOIN selecao se ON a.id = se.id_aluno
             LEFT JOIN selecionado s ON a.id = s.id_aluno AND s.id_vaga = :id_vaga

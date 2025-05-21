@@ -7,14 +7,14 @@ class sessions
 {
     function autenticar_session()
     {
-        if (!isset($_SESSION['Email']) == true && !isset($_SESSION['Senha']) == true) {
+        if (!$_SESSION['login']) {
             
             unset($_SESSION['Email']);
             unset($_SESSION['Senha']);
-            header('location:../autenticacao/login.php');
+            header('location:../autenticacao/login.php?login=erro');
             exit();
         }
-        $logado = $_SESSION['Email'];
+        $logado = $_SESSION['login'];
     }
     function tempo_session($tempo)
     {

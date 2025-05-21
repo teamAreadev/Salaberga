@@ -101,7 +101,7 @@ if (isset($_POST['layout'])) {
             background-image:
                 radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.05) 0%, rgba(0, 122, 51, 0) 20%),
                 radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.05) 0%, rgba(255, 165, 0, 0) 20%),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23007A33' fill-opacity='0.03' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23007A33' fill-opacity='0.03' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
             transition: all 0.3s ease;
         }
 
@@ -777,7 +777,7 @@ if (isset($_POST['layout'])) {
                                     console.log('Botão gerarRelatorioBtn encontrado. Adicionando listener.');
                                     resumoBtn.addEventListener('click', () => {
                                         console.log('Botão Gerar Resumo clicado (via script isolado). Abrindo relatório...');
-                                        window.open('../controllers/relatorio_resumo_vagas.php', '_blank');
+                                        window.open('./relatorio/relatorio_resumo_vagas.php', '_blank');
                                     });
                                 } else {
                                     console.error('Erro: Botão gerarRelatorioBtn NÃO encontrado no script isolado.');
@@ -845,6 +845,9 @@ if (isset($_POST['layout'])) {
                             $hora = isset($dado['hora']) ? htmlspecialchars($dado['hora'], ENT_QUOTES, 'UTF-8') : '';
                             $tipoVaga = isset($dado['tipo_vaga']) ? htmlspecialchars($dado['tipo_vaga'], ENT_QUOTES, 'UTF-8') : '';
                             $hasAlunos = !empty($select_model->alunos_selecionados_estagio($dado['id']));
+                            $empresa = $select_model->concedente_por_id($empresaId);
+                            $empresaContato = $empresa['contato']; // Obter o contato da tabela concedentes
+                            $empresaContatoLink = $empresaContato ? 'https://wa.me/55' . preg_replace('/\D/', '', $empresaContato) : '#';
                             ?>
                             <div class="vaga-card slide-up<?php echo !$hasAlunos ? ' single-link' : ''; ?>"
                                 style="animation-delay: <?php echo $delay; ?>ms;"
@@ -857,7 +860,15 @@ if (isset($_POST['layout'])) {
                                 data-hora="<?php echo $hora; ?>"
                                 data-tipo-vaga="<?php echo $tipoVaga; ?>">
                                 <div class="vaga-card-header">
-                                    <h3 class="vaga-card-title"><?php echo $empresaName ?></h3>
+                                    <h3 class="vaga-card-title">
+                                        <?php echo $empresaName ?>
+                                        <a href="<?php echo $empresaContatoLink; ?>" target="_blank">
+                                            <i class="fab fa-whatsapp text-green-500 ml-2"></i>
+                                        </a>
+                                        <?php if (!$empresaContato): ?>
+                                            <span class="text-sm text-gray-500">(contato não informado)</span>
+                                        <?php endif; ?>
+                                    </h3>
                                     <div class="vaga-card-actions">
                                         <button class="vaga-card-action text-gray-400 hover:text-primary-400 edit-btn" data-modal-id="editarVagaModal-<?php echo $vagaId; ?>">
                                             <i class="fas fa-edit"></i>
@@ -915,6 +926,14 @@ if (isset($_POST['layout'])) {
                                                 <?php foreach ($alunos as $aluno): ?>
                                                     <span class="text-sm text-gray-300">
                                                         <?= htmlspecialchars($aluno['nome']) ?>
+                                                        <?php $alunoContato = $aluno['contato']; // Supondo que o contato do aluno está disponível ?>
+                                                        <?php $alunoContatoLink = $alunoContato ? 'https://wa.me/55' . preg_replace('/\D/', '', $alunoContato) : '#'; ?>
+                                                        <a href="<?php echo $alunoContatoLink; ?>" target="_blank">
+                                                            <i class="fab fa-whatsapp text-green-500 ml-2"></i>
+                                                        </a>
+                                                        <?php if (!$alunoContato): ?>
+                                                            <span class="text-sm text-gray-500">(contato não informado)</span>
+                                                        <?php endif; ?>
                                                     </span>
                                                 <?php endforeach; ?>
                                             <?php endif; ?>
@@ -1163,7 +1182,7 @@ if (isset($_POST['layout'])) {
                     <h3 class="text-xl font-bold text-white">Relatório de seleção</h3>
                     <p class="text-gray-400 mt-2">Selecione as opções para gerar o relatório.</p>
                 </div>
-                <form id="formRelatorio" action="../controllers/gerar_relatorio_vagas.php" method="get" target="_blank" class="space-y-6">
+                <form id="formRelatorio" action="./relatorio/gerar_relatorio_vagas.php" method="get" target="_blank" class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Empresa</label>
                         <select name="empresa" class="custom-input mt-1 w-full">
@@ -1267,7 +1286,6 @@ if (isset($_POST['layout'])) {
         }
         document.addEventListener('DOMContentLoaded', () => {
             const novaVagaModal = document.getElementById('novaVagaModal');
-            const vagaForm = document.getElementById('vagaForm');
             const addVagaBtn = document.getElementById('addVagaBtn');
             const firstVagaBtn = document.getElementById('firstVagaBtn');
             const sidebarToggle = document.getElementById('sidebarToggle');
@@ -1297,7 +1315,7 @@ if (isset($_POST['layout'])) {
             });
 
             // Manipulação do formulário
-            vagaForm.addEventListener('submit', (e) => {
+            document.getElementById('vagaForm').addEventListener('submit', (e) => {
                 const submitBtn = e.submitter;
                 if (submitBtn) {
                     gsap.to(submitBtn, {
@@ -1602,6 +1620,54 @@ if (isset($_POST['layout'])) {
             url.searchParams.set('perfil', perfil);
             window.open(url.toString(), '_blank');
             fecharModalRelatorio();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const novaVagaModal = document.getElementById('novaVagaModal');
+            const cancelarBtn = document.getElementById('cancelarBtn');
+
+            // Função para fechar o modal
+            function fecharModal() {
+                novaVagaModal.classList.add('hidden');
+                novaVagaModal.classList.remove('flex');
+            }
+
+            // Fechar modal ao clicar no botão cancelar
+            cancelarBtn.addEventListener('click', fecharModal);
+
+            // Fechar modal ao clicar fora dele
+            window.addEventListener('click', (event) => {
+                if (event.target === novaVagaModal) {
+                    fecharModal();
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const novaVagaModal = document.getElementById('novaVagaModal');
+            const addVagaBtn = document.getElementById('addVagaBtn');
+
+            // Função para abrir o modal
+            function abrirModal() {
+                novaVagaModal.classList.remove('hidden');
+                novaVagaModal.classList.add('flex');
+            }
+
+            // Função para fechar o modal
+            function fecharModal() {
+                novaVagaModal.classList.add('hidden');
+                novaVagaModal.classList.remove('flex');
+            }
+
+            // Abrir modal ao clicar no botão "Nova Vaga"
+            addVagaBtn.addEventListener('click', abrirModal);
+
+            // Fechar modal ao clicar fora dele
+            novaVagaModal.addEventListener('click', (event) => {
+                if (event.target === novaVagaModal) {
+                    fecharModal();
+                }
+            });
         });
     </script>
 </body>
