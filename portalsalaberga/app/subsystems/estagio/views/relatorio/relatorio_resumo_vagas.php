@@ -122,7 +122,7 @@ class RelatorioResumoVagas extends PDF {
             $vagas_agrupadas[$chave]['quantidade'] += $vaga['quantidade'];
 
             // Conta alunos selecionados e em espera
-            $alunos_selecionados = $this->select_model->alunos_selecionados_estagio($vaga['id']);
+            $alunos_selecionados = $this->select_model->alunos_selecionados($vaga['id']);
             $alunos_espera = $this->select_model->alunos_espera($vaga['id']);
             
             $vagas_agrupadas[$chave]['alunos_selecionados'] += count($alunos_selecionados);
@@ -230,9 +230,6 @@ class RelatorioResumoVagas extends PDF {
         return mb_strtoupper($empresa, 'UTF-8');
     }
 }
-
-// Inicia a sessão antes de qualquer saída
-session_start();
 
 // Verifica autenticação
 $session = new sessions();

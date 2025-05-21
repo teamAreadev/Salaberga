@@ -19,35 +19,35 @@ class select_model extends connect
     }
     function total_vagas()
     {
-        $stmt_vagas = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas");
+        $stmt_vagas = $this->connect->query("SELECT sum(quant_vaga) as quant_vaga FROM vagas");
         $result = $stmt_vagas->fetch(PDO::FETCH_ASSOC);
 
         return $result;
     }
     function total_vagas_des()
     {
-        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas WHERE id_perfil = 2");
+        $stmt_empresa = $this->connect->query("SELECT sum(quant_vaga) as quant_vaga FROM vagas WHERE id_perfil = 2");
         $result = $stmt_empresa->fetch(PDO::FETCH_ASSOC);
 
         return $result;
     }
     function total_vagas_dev()
     {
-        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas WHERE id_perfil = 1");
+        $stmt_empresa = $this->connect->query("SELECT sum(quant_vaga) as quant_vaga FROM vagas WHERE id_perfil = 1");
         $result = $stmt_empresa->fetch(PDO::FETCH_ASSOC);
 
         return $result;
     }
     function total_vagas_tut()
     {
-        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) as quantidade FROM vagas WHERE id_perfil = 4");
+        $stmt_empresa = $this->connect->query("SELECT sum(quant_vaga) as quant_vaga FROM vagas WHERE id_perfil = 4");
         $result = $stmt_empresa->fetch(PDO::FETCH_ASSOC);
 
         return $result;
     }
     function total_vagas_sup()
     {
-        $stmt_empresa = $this->connect->query("SELECT sum(quantidade) from vagas where id_perfil = 3; ");
+        $stmt_empresa = $this->connect->query("SELECT sum(quant_vaga) from vagas where id_perfil = 3; ");
         $result = $stmt_empresa->fetch(PDO::FETCH_ASSOC);
 
         return $result;
@@ -200,7 +200,8 @@ class select_model extends connect
                 v.id as id,
                 c.nome AS nome_empresa,
                 p.nome_perfil AS nome_perfil,
-                v.quantidade AS quantidade,
+                v.quant_vaga AS quant_vaga,
+                v.quant_cand AS quant_cand,
                 v.data as data,
                 v.hora as hora,
                 v.tipo_vaga as tipo_vaga,

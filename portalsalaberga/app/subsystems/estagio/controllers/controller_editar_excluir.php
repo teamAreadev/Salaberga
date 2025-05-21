@@ -66,6 +66,7 @@ if (isset($_POST['id_excluir_empresa']) && !empty($_POST['id_excluir_empresa']))
     isset($_POST['empresa_editar_vaga']) && !empty($_POST['empresa_editar_vaga']) &&
     isset($_POST['perfil_editar_vaga']) && !empty($_POST['perfil_editar_vaga']) &&
     isset($_POST['quantidade_editar_vaga']) && !empty($_POST['quantidade_editar_vaga']) &&
+    isset($_POST['quant_candidatos_editar_vaga']) && !empty($_POST['quant_candidatos_editar_vaga']) &&
     isset($_POST['tipo_editar_vaga']) && !empty($_POST['tipo_editar_vaga']) &&
     isset($_POST['data_editar_vaga']) && !empty($_POST['data_editar_vaga']) &&
     isset($_POST['hora_editar_vaga']) && !empty($_POST['hora_editar_vaga'])
@@ -75,12 +76,13 @@ if (isset($_POST['id_excluir_empresa']) && !empty($_POST['id_excluir_empresa']))
     $empresa = $_POST['empresa_editar_vaga'];
     $perfil = $_POST['perfil_editar_vaga'];
     $quantidades_vagas = $_POST['quantidade_editar_vaga'];
+    $quant_candidatos = $_POST['quant_candidatos_editar_vaga'];
     $tipo_vaga = $_POST['tipo_editar_vaga'];
     $data = $_POST['data_editar_vaga'];
     $hora = $_POST['hora_editar_vaga'];
 
     $model = new main_model;
-    $result = $model->editar_vaga($id, $empresa, $perfil, $quantidades_vagas, $tipo_vaga, $data, $hora);
+    $result = $model->editar_vaga($id, $empresa, $perfil, $quantidades_vagas, $quant_candidatos, $tipo_vaga, $data, $hora);
 
     switch ($result) {
         case 1:

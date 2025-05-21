@@ -845,7 +845,9 @@ if (isset($_POST['layout'])) {
                             }
                             $vagaId = isset($dado['id']) ? htmlspecialchars($dado['id'], ENT_QUOTES, 'UTF-8') : '';
                             $empresaName = isset($dado['nome_empresa']) ? htmlspecialchars($dado['nome_empresa'], ENT_QUOTES, 'UTF-8') : 'Não informado';
-                            $quantidade = isset($dado['quantidade']) ? htmlspecialchars($dado['quantidade'], ENT_QUOTES, 'UTF-8') : '0';
+                            $quant_vaga = isset($dado['quant_vaga']) ? htmlspecialchars($dado['quant_vaga'], ENT_QUOTES, 'UTF-8') : '0';
+                            $quant_cand = isset($dado['quant_cand']) ? htmlspecialchars($dado['quant_cand'], ENT_QUOTES, 'UTF-8') : '0';
+                            $nomePerfil = isset($dado['nome_perfil']) ? htmlspecialchars($dado['nome_perfil'], ENT_QUOTES, 'UTF-8') : 'Área não informada';
                             $empresaId = isset($dado['id_empresa']) ? htmlspecialchars($dado['id_empresa'], ENT_QUOTES, 'UTF-8') : '';
                             $data = isset($dado['data']) ? htmlspecialchars($dado['data'], ENT_QUOTES, 'UTF-8') : '';
                             $hora = isset($dado['hora']) ? htmlspecialchars($dado['hora'], ENT_QUOTES, 'UTF-8') : '';
@@ -908,7 +910,11 @@ if (isset($_POST['layout'])) {
                                     </div>
                                     <div class="vaga-card-info-item">
                                         <i class="fas fa-users w-5"></i>
-                                        <span><?php echo $quantidade; ?> vaga(s) disponível(is)</span>
+                                        <span><?php echo $quant_vaga; ?> vaga(s) disponível(is)</span>
+                                    </div>
+                                    <div class="vaga-card-info-item">
+                                        <i class="fas fa-users w-5"></i>
+                                        <span><?php echo $quant_cand; ?> candidatos</span>
                                     </div>
                                     <div class="vaga-card-info-item">
                                         <i class="fas fa-calendar w-5"></i>
@@ -1036,7 +1042,11 @@ if (isset($_POST['layout'])) {
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-300 mb-2">Vagas Disponíveis</label>
-                                            <input type="number" name="quantidade_editar_vaga" min="1" value="<?php echo $quantidade; ?>" class="custom-input mt-1 w-full" required>
+                                            <input type="number" name="quantidade_editar_vaga" min="1" value="<?php echo $quant_vaga; ?>" class="custom-input mt-1 w-full" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300 mb-2">Quantidade de Candidatos</label>
+                                            <input type="number" name="quant_candidatos_editar_vaga" min="1" value="<?php echo isset($quant_cand) ? $quant_cand : ''; ?>" class="custom-input mt-1 w-full" required>
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-300 mb-2">Tipo de Vaga</label>
@@ -1143,8 +1153,12 @@ if (isset($_POST['layout'])) {
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">Vagas Disponíveis</label>
-                        <input type="number" id="vagaVagasDisponiveis" name="quantidades" min="1" class="custom-input mt-1 w-full" required>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Quantidade de Vagas</label>
+                        <input type="number" id="vagaVagasDisponiveis" name="quant_vagas" min="1" class="custom-input mt-1 w-full" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Quantidade de Candidatos</label>
+                        <input type="number" id="vagaVagasDisponiveis" name="quant_candidatos" min="1" class="custom-input mt-1 w-full" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Tipo de Vaga</label>
