@@ -37,7 +37,7 @@ try {
         function __construct($select_model, $vagas) {
             parent::__construct('P', 'mm', 'A4');
             $this->SetAutoPageBreak(true, 25);
-            $this->SetMargins(15, 15, 15);
+            $this->SetMargins(10, 15, 10);
             $this->select_model = $select_model;
             $this->vagas = $vagas;
             $this->processarDados();
@@ -114,6 +114,12 @@ try {
             return mb_strtoupper($empresa, 'UTF-8');
         }
 
+        function formatarData($data) {
+            if (empty($data)) return '-';
+            $data_obj = new DateTime($data);
+            return $data_obj->format('d/m/Y');
+        }
+
         // Cabeçalho
         function Header() {
             if ($this->PageNo() == 1) {
@@ -165,8 +171,9 @@ try {
             // Cabeçalho da tabela
             $this->SetFillColor(220, 240, 230);
             $this->SetFont('Arial', 'B', 10);
-            $this->Cell(80, 7, 'Empresa', 1, 0, 'L', true);
+            $this->Cell(55, 7, 'Empresa', 1, 0, 'L', true);
             $this->Cell(30, 7, 'Perfil', 1, 0, 'L', true);
+            $this->Cell(35, 7, 'Data | Hora', 1, 0, 'C', true);
             $this->Cell(70, 7, 'Alunos', 1, 1, 'C', true);
             
             // Dados da tabela
@@ -180,8 +187,9 @@ try {
             if (empty($this->vagas)) {
                 $bg = $row_bg1;
                 $this->SetFillColor($bg[0], $bg[1], $bg[2]);
-                $this->Cell(80, 7, '-', 1, 0, 'C', true);
+                $this->Cell(55, 7, '-', 1, 0, 'C', true);
                 $this->Cell(30, 7, '-', 1, 0, 'C', true);
+                $this->Cell(35, 7, '-', 1, 0, 'C', true);
                 $this->Cell(70, 7, '-', 1, 1, 'C', true);
             } else {
                 foreach ($this->vagas as $vaga) {
@@ -189,12 +197,16 @@ try {
                     $alunos_selecionados = $this->select_model->alunos_selecionados($vaga['id']);
                     $alunos_espera = $this->select_model->alunos_espera($vaga['id']);
                     
+                    $data_hora = ($this->formatarData($vaga['data'])) . ' | ' . ($vaga['hora'] ?? '-');
+                    if ($data_hora === '- | -') $data_hora = '-';
+
                     // Se não houver alunos, mostra uma linha com traço
                     if (empty($alunos_selecionados) && empty($alunos_espera)) {
-                        $bg = $row_bg1;
+                        $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
                         $this->SetFillColor($bg[0], $bg[1], $bg[2]);
-                        $this->Cell(80, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 80), 1, 0, 'L', true);
+                        $this->Cell(55, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 55), 1, 0, 'L', true);
                         $this->Cell(30, 7, $this->ajustarTexto($vaga['nome_perfil'] ?? '-', 30), 1, 0, 'L', true);
+                        $this->Cell(35, 7, $data_hora, 1, 0, 'C', true);
                         $this->Cell(70, 7, '-', 1, 1, 'C', true);
                         $contador_linhas++;
                     } else {
@@ -202,8 +214,9 @@ try {
                         foreach ($alunos_selecionados as $aluno) {
                             $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
                             $this->SetFillColor($bg[0], $bg[1], $bg[2]);
-                            $this->Cell(80, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 80), 1, 0, 'L', true);
+                            $this->Cell(55, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 55), 1, 0, 'L', true);
                             $this->Cell(30, 7, $this->ajustarTexto($vaga['nome_perfil'] ?? '-', 30), 1, 0, 'L', true);
+                            $this->Cell(35, 7, $data_hora, 1, 0, 'C', true);
                             
                             // Apenas o texto do aluno selecionado fica verde e negrito, fundo segue a alternância
                             $this->SetTextColor(0, 122, 51); // Verde para selecionados
@@ -218,8 +231,9 @@ try {
                         foreach ($alunos_espera as $aluno) {
                             $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
                             $this->SetFillColor($bg[0], $bg[1], $bg[2]);
-                            $this->Cell(80, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 80), 1, 0, 'L', true);
+                            $this->Cell(55, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 55), 1, 0, 'L', true);
                             $this->Cell(30, 7, $this->ajustarTexto($vaga['nome_perfil'] ?? '-', 30), 1, 0, 'L', true);
+                            $this->Cell(35, 7, $data_hora, 1, 0, 'C', true);
                             $this->SetTextColor(100, 100, 100); // Cinza para em espera
                             $this->Cell(70, 7, $this->ajustarTexto($this->formatarNome($aluno['nome']), 70), 1, 1, 'L', true);
                             $this->SetTextColor(40, 40, 40); // Volta para cor padrão
