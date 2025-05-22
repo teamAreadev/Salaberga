@@ -1,7 +1,7 @@
 <?php
-require_once('../../models/select_model.php');
-require_once('../../assets/fpdf/fpdf.php');
-require_once('../../models/sessions.php');
+require_once('../models/select_model.php');
+require_once('../assets/fpdf/fpdf.php');
+require_once('../models/sessions.php');
 // Configura o fuso horário para São Paulo
 date_default_timezone_set('America/Sao_Paulo');
 
@@ -52,7 +52,7 @@ try {
             
             foreach ($this->vagas as $vaga) {
                 // Busca alunos selecionados para esta vaga
-                $alunos_selecionados = $this->select_model->alunos_selecionados_relatorio($vaga['id']);
+                $alunos_selecionados = $this->select_model->alunos_selecionados($vaga['id']);
                 
                 // Busca alunos em espera para esta vaga
                 $alunos_espera = $this->select_model->alunos_espera($vaga['id']);
@@ -63,8 +63,7 @@ try {
                         'nome' => $aluno['nome'],
                         'empresa' => $vaga['nome_empresa'],
                         'perfil' => $vaga['nome_perfil'],
-                        'status' => 'Selecionado',
-                        'contato' => $aluno['contato'] ?? ''
+                        'status' => 'Selecionado'
                     ];
                     $total_alunos_selecionados++;
                 }
@@ -75,8 +74,7 @@ try {
                         'nome' => $aluno['nome'],
                         'empresa' => $vaga['nome_empresa'],
                         'perfil' => $vaga['nome_perfil'],
-                        'status' => 'Em Espera',
-                        'contato' => $aluno['contato'] ?? ''
+                        'status' => 'Em Espera'
                     ];
                     $total_alunos_espera++;
                 }
@@ -122,62 +120,34 @@ try {
             return $data_obj->format('d/m/Y');
         }
 
-        function formatarNumeroWhatsApp($numero) {
-            // Remove todos os caracteres não numéricos
-            $numero = preg_replace('/[^0-9]/', '', $numero);
-            
-            // Se o número começar com 55, remove
-            if (substr($numero, 0, 2) === '55') {
-                $numero = substr($numero, 2);
-            }
-            
-            // Se o número começar com 0, remove
-            if (substr($numero, 0, 1) === '0') {
-                $numero = substr($numero, 1);
-            }
-            
-            // Adiciona o código do país (55) se não existir
-            if (strlen($numero) === 11) {
-                $numero = '55' . $numero;
-            }
-            
-            return $numero;
-        }
-
         // Cabeçalho
-    function Header() {
-        if ($this->PageNo() == 1) {
-            $this->SetFillColor(248, 248, 248);
-            $this->Rect(0, 0, $this->GetPageWidth(), 40, 'F');
-            
-            $this->Image('https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png', 15, 10, 25);
-            
-            $this->SetFont('Arial', 'B', 18);
-            $this->SetTextColor($this->cores['primaria'][0], $this->cores['primaria'][1], $this->cores['primaria'][2]);
-            $this->SetXY(45, 15);
-            $this->Cell(100, 10, ' Seleções / Entrevistas realizadas', 0, 0, 'L');
-        
-            $this->SetFont('Arial', 'B', 9);
-            $this->SetTextColor($this->cores['subtitulo'][0], $this->cores['subtitulo'][1], $this->cores['subtitulo'][2]);
-            $this->SetXY(45, 25);
-            $this->Cell(100, 5, '  Ensino Médio Técnico em Informática', 0, 0, 'L');
-
-            date_default_timezone_set('America/Fortaleza');
-
-            $this->SetFont('Arial', 'I', 9);
-            $this->SetTextColor($this->cores['subtitulo'][0], $this->cores['subtitulo'][1], $this->cores['subtitulo'][2]);
-            $this->SetXY(45, 30);
-            $this->Cell(100, 5, '  Gerado em: ' . date('d/m/Y H:i'), 0, 0, 'L');
-            
-            $this->SetDrawColor($this->cores['primaria'][0], $this->cores['primaria'][1], $this->cores['primaria'][2]);
-            $this->SetLineWidth(0.5);
-            $this->Line(15, 40, 195, 40);
-            
-            $this->SetY(45);
-        } else {
-            $this->SetY(15);
+        function Header() {
+            if ($this->PageNo() == 1) {
+                $this->SetFillColor(248, 248, 248);
+                $this->Rect(0, 0, $this->GetPageWidth(), 40, 'F');
+                
+                // Use ImagePngWithAlpha para PNGs com transparência
+                $this->ImagePngWithAlpha('https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png', 15, 10, 25);
+                
+                $this->SetFont('Arial', 'B', 18);
+                $this->SetTextColor(...$this->cores['primaria']);
+                $this->SetXY(45, 15);
+                $this->Cell(100, 10, 'Relatório de seleção', 0, 0, 'L');
+                
+                $this->SetFont('Arial', 'I', 9);
+                $this->SetTextColor(...$this->cores['subtitulo']);
+                $this->SetXY(45, 25);
+                $this->Cell(100, 5, 'Gerado em: ' . date('d/m/Y H:i'), 0, 0, 'L');
+                
+                $this->SetDrawColor(...$this->cores['primaria']);
+                $this->SetLineWidth(0.5);
+                $this->Line(15, 40, 195, 40);
+                
+                $this->SetY(45);
+            } else {
+                $this->SetY(15);
+            }
         }
-    }
 
         // Rodapé
         function Footer() {
@@ -194,15 +164,18 @@ try {
 
         // Tabela de Vagas
         function addTabelaVagas() {
-
+            $this->SetY(45);
+            $this->SetFont('Arial', 'B', 12);
+            $this->SetTextColor(...$this->cores['primaria']);
+            $this->Cell(0, 10, 'Vagas Disponíveis', 0, 1, 'L');
+            
             // Cabeçalho da tabela
             $this->SetFillColor(220, 240, 230);
             $this->SetFont('Arial', 'B', 10);
-            $this->Cell(45, 7, 'Empresa', 1, 0, 'L', true);
+            $this->Cell(55, 7, 'Empresa', 1, 0, 'L', true);
             $this->Cell(30, 7, 'Perfil', 1, 0, 'L', true);
             $this->Cell(35, 7, 'Data | Hora', 1, 0, 'C', true);
-            $this->Cell(65, 7, 'Alunos', 1, 0, 'C', true);
-            $this->Cell(15, 7, 'Contato', 1, 1, 'C', true);
+            $this->Cell(70, 7, 'Alunos', 1, 1, 'C', true);
             
             // Dados da tabela
             $this->SetFont('Arial', '', 10);
@@ -215,15 +188,14 @@ try {
             if (empty($this->vagas)) {
                 $bg = $row_bg1;
                 $this->SetFillColor($bg[0], $bg[1], $bg[2]);
-                $this->Cell(45, 7, '-', 1, 0, 'C', true);
+                $this->Cell(55, 7, '-', 1, 0, 'C', true);
                 $this->Cell(30, 7, '-', 1, 0, 'C', true);
                 $this->Cell(35, 7, '-', 1, 0, 'C', true);
-                $this->Cell(65, 7, '-', 1, 0, 'C', true);
-                $this->Cell(15, 7, '-', 1, 1, 'C', true);
+                $this->Cell(70, 7, '-', 1, 1, 'C', true);
             } else {
                 foreach ($this->vagas as $vaga) {
                     // Busca alunos selecionados e em espera para esta vaga
-                    $alunos_selecionados = $this->select_model->alunos_selecionados_relatorio($vaga['id']);
+                    $alunos_selecionados = $this->select_model->alunos_selecionados($vaga['id']);
                     $alunos_espera = $this->select_model->alunos_espera($vaga['id']);
                     
                     $data_hora = ($this->formatarData($vaga['data'])) . ' | ' . ($vaga['hora'] ?? '-');
@@ -233,49 +205,26 @@ try {
                     if (empty($alunos_selecionados) && empty($alunos_espera)) {
                         $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
                         $this->SetFillColor($bg[0], $bg[1], $bg[2]);
-                        $this->Cell(45, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 45), 1, 0, 'L', true);
+                        $this->Cell(55, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 55), 1, 0, 'L', true);
                         $this->Cell(30, 7, $this->ajustarTexto($vaga['nome_perfil'] ?? '-', 30), 1, 0, 'L', true);
                         $this->Cell(35, 7, $data_hora, 1, 0, 'C', true);
-                        $this->Cell(65, 7, '-', 1, 0, 'C', true);
-                        $this->Cell(15, 7, '-', 1, 1, 'C', true);
+                        $this->Cell(70, 7, '-', 1, 1, 'C', true);
                         $contador_linhas++;
                     } else {
                         // Lista alunos selecionados
                         foreach ($alunos_selecionados as $aluno) {
                             $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
                             $this->SetFillColor($bg[0], $bg[1], $bg[2]);
-                            $this->Cell(45, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 45), 1, 0, 'L', true);
+                            $this->Cell(55, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 55), 1, 0, 'L', true);
                             $this->Cell(30, 7, $this->ajustarTexto($vaga['nome_perfil'] ?? '-', 30), 1, 0, 'L', true);
                             $this->Cell(35, 7, $data_hora, 1, 0, 'C', true);
                             
                             // Apenas o texto do aluno selecionado fica verde e negrito, fundo segue a alternância
                             $this->SetTextColor(0, 122, 51); // Verde para selecionados
                             $this->SetFont('Arial', 'B', 10); // Negrito para selecionados
-                            
-                            // Adiciona o nome do aluno
-                            $nome_aluno = $this->ajustarTexto($this->formatarNome($aluno['nome']), 65);
-                            $this->Cell(65, 7, $nome_aluno, 1, 0, 'L', true);
-                            
-                            // Adiciona o contato
-                            if (!empty($aluno['contato'])) {
-                                $x = $this->GetX();
-                                $y = $this->GetY();
-                                $this->Rect($x, $y, 15, 7);
-                                $this->Image('../../assets/whatsapp.png', $x + 5, $y + 1, 5, 5);
-                                $this->SetX($x + 15);
-                                $numero_whatsapp = $this->formatarNumeroWhatsApp($aluno['contato']);
-                                $this->Link($this->GetX() - 15, $this->GetY(), 15, 7, "https://wa.me/{$numero_whatsapp}");
-
-                                
-                            } else {
-                                $this->SetTextColor(0, 122, 51); // Verde para selecionados
-                                $this->SetFont('Arial', 'B', 10); // Negrito para selecionados
-                                $this->Cell(15, 7, 'X', 1, 0, 'C', true);
-                            }
-                            
+                            $this->Cell(70, 7, $this->ajustarTexto($this->formatarNome($aluno['nome']), 70), 1, 1, 'L', true);
                             $this->SetTextColor(40, 40, 40);
                             $this->SetFont('Arial', '', 10);
-                            $this->Ln(); // Adiciona uma quebra de linha após cada aluno
                             $contador_linhas++;
                         }
                         
@@ -283,33 +232,12 @@ try {
                         foreach ($alunos_espera as $aluno) {
                             $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
                             $this->SetFillColor($bg[0], $bg[1], $bg[2]);
-                            $this->Cell(45, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 45), 1, 0, 'L', true);
+                            $this->Cell(55, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['nome_empresa'] ?? '-'), 55), 1, 0, 'L', true);
                             $this->Cell(30, 7, $this->ajustarTexto($vaga['nome_perfil'] ?? '-', 30), 1, 0, 'L', true);
                             $this->Cell(35, 7, $data_hora, 1, 0, 'C', true);
                             $this->SetTextColor(100, 100, 100); // Cinza para em espera
-                            
-                            // Adiciona o nome do aluno
-                            $nome_aluno = $this->ajustarTexto($this->formatarNome($aluno['nome']), 65);
-                            $this->Cell(65, 7, $nome_aluno, 1, 0, 'L', true);
-                            
-                            // Adiciona o contato
-                            if (!empty($aluno['contato'])) {
-                                $x = $this->GetX();
-                                $y = $this->GetY();
-                                $this->Rect($x, $y, 15, 7);
-                                $this->Image('../../assets/whatsapp.png', $x + 5, $y + 1, 5, 5);
-                                $this->SetX($x + 15);
-                                $numero_whatsapp = $this->formatarNumeroWhatsApp($aluno['contato']);
-                                $this->Link($this->GetX() - 15, $this->GetY(), 15, 7, "https://wa.me/{$numero_whatsapp}");
-                            } else {
-                                $this->SetTextColor(0, 122, 51); // Verde para selecionados
-                                $this->SetFont('Arial', 'B', 10); // Negrito para selecionados
-                                $this->Cell(15, 7, 'X', 1, 0, 'C', true);
-                            }
-                            
-                            $this->SetTextColor(40, 40, 40);
-                            $this->SetFont('Arial', '', 10);
-                            $this->Ln(); // Adiciona uma quebra de linha após cada aluno
+                            $this->Cell(70, 7, $this->ajustarTexto($this->formatarNome($aluno['nome']), 70), 1, 1, 'L', true);
+                            $this->SetTextColor(40, 40, 40); // Volta para cor padrão
                             $contador_linhas++;
                         }
                     }
@@ -413,6 +341,278 @@ try {
 
         function gerarRelatorio() {
             $this->addTabelaVagas();
+        }
+
+        // Funções para suporte a transparência de PNG (copiado do script FPDF alpha channel)
+        var $tmpFiles = array(); 
+
+        function Image($file, $x=null, $y=null, $w=0, $h=0, $type='', $link='', $isMask=false, $maskImg=0)
+        {
+            //Put an image on the page
+            if(!isset($this->images[$file]))
+            {
+                //First use of this image, get info
+                if($type=='')
+                {
+                    $pos=strrpos($file,'.');
+                    if(!$pos)
+                        $this->Error('Image file has no extension and no type was specified: '.$file);
+                    $type=substr($file,$pos+1);
+                }
+                $type=strtolower($type);
+                if($type=='png'){
+                    $info=$this->_parsepng($file);
+                    if($info=='alpha')
+                        return $this->ImagePngWithAlpha($file,$x,$y,$w,$h,$link);
+                }
+                else
+                {
+                    if($type=='jpeg')
+                        $type='jpg';
+                    $mtd='_parse'.$type;
+                    if(!method_exists($this,$mtd))
+                        $this->Error('Unsupported image type: '.$type);
+                    $info=$this->$mtd($file);
+                }
+                if($isMask){
+                    if(in_array($file,$this->tmpFiles))
+                        $info['cs']='DeviceGray'; //hack necessary as GD can't produce gray scale images
+                    if($info['cs']!='DeviceGray')
+                        $this->Error('Mask must be a gray scale image');
+                    if($this->PDFVersion<'1.4')
+                        $this->PDFVersion='1.4';
+                }
+                $info['i']=count($this->images)+1;
+                if($maskImg>0)
+                    $info['masked'] = $maskImg;
+                $this->images[$file]=$info;
+            }
+            else
+                $info=$this->images[$file];
+            //Automatic width and height calculation if needed
+            if($w==0 && $h==0)
+            {
+                //Put image at 72 dpi
+                $w=$info['w']/$this->k;
+                $h=$info['h']/$this->k;
+            }
+            elseif($w==0)
+                $w=$h*$info['w']/$info['h'];
+            elseif($h==0)
+                $h=$w*$info['h']/$info['w'];
+            //Flowing mode
+            if($y===null)
+            {
+                if($this->y+$h>$this->PageBreakTrigger && !$this->InHeader && !$this->InFooter && $this->AcceptPageBreak())
+                {
+                    //Automatic page break
+                    $x2=$this->x;
+                    $this->AddPage($this->CurOrientation);
+                    $this->x=$x2;
+                }
+                $y=$this->y;
+                $this->y+=$h;
+            }
+            if($x===null)
+                $x=$this->x;
+            if(!$isMask)
+                $this->_out(sprintf('q %.2F 0 0 %.2F %.2F %.2F cm /I%d Do Q',$w*$this->k,$h*$this->k,$x*$this->k,($this->h-($y+$h))*$this->k,$info['i']));
+            if($link)
+                $this->Link($x,$y,$w,$h,$link);
+            return $info['i'];
+        }
+
+        function ImagePngWithAlpha($file,$x,$y,$w=0,$h=0,$link='')
+        {
+            $tmp_alpha = tempnam(sys_get_temp_dir(), 'mska');
+            $this->tmpFiles[] = $tmp_alpha;
+            $tmp_plain = tempnam(sys_get_temp_dir(), 'mskp');
+            $this->tmpFiles[] = $tmp_plain;
+
+            list($wpx, $hpx) = getimagesize($file);
+            $img = imagecreatefrompng($file);
+            $alpha_img = imagecreate( $wpx, $hpx );
+
+            // generate gray scale pallete
+            for($c=0;$c<256;$c++)
+                ImageColorAllocate($alpha_img, $c, $c, $c);
+
+            // extract alpha channel
+            $xpx=0;
+            while ($xpx<$wpx){
+                $ypx = 0;
+                while ($ypx<$hpx){
+                    $color_index = imagecolorat($img, $xpx, $ypx);
+                    $col = imagecolorsforindex($img, $color_index);
+                    imagesetpixel($alpha_img, $xpx, $ypx, $this->_gamma( (127-$col['alpha'])*255/127) );
+                    ++$ypx;
+                }
+                ++$xpx;
+            }
+
+            imagepng($alpha_img, $tmp_alpha);
+            imagedestroy($alpha_img);
+
+            // extract image without alpha channel
+            $plain_img = imagecreatetruecolor ( $wpx, $hpx );
+            imagecopy($plain_img, $img, 0, 0, 0, 0, $wpx, $hpx );
+            imagepng($plain_img, $tmp_plain);
+            imagedestroy($plain_img);
+            
+            //first embed mask image (w, h, x, will be ignored)
+            $maskImg = $this->Image($tmp_alpha, 0,0,0,0, 'PNG', '', true); 
+            
+            //embed image, masked with previously embedded mask
+            $this->Image($tmp_plain,$x,$y,$w,$h,'PNG',$link, false, $maskImg);
+        }
+
+        function Close()
+        {
+            parent::Close();
+            // clean up tmp files
+            foreach($this->tmpFiles as $tmp)
+                @unlink($tmp);
+        }
+
+        function _putimages()
+        {
+            $filter=($this->compress) ? '/Filter /FlateDecode ' : '';
+            
+            foreach ($this->images as $file => $info)
+            {
+                $this->_newobj();
+                $this->images[$file]['n']=$this->n;
+                $this->_out('<</Type /XObject');
+                $this->_out('/Subtype /Image');
+                $this->_out('/Width '.$info['w']);
+                $this->_out('/Height '.$info['h']);
+
+                if(isset($info['masked']))
+                    $this->_out('/SMask '.($this->n-1).' 0 R');
+
+                if($info['cs']=='Indexed')
+                    $this->_out('/ColorSpace [/Indexed /DeviceRGB '.(strlen($info['pal'])/3-1).' '.($this->n+1).' 0 R]');
+                else
+                {
+                    $this->_out('/ColorSpace /'.$info['cs']);
+                    if($info['cs']=='DeviceCMYK')
+                        $this->_out('/Decode [1 0 1 0 1 0 1 0]');
+                }
+                $this->_out('/BitsPerComponent '.$info['bpc']);
+                if(isset($info['f']))
+                    $this->_out('/Filter /'.$info['f']);
+                if(isset($info['parms']))
+                    $this->_out($info['parms']);
+                if(isset($info['trns']) && is_array($info['trns']))
+                {
+                    $trns='';
+                    for($i=0;$i<count($info['trns']);$i++)
+                        $trns.=$info['trns'][$i].' '.$info['trns'][$i].' ';
+                    $this->_out('/Mask ['.$trns.']');
+                }
+                $this->_out('/Length '.strlen($info['data']).'>>');
+                $this->_putstream($info['data']);
+                unset($this->images[$file]['data']);
+                $this->_out('endobj');
+                //Palette
+                if($info['cs']=='Indexed')
+                {
+                    $this->_newobj();
+                    $pal=($this->compress) ? gzcompress($info['pal']) : $info['pal'];
+                    $this->_out('<<'.$filter.'/Length '.strlen($pal).'>>');
+                    $this->_putstream($pal);
+                    $this->_out('endobj');
+                }
+            }
+        }
+
+        function _gamma($v){
+            return pow ($v/255, 2.2) * 255;
+        }
+
+        function _parsepng($file)
+        {
+            //Extract info from a PNG file
+            $f=fopen($file,'rb');
+            if(!$f)
+                $this->Error('Can\'t open image file: '.$file);
+            //Check signature
+            if($this->_readstream($f,8)!=chr(137).'PNG'.chr(13).chr(10).chr(26).chr(10))
+                $this->Error('Not a PNG file: '.$file);
+            //Read header chunk
+            $this->_readstream($f,4);
+            if($this->_readstream($f,4)!='IHDR')
+                $this->Error('Incorrect PNG file: '.$file);
+            $w=$this->_readint($f);
+            $h=$this->_readint($f);
+            $bpc=ord($this->_readstream($f,1));
+            if($bpc>8)
+                $this->Error('16-bit depth not supported: '.$file);
+            $ct=ord($this->_readstream($f,1));
+            if($ct==0)
+                $colspace='DeviceGray';
+            elseif($ct==2)
+                $colspace='DeviceRGB';
+            elseif($ct==3)
+                $colspace='Indexed';
+            else {
+                fclose($f);      // the only changes are 
+                return 'alpha';  // made in those 2 lines
+            }
+            if(ord($this->_readstream($f,1))!=0)
+                $this->Error('Unknown compression method: '.$file);
+            if(ord($this->_readstream($f,1))!=0)
+                $this->Error('Unknown filter method: '.$file);
+            if(ord($this->_readstream($f,1))!=0)
+                $this->Error('Interlacing not supported: '.$file);
+            $this->_readstream($f,4);
+            $parms='/DecodeParms <</Predictor 15 /Colors '.($ct==2 ? 3 : 1).' /BitsPerComponent '.$bpc.' /Columns '.$w.'>>';
+            //Scan chunks looking for palette, transparency and image data
+            $pal='';
+            $trns='';
+            $data='';
+            do
+            {
+                $n=$this->_readint($f);
+                $type=$this->_readstream($f,4);
+                if($type=='PLTE')
+                {
+                    //Read palette
+                    $pal=$this->_readstream($f,$n);
+                    $this->_readstream($f,4);
+                }
+                elseif($type=='tRNS')
+                {
+                    //Read transparency info
+                    $t=$this->_readstream($f,$n);
+                    if($ct==0)
+                        $trns=array(ord(substr($t,1,1)));
+                    elseif($ct==2)
+                        $trns=array(ord(substr($t,3,1)), ord(substr($t,5,1)));
+                    else
+                    {
+                        $pos=strpos($t,chr(0));
+                        if($pos!==false)
+                            $trns=array($pos);
+                    }
+                    $this->_readstream($f,4);
+                }
+                elseif($type=='IDAT')
+                {
+                    //Read image data block
+                    $data.=$this->_readstream($f,$n);
+                    $this->_readstream($f,4);
+                }
+                elseif($type=='IEND')
+                    break;
+                else
+                    $this->_readstream($f,$n+4);
+            }
+            while($n);
+            if($colspace=='Indexed' && empty($pal))
+                $this->Error('Missing palette in '.$file);
+            fclose($f);
+            return array('w'=>$w, 'h'=>$h, 'cs'=>$colspace, 'bpc'=>$bpc, 'f'=>'FlateDecode', 'parms'=>$parms, 'pal'=>$pal, 'trns'=>$trns, 'data'=>$data);
         }
     }
 

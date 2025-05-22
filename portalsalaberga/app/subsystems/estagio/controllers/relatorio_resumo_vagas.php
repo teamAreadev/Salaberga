@@ -1,7 +1,7 @@
 <?php
-require_once('../../models/select_model.php');
-require_once('../../models/sessions.php');
-require_once('../../assets/fpdf/fpdf.php');
+require_once('../models/select_model.php');
+require_once('../models/sessions.php');
+require_once('../assets/fpdf/fpdf.php');
 
 // Classe FPDF com suporte a UTF-8
 class PDF extends FPDF {
@@ -20,7 +20,13 @@ class PDF extends FPDF {
 class RelatorioResumoVagas extends PDF {
     private $select_model;
     private $vagas;
-    private $cores;
+    private $cores = [
+        'primaria' => [0, 122, 51],    // Verde institucional
+        'secundaria' => [240, 240, 240], // Cinza claro
+        'destaque' => [0, 90, 40],     // Verde escuro
+        'texto' => [70, 70, 70],       // Cinza escuro
+        'subtitulo' => [100, 100, 100]  // Cinza médio
+    ];
 
     public function __construct() {
         parent::__construct('P', 'mm', 'A4');
@@ -28,13 +34,6 @@ class RelatorioResumoVagas extends PDF {
         $this->SetMargins(15, 15, 15);
         $this->select_model = new select_model();
         $this->vagas = $this->select_model->vagas();
-        
-        $this->cores = array();
-        $this->cores['primaria'] = array(0, 122, 51);
-        $this->cores['secundaria'] = array(240, 240, 240);
-        $this->cores['destaque'] = array(0, 90, 40);
-        $this->cores['texto'] = array(70, 70, 70);
-        $this->cores['subtitulo'] = array(100, 100, 100);
     }
 
     function Header() {
@@ -45,23 +44,16 @@ class RelatorioResumoVagas extends PDF {
             $this->Image('https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png', 15, 10, 25);
             
             $this->SetFont('Arial', 'B', 18);
-            $this->SetTextColor($this->cores['primaria'][0], $this->cores['primaria'][1], $this->cores['primaria'][2]);
+            $this->SetTextColor(...$this->cores['primaria']);
             $this->SetXY(45, 15);
             $this->Cell(100, 10, ' Resumo de Vagas', 0, 0, 'L');
-        
-            $this->SetFont('Arial', 'B', 9);
-            $this->SetTextColor($this->cores['subtitulo'][0], $this->cores['subtitulo'][1], $this->cores['subtitulo'][2]);
-            $this->SetXY(45, 25);
-            $this->Cell(100, 5, '  Ensino Médio Técnico em Informática', 0, 0, 'L');
-
-            date_default_timezone_set('America/Fortaleza');
-
-            $this->SetFont('Arial', 'I', 9);
-            $this->SetTextColor($this->cores['subtitulo'][0], $this->cores['subtitulo'][1], $this->cores['subtitulo'][2]);
-            $this->SetXY(45, 30);
-            $this->Cell(100, 5, '  Gerado em: ' . date('d/m/Y H:i'), 0, 0, 'L');
             
-            $this->SetDrawColor($this->cores['primaria'][0], $this->cores['primaria'][1], $this->cores['primaria'][2]);
+            $this->SetFont('Arial', 'I', 9);
+            $this->SetTextColor(...$this->cores['subtitulo']);
+            $this->SetXY(45, 25);
+            $this->Cell(100, 5, 'Gerado em: ' . date('d/m/Y H:i'), 0, 0, 'L');
+            
+            $this->SetDrawColor(...$this->cores['primaria']);
             $this->SetLineWidth(0.5);
             $this->Line(15, 40, 195, 40);
             
@@ -72,13 +64,13 @@ class RelatorioResumoVagas extends PDF {
     }
 
     function Footer() {
-        $this->SetDrawColor($this->cores['primaria'][0], $this->cores['primaria'][1], $this->cores['primaria'][2]);
+        $this->SetDrawColor(...$this->cores['primaria']);
         $this->SetLineWidth(0.3);
         $this->Line(15, $this->GetPageHeight() - 20, $this->GetPageWidth() - 15, $this->GetPageHeight() - 20);
         
         $this->SetY(-18);
         $this->SetFont('Arial', 'I', 8);
-        $this->SetTextColor($this->cores['subtitulo'][0], $this->cores['subtitulo'][1], $this->cores['subtitulo'][2]);
+        $this->SetTextColor(...$this->cores['subtitulo']);
         $this->Cell(0, 5, 'Página ' . $this->PageNo() . '/{nb}', 0, 1, 'C');
         $this->Cell(0, 5, 'Sistema de Gestão de Vagas - Todos os direitos reservados', 0, 0, 'C');
     }
@@ -87,59 +79,50 @@ class RelatorioResumoVagas extends PDF {
         $this->AliasNbPages();
         $this->AddPage();
         
+        // Tabela de Resumo
         $this->SetFont('Arial', 'B', 12);
-        $this->SetTextColor($this->cores['primaria'][0], $this->cores['primaria'][1], $this->cores['primaria'][2]);
+        $this->SetTextColor(...$this->cores['primaria']);
+       
         
+        // Cabeçalho da tabela
         $this->SetFillColor(220, 240, 230);
         $this->SetFont('Arial', 'B', 10);
+        
+        // Adiciona espaço à esquerda para centralizar a tabela
         $this->SetX(15 + (180 - 170) / 2);
         
         $this->Cell(100, 7, 'Empresa', 1, 0, 'L', true);
         $this->Cell(40, 7, 'Perfil', 1, 0, 'L', true);
         $this->Cell(30, 7, 'Quantidade', 1, 1, 'C', true);
         
+        // Dados da tabela
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(40, 40, 40);
         
-        $row_bg1 = array(255, 255, 255);
-        $row_bg2 = array(245, 250, 245);
+        $row_bg1 = [255, 255, 255];
+        $row_bg2 = [245, 250, 245];
         $contador_linhas = 0;
 
-        $vagas_agrupadas = array();
+        // Agrupa vagas por empresa e perfil
+        $vagas_agrupadas = [];
         $total_alunos_selecionados = 0;
         $total_alunos_espera = 0;
-
-        $parciais_perfil = array();
-        $parciais_perfil[1] = 0;
-        $parciais_perfil[2] = 0;
-        $parciais_perfil[3] = 0;
-        $parciais_perfil[4] = 0;
 
         foreach ($this->vagas as $vaga) {
             $chave = $vaga['nome_empresa'] . '|' . $vaga['nome_perfil'];
             if (!isset($vagas_agrupadas[$chave])) {
-                $vagas_agrupadas[$chave] = array(
+                $vagas_agrupadas[$chave] = [
                     'empresa' => $vaga['nome_empresa'],
                     'perfil' => $vaga['nome_perfil'],
-                    'quant_vaga' => 0,
+                    'quantidade' => 0,
                     'alunos_selecionados' => 0,
                     'alunos_espera' => 0
-                );
+                ];
             }
-            $vagas_agrupadas[$chave]['quant_vaga'] += $vaga['quant_vaga'];
+            $vagas_agrupadas[$chave]['quantidade'] += $vaga['quantidade'];
 
-            $id_perfil = null;
-            switch (strtolower(trim($vaga['nome_perfil']))) {
-                case 'desenvolvimento': $id_perfil = 1; break;
-                case 'design/mídias': $id_perfil = 2; break;
-                case 'suporte/redes': $id_perfil = 3; break;
-                case 'tutoria': $id_perfil = 4; break;
-            }
-            if ($id_perfil && isset($parciais_perfil[$id_perfil])) {
-                $parciais_perfil[$id_perfil] += $vaga['quant_vaga'];
-            }
-
-            $alunos_selecionados = $this->select_model->alunos_selecionados_estagio($vaga['id']);
+            // Conta alunos selecionados e em espera
+            $alunos_selecionados = $this->select_model->alunos_selecionados($vaga['id']);
             $alunos_espera = $this->select_model->alunos_espera($vaga['id']);
             
             $vagas_agrupadas[$chave]['alunos_selecionados'] += count($alunos_selecionados);
@@ -149,6 +132,7 @@ class RelatorioResumoVagas extends PDF {
             $total_alunos_espera += count($alunos_espera);
         }
 
+        // Ordena por empresa e perfil
         uasort($vagas_agrupadas, function($a, $b) {
             $cmp = strcmp($a['empresa'], $b['empresa']);
             if ($cmp === 0) {
@@ -157,51 +141,49 @@ class RelatorioResumoVagas extends PDF {
             return $cmp;
         });
 
+        // Imprime as linhas da tabela
         foreach ($vagas_agrupadas as $vaga) {
             $bg = ($contador_linhas % 2 == 0) ? $row_bg1 : $row_bg2;
             $this->SetFillColor($bg[0], $bg[1], $bg[2]);
+            
+            // Adiciona espaço à esquerda para centralizar a tabela
             $this->SetX(15 + (180 - 170) / 2);
             
             $this->Cell(100, 7, $this->ajustarTexto($this->formatarEmpresa($vaga['empresa']), 55), 1, 0, 'L', true);
             $this->Cell(40, 7, $this->ajustarTexto($vaga['perfil'], 20), 1, 0, 'L', true);
-            $this->Cell(30, 7, $vaga['quant_vaga'], 1, 1, 'C', true);
+            $this->Cell(30, 7, $vaga['quantidade'], 1, 1, 'C', true);
             
             $contador_linhas++;
         }
 
-
+        // Totalizadores
         $this->Ln(5);
         $this->SetFont('Arial', 'B', 10);
         $this->SetFillColor(220, 240, 230);
-        $this->SetX(15 + (180 - (140 + 30)) / 2);
-        $this->Cell(170, 7, 'Detalhamento das Vagas:', 0, 1, 'L');
-
-        $nomes_perfil = array();
-        $nomes_perfil[1] = 'Perfil Desenvolvimento';
-        $nomes_perfil[2] = 'Perfil Design/Mídias';
-        $nomes_perfil[3] = 'Perfil Suporte/Redes';
-        $nomes_perfil[4] = 'Perfil Tutoria';
-
-
-        foreach ($parciais_perfil as $id_perfil => $quantidade) {
-            $this->SetX(15 + (180 - (140 + 30)) / 2);
-            $this->Cell(140, 7, $nomes_perfil[$id_perfil] . ':', 1, 0, 'L', true);
-            $this->Cell(30, 7, $quantidade, 1, 1, 'C', true);
-        }
         
-        $this->ln(5);
-        $this->SetX(15 + (180 - (140 + 30)) / 2);
+        // Adiciona espaço à esquerda para centralizar os totalizadores
+        $this->SetX(15 + (180 - (140 + 30)) / 2); // 140mm + 30mm = 170mm (largura dos totalizadores)
+
         $this->Cell(140, 7, 'Total de Vagas:', 1, 0, 'L', true);
-        $this->Cell(30, 7, array_sum(array_column($vagas_agrupadas, 'quant_vaga')), 1, 1, 'C', true);
-
+        $this->Cell(30, 7, array_sum(array_column($vagas_agrupadas, 'quantidade')), 1, 1, 'C', true);
+        
+        // Adiciona espaço à esquerda para centralizar os totalizadores
         $this->SetX(15 + (180 - (140 + 30)) / 2);
-        $this->Cell(140, 7, 'Déficit de Vagas:', 1, 0, 'L', true);
-        $this->Cell(30, 7, 49-array_sum(array_column($vagas_agrupadas, 'quant_vaga')), 1, 1, 'C', true);
 
-        $this->SetX(15 + (180 - (140 + 30)) / 2);
-        $this->Cell(140, 7, 'Concedentes:', 1, 0, 'L', true);
+        $this->Cell(140, 7, 'Total de Empresas:', 1, 0, 'L', true);
         $this->Cell(30, 7, count(array_unique(array_column($vagas_agrupadas, 'empresa'))), 1, 1, 'C', true);
 
+        // Adiciona espaço à esquerda para centralizar os totalizadores
+        $this->SetX(15 + (180 - (140 + 30)) / 2);
+
+        $this->Cell(140, 7, 'Total de Alunos Selecionados:', 1, 0, 'L', true);
+        $this->Cell(30, 7, $total_alunos_selecionados, 1, 1, 'C', true);
+
+        // Adiciona espaço à esquerda para centralizar os totalizadores
+        $this->SetX(15 + (180 - (140 + 30)) / 2);
+
+        $this->Cell(140, 7, 'Total de Alunos em Espera:', 1, 0, 'L', true);
+        $this->Cell(30, 7, $total_alunos_espera, 1, 1, 'C', true);
     }
 
     private function ajustarTexto($texto, $tamanho) {
@@ -216,23 +198,38 @@ class RelatorioResumoVagas extends PDF {
     }
 }
 
-session_start();
+// Verifica autenticação
 $session = new sessions();
 $session->autenticar_session();
 
+// Gera o relatório
+
+// Desativa a exibição de erros para evitar saída prematura
 ini_set('display_errors', 0);
 error_reporting(0);
 
 try {
+    error_log('RelatorioResumoVagas: Inicializando o relatório...');
     $relatorio = new RelatorioResumoVagas();
+    error_log('RelatorioResumoVagas: Objeto RelatorioResumoVagas criado.');
+    
+    error_log('RelatorioResumoVagas: Chamando gerarRelatorio...');
     $relatorio->gerarRelatorio();
+    error_log('RelatorioResumoVagas: gerarRelatorio concluído.');
+    
+    // Limpa o buffer de saída antes de gerar o PDF
     ob_clean();
+    error_log('RelatorioResumoVagas: Buffer de saída limpo. Chamando Output...');
+    
     $relatorio->Output('Relatorio_Resumo_Vagas.pdf', 'I');
+    error_log('RelatorioResumoVagas: Output chamado. Script deve terminar.');
     exit;
 } catch (Exception $e) {
+    // Restaura a exibição de erros
     ini_set('display_errors', 1);
     error_reporting(E_ALL);
     
+    error_log('Erro ao gerar relatório: ' . $e->getMessage());
     header('Content-Type: text/html; charset=utf-8');
     echo '<div style="color: red; padding: 20px; font-family: Arial, sans-serif;">';
     echo '<h2>Erro ao gerar relatório</h2>';
@@ -240,4 +237,4 @@ try {
     echo '<p>Detalhes do erro: ' . htmlspecialchars($e->getMessage()) . '</p>';
     echo '<p><a href="javascript:history.back()">Voltar</a></p>';
     echo '</div>';
-}
+} 
