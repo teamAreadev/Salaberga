@@ -85,7 +85,7 @@ class qrCode1 extends connect
                 $pdf->Cell($qr_size, 10, $codigo, 0, 0, 'L');
 
                 // Terceira linha: Estante, Prateleira
-                $localizacao = utf8_decode("Estante: " . $estante . " | Prateleira: p" . $prateleira);
+                $localizacao = utf8_decode("Estante: " . $estante . " | Prateleira: " . $prateleira);
                 $pdf->SetXY($current_x, $current_y + $qr_size + 18); // 25 pontos abaixo do QR code
                 $pdf->Cell($qr_size, 10, $localizacao, 0, 0, 'L');
 
