@@ -86,7 +86,7 @@ class select_model extends connect
         $sql .= " GROUP BY c.id ORDER BY c.nome ASC";
 
         $stmt = $this->connect->prepare($sql);
-        
+
         if (!empty($params)) {
             $stmt->execute($params);
         } else {
@@ -95,7 +95,8 @@ class select_model extends connect
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    private function removeAcentos($string) {
+    private function removeAcentos($string)
+    {
         $string = str_replace(
             ['á', 'à', 'ã', 'â', 'é', 'ê', 'í', 'ó', 'ô', 'õ', 'ú', 'ü', 'ç', 'Á', 'À', 'Ã', 'Â', 'É', 'Ê', 'Í', 'Ó', 'Ô', 'Õ', 'Ú', 'Ü', 'Ç'],
             ['a', 'a', 'a', 'a', 'e', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'c', 'A', 'A', 'A', 'A', 'E', 'E', 'I', 'O', 'O', 'O', 'U', 'U', 'C'],
@@ -107,10 +108,12 @@ class select_model extends connect
     function alunos($nome_perfil = 0, $search = '', $filtro = '')
     {
         // Normalizar o nome do perfil
-        if (strtolower($nome_perfil) === 'design/mídias' || 
-            strtolower($nome_perfil) === 'design/mídia' || 
+        if (
+            strtolower($nome_perfil) === 'design/mídias' ||
+            strtolower($nome_perfil) === 'design/mídia' ||
             strtolower($nome_perfil) === 'design/social mídia' ||
-            strtolower($nome_perfil) === 'design') {
+            strtolower($nome_perfil) === 'design'
+        ) {
             $nome_perfil = 'Design/Mídia';
         }
 
@@ -153,7 +156,7 @@ class select_model extends connect
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-   function alunos_aptos_curso($nome_perfil = 0, $search = '', $filtro = '')
+    function alunos_aptos_curso($nome_perfil = 0, $search = '', $filtro = '')
     {
         $sql = "SELECT * FROM aluno";
         $stmt = $this->connect->prepare($sql);
@@ -242,19 +245,27 @@ class select_model extends connect
         if (!empty($area)) {
             $sql .= " AND v.id_perfil = ?";
             $perfil_id = null;
-            switch(strtolower($area)) {
-                case 'desenvolvimento': $perfil_id = 1; break;
+            switch (strtolower($area)) {
+                case 'desenvolvimento':
+                    $perfil_id = 1;
+                    break;
                 case 'design':
                 case 'design/mídia':
                 case 'design/mídias':
-                case 'design/social mídia': $perfil_id = 2; break;
-                case 'suporte/redes': $perfil_id = 3; break;
-                case 'tutoria': $perfil_id = 4; break;
+                case 'design/social mídia':
+                    $perfil_id = 2;
+                    break;
+                case 'suporte/redes':
+                    $perfil_id = 3;
+                    break;
+                case 'tutoria':
+                    $perfil_id = 4;
+                    break;
             }
             if ($perfil_id !== null) {
-                 $params[] = $perfil_id;
+                $params[] = $perfil_id;
             } else {
-                $sql .= " AND 1=0"; 
+                $sql .= " AND 1=0";
             }
         }
 
@@ -266,7 +277,7 @@ class select_model extends connect
         $sql .= " ORDER BY v.data DESC, v.hora DESC";
 
         $stmt = $this->connect->prepare($sql);
-        
+
         if (!empty($params)) {
             $stmt->execute($params);
         } else {
@@ -357,16 +368,16 @@ class select_model extends connect
                 ':id_aluno' => $item['id_aluno'],
                 ':id_vaga' => $item['id_vaga']
             ]);
-            
+
             if ($check->fetch()) {
                 continue; // Já existe, não insere
             }
-            
+
             // Busca o nome do aluno
             $stmt_aluno = $this->connect->prepare("SELECT nome FROM aluno WHERE id = :id_aluno");
             $stmt_aluno->execute([':id_aluno' => $item['id_aluno']]);
             $aluno = $stmt_aluno->fetch(PDO::FETCH_ASSOC);
-            
+
             $stmt = $this->connect->prepare("INSERT INTO selecionado (id_aluno, id_vaga, nome) VALUES (:id_aluno, :id_vaga, :nome)");
             if ($stmt->execute([
                 ':id_aluno' => $item['id_aluno'],
@@ -389,27 +400,58 @@ class select_model extends connect
         return $this->connect;
     }
 
-    public function total_alunos(){
+    public function total_alunos()
+    {
 
         $stmt_alunos = $this->connect->query('SELECT count(*) FROM aluno');
         $result = $stmt_alunos->fetch(PDO::FETCH_ASSOC);
-        foreach($result as $dado){
+        foreach ($result as $dado) {
             return $dado;
         }
     }
 
-    function vaga_por_id($id_vaga) {
+    function vaga_por_id($id_vaga)
+    {
         $stmt = $this->connect->prepare("SELECT * FROM vagas WHERE id = ? LIMIT 1");
         $stmt->execute([$id_vaga]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function concedente_por_id($empresa_id) {
+    public function concedente_por_id($empresa_id)
+    {
         $sql = "SELECT id, nome, nome_contato, contato, endereco FROM concedentes WHERE id = :empresa_id LIMIT 1";
         $stmt = $this->connect->prepare($sql);
         $stmt->bindParam(':empresa_id', $empresa_id);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-}
 
+    function alunos_por_perfil()
+    {
+        $sql = "SELECT 
+            a.id,
+            a.nome,
+            a.medias,
+            a.projetos,
+            a.ocorrencia,
+            a.entregas_individuais,
+            a.entregas_grupo,
+            a.perfil_opc1,
+            a.perfil_opc2,
+            a.custeio,
+            (
+                a.medias + 
+                (CASE WHEN a.projetos != '' THEN 5 ELSE 0 END) -
+                (a.ocorrencia * 0.5) +
+                (a.entregas_individuais * 5) +
+                (a.entregas_grupo * 5)
+            ) AS score
+        FROM aluno a
+        ORDER BY 
+            score DESC,
+            a.medias DESC";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+}

@@ -212,6 +212,10 @@ if (isset($_POST['layout'])) {
                         <i class="fa fa-user-circle w-5 mr-3"></i>
                         Resultados 
                     </a>
+                    <a href="perfil_alunos.php" class="sidebar-link">
+                        <i class="fas fa-user-graduate w-5 mr-3"></i>
+                        Perfil alunos
+                    </a>
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
@@ -268,6 +272,10 @@ if (isset($_POST['layout'])) {
                     <a href="resultado_selecionados.php" class="sidebar-link">
                         <i class="fa fa-user-circle w-5 mr-3"></i>
                         Resultados 
+                    </a>
+                    <a href="perfil_alunos.php" class="sidebar-link">
+                        <i class="fas fa-user-graduate w-5 mr-3"></i>
+                        Perfil alunos
                     </a>
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
