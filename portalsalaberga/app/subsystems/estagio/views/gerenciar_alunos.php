@@ -1587,7 +1587,7 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                                 <label for="editPerfilOpc1" class="block text-sm font-medium text-gray-300">Opção 1</label>
                                 <select id="editPerfilOpc1" name="perfil_opc1" required class="custom-input">
                                     <option value="desenvolvimento" <?= (isset($editAluno['perfil_opc1']) && $editAluno['perfil_opc1'] == 'desenvolvimento') ? 'selected' : '' ?>>Desenvolvimento</option>
-                                    <option value="design" <?= (isset($editAluno['perfil_opc1']) && $editAluno['perfil_opc1'] == 'design') ? 'selected' : '' ?>>Design/Mídia</option>
+                                    <option value="design" <?= (isset($editAluno['perfil_opc1']) && $editAluno['perfil_opc1'] == 'design') ? 'selected' : '' ?>>Design/Mídias</option>
                                     <option value="tutoria" <?= (isset($editAluno['perfil_opc1']) && $editAluno['perfil_opc1'] == 'tutoria') ? 'selected' : '' ?>>Tutoria</option>
                                     <option value="suporte/redes" <?= (isset($editAluno['perfil_opc1']) && $editAluno['perfil_opc1'] == 'suporte/redes') ? 'selected' : '' ?>>Suporte/Redes</option>
                                 </select>
@@ -1596,7 +1596,7 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                                 <label for="editPerfilOpc2" class="block text-sm font-medium text-gray-300">Opção 2</label>
                                 <select id="editPerfilOpc2" name="perfil_opc2" required class="custom-input">
                                     <option value="desenvolvimento" <?= (isset($editAluno['perfil_opc2']) && $editAluno['perfil_opc2'] == 'desenvolvimento') ? 'selected' : '' ?>>Desenvolvimento</option>
-                                    <option value="design" <?= (isset($editAluno['perfil_opc2']) && $editAluno['perfil_opc2'] == 'design') ? 'selected' : '' ?>>Design/Mídia</option>
+                                    <option value="design" <?= (isset($editAluno['perfil_opc2']) && $editAluno['perfil_opc2'] == 'design') ? 'selected' : '' ?>>Design/Mídias</option>
                                     <option value="tutoria" <?= (isset($editAluno['perfil_opc2']) && $editAluno['perfil_opc2'] == 'tutoria') ? 'selected' : '' ?>>Tutoria</option>
                                     <option value="suporte/redes" <?= (isset($editAluno['perfil_opc2']) && $editAluno['perfil_opc2'] == 'suporte/redes') ? 'selected' : '' ?>>Suporte/Redes</option>
                                 </select>
@@ -1674,7 +1674,7 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                                 <label for="addPerfilOpc1" class="block text-sm font-medium text-gray-300">Opção 1</label>
                                 <select id="addPerfilOpc1" name="perfil_opc1" required class="custom-input">
                                     <option value="desenvolvimento">Desenvolvimento</option>
-                                    <option value="design">Design/Mídia</option>
+                                    <option value="design">Design/Mídias</option>
                                     <option value="tutoria">Tutoria</option>
                                     <option value="suporte/redes">Suporte/Redes</option>
                                 </select>
@@ -1683,7 +1683,7 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                                 <label for="addPerfilOpc2" class="block text-sm font-medium text-gray-300">Opção 2</label>
                                 <select id="addPerfilOpc2" name="perfil_opc2" required class="custom-input">
                                     <option value="desenvolvimento">Desenvolvimento</option>
-                                    <option value="design">Design/Mídia</option>
+                                    <option value="design">Design/Mídias</option>
                                     <option value="tutoria">Tutoria</option>
                                     <option value="suporte/redes">Suporte/Redes</option>
                                 </select>

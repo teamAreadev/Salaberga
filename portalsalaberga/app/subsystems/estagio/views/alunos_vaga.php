@@ -1,5 +1,7 @@
 <?php
 
+file_put_contents(__DIR__ . '/../logs/get_nome_perfil_log.txt', 'Nome Perfil Recebido (alunos_vaga.php): ' . print_r($_GET['nome_perfil'], true) . "\n---\n", FILE_APPEND);
+
 require_once('../models/select_model.php');
 require_once('../models/sessions.php');
 $select_model = new select_model();
@@ -743,7 +745,6 @@ if (isset($_POST['layout'])) {
                             <tbody id="alunosTableBody">
                                 <?php
                                 if (isset($_GET['nome_perfil'])) {
-
                                     $nome_perfil = $_GET['nome_perfil'];
                                     $id_vaga = $_GET['id_vaga'];
                                     $dados = $select_model->alunos($nome_perfil);
@@ -812,7 +813,7 @@ if (isset($_POST['layout'])) {
                             <i class="fas fa-times btn-icon"></i>
                             <span>Cancelar</span>
                         </a>
-                        <button type="submit" class="custom-btn custom-btn-primary">
+                        <button type="submit" class="custom-btn custom-btn-primary" id="confirmarSelecaoBtn">
                             <i class="fas fa-check btn-icon"></i>
                             <span>Confirmar Seleção</span>
                         </button>
@@ -826,59 +827,11 @@ if (isset($_POST['layout'])) {
         document.addEventListener('DOMContentLoaded', () => {
             const searchAluno = document.getElementById('searchAluno');
             const filterArea = document.getElementById('filterArea');
-            const selectAllBtn = document.getElementById('selectAllBtn');
+            const confirmarSelecaoBtn = document.getElementById('confirmarSelecaoBtn');
+            console.log('confirmarSelecaoBtn element:', confirmarSelecaoBtn);
             const sidebarToggle = document.getElementById('sidebarToggle');
             const closeSidebar = document.getElementById('closeSidebar');
             const mobileSidebar = document.getElementById('mobileSidebar');
-
-            // Dados simulados para vagas e empresas (substituir por dados reais do backend)
-            const vagas = [{
-                    id: 1,
-                    titulo: "Desenvolvedor Front-end",
-                    empresa: 1,
-                    area: "Desenvolvimento"
-                },
-                {
-                    id: 2,
-                    titulo: "Designer Gráfico",
-                    empresa: 2,
-                    area: "Design"
-                },
-                {
-                    id: 3,
-                    titulo: "Técnico de Redes",
-                    empresa: 3,
-                    area: "Redes/Suporte"
-                }
-            ];
-            const empresas = [{
-                    id: 1,
-                    nome: "TechCorp Solutions"
-                },
-                {
-                    id: 2,
-                    nome: "Mídia Digital"
-                },
-                {
-                    id: 3,
-                    nome: "Redes & Cia"
-                }
-            ];
-
-            // Obter ID da vaga da URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const vagaId = parseInt(urlParams.get('vaga_id')) || 1;
-
-            // Preencher informações da vaga
-            function preencherInfoVaga() {
-                const vaga = vagas.find(v => v.id === vagaId);
-                if (vaga) {
-                    const empresa = empresas.find(e => e.id === vaga.empresa);
-                    document.getElementById('vagaTitulo').textContent = vaga.titulo;
-                    document.getElementById('vagaEmpresa').textContent = empresa.nome;
-                    document.getElementById('vagaArea').textContent = vaga.area;
-                }
-            }
 
             // GSAP Animations
             gsap.from('.vaga-info-card', {
@@ -976,17 +929,13 @@ if (isset($_POST['layout'])) {
                 checkboxes.forEach(checkbox => {
                     checkbox.checked = todosSelecionados;
                 });
-                selectAllBtn.querySelector('span').textContent = todosSelecionados ? 'Desmarcar Todos' : 'Selecionar Todos';
             }
 
             // Event listeners
             searchAluno.addEventListener('input', aplicarFiltros);
             filterArea.addEventListener('change', aplicarFiltros);
-            selectAllBtn.addEventListener('click', toggleSelectAll);
-            confirmarSelecaoBtn.addEventListener('click', confirmarSelecao);
 
             // Inicializar página
-            preencherInfoVaga();
             aplicarFiltros();
         });
     </script>

@@ -1,5 +1,7 @@
 <?php
 
+file_put_contents('post_log.txt', print_r($_POST, true), FILE_APPEND);
+
 require_once('../models/model.php');
 print_r($_POST);
 if (isset($_POST['id_excluir_empresa']) && !empty($_POST['id_excluir_empresa'])) {

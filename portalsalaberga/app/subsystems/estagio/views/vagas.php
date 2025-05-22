@@ -834,7 +834,7 @@ if (isset($_POST['layout'])) {
                             $delay += 100;
                             $nomePerfil = isset($dado['nome_perfil']) ? htmlspecialchars($dado['nome_perfil'], ENT_QUOTES, 'UTF-8') : 'Área não informada';
                             $area = strtolower($nomePerfil);
-                            if ($area === 'design/social mídia' || $area === 'design/mídia' || $area === 'design') { // Considerar 'design' também
+                            if ($area === 'design/social mídia' || $area === 'design/mídia' || $area === 'design/mídias' || $area === 'design') { // Considerar todas as variações
                                 $area = 'design';
                             } elseif ($nomePerfil === 'Suporte/Redes') {
                                 $area = 'redes';
@@ -955,7 +955,7 @@ if (isset($_POST['layout'])) {
                                 </div>
                                 <div class="mt-auto <?php echo $hasAlunos ? 'space-y-4' : ''; ?>">
                                     <div>
-                                        <a href="./alunos_vaga.php?nome_perfil=<?= $dado['nome_perfil'] ?>&id_vaga=<?= $dado['id'] ?>&nome_empresa=<?= $dado['nome_empresa'] ?>&nome_baga=<?= $dado['id'] ?>" class="ver-detalhes-link">
+                                        <a href="./alunos_vaga.php?nome_perfil=<?= urlencode($dado['nome_perfil']) ?>&id_vaga=<?= $dado['id'] ?>&nome_empresa=<?= urlencode($dado['nome_empresa']) ?>&nome_baga=<?= $dado['id'] ?>" class="ver-detalhes-link">
                                             <span>Selecionar aluno</span>
                                             <i class="fas fa-arrow-right ml-2"></i>
                                         </a>
@@ -1383,15 +1383,70 @@ if (isset($_POST['layout'])) {
                 }
             }
 
+            // Função para preencher o modal de edição de vaga
+            function preencherModalEditarVaga(vagaId) {
+                const modal = document.getElementById(`editarVagaModal-${vagaId}`);
+                if (!modal) return;
+
+                // Encontrar o card da vaga correspondente para obter os dados
+                const vagaCard = document.querySelector(`.vaga-card[data-vaga-id="${vagaId}"]`);
+                if (!vagaCard) return;
+
+                // Obter dados dos atributos data-*
+                const empresaId = vagaCard.dataset.empresaId;
+                const area = vagaCard.dataset.area; // Nome da área
+                const quantidade = vagaCard.dataset.quantidade; // Quantidade de vagas
+                const quantCandidatos = vagaCard.dataset.quantCandidatos; // Quantidade de candidatos
+                const tipoVaga = vagaCard.dataset.tipoVaga; // Tipo de vaga
+                const data = vagaCard.dataset.data; // Data
+                const hora = vagaCard.dataset.hora; // Hora
+
+                // Preencher os campos do formulário
+                modal.querySelector('[name="id_editar_vaga"]').value = vagaId;
+                modal.querySelector('[name="empresa_editar_vaga"]').value = empresaId;
+                modal.querySelector('[name="quantidade_editar_vaga"]').value = quantidade;
+                modal.querySelector('[name="quant_candidatos_editar_vaga"]').value = quantCandidatos;
+                modal.querySelector('[name="tipo_editar_vaga"]').value = tipoVaga;
+                modal.querySelector('[name="data_editar_vaga"]').value = data;
+                modal.querySelector('[name="hora_editar_vaga"]').value = hora;
+
+                // Marcar o radio button do perfil correto
+                const perfilRadioButtons = modal.querySelectorAll('[name="perfil_editar_vaga"]');
+                perfilRadioButtons.forEach(radio => {
+                    // Comparar o valor do radio button (ID do perfil) com o nome da área da vaga
+                    // Pode ser necessário mapear o nome da área para o ID aqui, ou ajustar o data-area no card
+                    // Por enquanto, vamos tentar uma comparação baseada no texto exibido nos radio buttons (não ideal, mas para testar)
+                    const labelText = radio.nextElementSibling.textContent.trim().toLowerCase();
+                    const areaNormalized = area.toLowerCase();
+                    
+                    // Lógica para mapear o nome da área para o valor do radio button (ID)
+                    let perfilId = null;
+                    if (areaNormalized === 'desenvolvimento') perfilId = '1';
+                    else if (areaNormalized === 'design') perfilId = '2'; // Assumindo que 'design/mídia' e variações normalizam para 'design'
+                    else if (areaNormalized === 'suporte/redes') perfilId = '3';
+                    else if (areaNormalized === 'tutoria') perfilId = '4';
+
+                    if (radio.value === perfilId) {
+                         radio.checked = true;
+                    } else {
+                        radio.checked = false;
+                    }
+
+                });
+
+                // Abrir o modal
+                openModal(`editarVagaModal-${vagaId}`);
+            }
+
             // Delegar eventos para botões de Editar e Excluir
             vagasGrid.addEventListener('click', (e) => {
                 const editBtn = e.target.closest('.edit-btn');
                 const deleteBtn = e.target.closest('.delete-btn');
 
                 if (editBtn) {
-                    const modalId = editBtn.getAttribute('data-modal-id');
-                    console.log('Botão Editar clicado, modalId:', modalId);
-                    openModal(modalId);
+                    const vagaId = editBtn.closest('.vaga-card').dataset.vagaId;
+                    console.log('Botão Editar clicado, vagaId:', vagaId);
+                    preencherModalEditarVaga(vagaId); // Chamar a nova função
                 }
 
                 if (deleteBtn) {

@@ -95,8 +95,39 @@ class select_model extends connect
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    private function removeAcentos($string) {
+        $string = str_replace(
+            ['á', 'à', 'ã', 'â', 'é', 'ê', 'í', 'ó', 'ô', 'õ', 'ú', 'ü', 'ç', 'Á', 'À', 'Ã', 'Â', 'É', 'Ê', 'Í', 'Ó', 'Ô', 'Õ', 'Ú', 'Ü', 'Ç'],
+            ['a', 'a', 'a', 'a', 'e', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'c', 'A', 'A', 'A', 'A', 'E', 'E', 'I', 'O', 'O', 'O', 'U', 'U', 'C'],
+            $string
+        );
+        return $string;
+    }
+
     function alunos($nome_perfil = 0, $search = '', $filtro = '')
     {
+        // Log do nome do perfil recebido
+        file_put_contents(__DIR__ . '/../logs/alunos_query_debug.txt', "Nome do perfil recebido (raw): " . $nome_perfil . "\n", FILE_APPEND);
+        
+        // Remover acentos e normalizar o nome do perfil
+        $normalized_nome_perfil = $this->removeAcentos(mb_strtolower($nome_perfil, 'UTF-8'));
+        file_put_contents(__DIR__ . '/../logs/alunos_query_debug.txt', "Nome do perfil após remoção de acentos: " . $normalized_nome_perfil . "\n", FILE_APPEND);
+        
+        // Mapear variações do nome do perfil (sem acentos)
+        $perfil_mapping = [
+            'design/midias' => 'design',
+            'design/midia' => 'design',
+            'design/social midia' => 'design',
+            'design' => 'design',
+            'suporte/redes' => 'suporte/redes',
+            'tutoria' => 'tutoria',
+            'desenvolvimento' => 'desenvolvimento'
+        ];
+        
+        // Normalizar o nome do perfil usando o mapeamento
+        $normalized_nome_perfil = $perfil_mapping[$normalized_nome_perfil] ?? $normalized_nome_perfil;
+        file_put_contents(__DIR__ . '/../logs/alunos_query_debug.txt', "Nome do perfil após normalização: " . $normalized_nome_perfil . "\n", FILE_APPEND);
+
         $sql = "SELECT 
                     a.id,
                     a.nome,
@@ -116,25 +147,40 @@ class select_model extends connect
                         (a.entregas_grupo * 5)
                     ) AS score,
                     CASE 
-                        WHEN a.perfil_opc1 = :nome_perfil THEN 1
-                        WHEN a.perfil_opc2 = :nome_perfil THEN 2
+                        WHEN LOWER(a.perfil_opc1) = LOWER(:normalized_nome_perfil) THEN 1
+                        WHEN LOWER(a.perfil_opc2) = LOWER(:normalized_nome_perfil) THEN 2
                         ELSE 3
                     END AS priority_group
                 FROM aluno a
                 LEFT JOIN selecionado s ON a.id = s.id_aluno
                 LEFT JOIN selecao se ON a.id = se.id_aluno
-                WHERE (a.perfil_opc1 = :nome_perfil OR a.perfil_opc2 = :nome_perfil)
-                AND s.id_aluno IS NULL
-                AND se.id_aluno IS NULL
+                WHERE (
+                    LOWER(a.perfil_opc1) = LOWER(:normalized_nome_perfil) 
+                    OR 
+                    LOWER(a.perfil_opc2) = LOWER(:normalized_nome_perfil)
+                )
+                -- AND s.id_aluno IS NULL
+                -- AND se.id_aluno IS NULL
                 ORDER BY 
                     priority_group ASC,
                     score DESC,
                     a.medias DESC,
                     COALESCE(a.ocorrencia, 0) ASC";
+        
         $stmt = $this->connect->prepare($sql);
-        $stmt->bindValue(':nome_perfil', $nome_perfil, PDO::PARAM_STR);
+        $stmt->bindValue(':normalized_nome_perfil', $normalized_nome_perfil, PDO::PARAM_STR);
+
+        // Log da query e parâmetros
+        file_put_contents(__DIR__ . '/../logs/alunos_query_debug.txt', "Query SQL: " . $sql . "\n", FILE_APPEND);
+        file_put_contents(__DIR__ . '/../logs/alunos_query_debug.txt', "Parâmetro normalized_nome_perfil: " . $normalized_nome_perfil . "\n", FILE_APPEND);
+
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Log do resultado
+        file_put_contents(__DIR__ . '/../logs/alunos_query_debug.txt', "Número de alunos encontrados: " . count($result) . "\n---\n", FILE_APPEND);
+        
+        return $result;
     }
    function alunos_aptos_curso($nome_perfil = 0, $search = '', $filtro = '')
     {
@@ -224,7 +270,21 @@ class select_model extends connect
 
         if (!empty($area)) {
             $sql .= " AND v.id_perfil = ?";
-            $params[] = $area;
+            $perfil_id = null;
+            switch(strtolower($area)) {
+                case 'desenvolvimento': $perfil_id = 1; break;
+                case 'design':
+                case 'design/mídia':
+                case 'design/mídias':
+                case 'design/social mídia': $perfil_id = 2; break;
+                case 'suporte/redes': $perfil_id = 3; break;
+                case 'tutoria': $perfil_id = 4; break;
+            }
+            if ($perfil_id !== null) {
+                 $params[] = $perfil_id;
+            } else {
+                $sql .= " AND 1=0"; 
+            }
         }
 
         if (!empty($empresa)) {
