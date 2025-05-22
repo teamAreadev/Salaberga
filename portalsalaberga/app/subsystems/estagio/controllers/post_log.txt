@@ -1,0 +1,11 @@
+Array
+(
+    [id_editar_vaga] => 49
+    [empresa_editar_vaga] => 43
+    [perfil_editar_vaga] => 3
+    [quantidade_editar_vaga] => 7
+    [quant_candidatos_editar_vaga] => 7
+    [tipo_editar_vaga] => Presencial
+    [data_editar_vaga] => 2222-02-22
+    [hora_editar_vaga] => 22:02
+)

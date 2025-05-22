@@ -106,27 +106,13 @@ class select_model extends connect
 
     function alunos($nome_perfil = 0, $search = '', $filtro = '')
     {
-        // Log do nome do perfil recebido
-        file_put_contents(__DIR__ . '/../logs/alunos_query_debug.txt', "Nome do perfil recebido (raw): " . $nome_perfil . "\n", FILE_APPEND);
-        
-        // Remover acentos e normalizar o nome do perfil
-        $normalized_nome_perfil = $this->removeAcentos(mb_strtolower($nome_perfil, 'UTF-8'));
-        file_put_contents(__DIR__ . '/../logs/alunos_query_debug.txt', "Nome do perfil após remoção de acentos: " . $normalized_nome_perfil . "\n", FILE_APPEND);
-        
-        // Mapear variações do nome do perfil (sem acentos)
-        $perfil_mapping = [
-            'design/midias' => 'design',
-            'design/midia' => 'design',
-            'design/social midia' => 'design',
-            'design' => 'design',
-            'suporte/redes' => 'suporte/redes',
-            'tutoria' => 'tutoria',
-            'desenvolvimento' => 'desenvolvimento'
-        ];
-        
-        // Normalizar o nome do perfil usando o mapeamento
-        $normalized_nome_perfil = $perfil_mapping[$normalized_nome_perfil] ?? $normalized_nome_perfil;
-        file_put_contents(__DIR__ . '/../logs/alunos_query_debug.txt', "Nome do perfil após normalização: " . $normalized_nome_perfil . "\n", FILE_APPEND);
+        // Normalizar o nome do perfil
+        if (strtolower($nome_perfil) === 'design/mídias' || 
+            strtolower($nome_perfil) === 'design/mídia' || 
+            strtolower($nome_perfil) === 'design/social mídia' ||
+            strtolower($nome_perfil) === 'design') {
+            $nome_perfil = 'Design/Mídia';
+        }
 
         $sql = "SELECT 
                     a.id,
@@ -147,40 +133,25 @@ class select_model extends connect
                         (a.entregas_grupo * 5)
                     ) AS score,
                     CASE 
-                        WHEN LOWER(a.perfil_opc1) = LOWER(:normalized_nome_perfil) THEN 1
-                        WHEN LOWER(a.perfil_opc2) = LOWER(:normalized_nome_perfil) THEN 2
+                        WHEN a.perfil_opc1 = :nome_perfil THEN 1
+                        WHEN a.perfil_opc2 = :nome_perfil THEN 2
                         ELSE 3
                     END AS priority_group
                 FROM aluno a
                 LEFT JOIN selecionado s ON a.id = s.id_aluno
                 LEFT JOIN selecao se ON a.id = se.id_aluno
-                WHERE (
-                    LOWER(a.perfil_opc1) = LOWER(:normalized_nome_perfil) 
-                    OR 
-                    LOWER(a.perfil_opc2) = LOWER(:normalized_nome_perfil)
-                )
-                -- AND s.id_aluno IS NULL
-                -- AND se.id_aluno IS NULL
+                WHERE (LOWER(a.perfil_opc1) IN ('design', 'design/mídia', 'design/mídias', 'design/social mídia') OR LOWER(a.perfil_opc2) IN ('design', 'design/mídia', 'design/mídias', 'design/social mídia'))
+                AND s.id_aluno IS NULL
+                AND se.id_aluno IS NULL
                 ORDER BY 
                     priority_group ASC,
                     score DESC,
                     a.medias DESC,
                     COALESCE(a.ocorrencia, 0) ASC";
-        
         $stmt = $this->connect->prepare($sql);
-        $stmt->bindValue(':normalized_nome_perfil', $normalized_nome_perfil, PDO::PARAM_STR);
-
-        // Log da query e parâmetros
-        file_put_contents(__DIR__ . '/../logs/alunos_query_debug.txt', "Query SQL: " . $sql . "\n", FILE_APPEND);
-        file_put_contents(__DIR__ . '/../logs/alunos_query_debug.txt', "Parâmetro normalized_nome_perfil: " . $normalized_nome_perfil . "\n", FILE_APPEND);
-
+        $stmt->bindValue(':nome_perfil', $nome_perfil, PDO::PARAM_STR);
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        // Log do resultado
-        file_put_contents(__DIR__ . '/../logs/alunos_query_debug.txt', "Número de alunos encontrados: " . count($result) . "\n---\n", FILE_APPEND);
-        
-        return $result;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
    function alunos_aptos_curso($nome_perfil = 0, $search = '', $filtro = '')
     {
