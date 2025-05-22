@@ -8,7 +8,8 @@ if (isset($_POST['titulo2']) && !empty($_POST['titulo2'])) {
     $select = new select_model();
     $result = $select->select_livro_especifico($titulo2);
 
-    header('Location: ../views/QRCode/geradorQR_especifico_livro?');
+    header('Location: ../views/QRCode/geradorQR_especifico_livro.php');
+    exit();
 } else if (isset($_POST['relatorio'])) {
     $relatorio = $_POST['relatorio'];
 
@@ -32,6 +33,7 @@ if (isset($_POST['titulo2']) && !empty($_POST['titulo2'])) {
     $prateleira = $_POST['prateleira'];
 
     header('Location: ../views/relatorios/relatorio_pra_est.php?estante=' . $estante . '&prateleira=p' . $prateleira);
+    exit();
 }
 // Ajustando a condição para tornar 'edicao' opcional
 else if (

@@ -77,7 +77,7 @@
             </p>
         </div>
 
-        <form action="../../controllers/main_controller.php" method="post" class="space-y-6">
+        <form action="../../controllers/qr_controller.php" method="post" class="space-y-6">
             <div class="space-y-4">
                 <!-- Select para Estante com ícone -->
                 <div class="relative">

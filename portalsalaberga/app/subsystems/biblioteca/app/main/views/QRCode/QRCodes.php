@@ -33,7 +33,7 @@ class qrCode1 extends connect
         $prateleira = $_GET['prateleira'];
         $estante = $_GET['estante'];
 
-        $select_id_livro = $this->connect->query("SELECT id, titulo_livro, edicao, quantidade, cativo FROM catalogo WHERE prateleiras = 'p$prateleira' AND estantes = '$estante'");
+        $select_id_livro = $this->connect->query("SELECT id, titulo_livro, edicao, quantidade, cativo FROM catalogo WHERE prateleiras = '$prateleira' AND estantes = '$estante'");
         $id_livros = $select_id_livro->fetchAll(PDO::FETCH_ASSOC);
 
         // Configurações de layout
@@ -45,13 +45,16 @@ class qrCode1 extends connect
         $current_x = $start_x;
         $current_y = $start_y;
 
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->SetTextColor(0, 0, 0);
+
         foreach ($id_livros as $cod_livro) {
             for ($i = 1; $i <= $cod_livro['quantidade']; $i++) {
                 // Determinar a edição para a URL
                 $edicao = ($cod_livro['edicao'] == 'ENI*' || empty($cod_livro['edicao'])) ? '0' : $cod_livro['edicao'];
 
                 // Dados do QR Code
-                $dados = "https://salaberga.com/salaberga/portalsalaberga/app/subsystems/biblioteca/app/main/views/emprestimo/decisao.php?id_livro" . $cod_livro['id'] . "_" . $edicao . "_" . $i . "_" . $estante . "_p" . $prateleira;
+                $dados = "https://salaberga.com/salaberga/portalsalaberga/app/subsystems/biblioteca/app/main/views/emprestimo/decisao.php?id_livro=" . $cod_livro['id'] . "_" . $edicao . "_" . $i . "_" . $estante . "_p" . $prateleira;
 
                 // Usar um nome de arquivo único para cada QR Code
                 $arquivo_qrcode = __DIR__ . "/qrcode_" . $cod_livro['id'] . "_" . $i . ".png";
@@ -120,6 +123,7 @@ class qrCode1 extends connect
 
 if (isset($_GET['estante']) && isset($_GET['prateleira']) && !empty($_GET['estante']) && !empty($_GET['prateleira'])) {
     $qrcode = new qrCode1;
+    
 } else {
     header('location:geradorQR.php');
     exit();
