@@ -187,7 +187,7 @@ $select_model = new select_model();
                         <div class="relative">
                             <label for="searchBook" class="block text-sm font-medium text-gray-700 mb-1">Buscar Livro</label>
                             <div class="relative">
-                                <select class="js-example-basic-single" name="state">
+                                <select class="js-example-basic-single" name="editar_livro">
                                     <option value="" selected disabled>Selecione um livro para editar</option>
                                     <?php
                                     $livros = $select_model->select_nome_livro();
