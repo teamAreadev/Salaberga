@@ -325,6 +325,75 @@ if (isset($_POST['layout'])) {
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(220, 38, 38, 0.3) 100%);
         }
 
+        /* Area chips styling */
+        .area-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.35rem 1rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .area-chip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .area-desenvolvimento {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(29, 78, 216, 0.2) 100%);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .area-desenvolvimento:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(29, 78, 216, 0.3) 100%);
+        }
+
+        .area-design {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(126, 34, 206, 0.2) 100%);
+            color: #c4b5fd;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .area-design:hover {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(126, 34, 206, 0.3) 100%);
+        }
+
+        .area-midia {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .area-midia:hover {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.3) 100%);
+        }
+
+        .area-redes {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.2) 100%);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .area-redes:hover {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.3) 100%);
+        }
+
+        .area-tutoria {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .area-tutoria:hover {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.3) 100%);
+        }
+
         /* Custom input styling */
         .custom-input {
             background-color: rgba(35, 35, 35, 0.8) !important;
@@ -690,7 +759,6 @@ if (isset($_POST['layout'])) {
 
                 <!-- Info da Vaga -->
                 <div class="vaga-info-card mb-8 slide-up">
-                
                     <div class="flex flex-wrap gap-4 text-sm">
                         <div class="flex items-center gap-2">
                             <i class="fas fa-building text-primary-400"></i>
@@ -700,7 +768,33 @@ if (isset($_POST['layout'])) {
                         <div class="flex items-center gap-2">
                             <i class="fas fa-tag text-primary-400"></i>
                             <span class="text-gray-400">Área:</span>
-                            <span id="vagaArea" class="text-white"><?php echo $_GET['nome_perfil']?></span>
+                            <?php
+                            $nomePerfil = isset($_GET['nome_perfil']) ? htmlspecialchars($_GET['nome_perfil'], ENT_QUOTES, 'UTF-8') : 'Área não informada';
+                            $area = strtolower($nomePerfil);
+                            if ($area === 'design/social mídia' || $area === 'design/mídia' || $area === 'design/mídias' || $area === 'design') {
+                                $area_class = 'design';
+                            } elseif ($nomePerfil === 'Suporte/Redes') {
+                                $area_class = 'redes';
+                            } elseif ($nomePerfil === 'Tutoria') {
+                                $area_class = 'tutoria';
+                            } else {
+                                $area_class = 'desenvolvimento'; // Cor padrão se a área não for informada
+                            }
+                            ?>
+                            <span class="area-chip area-<?php echo $area_class; ?>">
+                                <?php if ($area_class === 'desenvolvimento'): ?>
+                                    <i class="fas fa-code mr-1 text-xs"></i>
+                                <?php elseif ($area_class === 'tutoria'): ?>
+                                    <i class="fas fa-chalkboard-teacher mr-1 text-xs"></i>
+                                <?php elseif ($area_class === 'design'): ?>
+                                    <i class="fas fa-paint-brush mr-1 text-xs"></i>
+                                <?php elseif ($area_class === 'redes'): ?>
+                                    <i class="fas fa-network-wired mr-1 text-xs"></i>
+                                <?php else: ?>
+                                    <i class="fas fa-question mr-1 text-xs"></i>
+                                <?php endif; ?>
+                                <?php echo $nomePerfil; ?>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -768,8 +862,72 @@ if (isset($_POST['layout'])) {
                                             <td><?= htmlspecialchars($dado['nome']) ?></td>
                                             <td class="text-center"><?= number_format($dado['medias'], 1) ?></td>
                                             <td><?= htmlspecialchars($dado['projetos'] ?? '-') ?></td>
-                                            <td><?= htmlspecialchars($dado['perfil_opc1']) ?></td>
-                                            <td><?= htmlspecialchars($dado['perfil_opc2'] ?? '-') ?></td>
+                                            <td>
+                                                <?php
+                                                $perfil1 = isset($dado['perfil_opc1']) ? htmlspecialchars($dado['perfil_opc1'], ENT_QUOTES, 'UTF-8') : 'Não informado';
+                                                $area1_class = strtolower($perfil1);
+                                                if ($area1_class === 'design/social mídia' || $area1_class === 'design/mídia' || $area1_class === 'design/mídias' || $area1_class === 'design') {
+                                                    $area1_class = 'design';
+                                                } elseif ($perfil1 === 'Suporte/Redes') {
+                                                    $area1_class = 'redes';
+                                                } elseif ($perfil1 === 'Tutoria') {
+                                                    $area1_class = 'tutoria';
+                                                } else {
+                                                    $area1_class = 'desenvolvimento'; // Cor padrão
+                                                }
+                                                ?>
+                                                <?php if ($perfil1 !== 'Não informado'): ?>
+                                                    <span class="area-chip area-<?php echo $area1_class; ?>">
+                                                        <?php if ($area1_class === 'desenvolvimento'): ?>
+                                                            <i class="fas fa-code mr-1 text-xs"></i>
+                                                        <?php elseif ($area1_class === 'tutoria'): ?>
+                                                            <i class="fas fa-chalkboard-teacher mr-1 text-xs"></i>
+                                                        <?php elseif ($area1_class === 'design'): ?>
+                                                            <i class="fas fa-paint-brush mr-1 text-xs"></i>
+                                                        <?php elseif ($area1_class === 'redes'): ?>
+                                                            <i class="fas fa-network-wired mr-1 text-xs"></i>
+                                                        <?php else: ?>
+                                                            <i class="fas fa-question mr-1 text-xs"></i>
+                                                        <?php endif; ?>
+                                                        <?php echo $perfil1; ?>
+                                                    </span>
+                                                <?php else: ?>
+                                                    <span class="text-gray-500">Não informado</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                $perfil2 = isset($dado['perfil_opc2']) ? htmlspecialchars($dado['perfil_opc2'], ENT_QUOTES, 'UTF-8') : 'Não informado';
+                                                $area2_class = strtolower($perfil2);
+                                                if ($area2_class === 'design/social mídia' || $area2_class === 'design/mídia' || $area2_class === 'design/mídias' || $area2_class === 'design') {
+                                                    $area2_class = 'design';
+                                                } elseif ($perfil2 === 'Suporte/Redes') {
+                                                    $area2_class = 'redes';
+                                                } elseif ($perfil2 === 'Tutoria') {
+                                                    $area2_class = 'tutoria';
+                                                } else {
+                                                    $area2_class = 'desenvolvimento'; // Cor padrão
+                                                }
+                                                ?>
+                                                <?php if ($perfil2 !== 'Não informado' && !empty($perfil2)): ?>
+                                                    <span class="area-chip area-<?php echo $area2_class; ?>">
+                                                        <?php if ($area2_class === 'desenvolvimento'): ?>
+                                                            <i class="fas fa-code mr-1 text-xs"></i>
+                                                        <?php elseif ($area2_class === 'tutoria'): ?>
+                                                            <i class="fas fa-chalkboard-teacher mr-1 text-xs"></i>
+                                                        <?php elseif ($area2_class === 'design'): ?>
+                                                            <i class="fas fa-paint-brush mr-1 text-xs"></i>
+                                                        <?php elseif ($area2_class === 'redes'): ?>
+                                                            <i class="fas fa-network-wired mr-1 text-xs"></i>
+                                                        <?php else: ?>
+                                                            <i class="fas fa-question mr-1 text-xs"></i>
+                                                        <?php endif; ?>
+                                                        <?php echo $perfil2; ?>
+                                                    </span>
+                                                <?php else: ?>
+                                                    <span class="text-gray-500">-</span>
+                                                <?php endif; ?>
+                                            </td>
                                             <td class="text-center">
                                                 <?php
                                                 $ocorrencias = $dado['ocorrencia'];
@@ -797,8 +955,72 @@ if (isset($_POST['layout'])) {
                                             <td><?= htmlspecialchars($dado['nome']) ?></td>
                                             <td class="text-center"><?= number_format($dado['medias'], 1) ?></td>
                                             <td><?= htmlspecialchars($dado['projetos'] ?? '-') ?></td>
-                                            <td><?= htmlspecialchars($dado['perfil_opc1']) ?></td>
-                                            <td><?= htmlspecialchars($dado['perfil_opc2'] ?? '-') ?></td>
+                                            <td>
+                                            <?php
+                                                $perfil1 = isset($dado['perfil_opc1']) ? htmlspecialchars($dado['perfil_opc1'], ENT_QUOTES, 'UTF-8') : 'Não informado';
+                                                $area1_class = strtolower($perfil1);
+                                                if ($area1_class === 'design/social mídia' || $area1_class === 'design/mídia' || $area1_class === 'design/mídias' || $area1_class === 'design') {
+                                                    $area1_class = 'design';
+                                                } elseif ($perfil1 === 'Suporte/Redes') {
+                                                    $area1_class = 'redes';
+                                                } elseif ($perfil1 === 'Tutoria') {
+                                                    $area1_class = 'tutoria';
+                                                } else {
+                                                    $area1_class = 'desenvolvimento'; // Cor padrão
+                                                }
+                                                ?>
+                                                <?php if ($perfil1 !== 'Não informado'): ?>
+                                                    <span class="area-chip area-<?php echo $area1_class; ?>">
+                                                        <?php if ($area1_class === 'desenvolvimento'): ?>
+                                                            <i class="fas fa-code mr-1 text-xs"></i>
+                                                        <?php elseif ($area1_class === 'tutoria'): ?>
+                                                            <i class="fas fa-chalkboard-teacher mr-1 text-xs"></i>
+                                                        <?php elseif ($area1_class === 'design'): ?>
+                                                            <i class="fas fa-paint-brush mr-1 text-xs"></i>
+                                                        <?php elseif ($area1_class === 'redes'): ?>
+                                                            <i class="fas fa-network-wired mr-1 text-xs"></i>
+                                                        <?php else: ?>
+                                                            <i class="fas fa-question mr-1 text-xs"></i>
+                                                        <?php endif; ?>
+                                                        <?php echo $perfil1; ?>
+                                                    </span>
+                                                <?php else: ?>
+                                                    <span class="text-gray-500">Não informado</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                            <?php
+                                                $perfil2 = isset($dado['perfil_opc2']) ? htmlspecialchars($dado['perfil_opc2'], ENT_QUOTES, 'UTF-8') : 'Não informado';
+                                                $area2_class = strtolower($perfil2);
+                                                if ($area2_class === 'design/social mídia' || $area2_class === 'design/mídia' || $area2_class === 'design/mídias' || $area2_class === 'design') {
+                                                    $area2_class = 'design';
+                                                } elseif ($perfil2 === 'Suporte/Redes') {
+                                                    $area2_class = 'redes';
+                                                } elseif ($perfil2 === 'Tutoria') {
+                                                    $area2_class = 'tutoria';
+                                                } else {
+                                                    $area2_class = 'desenvolvimento'; // Cor padrão
+                                                }
+                                                ?>
+                                                <?php if ($perfil2 !== 'Não informado' && !empty($perfil2)): ?>
+                                                    <span class="area-chip area-<?php echo $area2_class; ?>">
+                                                        <?php if ($area2_class === 'desenvolvimento'): ?>
+                                                            <i class="fas fa-code mr-1 text-xs"></i>
+                                                        <?php elseif ($area2_class === 'tutoria'): ?>
+                                                            <i class="fas fa-chalkboard-teacher mr-1 text-xs"></i>
+                                                        <?php elseif ($area2_class === 'design'): ?>
+                                                            <i class="fas fa-paint-brush mr-1 text-xs"></i>
+                                                        <?php elseif ($area2_class === 'redes'): ?>
+                                                            <i class="fas fa-network-wired mr-1 text-xs"></i>
+                                                        <?php else: ?>
+                                                            <i class="fas fa-question mr-1 text-xs"></i>
+                                                        <?php endif; ?>
+                                                        <?php echo $perfil2; ?>
+                                                    </span>
+                                                <?php else: ?>
+                                                    <span class="text-gray-500">-</span>
+                                                <?php endif; ?>
+                                            </td>
                                             <td class="text-center">
                                                 <?php
                                                 $ocorrencias = $dado['ocorrencia'];
