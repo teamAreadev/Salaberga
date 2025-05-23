@@ -100,13 +100,12 @@ class RegistroAluno
     {
         try {
             // Conexão com o banco de dados
-            /*$pdo = new PDO("mysql:host=localhost;dbname=u750204740_entradasaida", "u750204740_entradasaida", "paoComOvo123!@##", [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-            ]);*/
-            $pdo = new PDO("mysql:host=localhost;dbname=entradasaida", "root", "", [
+            $pdo = new PDO("mysql:host=localhost;dbname=u750204740_entradasaida", "u750204740_entradasaida", "paoComOvo123!@##", [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
             ]);
-
+            /*$pdo = new PDO("mysql:host=localhost;dbname=entradasaida", "root", "", [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]);*/
 
             // Verifica se o aluno existe na tabela aluno com base no nome
             $verificarAluno = "SELECT id_aluno FROM aluno WHERE nome = :nome";

@@ -1,9 +1,9 @@
 <?php
 //CONEXÃO COM O BANCO
 class Database {
-    private $dsn = 'mysql:host=localhost;dbname=entradasaida';
-    private $username = 'root';
-    private $password = '';
+    private $dsn = 'mysql:host=localhost;dbname=u750204740_entradasaida';
+    private $username = 'u750204740_entradasaida';
+    private $password = 'paoComOvo123!@##';
     private $connection = null;
 
     public function connect() {
