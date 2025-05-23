@@ -24,11 +24,6 @@ if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
 }else if (isset($_POST['editar_livro']) && !empty($_POST['editar_livro'])) {
     $id_livro = $_POST['editar_livro'];
 
-    $titulo = $_POST['titulo'];
-    $dados = [
-        'titulo_livro' => $titulo
-    ];
-
     $model = new main_model();
     $result = $model->excluir_livro($id_livro);
 

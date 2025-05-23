@@ -191,11 +191,82 @@ $select_model = new select_model();
                                     <option value="" selected disabled>Selecione um livro para editar</option>
                                     <?php
                                     $livros = $select_model->select_nome_livro();
-
                                     foreach ($livros as $livro) { ?>
-                                        <option value="<?= $livro['id'] ?>"><?= $livro['titulo_livro'] ?> | edição: <?= $livro['edicao'] ?> | editora: <?= $livro['editora'] ?> | estante: <?= $livro['estantes'] ?> | prateleira: <?= $livro['prateleiras'] ?></option>
+                                        <option value="<?= $livro['id'] ?>" 
+                                            data-titulo="<?= $livro['titulo_livro'] ?>"
+                                            data-edicao="<?= $livro['edicao'] ?>"
+                                            data-editora="<?= $livro['editora'] ?>"
+                                            data-estante="<?= $livro['estantes'] ?>"
+                                            data-prateleira="<?= $livro['prateleiras'] ?>"
+                                            data-quantidade="<?= $livro['quantidade'] ?>"
+                                        ><?= $livro['titulo_livro'] ?> | edição: <?= $livro['edicao'] ?> | editora: <?= $livro['editora'] ?> | estante: <?= $livro['estantes'] ?> | prateleira: <?= $livro['prateleiras'] ?> | quantidade: <?= $livro['quantidade'] ?></option>
                                     <?php } ?>
                                 </select>
+                            </div>
+                        </div>
+
+                        <!-- Formulário de Edição -->
+                        <div id="editForm" class="hidden mt-6 space-y-6">
+                            <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Editar Informações do Livro</h3>
+                                
+                                <!-- Título -->
+                                <div class="mb-4">
+                                    <label for="editTitulo" class="block text-sm font-medium text-gray-700 mb-1">Título</label>
+                                    <input type="text" id="editTitulo" name="editTitulo" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                </div>
+
+                                <!-- Edição -->
+                                <div class="mb-4">
+                                    <label for="editEdicao" class="block text-sm font-medium text-gray-700 mb-1">Edição</label>
+                                    <input type="text" id="editEdicao" name="editEdicao" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                </div>
+
+                                <!-- Editora -->
+                                <div class="mb-4">
+                                    <label for="editEditora" class="block text-sm font-medium text-gray-700 mb-1">Editora</label>
+                                    <input type="text" id="editEditora" name="editEditora" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                </div>
+
+                                <!-- Localização -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label for="editEstante" class="block text-sm font-medium text-gray-700 mb-1">Estante</label>
+                                        <select id="editEstante" name="editEstante" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 transition-all duration-200">
+                                            <?php for ($i = 1; $i <= 32; $i++) { ?>
+                                                <option value="<?= $i ?>">Estante <?= $i ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="editPrateleira" class="block text-sm font-medium text-gray-700 mb-1">Prateleira</label>
+                                        <select id="editPrateleira" name="editPrateleira" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 transition-all duration-200">
+                                            <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                                <option value="P<?= $i ?>">Prateleira <?= $i ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Quantidade -->
+                                <div class="mb-4">
+                                    <label for="editQuantidade" class="block text-sm font-medium text-gray-700 mb-1">Quantidade</label>
+                                    <input type="number" id="editQuantidade" name="editQuantidade" min="1" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                </div>
+                            </div>
+
+                            <!-- Botões de Ação -->
+                            <div class="flex space-x-4">
+                                <button type="submit" name="action" value="edit"
+                                    class="flex-1 bg-ceara-green hover:bg-ceara-green-dark text-white font-medium py-4 px-6 rounded-lg transition duration-300 ease-in-out hover:shadow-lg flex items-center justify-center text-lg shadow-md">
+                                    <i class="fas fa-save mr-3"></i>
+                                    Salvar Alterações
+                                </button>
+                                <button type="button" id="cancelEdit"
+                                    class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-medium py-4 px-6 rounded-lg transition duration-300 ease-in-out hover:shadow-lg flex items-center justify-center text-lg shadow-md">
+                                    <i class="fas fa-times mr-3"></i>
+                                    Cancelar
+                                </button>
                             </div>
                         </div>
 
@@ -223,19 +294,18 @@ $select_model = new select_model();
                         </div>
                     <?php endif; ?>
                 </div>
+            </form>
         </div>
-        </form>
-    </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchBook');
-            const searchResults = document.getElementById('searchResults');
             const validationMessage = document.getElementById('validationMessage');
+            const editForm = document.getElementById('editForm');
+            const cancelEditBtn = document.getElementById('cancelEdit');
 
             // Initialize Select2 with custom configuration
-            $('.js-example-basic-multiple').select2({
+            $('.js-example-basic-single').select2({
                 placeholder: "Digite o título do livro...",
                 allowClear: true,
                 language: {
@@ -245,40 +315,43 @@ $select_model = new select_model();
                     searching: function() {
                         return "Buscando...";
                     }
-                },
-                templateResult: formatBook,
-                templateSelection: formatBookSelection
+                }
+            }).on('select2:select', function(e) {
+                const selectedOption = e.params.data.element;
+                if (selectedOption) {
+                    // Update form fields with selected book data
+                    document.getElementById('editTitulo').value = selectedOption.dataset.titulo;
+                    document.getElementById('editEdicao').value = selectedOption.dataset.edicao;
+                    document.getElementById('editEditora').value = selectedOption.dataset.editora;
+                    document.getElementById('editEstante').value = selectedOption.dataset.estante;
+                    document.getElementById('editPrateleira').value = selectedOption.dataset.prateleira;
+                    document.getElementById('editQuantidade').value = selectedOption.dataset.quantidade;
+                    
+                    // Show the edit form
+                    editForm.classList.remove('hidden');
+                }
             });
 
-            // Custom formatting for dropdown options
-            function formatBook(book) {
-                if (!book.id) return book.text;
-                return $('<span>' + book.text + '</span>');
-            }
-
-            // Custom formatting for selected options
-            function formatBookSelection(book) {
-                if (!book.id) return book.text;
-                return $('<span>' + book.text + '</span>');
-            }
+            // Handle cancel button
+            cancelEditBtn.addEventListener('click', function() {
+                editForm.classList.add('hidden');
+                $('.js-example-basic-single').val('').trigger('change');
+            });
 
             // Form validation
             document.getElementById('deleteBookForm').addEventListener('submit', function(e) {
-                const selectedBooks = $('.js-example-basic-multiple').val();
-                if (!selectedBooks || selectedBooks.length === 0) {
+                const selectedBook = $('.js-example-basic-single').val();
+                if (!selectedBook) {
                     e.preventDefault();
                     validationMessage.innerHTML = `
                         <div class="flex items-center p-4 mb-4 text-red-800 border-l-4 border-red-500 bg-red-50 rounded-md" role="alert">
                             <i class="fas fa-exclamation-circle text-xl mr-3"></i>
-                            <span class="text-sm font-medium">Por favor, selecione pelo menos um livro para excluir!</span>
+                            <span class="text-sm font-medium">Por favor, selecione um livro para editar!</span>
                         </div>
                     `;
                     validationMessage.classList.remove('hidden');
                 }
             });
-        });
-        $(document).ready(function() {
-            $('.js-example-basic-single').select2();
         });
     </script>
 </body>

@@ -188,7 +188,7 @@ $select_model = new select_model();
                             <label for="searchBook" class="block text-sm font-medium text-gray-700 mb-1">Buscar Livro</label>
                             <div class="relative">
                                 <select class="js-example-basic-multiple" name="excluir_livro[]" multiple="multiple">
-                                    <option value="" selected disabled>Selecione um livro para excluir</option>
+        
                                     <?php
                                     $livros = $select_model->select_nome_livro();
                                     foreach ($livros as $livro) { ?>
