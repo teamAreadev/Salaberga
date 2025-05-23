@@ -320,7 +320,7 @@ $select_model = new select_model();
                     <div>
                         <label for="estante" class="block text-sm font-medium text-gray-700 mb-1">Estante</label>
                         <div class="relative">
-                            <select id="estante" name="estante"
+                            <select id="estante" name="livro_estante"
                                 class="w-full pl-3 pr-10 py-3 text-base border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none appearance-none bg-white hover:border-gray-300 text-gray-600 transition-all duration-200 cursor-pointer"
                                 required>
                                 <option value="" disabled selected>Selecione a Estante</option>
@@ -337,7 +337,7 @@ $select_model = new select_model();
                     <div>
                         <label for="prateleira" class="block text-sm font-medium text-gray-700 mb-1">Prateleira</label>
                         <div class="relative">
-                            <select id="prateleira" name="prateleira"
+                            <select id="prateleira" name="livro_prateleira"
                                 class="w-full pl-3 pr-10 py-3 text-base border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none appearance-none bg-white hover:border-gray-300 text-gray-600 transition-all duration-200 cursor-pointer"
                                 required>
                                 <option value="" disabled selected>Selecione a Prateleira</option>

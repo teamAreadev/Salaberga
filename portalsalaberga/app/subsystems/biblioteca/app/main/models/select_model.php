@@ -46,7 +46,7 @@ class select_model extends connect
     }
     public function select_nome_livro()
     {
-        $sql_nome_livro = $this->connect->query("SELECT titulo_livro, edicao, editora FROM catalogo");
+        $sql_nome_livro = $this->connect->query("SELECT * FROM catalogo");
         $nome = $sql_nome_livro->fetchAll(PDO::FETCH_ASSOC);
 
         return $nome;
