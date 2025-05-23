@@ -1504,18 +1504,29 @@ $dados_alunos_filtrados = $select_model->alunos_aptos_curso($perfil_filtro_php, 
                         // Helper para determinar classe e ícone (duplicação intencional para clareza entre renderizadores)
                         $getAreaHtmlPHP = function($area) {
                             if (!$area || $area === '') return '<span class="text-gray-500">-</span>';
-                            $lowerArea = area.toLowerCase();
+                            $lowerArea = strtolower($area);
                             $areaClass = '';
                             $iconClass = '';
 
-                            if (lowerArea.includes('desenvolvimento')) { areaClass = 'area-desenvolvimento'; iconClass = 'fas fa-code'; }
-                            else if (lowerArea.includes('design') || lowerArea.includes('midia')) { areaClass = 'area-design'; iconClass = 'fas fa-paint-brush'; }
-                            else if (lowerArea.includes('tutoria')) { areaClass = 'area-tutoria'; iconClass = 'fas fa-chalkboard-teacher'; }
-                            else if (lowerArea.includes('suporte') || lowerArea.includes('redes')) { areaClass = 'area-redes'; iconClass = 'fas fa-network-wired'; }
-                            else { areaClass = ''; iconClass = 'fas fa-question'; }
+                            if (strpos($lowerArea, 'desenvolvimento') !== false) {
+                                $areaClass = 'area-desenvolvimento';
+                                $iconClass = 'fas fa-code';
+                            } else if (strpos($lowerArea, 'design') !== false || strpos($lowerArea, 'midia') !== false) {
+                                $areaClass = 'area-design';
+                                $iconClass = 'fas fa-paint-brush';
+                            } else if (strpos($lowerArea, 'tutoria') !== false) {
+                                $areaClass = 'area-tutoria';
+                                $iconClass = 'fas fa-chalkboard-teacher';
+                            } else if (strpos($lowerArea, 'suporte') !== false || strpos($lowerArea, 'redes') !== false) {
+                                $areaClass = 'area-redes';
+                                $iconClass = 'fas fa-network-wired';
+                            } else {
+                                $areaClass = '';
+                                $iconClass = 'fas fa-question';
+                            }
 
                             // Garantir que a classe status-pill seja aplicada aqui
-                            return `<span class="status-pill ${areaClass}"><i class="${iconClass} text-xs mr-1"></i>${area}</span>`;
+                            return '<span class="status-pill ' . $areaClass . '">' . ('' !== $iconClass ? '<i class="' . $iconClass . ' text-xs mr-1"></i>' : '') . htmlspecialchars($area) . '</span>';
                         };
 
                         $area1Html = $getAreaHtmlPHP($dado['perfil_opc1'] ?? '');
