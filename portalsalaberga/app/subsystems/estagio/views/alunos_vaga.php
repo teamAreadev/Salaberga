@@ -813,9 +813,9 @@ if (isset($_POST['layout'])) {
                                 <select id="filterArea" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
                                     <option value="">Todas as áreas</option>
                                     <option value="desenvolvimento">Desenvolvimento</option>
-                                    <option value="design">Design</option>
-                                    <option value="midia">Mídia</option>
-                                    <option value="redes">Suporte/Redes</option>
+                                    <option value="design/mídia">Design/Mídia</option>
+                                    <option value="suporte/redes">Suporte/Redes</option>
+                                    <option value="tutoria">Tutoria</option>
                                 </select>
                                 <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
                             </div>

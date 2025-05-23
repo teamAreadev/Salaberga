@@ -797,7 +797,7 @@ if (isset($_POST['layout'])) {
                                 <select id="filterArea" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
                                     <option value="">Todas as áreas</option>
                                     <option value="desenvolvimento">Desenvolvimento</option>
-                                    <option value="design">Design/Mídia</option>
+                                    <option value="design/mídia">Design/Mídia</option>
                                     <option value="midia">Tutoria</option>
                                     <option value="redes">Suporte/Redes</option>
                                 </select>
@@ -1501,37 +1501,23 @@ if (isset($_POST['layout'])) {
             // Filtragem de vagas
             function aplicarFiltros() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
-                const areaFiltro = filterArea.value;
+                const areaFiltro = filterArea.value.toLowerCase();
                 const empresaFiltro = filterEmpresa.value;
                 const vagaCards = document.querySelectorAll('.vaga-card');
                 let visibleCount = 0;
 
-                // Atualizar URL com os filtros
-                const urlParams = new URLSearchParams(window.location.search);
-                if (empresaFiltro && empresaFiltro !== '') {
-                    urlParams.set('empresa', empresaFiltro);
-                    window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
-                } else {
-                    window.history.replaceState({}, '', window.location.pathname);
-                }
-
-                // Se houver filtro de empresa específico, recarregar a página
-                if (empresaFiltro && empresaFiltro !== '') {
-                    window.location.href = `${window.location.pathname}?empresa=${empresaFiltro}`;
-                    return;
-                }
-
                 vagaCards.forEach((card, index) => {
                     const titulo = card.querySelector('.vaga-card-title').textContent.toLowerCase();
-                    const area = card.dataset.area;
-                    const empresaId = card.dataset.empresaId;
+                    const cardArea = card.dataset.area.toLowerCase();
+                    const cardEmpresaId = card.dataset.empresaId;
                     const empresaNome = card.dataset.empresaNome.toLowerCase();
 
                     const matchSearch = searchTerm === '' ||
                         titulo.includes(searchTerm) ||
                         empresaNome.includes(searchTerm);
-                    const matchArea = areaFiltro === '' || area === areaFiltro;
-                    const matchEmpresa = empresaFiltro === '' || empresaId === empresaFiltro;
+                    
+                    const matchArea = areaFiltro === '' || cardArea === areaFiltro;
+                    const matchEmpresa = empresaFiltro === '' || cardEmpresaId === empresaFiltro;
                     
                     if (matchSearch && matchArea && matchEmpresa) {
                         card.style.display = '';
@@ -1543,7 +1529,7 @@ if (isset($_POST['layout'])) {
                             opacity: 1,
                             y: 0,
                             duration: 0.3,
-                            delay: index * 0.05
+                            delay: (visibleCount - 1) * 0.05
                         });
                     } else {
                         gsap.to(card, {
@@ -1557,28 +1543,33 @@ if (isset($_POST['layout'])) {
                     }
                 });
 
-                const noResultsMessage = document.getElementById('noResultsMessage');
-                if (visibleCount === 0 && !noResultsMessage) {
-                    const message = document.createElement('div');
-                    message.id = 'noResultsMessage';
-                    message.className = 'col-span-3 text-center py-8 text-gray-400 fade-in';
-                    message.innerHTML = `
-                        <i class="fas fa-search text-4xl mb-4 text-gray-600 opacity-30"></i>
-                        <p class="text-lg">Nenhuma vaga encontrada com os filtros atuais.</p>
-                        <button id="clearFiltersBtn" class="mt-4 custom-btn custom-btn-secondary">
-                            <i class="fas fa-times-circle btn-icon"></i>
-                            <span>Limpar Filtros</span>
-                        </button>
-                    `;
-                    document.getElementById('vagasGrid').appendChild(message);
-                    document.getElementById('clearFiltersBtn').addEventListener('click', () => {
-                        searchInput.value = '';
-                        filterArea.value = '';
-                        filterEmpresa.value = '';
-                        aplicarFiltros();
-                    });
-                } else if (visibleCount > 0 && noResultsMessage) {
-                    noResultsMessage.remove();
+                // Exibir mensagem se nenhum resultado for encontrado
+                const existingNoResultsMessage = document.getElementById('noResultsMessage');
+                if (visibleCount === 0) {
+                    if (!existingNoResultsMessage) {
+                        const message = document.createElement('div');
+                        message.id = 'noResultsMessage';
+                        message.className = 'col-span-full text-center py-8 text-gray-400 fade-in';
+                        message.innerHTML = `
+                            <i class="fas fa-search text-4xl mb-4 text-gray-600 opacity-30"></i>
+                            <p class="text-lg">Nenhuma vaga encontrada com os filtros atuais.</p>
+                            <button id="clearFiltersBtn" class="mt-4 custom-btn custom-btn-secondary">
+                                <i class="fas fa-times-circle btn-icon"></i>
+                                <span>Limpar Filtros</span>
+                            </button>
+                        `;
+                        document.getElementById('vagasGrid').appendChild(message);
+                        document.getElementById('clearFiltersBtn').addEventListener('click', () => {
+                            searchInput.value = '';
+                            filterArea.value = '';
+                            filterEmpresa.value = '';
+                            aplicarFiltros();
+                        });
+                    }
+                } else {
+                    if (existingNoResultsMessage) {
+                        existingNoResultsMessage.remove();
+                    }
                 }
             }
 
@@ -1593,6 +1584,9 @@ if (isset($_POST['layout'])) {
 
             filterArea.addEventListener('change', aplicarFiltros);
             filterEmpresa.addEventListener('change', aplicarFiltros);
+
+            // Inicializar página
+            aplicarFiltros();
 
             // Função para exibir toast
             function showToast(message, type) {

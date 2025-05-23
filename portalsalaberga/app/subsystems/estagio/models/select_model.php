@@ -141,10 +141,10 @@ class select_model extends connect
                         ELSE 3
                     END AS priority_group
                 FROM aluno a
-                LEFT JOIN selecionado s ON a.id = s.id_aluno
-                LEFT JOIN selecao se ON a.id = se.id_aluno
-                WHERE s.id_aluno IS NULL
-                AND se.id_aluno IS NULL
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM selecao se
+                    WHERE se.id_aluno = a.id AND (se.Status = '0' OR se.Status = '1')
+                )
                 ORDER BY 
                     priority_group ASC,
                     score DESC,
@@ -368,7 +368,21 @@ class select_model extends connect
     {
         $count = 0;
         foreach ($selecionados as $item) {
-            // Verifica se já existe
+            // Atualiza o status do aluno aprovado para '1' na tabela selecao
+            $updateAprovado = $this->connect->prepare("UPDATE selecao SET Status = '1' WHERE id_aluno = :id_aluno AND id_vaga = :id_vaga");
+            $updateAprovado->execute([
+                ':id_aluno' => $item['id_aluno'],
+                ':id_vaga' => $item['id_vaga']
+            ]);
+
+            // Atualiza o status dos demais alunos da mesma vaga para '2'
+            $updateNaoSelecionados = $this->connect->prepare("UPDATE selecao SET Status = '2' WHERE id_vaga = :id_vaga AND id_aluno != :id_aluno AND Status = '0'");
+            $updateNaoSelecionados->execute([
+                ':id_vaga' => $item['id_vaga'],
+                ':id_aluno' => $item['id_aluno']
+            ]);
+
+            // Verifica se já existe na tabela selecionado
             $check = $this->connect->prepare("SELECT 1 FROM selecionado WHERE id_aluno = :id_aluno AND id_vaga = :id_vaga");
             $check->execute([
                 ':id_aluno' => $item['id_aluno'],
@@ -390,12 +404,6 @@ class select_model extends connect
                 ':id_vaga' => $item['id_vaga'],
                 ':nome' => $aluno['nome']
             ])) {
-                // Remove da tabela selecao
-                $del = $this->connect->prepare("DELETE FROM selecao WHERE id_aluno = :id_aluno AND id_vaga = :id_vaga");
-                $del->execute([
-                    ':id_aluno' => $item['id_aluno'],
-                    ':id_vaga' => $item['id_vaga']
-                ]);
                 $count++;
             }
         }
