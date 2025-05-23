@@ -252,19 +252,17 @@ class select_model extends connect
             $sql .= " AND v.id_perfil = ?";
             $perfil_id = null;
             switch (strtolower($area)) {
-                case 'desenvolvimento':
+                case '1':
                     $perfil_id = 1;
                     break;
-                case 'design':
-                case 'design/mídia':
-                case 'design/mídias':
-                case 'design/social mídia':
+                case '2':
+
                     $perfil_id = 2;
                     break;
-                case 'suporte/redes':
+                case '3':
                     $perfil_id = 3;
                     break;
-                case 'tutoria':
+                case '4':
                     $perfil_id = 4;
                     break;
             }
