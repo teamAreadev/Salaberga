@@ -747,7 +747,7 @@ if (isset($_POST['layout'])) {
             </header>
 
             <!-- Main Content -->
-            <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6 sm:py-8 w-full">
+            <main class="max-w-7x2 mx-auto px-2 sm:px-6 lg:px-8 py-6 sm:py-8 w-full">
                 <!-- Breadcrumbs -->
                 <div class="text-sm text-gray-400 mb-6 flex items-center">
                     <a href="dashboard.php" class="hover:text-primary-400 transition-colors">Dashboard</a>
@@ -826,7 +826,7 @@ if (isset($_POST['layout'])) {
 
                 <!-- Tabela de Alunos -->
                 <form action="../controllers/controller.php" method="post">
-                    <div class="table-container slide-up">
+                    <div class="table-container slide-up md:block hidden">
                         <table class="custom-table">
                             <thead>
                                 <tr>
@@ -840,7 +840,7 @@ if (isset($_POST['layout'])) {
                                     <th width="100px">Área 2</th>
                                     <th width="100px" class="text-center">Ocorrências</th>
                                     <th width="100px">Custeio</th>
-                                    <th width="100px">Entregas individuais</th>
+                                    <th width="150px">Entregas individuais</th>
                                     <th width="100px">Entregas do grupo</th>
                                 </tr>
                             </thead>
@@ -936,7 +936,15 @@ if (isset($_POST['layout'])) {
                                                 ?>
                                             </td>
                                             <td><?= htmlspecialchars($dado['custeio'] = $dado['custeio'] == 0 ? "Não" : "Sim") ?></td>
-                                            <td><?= htmlspecialchars($dado['entregas_individuais']) ?></td>
+                                            <td>
+                                                <?php
+                                                $entregasIndividuais = isset($dado['entregas_individuais']) ? (int)$dado['entregas_individuais'] : 0;
+                                                $chipClassEntregas = $entregasIndividuais > 0 ? 'chip-green' : 'chip-yellow';
+                                                ?>
+                                                <span class="chip <?php echo $chipClassEntregas; ?>">
+                                                    <?php echo $entregasIndividuais; ?>
+                                                </span>
+                                            </td>
                                             <td><?= htmlspecialchars($dado['entregas_grupo']) ?></td>
                                         </tr>
                                     <?php }
@@ -1029,12 +1037,148 @@ if (isset($_POST['layout'])) {
                                                 ?>
                                             </td>
                                             <td><?= htmlspecialchars($dado['custeio'] = $dado['custeio'] == 0 ? "Não" : "Sim") ?></td>
-                                            <td><?= htmlspecialchars($dado['entregas']) ?></td>
+                                            <td>
+                                                <?php
+                                                $entregasIndividuais = isset($dado['entregas']) ? (int)$dado['entregas'] : 0;
+                                                $chipClassEntregas = $entregasIndividuais > 0 ? 'chip-green' : 'chip-yellow';
+                                                ?>
+                                                <span class="chip <?php echo $chipClassEntregas; ?>">
+                                                    <?php echo $entregasIndividuais; ?>
+                                                </span>
+                                            </td>
+                                            <td><?= htmlspecialchars($dado['entregas_grupo']) ?></td>
                                         </tr>
                                     <?php } ?>
                                 <?php } ?>
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Cards de Alunos (Mobile) -->
+                    <div class="md:hidden grid grid-cols-1 gap-4 slide-up">
+                        <?php
+                        // Re-fetching or using the same data depending on the initial fetch logic
+                        // Assuming $dados is available from the initial fetch
+                        if (!empty($dados)) {
+                            foreach ($dados as $index => $dado) {
+                                // Determine area classes for chips
+                                $perfil1 = isset($dado['perfil_opc1']) ? htmlspecialchars($dado['perfil_opc1'], ENT_QUOTES, 'UTF-8') : 'Não informado';
+                                $area1_class = strtolower($perfil1);
+                                if ($area1_class === 'design/social mídia' || $area1_class === 'design/mídia' || $area1_class === 'design/mídias' || $area1_class === 'design') {
+                                    $area1_class = 'design';
+                                } elseif ($perfil1 === 'Suporte/Redes') {
+                                    $area1_class = 'redes';
+                                } elseif ($perfil1 === 'Tutoria') {
+                                    $area1_class = 'tutoria';
+                                } else {
+                                    $area1_class = 'desenvolvimento'; // Cor padrão
+                                }
+
+                                $perfil2 = isset($dado['perfil_opc2']) ? htmlspecialchars($dado['perfil_opc2'], ENT_QUOTES, 'UTF-8') : 'Não informado';
+                                $area2_class = strtolower($perfil2);
+                                if ($area2_class === 'design/social mídia' || $area2_class === 'design/mídia' || $area2_class === 'design/mídias' || $area2_class === 'design') {
+                                    $area2_class = 'design';
+                                } elseif ($perfil2 === 'Suporte/Redes') {
+                                    $area2_class = 'redes';
+                                } elseif ($perfil2 === 'Tutoria') {
+                                    $area2_class = 'tutoria';
+                                } else {
+                                    $area2_class = 'desenvolvimento'; // Cor padrão
+                                }
+
+                                $ocorrencias = $dado['ocorrencia'];
+                                $chipClassOcorrencias = $ocorrencias == 0 ? 'chip-green' : ($ocorrencias == 1 ? 'chip-yellow' : 'chip-red');
+
+                                // Assuming $dado['entregas_individuais'] or $dado['entregas'] exists based on the table code
+                                $entregasIndividuais = isset($dado['entregas_individuais']) ? (int)$dado['entregas_individuais'] : (isset($dado['entregas']) ? (int)$dado['entregas'] : 0);
+                                $chipClassEntregas = $entregasIndividuais > 0 ? 'chip-green' : 'chip-yellow';
+                        ?>
+                            <div class="card-aluno mb-4 p-4 bg-dark-50 rounded-lg shadow-md border border-gray-700 slide-up" style="animation-delay: <?= $index * 0.1 ?>s;">
+                                <div class="flex items-center justify-between mb-3 border-b border-gray-700 pb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-semibold text-primary-400">Aluno #<?= $index + 1 ?></span>
+                                        <!-- Checkbox -->
+                                        <input type="checkbox" class="custom-checkbox" id="aluno_<?= $dado['id'] ?>_mobile" name="alunos[]" value="<?= $dado['id'] ?>">
+                                    </div>
+                                    <span class="text-xs text-gray-400"><i class="fas fa-star text-yellow-400 mr-1"></i> Score: <?= htmlspecialchars($dado['score']) ?></span>
+                                </div>
+                                <div class="mb-3">
+                                    <p class="text-lg font-bold text-white"><?= htmlspecialchars($dado['nome']) ?></p>
+                                    <p class="text-sm text-gray-400">Média: <span class="font-semibold text-white"><?= number_format($dado['medias'], 1) ?></span></p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3 text-sm mb-3">
+                                    <div>
+                                        <p class="text-gray-400 mb-1">Projetos:</p>
+                                        <p class="text-white font-semibold"><?= htmlspecialchars($dado['projetos'] ?? '-') ?></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-400 mb-1">Custeio:</p>
+                                        <p class="text-white font-semibold"><?= htmlspecialchars($dado['custeio'] = $dado['custeio'] == 0 ? "Não" : "Sim") ?></p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3 text-sm mb-3">
+                                    <div>
+                                        <p class="text-gray-400 mb-1">Entregas Individuais:</p>
+                                        <span class="chip <?php echo $chipClassEntregas; ?>"><?php echo $entregasIndividuais; ?></span>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-400 mb-1">Entregas Grupo:</p>
+                                        <span class="chip chip-green"><?= htmlspecialchars($dado['entregas_grupo']) ?></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 mb-1">Áreas de Interesse:</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <?php if ($perfil1 !== 'Não informado'): ?>
+                                            <span class="area-chip area-<?php echo $area1_class; ?>">
+                                                <?php if ($area1_class === 'desenvolvimento'): ?>
+                                                    <i class="fas fa-code mr-1 text-xs"></i>
+                                                <?php elseif ($area1_class === 'tutoria'): ?>
+                                                    <i class="fas fa-chalkboard-teacher mr-1 text-xs"></i>
+                                                <?php elseif ($area1_class === 'design'): ?>
+                                                    <i class="fas fa-paint-brush mr-1 text-xs"></i>
+                                                <?php elseif ($area1_class === 'redes'): ?>
+                                                    <i class="fas fa-network-wired mr-1 text-xs"></i>
+                                                <?php else: ?>
+                                                    <i class="fas fa-question mr-1 text-xs"></i>
+                                                <?php endif; ?>
+                                                <?php echo $perfil1; ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="text-gray-500 text-xs">Não informado</span>
+                                        <?php endif; ?>
+                                        <?php if ($perfil2 !== 'Não informado' && !empty($perfil2)): ?>
+                                            <span class="area-chip area-<?php echo $area2_class; ?>">
+                                                <?php if ($area2_class === 'desenvolvimento'): ?>
+                                                    <i class="fas fa-code mr-1 text-xs"></i>
+                                                <?php elseif ($area2_class === 'tutoria'): ?>
+                                                    <i class="fas fa-chalkboard-teacher mr-1 text-xs"></i>
+                                                <?php elseif ($area2_class === 'design'): ?>
+                                                    <i class="fas fa-paint-brush mr-1 text-xs"></i>
+                                                <?php elseif ($area2_class === 'redes'): ?>
+                                                    <i class="fas fa-network-wired mr-1 text-xs"></i>
+                                                <?php else: ?>
+                                                    <i class="fas fa-question mr-1 text-xs"></i>
+                                                <?php endif; ?>
+                                                <?php echo $perfil2; ?>
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <p class="text-gray-400 mb-1">Ocorrências:</p>
+                                    <span class="chip <?php echo $chipClassOcorrencias; ?>"><?php echo $ocorrencias; ?></span>
+                                </div>
+                            </div>
+                        <?php
+                            }
+                        } else {
+                            // Message for no students found
+                        ?>
+                            <p class="text-center text-gray-400 py-4">Nenhum aluno encontrado.</p>
+                        <?php
+                        }
+                        ?>
                     </div>
 
                     <!-- Botões de Ação -->

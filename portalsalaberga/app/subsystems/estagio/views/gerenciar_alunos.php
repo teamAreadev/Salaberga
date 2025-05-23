@@ -117,8 +117,8 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
             const aluno = alunos.find(a => a.id === parseInt(id));
             if (aluno) {
                 const detalhesContent = document.getElementById('detalhesContent');
-                const areaClassOpc1 = aluno.perfil_opc1.toLowerCase();
-                const areaClassOpc2 = aluno.perfil_opc2.toLowerCase();
+                const areaClassOpc1 = aluno.perfil_opc1 ? aluno.perfil_opc1.toLowerCase() : '';
+                const areaClassOpc2 = aluno.perfil_opc2 ? aluno.perfil_opc2.toLowerCase() : '';
                 
                 detalhesContent.innerHTML = `
                     <div class="detail-item">
@@ -128,6 +128,10 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                     <div class="detail-item">
                         <span class="detail-label">Nome</span>
                         <span class="detail-value font-medium">${aluno.nome}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Score</span>
+                        <span class="detail-value">${aluno.score || '-'}</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Contato</span>
@@ -143,7 +147,7 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Projetos</span>
-                        <span class="detail-value">${aluno.projetos}</span>
+                        <span class="detail-value">${aluno.projetos || '-'}</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Opção 1</span>
@@ -151,8 +155,9 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                             <i class="fas fa-${
                                 aluno.perfil_opc1 === 'desenvolvimento' ? 'code' :
                                 aluno.perfil_opc1 === 'design' ? 'paint-brush' :
-                                aluno.perfil_opc1 === 'midia' ? 'video' :
-                                'network-wired'
+                                aluno.perfil_opc1 === 'midia' ? 'video' : // Assuming 'midia' maps to 'video' icon
+                                aluno.perfil_opc1 === 'suporte/redes' ? 'network-wired' : // Assuming 'suporte/redes' maps to 'network-wired' icon
+                                'question'
                             } text-xs"></i>
                             ${aluno.perfil_opc1}
                         </span>
@@ -163,8 +168,9 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                             <i class="fas fa-${
                                 aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
                                 aluno.perfil_opc2 === 'design' ? 'paint-brush' :
-                                aluno.perfil_opc2 === 'midia' ? 'video' :
-                                'network-wired'
+                                aluno.perfil_opc2 === 'midia' ? 'video' : // Assuming 'midia' maps to 'video' icon
+                                aluno.perfil_opc2 === 'suporte/redes' ? 'network-wired' : // Assuming 'suporte/redes' maps to 'network-wired' icon
+                                'question'
                             } text-xs"></i>
                             ${aluno.perfil_opc2}
                         </span>
@@ -1768,8 +1774,16 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                 </div>
                 <div class="details-grid">
                     <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-gray-300 text-sm">ID:</span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['id']) ?></span>
+                    </div>
+                    <div class="flex flex-col gap-1">
                         <span class="font-semibold text-gray-300 text-sm">Nome:</span>
                         <span class="text-white"><?= htmlspecialchars($verAluno['nome']) ?></span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-gray-300 text-sm">Score:</span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['score'] ?? '-') ?></span>
                     </div>
                     <div class="flex flex-col gap-1">
                         <span class="font-semibold text-gray-300 text-sm">Contato:</span>
@@ -1789,11 +1803,11 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                     </div>
                     <div class="flex flex-col gap-1">
                         <span class="font-semibold text-gray-300 text-sm">Opção 1:</span>
-                        <span class="text-white"><?= htmlspecialchars($verAluno['perfil_opc1']) ?></span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['perfil_opc1'] ?? '-') ?></span>
                     </div>
                     <div class="flex flex-col gap-1">
                         <span class="font-semibold text-gray-300 text-sm">Opção 2:</span>
-                        <span class="text-white"><?= htmlspecialchars($verAluno['perfil_opc2']) ?></span>
+                        <span class="text-white"><?= htmlspecialchars($verAluno['perfil_opc2'] ?? '-') ?></span>
                     </div>
                     <div class="flex flex-col gap-1">
                         <span class="font-semibold text-gray-300 text-sm">Ocorrência:</span>
@@ -1801,7 +1815,7 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                     </div>
                     <div class="flex flex-col gap-1">
                         <span class="font-semibold text-gray-300 text-sm">Custeio:</span>
-                        <span class="text-white"><?= $verAluno['custeio'] == 1 ? 'Sim' : 'Não' ?></span>
+                        <span class="text-white"><?= isset($verAluno['custeio']) ? ($verAluno['custeio'] == 1 ? 'Sim' : 'Não') : '-' ?></span>
                     </div>
                     <div class="flex flex-col gap-1">
                         <span class="font-semibold text-gray-300 text-sm">Entregas Individuais:</span>
