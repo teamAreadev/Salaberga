@@ -522,6 +522,9 @@ $dados_alunos_filtrados = $select_model->alunos_aptos_curso($perfil_filtro_php, 
             align-items: center;
             gap: 0.375rem;
             transition: all 0.3s ease;
+            /* Adicionado para padronizar a largura */
+            min-width: 140px; /* Ajuste este valor conforme necessário */
+            justify-content: center; /* Centraliza o conteúdo */
         }
 
         .status-ativo {
@@ -546,30 +549,37 @@ $dados_alunos_filtrados = $select_model->alunos_aptos_curso($perfil_filtro_php, 
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(29, 78, 216, 0.2) 100%);
             color: #93c5fd;
             border: 1px solid rgba(59, 130, 246, 0.3);
+            width: 170px;
         }
 
         .area-tutoria {
             background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%); /* Usando estilo de midia para tutoria */
             color: #6ee7b7; /* Usando estilo de midia para tutoria */
-            border: none; /* Removendo a borda roxa */
+            /* Removendo a borda roxa */
+            /* Adicionando uma borda escura */
+            border: 1px solid rgba(5, 150, 105, 0.3);
+            width: 170px;
         }
 
         .area-design {
             background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(126, 34, 206, 0.2) 100%);
             color: #c4b5fd;
             border: 1px solid rgba(168, 85, 247, 0.3);
+            width: 170px;
         }
 
         .area-midia {
             background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
             color: #6ee7b7;
             border: 1px solid rgba(16, 185, 129, 0.3);
+            width: 170px;
         }
 
         .area-redes {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.2) 100%);
             color: #fcd34d;
             border: 1px solid rgba(245, 158, 11, 0.3);
+            width: 170px;
         }
 
         input,
@@ -1552,10 +1562,11 @@ $dados_alunos_filtrados = $select_model->alunos_aptos_curso($perfil_filtro_php, 
                         // Helper para determinar classe e ícone (duplicação intencional para clareza entre renderizadores)
                         $getAreaHtmlPHP = function($area) {
                             if (!$area || $area === '') return '<span class="text-gray-500">-</span>';
-                            $lowerArea = strtolower($area);
+                            $lowerArea = strtolower($area); // Use a função PHP strtolower
                             $areaClass = '';
                             $iconClass = '';
 
+                            // Use a função PHP strpos para verificar a existência da substring
                             if (strpos($lowerArea, 'desenvolvimento') !== false) {
                                 $areaClass = 'area-desenvolvimento';
                                 $iconClass = 'fas fa-code';
@@ -2182,50 +2193,46 @@ $dados_alunos_filtrados = $select_model->alunos_aptos_curso($perfil_filtro_php, 
             const searchTerm = document.getElementById('searchAluno').value.toLowerCase().trim();
             const perfilFiltro = document.getElementById('filterPerfil').value.toLowerCase();
 
-            const alunosFiltrados = alunos.filter(aluno => {
-                const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
-                
-                // Lógica de filtro de perfil: verifica se o aluno tem o perfil selecionado em qualquer opção
-                const matchPerfil = perfilFiltro === '' || 
-                                    (aluno.perfil_opc1 && aluno.perfil_opc1.toLowerCase().includes(perfilFiltro)) ||
-                                    (aluno.perfil_opc2 && aluno.perfil_opc2.toLowerCase().includes(perfilFiltro));
+            const urlParams = new URLSearchParams();
+            if (searchTerm) {
+                urlParams.set('search', searchTerm);
+            }
+            if (perfilFiltro) {
+                urlParams.set('perfil', perfilFiltro);
+            }
 
-                return matchSearch && matchPerfil;
-            });
-
-            renderizarTabelaDesktop(alunosFiltrados);
-            renderizarCardsMobile(alunosFiltrados);
+            // Construir a nova URL e navegar
+            window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
         }
 
         // Adicionar event listeners para os filtros e busca
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM carregado, inicializando...');
-            
+
             const searchInput = document.getElementById('searchAluno');
             const filterPerfil = document.getElementById('filterPerfil');
 
+            // Preencher campos de busca e filtro com valores da URL (ao carregar a página)
+            const urlParams = new URLSearchParams(window.location.search);
             if (searchInput) {
-                console.log('Adicionando event listener para busca');
-                searchInput.addEventListener('input', function(e) {
-                    console.log('Input de busca alterado:', e.target.value);
-                    aplicarFiltros();
-                });
+                searchInput.value = urlParams.get('search') || '';
+                 searchInput.addEventListener('input', aplicarFiltros);
             } else {
                 console.error('Elemento de busca não encontrado');
             }
 
             if (filterPerfil) {
-                console.log('Adicionando event listener para filtro de perfil');
-                filterPerfil.addEventListener('change', function(e) {
-                    console.log('Filtro de perfil alterado:', e.target.value);
-                    aplicarFiltros();
-                });
+                filterPerfil.value = urlParams.get('perfil') || '';
+                 filterPerfil.addEventListener('change', aplicarFiltros);
             } else {
                 console.error('Elemento de filtro de perfil não encontrado');
             }
 
-            // Renderizar a tabela e cards inicialmente
-            aplicarFiltros();
+            // Não chame aplicarFiltros() aqui, pois o PHP já carregou os dados filtrados inicialmente
+            // aplicarFiltros(); 
+
+            // Inicializar outros event listeners
+            adicionarEventListeners();
         });
 
     </script>
