@@ -344,6 +344,27 @@ $dados_alunos_filtrados = $select_model->alunos_aptos_curso($perfil_filtro_php, 
             const urlParams = new URLSearchParams(window.location.search);
             if (searchInput) {
                 searchInput.value = urlParams.get('search') || '';
+                 searchInput.addEventListener('input', aplicarFiltros);
+            } else {
+                console.error('Elemento de busca não encontrado');
+            }
+
+            if (filterPerfil) {
+                filterPerfil.value = urlParams.get('perfil') || '';
+                 filterPerfil.addEventListener('change', aplicarFiltros);
+            } else {
+                console.error('Elemento de filtro de perfil não encontrado');
+            }
+
+            // Não chame aplicarFiltros() aqui, pois o PHP já carregou os dados filtrados inicialmente
+            // aplicarFiltros(); 
+
+            // Inicializar outros event listeners
+            adicionarEventListeners();
+        });
+
+    </script>
+
     <script>
         tailwind.config = {
             darkMode: 'class',
