@@ -315,8 +315,35 @@ $dados_alunos_filtrados = $select_model->alunos_aptos_curso($perfil_filtro_php, 
         window.editarAluno = editarAluno;
         window.confirmarExclusao = confirmarExclusao;
         window.efetivarExclusaoAluno = efetivarExclusaoAluno;
-    </script>
 
+        // Função para aplicar filtros (considera busca e perfil)
+        function aplicarFiltros() {
+            const searchTerm = document.getElementById('searchAluno').value.toLowerCase().trim();
+            const perfilFiltro = document.getElementById('filterPerfil').value.toLowerCase();
+
+            const urlParams = new URLSearchParams();
+            if (searchTerm) {
+                urlParams.set('search', searchTerm);
+            }
+            if (perfilFiltro) {
+                urlParams.set('perfil', perfilFiltro);
+            }
+
+            // Construir a nova URL e navegar
+            window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
+        }
+
+        // Adicionar event listeners para os filtros e busca
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM carregado, inicializando...');
+
+            const searchInput = document.getElementById('searchAluno');
+            const filterPerfil = document.getElementById('filterPerfil');
+
+            // Preencher campos de busca e filtro com valores da URL (ao carregar a página)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (searchInput) {
+                searchInput.value = urlParams.get('search') || '';
     <script>
         tailwind.config = {
             darkMode: 'class',
