@@ -1,15 +1,16 @@
 <?php
-/*
+
 define('HOST', 'localhost');
 define('DATABASE', 'u750204740_sistBiblioteca');
 define('USER', 'u750204740_sistBiblioteca');
 define('PASSWORD', 'paoComOvo123!@##');
-*/
+
+/*
 define('HOST', 'localhost');
 define('DATABASE', 'sist_biblioteca');
 define('USER', 'root');
 define('PASSWORD', '');
-
+*/
 
 class connect
 {
