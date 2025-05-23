@@ -143,8 +143,7 @@ class select_model extends connect
                 FROM aluno a
                 LEFT JOIN selecionado s ON a.id = s.id_aluno
                 LEFT JOIN selecao se ON a.id = se.id_aluno
-                WHERE (LOWER(a.perfil_opc1) IN ('design', 'design/mídia', 'design/mídias', 'design/social mídia') OR LOWER(a.perfil_opc2) IN ('design', 'design/mídia', 'design/mídias', 'design/social mídia'))
-                AND s.id_aluno IS NULL
+                WHERE s.id_aluno IS NULL
                 AND se.id_aluno IS NULL
                 ORDER BY 
                     priority_group ASC,
@@ -154,7 +153,14 @@ class select_model extends connect
         $stmt = $this->connect->prepare($sql);
         $stmt->bindValue(':nome_perfil', $nome_perfil, PDO::PARAM_STR);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Log para debug
+        error_log("Total de alunos retornados: " . count($result));
+        error_log("Query SQL: " . $sql);
+        error_log("Nome do perfil: " . $nome_perfil);
+        
+        return $result;
     }
     function alunos_aptos_curso($nome_perfil = 0, $search = '', $filtro = '')
     {
