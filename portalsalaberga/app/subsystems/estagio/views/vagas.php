@@ -653,10 +653,7 @@ if (isset($_POST['layout'])) {
                         <i class="fa fa-user-circle w-5 mr-3"></i>
                         Resultados 
                     </a>
-                    <a href="perfil_alunos.php" class="sidebar-link">
-                        <i class="fas fa-user-graduate w-5 mr-3"></i>
-                        Perfil alunos
-                    </a>
+                    
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
@@ -717,10 +714,7 @@ if (isset($_POST['layout'])) {
                         <i class="fa fa-user-circle w-5 mr-3"></i>
                         Resultados 
                     </a>
-                    <a href="perfil_alunos.php" class="sidebar-link">
-                        <i class="fas fa-user-graduate w-5 mr-3"></i>
-                        Perfil alunos
-                    </a>
+                    
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
@@ -794,6 +788,7 @@ if (isset($_POST['layout'])) {
                         </div>
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
                             <div class="relative">
+                                
                                 <select id="filterArea" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
                                     <option value="">Todas as áreas</option>
                                     <?php

@@ -16,8 +16,8 @@ $editAluno = null;
 $verAluno = null;
 if (($modal === 'editar' || $modal === 'ver') && $editId) {
     // Buscar dados do aluno para edição ou visualização
-    $alunos = $select_model->alunos_aptos_curso();
-    foreach ($alunos as $a) {
+    $alunos_para_modal = $select_model->alunos_aptos_curso(); // Fetch all students for modal data
+    foreach ($alunos_para_modal as $a) {
         if ($a['id'] == $editId) {
             if ($modal === 'editar') {
                 $editAluno = $a;
@@ -28,6 +28,14 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
         }
     }
 }
+
+// Obter parâmetros de filtro e busca da URL
+$search_term_php = isset($_GET['search']) ? $_GET['search'] : '';
+$perfil_filtro_php = isset($_GET['perfil']) ? $_GET['perfil'] : '';
+
+// Buscar dados dos alunos com filtros aplicados pelo PHP
+$dados_alunos_filtrados = $select_model->alunos_aptos_curso($perfil_filtro_php, $search_term_php);
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -74,39 +82,10 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
             alunoIdParaExcluir = null;
         }
 
-        // Dados dos alunos
-        const alunos = [
-            <?php
-            try {
-                $dados = $select_model->alunos_aptos_curso();
-                if (empty($dados)) {
-                    echo "// Nenhum aluno encontrado";
-                } else {
-                    $total = count($dados);
-                    $index = 0;
-                    foreach ($dados as $dado) {
-                        $index++;
-                        echo "{
-                            id: " . $dado['id'] . ",
-                            nome: '" . addslashes($dado['nome']) . "',
-                            contato: '" . addslashes($dado['contato'] ?: '-') . "',
-                            medias: '" . addslashes($dado['medias'] ?: '-') . "',
-                            email: '" . addslashes($dado['email'] ?: '-') . "',
-                            projetos: '" . addslashes($dado['projetos'] ?: '-') . "',
-                            perfil_opc1: '" . addslashes($dado['perfil_opc1']) . "',
-                            perfil_opc2: '" . addslashes($dado['perfil_opc2']) . "',
-                            ocorrencia: '" . addslashes($dado['ocorrencia'] ?: '-') . "',
-                            custeio: " . $dado['custeio'] . ",
-                            entregas_individuais: '" . (isset($dado['entregas_individuais']) ? addslashes($dado['entregas_individuais']) : '-') . "',
-                            entregas_grupo: '" . (isset($dado['entregas_grupo']) ? addslashes($dado['entregas_grupo']) : '-') . "'
-                        }" . ($index < $total ? ',' : '');
-                    }
-                }
-            } catch (Exception $e) {
-                echo "// Erro ao buscar alunos: " . $e->getMessage();
-            }
-            ?>
-        ];
+        // Dados dos alunos (agora carregados via PHP com filtros)
+        const alunos = <?php echo json_encode($dados_alunos_filtrados); ?>;
+
+        console.log('Dados dos alunos carregados:', alunos);
 
         // Variável global para controle de exclusão
         let alunoIdParaExcluir = null;
@@ -117,9 +96,23 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
             const aluno = alunos.find(a => a.id === parseInt(id));
             if (aluno) {
                 const detalhesContent = document.getElementById('detalhesContent');
-                const areaClassOpc1 = aluno.perfil_opc1 ? aluno.perfil_opc1.toLowerCase() : '';
-                const areaClassOpc2 = aluno.perfil_opc2 ? aluno.perfil_opc2.toLowerCase() : '';
-                
+
+                // Helper para determinar classe e ícone para o modal de detalhes
+                const getAreaHtmlDetalhes = (area) => {
+                    if (!area || area === '-') return '<span class="text-gray-500">-</span>';
+                    const lowerArea = area.toLowerCase();
+                    let areaClass = '';
+                    let iconClass = '';
+
+                    if (lowerArea.includes('desenvolvimento')) { areaClass = 'area-desenvolvimento'; iconClass = 'fas fa-code'; }
+                    else if (lowerArea.includes('design') || lowerArea.includes('midia')) { areaClass = 'area-design'; iconClass = 'fas fa-paint-brush'; }
+                    else if (lowerArea.includes('tutoria')) { areaClass = 'area-tutoria'; iconClass = 'fas fa-chalkboard-teacher'; }
+                    else if (lowerArea.includes('suporte') || lowerArea.includes('redes')) { areaClass = 'area-redes'; iconClass = 'fas fa-network-wired'; }
+                    else { areaClass = ''; iconClass = 'fas fa-question'; }
+
+                    return `<span class="detail-value status-pill ${areaClass}"><i class="${iconClass} text-xs mr-1"></i>${area}</span>`;
+                };
+
                 detalhesContent.innerHTML = `
                     <div class="detail-item">
                         <span class="detail-label">ID</span>
@@ -151,29 +144,11 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Opção 1</span>
-                        <span class="detail-value status-pill area-${areaClassOpc1}">
-                            <i class="fas fa-${
-                                aluno.perfil_opc1 === 'desenvolvimento' ? 'code' :
-                                aluno.perfil_opc1 === 'design' ? 'paint-brush' :
-                                aluno.perfil_opc1 === 'midia' ? 'video' : // Assuming 'midia' maps to 'video' icon
-                                aluno.perfil_opc1 === 'suporte/redes' ? 'network-wired' : // Assuming 'suporte/redes' maps to 'network-wired' icon
-                                'question'
-                            } text-xs"></i>
-                            ${aluno.perfil_opc1}
-                        </span>
+                        ${getAreaHtmlDetalhes(aluno.perfil_opc1)}
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Opção 2</span>
-                        <span class="detail-value status-pill area-${areaClassOpc2}">
-                            <i class="fas fa-${
-                                aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
-                                aluno.perfil_opc2 === 'design' ? 'paint-brush' :
-                                aluno.perfil_opc2 === 'midia' ? 'video' : // Assuming 'midia' maps to 'video' icon
-                                aluno.perfil_opc2 === 'suporte/redes' ? 'network-wired' : // Assuming 'suporte/redes' maps to 'network-wired' icon
-                                'question'
-                            } text-xs"></i>
-                            ${aluno.perfil_opc2}
-                        </span>
+                        ${getAreaHtmlDetalhes(aluno.perfil_opc2)}
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Ocorrência</span>
@@ -192,7 +167,7 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                         <span class="detail-value">${aluno.entregas_grupo}</span>
                     </div>
                 `;
-                
+
                 const modal = document.getElementById('detalhesModal');
                 modal.classList.add('show');
             } else {
@@ -522,6 +497,12 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
+        .area-tutoria {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%); /* Usando estilo de midia para tutoria */
+            color: #6ee7b7; /* Usando estilo de midia para tutoria */
+            border: none; /* Removendo a borda roxa */
+        }
+
         .area-design {
             background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(126, 34, 206, 0.2) 100%);
             color: #c4b5fd;
@@ -560,6 +541,24 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
             border-radius: 0.375rem !important;
         }
 
+        .custom-input {
+            background-color: rgba(35, 35, 35, 0.8) !important;
+            border: 2px solid rgba(61, 61, 61, 0.8) !important;
+            border-radius: 10px !important;
+            color: #ffffff !important;
+            padding: 0.75rem 2.5rem 0.75rem 1rem !important;
+            width: 100% !important;
+            font-size: 0.95rem !important;
+            transition: all 0.3s ease !important;
+            backdrop-filter: blur(5px) !important;
+            -webkit-backdrop-filter: blur(5px) !important;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            min-width: 180px !important;
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: unset !important;
+        }
+
         select.custom-input {
             min-width: 180px !important;
             max-width: 100% !important;
@@ -577,9 +576,9 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
         }
 
         @media (max-width: 640px) {
-            input,
-            select,
-            .custom-input {
+
+            .custom-input,
+            select.custom-input {
                 min-width: 100% !important;
                 font-size: 1rem !important;
             }
@@ -589,14 +588,13 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
             }
         }
 
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #007A33 !important;
-            box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+        .custom-input:focus {
+            border-color: #00C250 !important;
+            box-shadow: 0 0 0 2px rgba(0, 194, 80, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
             outline: none !important;
             background-color: rgba(40, 40, 40, 0.9) !important;
         }
+
 
         .custom-input::placeholder {
             color: rgba(255, 255, 255, 0.4) !important;
@@ -1255,10 +1253,7 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                         <i class="fa fa-user-circle w-5 mr-3"></i>
                         Resultados 
                     </a>
-                    <a href="perfil_alunos.php" class="sidebar-link">
-                        <i class="fas fa-user-graduate w-5 mr-3"></i>
-                        Perfil alunos
-                    </a>
+                    
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
@@ -1319,10 +1314,7 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                         <i class="fa fa-user-circle w-5 mr-3"></i>
                         Resultados 
                     </a>
-                    <a href="perfil_alunos.php" class="sidebar-link">
-                        <i class="fas fa-user-graduate w-5 mr-3"></i>
-                        Perfil alunos
-                    </a>
+                    
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
@@ -1365,14 +1357,25 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                 <!-- Actions Bar -->
                 <div class="mb-8 action-bar p-4 sm:p-5 fade-in">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                        <div class="search-input-container relative w-full sm:w-64">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="custom-input pl-10 pr-4 py-2.5 w-full">
-                        </div>
                         <a href="?modal=adicionar" class="custom-btn custom-btn-primary" id="addAlunoBtn">
                             <i class="fas fa-plus btn-icon"></i>
                             <span>Adicionar Aluno</span>
                         </a>
+                        <div class="search-input-container relative w-full sm:w-64">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="searchAluno" placeholder="Buscar aluno..." class="custom-input pl-10 pr-4 py-2.5 w-full">
+                        </div>
+                         <!-- Novo filtro de perfil -->
+                         <div class="relative w-full sm:w-48">
+                             <select id="filterPerfil" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
+                                 <option value="">Todos os perfis</option>
+                                 <option value="desenvolvimento">Desenvolvimento</option>
+                                 <option value="design">Design/Mídias</option>
+                                 <option value="tutoria">Tutoria</option>
+                                 <option value="suporte/redes">Suporte/Redes</option>
+                             </select>
+                             <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
+                         </div>
                     </div>
                 </div>
                 <!-- Table Desktop -->
@@ -1381,19 +1384,50 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                         <thead>
                             <tr>
                                 <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Nome</th>
+                                <th scope="col" class="px-3 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">Área 1</th> <!-- Adicionada coluna para Área 1 -->
+                                <th scope="col" class="px-3 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">Área 2</th> <!-- Adicionada coluna para Área 2 -->
                                 <th scope="col" class="px-3 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="alunosTableBody">
                             <?php
-                            $dados = $select_model->alunos_aptos_curso();
-                            foreach ($dados as $index => $dado) {
-                                $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'area-desenvolvimento' : ($dado['perfil_opc1'] === 'design' ? 'area-design' : ($dado['perfil_opc1'] === 'midia' ? 'area-midia' : 'area-redes'));
-                                $areaClassOpc2 = $dado['perfil_opc2'] === 'desenvolvimento' ? 'area-desenvolvimento' : ($dado['perfil_opc2'] === 'design' ? 'area-design' : ($dado['perfil_opc2'] === 'midia' ? 'area-midia' : 'area-redes'));
+                            // Helper para determinar classe e ícone (duplicação intencional para clareza)
+                            $getAreaHtmlPHP = function($area) {
+                                if (!$area || $area === '') return '<span class="text-gray-500">-</span>';
+                                $lowerArea = strtolower($area);
+                                $areaClass = '';
+                                $iconClass = '';
+
+                                if (strpos($lowerArea, 'desenvolvimento') !== false) {
+                                    $areaClass = 'area-desenvolvimento';
+                                    $iconClass = 'fas fa-code';
+                                } else if (strpos($lowerArea, 'design') !== false || strpos($lowerArea, 'midia') !== false) {
+                                    $areaClass = 'area-design';
+                                    $iconClass = 'fas fa-paint-brush';
+                                } else if (strpos($lowerArea, 'tutoria') !== false) {
+                                    $areaClass = 'area-tutoria';
+                                    $iconClass = 'fas fa-chalkboard-teacher';
+                                } else if (strpos($lowerArea, 'suporte') !== false || strpos($lowerArea, 'redes') !== false) {
+                                    $areaClass = 'area-redes';
+                                    $iconClass = 'fas fa-network-wired';
+                                } else {
+                                    $areaClass = '';
+                                    $iconClass = 'fas fa-question';
+                                }
+
+                                // Garantir que a classe status-pill seja aplicada aqui
+                                return '<span class="status-pill ' . $areaClass . '">' . ('' !== $iconClass ? '<i class="' . $iconClass . ' text-xs mr-1"></i>' : '') . htmlspecialchars($area) . '</span>';
+                            };
+
+                            foreach ($dados_alunos_filtrados as $index => $dado) {
+                                $area1Html = $getAreaHtmlPHP($dado['perfil_opc1'] ?? '');
+                                $area2Html = $getAreaHtmlPHP($dado['perfil_opc2'] ?? '');
                                 $statusClass = $dado['custeio'] == 1 ? 'status-ativo' : (strtolower($dado['ocorrencia']) === 'estagiando' ? 'status-estagiando' : 'status-inativo');
                             ?>
                                 <tr class="hover:bg-dark-50 transition-colors slide-up" style="animation-delay: <?= $index * 50 ?>ms;">
                                     <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white"><?= htmlspecialchars($dado['nome']) ?></td>
+                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-300 text-center"><?= $area1Html ?></td> <!-- Nova coluna Área 1 centralizada -->
+                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-300 text-center"><?= $area2Html ?></td> <!-- Nova coluna Área 2 centralizada -->
                                     <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
                                         <button type="button" class="ver-detalhes-btn text-blue-400 hover:text-blue-300 mr-2 transition-colors" data-id="<?= $dado['id'] ?>">
                                             <a href="?modal=ver&id=<?= $dado['id'] ?>" class="text-blue-400 hover:text-blue-300">
@@ -1463,9 +1497,37 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                 <!-- Cards Mobile -->
                 <div id="alunosMobileCards" class="mobile-cards-container space-y-4">
                     <?php
-                    foreach ($dados as $dado) {
-                        $areaClassOpc1 = $dado['perfil_opc1'] === 'desenvolvimento' ? 'area-desenvolvimento' : ($dado['perfil_opc1'] === 'design' ? 'area-design' : ($dado['perfil_opc1'] === 'midia' ? 'area-midia' : 'area-redes'));
-                        $areaClassOpc2 = $dado['perfil_opc2'] === 'desenvolvimento' ? 'area-desenvolvimento' : ($dado['perfil_opc2'] === 'design' ? 'area-design' : ($dado['perfil_opc2'] === 'midia' ? 'area-midia' : 'area-redes'));
+                    foreach ($dados_alunos_filtrados as $dado) {
+                        // Helper para determinar classe e ícone (duplicação intencional para clareza entre renderizadores)
+                        $getAreaHtmlPHP = function($area) {
+                            if (!$area || $area === '') return '<span class="text-gray-500">-</span>';
+                            $lowerArea = strtolower($area);
+                            $areaClass = '';
+                            $iconClass = '';
+
+                            if (strpos($lowerArea, 'desenvolvimento') !== false) {
+                                $areaClass = 'area-desenvolvimento';
+                                $iconClass = 'fas fa-code';
+                            } else if (strpos($lowerArea, 'design') !== false || strpos($lowerArea, 'midia') !== false) {
+                                $areaClass = 'area-design';
+                                $iconClass = 'fas fa-paint-brush';
+                            } else if (strpos($lowerArea, 'tutoria') !== false) {
+                                $areaClass = 'area-tutoria';
+                                $iconClass = 'fas fa-chalkboard-teacher';
+                            } else if (strpos($lowerArea, 'suporte') !== false || strpos($lowerArea, 'redes') !== false) {
+                                $areaClass = 'area-redes';
+                                $iconClass = 'fas fa-network-wired';
+                            } else {
+                                $areaClass = '';
+                                $iconClass = 'fas fa-question';
+                            }
+
+                            // Garantir que a classe status-pill seja aplicada aqui
+                            return `<span class="status-pill ${areaClass}"><i class="${iconClass} text-xs mr-1"></i>${area}</span>`;
+                        };
+
+                        $area1Html = $getAreaHtmlPHP($dado['perfil_opc1'] ?? '');
+                        $area2Html = $getAreaHtmlPHP($dado['perfil_opc2'] ?? '');
                         $statusClass = $dado['custeio'] == 1 ? 'status-ativo' : (strtolower($dado['ocorrencia']) === 'estagiando' ? 'status-estagiando' : 'status-inativo');
                     ?>
                         <div class="mobile-card bg-dark-300 rounded-lg p-4 shadow-md">
@@ -1483,53 +1545,45 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                                     </button>
                                 </div>
                             </div>
+                            <!-- Exibir opções de perfil diretamente no card mobile -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <?= $area1Html ?>
+                                <?= $area2Html ?>
+                            </div>
                             <div id="detalhes-mobile-<?= $dado['id'] ?>" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
                                 <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <span class="text-gray-400 text-sm">Contato:</span>
-                                        <p class="text-white"><?= htmlspecialchars($dado['contato'] ?: '-') ?></p>
+                                    <div class="mobile-card-item">
+                                        <span class="mobile-card-label">Contato:</span>
+                                        <span class="mobile-card-value"><?= htmlspecialchars($dado['contato'] ?: '-') ?></span>
                                     </div>
-                                    <div>
-                                        <span class="text-gray-400 text-sm">Médias:</span>
-                                        <p class="text-white"><?= htmlspecialchars($dado['medias'] ?: '-') ?></p>
+                                     <div class="mobile-card-item">
+                                        <span class="mobile-card-label">Médias:</span>
+                                        <span class="mobile-card-value"><?= htmlspecialchars($dado['medias'] ?: '-') ?></span>
                                     </div>
-                                    <div>
-                                        <span class="text-gray-400 text-sm">Email:</span>
-                                        <p class="text-white"><?= htmlspecialchars($dado['email'] ?: '-') ?></p>
+                                    <div class="mobile-card-item">
+                                        <span class="mobile-card-label">Email:</span>
+                                        <span class="mobile-card-value"><?= htmlspecialchars($dado['email'] ?: '-') ?></span>
                                     </div>
-                                    <div>
-                                        <span class="text-gray-400 text-sm">Projetos:</span>
-                                        <p class="text-white"><?= htmlspecialchars($dado['projetos'] ?: '-') ?></p>
+                                    <div class="mobile-card-item">
+                                        <span class="mobile-card-label">Projetos:</span>
+                                        <span class="mobile-card-value"><?= htmlspecialchars($dado['projetos'] ?: '-') ?></span>
                                     </div>
-                                    <div>
-                                        <span class="text-gray-400 text-sm">Opção 2:</span>
-                                        <p class="text-white">
-                                            <span class="status-pill <?= $areaClassOpc2 ?>">
-                                                <i class="fas fa-${
-                                                    $dado['perfil_opc2'] === 'desenvolvimento' ? 'code' :
-                                                    $dado['perfil_opc2'] === 'design' ? 'paint-brush' :
-                                                    $dado['perfil_opc2'] === 'midia' ? 'video' :
-                                                    'network-wired'
-                                                } text-xs mr-1"></i>
-                                                <?= htmlspecialchars($dado['perfil_opc2']) ?>
-                                            </span>
-                                        </p>
+                                    <!-- Opções de perfil removidas daqui, pois já são exibidas acima -->
+                                     <div class="mobile-card-item">
+                                        <span class="mobile-card-label">Ocorrência:</span>
+                                        <span class="mobile-card-value"><?= htmlspecialchars($dado['ocorrencia'] ?: '-') ?></span>
                                     </div>
-                                    <div>
-                                        <span class="text-gray-400 text-sm">Ocorrência:</span>
-                                        <p class="text-white"><?= htmlspecialchars($dado['ocorrencia'] ?: '-') ?></p>
+                                    <div class="mobile-card-item">
+                                        <span class="mobile-card-label">Custeio:</span>
+                                        <span class="mobile-card-value"><?= $dado['custeio'] == 1 ? 'Sim' : 'Não' ?></span>
                                     </div>
-                                    <div>
-                                        <span class="text-gray-400 text-sm">Custeio:</span>
-                                        <p class="text-white"><?= $dado['custeio'] == 1 ? 'Sim' : 'Não' ?></p>
+                                     <div class="mobile-card-item">
+                                        <span class="mobile-card-label">Entregas Individuais:</span>
+                                        <span class="mobile-card-value"><?= htmlspecialchars($dado['entregas_individuais'] ?? '-') ?></span>
                                     </div>
-                                    <div>
-                                        <span class="text-gray-400 text-sm">Entregas Individuais:</span>
-                                        <p class="text-white"><?= htmlspecialchars($dado['entregas_individuais'] ?? '-') ?></p>
-                                    </div>
-                                    <div>
-                                        <span class="text-gray-400 text-sm">Entregas do Grupo:</span>
-                                        <p class="text-white"><?= htmlspecialchars($dado['entregas_grupo'] ?? '-') ?></p>
+                                    <div class="mobile-card-item">
+                                        <span class="mobile-card-label">Entregas do Grupo:</span>
+                                        <span class="mobile-card-value"><?= htmlspecialchars($dado['entregas_grupo'] ?? '-') ?></span>
                                     </div>
                                 </div>
                             </div>
@@ -1803,11 +1857,13 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                     </div>
                     <div class="flex flex-col gap-1">
                         <span class="font-semibold text-gray-300 text-sm">Opção 1:</span>
-                        <span class="text-white"><?= htmlspecialchars($verAluno['perfil_opc1'] ?? '-') ?></span>
+                        <!-- Usar a helper PHP para exibir o perfil com estilo -->
+                        <?= $getAreaHtmlPHP($verAluno['perfil_opc1'] ?? '') ?>
                     </div>
                     <div class="flex flex-col gap-1">
                         <span class="font-semibold text-gray-300 text-sm">Opção 2:</span>
-                        <span class="text-white"><?= htmlspecialchars($verAluno['perfil_opc2'] ?? '-') ?></span>
+                        <!-- Usar a helper PHP para exibir o perfil com estilo -->
+                        <?= $getAreaHtmlPHP($verAluno['perfil_opc2'] ?? '') ?>
                     </div>
                     <div class="flex flex-col gap-1">
                         <span class="font-semibold text-gray-300 text-sm">Ocorrência:</span>
@@ -1902,12 +1958,13 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                 console.error('Table body element not found');
                 return;
             }
-            
+
             tbody.innerHTML = '';
 
             if (!Array.isArray(alunosFiltrados) || alunosFiltrados.length === 0) {
                 const tr = document.createElement('tr');
-                tr.innerHTML = '<td colspan="2" class="px-3 py-4 text-center text-sm text-gray-400">Nenhum aluno encontrado</td>';
+                // Atualizar colspan para 4, pois adicionamos 2 colunas
+                tr.innerHTML = '<td colspan="4" class="px-3 py-4 text-center text-sm text-gray-400">Nenhum aluno encontrado</td>';
                 tbody.appendChild(tr);
                 return;
             }
@@ -1921,8 +1978,31 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-dark-50 transition-colors slide-up';
                 tr.style.animationDelay = `${index * 50}ms`;
+
+                // Helper para determinar classe e ícone
+                const getAreaHtml = (area) => {
+                    if (!area || area === '-') return '<span class="text-gray-500">-</span>';
+                    const lowerArea = area.toLowerCase();
+                    let areaClass = '';
+                    let iconClass = '';
+
+                    if (lowerArea.includes('desenvolvimento')) { areaClass = 'area-desenvolvimento'; iconClass = 'fas fa-code'; }
+                    else if (lowerArea.includes('design') || lowerArea.includes('midia')) { areaClass = 'area-design'; iconClass = 'fas fa-paint-brush'; }
+                    else if (lowerArea.includes('tutoria')) { areaClass = 'area-tutoria'; iconClass = 'fas fa-chalkboard-teacher'; }
+                    else if (lowerArea.includes('suporte') || lowerArea.includes('redes')) { areaClass = 'area-redes'; iconClass = 'fas fa-network-wired'; }
+                    else { areaClass = ''; iconClass = 'fas fa-question'; }
+
+                    // Garantir que a classe status-pill seja aplicada aqui
+                    return `<span class="status-pill ${areaClass}"><i class="${iconClass} text-xs mr-1"></i>${area}</span>`;
+                };
+
+                const area1Html = getAreaHtml(aluno.perfil_opc1);
+                const area2Html = getAreaHtml(aluno.perfil_opc2);
+
                 tr.innerHTML = `
                     <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-white">${aluno.nome}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-300 text-center">${area1Html}</td> <!-- Nova coluna Área 1 centralizada -->
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-300 text-center">${area2Html}</td> <!-- Nova coluna Área 2 centralizada -->
                     <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium action-icons">
                         <button type="button" class="ver-detalhes-btn text-blue-400 hover:text-blue-300 mr-2 transition-colors" data-id="${aluno.id}">
                             <i class="fas fa-info-circle"></i>
@@ -1961,14 +2041,25 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                 const card = document.createElement('div');
                 card.className = 'mobile-card bg-dark-300 rounded-lg p-4 shadow-md';
 
-                const areaClassOpc1 = aluno.perfil_opc1 === 'desenvolvimento' ? 'area-desenvolvimento' :
-                    aluno.perfil_opc1 === 'design' ? 'area-design' :
-                    aluno.perfil_opc1 === 'midia' ? 'area-midia' :
-                    'area-redes';
-                const areaClassOpc2 = aluno.perfil_opc2 === 'desenvolvimento' ? 'area-desenvolvimento' :
-                    aluno.perfil_opc2 === 'design' ? 'area-design' :
-                    aluno.perfil_opc2 === 'midia' ? 'area-midia' :
-                    'area-redes';
+                // Helper para determinar classe e ícone (duplicação intencional para clareza entre renderizadores)
+                const getAreaHtml = (area) => {
+                    if (!area || area === '-') return '<span class="text-gray-500">-</span>';
+                    const lowerArea = area.toLowerCase();
+                    let areaClass = '';
+                    let iconClass = '';
+
+                    if (lowerArea.includes('desenvolvimento')) { areaClass = 'area-desenvolvimento'; iconClass = 'fas fa-code'; }
+                    else if (lowerArea.includes('design') || lowerArea.includes('midia')) { areaClass = 'area-design'; iconClass = 'fas fa-paint-brush'; }
+                    else if (lowerArea.includes('tutoria')) { areaClass = 'area-tutoria'; iconClass = 'fas fa-chalkboard-teacher'; }
+                    else if (lowerArea.includes('suporte') || lowerArea.includes('redes')) { areaClass = 'area-redes'; iconClass = 'fas fa-network-wired'; }
+                    else { areaClass = ''; iconClass = 'fas fa-question'; }
+
+                    // Garantir que a classe status-pill seja aplicada aqui
+                    return `<span class="status-pill ${areaClass}"><i class="${iconClass} text-xs mr-1"></i>${area}</span>`;
+                };
+
+                const area1Html = getAreaHtml(aluno.perfil_opc1);
+                const area2Html = getAreaHtml(aluno.perfil_opc2);
 
                 card.innerHTML = `
                     <div class="flex justify-between items-center mb-4">
@@ -1985,53 +2076,45 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
                             </button>
                         </div>
                     </div>
+                    <!-- Exibir opções de perfil diretamente no card mobile -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        ${area1Html}
+                        ${area2Html}
+                    </div>
                     <div id="detalhes-mobile-${aluno.id}" class="hidden space-y-3 mt-4 pt-4 border-t border-gray-700">
                         <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <span class="text-gray-400 text-sm">Contato:</span>
-                                <p class="text-white">${aluno.contato}</p>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Contato:</span>
+                                <span class="mobile-card-value">${aluno.contato}</span>
                             </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Médias:</span>
-                                <p class="text-white">${aluno.medias}</p>
+                             <div class="mobile-card-item">
+                                <span class="mobile-card-label">Médias:</span>
+                                <span class="mobile-card-value">${aluno.medias}</span>
                             </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Email:</span>
-                                <p class="text-white">${aluno.email}</p>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Email:</span>
+                                <span class="mobile-card-value">${aluno.email}</span>
                             </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Projetos:</span>
-                                <p class="text-white">${aluno.projetos}</p>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Projetos:</span>
+                                <span class="mobile-card-value">${aluno.projetos}</span>
                             </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Opção 2:</span>
-                                <p class="text-white">
-                                    <span class="status-pill ${areaClassOpc2}">
-                                        <i class="fas fa-${
-                                            aluno.perfil_opc2 === 'desenvolvimento' ? 'code' :
-                                            aluno.perfil_opc2 === 'design' ? 'paint-brush' :
-                                            aluno.perfil_opc2 === 'midia' ? 'video' :
-                                            'network-wired'
-                                        } text-xs mr-1"></i>
-                                        ${aluno.perfil_opc2}
-                                    </span>
-                                </p>
+                            <!-- Opções de perfil removidas daqui, pois já são exibidas acima -->
+                             <div class="mobile-card-item">
+                                <span class="mobile-card-label">Ocorrência:</span>
+                                <span class="mobile-card-value">${aluno.ocorrencia}</span>
                             </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Ocorrência:</span>
-                                <p class="text-white">${aluno.ocorrencia}</p>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Custeio:</span>
+                                <span class="mobile-card-value">${aluno.custeio == 1 ? 'Sim' : 'Não'}</span>
                             </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Custeio:</span>
-                                <p class="text-white">${aluno.custeio == 1 ? 'Sim' : 'Não'}</p>
+                             <div class="mobile-card-item">
+                                <span class="mobile-card-label">Entregas Individuais:</span>
+                                <span class="mobile-card-value">${aluno.entregas_individuais}</span>
                             </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Entregas Individuais:</span>
-                                <p class="text-white">${aluno.entregas_individuais}</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400 text-sm">Entregas do Grupo:</span>
-                                <p class="text-white">${aluno.entregas_grupo}</p>
+                            <div class="mobile-card-item">
+                                <span class="mobile-card-label">Entregas do Grupo:</span>
+                                <span class="mobile-card-value">${aluno.entregas_grupo}</span>
                             </div>
                         </div>
                     </div>
@@ -2043,38 +2126,59 @@ if (($modal === 'editar' || $modal === 'ver') && $editId) {
             adicionarEventListeners();
         }
 
-        // Função para aplicar filtros
+        // Função para aplicar filtros (considera busca e perfil)
         function aplicarFiltros() {
             const searchTerm = document.getElementById('searchAluno').value.toLowerCase().trim();
+            const perfilFiltro = document.getElementById('filterPerfil').value.toLowerCase();
+
             const alunosFiltrados = alunos.filter(aluno => {
                 const matchSearch = aluno.nome.toLowerCase().includes(searchTerm);
-                return matchSearch;
+                
+                // Lógica de filtro de perfil: verifica se o aluno tem o perfil selecionado em qualquer opção
+                const matchPerfil = perfilFiltro === '' || 
+                                    (aluno.perfil_opc1 && aluno.perfil_opc1.toLowerCase().includes(perfilFiltro)) ||
+                                    (aluno.perfil_opc2 && aluno.perfil_opc2.toLowerCase().includes(perfilFiltro));
+
+                return matchSearch && matchPerfil;
             });
 
             renderizarTabelaDesktop(alunosFiltrados);
             renderizarCardsMobile(alunosFiltrados);
         }
 
-        // Event listener for search
+        // Adicionar event listeners para os filtros e busca
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM carregado, inicializando...');
+            
             const searchInput = document.getElementById('searchAluno');
+            const filterPerfil = document.getElementById('filterPerfil');
+
             if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const termo = this.value.toLowerCase();
-                    const alunosFiltrados = alunos.filter(aluno => 
-                        aluno.nome.toLowerCase().includes(termo)
-                    );
-                    renderizarTabelaDesktop(alunosFiltrados);
-                    renderizarCardsMobile(alunosFiltrados);
+                console.log('Adicionando event listener para busca');
+                searchInput.addEventListener('input', function(e) {
+                    console.log('Input de busca alterado:', e.target.value);
+                    aplicarFiltros();
                 });
+            } else {
+                console.error('Elemento de busca não encontrado');
             }
+
+            if (filterPerfil) {
+                console.log('Adicionando event listener para filtro de perfil');
+                filterPerfil.addEventListener('change', function(e) {
+                    console.log('Filtro de perfil alterado:', e.target.value);
+                    aplicarFiltros();
+                });
+            } else {
+                console.error('Elemento de filtro de perfil não encontrado');
+            }
+
+            // Renderizar a tabela e cards inicialmente
+            aplicarFiltros();
         });
 
-        // Expose additional functions to global scope
-        window.renderizarTabelaDesktop = renderizarTabelaDesktop;
-        window.renderizarCardsMobile = renderizarCardsMobile;
-        window.aplicarFiltros = aplicarFiltros;
     </script>
+
 </body>
 
 </html>

@@ -164,9 +164,48 @@ class select_model extends connect
     }
     function alunos_aptos_curso($nome_perfil = 0, $search = '', $filtro = '')
     {
-        $sql = "SELECT * FROM aluno";
+        $sql = "SELECT 
+                    a.id,
+                    a.nome,
+                    a.contato,
+                    a.medias,
+                    a.email,
+                    a.projetos,
+                    a.perfil_opc1,
+                    a.perfil_opc2,
+                    a.ocorrencia,
+                    a.custeio,
+                    a.entregas_individuais,
+                    a.entregas_grupo
+                FROM aluno a
+                WHERE 1=1";
+
+        $params = [];
+
+        if (!empty($search)) {
+            $sql .= " AND (a.nome LIKE ? OR a.email LIKE ? OR a.contato LIKE ?)";
+            $searchTerm = "%{$search}%";
+            $params[] = $searchTerm;
+            $params[] = $searchTerm;
+            $params[] = $searchTerm;
+        }
+
+        if (!empty($nome_perfil)) {
+            $sql .= " AND (a.perfil_opc1 = ? OR a.perfil_opc2 = ?)";
+            $params[] = $nome_perfil;
+            $params[] = $nome_perfil;
+        }
+
+        $sql .= " ORDER BY a.nome ASC";
+
         $stmt = $this->connect->prepare($sql);
-        $stmt->execute();
+        
+        if (!empty($params)) {
+            $stmt->execute($params);
+        } else {
+            $stmt->execute();
+        }
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     function alunos_aptos($nome_perfil = 0, $search = '', $filtro = '')
