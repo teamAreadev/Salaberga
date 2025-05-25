@@ -11,7 +11,7 @@ class Usuario {
         $stmt->execute([$email]);
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($usuario && $usuario['senha'] === md5($senha)) {
+        if ($usuario && password_verify($senha, $usuario['senha'])) {
             return $usuario;
         }
         return false;
@@ -23,10 +23,11 @@ class Usuario {
     }
 
     public function criarUsuario($nome, $email, $senha, $tipo) {
+        $senhaHash = password_hash($senha, PASSWORD_BCRYPT);
         $stmt = $this->pdo->prepare("
             INSERT INTO usuarios (nome, email, senha, tipo)
             VALUES (?, ?, ?, ?)
         ");
-        return $stmt->execute([$nome, $email, md5($senha), $tipo]);
+        return $stmt->execute([$nome, $email, $senhaHash, $tipo]);
     }
 } 
