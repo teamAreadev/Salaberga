@@ -1,5 +1,7 @@
 <?php
 
+ob_start(); // Iniciar buffering de saída para capturar qualquer saída inesperada
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -26,6 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
         $id = $_GET['id'];
         $demanda_data = $demanda->buscarDemanda($id);
 
+        // Capturar qualquer saída inesperada antes de enviar o JSON
+        $unexpected_output = ob_get_clean();
+        ob_start(); // Reiniciar o buffer para a saída JSON
+
         if ($demanda_data) {
             $response = [
                 'id' => $demanda_data['id'],
@@ -33,17 +39,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
                 'descricao' => $demanda_data['descricao'],
                 'prioridade' => $demanda_data['prioridade'],
                 'status' => $demanda_data['status'],
-                'usuario_id' => $demanda_data['usuario_id'],
-                'admin_id' => $demanda_data['admin_id']
+                'admin_id' => $demanda_data['admin_id'],
+                'usuarios_atribuidos' => $demanda_data['usuarios_atribuidos'] ?? []
             ];
-            
+
+            // Se houver saída inesperada, adicione ao JSON de sucesso (para não perder a info)
+             if (!empty($unexpected_output)) {
+                 $response['debug_output'] = $unexpected_output;
+             }
+
             header('Content-Type: application/json; charset=utf-8');
             echo json_encode($response);
-            exit();
+            exit(); // Termina a execução após enviar JSON
         } else {
             header('Content-Type: application/json; charset=utf-8');
-            echo json_encode(['error' => 'Demanda não encontrada.']);
-            exit();
+            http_response_code(404);
+            $error_response = ['error' => 'Demanda não encontrada.'];
+            
+            // Se houver saída inesperada, adicione ao JSON de erro
+            if (!empty($unexpected_output)) {
+                $error_response['debug_output'] = $unexpected_output;
+            }
+
+            echo json_encode($error_response);
+            exit(); // Termina a execução após enviar JSON
         }
     } elseif ($_GET['action'] === 'excluir' && isset($_GET['id'])) {
         $demanda->excluirDemanda($_GET['id']);
@@ -54,74 +73,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
 
 // Tratamento de requisições POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
-    if ($_POST['acao'] === 'criar') {
-        $titulo = $_POST['titulo'] ?? '';
-        $descricao = $_POST['descricao'] ?? '';
-        $prioridade = $_POST['prioridade'] ?? 'media';
-        $usuario_id = $_POST['usuario_id'] ?? null;
+    switch ($_POST['acao']) {
+        case 'criar':
+            $titulo = $_POST['titulo'] ?? '';
+            $descricao = $_POST['descricao'] ?? '';
+            $prioridade = $_POST['prioridade'] ?? 'media';
+            $usuarios_ids = isset($_POST['usuarios_ids']) ? (is_array($_POST['usuarios_ids']) ? $_POST['usuarios_ids'] : [$_POST['usuarios_ids']]) : [];
 
-        if (empty($titulo) || empty($descricao)) {
-            header("Location: ../views/admin.php?error=Por favor, preencha título e descrição.");
+            if (empty($titulo) || empty($descricao)) {
+                header("Location: ../views/admin.php?error=Por favor, preencha título e descrição.");
+                exit();
+            }
+
+            $admin_id = $_SESSION['usuario_id'];
+            $sucesso = $demanda->criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuarios_ids);
+
+            if ($sucesso) {
+                header("Location: ../views/admin.php?success=Demanda criada com sucesso!");
+            } else {
+                header("Location: ../views/admin.php?error=Erro ao criar demanda.");
+            }
             exit();
-        }
+        case 'atualizar_demanda':
+            if (isset($_POST['id'])) {
+                $id = $_POST['id'];
+                $titulo = $_POST['titulo'] ?? '';
+                $descricao = $_POST['descricao'] ?? '';
+                $prioridade = $_POST['prioridade'] ?? 'media';
+                $status = $_POST['status'] ?? 'pendente';
+                $usuarios_ids = isset($_POST['usuarios_ids']) ? (is_array($_POST['usuarios_ids']) ? $_POST['usuarios_ids'] : [$_POST['usuarios_ids']]) : [];
 
-        $admin_id = $_SESSION['usuario_id'];
-        $sucesso = $demanda->criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuario_id);
+                if (empty($titulo) || empty($descricao)) {
+                    header("Location: ../views/admin.php?error=Por favor, preencha título e descrição.");
+                    exit();
+                }
 
-        if ($sucesso) {
-            header("Location: ../views/admin.php?success=Demanda criada com sucesso!");
-        } else {
-            header("Location: ../views/admin.php?error=Erro ao criar demanda.");
-        }
-        exit();
-    } elseif ($_POST['acao'] === 'atualizar_demanda' && isset($_POST['id'])) {
-        $id = $_POST['id'];
-        $titulo = $_POST['titulo'] ?? '';
-        $descricao = $_POST['descricao'] ?? '';
-        $prioridade = $_POST['prioridade'] ?? 'media';
-        $status = $_POST['status'] ?? 'pendente';
-        $usuario_id = $_POST['usuario_id'] ?? null;
-
-        if (empty($titulo) || empty($descricao)) {
-            header("Location: ../views/admin.php?error=Por favor, preencha título e descrição.");
-            exit();
-        }
-
-        $sucesso = $demanda->atualizarDemanda($id, $titulo, $descricao, $prioridade, $status, $usuario_id);
-        
-        if ($sucesso) {
-            header("Location: ../views/admin.php?success=Demanda atualizada com sucesso!");
-        } else {
-            header("Location: ../views/admin.php?error=Erro ao atualizar demanda.");
-        }
-        exit();
-    } elseif ($_POST['acao'] === 'atualizar_status' && isset($_POST['id']) && isset($_POST['novo_status'])) {
-        $id_demanda = $_POST['id'];
-        $novo_status = $_POST['novo_status'];
-
-        if (!$demanda->verificarPermissaoUsuario($id_demanda, $_SESSION['usuario_id'])) {
-            header("Location: " . (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin' ? '../views/admin.php' : '../views/usuario.php') . "?error=Você não tem permissão para alterar o status desta demanda.");
-            exit();
-        }
-
-        $sucesso = false;
-        if ($novo_status === 'concluida') {
-            $sucesso = $demanda->marcarConcluida($id_demanda);
-        } elseif ($novo_status === 'em_andamento') {
-            $sucesso = $demanda->marcarEmAndamento($id_demanda);
-        }
-
-        if ($sucesso) {
-            header("Location: " . (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin' ? '../views/admin.php' : '../views/usuario.php') . "?success=Status atualizado com sucesso!");
-        } else {
-            header("Location: " . (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin' ? '../views/admin.php' : '../views/usuario.php') . "?error=Erro ao atualizar status.");
-        }
-        exit();
+                $sucesso = $demanda->atualizarDemanda($id, $titulo, $descricao, $prioridade, $status, $usuarios_ids);
+                
+                if ($sucesso) {
+                    header("Location: ../views/admin.php?success=Demanda atualizada com sucesso!");
+                } else {
+                    header("Location: ../views/admin.php?error=Erro ao atualizar demanda.");
+                }
+                exit();
+            }
+            break;
+        case 'atualizar_status':
+            if (isset($_POST['id']) && isset($_POST['novo_status'])) {
+                $demanda = new Demanda($pdo);
+                if ($_POST['novo_status'] === 'em_andamento') {
+                    $demanda->marcarEmAndamento($_POST['id'], $_POST['usuario_id'] ?? $_SESSION['usuario_id']);
+                } elseif ($_POST['novo_status'] === 'concluida') {
+                    $demanda->marcarConcluida($_POST['id'], $_POST['usuario_id'] ?? $_SESSION['usuario_id']);
+                }
+                
+                // Redireciona para a página correta baseado no tipo de usuário
+                if ($_SESSION['usuario_tipo'] === 'admin') {
+                    header("Location: ../views/admin.php");
+                } else {
+                    header("Location: ../views/usuario.php");
+                }
+                exit();
+            }
+            break;
     }
 }
 
 // Redirecionamento padrão
 header("Location: ../views/admin.php");
-exit();
-
-?> 
+exit(); 

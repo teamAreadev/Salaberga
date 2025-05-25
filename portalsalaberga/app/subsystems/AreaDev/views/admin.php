@@ -178,8 +178,8 @@ foreach ($demandas as $d) {
     /* Cards Styles */
     .demand-card {
         background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
-        border-radius: 20px;
-        padding: 1.5rem;
+        border-radius: 16px;
+        padding: 1.25rem;
         margin-bottom: 1rem;
         box-shadow: 0 8px 32px rgba(0,0,0,0.2);
         border: 1px solid rgba(0, 122, 51, 0.1);
@@ -187,6 +187,9 @@ foreach ($demandas as $d) {
         position: relative;
         overflow: hidden;
         cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
     }
 
     .demand-card::before {
@@ -211,36 +214,140 @@ foreach ($demandas as $d) {
         transform: scaleX(1);
     }
 
-    .stats-card {
-        background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-        border: 1px solid rgba(0, 122, 51, 0.1);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .card-title {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .card-title h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 0.375rem;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
         overflow: hidden;
     }
 
-    .stats-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0, 122, 51, 0.1);
+    .card-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+        margin-bottom: 0.375rem;
     }
 
-    .user-card {
-        background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
-        border-radius: 16px;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        box-shadow: 0 6px 24px rgba(0,0,0,0.15);
-        border: 1px solid rgba(0, 122, 51, 0.1);
-        transition: all 0.3s ease;
+    .card-id {
+        font-size: 0.7rem;
+        color: #888888;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.2rem 0.4rem;
+        border-radius: 8px;
     }
 
-    .user-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 30px rgba(0, 122, 51, 0.1);
-        border-color: rgba(0, 255, 107, 0.2);
+    .card-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .card-description {
+        color: #cccccc;
+        font-size: 0.813rem;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .card-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .detail-label {
+        font-size: 0.7rem;
+        color: #888888;
+    }
+
+    .detail-value {
+        font-size: 0.813rem;
+        color: #ffffff;
+        font-weight: 500;
+    }
+
+    .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 0.375rem;
+    }
+
+    .card-participants {
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .participants-title {
+        font-size: 0.813rem;
+        color: #888888;
+        margin-bottom: 0.5rem;
+    }
+
+    .participants-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+    }
+
+    .participant-item {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.2rem 0.5rem;
+        background: rgba(0, 122, 51, 0.1);
+        border-radius: 8px;
+        font-size: 0.7rem;
+    }
+
+    .participant-avatar {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #007A33, #00FF6B);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.6rem;
+        color: white;
+        font-weight: 600;
     }
 
     /* Button Styles */
@@ -305,6 +412,211 @@ foreach ($demandas as $d) {
         font-weight: 400;
     }
 
+    /* Custom Multi-Select Styles */
+    .custom-multi-select {
+        position: relative;
+        width: 100%;
+    }
+
+    .multi-select-container {
+        background: rgba(35, 35, 35, 0.95);
+        border: 2px solid rgba(0, 122, 51, 0.2);
+        border-radius: 12px;
+        min-height: 50px;
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .multi-select-container:hover {
+        border-color: rgba(0, 122, 51, 0.4);
+    }
+
+    .multi-select-container.active {
+        border-color: #00FF6B;
+        box-shadow: 0 0 0 4px rgba(0, 255, 107, 0.1);
+    }
+
+    .multi-select-display {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        min-height: 32px;
+        align-items: center;
+    }
+
+    .multi-select-placeholder {
+        color: #888888;
+        font-weight: 400;
+        font-size: 14px;
+    }
+
+    .selected-user-tag {
+        background: linear-gradient(135deg, rgba(0, 122, 51, 0.3), rgba(0, 122, 51, 0.2));
+        border: 1px solid rgba(0, 122, 51, 0.4);
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        color: #00FF6B;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        animation: slideIn 0.3s ease;
+        transition: all 0.2s ease;
+    }
+
+    .selected-user-tag:hover {
+        background: linear-gradient(135deg, rgba(0, 122, 51, 0.4), rgba(0, 122, 51, 0.3));
+        transform: scale(1.05);
+    }
+
+    .remove-user-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 10px;
+        color: #ffffff;
+    }
+
+    .remove-user-btn:hover {
+        background: rgba(239, 68, 68, 0.8);
+        transform: scale(1.1);
+    }
+
+    .multi-select-arrow {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform 0.3s ease;
+        color: #888888;
+        pointer-events: none;
+    }
+
+    .multi-select-container.active .multi-select-arrow {
+        transform: translateY(-50%) rotate(180deg);
+    }
+
+    .multi-select-dropdown {
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(35, 35, 35, 0.98);
+        border: 2px solid rgba(0, 122, 51, 0.2);
+        border-radius: 12px;
+        margin-bottom: 4px;
+        overflow-y: auto;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .multi-select-dropdown.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .multi-select-search {
+        padding: 12px;
+        border-bottom: 1px solid rgba(0, 122, 51, 0.1);
+    }
+
+    .multi-select-search input {
+        width: 100%;
+        background: rgba(45, 45, 45, 0.8);
+        border: 1px solid rgba(0, 122, 51, 0.2);
+        border-radius: 8px;
+        padding: 8px 12px;
+        color: #ffffff;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .multi-select-search input:focus {
+        border-color: #00FF6B;
+        box-shadow: 0 0 0 2px rgba(0, 255, 107, 0.1);
+    }
+
+    .multi-select-search input::placeholder {
+        color: #888888;
+    }
+
+    .multi-select-option {
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .multi-select-option:last-child {
+        border-bottom: none;
+    }
+
+    .multi-select-option:hover {
+        background: rgba(0, 122, 51, 0.1);
+        color: #00FF6B;
+    }
+
+    .multi-select-option.selected {
+        background: rgba(0, 122, 51, 0.2);
+        color: #00FF6B;
+        font-weight: 500;
+    }
+
+    .multi-select-option.selected::before {
+        content: '✓';
+        font-weight: bold;
+        margin-right: 8px;
+    }
+
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #007A33, #00FF6B);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 12px;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .user-info {
+        flex: 1;
+    }
+
+    .user-name {
+        font-weight: 500;
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .user-email {
+        font-size: 12px;
+        color: #888888;
+    }
+
     /* Search and Filter Styles */
     .search-container {
         background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
@@ -341,15 +653,18 @@ foreach ($demandas as $d) {
 
     /* Status Badges */
     .status-badge {
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        text-transform: capitalize;
+        padding: 0.2rem 0.5rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .status-badge i {
+        font-size: 0.875rem;
     }
 
     .status-badge:hover {
@@ -373,6 +688,10 @@ foreach ($demandas as $d) {
         color: #4ade80;
         border: 1px solid rgba(34, 197, 94, 0.3);
     }
+    
+    .status-concluida i {
+        color: #4ade80;
+    }
 
     .status-cancelada {
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
@@ -382,11 +701,10 @@ foreach ($demandas as $d) {
 
     /* Priority Badges */
     .priority-badge {
-        padding: 0.25rem 0.75rem;
+        padding: 0.2rem 0.5rem;
         border-radius: 15px;
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         font-weight: 600;
-        
         letter-spacing: 0.05em;
     }
 
@@ -451,6 +769,17 @@ foreach ($demandas as $d) {
         }
     }
 
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
     .fade-in {
         animation: fadeIn 0.5s ease-out forwards;
     }
@@ -470,24 +799,24 @@ foreach ($demandas as $d) {
     }
 
     ::-webkit-scrollbar-track {
-        background: #1a1a1a;
+        background: rgba(35, 35, 35, 0.5);
         border-radius: 4px;
     }
 
     ::-webkit-scrollbar-thumb {
-        background: linear-gradient(135deg, #007A33, #00FF6B);
+        background: rgba(0, 122, 51, 0.5);
         border-radius: 4px;
+        transition: all 0.3s ease;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(135deg, #00FF6B, #007A33);
+        background: rgba(0, 122, 51, 0.7);
     }
 
     /* Responsive */
     @media (max-width: 768px) {
         .demand-card {
             padding: 1rem;
-            margin-bottom: 0.75rem;
         }
         
         .stats-card {
@@ -496,6 +825,15 @@ foreach ($demandas as $d) {
         
         .search-container {
             padding: 1.5rem;
+        }
+
+        .multi-select-dropdown {
+            max-height: 150px;
+        }
+
+        .selected-user-tag {
+            font-size: 11px;
+            padding: 3px 8px;
         }
     }
 
@@ -552,6 +890,22 @@ foreach ($demandas as $d) {
         margin-bottom: 1rem;
         opacity: 0.5;
     }
+
+    /* Hide original select */
+    .hidden-select {
+        display: none;
+    }
+
+    /* Estilização para o status 'concluido' dos participantes */
+    .status-concluido {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-concluido i {
+        color: #4ade80;
+    }
 </style>
 
 <body class="select-none">
@@ -581,9 +935,6 @@ foreach ($demandas as $d) {
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
-        <!-- Stats Cards -->
-        
-
         <?php if (!empty($erro)): ?>
         <div class="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg mb-6 fade-in">
             <div class="flex items-center gap-2">
@@ -639,19 +990,26 @@ foreach ($demandas as $d) {
             
             <div id="demandsContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 <?php foreach ($demandas as $index => $d): ?>
+                
+                <?php
+                // DEBUG: Verificar os dados de cada demanda (Admin View)
+                // echo '<h3>DEBUG ADMIN: Demanda ID: ' . $d['id'] . '</h3>';
+                // var_dump($d);
+                // echo '<hr>';
+                ?>
+
                 <div class="demand-card fade-in" 
                      style="animation-delay: <?php echo ($index * 0.1); ?>s"
                      data-status="<?php echo $d['status']; ?>"
                      data-title="<?php echo strtolower($d['titulo']); ?>"
-                     data-description="<?php echo strtolower($d['descricao']); ?>">
+                     data-description="<?php echo strtolower($d['descricao']); ?>"
+                     data-demanda-id="<?php echo $d['id']; ?>">
                     
                     <!-- Card Header -->
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white mb-2 line-clamp-2">
-                                <?php echo htmlspecialchars($d['titulo']); ?>
-                            </h3>
-                            <div class="flex items-center gap-2 mb-2">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3><?php echo htmlspecialchars($d['titulo']); ?></h3>
+                            <div class="card-meta">
                                 <span class="status-badge status-<?php echo $d['status']; ?>">
                                     <?php
                                     $statusIcons = [
@@ -660,7 +1018,7 @@ foreach ($demandas as $d) {
                                         'concluida' => 'fas fa-check-circle',
                                         'cancelada' => 'fas fa-ban'
                                     ];
-                                    $status_display = ucfirst(str_replace('_', ' ', $d['status'])); // Formatar para exibição
+                                    $status_display = ucfirst(str_replace('_', ' ', $d['status']));
                                     ?>
                                     <i class="<?php echo $statusIcons[$d['status']] ?? 'fas fa-question'; ?>"></i>
                                     <?php echo $status_display; ?>
@@ -670,29 +1028,27 @@ foreach ($demandas as $d) {
                                 </span>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <span class="text-xs text-gray-400">ID: #<?php echo $d['id']; ?></span>
-                        </div>
+                        <span class="card-id">#<?php echo $d['id']; ?></span>
                     </div>
                     
                     <!-- Card Content -->
-                    <div class="mb-4">
-                        <p class="text-gray-300 text-sm line-clamp-3 mb-3">
+                    <div class="card-content">
+                        <p class="card-description">
                             <?php echo htmlspecialchars($d['descricao']); ?>
                         </p>
                         
-                        <div class="grid grid-cols-2 gap-4 text-xs">
-                            <div>
-                                <span class="text-gray-400">Criado em:</span>
-                                <p class="text-white font-medium">
+                        <div class="card-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Criado em</span>
+                                <span class="detail-value">
                                     <?php echo date('d/m/Y', strtotime($d['data_criacao'])); ?>
-                                </p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400">
-                                    <?php echo !empty($d['data_conclusao']) ? 'Concluído em:' : 'Prazo:'; ?>
                                 </span>
-                                <p class="text-white font-medium">
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">
+                                    <?php echo !empty($d['data_conclusao']) ? 'Concluído em' : 'Prazo'; ?>
+                                </span>
+                                <span class="detail-value">
                                     <?php 
                                     if (!empty($d['data_conclusao'])) {
                                         echo date('d/m/Y', strtotime($d['data_conclusao']));
@@ -700,16 +1056,15 @@ foreach ($demandas as $d) {
                                         echo 'Não definido';
                                     }
                                     ?>
-                                </p>
+                                </span>
                             </div>
                         </div>
-                            </div>
+                    </div>
                     
-                    <!-- Card Actions -->
-                    <div class="flex items-center justify-between pt-4 border-t border-gray-700">
-                        <div class="flex items-center gap-2">
+                    <!-- Card Footer -->
+                    <div class="card-footer">
+                        <div class="card-actions">
                             <?php if ($d['admin_id'] == $_SESSION['usuario_id']): ?>
-                            
                             <button 
                                 onclick="editarDemanda(<?php echo $d['id']; ?>)" 
                                 class="custom-btn bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg"
@@ -724,37 +1079,70 @@ foreach ($demandas as $d) {
                                 <i class="fas fa-trash"></i>
                             </button>
 
-                            <?php if ($d['status'] === 'pendente' && (is_null($d['usuario_id']) || $d['usuario_id'] == 0 || $d['usuario_id'] == '' || $d['usuario_id'] == $_SESSION['usuario_id']) && $d['admin_id'] == $_SESSION['usuario_id']): ?>
+                            <?php 
+                            $is_assigned = false;
+                            if (!empty($d['usuarios_atribuidos'])) {
+                                foreach ($d['usuarios_atribuidos'] as $atribuido) {
+                                    if ($atribuido['id'] == $_SESSION['usuario_id']) {
+                                        $is_assigned = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            $can_perform_action = $is_assigned || empty($d['usuarios_atribuidos']);
+
+                            if ($d['status'] === 'pendente' && $can_perform_action): 
+                            ?>
                             <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarEmAndamento()">
                                 <input type="hidden" name="acao" value="atualizar_status">
                                 <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
                                 <input type="hidden" name="novo_status" value="em_andamento">
                                 <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white p-2 rounded-lg" title="Marcar como Em Andamento">
                                     <i class="fas fa-spinner"></i>
-                                    Realizar Tarefa
                                 </button>
                             </form>
                             <?php endif; ?>
 
-                            <?php if ($d['status'] === 'em_andamento' && (is_null($d['usuario_id']) || $d['usuario_id'] == 0 || $d['usuario_id'] == '' || $d['usuario_id'] == $_SESSION['usuario_id']) && $d['admin_id'] == $_SESSION['usuario_id']): ?>
+                            <?php 
+                            if ($d['status'] === 'em_andamento' && $can_perform_action): 
+                            ?>
                             <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarConclusao()">
                                 <input type="hidden" name="acao" value="atualizar_status">
                                 <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
                                 <input type="hidden" name="novo_status" value="concluida">
                                 <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg" title="Marcar como Concluída">
                                     <i class="fas fa-check"></i>
-                                    Concluir
                                 </button>
                             </form>
                             <?php endif; ?>
                             <?php endif; ?>
                         </div>
-                        
-                        <div class="text-xs text-gray-400">
-                            <i class="fas fa-user mr-1"></i>
-                            <?php echo !empty($d['usuario_nome']) ? htmlspecialchars($d['usuario_nome']) : 'Não atribuído'; ?>
+                    </div>
+
+                    <!-- Participants Section -->
+                    <?php if (!empty($d['usuarios_atribuidos'])): ?>
+                    <div class="card-participants">
+                        <h4 class="participants-title">Participantes</h4>
+                        <div class="participants-list">
+                            <?php foreach ($d['usuarios_atribuidos'] as $u_atrib): ?>
+                            <div class="participant-item">
+                                <span class="participant-name"><?php echo htmlspecialchars($u_atrib['nome']); ?></span>
+                                <span class="status-badge status-<?php echo $u_atrib['status']; ?>">
+                                    <?php
+                                    $statusIcons = [
+                                        'pendente' => 'fas fa-clock',
+                                        'em_andamento' => 'fas fa-spinner fa-spin',
+                                        'concluido' => 'fas fa-check-circle'
+                                    ];
+                                    ?>
+                                    <i class="<?php echo $statusIcons[$u_atrib['status']] ?? 'fas fa-question'; ?>"></i>
+                                    <?php echo ucfirst($u_atrib['status']); ?>
+                                </span>
+                            </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
+                    <?php endif; ?>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -831,8 +1219,38 @@ foreach ($demandas as $d) {
                             </div>
                             <div>
                     <label for="usuario_id" class="block text-sm font-medium text-gray-300 mb-2">Atribuir a</label>
-                    <select id="usuario_id" name="usuario_id" class="custom-select w-full">
-                        <option value="">Não atribuído</option>
+                    
+                    <!-- Custom Multi-Select -->
+                    <div class="custom-multi-select">
+                        <div class="multi-select-container" onclick="toggleMultiSelect('usuario_id')">
+                            <div class="multi-select-display" id="usuario_id_display">
+                                <span class="multi-select-placeholder">Selecione os usuários</span>
+                            </div>
+                            <i class="fas fa-chevron-down multi-select-arrow"></i>
+                        </div>
+                        
+                        <div class="multi-select-dropdown" id="usuario_id_dropdown">
+                            <div class="multi-select-search">
+                                <input type="text" placeholder="Buscar usuários..." onkeyup="filterUsers('usuario_id', this.value)">
+                            </div>
+                            <div class="multi-select-options" id="usuario_id_options">
+                                <?php foreach ($usuarios as $u): ?>
+                                <div class="multi-select-option" data-value="<?php echo $u['id']; ?>" onclick="toggleUserSelection('usuario_id', <?php echo $u['id']; ?>, '<?php echo htmlspecialchars($u['nome']); ?>', '<?php echo htmlspecialchars($u['email']); ?>')">
+                                    <div class="user-avatar">
+                                        <?php echo strtoupper(substr($u['nome'], 0, 2)); ?>
+                                    </div>
+                                    <div class="user-info">
+                                        <div class="user-name"><?php echo htmlspecialchars($u['nome']); ?></div>
+                                        <div class="user-email"><?php echo htmlspecialchars($u['email']); ?></div>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden select for form submission -->
+                    <select name="usuarios_ids[]" multiple class="hidden-select" id="usuario_id_hidden">
                                     <?php foreach ($usuarios as $u): ?>
                                     <option value="<?php echo $u['id']; ?>"><?php echo htmlspecialchars($u['nome']); ?></option>
                                     <?php endforeach; ?>
@@ -926,13 +1344,42 @@ foreach ($demandas as $d) {
                         <option value="pendente">Pendente</option>
                         <option value="em_andamento">Em Andamento</option>
                         <option value="concluida">Concluída</option>
-                        
                     </select>
                 </div>
                 <div>
                     <label for="editar_usuario_id" class="block text-sm font-medium text-gray-300 mb-2">Atribuir a</label>
-                    <select id="editar_usuario_id" name="usuario_id" class="custom-select w-full">
-                        <option value="">Não atribuído</option>
+                    
+                    <!-- Custom Multi-Select for Edit -->
+                    <div class="custom-multi-select">
+                        <div class="multi-select-container" onclick="toggleMultiSelect('editar_usuario_id')">
+                            <div class="multi-select-display" id="editar_usuario_id_display">
+                                <span class="multi-select-placeholder">Selecione os usuários</span>
+                            </div>
+                            <i class="fas fa-chevron-down multi-select-arrow"></i>
+                        </div>
+                        
+                        <div class="multi-select-dropdown" id="editar_usuario_id_dropdown">
+                            <div class="multi-select-search">
+                                <input type="text" placeholder="Buscar usuários..." onkeyup="filterUsers('editar_usuario_id', this.value)">
+                            </div>
+                            <div class="multi-select-options" id="editar_usuario_id_options">
+                                <?php foreach ($usuarios as $u): ?>
+                                <div class="multi-select-option" data-value="<?php echo $u['id']; ?>" onclick="toggleUserSelection('editar_usuario_id', <?php echo $u['id']; ?>, '<?php echo htmlspecialchars($u['nome']); ?>', '<?php echo htmlspecialchars($u['email']); ?>')">
+                                    <div class="user-avatar">
+                                        <?php echo strtoupper(substr($u['nome'], 0, 2)); ?>
+                                    </div>
+                                    <div class="user-info">
+                                        <div class="user-name"><?php echo htmlspecialchars($u['nome']); ?></div>
+                                        <div class="user-email"><?php echo htmlspecialchars($u['email']); ?></div>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden select for form submission -->
+                    <select name="usuarios_ids[]" multiple class="hidden-select" id="editar_usuario_id_hidden">
                         <?php foreach ($usuarios as $u): ?>
                             <option value="<?php echo $u['id']; ?>"><?php echo htmlspecialchars($u['nome']); ?></option>
                         <?php endforeach; ?>
@@ -973,6 +1420,160 @@ foreach ($demandas as $d) {
     </div>
 
     <script>
+        // Multi-Select functionality
+        const multiSelectData = {};
+
+        function initializeMultiSelect(selectId) {
+            if (!multiSelectData[selectId]) {
+                multiSelectData[selectId] = {
+                    selectedUsers: [],
+                    isOpen: false
+                };
+            }
+        }
+
+        function toggleMultiSelect(selectId) {
+            initializeMultiSelect(selectId);
+            
+            const container = document.querySelector(`#${selectId}_dropdown`).parentElement.querySelector('.multi-select-container');
+            const dropdown = document.getElementById(`${selectId}_dropdown`);
+            
+            // Close other dropdowns
+            document.querySelectorAll('.multi-select-dropdown.active').forEach(dd => {
+                if (dd.id !== `${selectId}_dropdown`) {
+                    dd.classList.remove('active');
+                    dd.parentElement.querySelector('.multi-select-container').classList.remove('active');
+                }
+            });
+            
+            multiSelectData[selectId].isOpen = !multiSelectData[selectId].isOpen;
+            
+            if (multiSelectData[selectId].isOpen) {
+                container.classList.add('active');
+                dropdown.classList.add('active');
+            } else {
+                container.classList.remove('active');
+                dropdown.classList.remove('active');
+            }
+        }
+
+        function toggleUserSelection(selectId, userId, userName, userEmail) {
+            initializeMultiSelect(selectId);
+            
+            const selectedUsers = multiSelectData[selectId].selectedUsers;
+            const existingIndex = selectedUsers.findIndex(user => user.id === userId);
+            
+            if (existingIndex > -1) {
+                // Remove user
+                selectedUsers.splice(existingIndex, 1);
+            } else {
+                // Add user
+                selectedUsers.push({
+                    id: userId,
+                    name: userName,
+                    email: userEmail
+                });
+            }
+            
+            updateMultiSelectDisplay(selectId);
+            updateHiddenSelect(selectId);
+            updateOptionStates(selectId);
+        }
+
+        function updateMultiSelectDisplay(selectId) {
+            const display = document.getElementById(`${selectId}_display`);
+            const selectedUsers = multiSelectData[selectId].selectedUsers;
+            
+            if (selectedUsers.length === 0) {
+                display.innerHTML = '<span class="multi-select-placeholder">Selecione os usuários</span>';
+            } else {
+                display.innerHTML = selectedUsers.map(user => `
+                    <div class="selected-user-tag">
+                        <span>${user.name}</span>
+                        <button type="button" class="remove-user-btn" onclick="removeUser('${selectId}', ${user.id})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateHiddenSelect(selectId) {
+            const hiddenSelect = document.getElementById(`${selectId}_hidden`);
+            const selectedUsers = multiSelectData[selectId].selectedUsers;
+            
+            // Clear all selections
+            Array.from(hiddenSelect.options).forEach(option => {
+                option.selected = false;
+            });
+            
+            // Select the chosen users
+            selectedUsers.forEach(user => {
+                const option = hiddenSelect.querySelector(`option[value="${user.id}"]`);
+                if (option) {
+                    option.selected = true;
+                }
+            });
+        }
+
+        function updateOptionStates(selectId) {
+            const selectedUsers = multiSelectData[selectId].selectedUsers;
+            const options = document.querySelectorAll(`#${selectId}_options .multi-select-option`);
+            
+            options.forEach(option => {
+                const userId = parseInt(option.dataset.value);
+                const isSelected = selectedUsers.some(user => user.id === userId);
+                
+                if (isSelected) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+        }
+
+        function removeUser(selectId, userId) {
+            const selectedUsers = multiSelectData[selectId].selectedUsers;
+            const index = selectedUsers.findIndex(user => user.id === userId);
+            
+            if (index > -1) {
+                selectedUsers.splice(index, 1);
+                updateMultiSelectDisplay(selectId);
+                updateHiddenSelect(selectId);
+                updateOptionStates(selectId);
+            }
+        }
+
+        function filterUsers(selectId, searchTerm) {
+            const options = document.querySelectorAll(`#${selectId}_options .multi-select-option`);
+            const term = searchTerm.toLowerCase();
+            
+            options.forEach(option => {
+                const userName = option.querySelector('.user-name').textContent.toLowerCase();
+                const userEmail = option.querySelector('.user-email').textContent.toLowerCase();
+                
+                if (userName.includes(term) || userEmail.includes(term)) {
+                    option.style.display = 'flex';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.custom-multi-select')) {
+                document.querySelectorAll('.multi-select-dropdown.active').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                    dropdown.parentElement.querySelector('.multi-select-container').classList.remove('active');
+                });
+                
+                Object.keys(multiSelectData).forEach(selectId => {
+                    multiSelectData[selectId].isOpen = false;
+                });
+            }
+        });
+
         // Modal Functions
         function openModal(modalId) {
             const modal = document.getElementById(modalId);
@@ -986,6 +1587,28 @@ foreach ($demandas as $d) {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
             document.body.style.overflow = 'auto';
+            
+            // Reset multi-selects when closing modals
+            if (modalId === 'criarDemandaModal') {
+                resetMultiSelect('usuario_id');
+            } else if (modalId === 'editarDemandaModal') {
+                resetMultiSelect('editar_usuario_id');
+            }
+        }
+
+        function resetMultiSelect(selectId) {
+            if (multiSelectData[selectId]) {
+                multiSelectData[selectId].selectedUsers = [];
+                multiSelectData[selectId].isOpen = false;
+                updateMultiSelectDisplay(selectId);
+                updateHiddenSelect(selectId);
+                updateOptionStates(selectId);
+                
+                const container = document.querySelector(`#${selectId}_dropdown`).parentElement.querySelector('.multi-select-container');
+                const dropdown = document.getElementById(`${selectId}_dropdown`);
+                container.classList.remove('active');
+                dropdown.classList.remove('active');
+            }
         }
 
         // Filter Functions
@@ -1050,20 +1673,17 @@ foreach ($demandas as $d) {
 
         // Edit Demand Function
         function editarDemanda(id) {
+            // Reset the edit form
+            resetMultiSelect('editar_usuario_id');
             
-            
-            // Limpar dados anteriores
             document.getElementById('editar_demanda_id').value = '';
             document.getElementById('editar_titulo').value = '';
             document.getElementById('editar_descricao').value = '';
             document.getElementById('editar_prioridade').value = 'media';
             document.getElementById('editar_status').value = 'pendente';
-            document.getElementById('editar_usuario_id').value = '';
 
             fetch(`../controllers/DemandaController.php?action=get_demanda&id=${id}`)
                 .then(response => {
-                    
-                    
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
@@ -1074,7 +1694,6 @@ foreach ($demandas as $d) {
                     }
                     
                     return response.text().then(text => {
-                        
                         try {
                             return JSON.parse(text);
                         } catch (e) {
@@ -1084,10 +1703,14 @@ foreach ($demandas as $d) {
                     });
                 })
                 .then(data => {
-                    
                     if (data.error) {
                         console.error('Erro ao buscar dados da demanda:', data.error);
+                         if (data.debug_output) {
+                             console.error('Saída inesperada de debug:', data.debug_output);
+                             alert('Erro ao carregar dados da demanda: ' + data.error + '\nSaída de Debug: ' + data.debug_output);
+                         } else {
                         alert('Erro ao carregar dados da demanda: ' + data.error);
+                         }
                         return;
                     }
                     
@@ -1102,7 +1725,19 @@ foreach ($demandas as $d) {
                     document.getElementById('editar_descricao').value = data.descricao;
                     document.getElementById('editar_prioridade').value = data.prioridade || 'media';
                     document.getElementById('editar_status').value = data.status || 'pendente';
-                    document.getElementById('editar_usuario_id').value = data.usuario_id || '';
+                    
+                    // Set selected users for edit form
+                    if (data.usuarios_atribuidos && data.usuarios_atribuidos.length > 0) {
+                        initializeMultiSelect('editar_usuario_id');
+                        multiSelectData['editar_usuario_id'].selectedUsers = data.usuarios_atribuidos.map(user => ({
+                            id: user.id,
+                            name: user.nome,
+                            email: user.email
+                        }));
+                        updateMultiSelectDisplay('editar_usuario_id');
+                        updateHiddenSelect('editar_usuario_id');
+                        updateOptionStates('editar_usuario_id');
+                    }
                     
                     openModal('editarDemandaModal');
                 })
@@ -1185,6 +1820,22 @@ foreach ($demandas as $d) {
         function confirmarExclusao() {
             const id = document.getElementById('demanda_a_excluir_id').value;
             window.location.href = `../controllers/DemandaController.php?action=excluir&id=${id}`;
+        }
+
+        // Function to update assigned users display
+        function atualizarUsuariosAtribuidos(demandaId) {
+            fetch(`../controllers/DemandaController.php?action=get_demanda&id=${demandaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const card = document.querySelector(`[data-demanda-id="${demandaId}"]`);
+                    if (card && data.usuarios_atribuidos) {
+                        const usuariosContainer = card.querySelector('.usuarios-atribuidos');
+                        if (usuariosContainer) {
+                            const nomes = data.usuarios_atribuidos.map(u => u.nome).join(', ');
+                            usuariosContainer.textContent = nomes || 'Não atribuído';
+                        }
+                    }
+                });
         }
     </script>
 </body>

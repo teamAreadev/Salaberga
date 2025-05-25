@@ -1,9 +1,9 @@
 <?php
 class Database {
     private $host = "localhost";
-    private $db_name = "u750204740_areadev";
-    private $username = "u750204740_areadev";
-    private $password = "paoComOvo123!@#";
+    private $db_name = "area_dev";
+    private $username = "root";
+    private $password = "";
     private $conn;
 
     public function getConnection() {
@@ -27,4 +27,5 @@ class Database {
         return $this->conn;
     }
 }
-?> 
+
+

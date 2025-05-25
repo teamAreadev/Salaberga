@@ -300,14 +300,18 @@ foreach ($demandas as $d) {
 
     /* Status Badges */
     .status-badge {
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .status-badge i {
+         font-size: 0.875rem;
     }
 
     .status-badge:hover {
@@ -320,7 +324,7 @@ foreach ($demandas as $d) {
         border: 1px solid rgba(234, 179, 8, 0.3);
     }
 
-    .status-em-andamento {
+    .status-em_andamento {
         background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
         color: #60a5fa;
         border: 1px solid rgba(59, 130, 246, 0.3);
@@ -332,6 +336,20 @@ foreach ($demandas as $d) {
         border: 1px solid rgba(34, 197, 94, 0.3);
     }
 
+    .status-concluida i {
+        color: #4ade80;
+    }
+
+    .status-concluido { /* Para status de participante */
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-concluido i { /* Para status de participante */
+        color: #4ade80;
+    }
+
     .status-cancelada {
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
         color: #f87171;
@@ -340,11 +358,10 @@ foreach ($demandas as $d) {
 
     /* Priority Badges */
     .priority-badge {
-        padding: 0.25rem 0.75rem;
+        padding: 0.2rem 0.5rem;
         border-radius: 15px;
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         font-weight: 600;
-        
         letter-spacing: 0.05em;
     }
 
@@ -569,24 +586,6 @@ foreach ($demandas as $d) {
         <!-- Stats Cards -->
 
 
-        <!-- Progress Overview -->
-        <?php if ($totalDemandas > 0): ?>
-        <div class="stats-card mb-8 slide-up" style="animation-delay: 0.5s">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-white">Progresso Geral</h3>
-                <span class="text-2xl font-bold text-primary-50">
-                    <?php echo round(($demandasConcluidas / $totalDemandas) * 100); ?>%
-                </span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: <?php echo ($demandasConcluidas / $totalDemandas) * 100; ?>%"></div>
-            </div>
-            <p class="text-gray-400 text-sm mt-2">
-                <?php echo $demandasConcluidas; ?> de <?php echo $totalDemandas; ?> demandas concluídas
-            </p>
-        </div>
-        <?php endif; ?>
-
         <!-- Search and Filters -->
         <div class="search-container slide-up" style="animation-delay: 0.6s">
             <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
@@ -607,13 +606,13 @@ foreach ($demandas as $d) {
                     <button class="filter-btn active" onclick="filterByStatus('all')" data-status="all">
                         <i class="fas fa-list mr-2"></i>Todas
                     </button>
-                    <button class="filter-btn" onclick="filterByStatus('Pendente')" data-status="Pendente">
+                    <button class="filter-btn" onclick="filterByStatus('pendente')" data-status="pendente">
                         <i class="fas fa-clock mr-2"></i>Pendentes
                     </button>
-                    <button class="filter-btn" onclick="filterByStatus('Em Andamento')" data-status="Em Andamento">
+                    <button class="filter-btn" onclick="filterByStatus('em_andamento')" data-status="em_andamento">
                         <i class="fas fa-spinner mr-2"></i>Em Andamento
                     </button>
-                    <button class="filter-btn" onclick="filterByStatus('Concluída')" data-status="Concluída">
+                    <button class="filter-btn" onclick="filterByStatus('concluida')" data-status="concluida">
                         <i class="fas fa-check mr-2"></i>Concluídas
                     </button>
                 </div>
@@ -709,31 +708,72 @@ foreach ($demandas as $d) {
                             title="Ver detalhes">
                             <i class="fas fa-eye"></i>
                         </button>
-                        
-                        <?php if (strtolower($d['status']) === 'pendente' && $d['usuario_id'] == $_SESSION['usuario_id']): ?>
-                        <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarEmAndamento()">
-                            <input type="hidden" name="acao" value="atualizar_status">
-                            <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                            <input type="hidden" name="novo_status" value="em_andamento">
-                            <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white p-2 rounded-lg" title="Marcar como Em Andamento">
-                                <i class="fas fa-spinner"></i>
-                                Realizar Tarefa
-                            </button>
-                        </form>
-                        <?php endif; ?>
 
-                        <?php if (strtolower($d['status']) === 'em_andamento' && $d['usuario_id'] == $_SESSION['usuario_id']): ?>
-                        <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarConclusao()">
-                            <input type="hidden" name="acao" value="atualizar_status">
-                            <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                            <input type="hidden" name="novo_status" value="concluida">
-                            <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg" title="Marcar como Concluída">
-                                <i class="fas fa-check"></i>
-                                Concluir
-                            </button>
-                        </form>
+                        <?php 
+                        $usuario_logado_atribuido = false;
+                        $status_usuario = null;
+                        if (!empty($d['usuarios_atribuidos'])) {
+                            foreach ($d['usuarios_atribuidos'] as $u_atrib) {
+                                if ($u_atrib['id'] == $_SESSION['usuario_id']) {
+                                    $usuario_logado_atribuido = true;
+                                    $status_usuario = $u_atrib['status'];
+                                    break;
+                                }
+                            }
+                        }
+                        ?>
+
+                        <?php if ($usuario_logado_atribuido): ?>
+                            <?php if ($status_usuario === 'pendente'): ?>
+                                <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarEmAndamento()">
+                                    <input type="hidden" name="acao" value="atualizar_status">
+                                    <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                    <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['usuario_id']; ?>">
+                                    <input type="hidden" name="novo_status" value="em_andamento">
+                                    <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white p-2 rounded-lg" title="Marcar como Em Andamento">
+                                        <i class="fas fa-spinner"></i>
+                                        Realizar Tarefa
+                                    </button>
+                                </form>
+                            <?php elseif ($status_usuario === 'em_andamento'): ?>
+                                <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarConclusao()">
+                                    <input type="hidden" name="acao" value="atualizar_status">
+                                    <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                    <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['usuario_id']; ?>">
+                                    <input type="hidden" name="novo_status" value="concluida">
+                                    <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg" title="Marcar como Concluída">
+                                        <i class="fas fa-check"></i>
+                                        Concluir Minha Parte
+                                    </button>
+                                </form>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
+
+                    <!-- Status dos Usuários -->
+                    <?php if (!empty($d['usuarios_atribuidos'])): ?>
+                    <div class="mt-4 pt-4 border-t border-gray-700">
+                        <h4 class="text-sm font-semibold text-gray-400 mb-2">Status dos Participantes:</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <?php foreach ($d['usuarios_atribuidos'] as $u_atrib): ?>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs text-gray-300"><?php echo htmlspecialchars($u_atrib['nome']); ?>:</span>
+                                    <span class="status-badge status-<?php echo $u_atrib['status']; ?>">
+                                        <?php
+                                        $statusIcons = [
+                                            'pendente' => 'fas fa-clock',
+                                            'em_andamento' => 'fas fa-spinner fa-spin',
+                                            'concluido' => 'fas fa-check-circle'
+                                        ];
+                                        ?>
+                                        <i class="<?php echo $statusIcons[$u_atrib['status']] ?? 'fas fa-question'; ?>"></i>
+                                        <?php echo ucfirst($u_atrib['status']); ?>
+                                    </span>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
                 </div>
                         <?php endforeach; ?>
             </div>
@@ -823,7 +863,10 @@ foreach ($demandas as $d) {
 
             // Filter cards
             cards.forEach(card => {
-                if (status === 'all' || card.dataset.status === status) {
+                const cardStatus = card.dataset.status ? card.dataset.status.toLowerCase().replace(' ', '_') : '';
+                const filterStatus = status.toLowerCase().replace(' ', '_');
+                
+                if (filterStatus === 'all' || cardStatus === filterStatus) {
                     card.style.display = 'block';
                     visibleCards++;
                 } else {
