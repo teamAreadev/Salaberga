@@ -18,7 +18,14 @@ $demanda = new Demanda($pdo);
 
 // Processar atualização de status
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['acao'] === 'atualizar_status' && isset($_POST['id'])) {
-    $demanda->marcarConcluida($_POST['id']);
+    if (isset($_POST['novo_status'])) {
+        $novo_status = $_POST['novo_status'];
+        if ($novo_status === 'em_andamento') {
+            $demanda->marcarEmAndamento($_POST['id']);
+        } elseif ($novo_status === 'concluida') {
+            $demanda->marcarConcluida($_POST['id']);
+        }
+    }
     header("Location: usuario.php");
     exit();
 }
@@ -293,9 +300,9 @@ foreach ($demandas as $d) {
 
     /* Status Badges */
     .status-badge {
-        padding: 0.5rem 1rem;
+        padding: 0.25rem 0.75rem;
         border-radius: 20px;
-        font-size: 0.875rem;
+        font-size: 0.75rem;
         font-weight: 600;
         transition: all 0.3s ease;
         display: inline-flex;
@@ -319,7 +326,7 @@ foreach ($demandas as $d) {
         border: 1px solid rgba(59, 130, 246, 0.3);
     }
 
-    .status-concluída {
+    .status-concluida {
         background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
         color: #4ade80;
         border: 1px solid rgba(34, 197, 94, 0.3);
@@ -337,7 +344,7 @@ foreach ($demandas as $d) {
         border-radius: 15px;
         font-size: 0.75rem;
         font-weight: 600;
-        text-transform: uppercase;
+        
         letter-spacing: 0.05em;
     }
 
@@ -560,59 +567,7 @@ foreach ($demandas as $d) {
 
     <main class="container mx-auto px-4 py-8">
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="stats-card slide-up" style="animation-delay: 0.1s">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-400 mb-1">Total de Demandas</h3>
-                        <p class="text-3xl font-bold text-white"><?php echo $totalDemandas; ?></p>
-                        <p class="text-xs text-gray-500 mt-1">Atribuídas a você</p>
-                    </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-50 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-tasks text-white text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="stats-card slide-up" style="animation-delay: 0.2s">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-400 mb-1">Pendentes</h3>
-                        <p class="text-3xl font-bold text-yellow-400"><?php echo $demandasPendentes; ?></p>
-                        <p class="text-xs text-gray-500 mt-1">Aguardando início</p>
-                    </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-400 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-clock text-white text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="stats-card slide-up" style="animation-delay: 0.3s">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-400 mb-1">Em Andamento</h3>
-                        <p class="text-3xl font-bold text-blue-400"><?php echo $demandasEmAndamento; ?></p>
-                        <p class="text-xs text-gray-500 mt-1">Sendo executadas</p>
-                    </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-400 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-spinner text-white text-xl animate-spin"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="stats-card slide-up" style="animation-delay: 0.4s">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-400 mb-1">Concluídas</h3>
-                        <p class="text-3xl font-bold text-green-400"><?php echo $demandasConcluidas; ?></p>
-                        <p class="text-xs text-gray-500 mt-1">Finalizadas</p>
-                    </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-400 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-check-circle text-white text-xl"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
         <!-- Progress Overview -->
         <?php if ($totalDemandas > 0): ?>
@@ -646,7 +601,7 @@ foreach ($demandas as $d) {
                             onkeyup="filterDemands()"
                         >
                     </div>
-            </div>
+                </div>
 
                 <div class="flex flex-wrap gap-2">
                     <button class="filter-btn active" onclick="filterByStatus('all')" data-status="all">
@@ -662,8 +617,8 @@ foreach ($demandas as $d) {
                         <i class="fas fa-check mr-2"></i>Concluídas
                     </button>
                 </div>
-                                </div>
-                                </div>
+            </div>
+        </div>
 
         <!-- Demands Section -->
         <div class="mb-8">
@@ -688,18 +643,18 @@ foreach ($demandas as $d) {
                                 <?php echo htmlspecialchars($d['titulo']); ?>
                             </h3>
                             <div class="flex items-center gap-2 mb-2">
-                                <span class="status-badge status-<?php echo strtolower(str_replace(' ', '-', $d['status'])); ?>">
+                                <span class="status-badge status-<?php echo $d['status']; ?>">
                                     <?php
                                     $statusIcons = [
-                                        'Pendente' => 'fas fa-clock',
-                                        'Em Andamento' => 'fas fa-spinner fa-spin',
-                                        'Concluída' => 'fas fa-check-circle',
-                                        'Cancelada' => 'fas fa-ban'
+                                        'pendente' => 'fas fa-clock',
+                                        'em_andamento' => 'fas fa-spinner fa-spin',
+                                        'concluida' => 'fas fa-check-circle',
+                                        'cancelada' => 'fas fa-ban'
                                     ];
-                                    $status = ucfirst(strtolower($d['status']));
+                                    $status_display = ucfirst(str_replace('_', ' ', $d['status'])); // Formatar para exibição
                                     ?>
-                                    <i class="<?php echo $statusIcons[$status] ?? 'fas fa-question'; ?>"></i>
-                                    <?php echo $status; ?>
+                                    <i class="<?php echo $statusIcons[$d['status']] ?? 'fas fa-question'; ?>"></i>
+                                    <?php echo $status_display; ?>
                                 </span>
                             </div>
                         </div>
@@ -759,7 +714,7 @@ foreach ($demandas as $d) {
                         <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarEmAndamento()">
                             <input type="hidden" name="acao" value="atualizar_status">
                             <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                            <input type="hidden" name="novo_status" value="Em Andamento">
+                            <input type="hidden" name="novo_status" value="em_andamento">
                             <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white p-2 rounded-lg" title="Marcar como Em Andamento">
                                 <i class="fas fa-spinner"></i>
                                 Realizar Tarefa
@@ -771,7 +726,7 @@ foreach ($demandas as $d) {
                         <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarConclusao()">
                             <input type="hidden" name="acao" value="atualizar_status">
                             <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                            <input type="hidden" name="novo_status" value="Concluída">
+                            <input type="hidden" name="novo_status" value="concluida">
                             <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg" title="Marcar como Concluída">
                                 <i class="fas fa-check"></i>
                                 Concluir

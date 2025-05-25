@@ -46,9 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             $id_demanda = $_POST['id'];
             // Adicione lógica para validar o novo status, se necessário
             
-            if ($novo_status === 'Concluída') {
+            if ($novo_status === 'concluida') {
                  $demanda->marcarConcluida($id_demanda);
-            } elseif ($novo_status === 'Em Andamento') {
+            } elseif ($novo_status === 'em_andamento') {
                  $demanda->marcarEmAndamento($id_demanda);
             }
             // Adicione outras transições de status aqui, se houver
@@ -68,11 +68,11 @@ $demandasConcluidas = 0;
 $demandasPendentes = 0;
 
 foreach ($demandas as $d) {
-    if ($d['status'] === 'Em Andamento') {
+    if ($d['status'] === 'em_andamento') {
         $demandasEmAndamento++;
-    } elseif ($d['status'] === 'Concluída') {
+    } elseif ($d['status'] === 'concluida') {
         $demandasConcluidas++;
-    } elseif ($d['status'] === 'Pendente') {
+    } elseif ($d['status'] === 'pendente') {
         $demandasPendentes++;
     }
 }
@@ -341,9 +341,9 @@ foreach ($demandas as $d) {
 
     /* Status Badges */
     .status-badge {
-        padding: 0.5rem 1rem;
+        padding: 0.25rem 0.75rem;
         border-radius: 20px;
-        font-size: 0.875rem;
+        font-size: 0.75rem;
         font-weight: 600;
         transition: all 0.3s ease;
         display: inline-flex;
@@ -362,7 +362,7 @@ foreach ($demandas as $d) {
         border: 1px solid rgba(234, 179, 8, 0.3);
     }
 
-    .status-em-andamento {
+    .status-em_andamento {
         background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
         color: #60a5fa;
         border: 1px solid rgba(59, 130, 246, 0.3);
@@ -386,7 +386,7 @@ foreach ($demandas as $d) {
         border-radius: 15px;
         font-size: 0.75rem;
         font-weight: 600;
-        text-transform: uppercase;
+        
         letter-spacing: 0.05em;
     }
 
@@ -613,13 +613,13 @@ foreach ($demandas as $d) {
                     <button class="filter-btn active" onclick="filterByStatus('all')" data-status="all">
                         <i class="fas fa-list mr-2"></i>Todas
                     </button>
-                    <button class="filter-btn" onclick="filterByStatus('Pendente')" data-status="Pendente">
+                    <button class="filter-btn" onclick="filterByStatus('pendente')" data-status="pendente">
                         <i class="fas fa-clock mr-2"></i>Pendentes
                     </button>
-                    <button class="filter-btn" onclick="filterByStatus('Em Andamento')" data-status="Em Andamento">
+                    <button class="filter-btn" onclick="filterByStatus('em_andamento')" data-status="em_andamento">
                         <i class="fas fa-spinner mr-2"></i>Em Andamento
                     </button>
-                    <button class="filter-btn" onclick="filterByStatus('Concluída')" data-status="Concluída">
+                    <button class="filter-btn" onclick="filterByStatus('concluida')" data-status="concluida">
                         <i class="fas fa-check mr-2"></i>Concluídas
                     </button>
                 </div>
@@ -652,18 +652,18 @@ foreach ($demandas as $d) {
                                 <?php echo htmlspecialchars($d['titulo']); ?>
                             </h3>
                             <div class="flex items-center gap-2 mb-2">
-                                <span class="status-badge status-<?php echo strtolower(str_replace(' ', '-', $d['status'])); ?>">
+                                <span class="status-badge status-<?php echo $d['status']; ?>">
                                     <?php
                                     $statusIcons = [
-                                        'Pendente' => 'fas fa-clock',
-                                        'Em Andamento' => 'fas fa-spinner fa-spin',
-                                        'Concluída' => 'fas fa-check-circle',
-                                        'Cancelada' => 'fas fa-ban'
+                                        'pendente' => 'fas fa-clock',
+                                        'em_andamento' => 'fas fa-spinner fa-spin',
+                                        'concluida' => 'fas fa-check-circle',
+                                        'cancelada' => 'fas fa-ban'
                                     ];
-                                    $status = ucfirst(strtolower($d['status']));
+                                    $status_display = ucfirst(str_replace('_', ' ', $d['status'])); // Formatar para exibição
                                     ?>
-                                    <i class="<?php echo $statusIcons[$status] ?? 'fas fa-question'; ?>"></i>
-                                    <?php echo $status; ?>
+                                    <i class="<?php echo $statusIcons[$d['status']] ?? 'fas fa-question'; ?>"></i>
+                                    <?php echo $status_display; ?>
                                 </span>
                                 <span class="priority-badge priority-<?php echo $d['prioridade']; ?>">
                                     <?php echo ucfirst($d['prioridade']); ?>
@@ -709,6 +709,7 @@ foreach ($demandas as $d) {
                     <div class="flex items-center justify-between pt-4 border-t border-gray-700">
                         <div class="flex items-center gap-2">
                             <?php if ($d['admin_id'] == $_SESSION['usuario_id']): ?>
+                            
                             <button 
                                 onclick="editarDemanda(<?php echo $d['id']; ?>)" 
                                 class="custom-btn bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg"
@@ -723,11 +724,11 @@ foreach ($demandas as $d) {
                                 <i class="fas fa-trash"></i>
                             </button>
 
-                            <?php if (strtolower($d['status']) === 'pendente' && (is_null($d['usuario_id']) || $d['usuario_id'] == 0 || $d['usuario_id'] == '')): ?>
+                            <?php if ($d['status'] === 'pendente' && (is_null($d['usuario_id']) || $d['usuario_id'] == 0 || $d['usuario_id'] == '' || $d['usuario_id'] == $_SESSION['usuario_id']) && $d['admin_id'] == $_SESSION['usuario_id']): ?>
                             <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarEmAndamento()">
                                 <input type="hidden" name="acao" value="atualizar_status">
                                 <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                                <input type="hidden" name="novo_status" value="Em Andamento">
+                                <input type="hidden" name="novo_status" value="em_andamento">
                                 <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white p-2 rounded-lg" title="Marcar como Em Andamento">
                                     <i class="fas fa-spinner"></i>
                                     Realizar Tarefa
@@ -735,11 +736,11 @@ foreach ($demandas as $d) {
                             </form>
                             <?php endif; ?>
 
-                            <?php if (strtolower($d['status']) === 'em_andamento' && (is_null($d['usuario_id']) || $d['usuario_id'] == 0 || $d['usuario_id'] == '')): ?>
+                            <?php if ($d['status'] === 'em_andamento' && (is_null($d['usuario_id']) || $d['usuario_id'] == 0 || $d['usuario_id'] == '' || $d['usuario_id'] == $_SESSION['usuario_id']) && $d['admin_id'] == $_SESSION['usuario_id']): ?>
                             <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarConclusao()">
                                 <input type="hidden" name="acao" value="atualizar_status">
                                 <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                                <input type="hidden" name="novo_status" value="Concluída">
+                                <input type="hidden" name="novo_status" value="concluida">
                                 <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg" title="Marcar como Concluída">
                                     <i class="fas fa-check"></i>
                                     Concluir
@@ -922,10 +923,10 @@ foreach ($demandas as $d) {
                 <div>
                     <label for="editar_status" class="block text-sm font-medium text-gray-300 mb-2">Status</label>
                     <select id="editar_status" name="status" required class="custom-select w-full">
-                        <option value="Pendente">Pendente</option>
-                        <option value="Em Andamento">Em Andamento</option>
-                        <option value="Concluída">Concluída</option>
-                        <option value="Cancelada">Cancelada</option>
+                        <option value="pendente">Pendente</option>
+                        <option value="em_andamento">Em Andamento</option>
+                        <option value="concluida">Concluída</option>
+                        
                     </select>
                 </div>
                 <div>
@@ -946,6 +947,28 @@ foreach ($demandas as $d) {
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Delete Demand Modal -->
+    <div id="excluirDemandaModal" class="modal fixed inset-0 hidden items-center justify-center p-4 z-50">
+        <div class="modal-content w-full max-w-sm p-6 scale-in text-center">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-white">Confirmar Exclusão</h3>
+                <button onclick="closeModal('excluirDemandaModal')" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <p class="text-gray-300 mb-6">Tem certeza que deseja excluir esta demanda? Esta ação não pode ser desfeita.</p>
+            <input type="hidden" id="demanda_a_excluir_id">
+            <div class="flex justify-center gap-4">
+                <button type="button" onclick="closeModal('excluirDemandaModal')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
+                    Cancelar
+                </button>
+                <button type="button" onclick="confirmarExclusao()" class="custom-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
+                    Excluir
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1027,20 +1050,19 @@ foreach ($demandas as $d) {
 
         // Edit Demand Function
         function editarDemanda(id) {
-            console.log('Iniciando busca da demanda ID:', id);
+            
             
             // Limpar dados anteriores
             document.getElementById('editar_demanda_id').value = '';
             document.getElementById('editar_titulo').value = '';
             document.getElementById('editar_descricao').value = '';
             document.getElementById('editar_prioridade').value = 'media';
-            document.getElementById('editar_status').value = 'Pendente';
+            document.getElementById('editar_status').value = 'pendente';
             document.getElementById('editar_usuario_id').value = '';
 
             fetch(`../controllers/DemandaController.php?action=get_demanda&id=${id}`)
                 .then(response => {
-                    console.log('Response status:', response.status);
-                    console.log('Response headers:', response.headers);
+                    
                     
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -1052,7 +1074,7 @@ foreach ($demandas as $d) {
                     }
                     
                     return response.text().then(text => {
-                        console.log('Response text:', text);
+                        
                         try {
                             return JSON.parse(text);
                         } catch (e) {
@@ -1062,7 +1084,7 @@ foreach ($demandas as $d) {
                     });
                 })
                 .then(data => {
-                    console.log('Dados recebidos:', data);
+                    
                     if (data.error) {
                         console.error('Erro ao buscar dados da demanda:', data.error);
                         alert('Erro ao carregar dados da demanda: ' + data.error);
@@ -1079,7 +1101,7 @@ foreach ($demandas as $d) {
                     document.getElementById('editar_titulo').value = data.titulo;
                     document.getElementById('editar_descricao').value = data.descricao;
                     document.getElementById('editar_prioridade').value = data.prioridade || 'media';
-                    document.getElementById('editar_status').value = data.status || 'Pendente';
+                    document.getElementById('editar_status').value = data.status || 'pendente';
                     document.getElementById('editar_usuario_id').value = data.usuario_id || '';
                     
                     openModal('editarDemandaModal');
@@ -1092,9 +1114,8 @@ foreach ($demandas as $d) {
 
         // Delete Demand Function
         function excluirDemanda(id) {
-            if (confirm('Tem certeza que deseja excluir esta demanda? Esta ação não pode ser desfeita.')) {
-                window.location.href = `../controllers/DemandaController.php?action=excluir&id=${id}`;
-            }
+            document.getElementById('demanda_a_excluir_id').value = id;
+            openModal('excluirDemandaModal');
         }
 
         // Close modal when clicking outside
@@ -1159,6 +1180,11 @@ foreach ($demandas as $d) {
 
         function confirmarConclusao() {
             return confirm('Tem certeza que deseja marcar esta demanda como Concluída?');
+        }
+
+        function confirmarExclusao() {
+            const id = document.getElementById('demanda_a_excluir_id').value;
+            window.location.href = `../controllers/DemandaController.php?action=excluir&id=${id}`;
         }
     </script>
 </body>

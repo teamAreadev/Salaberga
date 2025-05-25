@@ -105,10 +105,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
         }
 
         $sucesso = false;
-        if ($novo_status === 'Em Andamento') {
-            $sucesso = $demanda->marcarEmAndamento($id_demanda);
-        } elseif ($novo_status === 'Concluída') {
+        if ($novo_status === 'concluida') {
             $sucesso = $demanda->marcarConcluida($id_demanda);
+        } elseif ($novo_status === 'em_andamento') {
+            $sucesso = $demanda->marcarEmAndamento($id_demanda);
         }
 
         if ($sucesso) {

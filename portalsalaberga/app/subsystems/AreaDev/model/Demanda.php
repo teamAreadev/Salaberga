@@ -44,8 +44,8 @@ class Demanda {
 
     public function criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuario_id = null) {
         $stmt = $this->pdo->prepare("
-            INSERT INTO demandas (titulo, descricao, prioridade, admin_id, usuario_id)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO demandas (titulo, descricao, prioridade, admin_id, usuario_id, status)
+            VALUES (?, ?, ?, ?, ?, 'pendente')
         ");
         // Converter string vazia para NULL para consistência
         $usuario_id_salvar = ($usuario_id === '' || $usuario_id === 0) ? null : $usuario_id;
