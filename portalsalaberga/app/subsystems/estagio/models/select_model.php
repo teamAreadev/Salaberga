@@ -164,9 +164,48 @@ class select_model extends connect
     }
     function alunos_aptos_curso($nome_perfil = 0, $search = '', $filtro = '')
     {
-        $sql = "SELECT * FROM aluno";
+        $sql = "SELECT 
+                    a.id,
+                    a.nome,
+                    a.contato,
+                    a.medias,
+                    a.email,
+                    a.projetos,
+                    a.perfil_opc1,
+                    a.perfil_opc2,
+                    a.ocorrencia,
+                    a.custeio,
+                    a.entregas_individuais,
+                    a.entregas_grupo
+                FROM aluno a
+                WHERE 1=1";
+
+        $params = [];
+
+        if (!empty($search)) {
+            $sql .= " AND (a.nome LIKE ? OR a.email LIKE ? OR a.contato LIKE ?)";
+            $searchTerm = "%{$search}%";
+            $params[] = $searchTerm;
+            $params[] = $searchTerm;
+            $params[] = $searchTerm;
+        }
+
+        if (!empty($nome_perfil)) {
+            $sql .= " AND (a.perfil_opc1 = ? OR a.perfil_opc2 = ?)";
+            $params[] = $nome_perfil;
+            $params[] = $nome_perfil;
+        }
+
+        $sql .= " ORDER BY a.nome ASC";
+
         $stmt = $this->connect->prepare($sql);
-        $stmt->execute();
+        
+        if (!empty($params)) {
+            $stmt->execute($params);
+        } else {
+            $stmt->execute();
+        }
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     function alunos_aptos($nome_perfil = 0, $search = '', $filtro = '')
@@ -252,19 +291,17 @@ class select_model extends connect
             $sql .= " AND v.id_perfil = ?";
             $perfil_id = null;
             switch (strtolower($area)) {
-                case 'desenvolvimento':
+                case '1':
                     $perfil_id = 1;
                     break;
-                case 'design':
-                case 'design/mídia':
-                case 'design/mídias':
-                case 'design/social mídia':
+                case '2':
+
                     $perfil_id = 2;
                     break;
-                case 'suporte/redes':
+                case '3':
                     $perfil_id = 3;
                     break;
-                case 'tutoria':
+                case '4':
                     $perfil_id = 4;
                     break;
             }

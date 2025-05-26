@@ -653,10 +653,7 @@ if (isset($_POST['layout'])) {
                         <i class="fa fa-user-circle w-5 mr-3"></i>
                         Resultados 
                     </a>
-                    <a href="perfil_alunos.php" class="sidebar-link">
-                        <i class="fas fa-user-graduate w-5 mr-3"></i>
-                        Perfil alunos
-                    </a>
+                    
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
@@ -717,10 +714,7 @@ if (isset($_POST['layout'])) {
                         <i class="fa fa-user-circle w-5 mr-3"></i>
                         Resultados 
                     </a>
-                    <a href="perfil_alunos.php" class="sidebar-link">
-                        <i class="fas fa-user-graduate w-5 mr-3"></i>
-                        Perfil alunos
-                    </a>
+                    
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
@@ -794,12 +788,36 @@ if (isset($_POST['layout'])) {
                         </div>
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
                             <div class="relative">
+                                
                                 <select id="filterArea" class="custom-input pl-4 pr-10 py-2.5 appearance-none w-full">
                                     <option value="">Todas as áreas</option>
-                                    <option value="desenvolvimento">Desenvolvimento</option>
-                                    <option value="design/mídia">Design/Mídia</option>
-                                    <option value="midia">Tutoria</option>
-                                    <option value="redes">Suporte/Redes</option>
+                                    <?php
+                                    // Mapeamento de ID para valor do option
+                                    $perfil_options = [
+                                        '1' => 'desenvolvimento',
+                                        '2' => 'design/mídia',
+                                        '4' => 'tutoria',
+                                        '3' => 'suporte/redes'
+                                    ];
+                                    $perfil_selecionado_id = isset($_GET['perfil']) ? $_GET['perfil'] : '';
+                                    $perfil_selecionado_value = '';
+                                    if (!empty($perfil_selecionado_id) && isset($perfil_options[$perfil_selecionado_id])) {
+                                        $perfil_selecionado_value = $perfil_options[$perfil_selecionado_id];
+                                    }
+
+                                    // Opções de área com seus valores
+                                    $areas = [
+                                        'desenvolvimento' => 'Desenvolvimento',
+                                        'design/mídia' => 'Desing/Mídia',
+                                        'tutoria' => 'Tutoria',
+                                        'suporte/redes' => 'Suporte/Redes'
+                                    ];
+
+                                    foreach ($areas as $value => $text) {
+                                        $selected = ($value === $perfil_selecionado_value) ? 'selected' : '';
+                                        echo "<option value='{$value}' {$selected}>" . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . "</option>";
+                                    }
+                                    ?>
                                 </select>
                                 <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
                             </div>
@@ -825,7 +843,11 @@ if (isset($_POST['layout'])) {
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="vagasGrid">
                     <?php
                     $empresa_filtro = isset($_GET['empresa']) ? $_GET['empresa'] : '';
-                    $dados = $select_model->vagas('', '', $empresa_filtro);
+                    // Adicionar lógica para ler o parâmetro GET 'perfil' aqui
+                    $perfil_filtro = isset($_GET['perfil']) ? $_GET['perfil'] : '';
+
+                    // Modificar a chamada a $select_model->vagas para incluir o filtro de perfil
+                    $dados = $select_model->vagas('', $perfil_filtro, $empresa_filtro); // Ajustado para usar $perfil_filtro também
                     if (empty($dados)): ?>
                         <div class="col-span-3 text-center py-16 text-gray-400 fade-in">
                             <i class="fas fa-briefcase text-5xl mb-4 text-gray-600 opacity-30"></i>
@@ -871,7 +893,7 @@ if (isset($_POST['layout'])) {
                                 data-area="<?php echo htmlspecialchars($area, ENT_QUOTES, 'UTF-8'); ?>"
                                 data-empresa-id="<?php echo $empresaId; ?>"
                                 data-empresa-nome="<?php echo $empresaName; ?>"
-                                data-quantidade="<?php echo $quantidade; ?>"
+                                data-quantidade="<?php echo $quant_vaga; ?>"
                                 data-data="<?php echo $data; ?>"
                                 data-hora="<?php echo $hora; ?>"
                                 data-tipo-vaga="<?php echo $tipoVaga; ?>">
@@ -1498,95 +1520,53 @@ if (isset($_POST['layout'])) {
                 });
             });
 
-            // Filtragem de vagas
+            // Filtragem de vagas - Lógica de navegação para GET
             function aplicarFiltros() {
-                const searchTerm = searchInput.value.toLowerCase().trim();
-                const areaFiltro = filterArea.value.toLowerCase();
+                const areaFiltro = filterArea.value;
                 const empresaFiltro = filterEmpresa.value;
-                const vagaCards = document.querySelectorAll('.vaga-card');
-                let visibleCount = 0;
 
-                vagaCards.forEach((card, index) => {
-                    const titulo = card.querySelector('.vaga-card-title').textContent.toLowerCase();
-                    const cardArea = card.dataset.area.toLowerCase();
-                    const cardEmpresaId = card.dataset.empresaId;
-                    const empresaNome = card.dataset.empresaNome.toLowerCase();
-
-                    const matchSearch = searchTerm === '' ||
-                        titulo.includes(searchTerm) ||
-                        empresaNome.includes(searchTerm);
-                    
-                    const matchArea = areaFiltro === '' || cardArea === areaFiltro;
-                    const matchEmpresa = empresaFiltro === '' || cardEmpresaId === empresaFiltro;
-                    
-                    if (matchSearch && matchArea && matchEmpresa) {
-                        card.style.display = '';
-                        visibleCount++;
-                        gsap.fromTo(card, {
-                            opacity: 0,
-                            y: 20
-                        }, {
-                            opacity: 1,
-                            y: 0,
-                            duration: 0.3,
-                            delay: (visibleCount - 1) * 0.05
-                        });
-                    } else {
-                        gsap.to(card, {
-                            opacity: 0,
-                            y: 20,
-                            duration: 0.3,
-                            onComplete: () => {
-                                card.style.display = 'none';
-                            }
-                        });
+                const urlParams = new URLSearchParams();
+                if (areaFiltro) {
+                    // Converter nome da área para ID do perfil para o GET request
+                    let perfilId;
+                    switch (areaFiltro.toLowerCase()) {
+                        case 'desenvolvimento':
+                            perfilId = '1';
+                            break;
+                        case 'design/mídia':
+                        case 'desing/mídia': // Incluir variação 'Desing/Mídia'
+                            perfilId = '2';
+                            break;
+                        case 'tutoria':
+                            perfilId = '4';
+                            break;
+                        case 'suporte/redes':
+                            perfilId = '3';
+                            break;
+                        default:
+                            perfilId = '';
                     }
-                });
-
-                // Exibir mensagem se nenhum resultado for encontrado
-                const existingNoResultsMessage = document.getElementById('noResultsMessage');
-                if (visibleCount === 0) {
-                    if (!existingNoResultsMessage) {
-                        const message = document.createElement('div');
-                        message.id = 'noResultsMessage';
-                        message.className = 'col-span-full text-center py-8 text-gray-400 fade-in';
-                        message.innerHTML = `
-                            <i class="fas fa-search text-4xl mb-4 text-gray-600 opacity-30"></i>
-                            <p class="text-lg">Nenhuma vaga encontrada com os filtros atuais.</p>
-                            <button id="clearFiltersBtn" class="mt-4 custom-btn custom-btn-secondary">
-                                <i class="fas fa-times-circle btn-icon"></i>
-                                <span>Limpar Filtros</span>
-                            </button>
-                        `;
-                        document.getElementById('vagasGrid').appendChild(message);
-                        document.getElementById('clearFiltersBtn').addEventListener('click', () => {
-                            searchInput.value = '';
-                            filterArea.value = '';
-                            filterEmpresa.value = '';
-                            aplicarFiltros();
-                        });
-                    }
-                } else {
-                    if (existingNoResultsMessage) {
-                        existingNoResultsMessage.remove();
+                    if (perfilId) {
+                         urlParams.set('perfil', perfilId);
                     }
                 }
+                if (empresaFiltro) {
+                    urlParams.set('empresa', empresaFiltro);
+                }
+
+                // Construir a nova URL e navegar
+                window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
             }
 
-            // Adicionar evento de input com debounce para melhor performance
-            let searchTimeout;
-            searchInput.addEventListener('input', (e) => {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    aplicarFiltros();
-                }, 300);
-            });
-
+            // Modificar listeners para disparar navegação
             filterArea.addEventListener('change', aplicarFiltros);
             filterEmpresa.addEventListener('change', aplicarFiltros);
 
-            // Inicializar página
-            aplicarFiltros();
+            // A busca por texto ainda funcionará no cliente após o carregamento inicial (com os filtros aplicados pelo GET)
+            // searchInput.addEventListener('input', aplicarFiltros); // Remover este listener pois queremos GET request nos selects
+
+            // Não chamar aplicarFiltros() aqui para evitar loop infinito de recarga
+            // A filtragem inicial será feita pelo PHP lendo os parâmetros GET na primeira carga
 
             // Função para exibir toast
             function showToast(message, type) {
