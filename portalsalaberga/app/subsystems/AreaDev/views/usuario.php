@@ -555,6 +555,56 @@ foreach ($demandas as $d) {
         cursor: not-allowed;
         transform: none;
     }
+
+    /* Select Styles */
+    .custom-select {
+        background: rgba(35, 35, 35, 0.95);
+        border: 2px solid rgba(0, 122, 51, 0.2);
+        border-radius: 12px;
+        padding: 0.875rem 1.25rem;
+        color: #ffffff;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        min-width: 200px;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    .custom-select:focus {
+        border-color: #00FF6B;
+        box-shadow: 0 0 0 4px rgba(0, 255, 107, 0.1);
+        outline: none;
+        background: rgba(35, 35, 35, 1);
+    }
+
+    .custom-select option {
+        background: #232323;
+        color: #ffffff;
+        padding: 1rem;
+    }
+
+    .custom-select:hover {
+        border-color: rgba(0, 122, 51, 0.4);
+    }
+
+    .select-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .select-wrapper::after {
+        content: '\f078';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #888888;
+        pointer-events: none;
+    }
 </style>
 
 <body class="select-none">
@@ -602,19 +652,24 @@ foreach ($demandas as $d) {
                     </div>
                 </div>
 
-                <div class="flex flex-wrap gap-2">
-                    <button class="filter-btn active" onclick="filterByStatus('all')" data-status="all">
-                        <i class="fas fa-list mr-2"></i>Todas
-                    </button>
-                    <button class="filter-btn" onclick="filterByStatus('pendente')" data-status="pendente">
-                        <i class="fas fa-clock mr-2"></i>Pendentes
-                    </button>
-                    <button class="filter-btn" onclick="filterByStatus('em_andamento')" data-status="em_andamento">
-                        <i class="fas fa-spinner mr-2"></i>Em Andamento
-                    </button>
-                    <button class="filter-btn" onclick="filterByStatus('concluida')" data-status="concluida">
-                        <i class="fas fa-check mr-2"></i>Concluídas
-                    </button>
+                <div class="flex flex-wrap gap-4">
+                    <div class="select-wrapper">
+                        <select class="custom-select" onchange="filterByStatus(this.value)">
+                            <option value="all">Todas as Demandas</option>
+                            <option value="pendente">Pendentes</option>
+                            <option value="em_andamento">Em Andamento</option>
+                            <option value="concluida">Concluídas</option>
+                        </select>
+                    </div>
+
+                    <div class="select-wrapper">
+                        <select class="custom-select" onchange="filterByPriority(this.value)">
+                            <option value="all">Todas Prioridades</option>
+                            <option value="alta">Alta</option>
+                            <option value="media">Média</option>
+                            <option value="baixa">Baixa</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -628,11 +683,11 @@ foreach ($demandas as $d) {
             
             <div id="demandsContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 <?php foreach ($demandas as $index => $d): ?>
-                <div class="demand-card fade-in" 
-                     style="animation-delay: <?php echo ($index * 0.1); ?>s"
-                     data-status="<?php echo $d['status']; ?>"
-                     data-title="<?php echo strtolower($d['titulo']); ?>"
-                     data-description="<?php echo strtolower($d['descricao']); ?>">
+                <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300"
+                    data-title="<?php echo htmlspecialchars($d['titulo']); ?>"
+                    data-description="<?php echo htmlspecialchars($d['descricao']); ?>"
+                    data-status="<?php echo $d['status']; ?>"
+                    data-priority="<?php echo $d['prioridade']; ?>">
                     
                     <!-- Card Header -->
                     <div class="flex items-start justify-between mb-4">
@@ -849,63 +904,72 @@ foreach ($demandas as $d) {
         // Filter Functions
         function filterByStatus(status) {
             const cards = document.querySelectorAll('.demand-card');
-            const buttons = document.querySelectorAll('.filter-btn');
             const emptyState = document.getElementById('emptyState');
-            let visibleCards = 0;
+            let visibleCount = 0;
 
-            // Update active button
-            buttons.forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.status === status) {
-                    btn.classList.add('active');
-                }
-            });
-
-            // Filter cards
             cards.forEach(card => {
-                const cardStatus = card.dataset.status ? card.dataset.status.toLowerCase().replace(' ', '_') : '';
-                const filterStatus = status.toLowerCase().replace(' ', '_');
-                
-                if (filterStatus === 'all' || cardStatus === filterStatus) {
+                if (status === 'all' || card.dataset.status === status) {
                     card.style.display = 'block';
-                    visibleCards++;
+                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
             });
 
-            // Show/hide empty state
-            if (visibleCards === 0) {
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+        }
+
+        function filterByPriority(priority) {
+            const cards = document.querySelectorAll('.demand-card');
+            const emptyState = document.getElementById('emptyState');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                if (priority === 'all' || card.dataset.priority === priority) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
             }
         }
 
         function filterDemands() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusSelect = document.querySelector('select[onchange="filterByStatus(this.value)"]');
+            const prioritySelect = document.querySelector('select[onchange="filterByPriority(this.value)"]');
             const cards = document.querySelectorAll('.demand-card');
             const emptyState = document.getElementById('emptyState');
-            let visibleCards = 0;
+            let visibleCount = 0;
 
             cards.forEach(card => {
-                const title = card.dataset.title;
-                const description = card.dataset.description;
-                const isVisible = title.includes(searchTerm) || description.includes(searchTerm);
-                
-                if (isVisible) {
+                const title = card.dataset.title.toLowerCase();
+                const description = card.dataset.description.toLowerCase();
+                const status = card.dataset.status;
+                const priority = card.dataset.priority;
+                const activeStatus = statusSelect.value;
+                const activePriority = prioritySelect.value;
+
+                const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+                const matchesStatus = activeStatus === 'all' || status === activeStatus;
+                const matchesPriority = activePriority === 'all' || priority === activePriority;
+
+                if (matchesSearch && matchesStatus && matchesPriority) {
                     card.style.display = 'block';
-                    visibleCards++;
+                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
             });
 
-            // Show/hide empty state
-            if (visibleCards === 0) {
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
             }
         }
 

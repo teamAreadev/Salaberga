@@ -40,7 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
                 'prioridade' => $demanda_data['prioridade'],
                 'status' => $demanda_data['status'],
                 'admin_id' => $demanda_data['admin_id'],
-                'usuarios_atribuidos' => $demanda_data['usuarios_atribuidos'] ?? []
+                'usuarios_atribuidos' => $demanda_data['usuarios_atribuidos'] ?? [],
+                'prazo' => $demanda_data['prazo'] ?? null
             ];
 
             // Se houver saída inesperada, adicione ao JSON de sucesso (para não perder a info)
@@ -79,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             $descricao = $_POST['descricao'] ?? '';
             $prioridade = $_POST['prioridade'] ?? 'media';
             $usuarios_ids = isset($_POST['usuarios_ids']) ? (is_array($_POST['usuarios_ids']) ? $_POST['usuarios_ids'] : [$_POST['usuarios_ids']]) : [];
+            $prazo = $_POST['prazo'] ?? null;
 
             if (empty($titulo) || empty($descricao)) {
                 header("Location: ../views/admin.php?error=Por favor, preencha título e descrição.");
@@ -86,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             }
 
             $admin_id = $_SESSION['usuario_id'];
-            $sucesso = $demanda->criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuarios_ids);
+            $sucesso = $demanda->criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuarios_ids, $prazo);
 
             if ($sucesso) {
                 header("Location: ../views/admin.php?success=Demanda criada com sucesso!");
@@ -102,13 +104,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
                 $prioridade = $_POST['prioridade'] ?? 'media';
                 $status = $_POST['status'] ?? 'pendente';
                 $usuarios_ids = isset($_POST['usuarios_ids']) ? (is_array($_POST['usuarios_ids']) ? $_POST['usuarios_ids'] : [$_POST['usuarios_ids']]) : [];
+                $prazo = $_POST['prazo'] ?? null;
 
                 if (empty($titulo) || empty($descricao)) {
                     header("Location: ../views/admin.php?error=Por favor, preencha título e descrição.");
                     exit();
                 }
 
-                $sucesso = $demanda->atualizarDemanda($id, $titulo, $descricao, $prioridade, $status, $usuarios_ids);
+                $sucesso = $demanda->atualizarDemanda($id, $titulo, $descricao, $prioridade, $status, $usuarios_ids, $prazo);
                 
                 if ($sucesso) {
                     header("Location: ../views/admin.php?success=Demanda atualizada com sucesso!");

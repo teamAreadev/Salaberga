@@ -960,19 +960,24 @@ foreach ($demandas as $d) {
                     </div>
                 </div>
                 
-                <div class="flex flex-wrap gap-2">
-                    <button class="filter-btn active" onclick="filterByStatus('all')" data-status="all">
-                        <i class="fas fa-list mr-2"></i>Todas
-                    </button>
-                    <button class="filter-btn" onclick="filterByStatus('pendente')" data-status="pendente">
-                        <i class="fas fa-clock mr-2"></i>Pendentes
-                    </button>
-                    <button class="filter-btn" onclick="filterByStatus('em_andamento')" data-status="em_andamento">
-                        <i class="fas fa-spinner mr-2"></i>Em Andamento
-                    </button>
-                    <button class="filter-btn" onclick="filterByStatus('concluida')" data-status="concluida">
-                        <i class="fas fa-check mr-2"></i>Concluídas
-                    </button>
+                <div class="flex flex-wrap gap-4">
+                    <div class="select-wrapper">
+                        <select class="custom-select" onchange="filterByStatus(this.value)">
+                            <option value="all">Todas as Demandas</option>
+                            <option value="pendente">Pendentes</option>
+                            <option value="em_andamento">Em Andamento</option>
+                            <option value="concluida">Concluídas</option>
+                        </select>
+                    </div>
+
+                    <div class="select-wrapper">
+                        <select class="custom-select" onchange="filterByPriority(this.value)">
+                            <option value="all">Todas Prioridades</option>
+                            <option value="alta">Alta</option>
+                            <option value="media">Média</option>
+                            <option value="baixa">Baixa</option>
+                        </select>
+                    </div>
                 </div>
                 
                 <button onclick="openModal('criarDemandaModal')" class="custom-btn bg-gradient-to-r from-primary-500 to-primary-50 hover:from-primary-400 hover:to-primary-100 text-white font-bold py-3 px-6 rounded-lg flex items-center gap-2">
@@ -1003,6 +1008,7 @@ foreach ($demandas as $d) {
                      data-status="<?php echo $d['status']; ?>"
                      data-title="<?php echo strtolower($d['titulo']); ?>"
                      data-description="<?php echo strtolower($d['descricao']); ?>"
+                     data-priority="<?php echo $d['prioridade']; ?>"
                      data-demanda-id="<?php echo $d['id']; ?>">
                     
                     <!-- Card Header -->
@@ -1052,6 +1058,8 @@ foreach ($demandas as $d) {
                                     <?php 
                                     if (!empty($d['data_conclusao'])) {
                                         echo date('d/m/Y', strtotime($d['data_conclusao']));
+                                    } else if (!empty($d['prazo'])) {
+                                        echo date('d/m/Y', strtotime($d['prazo']));
                                     } else {
                                         echo 'Não definido';
                                     }
@@ -1218,6 +1226,10 @@ foreach ($demandas as $d) {
                                 </select>
                             </div>
                             <div>
+                    <label for="prazo" class="block text-sm font-medium text-gray-300 mb-2">Prazo</label>
+                    <input type="date" id="prazo" name="prazo" required class="custom-input w-full" min="<?php echo date('Y-m-d'); ?>">
+                            </div>
+                            <div>
                     <label for="usuario_id" class="block text-sm font-medium text-gray-300 mb-2">Atribuir a</label>
                     
                     <!-- Custom Multi-Select -->
@@ -1345,6 +1357,10 @@ foreach ($demandas as $d) {
                         <option value="em_andamento">Em Andamento</option>
                         <option value="concluida">Concluída</option>
                     </select>
+                </div>
+                <div>
+                    <label for="editar_prazo" class="block text-sm font-medium text-gray-300 mb-2">Prazo</label>
+                    <input type="date" id="editar_prazo" name="prazo" required class="custom-input w-full" min="<?php echo date('Y-m-d'); ?>">
                 </div>
                 <div>
                     <label for="editar_usuario_id" class="block text-sm font-medium text-gray-300 mb-2">Atribuir a</label>
@@ -1614,60 +1630,72 @@ foreach ($demandas as $d) {
         // Filter Functions
         function filterByStatus(status) {
             const cards = document.querySelectorAll('.demand-card');
-            const buttons = document.querySelectorAll('.filter-btn');
             const emptyState = document.getElementById('emptyState');
-            let visibleCards = 0;
+            let visibleCount = 0;
 
-            // Update active button
-            buttons.forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.status === status) {
-                    btn.classList.add('active');
-                }
-            });
-
-            // Filter cards
             cards.forEach(card => {
                 if (status === 'all' || card.dataset.status === status) {
                     card.style.display = 'block';
-                    visibleCards++;
+                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
             });
 
-            // Show/hide empty state
-            if (visibleCards === 0) {
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+        }
+
+        function filterByPriority(priority) {
+            const cards = document.querySelectorAll('.demand-card');
+            const emptyState = document.getElementById('emptyState');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                if (priority === 'all' || card.dataset.priority === priority) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
             }
         }
 
         function filterDemands() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusSelect = document.querySelector('select[onchange="filterByStatus(this.value)"]');
+            const prioritySelect = document.querySelector('select[onchange="filterByPriority(this.value)"]');
             const cards = document.querySelectorAll('.demand-card');
             const emptyState = document.getElementById('emptyState');
-            let visibleCards = 0;
+            let visibleCount = 0;
 
             cards.forEach(card => {
-                const title = card.dataset.title;
-                const description = card.dataset.description;
-                const isVisible = title.includes(searchTerm) || description.includes(searchTerm);
-                
-                if (isVisible) {
+                const title = card.dataset.title.toLowerCase();
+                const description = card.dataset.description.toLowerCase();
+                const status = card.dataset.status;
+                const priority = card.dataset.priority;
+                const activeStatus = statusSelect.value;
+                const activePriority = prioritySelect.value;
+
+                const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+                const matchesStatus = activeStatus === 'all' || status === activeStatus;
+                const matchesPriority = activePriority === 'all' || priority === activePriority;
+
+                if (matchesSearch && matchesStatus && matchesPriority) {
                     card.style.display = 'block';
-                    visibleCards++;
+                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
             });
 
-            // Show/hide empty state
-            if (visibleCards === 0) {
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
             }
         }
 
@@ -1681,6 +1709,7 @@ foreach ($demandas as $d) {
             document.getElementById('editar_descricao').value = '';
             document.getElementById('editar_prioridade').value = 'media';
             document.getElementById('editar_status').value = 'pendente';
+            document.getElementById('editar_prazo').value = '';
 
             fetch(`../controllers/DemandaController.php?action=get_demanda&id=${id}`)
                 .then(response => {
@@ -1725,6 +1754,7 @@ foreach ($demandas as $d) {
                     document.getElementById('editar_descricao').value = data.descricao;
                     document.getElementById('editar_prioridade').value = data.prioridade || 'media';
                     document.getElementById('editar_status').value = data.status || 'pendente';
+                    document.getElementById('editar_prazo').value = data.prazo || '';
                     
                     // Set selected users for edit form
                     if (data.usuarios_atribuidos && data.usuarios_atribuidos.length > 0) {

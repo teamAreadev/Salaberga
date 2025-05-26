@@ -85,15 +85,15 @@ class Demanda {
         return $demanda;
     }
 
-    public function criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuarios_ids = []) {
+    public function criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuarios_ids = [], $prazo = null) {
         try {
             $this->pdo->beginTransaction();
 
         $stmt = $this->pdo->prepare("
-                INSERT INTO demandas (titulo, descricao, prioridade, admin_id, status)
-                VALUES (?, ?, ?, ?, 'pendente')
+                INSERT INTO demandas (titulo, descricao, prioridade, admin_id, status, prazo)
+                VALUES (?, ?, ?, ?, 'pendente', ?)
             ");
-            $stmt->execute([$titulo, $descricao, $prioridade, $admin_id]);
+            $stmt->execute([$titulo, $descricao, $prioridade, $admin_id, $prazo]);
 
             $demanda_id = $this->pdo->lastInsertId();
 
@@ -117,16 +117,16 @@ class Demanda {
         }
     }
 
-    public function atualizarDemanda($id, $titulo, $descricao, $prioridade, $status, $usuarios_ids = []) {
+    public function atualizarDemanda($id, $titulo, $descricao, $prioridade, $status, $usuarios_ids = [], $prazo = null) {
         try {
             $this->pdo->beginTransaction();
 
         $stmt = $this->pdo->prepare("
             UPDATE demandas 
-                SET titulo = ?, descricao = ?, prioridade = ?, status = ?
+                SET titulo = ?, descricao = ?, prioridade = ?, status = ?, prazo = ?
             WHERE id = ?
         ");
-            $stmt->execute([$titulo, $descricao, $prioridade, $status, $id]);
+            $stmt->execute([$titulo, $descricao, $prioridade, $status, $prazo, $id]);
 
             // Remover atribuições existentes e adicionar as novas
             $stmtRemoverAtribuicao = $this->pdo->prepare("DELETE FROM demanda_usuarios WHERE demanda_id = ?");
