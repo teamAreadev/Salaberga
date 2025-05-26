@@ -187,7 +187,7 @@ $select_model = new select_model();
                         <div class="relative">
                             <label for="searchBook" class="block text-sm font-medium text-gray-700 mb-1">Buscar Livro</label>
                             <div class="relative">
-                                <select class="js-example-basic-single" name="editar_livro">
+                                <select class="js-example-basic-single" name="id_livro">
                                     <option value="" selected disabled>Selecione um livro para editar</option>
                                     <?php
                                     $livros = $select_model->select_nome_livro();
@@ -197,8 +197,26 @@ $select_model = new select_model();
                                             data-edicao="<?= $livro['edicao'] ?>"
                                             data-editora="<?= $livro['editora'] ?>"
                                             data-estante="<?= $livro['estantes'] ?>"
-                                            data-prateleira="<?= $livro['prateleiras'] ?>"
+                                            <?php if ($livro['prateleiras'] == 'p1'){
+                                                ?>data-prateleira="P1"<?php
+                                            }else if($livro['prateleiras'] == 'p2'){
+                                                ?>data-prateleira="P2"<?php
+                                            }else if($livro['prateleiras'] == 'p3'){
+                                                ?>data-prateleira="P3"<?php
+                                            }else if($livro['prateleiras'] == 'p4'){
+                                                ?>data-prateleira="P4"<?php
+                                            }else if($livro['prateleiras'] == 'p5'){
+                                                ?>data-prateleira="P5"<?php
+                                            }
+                                            ?>
                                             data-quantidade="<?= $livro['quantidade'] ?>"
+                                            data-genero="<?= $livro['generos'] ?>"
+                                            data-subgenero="<?= $livro['subgenero'] ?>"
+                                            data-ano_publicacao="<?= $livro['ano_publicacao'] ?>"
+                                            data-corredor="<?= $livro['corredor'] ?>"
+                                            data-ficcao="<?= $livro['ficcao'] ?>"
+                                            data-literatura="<?= $livro['literatura'] ?>"
+                                            data-cativo="<?= $livro['cativo'] ?>"
                                         ><?= $livro['titulo_livro'] ?> | edição: <?= $livro['edicao'] ?> | editora: <?= $livro['editora'] ?> | estante: <?= $livro['estantes'] ?> | prateleira: <?= $livro['prateleiras'] ?> | quantidade: <?= $livro['quantidade'] ?></option>
                                     <?php } ?>
                                 </select>
@@ -213,26 +231,26 @@ $select_model = new select_model();
                                 <!-- Título -->
                                 <div class="mb-4">
                                     <label for="editTitulo" class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                                    <input type="text" id="editTitulo" name="editTitulo" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                    <input type="text" id="editTitulo" name="titulo" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
                                 </div>
 
                                 <!-- Edição -->
                                 <div class="mb-4">
                                     <label for="editEdicao" class="block text-sm font-medium text-gray-700 mb-1">Edição</label>
-                                    <input type="text" id="editEdicao" name="editEdicao" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                    <input type="text" id="editEdicao" name="edicao" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
                                 </div>
 
                                 <!-- Editora -->
                                 <div class="mb-4">
                                     <label for="editEditora" class="block text-sm font-medium text-gray-700 mb-1">Editora</label>
-                                    <input type="text" id="editEditora" name="editEditora" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                    <input type="text" id="editEditora" name="editora" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
                                 </div>
 
                                 <!-- Localização -->
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                     <div>
                                         <label for="editEstante" class="block text-sm font-medium text-gray-700 mb-1">Estante</label>
-                                        <select id="editEstante" name="editEstante" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 transition-all duration-200">
+                                        <select id="editEstante" name="estante" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 transition-all duration-200">
                                             <?php for ($i = 1; $i <= 32; $i++) { ?>
                                                 <option value="<?= $i ?>">Estante <?= $i ?></option>
                                             <?php } ?>
@@ -240,7 +258,7 @@ $select_model = new select_model();
                                     </div>
                                     <div>
                                         <label for="editPrateleira" class="block text-sm font-medium text-gray-700 mb-1">Prateleira</label>
-                                        <select id="editPrateleira" name="editPrateleira" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 transition-all duration-200">
+                                        <select id="editPrateleira" name="prateleira" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 transition-all duration-200">
                                             <?php for ($i = 1; $i <= 5; $i++) { ?>
                                                 <option value="P<?= $i ?>">Prateleira <?= $i ?></option>
                                             <?php } ?>
@@ -251,13 +269,73 @@ $select_model = new select_model();
                                 <!-- Quantidade -->
                                 <div class="mb-4">
                                     <label for="editQuantidade" class="block text-sm font-medium text-gray-700 mb-1">Quantidade</label>
-                                    <input type="number" id="editQuantidade" name="editQuantidade" min="1" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                    <input type="number" id="editQuantidade" name="quantidade" min="1" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                </div>
+
+                                <!-- Gênero e Subgênero -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label for="editGenero" class="block text-sm font-medium text-gray-700 mb-1">Gênero</label>
+                                       <select name="genero" id="editGenero" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                        <?php 
+                                        $generos = $select_model->select_genero();
+                                        foreach ($generos as $genero) { ?>
+                                            <option value="<?= $genero['id'] ?>"><?= $genero['generos'] ?></option>
+                                        <?php } ?>
+                                       </select>
+                                    </div>
+                                    <div>
+                                        <label for="editSubgenero" class="block text-sm font-medium text-gray-700 mb-1">Subgênero</label>
+                                        <select name="subgenero" id="editSubgenero" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                        <?php
+                                    $generos = $select_model->select_genero();
+                                    foreach ($generos as $genero) {
+                                        $subgeneros = $select_model->select_subgenero(genero: $genero['generos']);
+                                        ?>
+                                        <optgroup label="<?= $genero['generos'] ?>"></optgroup>
+                                        <?php
+                                        foreach ($subgeneros as $subgenero) {
+                                            ?>
+                                            <option value="<?= $subgenero['id'] ?>"><?= $subgenero['subgenero'] ?></option>
+                                        <?php } ?>
+                                        </optgroup>
+                                    <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Ano de Publicação e Corredor -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label for="editAnoPublicacao" class="block text-sm font-medium text-gray-700 mb-1">Ano de Publicação</label>
+                                        <input type="text" id="editAnoPublicacao" name="ano_publicacao" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                    </div>
+                                    <div>
+                                        <label for="editCorredor" class="block text-sm font-medium text-gray-700 mb-1">Corredor</label>
+                                        <input type="text" id="editCorredor" name="corredor" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                    </div>
+                                </div>
+
+                                <!-- Checkboxes -->
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="editFiccao" name="ficcao" class="w-4 h-4 text-ceara-green border-gray-300 rounded focus:ring-ceara-green">
+                                        <label for="editFiccao" class="ml-2 text-sm font-medium text-gray-700">Ficção</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="editLiteratura" name="literatura" class="w-4 h-4 text-ceara-green border-gray-300 rounded focus:ring-ceara-green">
+                                        <label for="editLiteratura" class="ml-2 text-sm font-medium text-gray-700">Literatura</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="editCativo" name="cativo" class="w-4 h-4 text-ceara-green border-gray-300 rounded focus:ring-ceara-green">
+                                        <label for="editCativo" class="ml-2 text-sm font-medium text-gray-700">Cativo</label>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- Botões de Ação -->
                             <div class="flex space-x-4">
-                                <button type="submit" name="action" value="edit"
+                                <button type="submit"
                                     class="flex-1 bg-ceara-green hover:bg-ceara-green-dark text-white font-medium py-4 px-6 rounded-lg transition duration-300 ease-in-out hover:shadow-lg flex items-center justify-center text-lg shadow-md">
                                     <i class="fas fa-save mr-3"></i>
                                     Salvar Alterações
@@ -324,8 +402,33 @@ $select_model = new select_model();
                     document.getElementById('editEdicao').value = selectedOption.dataset.edicao;
                     document.getElementById('editEditora').value = selectedOption.dataset.editora;
                     document.getElementById('editEstante').value = selectedOption.dataset.estante;
-                    document.getElementById('editPrateleira').value = selectedOption.dataset.prateleira;
+                    // Handle prateleira with P prefix
+                    const prateleiraValue = selectedOption.dataset.prateleira;
+                    document.getElementById('editPrateleira').value = prateleiraValue;
                     document.getElementById('editQuantidade').value = selectedOption.dataset.quantidade;
+                    
+                    // Populate new fields
+                    // Encontrar a opção do gênero que corresponde ao texto
+                    const generoSelect = document.getElementById('editGenero');
+                    const generoOptions = Array.from(generoSelect.options);
+                    const generoOption = generoOptions.find(option => option.text === selectedOption.dataset.genero);
+                    if (generoOption) {
+                        generoSelect.value = generoOption.value;
+                    }
+
+                    // Encontrar a opção do subgênero que corresponde ao texto
+                    const subgeneroSelect = document.getElementById('editSubgenero');
+                    const subgeneroOptions = Array.from(subgeneroSelect.options);
+                    const subgeneroOption = subgeneroOptions.find(option => option.text === selectedOption.dataset.subgenero);
+                    if (subgeneroOption) {
+                        subgeneroSelect.value = subgeneroOption.value;
+                    }
+
+                    document.getElementById('editAnoPublicacao').value = selectedOption.dataset.ano_publicacao;
+                    document.getElementById('editCorredor').value = selectedOption.dataset.corredor;
+                    document.getElementById('editFiccao').checked = selectedOption.dataset.ficcao === '1';
+                    document.getElementById('editLiteratura').checked = selectedOption.dataset.literatura === '1';
+                    document.getElementById('editCativo').checked = selectedOption.dataset.cativo === '1';
                     
                     // Show the edit form
                     editForm.classList.remove('hidden');
