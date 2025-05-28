@@ -36,22 +36,22 @@ if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
     isset($_POST['ano_publicacao']) && !empty($_POST['ano_publicacao']) &&
     isset($_POST['quantidade']) && !empty($_POST['quantidade'])
 ) {
-
-    echo $titulo = $_POST['titulo'];
-    echo $id_livro = $_POST['id_livro'];
-    echo $editora = $_POST['editora'];
-    echo $edicao = $_POST['edicao'];
-    echo $quantidade = $_POST['quantidade'];
-    echo $corredor = $_POST['corredor'];
-    echo $estante = $_POST['estante'];
-    echo $prateleira = $_POST['prateleira'];
-    echo $subgenero = $_POST['subgenero'];
-    echo $literatura = $_POST['literatura'];
-    echo $ficcao = $_POST['ficcao'];
-    echo $cativo = $_POST['cativo'];
-    echo $genero = $_POST['genero'];
-    echo $ano_publicacao = $_POST['ano_publicacao'];
-    echo $subgenero = $_POST['subgenero'];
+    $titulo = $_POST['titulo'];
+    $id_livro = $_POST['id_livro'];
+    $editora = $_POST['editora'];
+    $edicao = $_POST['edicao'];
+    $quantidade = $_POST['quantidade'];
+    $corredor = $_POST['corredor'];
+    $estante = $_POST['estante'];
+    $prateleira = $_POST['prateleira'];
+    $subgenero = $_POST['subgenero'];
+    $literatura = $_POST['literatura'] ?? 0;
+    $ficcao = $_POST['ficcao'] ?? 0;
+    $cativo = $_POST['cativo'] ?? 0;
+    $genero = $_POST['genero'];
+    $ano_publicacao = $_POST['ano_publicacao'];
+    $subgenero = $_POST['subgenero'];
+    $genero = $_POST['genero'];
 
     $model = new main_model();
     $result = $model->editar_livro($id_livro, $titulo, $data, $editora, $edicao, $quantidade, $corredor, $estante, $prateleira, $subgenero, $literatura, $ficcao, $cativo, $genero, $ano_publicacao);

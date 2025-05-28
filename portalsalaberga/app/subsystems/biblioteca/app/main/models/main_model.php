@@ -245,9 +245,9 @@ class main_model extends connect
         }
     }
 
-    public function editar_livro($id_livro, $titulo, $data, $editora, $edicao, $quantidade, $corredor, $estante, $prateleira, $subgenero, $literatura, $ficcao, $cativo)
+    public function editar_livro($id_livro, $titulo, $data, $editora, $edicao, $quantidade, $corredor, $estante, $prateleira,$genero, $subgenero, $literatura, $ficcao, $cativo)
     {
-        $sql_editar = $this->connect->prepare("UPDATE catalogo SET titulo_livro = :titulo, ano_publicacao = :data, editora = :editora, edicao = :edicao, quantidade = :quantidade, corredor = :corredor, estante = :estante, prateleira = :prateleira, subgenero = :subgenero, literatura = :literatura, ficcao = :ficcao, cativo = :cativo WHERE id = :id");
+        $sql_editar = $this->connect->prepare("UPDATE catalogo SET titulo_livro = :titulo, ano_publicacao = :data, editora = :editora, edicao = :edicao, quantidade = :quantidade, corredor = :corredor, estantes = :estante, prateleiras = :prateleira,id_genero = :genero, id_subgenero = :subgenero, literatura = :literatura, ficcao = :ficcao, cativo = :cativo WHERE id = :id");
         $sql_editar->bindValue(':id', $id_livro);
         $sql_editar->bindValue(':titulo', $titulo);
         $sql_editar->bindValue(':data', $data);
@@ -257,6 +257,7 @@ class main_model extends connect
         $sql_editar->bindValue(':corredor', $corredor);
         $sql_editar->bindValue(':estante', $estante);
         $sql_editar->bindValue(':prateleira', $prateleira);
+        $sql_editar->bindValue(':genero', $genero);
         $sql_editar->bindValue(':subgenero', $subgenero);
         $sql_editar->bindValue(':literatura', $literatura);
         $sql_editar->bindValue(':ficcao', $ficcao);
