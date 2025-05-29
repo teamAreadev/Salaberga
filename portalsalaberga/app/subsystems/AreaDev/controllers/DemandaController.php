@@ -24,57 +24,57 @@ $demanda = new Demanda($pdo);
 
 // Tratamento de requisições GET
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
-    if ($_GET['action'] === 'get_demanda' && isset($_GET['id'])) {
-        $id = $_GET['id'];
-        $demanda_data = $demanda->buscarDemanda($id);
-
-        // Capturar qualquer saída inesperada antes de enviar o JSON
-        $unexpected_output = ob_get_clean();
-        ob_start(); // Reiniciar o buffer para a saída JSON
-
-        if ($demanda_data) {
-            $response = [
-                'id' => $demanda_data['id'],
-                'titulo' => $demanda_data['titulo'],
-                'descricao' => $demanda_data['descricao'],
-                'prioridade' => $demanda_data['prioridade'],
-                'status' => $demanda_data['status'],
-                'admin_id' => $demanda_data['admin_id'],
-                'usuarios_atribuidos' => $demanda_data['usuarios_atribuidos'] ?? [],
-                'prazo' => $demanda_data['prazo'] ?? null
-            ];
-
-            // Se houver saída inesperada, adicione ao JSON de sucesso (para não perder a info)
-             if (!empty($unexpected_output)) {
-                 $response['debug_output'] = $unexpected_output;
-             }
-
-            header('Content-Type: application/json; charset=utf-8');
-            echo json_encode($response);
-            exit(); // Termina a execução após enviar JSON
-        } else {
-            header('Content-Type: application/json; charset=utf-8');
-            http_response_code(404);
-            $error_response = ['error' => 'Demanda não encontrada.'];
-            
-            // Se houver saída inesperada, adicione ao JSON de erro
-            if (!empty($unexpected_output)) {
-                $error_response['debug_output'] = $unexpected_output;
+    switch ($_GET['action']) {
+        case 'get_demanda':
+            if (!isset($_GET['id'])) {
+                http_response_code(400);
+                echo json_encode(['error' => 'ID não fornecido']);
+                exit;
             }
 
-            echo json_encode($error_response);
-            exit(); // Termina a execução após enviar JSON
-        }
-    } elseif ($_GET['action'] === 'excluir' && isset($_GET['id'])) {
-        $demanda->excluirDemanda($_GET['id']);
-        header("Location: ../views/admin.php");
-        exit();
+            $demanda = new Demanda($pdo);
+            $dados = $demanda->buscarDemanda($_GET['id']);
+
+            if (!$dados) {
+                http_response_code(404);
+                echo json_encode(['error' => 'Demanda não encontrada']);
+                exit;
+            }
+
+            header('Content-Type: application/json');
+            echo json_encode($dados);
+            exit;
+            break;
+        case 'excluir':
+            if (!isset($_GET['id'])) {
+                $error_response = ['error' => 'ID não fornecido'];
+                http_response_code(400);
+                echo json_encode($error_response);
+                exit();
+            }
+            $demanda->excluirDemanda($_GET['id']);
+            header("Location: ../views/admin.php");
+            exit();
+            break;
     }
 }
 
 // Tratamento de requisições POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
     switch ($_POST['acao']) {
+        case 'excluir':
+            if (isset($_POST['id'])) {
+                $demanda = new Demanda($pdo);
+                $sucesso = $demanda->excluirDemanda($_POST['id']);
+                
+                if ($sucesso) {
+                    header("Location: ../views/admin.php?success=Demanda excluída com sucesso!");
+                } else {
+                    header("Location: ../views/admin.php?error=Erro ao excluir demanda.");
+                }
+                exit();
+            }
+            break;
         case 'criar':
             $titulo = $_POST['titulo'] ?? '';
             $descricao = $_POST['descricao'] ?? '';
@@ -102,8 +102,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
                 $titulo = $_POST['titulo'] ?? '';
                 $descricao = $_POST['descricao'] ?? '';
                 $prioridade = $_POST['prioridade'] ?? 'media';
-                $status = $_POST['status'] ?? 'pendente';
-                $usuarios_ids = isset($_POST['usuarios_ids']) ? (is_array($_POST['usuarios_ids']) ? $_POST['usuarios_ids'] : [$_POST['usuarios_ids']]) : [];
                 $prazo = $_POST['prazo'] ?? null;
 
                 if (empty($titulo) || empty($descricao)) {
@@ -111,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
                     exit();
                 }
 
-                $sucesso = $demanda->atualizarDemanda($id, $titulo, $descricao, $prioridade, $status, $usuarios_ids, $prazo);
+                $sucesso = $demanda->atualizarDemanda($id, $titulo, $descricao, $prioridade, null, [], $prazo);
                 
                 if ($sucesso) {
                     header("Location: ../views/admin.php?success=Demanda atualizada com sucesso!");
@@ -127,7 +125,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
                 if ($_POST['novo_status'] === 'em_andamento') {
                     $demanda->marcarEmAndamento($_POST['id'], $_POST['usuario_id'] ?? $_SESSION['usuario_id']);
                 } elseif ($_POST['novo_status'] === 'concluida') {
-                    $demanda->marcarConcluida($_POST['id'], $_POST['usuario_id'] ?? $_SESSION['usuario_id']);
+                    if ($_SESSION['usuario_tipo'] === 'admin') {
+                        // Se for admin, marca a demanda como concluída e apenas o admin como concluído
+                        $pdo->beginTransaction();
+                        try {
+                            // Atualiza o status da demanda
+                            $stmt = $pdo->prepare("
+                                UPDATE demandas 
+                                SET status = 'concluida', data_conclusao = CURRENT_TIMESTAMP 
+                                WHERE id = ?
+                            ");
+                            $stmt->execute([$_POST['id']]);
+
+                            // Atualiza apenas o status do admin
+                            $stmt = $pdo->prepare("
+                                UPDATE demanda_usuarios 
+                                SET status = 'concluido', data_conclusao = CURRENT_TIMESTAMP 
+                                WHERE demanda_id = ? AND usuario_id = ?
+                            ");
+                            $stmt->execute([$_POST['id'], $_SESSION['usuario_id']]);
+
+                            $pdo->commit();
+                        } catch (Exception $e) {
+                            $pdo->rollBack();
+                            header("Location: ../views/admin.php?error=Erro ao concluir demanda.");
+                            exit();
+                        }
+                    } else {
+                        // Se for usuário normal, usa o método existente
+                        $demanda->marcarConcluida($_POST['id'], $_POST['usuario_id'] ?? $_SESSION['usuario_id']);
+                    }
                 }
                 
                 // Redireciona para a página correta baseado no tipo de usuário
@@ -135,6 +162,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
                     header("Location: ../views/admin.php");
                 } else {
                     header("Location: ../views/usuario.php");
+                }
+                exit();
+            }
+            break;
+        case 'aceitar_demanda':
+            if (isset($_POST['id'])) {
+                $demanda = new Demanda($pdo);
+                $sucesso = $demanda->aceitarDemanda($_POST['id'], $_SESSION['usuario_id']);
+                
+                if ($sucesso) {
+                    header("Location: ../views/usuario.php?success=Demanda aceita com sucesso!");
+                } else {
+                    header("Location: ../views/usuario.php?error=Erro ao aceitar demanda.");
+                }
+                exit();
+            }
+            break;
+        case 'recusar_demanda':
+            if (isset($_POST['id'])) {
+                $demanda = new Demanda($pdo);
+                $sucesso = $demanda->recusarDemanda($_POST['id'], $_SESSION['usuario_id']);
+                
+                if ($sucesso) {
+                    header("Location: ../views/usuario.php?success=Demanda recusada com sucesso!");
+                } else {
+                    header("Location: ../views/usuario.php?error=Erro ao recusar demanda.");
                 }
                 exit();
             }
