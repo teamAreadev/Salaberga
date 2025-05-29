@@ -1,19 +1,35 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/auth.php';
 require_once __DIR__ . '/../model/Demanda.php';
 require_once __DIR__ . '/../model/Usuario.php';
 
-session_start();
+// Verificar se é admin
+verificarAdmin();
 
 // Inicializa a conexão com o banco de dados
 $database = new Database();
 $pdo = $database->getConnection();
 
 // Verificar se está logado e é admin
-if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'admin') {
-    header("Location: login.php");
+if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo']) || $_SESSION['usuario_tipo'] !== 'admin') {
+    // Limpar sessão e redirecionar para login
+    session_unset();
+    session_destroy();
+    header("Location: login.php?error=Acesso negado. Faça login como administrador.");
     exit();
 }
+
+// Verificar tempo de inatividade (30 minutos)
+if (isset($_SESSION['ultimo_acesso']) && (time() - $_SESSION['ultimo_acesso'] > 1800)) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php?error=Sessão expirada. Por favor, faça login novamente.");
+    exit();
+}
+
+// Atualizar último acesso
+$_SESSION['ultimo_acesso'] = time();
 
 $demanda = new Demanda($pdo);
 $usuario = new Usuario($pdo);
@@ -24,12 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
         $titulo = $_POST['titulo'] ?? '';
         $descricao = $_POST['descricao'] ?? '';
         $prioridade = $_POST['prioridade'] ?? 'media';
-        $usuario_id = $_POST['usuario_id'] ?? null;
+        $prazo = $_POST['prazo'] ?? null;
 
         if (!empty($titulo) && !empty($descricao)) {
-            $sucesso = $demanda->criarDemanda($titulo, $descricao, $prioridade, $_SESSION['usuario_id'], $usuario_id);
+            $sucesso = $demanda->criarDemanda($titulo, $descricao, $prioridade, $_SESSION['usuario_id'], [], $prazo);
             if ($sucesso) {
-            header("Location: admin.php");
+                header("Location: admin.php?success=Demanda criada com sucesso!");
             exit();
             } else {
                 $erro = "Erro ao criar demanda. Por favor, tente novamente.";
@@ -190,6 +206,7 @@ foreach ($demandas as $d) {
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
+        padding: 1.25rem; /* Padding padrão para o card */
     }
 
     .demand-card::before {
@@ -214,6 +231,12 @@ foreach ($demandas as $d) {
         transform: scaleX(1);
     }
 
+    .demand-card.no-participants {
+        /* Ajusta o padding inferior e potencialmente outros espaçamentos */
+        padding-bottom: 1.5rem; /* Aumenta ligeiramente o padding inferior */
+        /* Adicionar outras regras se necessário para reduzir espaço vertical */
+    }
+
     .card-header {
         display: flex;
         justify-content: space-between;
@@ -227,7 +250,7 @@ foreach ($demandas as $d) {
     }
 
     .card-title h3 {
-        font-size: 1rem;
+        font-size: 1.25rem;
         font-weight: 600;
         color: #ffffff;
         margin-bottom: 0.375rem;
@@ -300,7 +323,7 @@ foreach ($demandas as $d) {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-top: 0.75rem;
+        padding-top: 0.75rem; /* Espaço acima dos botões de ação */
         border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
@@ -310,8 +333,8 @@ foreach ($demandas as $d) {
     }
 
     .card-participants {
-        margin-top: 0.75rem;
-        padding-top: 0.75rem;
+        margin-top: 0.75rem; /* Espaço entre o rodapé e a lista de participantes */
+        padding-top: 0.75rem; /* Espaço interno acima da lista de participantes */
         border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
@@ -323,31 +346,149 @@ foreach ($demandas as $d) {
 
     .participants-list {
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.375rem;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .participants-details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
     }
 
     .participant-item {
         display: flex;
-        align-items: center;
-        gap: 0.375rem;
-        padding: 0.2rem 0.5rem;
-        background: rgba(0, 122, 51, 0.1);
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 0.5rem;
+        background: rgba(0, 0, 0, 0.1);
         border-radius: 8px;
-        font-size: 0.7rem;
+        transition: all 0.3s ease;
     }
 
-    .participant-avatar {
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #007A33, #00FF6B);
+    .participant-item:hover {
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .participant-info {
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        justify-content: center;
-        font-size: 0.6rem;
-        color: white;
+        gap: 0.5rem;
+    }
+
+    .participant-name {
+        font-weight: 500;
+        color: #ffffff;
+    }
+
+    .participant-completion {
+        font-size: 0.75rem;
+        color: #888888;
+        padding-left: 0.5rem;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .status-badge i {
+        font-size: 0.875rem;
+    }
+
+    .status-badge:hover {
+        transform: scale(1.05);
+    }
+
+    .status-pendente {
+        background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(234, 179, 8, 0.1));
+        color: #fbbf24;
+        border: 1px solid rgba(234, 179, 8, 0.3);
+    }
+
+    .status-aceito {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-recusado {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .status-em_andamento {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+        color: #60a5fa;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .status-concluida {
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .status-concluida i {
+        color: #4ade80;
+    }
+
+    .status-cancelada {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Priority Badges */
+    .priority-badge {
+        padding: 0.2rem 0.5rem;
+        border-radius: 15px;
+        font-size: 0.7rem;
         font-weight: 600;
+        letter-spacing: 0.05em;
+    }
+
+    .priority-alta {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .priority-media {
+        background: rgba(234, 179, 8, 0.2);
+        color: #fbbf24;
+        border: 1px solid rgba(234, 179, 8, 0.3);
+    }
+
+    .priority-baixa {
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    /* Modal Styles */
+    .modal {
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
+        transition: all 0.3s ease;
+    }
+
+    .modal-content {
+        background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
+        border: 1px solid rgba(0, 122, 51, 0.2);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        border-radius: 24px;
+        backdrop-filter: blur(20px);
     }
 
     /* Button Styles */
@@ -508,27 +649,28 @@ foreach ($demandas as $d) {
 
     .multi-select-dropdown {
         position: absolute;
-        bottom: 100%;
+        bottom: 100%; /* Position above the container */
         left: 0;
         right: 0;
         background: rgba(35, 35, 35, 0.98);
         border: 2px solid rgba(0, 122, 51, 0.2);
         border-radius: 12px;
-        margin-bottom: 4px;
+        margin-bottom: 4px; /* Space between container and dropdown */
+        max-height: 200px; /* Limit height */
         overflow-y: auto;
         z-index: 1000;
         opacity: 0;
         visibility: hidden;
-        transform: translateY(10px);
+        transform: translateY(10px); /* Start slightly below */
         transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px); /* Optional: add blur effect */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Optional: add shadow */
     }
 
     .multi-select-dropdown.active {
         opacity: 1;
         visibility: visible;
-        transform: translateY(0);
+        transform: translateY(0); /* Slide up to final position */
     }
 
     .multi-select-search {
@@ -579,7 +721,6 @@ foreach ($demandas as $d) {
     .multi-select-option.selected {
         background: rgba(0, 122, 51, 0.2);
         color: #00FF6B;
-        font-weight: 500;
     }
 
     .multi-select-option.selected::before {
@@ -651,192 +792,6 @@ foreach ($demandas as $d) {
         transform: translateY(-2px);
     }
 
-    /* Status Badges */
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.2rem 0.5rem;
-        border-radius: 20px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-    .status-badge i {
-        font-size: 0.875rem;
-    }
-
-    .status-badge:hover {
-        transform: scale(1.05);
-    }
-
-    .status-pendente {
-        background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(234, 179, 8, 0.1));
-        color: #fbbf24;
-        border: 1px solid rgba(234, 179, 8, 0.3);
-    }
-
-    .status-em_andamento {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
-        color: #60a5fa;
-        border: 1px solid rgba(59, 130, 246, 0.3);
-    }
-
-    .status-concluida {
-        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
-        color: #4ade80;
-        border: 1px solid rgba(34, 197, 94, 0.3);
-    }
-    
-    .status-concluida i {
-        color: #4ade80;
-    }
-
-    .status-cancelada {
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    /* Priority Badges */
-    .priority-badge {
-        padding: 0.2rem 0.5rem;
-        border-radius: 15px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-    }
-
-    .priority-alta {
-        background: rgba(239, 68, 68, 0.2);
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    .priority-media {
-        background: rgba(234, 179, 8, 0.2);
-        color: #fbbf24;
-        border: 1px solid rgba(234, 179, 8, 0.3);
-    }
-
-    .priority-baixa {
-        background: rgba(34, 197, 94, 0.2);
-        color: #4ade80;
-        border: 1px solid rgba(34, 197, 94, 0.3);
-    }
-
-    /* Modal Styles */
-    .modal {
-        background: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(8px);
-        transition: all 0.3s ease;
-    }
-
-    .modal-content {
-        background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
-        border: 1px solid rgba(0, 122, 51, 0.2);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-        border-radius: 24px;
-        backdrop-filter: blur(20px);
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes scaleIn {
-        from {
-            opacity: 0;
-            transform: scale(0.9);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-
-    @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateX(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    .fade-in {
-        animation: fadeIn 0.5s ease-out forwards;
-    }
-
-    .slide-up {
-        animation: slideUp 0.6s ease-out forwards;
-    }
-
-    .scale-in {
-        animation: scaleIn 0.3s ease-out forwards;
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: rgba(35, 35, 35, 0.5);
-        border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: rgba(0, 122, 51, 0.5);
-        border-radius: 4px;
-        transition: all 0.3s ease;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: rgba(0, 122, 51, 0.7);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .demand-card {
-            padding: 1rem;
-        }
-        
-        .stats-card {
-            padding: 1.5rem;
-        }
-        
-        .search-container {
-            padding: 1.5rem;
-        }
-
-        .multi-select-dropdown {
-            max-height: 150px;
-        }
-
-        .selected-user-tag {
-            font-size: 11px;
-            padding: 3px 8px;
-        }
-    }
-
     /* Loading Animation */
     .loading {
         display: inline-block;
@@ -906,29 +861,61 @@ foreach ($demandas as $d) {
     .status-concluido i {
         color: #4ade80;
     }
+
+    .prazo-info-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        background: rgba(0, 122, 51, 0.2); /* Subtle green background */
+        color: #4ade80; /* Green text color */
+        font-size: 0.875rem;
+        font-weight: 500;
+        border: 1px solid rgba(0, 122, 51, 0.3);
+    }
+
+    .prazo-info-badge i {
+        color: #00FF6B; /* Brighter green icon */
+    }
 </style>
 
 <body class="select-none">
     <!-- Header -->
-    <header class="bg-dark-200 shadow-lg border-b border-primary/20 sticky top-0 z-50 backdrop-blur-lg">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-50 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-tasks text-white text-lg"></i>
+    <header class="bg-dark-400 shadow-lg border-b border-primary-500/20 sticky top-0 z-50 backdrop-blur-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <!-- Logo e Título -->
+                <div class="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
+                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="w-10 h-10">
+                    <div class="text-center sm:text-left">
+                        <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary-50 to-primary-200 bg-clip-text text-transparent">
+                            Painel Administrativo
+                        </h1>
+                        <p class="text-sm text-gray-400">Sistema de Gestão de Demandas</p>
+                    </div>
                 </div>
-                <h1 class="text-2xl font-bold bg-gradient-to-r from-primary-50 to-primary-200 bg-clip-text text-transparent">
-                    Painel Administrativo
-                </h1>
-            </div>
-            <div class="flex items-center gap-4">
-                <div class="hidden md:flex items-center gap-2 text-gray-300">
-                    <i class="fas fa-user-shield text-primary-50"></i>
-                    <span>Bem-vindo, <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></span>
+
+                <!-- Botões e Informações do Usuário -->
+                <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                    <!-- Informações do Usuário -->
+                    <div class="flex items-center gap-2 text-gray-300 bg-dark-300/50 px-4 py-2 rounded-lg">
+                        <i class="fas fa-user-shield text-primary-50"></i>
+                        <span class="text-sm truncate max-w-[200px]"><?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></span>
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-end">
+                        <a href="relatorio.php" class="custom-btn bg-primary-500 hover:bg-primary-600 text-white py-2 px-4 rounded-lg flex items-center gap-2 text-sm w-full sm:w-auto justify-center">
+                            <i class="fas fa-chart-bar btn-icon"></i>
+                            <span>Relatórios</span>
+                        </a>
+                        <a href="logout.php" class="custom-btn bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-2 px-4 rounded-lg flex items-center gap-2 text-sm w-full sm:w-auto justify-center">
+                            <i class="fas fa-sign-out-alt btn-icon"></i>
+                            <span>Sair</span>
+                        </a>
+                    </div>
                 </div>
-                <a href="logout.php" class="custom-btn bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">
-                    <i class="fas fa-sign-out-alt btn-icon"></i> 
-                    <span class="hidden md:inline">Sair</span>
-                </a>
             </div>
         </div>
     </header>
@@ -943,6 +930,9 @@ foreach ($demandas as $d) {
             </div>
         </div>
         <?php endif; ?>
+
+        <!-- Espaço restaurado antes dos filtros -->
+        <div style="height: 2rem;"></div>
 
         <!-- Search and Filters -->
         <div class="search-container slide-up" style="animation-delay: 0.5s">
@@ -983,6 +973,8 @@ foreach ($demandas as $d) {
                 <button onclick="openModal('criarDemandaModal')" class="custom-btn bg-gradient-to-r from-primary-500 to-primary-50 hover:from-primary-400 hover:to-primary-100 text-white font-bold py-3 px-6 rounded-lg flex items-center gap-2">
                     <i class="fas fa-plus btn-icon"></i> Nova Demanda
                 </button>
+
+               
             </div>
         </div>
 
@@ -993,40 +985,62 @@ foreach ($demandas as $d) {
                 Gerenciar Demandas
             </h2>
             
-            <div id="demandsContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                <?php foreach ($demandas as $index => $d): ?>
+            <!-- Seção Em Espera -->
+            <div class="mb-8">
+                <h3 class="text-xl font-bold text-white mb-4">Em Espera</h3>
+                <div id="demandasEsperaContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
+                    <?php 
+                    $count_espera = 0;
+                    foreach ($demandas as $index => $d): 
+                        // Verifica se o status é 'pendente' para a seção 'Em Espera'
+                        if ($d['status'] === 'pendente'):
+                            $count_espera++;
+                    ?>
                 
                 <?php
-                // DEBUG: Verificar os dados de cada demanda (Admin View)
-                // echo '<h3>DEBUG ADMIN: Demanda ID: ' . $d['id'] . '</h3>';
-                // var_dump($d);
-                // echo '<hr>';
-                ?>
+                    // Determina se há participantes atribuídos para ajustar o padding
+                    $has_participants = !empty($d['usuarios_atribuidos']);
+                    ?>
 
-                <div class="demand-card fade-in" 
-                     style="animation-delay: <?php echo ($index * 0.1); ?>s"
-                     data-status="<?php echo $d['status']; ?>"
-                     data-title="<?php echo strtolower($d['titulo']); ?>"
-                     data-description="<?php echo strtolower($d['descricao']); ?>"
-                     data-priority="<?php echo $d['prioridade']; ?>"
-                     data-demanda-id="<?php echo $d['id']; ?>">
+                    <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300 <?php echo $has_participants ? '' : 'no-participants'; ?>"
+                    data-title="<?php echo htmlspecialchars($d['titulo']); ?>"
+                    data-description="<?php echo htmlspecialchars($d['descricao']); ?>"
+                    data-status="<?php echo $d['status']; ?>"
+                    data-priority="<?php echo $d['prioridade']; ?>">
                     
                     <!-- Card Header -->
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h3><?php echo htmlspecialchars($d['titulo']); ?></h3>
-                            <div class="card-meta">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white mb-2 line-clamp-2 cursor-pointer hover:text-primary-50 transition-colors duration-300"
+                                onclick="mostrarDescricao('<?php echo htmlspecialchars($d['titulo']); ?>', '<?php echo htmlspecialchars($d['descricao']); ?>', '<?php echo $d['status']; ?>', '<?php echo date('d/m/Y H:i', strtotime($d['data_criacao'])); ?>', '<?php echo !empty($d['data_conclusao']) ? date('d/m/Y H:i', strtotime($d['data_conclusao'])) : ''; ?>')">
+                                <?php echo htmlspecialchars($d['titulo']); ?>
+                            </h3>
+                            <div class="flex items-center gap-2 mb-2">
                                 <span class="status-badge status-<?php echo $d['status']; ?>">
                                     <?php
                                     $statusIcons = [
                                         'pendente' => 'fas fa-clock',
                                         'em_andamento' => 'fas fa-spinner fa-spin',
                                         'concluida' => 'fas fa-check-circle',
-                                        'cancelada' => 'fas fa-ban'
+                                        'cancelada' => 'fas fa-ban',
+                                        'aceito' => 'fas fa-check-circle'
                                     ];
-                                    $status_display = ucfirst(str_replace('_', ' ', $d['status']));
+                                    
+                                    $display_status = $d['status'];
+                                    $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
+
+                                        // Lógica para status do card baseado no participante único concluído (se houver)
+                                    if (!empty($d['usuarios_atribuidos']) && count($d['usuarios_atribuidos']) === 1) {
+                                                        $single_participant_status = $d['usuarios_atribuidos'][0]['status'] ?? null;
+                                                        if ($single_participant_status === 'concluido') {
+                                                $display_status = 'concluida';
+                                                            $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
+                                                        }
+                                                    }
+                                    
+                                        $status_display = ucfirst(str_replace('_', ' ', $display_status));
                                     ?>
-                                    <i class="<?php echo $statusIcons[$d['status']] ?? 'fas fa-question'; ?>"></i>
+                                    <i class="<?php echo $display_icon; ?>"></i>
                                     <?php echo $status_display; ?>
                                 </span>
                                 <span class="priority-badge priority-<?php echo $d['prioridade']; ?>">
@@ -1034,133 +1048,326 @@ foreach ($demandas as $d) {
                                 </span>
                             </div>
                         </div>
-                        <span class="card-id">#<?php echo $d['id']; ?></span>
+                        <div class="text-right">
+                            <span class="text-xs text-gray-400">ID: #<?php echo $d['id']; ?></span>
+                        </div>
                     </div>
                     
                     <!-- Card Content -->
-                    <div class="card-content">
-                        <p class="card-description">
+                    <div class="mb-4">
+                        <p class="text-gray-300 text-sm line-clamp-3 mb-3">
                             <?php echo htmlspecialchars($d['descricao']); ?>
                         </p>
                         
-                        <div class="card-details">
-                            <div class="detail-item">
-                                <span class="detail-label">Criado em</span>
-                                <span class="detail-value">
+                        <div class="grid grid-cols-2 gap-4 text-xs">
+                            <div>
+                                <span class="text-gray-400">Criado em:</span>
+                                <p class="text-white font-medium">
                                     <?php echo date('d/m/Y', strtotime($d['data_criacao'])); ?>
-                                </span>
+                                </p>
+                                <p class="text-gray-400">
+                                    <?php echo date('H:i', strtotime($d['data_criacao'])); ?>
+                                </p>
                             </div>
-                            <div class="detail-item">
-                                <span class="detail-label">
-                                    <?php echo !empty($d['data_conclusao']) ? 'Concluído em' : 'Prazo'; ?>
-                                </span>
-                                <span class="detail-value">
+                            <div>
+                                    <?php if ($d['status'] === 'concluida'): ?>
+                                        <span class="text-gray-400">Concluído em:</span>
+                                <p class="text-white font-medium">
+                                            <?php echo date('d/m/Y', strtotime($d['data_conclusao'])); ?>
+                                        </p>
+                                        <p class="text-gray-400">
+                                            <?php echo date('H:i', strtotime($d['data_conclusao'])); ?>
+                                        </p>
+                                    <?php else: ?>
+                                        <span class="text-gray-400">Prazo:</span>
                                     <?php 
-                                    if (!empty($d['data_conclusao'])) {
-                                        echo date('d/m/Y', strtotime($d['data_conclusao']));
-                                    } else if (!empty($d['prazo'])) {
-                                        echo date('d/m/Y', strtotime($d['prazo']));
-                                    } else {
-                                        echo 'Não definido';
-                                    }
-                                    ?>
-                                </span>
+                                        $dias_prazo = 0;
+                                        switch ($d['prioridade']) {
+                                            case 'baixa':
+                                                $dias_prazo = 5;
+                                                break;
+                                            case 'media':
+                                                $dias_prazo = 3;
+                                                break;
+                                            case 'alta':
+                                                $dias_prazo = 1;
+                                                break;
+                                        }
+                                        $data_prazo = date('d/m/Y', strtotime($d['data_criacao'] . " +{$dias_prazo} days"));
+                                        $data_prazo_hora = date('H:i', strtotime($d['data_criacao']));
+                                        ?>
+                                        <p class="text-white font-medium">
+                                            <?php echo $data_prazo; ?>
+                                        </p>
+                                <p class="text-gray-400">
+                                            <?php echo $data_prazo_hora; ?>
+                                </p>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Card Footer -->
-                    <div class="card-footer">
-                        <div class="card-actions">
-                            <?php if ($d['admin_id'] == $_SESSION['usuario_id']): ?>
-                            <button 
-                                onclick="editarDemanda(<?php echo $d['id']; ?>)" 
-                                class="custom-btn bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg"
-                                title="Editar demanda">
+                    <!-- Card Actions -->
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                            <div class="flex items-center gap-2">
+                                <?php if ($d['status'] !== 'concluida'): ?>
+                                    <?php if ($d['status'] === 'pendente'): ?>
+                                        <button onclick="realizarTarefa(<?php echo $d['id']; ?>, '<?php echo $d['status']; ?>')" 
+                                                class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg transition-all duration-300 flex items-center gap-2">
+                                            <i class="fas fa-tasks"></i>
+                                            Realizar Tarefa
+                        </button>
+                                    <?php elseif ($d['status'] === 'em_andamento'): ?>
+                                        <button onclick="concluirDemanda(<?php echo $d['id']; ?>)" 
+                                                class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg transition-all duration-300 flex items-center gap-2">
+                                            <i class="fas fa-check"></i>
+                                            Concluir
+                                        </button>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                                <button onclick="editarDemanda(<?php echo $d['id']; ?>)" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="excluirDemanda(<?php echo $d['id']; ?>)" class="custom-btn bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded-lg" title="Excluir">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Status dos Usuários -->
+                        <?php if (!empty($d['usuarios_atribuidos'])): ?>
+                        <div class="mt-4 pt-4 border-t border-gray-700">
+                            <h4 class="text-sm font-semibold text-gray-400 mb-2">Status dos Participantes:</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <?php foreach ($d['usuarios_atribuidos'] as $u_atrib): ?>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs text-gray-300"><?php echo htmlspecialchars($u_atrib['nome']); ?>:</span>
+                                        <span class="status-badge status-<?php echo $u_atrib['status']; ?>">
+                                            <?php
+                                            $statusIconsParticipante = [
+                                                'pendente' => 'fas fa-clock',
+                                                'aceito' => 'fas fa-check-circle',
+                                                'em_andamento' => 'fas fa-spinner fa-spin',
+                                                'concluido' => 'fas fa-check-circle',
+                                                'recusado' => 'fas fa-times-circle'
+                                            ];
+                                            ?>
+                                            <i class="<?php echo $statusIconsParticipante[$u_atrib['status']] ?? 'fas fa-question'; ?>"></i>
+                                            <?php echo ucfirst($u_atrib['status']); ?>
+                                        </span>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php 
+                        endif; // Fim da condição 'pendente'
+                    endforeach; 
+                    ?>
+                </div>
+                 <?php if ($count_espera === 0): ?>
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard"></i>
+                        <h3 class="text-xl font-semibold mb-2">Nenhuma demanda em espera</h3>
+                        <p>Todas as demandas pendentes estão sendo feitas ou foram concluídas/canceladas.</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+        
+             <!-- O resto dos cards (Concluídas, Canceladas, etc.) -->
+            <div class="mb-8">
+                 <h3 class="text-xl font-bold text-white mb-4">Outras Demandas</h3>
+                 <div id="demandasOutrasContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
+                     <?php 
+                     $count_outras = 0;
+                     foreach ($demandas as $index => $d): 
+                         // Verifica se o status NÃO é 'pendente' para a seção 'Outras Demandas'
+                         if ($d['status'] !== 'pendente'):
+                             $count_outras++;
+                     ?>
+                     
+                     <?php
+                     // Determina se há participantes atribuídos para ajustar o padding
+                     $has_participants = !empty($d['usuarios_atribuidos']);
+                     ?>
+
+                     <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300 <?php echo $has_participants ? '' : 'no-participants'; ?>"
+                         data-title="<?php echo htmlspecialchars($d['titulo']); ?>"
+                         data-description="<?php echo htmlspecialchars($d['descricao']); ?>"
+                         data-status="<?php echo $d['status']; ?>"
+                         data-priority="<?php echo $d['prioridade']; ?>">
+                         
+                         <!-- Card Header -->
+                         <div class="flex items-start justify-between mb-4">
+                             <div class="flex-1">
+                                 <h3 class="text-lg font-semibold text-white mb-2 line-clamp-2 cursor-pointer hover:text-primary-50 transition-colors duration-300"
+                                     onclick="mostrarDescricao('<?php echo htmlspecialchars($d['titulo']); ?>', '<?php echo htmlspecialchars($d['descricao']); ?>', '<?php echo $d['status']; ?>', '<?php echo date('d/m/Y H:i', strtotime($d['data_criacao'])); ?>', '<?php echo !empty($d['data_conclusao']) ? date('d/m/Y H:i', strtotime($d['data_conclusao'])) : ''; ?>')">
+                                     <?php echo htmlspecialchars($d['titulo']); ?>
+                                 </h3>
+                                 <div class="flex items-center gap-2 mb-2">
+                                     <span class="status-badge status-<?php echo $d['status']; ?>">
+                                         <?php
+                                         $statusIcons = [
+                                             'pendente' => 'fas fa-clock',
+                                             'em_andamento' => 'fas fa-spinner fa-spin',
+                                             'concluida' => 'fas fa-check-circle',
+                                             'cancelada' => 'fas fa-ban',
+                                             'aceito' => 'fas fa-check-circle'
+                                         ];
+                                         
+                                         $display_status = $d['status'];
+                                         $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
+
+                                         // Lógica para status do card baseado no participante único concluído (se houver)
+                                         if (!empty($d['usuarios_atribuidos']) && count($d['usuarios_atribuidos']) === 1) {
+                                             $single_participant_status = $d['usuarios_atribuidos'][0]['status'] ?? null;
+                                             if ($single_participant_status === 'concluido') {
+                                                 $display_status = 'concluida';
+                                                 $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
+                                             }
+                                         }
+
+                                         $status_display = ucfirst(str_replace('_', ' ', $display_status));
+                                         ?>
+                                         <i class="<?php echo $display_icon; ?>"></i>
+                                         <?php echo $status_display; ?>
+                                     </span>
+                                     <span class="priority-badge priority-<?php echo $d['prioridade']; ?>">
+                                         <?php echo ucfirst($d['prioridade']); ?>
+                                     </span>
+                                 </div>
+                             </div>
+                             <div class="text-right">
+                                 <span class="text-xs text-gray-400">ID: #<?php echo $d['id']; ?></span>
+            </div>
+                         </div>
+                         
+                         <!-- Card Content -->
+                         <div class="mb-4">
+                             <p class="text-gray-300 text-sm line-clamp-3 mb-3">
+                                 <?php echo htmlspecialchars($d['descricao']); ?>
+                             </p>
+                             
+                             <div class="grid grid-cols-2 gap-4 text-xs">
+                                 <div>
+                                     <span class="text-gray-400">Criado em:</span>
+                                     <p class="text-white font-medium">
+                                         <?php echo date('d/m/Y', strtotime($d['data_criacao'])); ?>
+                                     </p>
+                                     <p class="text-gray-400">
+                                         <?php echo date('H:i', strtotime($d['data_criacao'])); ?>
+                                     </p>
+                                 </div>
+                                 <div>
+                                     <?php if ($d['status'] === 'concluida'): ?>
+                                         <span class="text-gray-400">Concluído em:</span>
+                                         <p class="text-white font-medium">
+                                             <?php echo date('d/m/Y', strtotime($d['data_conclusao'])); ?>
+                                         </p>
+                                         <p class="text-gray-400">
+                                             <?php echo date('H:i', strtotime($d['data_conclusao'])); ?>
+                                         </p>
+                                     <?php else: ?>
+                                         <span class="text-gray-400">Prazo:</span>
+                                         <?php
+                                         $dias_prazo = 0;
+                                         switch ($d['prioridade']) {
+                                             case 'baixa':
+                                                 $dias_prazo = 5;
+                                                 break;
+                                             case 'media':
+                                                 $dias_prazo = 3;
+                                                 break;
+                                             case 'alta':
+                                                 $dias_prazo = 1;
+                                                 break;
+                                         }
+                                         $data_prazo = date('d/m/Y', strtotime($d['data_criacao'] . " +{$dias_prazo} days"));
+                                         $data_prazo_hora = date('H:i', strtotime($d['data_criacao']));
+                                         ?>
+                                         <p class="text-white font-medium">
+                                             <?php echo $data_prazo; ?>
+                                         </p>
+                                         <p class="text-gray-400">
+                                             <?php echo $data_prazo_hora; ?>
+                                         </p>
+                                     <?php endif; ?>
+                                 </div>
+                             </div>
+                         </div>
+                         
+                         <!-- Card Actions -->
+                         <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                        <div class="flex items-center gap-2">
+                            <?php if ($d['status'] !== 'concluida'): ?>
+                                <?php if ($d['status'] === 'pendente'): ?>
+                                         <button onclick="realizarTarefa(<?php echo $d['id']; ?>, '<?php echo $d['status']; ?>')" 
+                                                 class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg transition-all duration-300 flex items-center gap-2">
+                                        <i class="fas fa-tasks"></i>
+                                        Realizar Tarefa
+                                    </button>
+                                <?php elseif ($d['status'] === 'em_andamento'): ?>
+                                    <button onclick="concluirDemanda(<?php echo $d['id']; ?>)" 
+                                                 class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg transition-all duration-300 flex items-center gap-2">
+                                        <i class="fas fa-check"></i>
+                                        Concluir
+                                    </button>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                                 <button onclick="editarDemanda(<?php echo $d['id']; ?>)" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg" title="Editar">
                                 <i class="fas fa-edit"></i>
                             </button>
-
-                            <button 
-                                onclick="excluirDemanda(<?php echo $d['id']; ?>)" 
-                                class="custom-btn bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg"
-                                title="Excluir demanda">
+                                 <button onclick="excluirDemanda(<?php echo $d['id']; ?>)" class="custom-btn bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded-lg" title="Excluir">
                                 <i class="fas fa-trash"></i>
                             </button>
-
-                            <?php 
-                            $is_assigned = false;
-                            if (!empty($d['usuarios_atribuidos'])) {
-                                foreach ($d['usuarios_atribuidos'] as $atribuido) {
-                                    if ($atribuido['id'] == $_SESSION['usuario_id']) {
-                                        $is_assigned = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            $can_perform_action = $is_assigned || empty($d['usuarios_atribuidos']);
-
-                            if ($d['status'] === 'pendente' && $can_perform_action): 
-                            ?>
-                            <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarEmAndamento()">
-                                <input type="hidden" name="acao" value="atualizar_status">
-                                <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                                <input type="hidden" name="novo_status" value="em_andamento">
-                                <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white p-2 rounded-lg" title="Marcar como Em Andamento">
-                                    <i class="fas fa-spinner"></i>
-                                </button>
-                            </form>
-                            <?php endif; ?>
-
-                            <?php 
-                            if ($d['status'] === 'em_andamento' && $can_perform_action): 
-                            ?>
-                            <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarConclusao()">
-                                <input type="hidden" name="acao" value="atualizar_status">
-                                <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                                <input type="hidden" name="novo_status" value="concluida">
-                                <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg" title="Marcar como Concluída">
-                                    <i class="fas fa-check"></i>
-                                </button>
-                            </form>
-                            <?php endif; ?>
-                            <?php endif; ?>
                         </div>
                     </div>
 
-                    <!-- Participants Section -->
+                    <!-- Status dos Usuários -->
                     <?php if (!empty($d['usuarios_atribuidos'])): ?>
-                    <div class="card-participants">
-                        <h4 class="participants-title">Participantes</h4>
-                        <div class="participants-list">
+                    <div class="mt-4 pt-4 border-t border-gray-700">
+                        <h4 class="text-sm font-semibold text-gray-400 mb-2">Status dos Participantes:</h4>
+                        <div class="flex flex-wrap gap-2">
                             <?php foreach ($d['usuarios_atribuidos'] as $u_atrib): ?>
-                            <div class="participant-item">
-                                <span class="participant-name"><?php echo htmlspecialchars($u_atrib['nome']); ?></span>
-                                <span class="status-badge status-<?php echo $u_atrib['status']; ?>">
-                                    <?php
-                                    $statusIcons = [
-                                        'pendente' => 'fas fa-clock',
-                                        'em_andamento' => 'fas fa-spinner fa-spin',
-                                        'concluido' => 'fas fa-check-circle'
-                                    ];
-                                    ?>
-                                    <i class="<?php echo $statusIcons[$u_atrib['status']] ?? 'fas fa-question'; ?>"></i>
-                                    <?php echo ucfirst($u_atrib['status']); ?>
-                                </span>
-                            </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs text-gray-300"><?php echo htmlspecialchars($u_atrib['nome']); ?>:</span>
+                                    <span class="status-badge status-<?php echo $u_atrib['status']; ?>">
+                                        <?php
+                                        $statusIconsParticipante = [
+                                            'pendente' => 'fas fa-clock',
+                                            'aceito' => 'fas fa-check-circle',
+                                            'em_andamento' => 'fas fa-spinner fa-spin',
+                                            'concluido' => 'fas fa-check-circle',
+                                            'recusado' => 'fas fa-times-circle'
+                                        ];
+                                        ?>
+                                        <i class="<?php echo $statusIconsParticipante[$u_atrib['status']] ?? 'fas fa-question'; ?>"></i>
+                                        <?php echo ucfirst($u_atrib['status']); ?>
+                                    </span>
+                                </div>
                             <?php endforeach; ?>
                         </div>
                     </div>
                     <?php endif; ?>
                 </div>
-                <?php endforeach; ?>
+                     <?php 
+                         endif; // Fim da condição para 'Outras Demandas'
+                     endforeach; 
+                     ?>
             </div>
+                  <?php if ($count_outras === 0): ?>
+                     <div class="empty-state">
+                         <i class="fas fa-list"></i>
+                         <h3 class="text-xl font-semibold mb-2">Nenhuma outra demanda</h3>
+                         <p>Todas as demandas estão em espera ou sendo feitas.</p>
+            </div>
+                 <?php endif; ?>
+             </div>
 
-            <!-- Empty State -->
-            <div id="emptyState" class="empty-state hidden">
-                <i class="fas fa-search"></i>
-                <h3 class="text-xl font-semibold mb-2">Nenhuma demanda encontrada</h3>
-                <p>Tente ajustar os filtros ou criar uma nova demanda.</p>
-            </div>
+            
+            <!-- O Empty State geral foi removido daqui -->
         </div>
 
         <!-- User Management Section -->
@@ -1220,54 +1427,12 @@ foreach ($demandas as $d) {
                             <div>
                     <label for="prioridade" class="block text-sm font-medium text-gray-300 mb-2">Prioridade</label>
                     <select id="prioridade" name="prioridade" required class="custom-select w-full">
-                        <option value="alta">Alta</option>
-                        <option value="media" selected>Média</option>
                                     <option value="baixa">Baixa</option>
+                                    <option value="media">Média</option>
+                                    <option value="alta">Alta</option>
                                 </select>
                             </div>
-                            <div>
-                    <label for="prazo" class="block text-sm font-medium text-gray-300 mb-2">Prazo</label>
-                    <input type="date" id="prazo" name="prazo" required class="custom-input w-full" min="<?php echo date('Y-m-d'); ?>">
-                            </div>
-                            <div>
-                    <label for="usuario_id" class="block text-sm font-medium text-gray-300 mb-2">Atribuir a</label>
-                    
-                    <!-- Custom Multi-Select -->
-                    <div class="custom-multi-select">
-                        <div class="multi-select-container" onclick="toggleMultiSelect('usuario_id')">
-                            <div class="multi-select-display" id="usuario_id_display">
-                                <span class="multi-select-placeholder">Selecione os usuários</span>
-                            </div>
-                            <i class="fas fa-chevron-down multi-select-arrow"></i>
-                        </div>
-                        
-                        <div class="multi-select-dropdown" id="usuario_id_dropdown">
-                            <div class="multi-select-search">
-                                <input type="text" placeholder="Buscar usuários..." onkeyup="filterUsers('usuario_id', this.value)">
-                            </div>
-                            <div class="multi-select-options" id="usuario_id_options">
-                                <?php foreach ($usuarios as $u): ?>
-                                <div class="multi-select-option" data-value="<?php echo $u['id']; ?>" onclick="toggleUserSelection('usuario_id', <?php echo $u['id']; ?>, '<?php echo htmlspecialchars($u['nome']); ?>', '<?php echo htmlspecialchars($u['email']); ?>')">
-                                    <div class="user-avatar">
-                                        <?php echo strtoupper(substr($u['nome'], 0, 2)); ?>
-                                    </div>
-                                    <div class="user-info">
-                                        <div class="user-name"><?php echo htmlspecialchars($u['nome']); ?></div>
-                                        <div class="user-email"><?php echo htmlspecialchars($u['email']); ?></div>
-                                    </div>
-                                </div>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Hidden select for form submission -->
-                    <select name="usuarios_ids[]" multiple class="hidden-select" id="usuario_id_hidden">
-                                    <?php foreach ($usuarios as $u): ?>
-                                    <option value="<?php echo $u['id']; ?>"><?php echo htmlspecialchars($u['nome']); ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
+                            <div id="prazoCalculadoInfo" class="mt-2"></div>
                 <div class="flex justify-end gap-4 mt-6">
                     <button type="button" onclick="closeModal('criarDemandaModal')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
                                     Cancelar
@@ -1333,80 +1498,33 @@ foreach ($demandas as $d) {
             </div>
             <form action="../controllers/DemandaController.php" method="POST" class="space-y-4">
                 <input type="hidden" name="acao" value="atualizar_demanda">
-                <input type="hidden" name="id" id="editar_demanda_id">
+                <input type="hidden" id="editId" name="id">
+                
                 <div>
-                    <label for="editar_titulo" class="block text-sm font-medium text-gray-300 mb-2">Título</label>
-                    <input type="text" id="editar_titulo" name="titulo" required class="custom-input w-full">
+                    <label for="editTitulo" class="block text-sm font-medium text-gray-300 mb-2">Título</label>
+                    <input type="text" id="editTitulo" name="titulo" required class="custom-input w-full">
                 </div>
+                
                 <div>
-                    <label for="editar_descricao" class="block text-sm font-medium text-gray-300 mb-2">Descrição</label>
-                    <textarea id="editar_descricao" name="descricao" required class="custom-input w-full" rows="4"></textarea>
+                    <label for="editDescricao" class="block text-sm font-medium text-gray-300 mb-2">Descrição</label>
+                    <textarea id="editDescricao" name="descricao" rows="4" required class="custom-input w-full"></textarea>
                 </div>
+                
                 <div>
-                    <label for="editar_prioridade" class="block text-sm font-medium text-gray-300 mb-2">Prioridade</label>
-                    <select id="editar_prioridade" name="prioridade" required class="custom-select w-full">
-                        <option value="alta">Alta</option>
-                        <option value="media">Média</option>
+                    <label for="editPrioridade" class="block text-sm font-medium text-gray-300 mb-2">Prioridade</label>
+                    <select id="editPrioridade" name="prioridade" required class="custom-select w-full">
                         <option value="baixa">Baixa</option>
+                        <option value="media">Média</option>
+                        <option value="alta">Alta</option>
                     </select>
                 </div>
-                <div>
-                    <label for="editar_status" class="block text-sm font-medium text-gray-300 mb-2">Status</label>
-                    <select id="editar_status" name="status" required class="custom-select w-full">
-                        <option value="pendente">Pendente</option>
-                        <option value="em_andamento">Em Andamento</option>
-                        <option value="concluida">Concluída</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="editar_prazo" class="block text-sm font-medium text-gray-300 mb-2">Prazo</label>
-                    <input type="date" id="editar_prazo" name="prazo" required class="custom-input w-full" min="<?php echo date('Y-m-d'); ?>">
-                </div>
-                <div>
-                    <label for="editar_usuario_id" class="block text-sm font-medium text-gray-300 mb-2">Atribuir a</label>
-                    
-                    <!-- Custom Multi-Select for Edit -->
-                    <div class="custom-multi-select">
-                        <div class="multi-select-container" onclick="toggleMultiSelect('editar_usuario_id')">
-                            <div class="multi-select-display" id="editar_usuario_id_display">
-                                <span class="multi-select-placeholder">Selecione os usuários</span>
-                            </div>
-                            <i class="fas fa-chevron-down multi-select-arrow"></i>
-                        </div>
-                        
-                        <div class="multi-select-dropdown" id="editar_usuario_id_dropdown">
-                            <div class="multi-select-search">
-                                <input type="text" placeholder="Buscar usuários..." onkeyup="filterUsers('editar_usuario_id', this.value)">
-                            </div>
-                            <div class="multi-select-options" id="editar_usuario_id_options">
-                                <?php foreach ($usuarios as $u): ?>
-                                <div class="multi-select-option" data-value="<?php echo $u['id']; ?>" onclick="toggleUserSelection('editar_usuario_id', <?php echo $u['id']; ?>, '<?php echo htmlspecialchars($u['nome']); ?>', '<?php echo htmlspecialchars($u['email']); ?>')">
-                                    <div class="user-avatar">
-                                        <?php echo strtoupper(substr($u['nome'], 0, 2)); ?>
-                                    </div>
-                                    <div class="user-info">
-                                        <div class="user-name"><?php echo htmlspecialchars($u['nome']); ?></div>
-                                        <div class="user-email"><?php echo htmlspecialchars($u['email']); ?></div>
-                                    </div>
-                                </div>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Hidden select for form submission -->
-                    <select name="usuarios_ids[]" multiple class="hidden-select" id="editar_usuario_id_hidden">
-                        <?php foreach ($usuarios as $u): ?>
-                            <option value="<?php echo $u['id']; ?>"><?php echo htmlspecialchars($u['nome']); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                <div id="editPrazoCalculadoInfo" class="mt-2"></div>
                 <div class="flex justify-end gap-4 mt-6">
                     <button type="button" onclick="closeModal('editarDemandaModal')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
                         Cancelar
                     </button>
-                    <button type="submit" name="atualizar_demanda" class="custom-btn bg-gradient-to-r from-primary-500 to-primary-50 hover:from-primary-400 hover:to-primary-100 text-white font-bold py-2 px-4 rounded-lg">
-                        Atualizar Demanda
+                    <button type="submit" class="custom-btn bg-gradient-to-r from-primary-500 to-primary-50 hover:from-primary-400 hover:to-primary-100 text-white font-bold py-2 px-4 rounded-lg">
+                        Salvar Alterações
                     </button>
                 </div>
             </form>
@@ -1415,22 +1533,37 @@ foreach ($demandas as $d) {
 
     <!-- Delete Demand Modal -->
     <div id="excluirDemandaModal" class="modal fixed inset-0 hidden items-center justify-center p-4 z-50">
-        <div class="modal-content w-full max-w-sm p-6 scale-in text-center">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-white">Confirmar Exclusão</h3>
-                <button onclick="closeModal('excluirDemandaModal')" class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
+        <div class="modal-content w-full max-w-md p-8 scale-in">
+            <div class="flex flex-col items-center text-center">
+                <!-- Ícone de Alerta -->
+                <div class="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-6">
+                    <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
             </div>
-            <p class="text-gray-300 mb-6">Tem certeza que deseja excluir esta demanda? Esta ação não pode ser desfeita.</p>
-            <input type="hidden" id="demanda_a_excluir_id">
+
+                <h3 class="text-2xl font-bold text-white mb-4">Confirmar Exclusão</h3>
+                
+                <p class="text-gray-300 mb-8 text-lg">
+                    Tem certeza que deseja excluir esta demanda? Esta ação não pode ser desfeita.
+                </p>
+
+                <form action="../controllers/DemandaController.php" method="POST" id="formExcluirDemanda" class="w-full">
+                <input type="hidden" name="acao" value="excluir">
+                <input type="hidden" name="id" id="demanda_a_excluir_id">
+                    
             <div class="flex justify-center gap-4">
-                <button type="button" onclick="closeModal('excluirDemandaModal')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
+                        <button type="button" onclick="closeModal('excluirDemandaModal')" 
+                                class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition-all duration-300">
+                            <i class="fas fa-times"></i>
                     Cancelar
                 </button>
-                <button type="button" onclick="confirmarExclusao()" class="custom-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
+                        
+                        <button type="submit" 
+                                class="custom-btn bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition-all duration-300">
+                            <i class="fas fa-trash"></i>
                     Excluir
                 </button>
+            </div>
+            </form>
             </div>
         </div>
     </div>
@@ -1621,11 +1754,163 @@ foreach ($demandas as $d) {
                 updateOptionStates(selectId);
                 
                 const container = document.querySelector(`#${selectId}_dropdown`).parentElement.querySelector('.multi-select-container');
-                const dropdown = document.getElementById(`${selectId}_dropdown`);
                 container.classList.remove('active');
-                dropdown.classList.remove('active');
             }
         }
+
+        // Função para editar demanda
+        async function editarDemanda(id) {
+            try {
+                const response = await fetch(`../controllers/DemandaController.php?action=get_demanda&id=${id}`);
+                    if (!response.ok) {
+                    throw new Error('Erro ao buscar dados da demanda');
+                }
+                const data = await response.json();
+                
+                if (data) {
+                    document.getElementById('editId').value = data.id;
+                    document.getElementById('editTitulo').value = data.titulo;
+                    document.getElementById('editDescricao').value = data.descricao;
+                    document.getElementById('editPrioridade').value = data.prioridade;
+                    
+                    // Atualiza a exibição do prazo calculado para edição
+                    updateEditPrazoCalculadoInfo();
+
+                    openModal('editarDemandaModal');
+                } else {
+                    alert('Erro ao carregar dados da demanda');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao carregar dados da demanda: ' + error.message);
+            }
+        }
+
+        // Função para excluir demanda
+        function excluirDemanda(id) {
+            document.getElementById('demanda_a_excluir_id').value = id;
+            openModal('excluirDemandaModal');
+        }
+
+        // Atualizar informação de prazo calculado ao selecionar prioridade
+        const prioridadeSelect = document.getElementById('prioridade');
+        const prazoCalculadoInfo = document.getElementById('prazoCalculadoInfo');
+
+        function updatePrazoCalculadoInfo() {
+            const prioridade = prioridadeSelect.value;
+            let dias = 0;
+            switch (prioridade) {
+                case 'baixa':
+                    dias = 5;
+                    break;
+                case 'media':
+                    dias = 3;
+                    break;
+                case 'alta':
+                    dias = 1;
+                    break;
+            }
+            prazoCalculadoInfo.innerHTML = `
+                <span class="prazo-info-badge">
+                    <i class="fas fa-clock"></i>
+                    Prazo: até ${dias} dia${dias > 1 ? 's' : ''}
+                </span>
+            `;
+        }
+
+        // Atualizar ao carregar a página e ao mudar a seleção
+        updatePrazoCalculadoInfo(); // Chama uma vez ao carregar para mostrar o prazo inicial
+        prioridadeSelect.addEventListener('change', updatePrazoCalculadoInfo);
+
+        // Atualizar informação de prazo calculado ao selecionar prioridade no modal de edição
+        const editPrioridadeSelect = document.getElementById('editPrioridade');
+        const editPrazoCalculadoInfo = document.getElementById('editPrazoCalculadoInfo');
+
+        function updateEditPrazoCalculadoInfo() {
+            const prioridade = editPrioridadeSelect.value;
+            let dias = 0;
+            switch (prioridade) {
+                case 'baixa':
+                    dias = 5;
+                    break;
+                case 'media':
+                    dias = 3;
+                    break;
+                case 'alta':
+                    dias = 1;
+                    break;
+            }
+            editPrazoCalculadoInfo.innerHTML = `
+                <span class="prazo-info-badge">
+                    <i class="fas fa-clock"></i>
+                    Prazo: até ${dias} dia${dias > 1 ? 's' : ''}
+                </span>
+            `;
+        }
+
+        // Atualizar ao mudar a seleção no modal de edição
+        editPrioridadeSelect.addEventListener('change', updateEditPrazoCalculadoInfo);
+
+        // Função para realizar tarefa
+        function realizarTarefa(demandaId, statusAtual) {
+                // Criar um formulário dinâmico
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '../controllers/DemandaController.php';
+
+                // Adicionar campos necessários
+                const acaoInput = document.createElement('input');
+                acaoInput.type = 'hidden';
+                acaoInput.name = 'acao';
+                acaoInput.value = 'atualizar_status';
+
+                const idInput = document.createElement('input');
+                idInput.type = 'hidden';
+                idInput.name = 'id';
+                idInput.value = demandaId;
+
+                const statusInput = document.createElement('input');
+                statusInput.type = 'hidden';
+                statusInput.name = 'novo_status';
+                statusInput.value = statusAtual === 'em_andamento' ? 'concluida' : 'em_andamento';
+
+                // Adicionar inputs ao formulário
+                form.appendChild(acaoInput);
+                form.appendChild(idInput);
+                form.appendChild(statusInput);
+
+                // Adicionar formulário ao documento e enviar
+                document.body.appendChild(form);
+                form.submit();
+        }
+
+        function concluirDemanda(demandaId) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '../controllers/DemandaController.php';
+                
+                const actionInput = document.createElement('input');
+                actionInput.type = 'hidden';
+                actionInput.name = 'acao';
+                actionInput.value = 'atualizar_status';
+                
+                const idInput = document.createElement('input');
+                idInput.type = 'hidden';
+                idInput.name = 'id';
+                idInput.value = demandaId;
+                
+                const statusInput = document.createElement('input');
+                statusInput.type = 'hidden';
+                statusInput.name = 'novo_status';
+                statusInput.value = 'concluida';
+                
+                form.appendChild(actionInput);
+                form.appendChild(idInput);
+                form.appendChild(statusInput);
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
 
         // Filter Functions
         function filterByStatus(status) {
@@ -1634,7 +1919,10 @@ foreach ($demandas as $d) {
             let visibleCount = 0;
 
             cards.forEach(card => {
-                if (status === 'all' || card.dataset.status === status) {
+                // Use dataset para obter o status do card
+                const cardStatus = card.dataset.status;
+                
+                if (status === 'all' || cardStatus === status) {
                     card.style.display = 'block';
                     visibleCount++;
                 } else {
@@ -1645,6 +1933,8 @@ foreach ($demandas as $d) {
             if (emptyState) {
                 emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
             }
+            // Após filtrar por status, reaplica o filtro de texto e prioridade
+            filterDemands();
         }
 
         function filterByPriority(priority) {
@@ -1653,7 +1943,10 @@ foreach ($demandas as $d) {
             let visibleCount = 0;
 
             cards.forEach(card => {
-                if (priority === 'all' || card.dataset.priority === priority) {
+                // Use dataset para obter a prioridade do card
+                const cardPriority = card.dataset.priority;
+
+                if (priority === 'all' || cardPriority === priority) {
                     card.style.display = 'block';
                     visibleCount++;
                 } else {
@@ -1664,6 +1957,8 @@ foreach ($demandas as $d) {
             if (emptyState) {
                 emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
             }
+            // Após filtrar por prioridade, reaplica o filtro de texto e status
+            filterDemands();
         }
 
         function filterDemands() {
@@ -1677,10 +1972,12 @@ foreach ($demandas as $d) {
             cards.forEach(card => {
                 const title = card.dataset.title.toLowerCase();
                 const description = card.dataset.description.toLowerCase();
+                // Use dataset para obter status e prioridade
                 const status = card.dataset.status;
                 const priority = card.dataset.priority;
-                const activeStatus = statusSelect.value;
-                const activePriority = prioritySelect.value;
+                
+                const activeStatus = statusSelect ? statusSelect.value : 'all'; // Verifica se o select existe
+                const activePriority = prioritySelect ? prioritySelect.value : 'all'; // Verifica se o select existe
 
                 const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
                 const matchesStatus = activeStatus === 'all' || status === activeStatus;
@@ -1699,174 +1996,37 @@ foreach ($demandas as $d) {
             }
         }
 
-        // Edit Demand Function
-        function editarDemanda(id) {
-            // Reset the edit form
-            resetMultiSelect('editar_usuario_id');
-            
-            document.getElementById('editar_demanda_id').value = '';
-            document.getElementById('editar_titulo').value = '';
-            document.getElementById('editar_descricao').value = '';
-            document.getElementById('editar_prioridade').value = 'media';
-            document.getElementById('editar_status').value = 'pendente';
-            document.getElementById('editar_prazo').value = '';
+        // Função para atualizar o estado vazio de um container específico
+        function updateEmptyState(containerId) {
+            const container = document.getElementById(containerId);
+            const cards = container.querySelectorAll('.demand-card');
+            let visibleCount = 0;
 
-            fetch(`../controllers/DemandaController.php?action=get_demanda&id=${id}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    
-                    const contentType = response.headers.get('content-type');
-                    if (!contentType || !contentType.includes('application/json')) {
-                        throw new TypeError("Resposta não é JSON! Content-Type: " + contentType);
-                    }
-                    
-                    return response.text().then(text => {
-                        try {
-                            return JSON.parse(text);
-                        } catch (e) {
-                            console.error('Erro ao fazer parse do JSON:', e);
-                            throw new Error('Resposta inválida do servidor');
-                        }
-                    });
-                })
-                .then(data => {
-                    if (data.error) {
-                        console.error('Erro ao buscar dados da demanda:', data.error);
-                         if (data.debug_output) {
-                             console.error('Saída inesperada de debug:', data.debug_output);
-                             alert('Erro ao carregar dados da demanda: ' + data.error + '\nSaída de Debug: ' + data.debug_output);
-                         } else {
-                        alert('Erro ao carregar dados da demanda: ' + data.error);
-                         }
-                        return;
-                    }
-                    
-                    if (!data.id || !data.titulo || !data.descricao) {
-                        console.error('Dados incompletos recebidos:', data);
-                        alert('Dados incompletos recebidos do servidor');
-                        return;
-                    }
-                    
-                    document.getElementById('editar_demanda_id').value = data.id;
-                    document.getElementById('editar_titulo').value = data.titulo;
-                    document.getElementById('editar_descricao').value = data.descricao;
-                    document.getElementById('editar_prioridade').value = data.prioridade || 'media';
-                    document.getElementById('editar_status').value = data.status || 'pendente';
-                    document.getElementById('editar_prazo').value = data.prazo || '';
-                    
-                    // Set selected users for edit form
-                    if (data.usuarios_atribuidos && data.usuarios_atribuidos.length > 0) {
-                        initializeMultiSelect('editar_usuario_id');
-                        multiSelectData['editar_usuario_id'].selectedUsers = data.usuarios_atribuidos.map(user => ({
-                            id: user.id,
-                            name: user.nome,
-                            email: user.email
-                        }));
-                        updateMultiSelectDisplay('editar_usuario_id');
-                        updateHiddenSelect('editar_usuario_id');
-                        updateOptionStates('editar_usuario_id');
-                    }
-                    
-                    openModal('editarDemandaModal');
-                })
-                .catch(error => {
-                    console.error('Erro na requisição AJAX:', error);
-                    alert('Erro ao carregar dados da demanda: ' + error.message);
-                });
-        }
+            cards.forEach(card => {
+                if (card.style.display !== 'none') {
+                    visibleCount++;
+                }
+            });
 
-        // Delete Demand Function
-        function excluirDemanda(id) {
-            document.getElementById('demanda_a_excluir_id').value = id;
-            openModal('excluirDemandaModal');
+            const emptyState = container.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
         }
 
         // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.add('hidden');
-                event.target.classList.remove('flex');
-                document.body.style.overflow = 'auto';
-            }
-        }
-
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                const openModals = document.querySelectorAll('.modal:not(.hidden)');
-                openModals.forEach(modal => {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('flex');
-                });
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        // Add loading states to buttons
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function() {
-                const submitBtn = form.querySelector('button[type="submit"]');
-                if (submitBtn) {
-                    submitBtn.innerHTML = '<div class="loading"></div> Processando...';
-                    submitBtn.disabled = true;
-                }
-            });
-        });
-
-        // Initialize tooltips and animations
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add hover effects to cards
-            document.querySelectorAll('.demand-card').forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-8px) scale(1.02)';
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.custom-multi-select')) {
+                document.querySelectorAll('.multi-select-dropdown.active').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                    dropdown.parentElement.querySelector('.multi-select-container').classList.remove('active');
                 });
                 
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0) scale(1)';
+                Object.keys(multiSelectData).forEach(selectId => {
+                    multiSelectData[selectId].isOpen = false;
                 });
-            });
-
-            // Add click animation to buttons
-            document.querySelectorAll('.custom-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                });
-            });
+            }
         });
-
-        function confirmarEmAndamento() {
-            return confirm('Tem certeza que deseja marcar esta demanda como Em Andamento?');
-        }
-
-        function confirmarConclusao() {
-            return confirm('Tem certeza que deseja marcar esta demanda como Concluída?');
-        }
-
-        function confirmarExclusao() {
-            const id = document.getElementById('demanda_a_excluir_id').value;
-            window.location.href = `../controllers/DemandaController.php?action=excluir&id=${id}`;
-        }
-
-        // Function to update assigned users display
-        function atualizarUsuariosAtribuidos(demandaId) {
-            fetch(`../controllers/DemandaController.php?action=get_demanda&id=${demandaId}`)
-                .then(response => response.json())
-                .then(data => {
-                    const card = document.querySelector(`[data-demanda-id="${demandaId}"]`);
-                    if (card && data.usuarios_atribuidos) {
-                        const usuariosContainer = card.querySelector('.usuarios-atribuidos');
-                        if (usuariosContainer) {
-                            const nomes = data.usuarios_atribuidos.map(u => u.nome).join(', ');
-                            usuariosContainer.textContent = nomes || 'Não atribuído';
-                        }
-                    }
-                });
-        }
     </script>
 </body>
 </html> 

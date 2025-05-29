@@ -308,19 +308,31 @@ session_start();
 
 <body class="select-none">
     <!-- Header -->
-    <header class="bg-dark-200/50 backdrop-blur-md shadow-lg border-b border-primary/20 sticky top-0 z-50">
-        <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex flex-row justify-between items-center gap-3 sm:gap-4">
-            <div class="flex items-center gap-3 sm:gap-4">
-                <div class="hidden sm:flex w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary-500 to-primary-50 rounded-xl items-center justify-center">
-                    <i class="fas fa-tasks text-white text-base sm:text-lg"></i>
+    <header class="bg-dark-400 shadow-lg border-b border-primary-500/20 sticky top-0 z-50 backdrop-blur-lg">
+        <div class="container mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
+            <!-- Logo e Título -->
+            <div class="flex items-center gap-3">
+                <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="w-10 h-10">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary-50 to-primary-200 bg-clip-text text-transparent">
+                        Sistema de Gestão de Demandas
+                    </h1>
+                    <p class="text-sm text-gray-400 hidden md:block"></p>
                 </div>
-                <h1 class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary-50 to-primary-200 bg-clip-text text-transparent">
-                    Demandas Area Dev
-                </h1>
             </div>
-            <a href="views/login.php" class="w-auto custom-btn bg-gradient-to-r from-primary-500 to-primary-50 hover:from-primary-400 hover:to-primary-100 text-white font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-xl flex items-center justify-center gap-2">
-                <i class="fas fa-sign-in-alt btn-icon"></i> Entrar
-            </a>
+
+            <!-- Botões de Ação e Informações do Usuário (Removidos para página inicial) -->
+            <div>
+              
+             
+         
+                    <a href="./views/login.php" class="custom-btn bg-primary-500 hover:bg-primary-600 text-white py-2 px-4 rounded-lg flex items-center gap-2 text-sm">
+                        <i class="fas fa-sign-in-alt btn-icon"></i>
+                        <span>Login</span>
+                    </a>
+                   
+              
+            </div>
         </div>
     </header>
 

@@ -21,7 +21,7 @@ if (isset($_SESSION['usuario_id'])) {
 $erro = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $_POST['email'] ?? '';
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $senha = $_POST['senha'] ?? '';
 
     if (empty($email) || empty($senha)) {
@@ -31,9 +31,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $resultado = $usuario->verificarLogin($email, $senha);
 
         if ($resultado) {
+            // Regenerar ID da sessão por segurança
+            session_regenerate_id(true);
+            
+            // Limpar dados antigos da sessão
+            session_unset();
+            
+            // Armazenar novos dados na sessão
             $_SESSION['usuario_id'] = $resultado['id'];
             $_SESSION['usuario_nome'] = $resultado['nome'];
             $_SESSION['usuario_tipo'] = $resultado['tipo'];
+            $_SESSION['ultimo_acesso'] = time();
+            $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
+            $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 
             if ($resultado['tipo'] === 'admin') {
                 header("Location: admin.php");
@@ -108,6 +118,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 },
                 animation: {
                     'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    'slide-up': 'slideUp 0.5s ease-out forwards'
+                },
+                keyframes: {
+                    slideUp: {
+                        'from': { opacity: '0', transform: 'translateY(20px)' },
+                        'to': { opacity: '1', transform: 'translateY(0)' }
+                    }
                 },
                 boxShadow: {
                     'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.36)',
@@ -132,30 +149,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         color: #ffffff;
         min-height: 100vh;
         background-image:
-            radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.03) 0%, rgba(0, 122, 51, 0) 20%),
-            radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.03) 0%, rgba(255, 165, 0, 0) 20%);
+            radial-gradient(circle at 10% 20%, rgba(0, 122, 51, 0.1) 0%, rgba(0, 122, 51, 0) 20%),
+            radial-gradient(circle at 90% 80%, rgba(255, 165, 0, 0.1) 0%, rgba(255, 165, 0, 0) 20%),
+            linear-gradient(135deg, rgba(0, 122, 51, 0.05) 0%, rgba(255, 165, 0, 0.05) 100%);
         transition: all 0.3s ease;
     }
 
     .login-card {
-        background: rgba(45, 45, 45, 0.97);
-        border-radius: 16px;
-        padding: 2rem;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-        border: 1.5px solid #007A3333;
-        transition: box-shadow 0.3s, border 0.3s;
-        backdrop-filter: blur(10px);
+        background: rgba(31, 31, 31, 0.95);
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(0, 122, 51, 0.2);
+        backdrop-filter: blur(12px);
+        transition: all 0.3s ease;
     }
 
     .login-card:hover {
-        box-shadow: 0 12px 32px rgba(0,122,51,0.18);
-        border: 1.5px solid #00FF6B;
+        box-shadow: 0 12px 40px rgba(0, 122, 51, 0.3);
+        border-color: rgba(0, 255, 107, 0.3);
     }
 
     .custom-input {
         background: rgba(35, 35, 35, 0.9);
-        border: 1.5px solid #007A3333;
-        border-radius: 8px;
+        border: 1px solid rgba(0, 122, 51, 0.3);
+        border-radius: 10px;
         padding: 0.75rem 1rem;
         color: #ffffff;
         transition: all 0.3s ease;
@@ -163,18 +181,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     .custom-input:focus {
         border-color: #00FF6B;
-        box-shadow: 0 0 0 2px rgba(0, 255, 107, 0.1);
+        box-shadow: 0 0 0 3px rgba(0, 255, 107, 0.15);
         outline: none;
     }
 
     .custom-input::placeholder {
-        color: #666666;
+        color: #6b7280;
     }
 
     .custom-btn {
         position: relative;
         overflow: hidden;
         transition: all 0.3s ease;
+        border-radius: 10px;
     }
 
     .custom-btn::before {
@@ -184,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
         transform: translateX(-100%);
         transition: transform 0.5s ease;
     }
@@ -193,72 +212,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         transform: translateX(100%);
     }
 
+    .custom-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 122, 51, 0.3);
+    }
+
     .btn-icon {
         transition: all 0.3s ease;
-        opacity: 0.8;
     }
 
     .custom-btn:hover .btn-icon {
-        transform: translateX(3px);
-        opacity: 1;
-    }
-
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: #1a1a1a;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: #3d3d3d;
-        border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: #007A33;
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .fade-in {
-        animation: fadeIn 0.3s ease-out forwards;
-    }
-
-    .slide-up {
-        animation: slideUp 0.4s ease-out forwards;
+        transform: translateX(3px) scale(1.1);
     }
 
     .error-message {
-        background: rgba(220, 38, 38, 0.1);
-        border: 1px solid rgba(220, 38, 38, 0.2);
-        color: #ef4444;
-        padding: 0.75rem;
-        border-radius: 8px;
-        margin-bottom: 1rem;
-        animation: shake 0.5s ease-in-out;
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #f87171;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        animation: shake 0.4s ease-in-out;
     }
 
     @keyframes shake {
@@ -266,61 +243,89 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         25% { transform: translateX(-5px); }
         75% { transform: translateX(5px); }
     }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #1a1a1a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #007A33, #00FF6B);
+        border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #00FF6B, #007A33);
+    }
 </style>
 <body class="select-none">
-    <div class="min-h-screen flex items-center justify-center p-4">
-        <div class="login-card w-full max-w-md slide-up">
-        <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-white mb-2">Bem-vindo</h1>
-                <p class="text-gray-300">Faça login para acessar o sistema</p>
-        </div>
-
-            <?php if (isset($_GET['error'])): ?>
-            <div class="error-message fade-in">
-                <i class="fas fa-exclamation-circle mr-2"></i>
-                <?php echo htmlspecialchars($_GET['error']); ?>
+    <div class="min-h-screen flex items-center justify-center p-4 sm:p-6">
+        <div class="login-card w-full max-w-md animate-slide-up">
+            <!-- Logo e Título -->
+            <div class="text-center mb-8">
+                <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="mx-auto w-16 h-16 mb-4">
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-primary-50 to-primary-200 bg-clip-text text-transparent">
+                    Sistema de Gestão de Demandas
+                </h1>
+                <p class="text-gray-400 text-sm mt-2">Faça login para acessar suas demandas</p>
             </div>
+
+            <!-- Mensagem de Erro -->
+            <?php if (!empty($erro)): ?>
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <?php echo htmlspecialchars($erro); ?>
+                </div>
             <?php endif; ?>
 
+            <!-- Formulário -->
             <form action="" method="POST" class="space-y-6">
+                <!-- Campo Email -->
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                    <label for="email" class="block text-sm font-medium text-gray-300 mb-2">E-mail</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                            <i class="fas fa-envelope text-gray-400"></i>
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4">
+                            <i class="fas fa-envelope text-primary-200 text-sm"></i>
                         </span>
                         <input type="email" id="email" name="email" required
-                            class="custom-input w-full pl-10"
-                            placeholder="seu@email.com">
+                            class="custom-input w-full pl-12 pr-4 py-3"
+                            placeholder="seu@email.com"
+                            value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>">
                     </div>
                 </div>
 
+                <!-- Campo Senha -->
                 <div>
                     <label for="senha" class="block text-sm font-medium text-gray-300 mb-2">Senha</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                            <i class="fas fa-lock text-gray-400"></i>
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4">
+                            <i class="fas fa-lock text-primary-200 text-sm"></i>
                         </span>
                         <input type="password" id="senha" name="senha" required
-                            class="custom-input w-full pl-10"
+                            class="custom-input w-full pl-12 pr-4 py-3"
                             placeholder="••••••••">
                     </div>
                 </div>
 
+                <!-- Botão de Login -->
                 <button type="submit" name="login"
-                    class="custom-btn w-full bg-primary hover:bg-primary-400 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2">
+                    class="custom-btn w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300">
                     <i class="fas fa-sign-in-alt btn-icon"></i>
                     Entrar
-                    </button>
+                </button>
             </form>
 
+            <!-- Link Voltar -->
             <div class="mt-6 text-center">
-                <a href="../index.php" class="text-primary-50 hover:text-primary-200 transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i>
+                <a href="../index.php" class="text-primary-100 hover:text-primary-50 text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                    <i class="fas fa-arrow-left"></i>
                     Voltar para a página inicial
                 </a>
             </div>
         </div>
     </div>
 </body>
-</html> 
+</html>

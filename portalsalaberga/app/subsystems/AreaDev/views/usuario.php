@@ -1,18 +1,34 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/auth.php';
 require_once __DIR__ . '/../model/Demanda.php';
 
-session_start();
+// Verificar se é usuário normal
+verificarUsuario();
 
 // Inicializa a conexão com o banco de dados
 $database = new Database();
 $pdo = $database->getConnection();
 
 // Verificar se está logado
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php");
+if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
+    // Limpar sessão e redirecionar para login
+    session_unset();
+    session_destroy();
+    header("Location: login.php?error=Acesso negado. Por favor, faça login.");
     exit();
 }
+
+// Verificar tempo de inatividade (30 minutos)
+if (isset($_SESSION['ultimo_acesso']) && (time() - $_SESSION['ultimo_acesso'] > 1800)) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php?error=Sessão expirada. Por favor, faça login novamente.");
+    exit();
+}
+
+// Atualizar último acesso
+$_SESSION['ultimo_acesso'] = time();
 
 $demanda = new Demanda($pdo);
 
@@ -20,14 +36,40 @@ $demanda = new Demanda($pdo);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['acao'] === 'atualizar_status' && isset($_POST['id'])) {
     if (isset($_POST['novo_status'])) {
         $novo_status = $_POST['novo_status'];
+        // Se for usuário normal, usa os métodos existentes
         if ($novo_status === 'em_andamento') {
-            $demanda->marcarEmAndamento($_POST['id']);
+            $demanda->marcarEmAndamento($_POST['id'], $_SESSION['usuario_id']);
         } elseif ($novo_status === 'concluida') {
-            $demanda->marcarConcluida($_POST['id']);
+            $demanda->marcarConcluida($_POST['id'], $_SESSION['usuario_id']);
         }
     }
+    // Redireciona para a página do usuário
     header("Location: usuario.php");
     exit();
+}
+
+// Processar ações de aceitar/recusar
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && isset($_POST['id'])) {
+    $demanda_id = $_POST['id'];
+    $usuario_id = $_SESSION['usuario_id'];
+    
+    if ($_POST['acao'] === 'aceitar_demanda') {
+        $sucesso = $demanda->aceitarDemanda($demanda_id, $usuario_id);
+        if ($sucesso) {
+            header("Location: usuario.php?success=Demanda aceita com sucesso!");
+        } else {
+            header("Location: usuario.php?error=Erro ao aceitar demanda.");
+        }
+        exit();
+    } elseif ($_POST['acao'] === 'recusar_demanda') {
+        $sucesso = $demanda->recusarDemanda($demanda_id, $usuario_id);
+        if ($sucesso) {
+            header("Location: usuario.php?success=Demanda recusada com sucesso!");
+        } else {
+            header("Location: usuario.php?error=Erro ao recusar demanda.");
+        }
+        exit();
+    }
 }
 
 $demandas = $demanda->listarDemandasPorUsuario($_SESSION['usuario_id']);
@@ -324,6 +366,16 @@ foreach ($demandas as $d) {
         border: 1px solid rgba(234, 179, 8, 0.3);
     }
 
+    .status-aceito { /* Adicionado */
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-aceito i { /* Adicionado */
+        color: #4ade80;
+    }
+
     .status-em_andamento {
         background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
         color: #60a5fa;
@@ -354,6 +406,21 @@ foreach ($demandas as $d) {
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
         color: #f87171;
         border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .status-cancelada i {
+        color: #f87171;
+    }
+
+    /* Adicionando estilos para status recusado */
+     .status-recusado {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+     .status-recusado i {
+        color: #f87171;
     }
 
     /* Priority Badges */
@@ -605,29 +672,67 @@ foreach ($demandas as $d) {
         color: #888888;
         pointer-events: none;
     }
+
+    .demand-card h3 { /* Ajustando tamanho da fonte do título */
+        font-size: 1.25rem; /* Increased font size */
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 0.375rem;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .card-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+        margin-bottom: 0.375rem;
+    }
+
+    .card-id {
+        // ... existing code ...
+    }
 </style>
 
 <body class="select-none">
     <!-- Header -->
-    <header class="bg-dark-200 shadow-lg border-b border-primary/20 sticky top-0 z-40 backdrop-blur-lg">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-50 rounded-xl flex items-center justify-center float">
-                    <i class="fas fa-user text-white text-lg"></i>
+    <header class="bg-dark-400 shadow-lg border-b border-primary-500/20 sticky top-0 z-50 backdrop-blur-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <!-- Logo e Título -->
+                <div class="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
+                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="w-10 h-10">
+                    <div class="text-center sm:text-left">
+                        <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary-50 to-primary-200 bg-clip-text text-transparent">
+                            Painel do Usuário
+                        </h1>
+                        <p class="text-sm text-gray-400">Sistema de Gestão de Demandas</p>
+                    </div>
                 </div>
-                <h1 class="text-2xl font-bold bg-gradient-to-r from-primary-50 to-primary-200 bg-clip-text text-transparent">
-                    Painel do Usuário
-                </h1>
-            </div>
-            <div class="flex items-center gap-4">
-                <div class="hidden md:flex items-center gap-2 text-gray-300">
-                    <i class="fas fa-user-circle text-primary-50"></i>
-                    <span>Bem-vindo, <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></span>
+
+                <!-- Botões e Informações do Usuário -->
+                <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                    <!-- Informações do Usuário -->
+                    <div class="flex items-center gap-2 text-gray-300 bg-dark-300/50 px-4 py-2 rounded-lg">
+                        <i class="fas fa-user text-primary-50"></i>
+                        <span class="text-sm truncate max-w-[200px]"><?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></span>
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-end">
+                        <a href="relatorio.php" class="custom-btn bg-primary-500 hover:bg-primary-600 text-white py-2 px-4 rounded-lg flex items-center gap-2 text-sm w-full sm:w-auto justify-center">
+                            <i class="fas fa-chart-bar btn-icon"></i>
+                            <span>Relatórios</span>
+                        </a>
+                        <a href="logout.php" class="custom-btn bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-2 px-4 rounded-lg flex items-center gap-2 text-sm w-full sm:w-auto justify-center">
+                            <i class="fas fa-sign-out-alt btn-icon"></i>
+                            <span>Sair</span>
+                        </a>
+                    </div>
                 </div>
-                <a href="logout.php" class="custom-btn bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">
-                    <i class="fas fa-sign-out-alt btn-icon"></i> 
-                    <span class="hidden md:inline">Sair</span>
-                </a>
             </div>
         </div>
     </header>
@@ -681,13 +786,45 @@ foreach ($demandas as $d) {
                 Minhas Demandas
             </h2>
             
-            <div id="demandsContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                <?php foreach ($demandas as $index => $d): ?>
+            <!-- Seção Em Espera -->
+            <div class="mb-8">
+                <h3 class="text-xl font-bold text-white mb-4">Em Espera</h3>
+                <div id="demandasEsperaContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
+                    <?php 
+                    $count_espera = 0;
+                    foreach ($demandas as $index => $d): 
+                        // Verifica se o status é 'pendente' OU se o usuário está atribuído mas ainda não aceitou
+                        $usuario_pendente = false;
+                        if (!empty($d['usuarios_atribuidos'])) {
+                            foreach ($d['usuarios_atribuidos'] as $u_atrib) {
+                                if ($u_atrib['id'] == $_SESSION['usuario_id'] && $u_atrib['status'] === 'pendente') {
+                                    $usuario_pendente = true;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        if ($d['status'] === 'pendente' || $usuario_pendente):
+                            $count_espera++;
+                    ?>
+                    
                 <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300"
                     data-title="<?php echo htmlspecialchars($d['titulo']); ?>"
                     data-description="<?php echo htmlspecialchars($d['descricao']); ?>"
                     data-status="<?php echo $d['status']; ?>"
-                    data-priority="<?php echo $d['prioridade']; ?>">
+                        data-priority="<?php echo $d['prioridade']; ?>"
+                        data-user-status="<?php 
+                            $user_status = null;
+                            if (!empty($d['usuarios_atribuidos'])) {
+                                foreach ($d['usuarios_atribuidos'] as $u_atrib) {
+                                    if ($u_atrib['id'] == $_SESSION['usuario_id']) {
+                                        $user_status = $u_atrib['status'];
+                                        break;
+                                    }
+                                }
+                            }
+                            echo $user_status ?? 'none';
+                        ?>">
                     
                     <!-- Card Header -->
                     <div class="flex items-start justify-between mb-4">
@@ -703,11 +840,25 @@ foreach ($demandas as $d) {
                                         'pendente' => 'fas fa-clock',
                                         'em_andamento' => 'fas fa-spinner fa-spin',
                                         'concluida' => 'fas fa-check-circle',
-                                        'cancelada' => 'fas fa-ban'
+                                        'cancelada' => 'fas fa-ban',
+                                        'aceito' => 'fas fa-check-circle'
                                     ];
-                                    $status_display = ucfirst(str_replace('_', ' ', $d['status'])); // Formatar para exibição
+                                    
+                                    // Lógica para status do card baseado no participante único concluído
+                                    $display_status = $d['status'];
+                                    $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
+
+                                    if (!empty($d['usuarios_atribuidos']) && count($d['usuarios_atribuidos']) === 1) {
+                                        $single_participant_status = $d['usuarios_atribuidos'][0]['status'] ?? null;
+                                        if ($single_participant_status === 'concluido') {
+                                            $display_status = 'concluida'; // Usa 'concluida' para o status principal do card
+                                            $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
+                                        }
+                                    }
+                                    
+                                    $status_display = ucfirst(str_replace('_', ' ', $display_status)); // Formatar para exibição
                                     ?>
-                                    <i class="<?php echo $statusIcons[$d['status']] ?? 'fas fa-question'; ?>"></i>
+                                    <i class="<?php echo $display_icon; ?>"></i>
                                     <?php echo $status_display; ?>
                                 </span>
                             </div>
@@ -780,23 +931,40 @@ foreach ($demandas as $d) {
 
                         <?php if ($usuario_logado_atribuido): ?>
                             <?php if ($status_usuario === 'pendente'): ?>
-                                <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarEmAndamento()">
+                                    <div class="flex items-center gap-2 ml-auto">
+                                    <form method="POST" action="../controllers/DemandaController.php" class="inline">
+                                        <input type="hidden" name="acao" value="aceitar_demanda">
+                                        <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                        <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg" title="Aceitar Demanda">
+                                            <i class="fas fa-check"></i> Aceitar
+                                        </button>
+                                    </form>
+                                    <form method="POST" action="../controllers/DemandaController.php" class="inline">
+                                        <input type="hidden" name="acao" value="recusar_demanda">
+                                        <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                        <button type="submit" class="custom-btn bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded-lg" title="Recusar Demanda">
+                                            <i class="fas fa-times"></i> Recusar
+                                        </button>
+                                    </form>
+                                </div>
+                            <?php elseif ($status_usuario === 'aceito'): ?>
+                                    <form method="POST" action="../controllers/DemandaController.php" class="inline ml-auto">
                                     <input type="hidden" name="acao" value="atualizar_status">
                                     <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
                                     <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['usuario_id']; ?>">
                                     <input type="hidden" name="novo_status" value="em_andamento">
-                                    <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white p-2 rounded-lg" title="Marcar como Em Andamento">
+                                    <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg" title="Marcar como Em Andamento">
                                         <i class="fas fa-spinner"></i>
                                         Realizar Tarefa
                                     </button>
                                 </form>
                             <?php elseif ($status_usuario === 'em_andamento'): ?>
-                                <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarConclusao()">
+                                    <form method="POST" action="../controllers/DemandaController.php" class="inline ml-auto">
                                     <input type="hidden" name="acao" value="atualizar_status">
                                     <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
                                     <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['usuario_id']; ?>">
                                     <input type="hidden" name="novo_status" value="concluida">
-                                    <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg" title="Marcar como Concluída">
+                                    <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg" title="Marcar como Concluída">
                                         <i class="fas fa-check"></i>
                                         Concluir Minha Parte
                                     </button>
@@ -811,33 +979,287 @@ foreach ($demandas as $d) {
                         <h4 class="text-sm font-semibold text-gray-400 mb-2">Status dos Participantes:</h4>
                         <div class="flex flex-wrap gap-2">
                             <?php foreach ($d['usuarios_atribuidos'] as $u_atrib): ?>
+                                <?php if ($u_atrib['status'] !== 'pendente'): ?>
                                 <div class="flex items-center gap-2">
                                     <span class="text-xs text-gray-300"><?php echo htmlspecialchars($u_atrib['nome']); ?>:</span>
                                     <span class="status-badge status-<?php echo $u_atrib['status']; ?>">
                                         <?php
-                                        $statusIcons = [
+                                        $statusIconsParticipante = [
                                             'pendente' => 'fas fa-clock',
+                                            'aceito' => 'fas fa-check-circle',
                                             'em_andamento' => 'fas fa-spinner fa-spin',
-                                            'concluido' => 'fas fa-check-circle'
+                                            'concluido' => 'fas fa-check-circle',
+                                            'recusado' => 'fas fa-times-circle'
                                         ];
                                         ?>
-                                        <i class="<?php echo $statusIcons[$u_atrib['status']] ?? 'fas fa-question'; ?>"></i>
+                                        <i class="<?php echo $statusIconsParticipante[$u_atrib['status']] ?? 'fas fa-question'; ?>"></i>
                                         <?php echo ucfirst($u_atrib['status']); ?>
                                     </span>
                                 </div>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </div>
                     </div>
                     <?php endif; ?>
+
+                    <div class="card-actions">
+                        <!-- Botões de ação -->
+                        <?php 
+                        // Código PHP para botões de ação (aceitar, recusar, iniciar, concluir)
+                        // Removendo este bloco conforme a necessidade do usuário
+                        ?>
+                    </div>
                 </div>
-                        <?php endforeach; ?>
+                    <?php 
+                        endif; // Fim da condição 'pendente'
+                    endforeach; 
+                    ?>
+                </div>
+                 <?php if ($count_espera === 0): ?>
+                    <div class="empty-state">
+                         <i class="fas fa-clipboard"></i>
+                         <h3 class="text-xl font-semibold mb-2">Nenhuma demanda em espera</h3>
+                         <p>Todas as suas demandas pendentes foram aceitas, recusadas ou concluídas.</p>
+                     </div>
+                 <?php endif; ?>
             </div>
             
-            <!-- Empty State -->
-            <div id="emptyState" class="empty-state hidden">
-                <i class="fas fa-search"></i>
-                <h3 class="text-xl font-semibold mb-2">Nenhuma demanda encontrada</h3>
-                <p>Tente ajustar os filtros ou aguarde novas demandas serem atribuídas.</p>
+            <!-- Seção Outras Demandas -->
+            <div class="mb-8">
+                <h3 class="text-xl font-bold text-white mb-4">Outras Demandas</h3>
+                <div id="demandasOutrasContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
+                     <?php 
+                    $count_outras = 0;
+                     foreach ($demandas as $index => $d): 
+                         // Verifica se o status NÃO é 'pendente' E o usuário não está pendente
+                         $usuario_pendente = false;
+                         if (!empty($d['usuarios_atribuidos'])) {
+                             foreach ($d['usuarios_atribuidos'] as $u_atrib) {
+                                 if ($u_atrib['id'] == $_SESSION['usuario_id'] && $u_atrib['status'] === 'pendente') {
+                                     $usuario_pendente = true;
+                                     break;
+                                 }
+                             }
+                         }
+                         
+                         if ($d['status'] !== 'pendente' && !$usuario_pendente):
+                             $count_outras++;
+                     ?>
+                     
+                     <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300"
+                         data-title="<?php echo htmlspecialchars($d['titulo']); ?>"
+                         data-description="<?php echo htmlspecialchars($d['descricao']); ?>"
+                         data-status="<?php echo $d['status']; ?>"
+                         data-priority="<?php echo $d['prioridade']; ?>"
+                         data-user-status="<?php 
+                            $user_status = null;
+                            if (!empty($d['usuarios_atribuidos'])) {
+                                foreach ($d['usuarios_atribuidos'] as $u_atrib) {
+                                    if ($u_atrib['id'] == $_SESSION['usuario_id']) {
+                                        $user_status = $u_atrib['status'];
+                                        break;
+                                    }
+                                }
+                            }
+                            echo $user_status ?? 'none';
+                        ?>">
+                         
+                         <!-- Card Header -->
+                         <div class="flex items-start justify-between mb-4">
+                             <div class="flex-1">
+                                 <h3 class="text-lg font-semibold text-white mb-2 line-clamp-2 cursor-pointer hover:text-primary-50 transition-colors duration-300"
+                                     onclick="mostrarDescricao('<?php echo htmlspecialchars($d['titulo']); ?>', '<?php echo htmlspecialchars($d['descricao']); ?>', '<?php echo $d['status']; ?>', '<?php echo date('d/m/Y H:i', strtotime($d['data_criacao'])); ?>', '<?php echo !empty($d['data_conclusao']) ? date('d/m/Y H:i', strtotime($d['data_conclusao'])) : ''; ?>')">
+                                     <?php echo htmlspecialchars($d['titulo']); ?>
+                                 </h3>
+                                 <div class="flex items-center gap-2 mb-2">
+                                     <span class="status-badge status-<?php echo $d['status']; ?>">
+                                         <?php
+                                         $statusIcons = [
+                                             'pendente' => 'fas fa-clock',
+                                             'em_andamento' => 'fas fa-spinner fa-spin',
+                                             'concluida' => 'fas fa-check-circle',
+                                             'cancelada' => 'fas fa-ban',
+                                             'aceito' => 'fas fa-check-circle'
+                                         ];
+                                         
+                                         // Lógica para status do card baseado no participante único concluído
+                                         $display_status = $d['status'];
+                                         $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
+
+                                         if (!empty($d['usuarios_atribuidos']) && count($d['usuarios_atribuidos']) === 1) {
+                                             $single_participant_status = $d['usuarios_atribuidos'][0]['status'] ?? null;
+                                             if ($single_participant_status === 'concluido') {
+                                                 $display_status = 'concluida'; // Usa 'concluida' para o status principal do card
+                                                 $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
+                                             }
+                                         }
+                                         
+                                         $status_display = ucfirst(str_replace('_', ' ', $display_status)); // Formatar para exibição
+                                         ?>
+                                         <i class="<?php echo $display_icon; ?>"></i>
+                                         <?php echo $status_display; ?>
+                                     </span>
+                                 </div>
+                             </div>
+                             <div class="text-right">
+                                 <span class="text-xs text-gray-400">ID: #<?php echo $d['id']; ?></span>
+                             </div>
+                         </div>
+                         
+                         <!-- Card Content -->
+                         <div class="mb-4">
+                             <p class="text-gray-300 text-sm line-clamp-3 mb-3">
+                                 <?php echo htmlspecialchars($d['descricao']); ?>
+                             </p>
+                             
+                             <div class="grid grid-cols-2 gap-4 text-xs">
+                                 <div>
+                                     <span class="text-gray-400">Criado em:</span>
+                                     <p class="text-white font-medium">
+                                         <?php echo date('d/m/Y', strtotime($d['data_criacao'])); ?>
+                                     </p>
+                                     <p class="text-gray-400">
+                                         <?php echo date('H:i', strtotime($d['data_criacao'])); ?>
+                                     </p>
+                                 </div>
+                                 <div>
+                                     <span class="text-gray-400">
+                                         <?php echo !empty($d['data_conclusao']) ? 'Concluído em:' : 'Status:'; ?>
+                                     </span>
+                                     <p class="text-white font-medium">
+                                         <?php 
+                                         if (!empty($d['data_conclusao'])) {
+                                             echo date('d/m/Y', strtotime($d['data_conclusao']));
+                                         } else {
+                                             echo 'Em progresso';
+                                         }
+                                         ?>
+                                     </p>
+                                     <?php if (!empty($d['data_conclusao'])): ?>
+                                     <p class="text-gray-400">
+                                         <?php echo date('H:i', strtotime($d['data_conclusao'])); ?>
+                                     </p>
+                                     <?php endif; ?>
+                                 </div>
+                             </div>
+                         </div>
+                         
+                         <!-- Card Actions -->
+                         <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                             <button 
+                                 onclick="mostrarDescricao('<?php echo htmlspecialchars($d['titulo']); ?>', '<?php echo htmlspecialchars($d['descricao']); ?>', '<?php echo $d['status']; ?>', '<?php echo date('d/m/Y H:i', strtotime($d['data_criacao'])); ?>', '<?php echo !empty($d['data_conclusao']) ? date('d/m/Y H:i', strtotime($d['data_conclusao'])) : ''; ?>')"
+                                 class="custom-btn bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg"
+                                 title="Ver detalhes">
+                                 <i class="fas fa-eye"></i>
+                             </button>
+
+                             <?php 
+                             $usuario_logado_atribuido = false;
+                             $status_usuario = null;
+                             if (!empty($d['usuarios_atribuidos'])) {
+                                 foreach ($d['usuarios_atribuidos'] as $u_atrib) {
+                                     if ($u_atrib['id'] == $_SESSION['usuario_id']) {
+                                         $usuario_logado_atribuido = true;
+                                         $status_usuario = $u_atrib['status'];
+                                         break;
+                                     }
+                                 }
+                             }
+                             ?>
+
+                             <?php if ($usuario_logado_atribuido): ?>
+                                 <?php if ($status_usuario === 'pendente'): ?>
+                                     <div class="flex items-center gap-2 ml-auto">
+                                         <form method="POST" action="../controllers/DemandaController.php" class="inline">
+                                             <input type="hidden" name="acao" value="aceitar_demanda">
+                                             <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                             <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg" title="Aceitar Demanda">
+                                                 <i class="fas fa-check"></i> Aceitar
+                                             </button>
+                                         </form>
+                                         <form method="POST" action="../controllers/DemandaController.php" class="inline">
+                                             <input type="hidden" name="acao" value="recusar_demanda">
+                                             <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                             <button type="submit" class="custom-btn bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded-lg" title="Recusar Demanda">
+                                                 <i class="fas fa-times"></i> Recusar
+                                             </button>
+                                         </form>
+                                     </div>
+                                 <?php elseif ($status_usuario === 'aceito'): ?>
+                                     <form method="POST" action="../controllers/DemandaController.php" class="inline ml-auto">
+                                         <input type="hidden" name="acao" value="atualizar_status">
+                                         <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                         <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['usuario_id']; ?>">
+                                         <input type="hidden" name="novo_status" value="em_andamento">
+                                         <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg" title="Marcar como Em Andamento">
+                                             <i class="fas fa-spinner"></i>
+                                             Realizar Tarefa
+                                         </button>
+                                     </form>
+                                 <?php elseif ($status_usuario === 'em_andamento'): ?>
+                                     <form method="POST" action="../controllers/DemandaController.php" class="inline ml-auto">
+                                         <input type="hidden" name="acao" value="atualizar_status">
+                                         <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                         <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['usuario_id']; ?>">
+                                         <input type="hidden" name="novo_status" value="concluida">
+                                         <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg" title="Marcar como Concluída">
+                                             <i class="fas fa-check"></i>
+                                             Concluir Minha Parte
+                                         </button>
+                                     </form>
+                                 <?php endif; ?>
+                             <?php endif; ?>
+                         </div>
+
+                         <!-- Status dos Usuários -->
+                         <?php if (!empty($d['usuarios_atribuidos'])): ?>
+                         <div class="mt-4 pt-4 border-t border-gray-700">
+                             <h4 class="text-sm font-semibold text-gray-400 mb-2">Status dos Participantes:</h4>
+                             <div class="flex flex-wrap gap-2">
+                                 <?php foreach ($d['usuarios_atribuidos'] as $u_atrib): ?>
+                                     <?php if ($u_atrib['status'] !== 'pendente'): ?>
+                                     <div class="flex items-center gap-2">
+                                         <span class="text-xs text-gray-300"><?php echo htmlspecialchars($u_atrib['nome']); ?>:</span>
+                                         <span class="status-badge status-<?php echo $u_atrib['status']; ?>">
+                                             <?php
+                                             $statusIconsParticipante = [
+                                                 'pendente' => 'fas fa-clock',
+                                                 'aceito' => 'fas fa-check-circle',
+                                                 'em_andamento' => 'fas fa-spinner fa-spin',
+                                                 'concluido' => 'fas fa-check-circle',
+                                                 'recusado' => 'fas fa-times-circle'
+                                             ];
+                                             ?>
+                                             <i class="<?php echo $statusIconsParticipante[$u_atrib['status']] ?? 'fas fa-question'; ?>"></i>
+                                             <?php echo ucfirst($u_atrib['status']); ?>
+                                         </span>
+                                     </div>
+                                     <?php endif; ?>
+                        <?php endforeach; ?>
+            </div>
+                         </div>
+                         <?php endif; ?>
+
+                         <div class="card-actions">
+                             <!-- Botões de ação -->
+                             <?php 
+                             // Código PHP para botões de ação (aceitar, recusar, iniciar, concluir)
+                             // Removendo este bloco conforme a necessidade do usuário
+                             ?>
+                         </div>
+                     </div>
+                     <?php 
+                         endif; // Fim da condição para 'Outras Demandas'
+                     endforeach; 
+                     ?>
+                </div>
+                 <?php if ($count_outras === 0): ?>
+                     <div class="empty-state">
+                         <i class="fas fa-list"></i>
+                         <h3 class="text-xl font-semibold mb-2">Nenhuma outra demanda</h3>
+                         <p>Todas as suas demandas estão em espera.</p>
+                     </div>
+                 <?php endif; ?>
             </div>
         </div>
     </main>
@@ -903,41 +1325,55 @@ foreach ($demandas as $d) {
 
         // Filter Functions
         function filterByStatus(status) {
+            // Seleciona todos os cards, independentemente da seção
             const cards = document.querySelectorAll('.demand-card');
-            const emptyState = document.getElementById('emptyState');
-            let visibleCount = 0;
 
             cards.forEach(card => {
-                if (status === 'all' || card.dataset.status === status) {
-                    card.style.display = 'block';
-                    visibleCount++;
+                const cardStatus = card.dataset.status;
+                let isVisible = false;
+
+                if (status === 'all') {
+                    // Se 'Todas', mostra todos os cards
+                    isVisible = true;
+                } else if (status === 'pendente') {
+                    // Se 'Pendentes', mostra apenas cards com status 'pendente'
+                    isVisible = cardStatus === 'pendente';
                 } else {
-                    card.style.display = 'none';
+                     // Se outro status (em_andamento, concluida, etc.), mostra apenas cards na seção 'Outras Demandas' que correspondam ou se o filtro for 'outras'
+                    isVisible = cardStatus !== 'pendente' && (status === 'outras' || cardStatus === status);
                 }
+
+                card.style.display = isVisible ? 'block' : 'none';
             });
 
-            if (emptyState) {
-                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
-            }
+            // Atualiza o estado vazio para cada container
+            updateEmptyState('demandasEsperaContainer');
+            updateEmptyState('demandasOutrasContainer');
+            
+            // Reaplica outros filtros (texto e prioridade)
+            filterDemands();
         }
 
         function filterByPriority(priority) {
             const cards = document.querySelectorAll('.demand-card');
-            const emptyState = document.getElementById('emptyState');
-            let visibleCount = 0;
 
             cards.forEach(card => {
-                if (priority === 'all' || card.dataset.priority === priority) {
-                    card.style.display = 'block';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
+                const cardPriority = card.dataset.priority;
+                
+                // Lógica de visibilidade inicial baseada apenas na prioridade
+                let isVisibleByPriority = (priority === 'all' || cardPriority === priority);
+                
+                // Aplica a visibilidade baseada na prioridade
+                // A visibilidade final será determinada pela combinação de todos os filtros em filterDemands
+                card.style.display = isVisibleByPriority ? 'block' : 'none';
             });
 
-            if (emptyState) {
-                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
-            }
+             // Atualiza o estado vazio para cada container - pode não ser necessário aqui, pois filterDemands será chamado
+             // updateEmptyState('demandasEsperaContainer');
+             // updateEmptyState('demandasOutrasContainer');
+            
+            // Após filtrar por prioridade, reaplica o filtro de texto e status
+            filterDemands();
         }
 
         function filterDemands() {
@@ -945,40 +1381,71 @@ foreach ($demandas as $d) {
             const statusSelect = document.querySelector('select[onchange="filterByStatus(this.value)"]');
             const prioritySelect = document.querySelector('select[onchange="filterByPriority(this.value)"]');
             const cards = document.querySelectorAll('.demand-card');
-            const emptyState = document.getElementById('emptyState');
-            let visibleCount = 0;
+            
+            const activeStatus = statusSelect ? statusSelect.value : 'all';
+            const activePriority = prioritySelect ? prioritySelect.value : 'all';
 
             cards.forEach(card => {
                 const title = card.dataset.title.toLowerCase();
                 const description = card.dataset.description.toLowerCase();
                 const status = card.dataset.status;
                 const priority = card.dataset.priority;
-                const activeStatus = statusSelect.value;
-                const activePriority = prioritySelect.value;
+                const isUserPending = card.dataset.userStatus === 'pendente';
 
                 const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
-                const matchesStatus = activeStatus === 'all' || status === activeStatus;
                 const matchesPriority = activePriority === 'all' || priority === activePriority;
 
+                // Lógica de correspondência de status baseada nas novas seções
+                let matchesStatus = false;
+                if (activeStatus === 'all') {
+                    matchesStatus = true;
+                } else if (activeStatus === 'pendente') {
+                    matchesStatus = status === 'pendente' || isUserPending;
+                } else { // Inclui 'em_andamento', 'concluida', etc.
+                    matchesStatus = status !== 'pendente' && !isUserPending && status === activeStatus;
+                }
+
+                // Determina a visibilidade final
                 if (matchesSearch && matchesStatus && matchesPriority) {
                     card.style.display = 'block';
-                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
             });
 
+            // Atualiza o estado vazio para cada container
+            updateEmptyState('demandasEsperaContainer');
+            updateEmptyState('demandasOutrasContainer');
+        }
+
+        // Função para atualizar o estado vazio de um container específico
+        function updateEmptyState(containerId) {
+            const container = document.getElementById(containerId);
+            // Verifica se o container existe antes de tentar encontrar cards
+            if (!container) return;
+
+            const cards = container.querySelectorAll('.demand-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                 // Verifica se o card está visível E se ele pertence a este container
+                 const cardStatus = card.dataset.status;
+                 let belongsToContainer = false;
+                 if (containerId === 'demandasEsperaContainer' && cardStatus === 'pendente') {
+                     belongsToContainer = true;
+                 } else if (containerId === 'demandasOutrasContainer' && cardStatus !== 'pendente') {
+                     belongsToContainer = true;
+                 }
+
+                if (card.style.display !== 'none' && belongsToContainer) {
+                    visibleCount++;
+                }
+            });
+
+            const emptyState = container.querySelector('.empty-state');
             if (emptyState) {
                 emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
             }
-        }
-
-        function confirmarConclusao() {
-            return confirm('Tem certeza que deseja marcar esta demanda como concluída?');
-        }
-
-        function confirmarEmAndamento() {
-            return confirm('Tem certeza que deseja marcar esta demanda como Em Andamento?');
         }
 
         // Close modal when clicking outside
