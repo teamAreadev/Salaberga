@@ -22,12 +22,12 @@ function isCurrentPage($page)
 }
 
 // Só redireciona se NÃO estiver na página correta
-if (isset($_SESSION['login']) && $_SESSION['login'] && !isset($_SESSION['ss_usuario'])) {
+if (isset($_SESSION['login']) && $_SESSION['login'] && isset($_SESSION['ss_usuario'])) {
     if (!isCurrentPage('inicio.php') && !isCurrentPage('index.php')) {
         header('Location: ../views/inicio.php');
         exit();
     }
-} else if (isset($_SESSION['login']) && $_SESSION['login'] && !isset($_SESSION['ss_adm'])) {
+} else if (isset($_SESSION['login']) && $_SESSION['login'] && isset($_SESSION['ss_adm'])) {
     if (!isCurrentPage('inicio_ADM.php') && !isCurrentPage('index.php')) {
         header('Location: ../views/inicio_ADM.php');
         exit();
