@@ -1,19 +1,15 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/auth.php';
 require_once __DIR__ . '/../model/Demanda.php';
 require_once __DIR__ . '/../model/Usuario.php';
 
-session_start();
+// Verificar se é admin
+verificarAdmin();
 
 // Inicializa a conexão com o banco de dados
 $database = new Database();
 $pdo = $database->getConnection();
-
-// Verificar se está logado e é admin
-if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'admin') {
-    header("Location: login.php");
-    exit();
-}
 
 $demanda = new Demanda($pdo);
 $usuario = new Usuario($pdo);

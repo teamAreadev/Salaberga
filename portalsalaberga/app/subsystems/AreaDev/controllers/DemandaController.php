@@ -6,19 +6,12 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/auth.php';
 require_once __DIR__ . '/../model/Demanda.php';
-
-session_start();
 
 // Inicializa a conexão com o banco de dados
 $database = new Database();
 $pdo = $database->getConnection();
-
-// Verificar se o usuário está logado
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: ../views/login.php");
-    exit();
-}
 
 $demanda = new Demanda($pdo);
 
@@ -46,6 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
             exit;
             break;
         case 'excluir':
+            // Verificar se é admin
+            verificarAdmin();
+            
             if (!isset($_GET['id'])) {
                 $error_response = ['error' => 'ID não fornecido'];
                 http_response_code(400);
@@ -63,6 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
     switch ($_POST['acao']) {
         case 'excluir':
+            // Verificar se é admin
+            verificarAdmin();
+            
             if (isset($_POST['id'])) {
                 $demanda = new Demanda($pdo);
                 $sucesso = $demanda->excluirDemanda($_POST['id']);
@@ -76,6 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             }
             break;
         case 'criar':
+            // Verificar se é admin
+            verificarAdmin();
+            
             $titulo = $_POST['titulo'] ?? '';
             $descricao = $_POST['descricao'] ?? '';
             $prioridade = $_POST['prioridade'] ?? 'media';
@@ -97,6 +99,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             }
             exit();
         case 'atualizar_demanda':
+            // Verificar se é admin
+            verificarAdmin();
+            
             if (isset($_POST['id'])) {
                 $id = $_POST['id'];
                 $titulo = $_POST['titulo'] ?? '';
@@ -125,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
                 if ($_POST['novo_status'] === 'em_andamento') {
                     $demanda->marcarEmAndamento($_POST['id'], $_POST['usuario_id'] ?? $_SESSION['usuario_id']);
                 } elseif ($_POST['novo_status'] === 'concluida') {
-                    if ($_SESSION['usuario_tipo'] === 'admin') {
+                    if (isAdmin()) {
                         // Se for admin, marca a demanda como concluída e apenas o admin como concluído
                         $pdo->beginTransaction();
                         try {
@@ -158,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
                 }
                 
                 // Redireciona para a página correta baseado no tipo de usuário
-                if ($_SESSION['usuario_tipo'] === 'admin') {
+                if (isAdmin()) {
                     header("Location: ../views/admin.php");
                 } else {
                     header("Location: ../views/usuario.php");
@@ -167,6 +172,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             }
             break;
         case 'aceitar_demanda':
+            // Verificar se é usuário normal
+            verificarUsuario();
+            
             if (isset($_POST['id'])) {
                 $demanda = new Demanda($pdo);
                 $sucesso = $demanda->aceitarDemanda($_POST['id'], $_SESSION['usuario_id']);
@@ -180,6 +188,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             }
             break;
         case 'recusar_demanda':
+            // Verificar se é usuário normal
+            verificarUsuario();
+            
             if (isset($_POST['id'])) {
                 $demanda = new Demanda($pdo);
                 $sucesso = $demanda->recusarDemanda($_POST['id'], $_SESSION['usuario_id']);

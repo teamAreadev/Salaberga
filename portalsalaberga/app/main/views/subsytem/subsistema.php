@@ -8,6 +8,222 @@ $session->autenticar_session();
 if (isset($_GET['sair'])) {
     $session->quebra_session();
 }
+
+// Get user's systems and permissions from session
+// This will be an array like:
+// [
+//   {'sistema_id': 1, 'sistema_nome': 'Estagio', 'permissao_id': 1, 'permissao_descricao': 'usuario'},
+//   {'sistema_id': 1, 'sistema_nome': 'Estagio', 'permissao_id': 2, 'permissao_descricao': 'adm'}, // If user has multiple permissions for a system
+//   {'sistema_id': 2, 'sistema_nome': 'Portal STGM', 'permissao_id': 1, 'permissao_descricao': 'usuario'},
+//   ...
+// ]
+$userSystemsPermissions = $_SESSION['user_systems_permissions'] ?? [];
+
+// TEMPORARY DEBUG OUTPUT: Check what is in $userSystemsPermissions
+// echo '<pre style="color: black;">Debug $userSystemsPermissions: ';
+// print_r($userSystemsPermissions);
+// echo '</pre>';
+
+// Define cards that should always be visible regardless of permissions
+$alwaysVisibleCards = [
+    'Portal STGM_usuario' => [
+        'url' => '../../', // Placeholder URL - replace manually
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Portal STGM',
+        'category' => 'Sistema'
+    ],
+    'Padlet_usuario' => [
+       'url' => 'https://padlet.com/slavosier298/metas-semanais-lgz5dkmtd950ql6', // Placeholder URL - replace manually
+       'image' => 'https://i.postimg.cc/jdwcgtg7/unnamed-removebg-preview.png',
+       'name' => 'Padlet da Entrega das Equipes',
+       'category' => 'Organização'
+    ],
+    // Add mappings for other systems and their relevant permissions
+    // Examples based on your original HTML, adjust names and permissions as needed:
+    'Vagas Estágio_usuario' => [
+        'url' => 'https://docs.google.com/forms/d/e/1FAIpQLSfGvkOCRltkaNwPD3b25bKnXMRrP7VMhKiu2YTq0_hHOch2vQ/viewform', // Placeholder URL - replace manually
+        'image' => 'https://i.postimg.cc/B6zBhTLR/estagio.png',
+        'name' => 'Vagas Estágio',
+        'category' => 'Formulário'
+    ],
+     'Custeio Maracanaú_usuario' => [ // Adjust system name to match your database
+        'url' => 'https://docs.google.com/forms/d/e/1FAIpQLSdPxOcbRHApBMiUzETFePoVk3qFt5wN4wD5cQaRG8pMcrJnTw/viewform?fbzx=2231577792646554531', // Placeholder URL - replace manually
+        'image' => 'https://i.postimg.cc/B6zBhTLR/estagio.png',
+        'name' => 'Custeio Maracanaú',
+        'category' => 'Formulário'
+    ],
+    'Perfil Estágio_usuario' => [ // Adjust system name to match your database
+        'url' => 'https://docs.google.com/forms/d/e/1FAIpQLSfP-eDUeU8KO20zQAP3LUEREfJTrK_kjTnaKSLuk8kAnZRQ-g/viewform', // Placeholder URL - replace manually
+        'image' => 'https://i.postimg.cc/B6zBhTLR/estagio.png',
+        'name' => 'Perfil Estágio',
+        'category' => 'Formulário'
+    ],
+    'Dados da Apólice_usuario' => [ // Adjust system name to match your database
+        'url' => '#', // Placeholder URL - replace manually
+        'image' => 'https://i.postimg.cc/B6zBhTLR/estagio.png',
+        'name' => 'Dados da Apólice',
+        'category' => 'Formulário'
+    ],
+];
+
+// Define a mapping of system name AND permission description to card data
+// The keys are formatted as "sistema_nome_permissao_descricao"
+// IMPORTANT: Ensure "sistema_nome" matches exactly what comes from the database table `sistemas`.sistema
+// IMPORTANT: Ensure "permissao_descricao" matches exactly what comes from the database table `permissoes`.descricao
+$systemPermissionCardMap = [
+    // Correcting keys to match potential database output exactly
+    'Entrada/saída_usuario(1)' => [
+        'url' => '#',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Entrada/saída',
+        'category' => 'Sistema'
+    ],
+    'Entrada/saída_vigilante(1)' => [
+        'url' => '#',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Entrada/saída',
+        'category' => 'Sistema'
+    ],
+    'Estágio_usuario(2)' => [
+        'url' => '../../../subsystems/estagio/', // Placeholder URL - replace manually
+        'image' => 'https://i.postimg.cc/CMX7vRKh/aviso-1.png',
+        'name' => 'Estágio (Usuário)',
+        'category' => 'Carreira'
+    ],
+    'Estágio_adm(2)' => [
+        'url' => '../../../subsystems/estagio/default.php',
+        'image' => 'https://i.postimg.cc/CMX7vRKh/aviso-1.png',
+        'name' => 'Estágio (Admin)',
+        'category' => 'Administração'
+    ],
+    'Demandas_usuario(3)' => [
+        'url' => '../../../subsystems/AreaDev/views/usuario.php',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Demandas (Usuário)',
+        'category' => 'Sistema'
+    ],
+    'Demandas_adm_geral(3)' => [
+        'url' => '../../../subsystems/AreaDev/views/admin.php',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Demandas (Admin Geral)',
+        'category' => 'Sistema'
+    ],
+    'Demandas_adm_area_suporte(3)' => [
+        'url' => '../../../subsystems/AreaDev/views/admin.php',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Demandas (Admin Suporte)',
+        'category' => 'Sistema'
+    ],
+    'Demandas_adm_area_dev(3)' => [
+        'url' => '../../../subsystems/AreaDev/views/admin.php',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Demandas (Admin Dev)',
+        'category' => 'Sistema'
+    ],
+    'Demandas_adm_area_design(3)' => [
+        'url' => '../../../subsystems/AreaDev/views/admin.php',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Demandas (Admin Design)',
+        'category' => 'Sistema'
+    ],
+    'Biblioteca_usuario(4)' => [
+        'url' => '../../../subsystems/biblioteca/app/main/index.php',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Biblioteca (Usuário)',
+        'category' => 'Sistema'
+    ],
+    'SS_usuario(5)' => [
+        'url' => '../../../subsystems/SS/views/inicio.php',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'SS (Usuário)',
+        'category' => 'Sistema'
+    ],
+    'SS_adm(5)' => [
+        'url' => '../../../subsystems/SS/views/inicio_ADM.php',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'SS (Admin)',
+        'category' => 'Sistema'
+    ],
+    
+    // ... add more mappings based on your 'sistemas' and 'permissoes' tables
+];
+
+// Prepare an array of unique cards to display based on user's systems and permissions
+$cardsToDisplay = [];
+// First, add the always visible cards
+$cardsToDisplay = $alwaysVisibleCards;
+
+// Then add cards based on user's permissions
+if (!empty($userSystemsPermissions)) {
+    foreach ($userSystemsPermissions as $item) {
+        // Use the exact system name and permission description from the database result
+        $key = $item['sistema_nome'] . '_' . $item['permissao_descricao'];
+
+        // If this system-permission combination is in our map, add its card data
+        if (isset($systemPermissionCardMap[$key])) {
+            // Use the key as a unique identifier to avoid duplicate cards for the same system-permission combo
+            $cardsToDisplay[$key] = $systemPermissionCardMap[$key];
+        }
+    }
+}
+
+// TEMPORARY DEBUG OUTPUT: Check what cards are prepared for display
+// echo '<pre style="color: black;">Debug $cardsToDisplay: ';
+// print_r($cardsToDisplay);
+// echo '</pre>';
+
+// Atribuir sessões baseadas nas permissões do usuário
+if (!empty($userSystemsPermissions)) {
+    foreach ($userSystemsPermissions as $item) {
+        // Estágio
+        if ($item['sistema_nome'] === 'Estágio') {
+            if ($item['permissao_descricao'] === 'adm(2)') {
+                $_SESSION['estagio_adm'] = true;
+            } else if ($item['permissao_descricao'] === 'usuario(2)') {
+                $_SESSION['estagio_usuario'] = true;
+            }
+        }
+        
+        // Entrada/Saída
+        if ($item['sistema_nome'] === 'Entrada/saída') {
+            if ($item['permissao_descricao'] === 'vigilante(1)') {
+                $_SESSION['entrada_saida_vigilante'] = true;
+            } else if ($item['permissao_descricao'] === 'usuario(1)') {
+                $_SESSION['entrada_saida_usuario'] = true;
+            }
+        }
+
+        // Demandas
+        if ($item['sistema_nome'] === 'Demandas') {
+            if ($item['permissao_descricao'] === 'adm_geral(3)') {
+                $_SESSION['demandas_adm_geral'] = true;
+            } else if ($item['permissao_descricao'] === 'adm_area_suporte(3)') {
+                $_SESSION['demandas_adm_suporte'] = true;
+            } else if ($item['permissao_descricao'] === 'adm_area_dev(3)') {
+                $_SESSION['demandas_adm_dev'] = true;
+            } else if ($item['permissao_descricao'] === 'adm_area_design(3)') {
+                $_SESSION['demandas_adm_design'] = true;
+            } else if ($item['permissao_descricao'] === 'usuario(3)') {
+                $_SESSION['demandas_usuario'] = true;
+            }
+        }
+
+        // Biblioteca
+        if ($item['sistema_nome'] === 'Biblioteca' && $item['permissao_descricao'] === 'usuario(4)') {
+            $_SESSION['biblioteca_usuario'] = true;
+        }
+
+        // SS (Sistema de Suporte)
+        if ($item['sistema_nome'] === 'SS') {
+            if ($item['permissao_descricao'] === 'adm(5)') {
+                $_SESSION['ss_adm'] = true;
+            } else if ($item['permissao_descricao'] === 'usuario(5)') {
+                $_SESSION['ss_usuario'] = true;
+            }
+        }
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -610,33 +826,12 @@ if (isset($_GET['sair'])) {
                             </div>
                         </div>
                     </div>
-                    <!--
-                    <a href="../autenticacao/perfil.php">
-                        <div class="flex items-center gap-3 cursor-pointer">
-                            <div class="relative">
-                                <img src="https://i.postimg.cc/m2d5f5L3/images-removebg-preview.png" alt="Perfil"
-                                    class="w-10 h-10 rounded-full border-2 border-transparent hover:border-secondary transition-colors duration-300">
-                                <div
-                                    class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white">
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+                    <!-- Profile dropdown placeholder -->
                 </nav>
-                
 
                 <div class="md:hidden">
-                    <div class="relative">
-                        <a href="../autenticacao/perfil.php">
-                            <img src="https://i.postimg.cc/m2d5f5L3/images-removebg-preview.png" alt="Perfil"
-                                class="w-10 h-10 rounded-full border-2 border-transparent hover:border-secondary transition-colors duration-300">
-                            <div
-                                class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white">
-                            </div>
-                        </a>
-                    </div>
+                    <!-- Mobile profile placeholder -->
                 </div>
-                -->
             </div>
         </div>
     </header>
@@ -660,13 +855,11 @@ if (isset($_GET['sair'])) {
                 </button>
 
                 <div id="accessibilityMenuMobile" class="menu-base bottom-24 hidden">
-
                     <button class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
                         style="color: #1a1a1a;">
                         <i class="fa-solid fa-ear-listen"></i>
                         <span>Leitor de Tela</span>
                     </button>
-
                     <div class="relative">
                         <button id="themeBtnMobile"
                             class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center justify-between"
@@ -687,7 +880,6 @@ if (isset($_GET['sair'])) {
                         </button>
                         <span class="font-semibold">Temas de Contraste</span>
                     </div>
-
                     <div class="py-2" style="color: #1a1a1a;">
                         <button class="w-full px-4 py-3 text-left hover:bg-gray-100"
                             data-theme="monochrome">Monocromático</button>
@@ -715,7 +907,6 @@ if (isset($_GET['sair'])) {
                 <span class="text-xs">Tema</span>
             </button>
         </div>
-
         <div id="menuOverlay" class="menu-overlay"></div>
     </nav>
 
@@ -723,14 +914,12 @@ if (isset($_GET['sair'])) {
         .mobile-nav {
             transition: transform 0.3s ease-in-out;
         }
-
         #accessibilityMenuMobile,
         #themeMenuMobile {
             transition: all 0.3s ease-in-out;
             max-height: 80vh;
             overflow-y: auto;
         }
-
         .menu-base {
             position: fixed;
             left: 1rem;
@@ -740,7 +929,6 @@ if (isset($_GET['sair'])) {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             z-index: 50;
         }
-
         .menu-overlay {
             position: fixed;
             inset: 0;
@@ -750,7 +938,6 @@ if (isset($_GET['sair'])) {
             pointer-events: none;
             z-index: 40;
         }
-
         .menu-overlay.active {
             opacity: 1;
             pointer-events: auto;
@@ -932,7 +1119,7 @@ if (isset($_GET['sair'])) {
                 lastScroll = currentScroll;
             });
             const searchInput = document.getElementById('search-input');
-            const appCards = document.querySelectorAll('.app-card');
+            const appCardLinks = document.querySelectorAll('.grid-container a'); // Select the anchor tags
             const gridContainer = document.querySelector('.grid-container');
 
             searchInput.addEventListener('input', function(e) {
@@ -945,49 +1132,37 @@ if (isset($_GET['sair'])) {
                     return;
                 }
 
-                appCards.forEach(card => {
-                    const appName = card.querySelector('.app-name').textContent.toLowerCase();
-                    const category = card.querySelector('.category-tag').textContent.toLowerCase();
-                    const parentLink = card.parentElement;
+                appCardLinks.forEach(cardLink => { // Iterate through anchor tags
+                    const appName = cardLink.querySelector('.app-name').textContent.toLowerCase();
+                    const category = cardLink.querySelector('.category-tag').textContent.toLowerCase();
 
                     if (appName.includes(searchTerm) || category.includes(searchTerm)) {
-                        visibleCards.push(parentLink);
-                        parentLink.style.display = 'block';
+                        visibleCards.push(cardLink);
+                        cardLink.style.display = 'block';
                         setTimeout(() => {
-                            parentLink.style.opacity = '1';
-                            parentLink.style.transform = 'scale(1)';
+                            cardLink.style.opacity = '1';
+                            cardLink.style.transform = 'scale(1)';
                         }, 50);
                     } else {
-                        hiddenCards.push(parentLink);
-                        parentLink.style.opacity = '0';
-                        parentLink.style.transform = 'scale(0.8)';
+                        hiddenCards.push(cardLink);
+                        cardLink.style.opacity = '0';
+                        cardLink.style.transform = 'scale(0.8)';
                         setTimeout(() => {
-                            parentLink.style.display = 'none';
+                            cardLink.style.display = 'none';
                         }, 300);
                     }
                 });
             });
 
             function showAllCards() {
-                gridContainer.classList.add('transitioning');
-
-                appCards.forEach((card, index) => {
-                    const parentLink = card.parentElement;
-
-                    parentLink.style.display = 'block';
-                    parentLink.style.opacity = '0';
-                    parentLink.style.transform = 'scale(0.8)';
-
-                    setTimeout(() => {
-                        parentLink.style.opacity = '1';
-                        parentLink.style.transform = 'scale(1)';
-                    }, index * 50);
-                });
-
-
-                setTimeout(() => {
-                    gridContainer.classList.remove('transitioning');
-                }, appCards.length * 50 + 300);
+                 // This function needs to operate on the existing rendered cards
+                 appCardLinks.forEach((cardLink, index) => {
+                     cardLink.style.display = 'block';
+                     setTimeout(() => {
+                         cardLink.style.opacity = '1';
+                         cardLink.style.transform = 'scale(1)';
+                     }, index * 50); // Animate back in
+                 });
             }
 
             searchInput.addEventListener('search', function() {
@@ -995,7 +1170,6 @@ if (isset($_GET['sair'])) {
                     showAllCards();
                 }
             });
-
 
             const clearButton = document.createElement('button');
             clearButton.textContent = '';
@@ -1010,7 +1184,6 @@ if (isset($_GET['sair'])) {
                 clearButton.style.display = 'none';
             });
 
-
             searchInput.addEventListener('input', function() {
                 clearButton.style.display = this.value ? 'block' : 'none';
             });
@@ -1018,7 +1191,8 @@ if (isset($_GET['sair'])) {
             const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
             mobileNavLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
-                    e.preventDefault();
+                    // Prevent default only if you are handling navigation via JS or forms
+                    // e.preventDefault(); // Uncomment if needed
 
                     mobileNavLinks.forEach(l => l.classList.remove('text-primary'));
                     this.classList.add('text-primary');
@@ -1030,22 +1204,25 @@ if (isset($_GET['sair'])) {
                 });
             });
 
+             // Card animation only on initial load
             const animateCards = () => {
-                appCards.forEach((card, index) => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(20px)';
+                const initialAppCardLinks = document.querySelectorAll('.grid-container a'); // Select the links
+                 initialAppCardLinks.forEach((cardLink, index) => { // Iterate through links
+                    cardLink.style.opacity = '0';
+                    cardLink.style.transform = 'translateY(20px)';
 
                     setTimeout(() => {
-                        card.style.transition = 'all 0.3s ease-out';
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
+                        cardLink.style.transition = 'all 0.3s ease-out';
+                        cardLink.style.opacity = '1';
+                        cardLink.style.transform = 'translateY(0)';
                     }, index * 100);
                 });
             };
 
-            animateCards();
+            animateCards(); // Run animation on page load
 
-            appCards.forEach(card => {
+            // Add event listeners to the .app-card element inside the link
+             document.querySelectorAll('.app-card').forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     const icon = this.querySelector('.icon-wrapper');
                     icon.style.transform = 'scale(1.1) rotate(5deg)';
@@ -1056,6 +1233,7 @@ if (isset($_GET['sair'])) {
                     icon.style.transform = 'scale(1) rotate(0)';
                 });
             });
+
 
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
@@ -1072,275 +1250,55 @@ if (isset($_GET['sair'])) {
 
             const showLoading = () => {
                 const loading = document.createElement('div');
-                loading.className = 'loading-indicator';
+                loading.className = 'loading-indicator'; // You'd need CSS for this class
                 document.body.appendChild(loading);
 
+                // Example: remove loading indicator after a delay (or on page load complete)
+                // This might need to be tied to actual page load for dynamic content
                 setTimeout(() => {
                     loading.remove();
-                }, 1000);
+                }, 1000); // Adjust as needed
             };
 
-            appCards.forEach(card => {
-                card.addEventListener('click', showLoading);
+             // Add click listener to the anchor tags for loading indicator
+             document.querySelectorAll('.grid-container a').forEach(link => {
+                link.addEventListener('click', showLoading);
             });
+
         });
     </script>
     <div class="search-container">
         <input type="text" class="search-bar" placeholder="Buscar aplicativos..." id="search-input">
     </div>
     <main class="container mx-auto px-4">
-        <div class="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 md:gap-8 p-4 md:p-8 max-w-[1400px] mx-auto transition-all duration-300">
+        <div class="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 md:gap-8 p-4 md:p-8 max-w-[1400px] mx-auto transition-all duration-300 grid-container">
 
-            <a href="https://salaberga.com" target="_blank">
-                <div class="app-card w-{100px} h-full h-4">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png"
-                            alt="Portal STGM" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Portal STGM</h3>
-                    <span class="category-tag">Sistema</span>
-                </div>
-            </a>
-
-            <a href="../../../subsystems/estagio/index.php">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/CMX7vRKh/aviso-1.png" alt="Gestão de Estágio" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Selecionados Estágio 2025</h3>
-                    <span class="category-tag">Carreira</span>
-                </div>
-            </a>
-
-            <a href="https://padlet.com/slavosier298/metas-semanais-lgz5dkmtd950ql6">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/jdwcgtg7/unnamed-removebg-preview.png" alt="Gestão de Estágio" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Padlet da Entrega das Equipes</h3>
-                    <span class="category-tag">Organização</span>
-                </div>
-            </a>
-
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfGvkOCRltkaNwPD3b25bKnXMRrP7VMhKiu2YTq0_hHOch2vQ/viewform">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Vagas Estágio</h3>
-                    <span class="category-tag">Formulário</span>
-                </div>
-            </a>
-
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPxOcbRHApBMiUzETFePoVk3qFt5wN4wD5cQaRG8pMcrJnTw/viewform?fbzx=2231577792646554531">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Custeio Maracanaú</h3>
-                    <span class="category-tag">Formulário</span>
-                </div>
-            </a>
-
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfP-eDUeU8KO20zQAP3LUEREfJTrK_kjTnaKSLuk8kAnZRQ-g/viewform">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Perfil Estágio</h3>
-                    <span class="category-tag">Formulário</span>
-                </div>
-            </a>
-
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfP-eDUeU8KO20zQAP3LUEREfJTrK_kjTnaKSLuk8kAnZRQ-g/viewform">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Perfil Estágio</h3>
-                    <span class="category-tag">Formulário</span>
-                </div>
-            </a>
-
-            <a href="https://forms.gle/rngcZ6MYSiraZYGT7">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Dados da Apólice </h3>
-                    <span class="category-tag">Formulário</span>
-                </div>
-            </a>
-
-            <!-- <a href="../../subsystems/biblioteca/app/main/index.php">
-            <a href="https://aluno.seduc.ce.gov.br/">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img , src="https://i.postimg.cc/MGhrtrk4/aluna.png" alt="Aluno Online" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Aluno Online</h3>
-                    <span class="category-tag">Portal</span>
-                </div>
-            </a>
-
-            <a href="https://classroom.google.com/">
-                <div class="app-card w-{100px} h-full">
-
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/BQNdZvgK/image-1599078642807-removebg-preview.png"
-                            alt="Google Classroom" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Google Classroom</h3>
-                    <span class="category-tag">Aulas</span>
-                </div>
-            </a>
-
-
-
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/cJn3sprk/logout-15423241.png" alt="Entrada e Saída de Alunos"
-                            class="app-icon">
-                    </div>
-                    <h3 class="app-name">Entrada e Saída de Alunos</h3>
-                    <span class="category-tag">Administração</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/gjNXSdTj/diet-561611.png" alt="Gestão da Alimentação Escolar"
-                            class="app-icon">
-                    </div>
-                    <h3 class="app-name">Gestão da Alimentação Escolar</h3>
-                    <span class="category-tag">Nutrição</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/VNQ6Fdk4/racking-system-11392607.png"
-                            alt="Controle de Estoque de Materiais" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Controle de Estoque de Materiais</h3>
-                    <span class="category-tag">Logística</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/B6zBhTLR/estagio.png" alt="Gestão de Estágio" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Gestão de Estágio</h3>
-                    <span class="category-tag">Carreira</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/d04BCPqs/suporte-tecnico.png" alt="Chamados de Suporte"
-                            class="app-icon">
-                    </div>
-                    <h3 class="app-name">Chamados de Suporte</h3>
-                    <span class="category-tag">TI</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/G2vvjWRT/manutencao.png" alt="Gerência de Espaços e Equipamentos"
-                            class="app-icon">
-                    </div>
-                    <h3 class="app-name">Gerência de Espaços e Equipamentos</h3>
-                    <span class="category-tag">Infraestrutura</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/QdDknxCN/armazenamento-de-banco-de-dados.png"
-                            alt="Banco de Questões" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Banco de Questões</h3>
-                    <span class="category-tag">Educação</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/8kFH70xG/pessoa.png" alt="Registros PCD" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Registros PCD</h3>
-                    <span class="category-tag">Inclusão</span>
-                </div>
-            </a>
-
-
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/C5VsTF74/scan-facial.png" alt="Sistema de patrimônios" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Sistema de patrimônios</h3>
-                    <span class="category-tag">Patrimônio</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/6qjqVc8G/profits-1571029.png" alt="Financeiro" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Financeiro</h3>
-                    <span class="category-tag">Economia</span>
-                </div>
-            </a>
-
-            <a href="#">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/hjnXKfFh/businessman-1253671.png"
-                            alt="Professor Diretor de Turma" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Professor Diretor de Turma</h3>
-                    <span class="category-tag">Educação</span>
-                </div>
-            </a>
-
-
-
-            <a href="https://mural.seduc.ce.gov.br">
-                <div class="app-card w-{100px} h-full">
-
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/CMX7vRKh/aviso-1.png" alt="Mural de Avisos" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Mural de Avisos</h3>
-                    <span class="category-tag">Comunicação</span>
-                </div>
-            </a>
-
-            <a href="https://forms.google.com/">
-                <div class="app-card w-{100px} h-full">
-
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/Vkfm4T7j/png-transparent-g-suite-form-google-surveys-email-house-purple-violet-rectangle-removebg-preview.png"
-                            alt="Google Forms" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Google Forms</h3>
-                    <span class="category-tag">Atividades</span>
-                </div>
-            </a>-->
+            <?php
+            // Use the prepared cardsToDisplay array
+            if (!empty($cardsToDisplay)) {
+                foreach ($cardsToDisplay as $key => $cardData) {
+            ?>
+                        <a href="<?php echo htmlspecialchars($cardData['url']); ?>"
+                           class="app-card-link"
+                           <?php if (strpos($cardData['url'], 'http') === 0): ?>target="_blank"<?php endif; ?>
+                           data-card-key="<?php echo htmlspecialchars($key); ?>"> <!-- Added data-card-key for reference -->
+                            <div class="app-card w-{100px} h-full">
+                                <div class="icon-wrapper">
+                                    <img src="<?php echo htmlspecialchars($cardData['image']); ?>"
+                                         alt="<?php echo htmlspecialchars($cardData['name']); ?>"
+                                         class="app-icon">
+                                </div>
+                                <h3 class="app-name"><?php echo htmlspecialchars($cardData['name']); ?></h3>
+                                <span class="category-tag"><?php echo htmlspecialchars($cardData['category']); ?></span>
+                            </div>
+                        </a>
+            <?php
+                }
+            } else {
+                // Handle case where user has no systems/permissions matching the map
+                echo "<p>Nenhum sistema ou permissão atribuída que corresponda aos cards disponíveis.</p>";
+            }
+            ?>
         </div>
     </main>
 </body>

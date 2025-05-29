@@ -10,26 +10,6 @@ verificarUsuario();
 $database = new Database();
 $pdo = $database->getConnection();
 
-// Verificar se está logado
-if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
-    // Limpar sessão e redirecionar para login
-    session_unset();
-    session_destroy();
-    header("Location: login.php?error=Acesso negado. Por favor, faça login.");
-    exit();
-}
-
-// Verificar tempo de inatividade (30 minutos)
-if (isset($_SESSION['ultimo_acesso']) && (time() - $_SESSION['ultimo_acesso'] > 1800)) {
-    session_unset();
-    session_destroy();
-    header("Location: login.php?error=Sessão expirada. Por favor, faça login novamente.");
-    exit();
-}
-
-// Atualizar último acesso
-$_SESSION['ultimo_acesso'] = time();
-
 $demanda = new Demanda($pdo);
 
 // Processar atualização de status

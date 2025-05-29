@@ -27,21 +27,10 @@ if (isset($_POST['login']) && isset($_POST['email']) && isset($_POST['senha']) &
     $senha = $_POST['senha'];
     require_once('../../models/model_dados.php');
     $login = login($email, $senha);
-
-    if ($_SESSION['status'] == 0) {
-
-        header('location: ../../views/subsytem/subsistema.php');
+    if ($login) {
+        header('Location: ../../views/subsytem/subsistema.php');
         exit();
-    } else if ($_SESSION['status'] == 1) {
-        header('location: ../../views/subsytem/subsistema_professor.php');
-        exit();
-    } else if ($_SESSION['status'] == 2) {
-        header('Location: ../../views/subsytem/subsistema_estagio.php');
-        exit();
-    } else if ($_SESSION['status'] == 4) {
-        header('Location: ../../../subsystems/entradasaida/logado.php');
-        exit();
-    } else if ($login == 5) {
+    } else {
         header('Location: ../../../views/autenticacao/login.php?login=erro');
         exit();
     }

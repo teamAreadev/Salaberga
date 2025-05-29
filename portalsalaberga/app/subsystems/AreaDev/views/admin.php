@@ -5,31 +5,11 @@ require_once __DIR__ . '/../model/Demanda.php';
 require_once __DIR__ . '/../model/Usuario.php';
 
 // Verificar se é admin
-verificarAdmin();
+
 
 // Inicializa a conexão com o banco de dados
 $database = new Database();
 $pdo = $database->getConnection();
-
-// Verificar se está logado e é admin
-if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo']) || $_SESSION['usuario_tipo'] !== 'admin') {
-    // Limpar sessão e redirecionar para login
-    session_unset();
-    session_destroy();
-    header("Location: login.php?error=Acesso negado. Faça login como administrador.");
-    exit();
-}
-
-// Verificar tempo de inatividade (30 minutos)
-if (isset($_SESSION['ultimo_acesso']) && (time() - $_SESSION['ultimo_acesso'] > 1800)) {
-    session_unset();
-    session_destroy();
-    header("Location: login.php?error=Sessão expirada. Por favor, faça login novamente.");
-    exit();
-}
-
-// Atualizar último acesso
-$_SESSION['ultimo_acesso'] = time();
 
 $demanda = new Demanda($pdo);
 $usuario = new Usuario($pdo);
@@ -46,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             $sucesso = $demanda->criarDemanda($titulo, $descricao, $prioridade, $_SESSION['usuario_id'], [], $prazo);
             if ($sucesso) {
                 header("Location: admin.php?success=Demanda criada com sucesso!");
-            exit();
+                exit();
             } else {
                 $erro = "Erro ao criar demanda. Por favor, tente novamente.";
             }
