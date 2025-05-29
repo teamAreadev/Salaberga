@@ -61,7 +61,7 @@ else if (
     $estante = $_POST['livro_estante'];
     $prateleira = $_POST['livro_prateleira'];
     $subgenero = $_POST['nomesubGenero'];
-    $literatura = $_POST['literatura'] == 0 ? "Brasileira" : "Estrangeira";
+    $literatura = $_POST['literatura'] == "Brasileira" ? 1 : 0;
     $ficcao = $_POST['ficcao'] ?? 0;
     $cativo = $_POST['cativo'] ?? 0;
 

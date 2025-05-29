@@ -192,32 +192,32 @@ $select_model = new select_model();
                                     <?php
                                     $livros = $select_model->select_nome_livro();
                                     foreach ($livros as $livro) { ?>
-                                        <option value="<?= $livro['id'] ?>" 
+                                        <option value="<?= $livro['id'] ?>"
                                             data-titulo="<?= $livro['titulo_livro'] ?>"
                                             data-edicao="<?= $livro['edicao'] ?>"
                                             data-editora="<?= $livro['editora'] ?>"
                                             data-estante="<?= $livro['estantes'] ?>"
-                                            <?php if ($livro['prateleiras'] == 'p1'){
-                                                ?>data-prateleira="P1"<?php
-                                            }else if($livro['prateleiras'] == 'p2'){
-                                                ?>data-prateleira="P2"<?php
-                                            }else if($livro['prateleiras'] == 'p3'){
-                                                ?>data-prateleira="P3"<?php
-                                            }else if($livro['prateleiras'] == 'p4'){
-                                                ?>data-prateleira="P4"<?php
-                                            }else if($livro['prateleiras'] == 'p5'){
-                                                ?>data-prateleira="P5"<?php
-                                            }
-                                            ?>
+                                            <?php if ($livro['prateleiras'] == 'p1') {
+                                            ?>data-prateleira="P1" <?php
+                                                                } else if ($livro['prateleiras'] == 'p2') {
+                                                                    ?>data-prateleira="P2" <?php
+                                                                                        } else if ($livro['prateleiras'] == 'p3') {
+                                                                                            ?>data-prateleira="P3" <?php
+                                                                                                                    } else if ($livro['prateleiras'] == 'p4') {
+                                                                                                                        ?>data-prateleira="P4" <?php
+                                                                                                                    } else if ($livro['prateleiras'] == 'p5') {
+                                                                                                                        ?>data-prateleira="P5" <?php
+                                                                                                                    }
+                                                                                                                        ?>
                                             data-quantidade="<?= $livro['quantidade'] ?>"
                                             data-genero="<?= $livro['generos'] ?>"
                                             data-subgenero="<?= $livro['subgenero'] ?>"
                                             data-ano_publicacao="<?= $livro['ano_publicacao'] ?>"
                                             data-corredor="<?= $livro['corredor'] ?>"
                                             data-ficcao="<?= $livro['ficcao'] ?>"
-                                            data-literatura="<?= $livro['literatura'] ?>"
+                                            data-brasileira="<?= $livro['brasileira'] ?>"
                                             data-cativo="<?= $livro['cativo'] ?>"
-                                        ><?= $livro['titulo_livro'] ?> | edição: <?= $livro['edicao'] ?> | editora: <?= $livro['editora'] ?> | estante: <?= $livro['estantes'] ?> | prateleira: <?= $livro['prateleiras'] ?> | quantidade: <?= $livro['quantidade'] ?></option>
+                                            <?= $livro['titulo_livro'] ?> | edição: <?= $livro['edicao'] ?> | editora: <?= $livro['editora'] ?> | estante: <?= $livro['estantes'] ?> | prateleira: <?= $livro['prateleiras'] ?> | quantidade: <?= $livro['quantidade'] ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -227,7 +227,7 @@ $select_model = new select_model();
                         <div id="editForm" class="hidden mt-6 space-y-6">
                             <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
                                 <h3 class="text-lg font-medium text-gray-900 mb-4">Editar Informações do Livro</h3>
-                                
+
                                 <!-- Título -->
                                 <div class="mb-4">
                                     <label for="editTitulo" class="block text-sm font-medium text-gray-700 mb-1">Título</label>
@@ -276,30 +276,30 @@ $select_model = new select_model();
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                     <div>
                                         <label for="editGenero" class="block text-sm font-medium text-gray-700 mb-1">Gênero</label>
-                                       <select name="genero" id="editGenero" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
-                                        <?php 
-                                        $generos = $select_model->select_genero();
-                                        foreach ($generos as $genero) { ?>
-                                            <option value="<?= $genero['id'] ?>"><?= $genero['generos'] ?></option>
-                                        <?php } ?>
-                                       </select>
+                                        <select name="genero" id="editGenero" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
+                                            <?php
+                                            $generos = $select_model->select_genero();
+                                            foreach ($generos as $genero) { ?>
+                                                <option value="<?= $genero['id'] ?>"><?= $genero['generos'] ?></option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                     <div>
                                         <label for="editSubgenero" class="block text-sm font-medium text-gray-700 mb-1">Subgênero</label>
                                         <select name="subgenero" id="editSubgenero" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
-                                        <?php
-                                    $generos = $select_model->select_genero();
-                                    foreach ($generos as $genero) {
-                                        $subgeneros = $select_model->select_subgenero(genero: $genero['generos']);
-                                        ?>
-                                        <optgroup label="<?= $genero['generos'] ?>"></optgroup>
-                                        <?php
-                                        foreach ($subgeneros as $subgenero) {
+                                            <?php
+                                            $generos = $select_model->select_genero();
+                                            foreach ($generos as $genero) {
+                                                $subgeneros = $select_model->select_subgenero(genero: $genero['generos']);
                                             ?>
-                                            <option value="<?= $subgenero['id'] ?>"><?= $subgenero['subgenero'] ?></option>
-                                        <?php } ?>
-                                        </optgroup>
-                                    <?php } ?>
+                                                <optgroup label="<?= $genero['generos'] ?>"></optgroup>
+                                                <?php
+                                                foreach ($subgeneros as $subgenero) {
+                                                ?>
+                                                    <option value="<?= $subgenero['id'] ?>"><?= $subgenero['subgenero'] ?></option>
+                                                <?php } ?>
+                                                </optgroup>
+                                            <?php } ?>
                                         </select>
                                     </div>
                                 </div>
@@ -324,7 +324,7 @@ $select_model = new select_model();
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" id="editLiteratura" name="literatura" class="w-4 h-4 text-ceara-green border-gray-300 rounded focus:ring-ceara-green">
-                                        <label for="editLiteratura" class="ml-2 text-sm font-medium text-gray-700">Literatura</label>
+                                        <label for="editLiteratura" class="ml-2 text-sm font-medium text-gray-700">Brasileira</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" id="editCativo" name="cativo" class="w-4 h-4 text-ceara-green border-gray-300 rounded focus:ring-ceara-green">
@@ -360,7 +360,7 @@ $select_model = new select_model();
                         <div class="flex items-center p-4 mb-4 text-green-800 border-l-4 border-green-500 bg-green-50 rounded-md"
                             role="alert">
                             <i class="fas fa-check-circle text-xl mr-3"></i>
-                            <span class="text-sm font-medium">Livro excluído com sucesso!</span>
+                            <span class="text-sm font-medium">Livro editado com sucesso!</span>
                         </div>
                     <?php endif; ?>
 
@@ -368,7 +368,7 @@ $select_model = new select_model();
                         <div class="flex items-center p-4 mb-4 text-red-800 border-l-4 border-red-500 bg-red-50 rounded-md"
                             role="alert">
                             <i class="fas fa-exclamation-circle text-xl mr-3"></i>
-                            <span class="text-sm font-medium">ERRO ao excluir livro!</span>
+                            <span class="text-sm font-medium">ERRO ao editar livro!</span>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -406,7 +406,7 @@ $select_model = new select_model();
                     const prateleiraValue = selectedOption.dataset.prateleira;
                     document.getElementById('editPrateleira').value = prateleiraValue;
                     document.getElementById('editQuantidade').value = selectedOption.dataset.quantidade;
-                    
+
                     // Populate new fields
                     // Encontrar a opção do gênero que corresponde ao texto
                     const generoSelect = document.getElementById('editGenero');
@@ -427,9 +427,9 @@ $select_model = new select_model();
                     document.getElementById('editAnoPublicacao').value = selectedOption.dataset.ano_publicacao;
                     document.getElementById('editCorredor').value = selectedOption.dataset.corredor;
                     document.getElementById('editFiccao').checked = selectedOption.dataset.ficcao === '1';
-                    document.getElementById('editLiteratura').checked = selectedOption.dataset.literatura === '1';
+                    document.getElementById('editLiteratura').checked = selectedOption.dataset.brasileira === '1';
                     document.getElementById('editCativo').checked = selectedOption.dataset.cativo === '1';
-                    
+
                     // Show the edit form
                     editForm.classList.remove('hidden');
                 }

@@ -47,7 +47,28 @@ class select_model extends connect
     public function select_nome_livro()
     {
         $sql_nome_livro = $this->connect->query(
-            "SELECT c.id, c.titulo_livro, a.nome_autor, a.sobrenome_autor, c.edicao, c.editora, c.quantidade, g.generos, sg.subgenero, c.ano_publicacao, c.corredor, c.estantes, c.prateleiras, c.ficcao, c.literatura, c.cativo FROM catalogo c INNER JOIN livros_autores l ON c.id = l.id_livro INNER JOIN autores a ON l.id_autor = a.id LEFT JOIN genero g ON c.id_genero = g.id LEFT JOIN subgenero sg ON c.id_subgenero = sg.id ORDER BY c.titulo_livro, c.edicao;");
+            "SELECT 
+                        c.id,
+                        c.titulo_livro,
+                        c.edicao,
+                        c.editora,
+                        c.quantidade,
+                        g.generos,
+                        sg.subgenero,
+                        c.ano_publicacao,
+                        c.corredor,
+                        c.estantes,
+                        c.prateleiras,
+                        c.ficcao,
+                        c.literatura,
+                        c.cativo,
+                    FROM catalogo c 
+                    INNER JOIN livros_autores l ON c.id = l.id_livro 
+                    INNER JOIN autores a ON l.id_autor = a.id 
+                    LEFT JOIN genero g ON c.id_genero = g.id 
+                    LEFT JOIN subgenero sg ON c.id_subgenero = sg.id 
+                    ORDER BY c.titulo_livro, c.edicao;"
+        );
         $nome = $sql_nome_livro->fetchAll(PDO::FETCH_ASSOC);
 
         return $nome;

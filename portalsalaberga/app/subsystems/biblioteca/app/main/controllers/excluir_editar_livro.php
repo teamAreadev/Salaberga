@@ -4,12 +4,7 @@ print_r($_POST);
 
 if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
     $id_livro = $_POST['excluir_livro'];
-
-    $titulo = $_POST['titulo'];
-    $dados = [
-        'titulo_livro' => $titulo
-    ];
-
+    print_r($id_livro);
     $model = new main_model();
     $result = $model->excluir_livro($id_livro);
 
@@ -25,8 +20,8 @@ if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
 } else if (
     isset($_POST['id_livro']) && !empty($_POST['id_livro']) &&
     isset($_POST['titulo']) && !empty($_POST['titulo']) &&
-    isset($_POST['editora']) && !empty($_POST['editora']) &&
     isset($_POST['edicao']) && !empty($_POST['edicao']) &&
+    isset($_POST['editora']) && !empty($_POST['editora']) &&
     isset($_POST['quantidade']) && !empty($_POST['quantidade']) &&
     isset($_POST['corredor']) && !empty($_POST['corredor']) &&
     isset($_POST['estante']) && !empty($_POST['estante']) &&
@@ -34,34 +29,42 @@ if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
     isset($_POST['subgenero']) && !empty($_POST['subgenero']) &&
     isset($_POST['genero']) && !empty($_POST['genero']) &&
     isset($_POST['ano_publicacao']) && !empty($_POST['ano_publicacao']) &&
-    isset($_POST['quantidade']) && !empty($_POST['quantidade'])
+    isset($_POST['nome']) && !empty($_POST['nome']) &&
+    isset($_POST['sobrenome']) && !empty($_POST['sobrenome']) &&
+    isset($_POST['antigo_nome']) && !empty($_POST['antigo_nome']) &&
+    isset($_POST['antigo_sobrenome']) && !empty($_POST['antigo_sobrenome'])
 ) {
-    $titulo = $_POST['titulo'];
     $id_livro = $_POST['id_livro'];
-    $editora = $_POST['editora'];
+    $titulo = $_POST['titulo'];
     $edicao = $_POST['edicao'];
+    $editora = $_POST['editora'];
     $quantidade = $_POST['quantidade'];
     $corredor = $_POST['corredor'];
     $estante = $_POST['estante'];
     $prateleira = $_POST['prateleira'];
     $subgenero = $_POST['subgenero'];
-    $literatura = $_POST['literatura'] ?? 0;
-    $ficcao = $_POST['ficcao'] ?? 0;
-    $cativo = $_POST['cativo'] ?? 0;
+    $literatura = isset($_POST['literatura']) ? 1 : 0;
+    $ficcao = isset($_POST['ficcao']) ? 1 : 0;
+    $cativo = isset($_POST['cativo']) ? 1 : 0;
     $genero = $_POST['genero'];
     $ano_publicacao = $_POST['ano_publicacao'];
     $subgenero = $_POST['subgenero'];
     $genero = $_POST['genero'];
+    $nome = $_POST['nome'];
+    $sobrenome = $_POST['sobrenome'];
+    $antigo_nome = $_POST['antigo_nome'];
+    $antigo_sobrenome = $_POST['antigo_sobrenome'];
+
 
     $model = new main_model();
-    $result = $model->editar_livro($id_livro, $titulo, $data, $editora, $edicao, $quantidade, $corredor, $estante, $prateleira, $subgenero, $literatura, $ficcao, $cativo, $genero, $ano_publicacao);
+    $result = $model->editar_livro($id_livro, $titulo, $ano_publicacao, $editora, $edicao, $quantidade, $corredor, $estante, $prateleira, $genero, $subgenero, $literatura, $ficcao, $cativo, $nome, $sobrenome, $antigo_nome, $antigo_sobrenome);
 
     switch ($result) {
         case 1:
-            header('location:../views/excluir_livro.php?true');
+            header('location:../views/editar_livro.php?true');
             break;
         case 2:
-            header('location:../views/excluir_livro.php?error');
+            header('location:../views/editar_livro.php?error');
             break;
     }
 }

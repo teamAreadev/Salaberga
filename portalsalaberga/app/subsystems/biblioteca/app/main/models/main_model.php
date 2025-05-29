@@ -45,7 +45,7 @@ class main_model extends connect
             $id = $sql_id->fetch(PDO::FETCH_ASSOC);
 
             /** Prepara uma query para inserir um novo livro na tabela catalogo */
-            $cadastro_livro = $this->connect->prepare("INSERT INTO $this->catalogo VALUES (null, :titulo_livro, :ano_publicacao, :editora, :edicao, :quantidade, :corredor, :estante, :prateleira, :genero, :subgenero, :ficcao, :literatura, :cativo)");
+            $cadastro_livro = $this->connect->prepare("INSERT INTO $this->catalogo VALUES (null, :titulo_livro, :ano_publicacao, :editora, :edicao, :quantidade, :corredor, :estante, :prateleira, :genero, :subgenero, :ficcao, :brasileira, :cativo)");
 
             /** Associa os valores dos parâmetros aos placeholders da query de inserção */
             $cadastro_livro->bindValue(':titulo_livro', $titulo);
@@ -59,7 +59,7 @@ class main_model extends connect
             $cadastro_livro->bindValue(':genero', $id['id_genero']);
             $cadastro_livro->bindValue(':subgenero', $id['id']);
             $cadastro_livro->bindValue(':ficcao', $ficcao);
-            $cadastro_livro->bindValue(':literatura', $literatura);
+            $cadastro_livro->bindValue(':brasileira', $literatura);
             $cadastro_livro->bindValue(':cativo', $cativo);
 
             /** Executa a query para inserir o livro */
@@ -227,30 +227,25 @@ class main_model extends connect
             $sql_excluir->bindValue(':id', $id);
             $sql_excluir->execute();
 
-            if ($sql_excluir) {
+            $sql_excluir = $this->connect->prepare("DELETE FROM catalogo WHERE id = :id");
+            $sql_excluir->bindValue(':id', $id);
+            $sql_excluir->execute();
+        }
+        if ($sql_excluir) {
+            return 1;
+        } else {
 
-                $sql_excluir = $this->connect->prepare("DELETE FROM catalogo WHERE id = :id");
-                $sql_excluir->bindValue(':id', $id);
-                $sql_excluir->execute();
-
-                if ($sql_excluir) {
-                    return 1;
-                } else {
-
-                    return 2;
-                }
-            } else {
-                return 2;
-            }
+            return 2;
         }
     }
 
-    public function editar_livro($id_livro, $titulo, $data, $editora, $edicao, $quantidade, $corredor, $estante, $prateleira,$genero, $subgenero, $literatura, $ficcao, $cativo)
+    public function editar_livro($id_livro, $titulo, $ano_publicacao, $editora, $edicao, $quantidade, $corredor, $estante, $prateleira, $genero, $subgenero, $literatura, $ficcao, $cativo, $nome_novo, $sobrenome_novo, $nome_antigo, $sobrenome_antigo)
     {
-        $sql_editar = $this->connect->prepare("UPDATE catalogo SET titulo_livro = :titulo, ano_publicacao = :data, editora = :editora, edicao = :edicao, quantidade = :quantidade, corredor = :corredor, estantes = :estante, prateleiras = :prateleira,id_genero = :genero, id_subgenero = :subgenero, literatura = :literatura, ficcao = :ficcao, cativo = :cativo WHERE id = :id");
+
+        $sql_editar = $this->connect->prepare("UPDATE catalogo SET titulo_livro = :titulo, ano_publicacao = :ano_publicacao, editora = :editora, edicao = :edicao, quantidade = :quantidade, corredor = :corredor, estantes = :estante, prateleiras = :prateleira, id_genero = :genero, id_subgenero = :subgenero, brasileira = :literatura, ficcao = :ficcao, cativo = :cativo WHERE id = :id");
         $sql_editar->bindValue(':id', $id_livro);
         $sql_editar->bindValue(':titulo', $titulo);
-        $sql_editar->bindValue(':data', $data);
+        $sql_editar->bindValue(':ano_publicacao', $ano_publicacao);
         $sql_editar->bindValue(':editora', $editora);
         $sql_editar->bindValue(':edicao', $edicao);
         $sql_editar->bindValue(':quantidade', $quantidade);
@@ -264,9 +259,64 @@ class main_model extends connect
         $sql_editar->bindValue(':cativo', $cativo);
         $sql_editar->execute();
 
+        $tamanho_array = count($nome_novo) - 1;
+        /** Inicia um loop para processar cada autor do livro */
+        for ($x = 0; $x <= $tamanho_array; $x++) {
+
+            /** Pega o nome e sobrenome do autor atual do array */
+            $nome_novo_array = $nome_novo[$x];
+            $sobrenome_novo_array = $sobrenome_novo[$x];
+
+            /** Verifica se o autor já existe na tabela autores */
+            $sql_check = $this->connect->prepare("SELECT nome_autor, sobrenome_autor FROM autores WHERE nome_autor = :nome_autor AND sobrenome_autor = :sobrenome_autor");
+            $sql_check->bindValue(':nome_autor', $nome_antigo);
+            $sql_check->bindValue(':sobrenome_autor', $sobrenome_antigo);
+            $sql_check->execute();
+            $autores = $sql_check->fetch(PDO::FETCH_ASSOC);
+
+            /** Se o autor não existe, cadastra um novo */
+            if (empty($autores)) {
+                /** Prepara a query para inserir um novo autor */
+                $sql_autor = $this->connect->prepare("INSERT INTO autores VALUES(NULL, :nome_autor, :sobrenome_autor)");
+                $sql_autor->bindValue(':nome_autor', $nome_novo_array);
+                $sql_autor->bindValue(':sobrenome_autor', $sobrenome_novo_array);
+                $sql_autor->execute();
+
+                /** Busca o id do autor recém-cadastrado */
+                $sql_check = $this->connect->prepare("SELECT id FROM autores WHERE nome_autor = :nome_autor AND sobrenome_autor = :sobrenome_autor");
+                $sql_check->bindValue(':nome_autor', $nome_novo_array);
+                $sql_check->bindValue(':sobrenome_autor', $sobrenome_novo_array);
+                $sql_check->execute();
+                $id_autor = $sql_check->fetch(PDO::FETCH_ASSOC);
+
+                /** Insere a relação entre o autor e o livro na tabela livros_autores */
+                $sql_id_autor_livro = $this->connect->prepare("INSERT INTO livros_autores VALUES(NULL, :id_autor, :id_livro)");
+                $sql_id_autor_livro->bindValue(':id_autor', $id_autor['id']);
+                $sql_id_autor_livro->bindValue(':id_livro', $id_livro);
+                $sql_id_autor_livro->execute();
+            } else {
+                /** Se o autor já existe, apenas busca o id dele */
+                $sql_check = $this->connect->prepare("SELECT id FROM autores WHERE nome_autor = :nome_autor AND sobrenome_autor = :sobrenome_autor");
+                $sql_check->bindValue(':nome_autor', $nome_antigo);
+                $sql_check->bindValue(':sobrenome_autor', $sobrenome_antigo);
+                $sql_check->execute();
+                $id_autor = $sql_check->fetch(PDO::FETCH_ASSOC);
+
+                /** Insere a relação entre o autor existente e o livro na tabela livros_autores */
+                $sql_id_autor_livro = $this->connect->prepare("UPDATE autores SET nome_autor = :nome_autor, sobrenome_autor = :sobrenome_autor WHERE id = :id");
+                $sql_id_autor_livro->bindValue(':nome_autor', $nome_novo_array);
+                $sql_id_autor_livro->bindValue(':sobrenome_autor', $sobrenome_novo_array);
+                $sql_id_autor_livro->bindValue(':id', $id_autor['id']);
+                $sql_id_autor_livro->execute();
+            }
+        }
+
+        /** Verifica se as inserções do livro e da relação autor-livro foram bem-sucedidas */
         if ($sql_editar) {
+            /** Retorna 1 se o cadastro foi concluído com sucesso */
             return 1;
         } else {
+            /** Retorna 2 se houve algum erro no cadastro */
             return 2;
         }
     }
