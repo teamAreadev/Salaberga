@@ -46,8 +46,8 @@ else if (
     isset($_POST['data']) && !empty($_POST['data']) &&
     isset($_POST['corredor']) && !empty($_POST['corredor']) &&
     isset($_POST['quantidade']) && !empty($_POST['quantidade']) &&
-    isset($_POST['estante']) && !empty($_POST['estante']) &&
-    isset($_POST['prateleira']) && !empty($_POST['prateleira'])
+    isset($_POST['livro_estante']) && !empty($_POST['livro_estante']) &&
+    isset($_POST['livro_prateleira']) && !empty($_POST['livro_prateleira'])
 ) {
     $nome = $_POST['nome'];
     $sobrenome = $_POST['sobrenome'];
@@ -58,10 +58,10 @@ else if (
     $edicao = (!isset($_POST['edicao']) || empty($_POST['edicao'])) ? "ENI*" : $_POST['edicao'];
     $quantidade = $_POST['quantidade'];
     $corredor = $_POST['corredor'];
-    $estante = $_POST['estante'];
-    $prateleira = $_POST['prateleira'];
+    $estante = $_POST['livro_estante'];
+    $prateleira = $_POST['livro_prateleira'];
     $subgenero = $_POST['nomesubGenero'];
-    $literatura = $_POST['literatura'] == 0 ? "Brasileira" : "Estrangeira";
+    $literatura = $_POST['literatura'] == "Brasileira" ? 1 : 0;
     $ficcao = $_POST['ficcao'] ?? 0;
     $cativo = $_POST['cativo'] ?? 0;
 

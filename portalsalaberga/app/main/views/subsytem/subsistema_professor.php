@@ -1091,7 +1091,7 @@ if (isset($_GET['sair'])) {
     <main class="container mx-auto px-4">
         <div class="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 md:gap-8 p-4 md:p-8 max-w-[1400px] mx-auto transition-all duration-300">
 
-            <a href="https://salaberga.com" target="_blank">
+            <a href="../../index.php" target="_blank">
                 <div class="app-card w-{100px} h-full h-4">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png"
@@ -1102,7 +1102,7 @@ if (isset($_GET['sair'])) {
                 </div>
             </a>
 
-            <a href="https://salaberga.com/salaberga/portalsalaberga/app/subsystems/biblioteca/app/main/index.php" target="_blank">
+            <a href="../../../subsystems/biblioteca/app/main/index.php" target="_blank">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/Ls3gGHcR/pilha-de-livros.png" alt="Biblioteca" class="app-icon">

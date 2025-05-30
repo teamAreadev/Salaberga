@@ -82,7 +82,32 @@
                 </span>
                 <i class="fas fa-chevron-right text-gray-400"></i>
             </a>
-
+            <a href="excluir_livro.php"
+                class="card-hover block w-full bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-between hover:bg-gray-100">
+                <span class="flex items-center">
+                    <i class="fas fa-book mr-4 text-xl text-primary"></i>
+                    <span class="text-lg">Excluir Livro</span>
+                </span>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </a>
+            <a href="editar_livro.php"
+                class="card-hover block w-full bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-between hover:bg-gray-100">
+                <span class="flex items-center">
+                    <i class="fas fa-book mr-4 text-xl text-primary"></i>
+                    <span class="text-lg">Editar Livro</span>
+                </span>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </a>
+            <a href="editar_autor.php"
+                class="card-hover block w-full bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-between hover:bg-gray-100">
+                <span class="flex items-center">
+                    <i class="fas fa-book mr-4 text-xl text-primary"></i>
+                    <span class="text-lg">Editar Autor</span>
+                </span>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </a>
+            
+            
         </div>
 
         <div class="mt-10 pt-6 border-t border-gray-200 text-center">
