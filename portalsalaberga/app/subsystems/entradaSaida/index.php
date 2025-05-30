@@ -1,9 +1,13 @@
 <?php
 
-
 require_once('../../main/models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
+
+if (!isset($_SESSION['email'])) {
+    header('Location: ../../main/views/autenticacao/login.php');
+    exit();
+}
 
 // Configura o time zone para o fuso horário desejado (exemplo: América/São Paulo)
 date_default_timezone_set('America/Sao_Paulo');

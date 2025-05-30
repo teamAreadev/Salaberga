@@ -8,9 +8,9 @@ class sessions
     function autenticar_session()
     {
         if (!$_SESSION['login']) {
-            
-            unset($_SESSION['Email']);
-            unset($_SESSION['Senha']);
+
+            session_unset();
+            session_destroy();
             header('location:../autenticacao/login.php?login=erro');
             exit();
         }

@@ -1,53 +1,6 @@
 <?php
 
-
-
 //require_once '../config/Database.php';
-
-class UserAuth
-{
-    private $db;
-
-    public function __construct()
-    {
-        $this->db = new Database();
-    }
-
-    public function login($email, $senha)
-    {
-        try {
-
-            $pdo = $this->db->connect();
-
-
-            $queryStr = "SELECT email, senha, status FROM usuario WHERE email = :email AND senha = :senha";
-            $query = $pdo->prepare($queryStr);
-
-
-            $query->bindValue(":email", $email);
-            $query->bindValue(":senha", $senha);
-
-            // Executa a query
-            $query->execute();
-            $result = $query->fetchAll(PDO::FETCH_ASSOC);
-
-            if (!empty($result)) {
-                $_SESSION['login'] = true;
-                $_SESSION['status'] = $result[0]['status'];
-                $_SESSION['refresh'] = 0;
-                return true; // Usuário encontrado
-            } else {
-                return false; // Usuário não encontrado
-            }
-        } catch (Exception $e) {
-            throw new Exception("Erro ao realizar login: " . $e->getMessage());
-        } finally {
-
-            $this->db->closeConnection();
-        }
-    }
-}
-
 
 class CadastroAluno
 {
