@@ -4,21 +4,15 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/auth.php';
 require_once __DIR__ . '/../model/Usuario.php';
 
-session_start();
+// Verificar se é admin
+verificarAdmin();
 
 // Inicializa a conexão com o banco de dados
 $database = new Database();
 $pdo = $database->getConnection();
-
-// Verificar se o usuário está logado e é admin (apenas admins devem criar usuários)
-// Adapte esta verificação conforme a sua lógica de permissões
-if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'admin') {
-    // Redirecionar para login ou página de erro de permissão
-    header("Location: ../views/login.php?error=Acesso negado.");
-    exit();
-}
 
 $usuario = new Usuario($pdo);
 

@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/config/auth.php';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
