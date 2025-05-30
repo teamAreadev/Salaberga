@@ -1,13 +1,19 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../config/auth.php';
+// require_once __DIR__ . '/../config/auth.php';
 require_once __DIR__ . '/../model/Demanda.php';
 
 // Verificar se é usuário normal
+function verificarUsuario() {
+    if (isset($_SESSION['demandas_adm_geral']) || isset($_SESSION['demandas_adm_dev'])) {
+        header('Location: admin.php');
+        exit();
+    }
+}
 verificarUsuario();
 
 // Inicializa a conexão com o banco de dados
-$database = new Database();
+$database = Database::getInstance();
 $pdo = $database->getConnection();
 
 $demanda = new Demanda($pdo);

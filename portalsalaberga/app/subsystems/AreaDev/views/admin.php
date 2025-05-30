@@ -1,68 +1,86 @@
 <?php
+// Removido controle de sessão e permissões para acesso livre
 require_once __DIR__ . '/../config/Database.php';
-require_once __DIR__ . '/../config/auth.php';
 require_once __DIR__ . '/../model/Demanda.php';
 require_once __DIR__ . '/../model/Usuario.php';
-
-// Verificar se é admin
-
-
+require_once __DIR__ . '/../model/Area.php';
+// Função para mapear a área a partir da permissão
+function areaFromPermissao($permissao) {
+    if (strpos($permissao, 'adm_area_design') === 0) return 'Design';
+    if (strpos($permissao, 'adm_area_dev') === 0) return 'Desenvolvimento';
+    if (strpos($permissao, 'adm_area_suporte') === 0) return 'Suporte';
+    if (strpos($permissao, 'adm_geral') === 0) return 'Geral';
+    if (strpos($permissao, 'usuario') === 0) return 'Usuário Comum';
+    return 'Desconhecida';
+}
+// Removido bloqueio de permissão
 // Inicializa a conexão com o banco de dados
-$database = new Database();
-$pdo = $database->getConnection();
-
-$demanda = new Demanda($pdo);
-$usuario = new Usuario($pdo);
-
-// Processar criação de demanda
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
-    if ($_POST['acao'] === 'criar') {
-        $titulo = $_POST['titulo'] ?? '';
-        $descricao = $_POST['descricao'] ?? '';
-        $prioridade = $_POST['prioridade'] ?? 'media';
-        $prazo = $_POST['prazo'] ?? null;
-
-        if (!empty($titulo) && !empty($descricao)) {
-            $sucesso = $demanda->criarDemanda($titulo, $descricao, $prioridade, $_SESSION['usuario_id'], [], $prazo);
-            if ($sucesso) {
-                header("Location: admin.php?success=Demanda criada com sucesso!");
-                exit();
-            } else {
-                $erro = "Erro ao criar demanda. Por favor, tente novamente.";
-            }
-        }
-    } elseif ($_POST['acao'] === 'excluir' && isset($_POST['id'])) {
-        $demanda->excluirDemanda($_POST['id']);
-        header("Location: admin.php");
-        exit();
-    } elseif ($_POST['acao'] === 'atualizar_status' && isset($_POST['id'])) {
-        // Verifica se um novo status foi enviado e atualiza
-        if (isset($_POST['novo_status'])) {
-            $novo_status = $_POST['novo_status'];
-            $id_demanda = $_POST['id'];
-            // Adicione lógica para validar o novo status, se necessário
-            
-            if ($novo_status === 'concluida') {
-                 $demanda->marcarConcluida($id_demanda);
-            } elseif ($novo_status === 'em_andamento') {
-                 $demanda->marcarEmAndamento($id_demanda);
-            }
-            // Adicione outras transições de status aqui, se houver
-        }
-        header("Location: admin.php");
-        exit();
+$database = Database::getInstance();
+$pdo_salaberga = $database->getSalabergaConnection(); // Conexão centralizada
+$pdo_area_dev = $database->getAreaDevConnection();
+// Inicializa os modelos
+$demanda = new Demanda($pdo_area_dev);
+$usuario = new Usuario($pdo_salaberga); // Busca usuários do banco centralizado
+$area = new Area($pdo_area_dev);
+$areas = $area->listarAreas();
+// Remover áreas duplicadas pelo nome
+$nomesVistos = [];
+$areas_unicas = [];
+foreach ($areas as $a) {
+    if (!in_array($a['nome'], $nomesVistos)) {
+        $areas_unicas[] = $a;
+        $nomesVistos[] = $a['nome'];
     }
 }
-
+$areas = $areas_unicas;
+// Buscar usuários conforme permissões do sistema de demandas
+$id_sistema_demandas = 3; // <-- AJUSTE para o ID correto do sistema de demandas na tabela sistemas
+$usuarios_permissoes = $usuario->listarUsuariosComPermissoes($id_sistema_demandas);
+$admins_gerais = Usuario::filtrarAdminsGerais($usuarios_permissoes);
+$admins_area = Usuario::filtrarAdminsArea($usuarios_permissoes);
+$usuarios = Usuario::filtrarUsuariosComuns($usuarios_permissoes);
+// Processar ações POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            case 'create':
+                if (isset($_POST['titulo'], $_POST['descricao'], $_POST['area_id'], $_POST['prioridade'])) {
+                    $demanda->criarDemanda(
+                        $_POST['titulo'],
+                        $_POST['descricao'],
+                        $_POST['prioridade'],
+                        1, // admin_id fixo
+                        [],
+                        null,
+                        $_POST['area_id'],
+                        $usuario // Passa o model Usuario
+                    );
+                }
+                break;
+            case 'delete':
+                if (isset($_POST['demanda_id'])) {
+                    $demanda->excluirDemanda($_POST['demanda_id']);
+                }
+                break;
+            case 'update_status':
+                if (isset($_POST['demanda_id'], $_POST['novo_status'])) {
+                    if ($_POST['novo_status'] === 'concluida') {
+                        $demanda->marcarConcluida($_POST['demanda_id'], 1);
+                    } else if ($_POST['novo_status'] === 'em_andamento') {
+                        $demanda->marcarEmAndamento($_POST['demanda_id'], 1);
+                    }
+                }
+                break;
+        }
+    }
+}
+// Listar todas as demandas
 $demandas = $demanda->listarDemandas();
-$usuarios = $usuario->listarUsuarios();
-
 // Calcular totais de demandas por status
 $totalDemandas = count($demandas);
 $demandasEmAndamento = 0;
 $demandasConcluidas = 0;
 $demandasPendentes = 0;
-
 foreach ($demandas as $d) {
     if ($d['status'] === 'em_andamento') {
         $demandasEmAndamento++;
@@ -1362,6 +1380,58 @@ foreach ($demandas as $d) {
                 </button>
             </div>
 
+            <!-- Admins Gerais -->
+            <?php if (!empty($admins_gerais)): ?>
+            <h3 class="text-lg font-semibold text-primary-100 mb-2">Administradores Gerais</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                <?php foreach ($admins_gerais as $index => $user): ?>
+                <div class="user-card fade-in" style="animation-delay: <?php echo ($index * 0.1); ?>s">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-shield text-white"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white">
+                                <?php echo htmlspecialchars($user['nome']); ?>
+                            </h3>
+                            <p class="text-gray-400 text-sm"><?php echo htmlspecialchars($user['email']); ?></p>
+                            <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full bg-red-500/20 text-red-400">
+                                Admin Geral - <?php echo areaFromPermissao($user['permissao']); ?>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+
+            <!-- Admins de Área -->
+            <?php if (!empty($admins_area)): ?>
+            <h3 class="text-lg font-semibold text-primary-100 mb-2">Administradores de Área</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                <?php foreach ($admins_area as $index => $user): ?>
+                <div class="user-card fade-in" style="animation-delay: <?php echo ($index * 0.1); ?>s">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-cog text-white"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white">
+                                <?php echo htmlspecialchars($user['nome']); ?>
+                            </h3>
+                            <p class="text-gray-400 text-sm"><?php echo htmlspecialchars($user['email']); ?></p>
+                            <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full bg-yellow-500/20 text-yellow-400">
+                                Admin de Área - <?php echo areaFromPermissao($user['permissao']); ?>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+
+            <!-- Usuários Comuns -->
+            <h3 class="text-lg font-semibold text-primary-100 mb-2">Usuários</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <?php foreach ($usuarios as $index => $user): ?>
                 <div class="user-card fade-in" style="animation-delay: <?php echo ($index * 0.1); ?>s">
@@ -1374,8 +1444,8 @@ foreach ($demandas as $d) {
                                 <?php echo htmlspecialchars($user['nome']); ?>
                             </h3>
                             <p class="text-gray-400 text-sm"><?php echo htmlspecialchars($user['email']); ?></p>
-                            <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full <?php echo $user['tipo'] === 'admin' ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'; ?>">
-                                <?php echo ucfirst($user['tipo']); ?>
+                            <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">
+                                Usuário - <?php echo areaFromPermissao($user['permissao']); ?>
                             </span>
                         </div>
                     </div>
@@ -1395,35 +1465,44 @@ foreach ($demandas as $d) {
                 </button>
             </div>
             <form action="../controllers/DemandaController.php" method="POST" class="space-y-4">
-                            <input type="hidden" name="acao" value="criar">
-                            <div>
+                <input type="hidden" name="acao" value="criar">
+                <div>
+                    <label for="area_id" class="block text-sm font-medium text-gray-300 mb-2">Área</label>
+                    <select id="area_id" name="area_id" required class="custom-select w-full">
+                        <option value="">Selecione a área</option>
+                        <?php foreach ($areas as $area): ?>
+                            <option value="<?= $area['id'] ?>"><?= htmlspecialchars($area['nome']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div>
                     <label for="titulo" class="block text-sm font-medium text-gray-300 mb-2">Título</label>
                     <input type="text" id="titulo" name="titulo" required class="custom-input w-full">
-                            </div>
-                            <div>
+                </div>
+                <div>
                     <label for="descricao" class="block text-sm font-medium text-gray-300 mb-2">Descrição</label>
                     <textarea id="descricao" name="descricao" required class="custom-input w-full" rows="4"></textarea>
-                            </div>
-                            <div>
+                </div>
+                <div>
                     <label for="prioridade" class="block text-sm font-medium text-gray-300 mb-2">Prioridade</label>
                     <select id="prioridade" name="prioridade" required class="custom-select w-full">
-                                    <option value="baixa">Baixa</option>
-                                    <option value="media">Média</option>
-                                    <option value="alta">Alta</option>
-                                </select>
-                            </div>
-                            <div id="prazoCalculadoInfo" class="mt-2"></div>
+                        <option value="baixa">Baixa</option>
+                        <option value="media">Média</option>
+                        <option value="alta">Alta</option>
+                    </select>
+                </div>
+                <div id="prazoCalculadoInfo" class="mt-2"></div>
                 <div class="flex justify-end gap-4 mt-6">
                     <button type="button" onclick="closeModal('criarDemandaModal')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
-                                    Cancelar
-                                </button>
+                        Cancelar
+                    </button>
                     <button type="submit" name="criar" class="custom-btn bg-gradient-to-r from-primary-500 to-primary-50 hover:from-primary-400 hover:to-primary-100 text-white font-bold py-2 px-4 rounded-lg">
                         Criar Demanda
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                    </button>
                 </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Create User Modal -->
     <div id="criarUsuarioModal" class="modal fixed inset-0 hidden items-center justify-center p-4 z-50">
@@ -1447,23 +1526,23 @@ foreach ($demandas as $d) {
                 <div>
                     <label for="senha" class="block text-sm font-medium text-gray-300 mb-2">Senha</label>
                     <input type="password" id="senha" name="senha" required class="custom-input w-full">
-                                </div>
+                </div>
                 <div>
                     <label for="tipo" class="block text-sm font-medium text-gray-300 mb-2">Tipo de Usuário</label>
                     <select id="tipo" name="tipo" required class="custom-select w-full">
                         <option value="usuario">Usuário Comum</option>
                         <option value="admin">Administrador</option>
                     </select>
-                                </div>
+                </div>
                 <div class="flex justify-end gap-4 mt-6">
                     <button type="button" onclick="closeModal('criarUsuarioModal')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
                         Cancelar
-                                    </button>
+                    </button>
                     <button type="submit" name="criar_usuario" class="custom-btn bg-gradient-to-r from-secondary-500 to-secondary-400 hover:from-secondary-400 hover:to-secondary-300 text-white font-bold py-2 px-4 rounded-lg">
                         Criar Usuário
-                                    </button>
+                    </button>
                 </div>
-                                </form>
+            </form>
         </div>
     </div>
 
@@ -2007,6 +2086,16 @@ foreach ($demandas as $d) {
                 });
             }
         });
+
+        // Função para mapear a área a partir da permissão
+        function areaFromPermissao($permissao) {
+            if (strpos($permissao, 'adm_area_design') === 0) return 'Design';
+            if (strpos($permissao, 'adm_area_dev') === 0) return 'Desenvolvimento';
+            if (strpos($permissao, 'adm_area_suporte') === 0) return 'Suporte';
+            if (strpos($permissao, 'adm_geral') === 0) return 'Geral';
+            if (strpos($permissao, 'usuario') === 0) return 'Usuário Comum';
+            return 'Desconhecida';
+        }
     </script>
 </body>
 </html> 

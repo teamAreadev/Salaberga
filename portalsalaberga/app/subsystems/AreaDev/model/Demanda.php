@@ -86,41 +86,66 @@ class Demanda {
         return $demanda;
     }
 
-    public function criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuarios_ids = [], $prazo = null) {
+    public function listarDemandasPorArea($area_id) {
+        $stmt = $this->pdo->prepare("
+            SELECT d.*, u.nome as admin_nome
+            FROM demandas d 
+            LEFT JOIN usuarios u ON d.admin_id = u.id 
+            WHERE d.area_id = ?
+            ORDER BY d.data_criacao DESC
+        ");
+        $stmt->execute([$area_id]);
+        $demandas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($demandas as &$demanda) {
+            $stmtUsuarios = $this->pdo->prepare("
+                SELECT u.id, u.nome, du.status, du.data_conclusao 
+                FROM usuarios u
+                INNER JOIN demanda_usuarios du ON u.id = du.usuario_id
+                WHERE du.demanda_id = ? AND du.status IN ('aceito', 'em_andamento', 'concluido')
+                UNION
+                SELECT u.id, u.nome, d.status as status, d.data_conclusao
+                FROM usuarios u
+                INNER JOIN demandas d ON u.id = d.admin_id
+                WHERE d.id = ? AND u.id = d.admin_id AND d.status IN ('em_andamento', 'concluida')
+            ");
+            $stmtUsuarios->execute([$demanda['id'], $demanda['id']]);
+            $demanda['usuarios_atribuidos'] = $stmtUsuarios->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return $demandas;
+    }
+
+    public function criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuarios_ids = [], $prazo = null, $area_id = null, $usuarioModel = null) {
         try {
             $this->pdo->beginTransaction();
 
-            // Calcular o prazo baseado na prioridade
             $dias_para_adicionar = 0;
             switch ($prioridade) {
-                case 'baixa':
-                    $dias_para_adicionar = 5;
-                    break;
-                case 'media':
-                    $dias_para_adicionar = 3;
-                    break;
-                case 'alta':
-                    $dias_para_adicionar = 1;
-                    break;
+                case 'baixa': $dias_para_adicionar = 5; break;
+                case 'media': $dias_para_adicionar = 3; break;
+                case 'alta': $dias_para_adicionar = 1; break;
             }
-
-            // Adicionar os dias à data atual para obter o prazo final
             $prazo_calculado = date('Y-m-d', strtotime("+" . $dias_para_adicionar . " days"));
 
             $stmt = $this->pdo->prepare("
-                INSERT INTO demandas (titulo, descricao, prioridade, admin_id, status, prazo)
-                VALUES (?, ?, ?, ?, 'pendente', ?)
+                INSERT INTO demandas (titulo, descricao, prioridade, admin_id, status, prazo, area_id)
+                VALUES (?, ?, ?, ?, 'pendente', ?, ?)
             ");
-            $stmt->execute([$titulo, $descricao, $prioridade, $admin_id, $prazo_calculado]);
+            $stmt->execute([$titulo, $descricao, $prioridade, $admin_id, $prazo_calculado, $area_id]);
 
             $demanda_id = $this->pdo->lastInsertId();
 
-            // Buscar todos os usuários ativos
-            $stmtUsuarios = $this->pdo->prepare("SELECT id FROM usuarios WHERE tipo = 'usuario'");
-            $stmtUsuarios->execute();
-            $todos_usuarios = $stmtUsuarios->fetchAll(PDO::FETCH_COLUMN);
+            // Buscar usuários do banco centralizado com permissão 'usuario' e da área correta
+            if ($usuarioModel && $area_id) {
+                $usuarios_permissoes = $usuarioModel->listarUsuariosComPermissoes(3); // 3 = id do sistema de demandas
+                $usuarios_area = array_filter($usuarios_permissoes, function($u) use ($area_id) {
+                    return strpos($u['permissao'], 'usuario') === 0 && isset($u['area_id']) && $u['area_id'] == $area_id;
+                });
+                $todos_usuarios = array_column($usuarios_area, 'id');
+            } else {
+                $todos_usuarios = [];
+            }
 
-            // Atribuir a demanda para todos os usuários
             $stmtAtribuir = $this->pdo->prepare("
                 INSERT INTO demanda_usuarios (demanda_id, usuario_id, status)
                 VALUES (?, ?, 'pendente')
@@ -131,7 +156,6 @@ class Demanda {
 
             $this->pdo->commit();
             return true;
-
         } catch (Exception $e) {
             $this->pdo->rollBack();
             return false;

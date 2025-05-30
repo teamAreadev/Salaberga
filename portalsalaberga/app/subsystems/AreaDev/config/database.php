@@ -1,35 +1,46 @@
 <?php
 class Database {
-    private $host = "localhost";
-    private $db_name = "area_dev";
-    private $username = "root";
-    private $password = "";
-    private $conn;
+    private $salaberga;
+    private $area_dev;
+    private static $instance = null;
 
-    public function getConnection() {
-        $this->conn = null;
-
-        // Primeiro tenta conectar ao banco de produção
+    private function __construct() {
         try {
-            $dsn = "mysql:host=" . $this->host . ";dbname=u750204740_areadev";
-            $this->conn = new PDO($dsn, "u750204740_areadev", "paoComOvo123!@##");
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-            $this->conn->exec("set names utf8");
-            return $this->conn;
-        } catch(PDOException $e) {
-            // Se falhar, tenta conectar ao banco local
-            try {
-                $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->db_name;
-                $this->conn = new PDO($dsn, $this->username, $this->password);
-                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-                $this->conn->exec("set names utf8");
-                return $this->conn;
-            } catch(PDOException $e) {
-                echo "Erro de conexão: " . $e->getMessage();
-                return null;
-            }
+            // Conexão com o banco salaberga
+            $dsn_salaberga = 'mysql:host=localhost;dbname=salaberga';
+            $username_salaberga = "root";
+            $password_salaberga = "";
+            $this->salaberga = new PDO($dsn_salaberga, $username_salaberga, $password_salaberga);
+            $this->salaberga->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            // Conexão com o banco area_dev
+            $dsn_area_dev = 'mysql:host=localhost;dbname=area_dev';
+            $username_area_dev = "root";
+            $password_area_dev = "";
+            $this->area_dev = new PDO($dsn_area_dev, $username_area_dev, $password_area_dev);
+            $this->area_dev->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die("Erro na conexão com o banco de dados: " . $e->getMessage());
         }
+    }
+
+    public static function getInstance() {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    public function getSalabergaConnection() {
+        return $this->salaberga;
+    }
+
+    public function getAreaDevConnection() {
+        return $this->area_dev;
+    }
+
+    // Método para compatibilidade com código existente
+    public function getConnection() {
+        return $this->area_dev;
     }
 }
