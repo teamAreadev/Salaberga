@@ -60,14 +60,14 @@ class select_model extends connect
                         c.estantes,
                         c.prateleiras,
                         c.ficcao,
-                        c.literatura,
-                        c.cativo,
+                        c.brasileira,
+                        c.cativo
                     FROM catalogo c 
                     INNER JOIN livros_autores l ON c.id = l.id_livro 
                     INNER JOIN autores a ON l.id_autor = a.id 
                     LEFT JOIN genero g ON c.id_genero = g.id 
                     LEFT JOIN subgenero sg ON c.id_subgenero = sg.id 
-                    ORDER BY c.titulo_livro, c.edicao;"
+                    ORDER BY c.titulo_livro, c.edicao"
         );
         $nome = $sql_nome_livro->fetchAll(PDO::FETCH_ASSOC);
 
@@ -96,5 +96,11 @@ class select_model extends connect
         }
 
         return $array_dados;
+    }
+    public function select_nome_autor(){
+        $sql_nome_autor = $this->connect->query("SELECT * FROM autores");
+        $nome_autor = $sql_nome_autor->fetchAll(PDO::FETCH_ASSOC);
+
+        return $nome_autor;
     }
 }

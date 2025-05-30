@@ -28,11 +28,7 @@ if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
     isset($_POST['prateleira']) && !empty($_POST['prateleira']) &&
     isset($_POST['subgenero']) && !empty($_POST['subgenero']) &&
     isset($_POST['genero']) && !empty($_POST['genero']) &&
-    isset($_POST['ano_publicacao']) && !empty($_POST['ano_publicacao']) &&
-    isset($_POST['nome']) && !empty($_POST['nome']) &&
-    isset($_POST['sobrenome']) && !empty($_POST['sobrenome']) &&
-    isset($_POST['antigo_nome']) && !empty($_POST['antigo_nome']) &&
-    isset($_POST['antigo_sobrenome']) && !empty($_POST['antigo_sobrenome'])
+    isset($_POST['ano_publicacao']) && !empty($_POST['ano_publicacao'])
 ) {
     $id_livro = $_POST['id_livro'];
     $titulo = $_POST['titulo'];
@@ -50,14 +46,9 @@ if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
     $ano_publicacao = $_POST['ano_publicacao'];
     $subgenero = $_POST['subgenero'];
     $genero = $_POST['genero'];
-    $nome = $_POST['nome'];
-    $sobrenome = $_POST['sobrenome'];
-    $antigo_nome = $_POST['antigo_nome'];
-    $antigo_sobrenome = $_POST['antigo_sobrenome'];
-
 
     $model = new main_model();
-    $result = $model->editar_livro($id_livro, $titulo, $ano_publicacao, $editora, $edicao, $quantidade, $corredor, $estante, $prateleira, $genero, $subgenero, $literatura, $ficcao, $cativo, $nome, $sobrenome, $antigo_nome, $antigo_sobrenome);
+    $result = $model->editar_livro($id_livro, $titulo, $ano_publicacao, $editora, $edicao, $quantidade, $corredor, $estante, $prateleira, $genero, $subgenero, $literatura, $ficcao, $cativo);
 
     switch ($result) {
         case 1:
@@ -65,6 +56,26 @@ if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
             break;
         case 2:
             header('location:../views/editar_livro.php?error');
+            break;
+    }
+} else if (
+    isset($_POST['id_autor']) && !empty($_POST['id_autor']) &&
+    isset($_POST['nome']) && !empty($_POST['nome']) &&
+    isset($_POST['sobrenome']) && !empty($_POST['sobrenome'])
+) {
+    $id_autor = $_POST['id_autor'];
+    $nome = $_POST['nome'];
+    $sobrenome = $_POST['sobrenome'];
+
+    $model = new main_model();
+    $result = $model->editar_autor($id_autor, $nome, $sobrenome);
+
+    switch ($result) {
+        case 1:
+            header('location:../views/editar_autor.php?true');
+            break;
+        case 2:
+            header('location:../views/editar_autor.php?error');
             break;
     }
 }

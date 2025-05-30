@@ -216,7 +216,7 @@ $select_model = new select_model();
                                             data-corredor="<?= $livro['corredor'] ?>"
                                             data-ficcao="<?= $livro['ficcao'] ?>"
                                             data-brasileira="<?= $livro['brasileira'] ?>"
-                                            data-cativo="<?= $livro['cativo'] ?>"
+                                            data-cativo="<?= $livro['cativo'] ?>">
                                             <?= $livro['titulo_livro'] ?> | edição: <?= $livro['edicao'] ?> | editora: <?= $livro['editora'] ?> | estante: <?= $livro['estantes'] ?> | prateleira: <?= $livro['prateleiras'] ?> | quantidade: <?= $livro['quantidade'] ?></option>
                                     <?php } ?>
                                 </select>
