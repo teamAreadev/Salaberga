@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 
 if (isset($_POST['email']) && $_POST['email'] == 'concedente@concedente.com' && isset($_POST['senha']) && $_POST['senha'] == 'paocomovo') {
     header('Location: ../../views/subsytem/subsistema_concedente.php');
@@ -22,19 +22,25 @@ if (isset($_GET['sair'])) {
 }
 
 if (isset($_POST['login']) && isset($_POST['email']) && isset($_POST['senha']) && !empty($_POST['email']) && !empty($_POST['senha'])) {
-
     $email = $_POST['email'];
     $senha = $_POST['senha'];
+    
+    error_log("Tentativa de login para o email: " . $email);
+    
     require_once('../../models/model_dados.php');
     $login = login($email, $senha);
+    
     if ($login) {
+        error_log("Login bem sucedido para o email: " . $email);
         header('Location: ../../views/subsytem/subsistema.php');
         exit();
     } else {
-        header('Location: ../../../views/autenticacao/login.php?login=erro');
+        error_log("Falha no login para o email: " . $email);
+        header('Location: ../../views/autenticacao/login.php?login=erro');
         exit();
     }
 } else {
-    header('Location: ../../../views/autenticacao/login.php?login=erro');
+    error_log("Dados de login incompletos ou inválidos");
+    header('Location: ../../views/autenticacao/login.php?login=erro');
     exit();
 }

@@ -1,16 +1,18 @@
 <?php
 class Demanda {
     private $pdo;
+    private $pdo_salaberga;
 
     public function __construct($pdo) {
         $this->pdo = $pdo;
+        $this->pdo_salaberga = Database::getInstance()->getSalabergaConnection();
     }
 
     public function listarDemandas() {
         $stmt = $this->pdo->prepare("
             SELECT d.*, u.nome as admin_nome
             FROM demandas d 
-            LEFT JOIN usuarios u ON d.admin_id = u.id 
+            LEFT JOIN u750204740_salaberga.usuarios u ON d.admin_id = u.id 
             ORDER BY d.data_criacao DESC
         ");
         $stmt->execute();
@@ -20,12 +22,12 @@ class Demanda {
         foreach ($demandas as &$demanda) {
             $stmtUsuarios = $this->pdo->prepare("
                 SELECT u.id, u.nome, du.status, du.data_conclusao 
-                FROM usuarios u
+                FROM u750204740_salaberga.usuarios u
                 INNER JOIN demanda_usuarios du ON u.id = du.usuario_id
                 WHERE du.demanda_id = ? AND du.status IN ('aceito', 'em_andamento', 'concluido')
                 UNION
                 SELECT u.id, u.nome, d.status as status, d.data_conclusao
-                FROM usuarios u
+                FROM u750204740_salaberga.usuarios u
                 INNER JOIN demandas d ON u.id = d.admin_id
                 WHERE d.id = ? AND u.id = d.admin_id AND d.status IN ('em_andamento', 'concluida')
             ");
@@ -37,28 +39,103 @@ class Demanda {
     }
 
     public function listarDemandasPorUsuario($usuario_id) {
-        $stmt = $this->pdo->prepare("
-            SELECT d.*, u.nome as admin_nome,
-                   du.status as status_usuario,
-                   du.data_conclusao as data_conclusao_usuario
-            FROM demandas d 
-            LEFT JOIN usuarios u ON d.admin_id = u.id 
-            INNER JOIN demanda_usuarios du ON d.id = du.demanda_id
-            WHERE du.usuario_id = ? 
-            ORDER BY d.data_criacao DESC
+        error_log("DEBUG: Iniciando listarDemandasPorUsuario para usuário ID: " . $usuario_id);
+
+        // Primeiro, buscar todas as permissões do usuário
+        $stmtArea = $this->pdo_salaberga->prepare("
+            SELECT p.descricao as permissao
+            FROM usu_sist us
+            INNER JOIN sist_perm sp ON us.sist_perm_id = sp.id
+            INNER JOIN permissoes p ON sp.permissao_id = p.id
+            WHERE us.usuario_id = ? AND sp.sistema_id = 3
         ");
-        $stmt->execute([$usuario_id]);
+        $stmtArea->execute([$usuario_id]);
+        $permissoes = $stmtArea->fetchAll(PDO::FETCH_ASSOC);
+        
+        error_log("DEBUG: Permissões encontradas: " . print_r($permissoes, true));
+
+        // Array para armazenar os IDs das áreas do usuário
+        $area_ids = [];
+
+        // Processar cada permissão
+        foreach ($permissoes as $permissao) {
+            if (strpos($permissao['permissao'], 'usuario_area_') === 0 || strpos($permissao['permissao'], 'adm_area_') === 0) {
+                $area_nome = substr($permissao['permissao'], strpos($permissao['permissao'], '_') + 1);
+                $area_nome = substr($area_nome, strpos($area_nome, '_') + 1);
+                $area_nome = ucfirst($area_nome); // Primeira letra maiúscula
+                
+                error_log("DEBUG: Nome da área extraído: " . $area_nome);
+                
+                // Buscar o ID da área pelo nome
+                $stmtAreaId = $this->pdo->prepare("SELECT id FROM areas WHERE nome = ?");
+                $stmtAreaId->execute([$area_nome]);
+                $area = $stmtAreaId->fetch(PDO::FETCH_ASSOC);
+                
+                error_log("DEBUG: Área encontrada: " . print_r($area, true));
+                
+                if ($area) {
+                    $area_ids[] = $area['id'];
+                    error_log("DEBUG: ID da área adicionado: " . $area['id']);
+                }
+            }
+        }
+
+        // Se não encontrou nenhuma área específica, buscar todas as demandas atribuídas ao usuário
+        if (empty($area_ids)) {
+            $stmt = $this->pdo->prepare("
+                SELECT DISTINCT d.*, u.nome as admin_nome,
+                       COALESCE(du.status, 'pendente') as status_usuario,
+                       du.data_conclusao as data_conclusao_usuario
+                FROM demandas d 
+                LEFT JOIN u750204740_salaberga.usuarios u ON d.admin_id = u.id 
+                LEFT JOIN demanda_usuarios du ON d.id = du.demanda_id AND du.usuario_id = ?
+                WHERE du.usuario_id = ?
+                ORDER BY d.data_criacao DESC
+            ");
+            $stmt->execute([$usuario_id, $usuario_id]);
+        } else {
+            // Buscar demandas onde o usuário está atribuído OU que são das áreas do usuário
+            $placeholders = str_repeat('?,', count($area_ids) - 1) . '?';
+            $stmt = $this->pdo->prepare("
+                SELECT DISTINCT d.*, u.nome as admin_nome,
+                       COALESCE(du.status, 'pendente') as status_usuario,
+                       du.data_conclusao as data_conclusao_usuario
+                FROM demandas d 
+                LEFT JOIN u750204740_salaberga.usuarios u ON d.admin_id = u.id 
+                LEFT JOIN demanda_usuarios du ON d.id = du.demanda_id AND du.usuario_id = ?
+                WHERE du.usuario_id = ? OR d.area_id IN ($placeholders)
+                ORDER BY d.data_criacao DESC
+            ");
+            
+            // Preparar os parâmetros: usuario_id, usuario_id, e todos os area_ids
+            $params = array_merge([$usuario_id, $usuario_id], $area_ids);
+            $stmt->execute($params);
+        }
+
         $demandas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        error_log("DEBUG: Query executada com parâmetros - usuario_id: $usuario_id, area_ids: " . implode(',', $area_ids));
+        error_log("DEBUG: Número de demandas encontradas: " . count($demandas));
+        error_log("DEBUG: Primeira demanda (se houver): " . print_r(!empty($demandas) ? $demandas[0] : 'Nenhuma demanda', true));
 
         // Para cada demanda, buscar os usuários atribuídos
         foreach ($demandas as &$demanda) {
             $stmtUsuarios = $this->pdo->prepare("
                 SELECT u.id, u.nome, du.status, du.data_conclusao 
-                FROM usuarios u
-                INNER JOIN demanda_usuarios du ON u.id = du.usuario_id
+                FROM u750204740_salaberga.usuarios u
+                LEFT JOIN demanda_usuarios du ON u.id = du.usuario_id
                 WHERE du.demanda_id = ?
             ");
             $stmtUsuarios->execute([$demanda['id']]);
+
+            // DEBUG: Log da consulta de usuários atribuídos
+            error_log("DEBUG SQL: Consulta para usuarios_atribuidos: " . $stmtUsuarios->queryString);
+            error_log("DEBUG Params: Parametros para usuarios_atribuidos: " . print_r([$demanda['id']], true));
+            error_log("DEBUG Result: Resultado da consulta de usuarios_atribuidos: " . print_r($stmtUsuarios->fetchAll(PDO::FETCH_ASSOC), true));
+
+            // Resetar o ponteiro para que o fetchAll posterior funcione
+            $stmtUsuarios->execute([$demanda['id']]);
+
             $demanda['usuarios_atribuidos'] = $stmtUsuarios->fetchAll(PDO::FETCH_ASSOC);
         }
 
@@ -86,54 +163,71 @@ class Demanda {
         return $demanda;
     }
 
-    public function criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuarios_ids = [], $prazo = null) {
+    public function listarDemandasPorArea($area_id) {
+        $stmt = $this->pdo->prepare("
+            SELECT d.*, u.nome as admin_nome
+            FROM demandas d 
+            LEFT JOIN u750204740_salaberga.usuarios u ON d.admin_id = u.id 
+            WHERE d.area_id = ?
+            ORDER BY d.data_criacao DESC
+        ");
+        $stmt->execute([$area_id]);
+        $demandas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($demandas as &$demanda) {
+            $stmtUsuarios = $this->pdo->prepare("
+                SELECT u.id, u.nome, du.status, du.data_conclusao 
+                FROM u750204740_salaberga.usuarios u
+                INNER JOIN demanda_usuarios du ON u.id = du.usuario_id
+                WHERE du.demanda_id = ? AND du.status IN ('aceito', 'em_andamento', 'concluido')
+                UNION
+                SELECT u.id, u.nome, d.status as status, d.data_conclusao
+                FROM u750204740_salaberga.usuarios u
+                INNER JOIN demandas d ON u.id = d.admin_id
+                WHERE d.id = ? AND u.id = d.admin_id AND d.status IN ('em_andamento', 'concluida')
+            ");
+            $stmtUsuarios->execute([$demanda['id'], $demanda['id']]);
+            $demanda['usuarios_atribuidos'] = $stmtUsuarios->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return $demandas;
+    }
+
+    public function criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuarios_ids = [], $prazo = null, $area_id = null, $usuarioModel = null) {
         try {
             $this->pdo->beginTransaction();
 
-            // Calcular o prazo baseado na prioridade
             $dias_para_adicionar = 0;
             switch ($prioridade) {
-                case 'baixa':
-                    $dias_para_adicionar = 5;
-                    break;
-                case 'media':
-                    $dias_para_adicionar = 3;
-                    break;
-                case 'alta':
-                    $dias_para_adicionar = 1;
-                    break;
+                case 'baixa': $dias_para_adicionar = 5; break;
+                case 'media': $dias_para_adicionar = 3; break;
+                case 'alta': $dias_para_adicionar = 1; break;
             }
-
-            // Adicionar os dias à data atual para obter o prazo final
             $prazo_calculado = date('Y-m-d', strtotime("+" . $dias_para_adicionar . " days"));
 
             $stmt = $this->pdo->prepare("
-                INSERT INTO demandas (titulo, descricao, prioridade, admin_id, status, prazo)
-                VALUES (?, ?, ?, ?, 'pendente', ?)
+                INSERT INTO demandas (titulo, descricao, prioridade, admin_id, status, prazo, area_id)
+                VALUES (?, ?, ?, ?, 'pendente', ?, ?)
             ");
-            $stmt->execute([$titulo, $descricao, $prioridade, $admin_id, $prazo_calculado]);
+            $stmt->execute([$titulo, $descricao, $prioridade, $admin_id, $prazo_calculado, $area_id]);
 
             $demanda_id = $this->pdo->lastInsertId();
 
-            // Buscar todos os usuários ativos
-            $stmtUsuarios = $this->pdo->prepare("SELECT id FROM usuarios WHERE tipo = 'usuario'");
-            $stmtUsuarios->execute();
-            $todos_usuarios = $stmtUsuarios->fetchAll(PDO::FETCH_COLUMN);
-
-            // Atribuir a demanda para todos os usuários
-            $stmtAtribuir = $this->pdo->prepare("
-                INSERT INTO demanda_usuarios (demanda_id, usuario_id, status)
-                VALUES (?, ?, 'pendente')
-            ");
-            foreach ($todos_usuarios as $usuario_id) {
-                $stmtAtribuir->execute([$demanda_id, $usuario_id]);
+            // Atribuir usuários apenas se a lista de IDs for fornecida explicitamente
+            if (!empty($usuarios_ids)) {
+                $stmtAtribuir = $this->pdo->prepare("
+                    INSERT INTO demanda_usuarios (demanda_id, usuario_id, status)
+                    VALUES (?, ?, 'pendente')
+                ");
+                foreach ($usuarios_ids as $usuario_id) {
+                    $stmtAtribuir->execute([$demanda_id, $usuario_id]);
+                }
             }
 
             $this->pdo->commit();
             return true;
-
         } catch (Exception $e) {
             $this->pdo->rollBack();
+            error_log("Erro ao criar demanda: " . $e->getMessage());
             return false;
         }
     }

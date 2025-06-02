@@ -100,18 +100,42 @@ function login($email, $senha)
 {
     require_once('../../config/Database.php');
     try {
+        $conexao = Database::getSalabergaConnection();
+
         // Prepara e executa a consulta para verificar o usuário na tabela 'usuarios'
-        // Included 'nome' in select as it's in the new schema
-        $querySelectUser = "SELECT id, email, nome FROM usuarios WHERE email = :email AND senha = MD5(:senha)";
+        $querySelectUser = "SELECT id, email, nome, senha FROM usuarios WHERE email = :email";
         $stmtSelectUser = $conexao->prepare($querySelectUser);
         $stmtSelectUser->bindParam(':email', $email);
-        $stmtSelectUser->bindParam(':senha', $senha);
         $stmtSelectUser->execute();
         $user = $stmtSelectUser->fetch(PDO::FETCH_ASSOC);
 
+        $login_successful = false;
+
         if (!empty($user)) {
-            // Login successful, fetch systems and permissions for this user
-            // UPDATED QUERY TO USE NEW usu_sist STRUCTURE (usuario_id links to sist_perm_id)
+            // Verifica se a senha corresponde usando bcrypt (para senhas já migradas)
+            if (password_verify($senha, $user['senha'])) {
+                $login_successful = true;
+            } else {
+                // Se não corresponder com bcrypt, verifica se é uma senha MD5 antiga
+                // MD5 hashes são tipicamente 32 caracteres hexadecimais
+                if (strlen($user['senha']) === 32 && ctype_xdigit($user['senha'])) {
+                    if (md5($senha) === $user['senha']) {
+                        $login_successful = true;
+                        // Senha MD5 correta, agora faça a migração para bcrypt
+                        $new_senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+                        $update_query = "UPDATE usuarios SET senha = :new_senha WHERE id = :userId";
+                        $update_stmt = $conexao->prepare($update_query);
+                        $update_stmt->bindParam(':new_senha', $new_senha_hash);
+                        $update_stmt->bindParam(':userId', $user['id']);
+                        $update_stmt->execute();
+                        error_log("Senha MD5 migrada para bcrypt para o usuário: " . $email);
+                    }
+                }
+            }
+        }
+
+        if ($login_successful) {
+            // Login bem sucedido, busca sistemas e permissões para este usuário
             $queryUserSystemsPermissions = "
                 SELECT
                     s.id AS sistema_id,
@@ -120,14 +144,14 @@ function login($email, $senha)
                     p.descricao AS permissao_descricao
                 FROM
                     usuarios u
-                INNER JOIN
+                LEFT JOIN
                     usu_sist us ON u.id = us.usuario_id
-                INNER JOIN
-                    sist_perm sp ON us.sist_perm_id = sp.id -- Join usu_sist to sist_perm
-                INNER JOIN
-                    sistemas s ON sp.sistema_id = s.id     -- Join sist_perm to sistemas
-                INNER JOIN
-                    permissoes p ON sp.permissao_id = p.id -- Join sist_perm to permissoes
+                LEFT JOIN
+                    sist_perm sp ON us.sist_perm_id = sp.id
+                LEFT JOIN
+                    sistemas s ON sp.sistema_id = s.id
+                LEFT JOIN
+                    permissoes p ON sp.permissao_id = p.id
                 WHERE
                     u.id = :userId
             ";
@@ -137,26 +161,23 @@ function login($email, $senha)
             $stmtUserSystemsPermissions->execute();
             $userSystemsPermissions = $stmtUserSystemsPermissions->fetchAll(PDO::FETCH_ASSOC);
 
-            // Store relevant user data and systems/permissions in session
+            // Armazena dados relevantes do usuário e sistemas/permissões na sessão
             $_SESSION['login'] = true;
+            $_SESSION['user_id'] = $user['id']; // Armazena o ID do usuário na sessão
             $_SESSION['Email'] = $user['email'];
-             // Note: Storing raw password (even masked) is not recommended.
-            $_SESSION['Senha'] = str_repeat('•', strlen($senha)); // Example: store masked password
+            $_SESSION['Senha'] = str_repeat('•', strlen($senha)); // Evitar armazenar senha real
+            $_SESSION['Nome'] = $user['nome'];
+            $_SESSION['user_systems_permissions'] = $userSystemsPermissions;
 
-            $_SESSION['Nome'] = $user['nome']; // 'nome' is available in the new 'usuarios' table
-
-            $_SESSION['user_systems_permissions'] = $userSystemsPermissions; // Store fetched data
-
-            return true; // Indicate successful login
-
+            return true;
         } else {
-            return false; // Indicate login failure
+            error_log("Tentativa de login falhou para o email: " . $email);
+            return false;
         }
 
     } catch (PDOException $e) {
-        error_log("Erro no banco de dados: " . $e->getMessage());
-        echo "Erro no banco de dados: " . $e->getMessage();
-        return false; // Indicate error
+        error_log("Erro no banco de dados durante login: " . $e->getMessage());
+        return false;
     }
 }
 

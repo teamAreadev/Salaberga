@@ -1,4 +1,6 @@
 <?php
+session_start();
+// Removido controle de sessão e permissões para permitir acesso livre
 
 ob_start(); // Iniciar buffering de saída para capturar qualquer saída inesperada
 
@@ -6,11 +8,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../config/auth.php';
+// require_once __DIR__ . '/../config/auth.php';
 require_once __DIR__ . '/../model/Demanda.php';
 
 // Inicializa a conexão com o banco de dados
-$database = new Database();
+$database = Database::getInstance();
 $pdo = $database->getConnection();
 
 $demanda = new Demanda($pdo);
@@ -39,9 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
             exit;
             break;
         case 'excluir':
-            // Verificar se é admin
-            verificarAdmin();
-            
+            // Removido verificarAdmin();
             if (!isset($_GET['id'])) {
                 $error_response = ['error' => 'ID não fornecido'];
                 http_response_code(400);
@@ -56,16 +56,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
 }
 
 // Tratamento de requisições POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verificar se a ação é para atualizar o status
+    if (isset($_GET['action']) && $_GET['action'] === 'updateStatus') {
+        if (isset($_POST['id']) && isset($_POST['novo_status'])) {
+            $demanda = new Demanda($pdo);
+            
+            // Obter o ID do usuário logado da sessão
+            $usuario_id_logado = $_SESSION['user_id'] ?? null;
+
+            // Verificar se o usuário está logado
+            if (!$usuario_id_logado) {
+                header("Location: ../views/usuario.php?error=Usuário não logado.");
+                exit();
+            }
+
+            if ($_POST['novo_status'] === 'em_andamento') {
+                error_log("DEBUG Controller: Tentando marcar demanda ID " . $_POST['id'] . " como em andamento para usuário " . $usuario_id_logado);
+                $sucesso = $demanda->marcarEmAndamento($_POST['id'], $usuario_id_logado);
+                error_log("DEBUG Controller: Resultado de marcarEmAndamento: " . ($sucesso ? 'Sucesso' : 'Falha'));
+                if ($sucesso) {
+                    error_log("DEBUG Controller: Preparando para redirecionar para sucesso - em_andamento");
+                    header("Location: ../views/usuario.php?success=Demanda marcada como em andamento!");
+                    error_log("DEBUG Controller: Chamada header() executada para sucesso - em_andamento");
+                } else {
+                    error_log("DEBUG Controller: Preparando para redirecionar para erro - em_andamento");
+                    header("Location: ../views/usuario.php?error=Erro ao marcar demanda como em andamento.");
+                    error_log("DEBUG Controller: Chamada header() executada para erro - em_andamento");
+                }
+            } elseif ($_POST['novo_status'] === 'concluida') {
+                error_log("DEBUG Controller: Tentando marcar demanda ID " . $_POST['id'] . " como concluída para usuário " . $usuario_id_logado);
+                $sucesso = $demanda->marcarConcluida($_POST['id'], $usuario_id_logado);
+                error_log("DEBUG Controller: Resultado de marcarConcluida: " . ($sucesso ? 'Sucesso' : 'Falha'));
+                if ($sucesso) {
+                    header("Location: ../views/usuario.php?success=Sua parte na demanda foi marcada como concluída!");
+                } else {
+                    header("Location: ../views/usuario.php?error=Erro ao marcar sua parte na demanda como concluída.");
+                }
+            }
+            exit();
+        }
+    }
+    
+    // Switch para outras ações POST que usam o parâmetro 'acao' no corpo
+    if (isset($_POST['acao'])) {
     switch ($_POST['acao']) {
         case 'excluir':
-            // Verificar se é admin
-            verificarAdmin();
-            
+            // Removido verificarAdmin();
             if (isset($_POST['id'])) {
                 $demanda = new Demanda($pdo);
                 $sucesso = $demanda->excluirDemanda($_POST['id']);
-                
                 if ($sucesso) {
                     header("Location: ../views/admin.php?success=Demanda excluída com sucesso!");
                 } else {
@@ -75,22 +115,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             }
             break;
         case 'criar':
-            // Verificar se é admin
-            verificarAdmin();
-            
+            // Removido verificarAdmin();
             $titulo = $_POST['titulo'] ?? '';
             $descricao = $_POST['descricao'] ?? '';
             $prioridade = $_POST['prioridade'] ?? 'media';
             $usuarios_ids = isset($_POST['usuarios_ids']) ? (is_array($_POST['usuarios_ids']) ? $_POST['usuarios_ids'] : [$_POST['usuarios_ids']]) : [];
             $prazo = $_POST['prazo'] ?? null;
+            $area_id = $_POST['area_id'] ?? null;
 
             if (empty($titulo) || empty($descricao)) {
                 header("Location: ../views/admin.php?error=Por favor, preencha título e descrição.");
                 exit();
             }
 
-            $admin_id = $_SESSION['usuario_id'];
-            $sucesso = $demanda->criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuarios_ids, $prazo);
+            require_once __DIR__ . '/../model/Usuario.php';
+            $database = Database::getInstance();
+            $pdo_salaberga = $database->getSalabergaConnection();
+            $usuarioModel = new Usuario($pdo_salaberga);
+
+            // Removido uso de $_SESSION['usuario_id']
+            $admin_id = 1; // Valor fixo para admin_id
+            $sucesso = $demanda->criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuarios_ids, $prazo, $area_id, $usuarioModel);
 
             if ($sucesso) {
                 header("Location: ../views/admin.php?success=Demanda criada com sucesso!");
@@ -99,9 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             }
             exit();
         case 'atualizar_demanda':
-            // Verificar se é admin
-            verificarAdmin();
-            
+            // Removido verificarAdmin();
             if (isset($_POST['id'])) {
                 $id = $_POST['id'];
                 $titulo = $_POST['titulo'] ?? '';
@@ -115,7 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
                 }
 
                 $sucesso = $demanda->atualizarDemanda($id, $titulo, $descricao, $prioridade, null, [], $prazo);
-                
                 if ($sucesso) {
                     header("Location: ../views/admin.php?success=Demanda atualizada com sucesso!");
                 } else {
@@ -124,61 +166,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
                 exit();
             }
             break;
-        case 'atualizar_status':
-            if (isset($_POST['id']) && isset($_POST['novo_status'])) {
-                $demanda = new Demanda($pdo);
-                if ($_POST['novo_status'] === 'em_andamento') {
-                    $demanda->marcarEmAndamento($_POST['id'], $_POST['usuario_id'] ?? $_SESSION['usuario_id']);
-                } elseif ($_POST['novo_status'] === 'concluida') {
-                    if (isAdmin()) {
-                        // Se for admin, marca a demanda como concluída e apenas o admin como concluído
-                        $pdo->beginTransaction();
-                        try {
-                            // Atualiza o status da demanda
-                            $stmt = $pdo->prepare("
-                                UPDATE demandas 
-                                SET status = 'concluida', data_conclusao = CURRENT_TIMESTAMP 
-                                WHERE id = ?
-                            ");
-                            $stmt->execute([$_POST['id']]);
-
-                            // Atualiza apenas o status do admin
-                            $stmt = $pdo->prepare("
-                                UPDATE demanda_usuarios 
-                                SET status = 'concluido', data_conclusao = CURRENT_TIMESTAMP 
-                                WHERE demanda_id = ? AND usuario_id = ?
-                            ");
-                            $stmt->execute([$_POST['id'], $_SESSION['usuario_id']]);
-
-                            $pdo->commit();
-                        } catch (Exception $e) {
-                            $pdo->rollBack();
-                            header("Location: ../views/admin.php?error=Erro ao concluir demanda.");
-                            exit();
-                        }
-                    } else {
-                        // Se for usuário normal, usa o método existente
-                        $demanda->marcarConcluida($_POST['id'], $_POST['usuario_id'] ?? $_SESSION['usuario_id']);
-                    }
-                }
-                
-                // Redireciona para a página correta baseado no tipo de usuário
-                if (isAdmin()) {
-                    header("Location: ../views/admin.php");
-                } else {
-                    header("Location: ../views/usuario.php");
-                }
-                exit();
-            }
-            break;
         case 'aceitar_demanda':
-            // Verificar se é usuário normal
-            verificarUsuario();
-            
+            // Removido verificarUsuario();
             if (isset($_POST['id'])) {
                 $demanda = new Demanda($pdo);
-                $sucesso = $demanda->aceitarDemanda($_POST['id'], $_SESSION['usuario_id']);
-                
+                $usuario_id_logado = $_SESSION['user_id'] ?? null; // Obter o ID do usuário logado da sessão
+
+                // Verificar se o usuário está logado
+                if (!$usuario_id_logado) {
+                    // Redirecionar ou retornar erro se o usuário não estiver logado
+                    header("Location: ../views/usuario.php?error=Usuário não logado.");
+                    exit();
+                }
+
+                $sucesso = $demanda->aceitarDemanda($_POST['id'], $usuario_id_logado);
                 if ($sucesso) {
                     header("Location: ../views/usuario.php?success=Demanda aceita com sucesso!");
                 } else {
@@ -188,13 +189,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             }
             break;
         case 'recusar_demanda':
-            // Verificar se é usuário normal
-            verificarUsuario();
-            
+            // Removido verificarUsuario();
             if (isset($_POST['id'])) {
                 $demanda = new Demanda($pdo);
-                $sucesso = $demanda->recusarDemanda($_POST['id'], $_SESSION['usuario_id']);
-                
+                $usuario_id_logado = $_SESSION['user_id'] ?? null; // Obter o ID do usuário logado da sessão
+
+                // Verificar se o usuário está logado
+                if (!$usuario_id_logado) {
+                    // Redirecionar ou retornar erro se o usuário não estiver logado
+                    header("Location: ../views/usuario.php?error=Usuário não logado.");
+                    exit();
+                }
+
+                $sucesso = $demanda->recusarDemanda($_POST['id'], $usuario_id_logado);
                 if ($sucesso) {
                     header("Location: ../views/usuario.php?success=Demanda recusada com sucesso!");
                 } else {
@@ -206,6 +213,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
     }
 }
 
-// Redirecionamento padrão
-header("Location: ../views/admin.php");
-exit(); 
+// Removidas funções isAdmin, verificarAdmin e verificarUsuario 
+} 
