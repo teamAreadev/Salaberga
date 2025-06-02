@@ -28,12 +28,37 @@ class Usuario {
     }
 
     public function criarUsuario($nome, $email, $senha, $tipo) {
+        // Verifica se o e-mail já existe
+        $stmt = $this->pdo->prepare("SELECT id FROM usuarios WHERE email = ?");
+        $stmt->execute([$email]);
+        if ($stmt->fetch()) {
+            return "email_ja_cadastrado";
+        }
+
         $senhaHash = password_hash($senha, PASSWORD_BCRYPT);
-        $stmt = $this->pdo->prepare("
-            INSERT INTO usuarios (nome, email, senha, tipo)
-            VALUES (?, ?, ?, ?)
-        ");
-        return $stmt->execute([$nome, $email, $senhaHash, $tipo]);
+        $this->pdo->beginTransaction();
+        try {
+            // Inserir na tabela usuarios
+            $stmt = $this->pdo->prepare("
+                INSERT INTO usuarios (nome, email, senha)
+                VALUES (?, ?, ?)
+            ");
+            $stmt->execute([$nome, $email, $senhaHash]);
+            $usuario_id = $this->pdo->lastInsertId();
+
+            // Inserir na tabela usu_sist
+            $stmt = $this->pdo->prepare("
+                INSERT INTO usu_sist (usuario_id, sist_perm_id)
+                VALUES (?, ?)
+            ");
+            $stmt->execute([$usuario_id, $tipo]);
+
+            $this->pdo->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            return $e->getMessage();
+        }
     }
 
     public function listarAdminsGerais() {
@@ -63,12 +88,13 @@ class Usuario {
     // Busca todos os usuários e suas permissões para um sistema específico
     public function listarUsuariosComPermissoes($sistema_id) {
         $sql = "
-            SELECT u.*, p.descricao as permissao
+            SELECT u.*, p.descricao as permissao, sp.id as sist_perm_id
             FROM usuarios u
             INNER JOIN usu_sist us ON u.id = us.usuario_id
             INNER JOIN sist_perm sp ON us.sist_perm_id = sp.id
             INNER JOIN permissoes p ON sp.permissao_id = p.id
             WHERE sp.sistema_id = ?
+              AND p.id IN (13,12,11,6,5)
             ORDER BY u.nome
         ";
         $stmt = $this->pdo->prepare($sql);
@@ -91,5 +117,16 @@ class Usuario {
         return array_filter($usuarios, function($u) {
             return strpos($u['permissao'], 'usuario') === 0;
         });
+    }
+
+    // Buscar todas as permissões disponíveis na tabela sist_perm
+    public function listarPermissoes() {
+        $stmt = $this->pdo->query("
+            SELECT sp.id, p.descricao
+            FROM sist_perm sp
+            INNER JOIN permissoes p ON sp.permissao_id = p.id
+            ORDER BY p.descricao
+        ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 } 

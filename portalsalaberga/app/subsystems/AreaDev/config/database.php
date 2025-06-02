@@ -1,4 +1,24 @@
 <?php
+// Detecta se está no ambiente local ou na hospedagem
+$is_local = $_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1';
+
+// Configurações do banco de dados
+if ($is_local) {
+    // Configurações para ambiente local
+    define('DB_SALABERGA_NAME', 'u750204740_salaberga');
+    define('DB_AREA_DEV_NAME', 'u750204740_areadev');
+    define('DB_HOST', 'localhost');
+    define('DB_USER', 'root');
+    define('DB_PASS', '');
+} else {
+    // Configurações para ambiente de produção (hospedagem)
+    define('DB_SALABERGA_NAME', 'u750204740_salaberga');
+    define('DB_AREA_DEV_NAME', 'u750204740_areadev');
+    define('DB_HOST', 'localhost');
+    define('DB_USER', 'u750204740_salaberga');
+    define('DB_PASS', 'paoComOvo123!@##');
+}
+
 class Database {
     private $salaberga;
     private $area_dev;
@@ -7,17 +27,13 @@ class Database {
     private function __construct() {
         try {
             // Conexão com o banco salaberga
-            $dsn_salaberga = 'mysql:host=localhost;dbname=salaberga';
-            $username_salaberga = "root";
-            $password_salaberga = "";
-            $this->salaberga = new PDO($dsn_salaberga, $username_salaberga, $password_salaberga);
+            $dsn_salaberga = 'mysql:host=' . DB_HOST . ';dbname=' . DB_SALABERGA_NAME;
+            $this->salaberga = new PDO($dsn_salaberga, DB_USER, DB_PASS);
             $this->salaberga->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // Conexão com o banco area_dev
-            $dsn_area_dev = 'mysql:host=localhost;dbname=area_dev';
-            $username_area_dev = "root";
-            $password_area_dev = "";
-            $this->area_dev = new PDO($dsn_area_dev, $username_area_dev, $password_area_dev);
+            $dsn_area_dev = 'mysql:host=' . DB_HOST . ';dbname=' . DB_AREA_DEV_NAME;
+            $this->area_dev = new PDO($dsn_area_dev, DB_USER, DB_PASS);
             $this->area_dev->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             die("Erro na conexão com o banco de dados: " . $e->getMessage());

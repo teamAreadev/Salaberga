@@ -19,10 +19,17 @@ if (isset($_GET['sair'])) {
 // ]
 $userSystemsPermissions = $_SESSION['user_systems_permissions'] ?? [];
 
-// TEMPORARY DEBUG OUTPUT: Check what is in $userSystemsPermissions
-// echo '<pre style="color: black;">Debug $userSystemsPermissions: ';
-// print_r($userSystemsPermissions);
-// echo '</pre>';
+// Debug output usando uma abordagem mais segura
+$debugData = [
+    'userSystemsPermissions' => $userSystemsPermissions,
+    'adminPermissions' => $_SESSION['user_systems_permissions'] ?? []
+];
+
+echo '<script>';
+echo 'const debugData = ' . json_encode($debugData, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS) . ';';
+echo 'console.log("Debug $userSystemsPermissions:", debugData.userSystemsPermissions);';
+echo 'console.log("Debug $userSystemsPermissions (Admin Geral):", debugData.adminPermissions);';
+echo '</script>';
 
 // Define cards that should always be visible regardless of permissions
 $alwaysVisibleCards = [
@@ -67,11 +74,11 @@ $alwaysVisibleCards = [
 ];
 
 // Define a mapping of system name AND permission description to card data
-// The keys are formatted as "sistema_nome_permissao_descricao"
+// The keys are formatted as "sistema_nome_permissao_descricao(sistema_id)"
 // IMPORTANT: Ensure "sistema_nome" matches exactly what comes from the database table `sistemas`.sistema
 // IMPORTANT: Ensure "permissao_descricao" matches exactly what comes from the database table `permissoes`.descricao
 $systemPermissionCardMap = [
-    // Correcting keys to match potential database output exactly
+    // Entradas para outros sistemas (manter as que parecem corretas)
     'Entrada/saída_usuario(1)' => [
         'url' => '#',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
@@ -96,36 +103,58 @@ $systemPermissionCardMap = [
         'name' => 'Estágio (Admin)',
         'category' => 'Administração'
     ],
+
+    // Mapeamentos LIMPOS para o sistema "Demandas" (ID 3)
+    'Demandas_adm_geral(3)' => [
+        'url' => '../../../subsystems/areadev/views/admin.php',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Demandas (Admin Geral)',
+        'category' => 'Administração'
+    ],
     'Demandas_usuario(3)' => [
-        'url' => '../../../subsystems/AreaDev/views/usuario.php',
+        'url' => '../../../subsystems/areadev/views/usuario.php',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
         'name' => 'Demandas (Usuário)',
         'category' => 'Sistema'
     ],
-    'Demandas_adm_geral(3)' => [
-        'url' => '../../../subsystems/AreaDev/views/admin.php',
+    'Demandas_usuario_area_desenvolvimento(3)' => [
+        'url' => '../../../subsystems/areadev/views/usuario.php',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
-        'name' => 'Demandas (Admin Geral)',
+        'name' => 'Demandas (Desenvolvimento)',
+        'category' => 'Sistema'
+    ],
+    'Demandas_usuario_area_design(3)' => [
+        'url' => '../../../subsystems/areadev/views/usuario.php',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Demandas (Design)',
+        'category' => 'Sistema'
+    ],
+    'Demandas_usuario_area_suporte(3)' => [
+        'url' => '../../../subsystems/areadev/views/usuario.php',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Demandas (Suporte)',
         'category' => 'Sistema'
     ],
     'Demandas_adm_area_suporte(3)' => [
-        'url' => '../../../subsystems/AreaDev/views/admin.php',
+        'url' => '../../../subsystems/areadev/views/admin.php',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
         'name' => 'Demandas (Admin Suporte)',
-        'category' => 'Sistema'
+        'category' => 'Administração'
     ],
     'Demandas_adm_area_dev(3)' => [
-        'url' => '../../../subsystems/AreaDev/views/admin.php',
+        'url' => '../../../subsystems/areadev/views/admin.php',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
         'name' => 'Demandas (Admin Dev)',
-        'category' => 'Sistema'
+        'category' => 'Administração'
     ],
     'Demandas_adm_area_design(3)' => [
-        'url' => '../../../subsystems/AreaDev/views/admin.php',
+        'url' => '../../../subsystems/areadev/views/admin.php',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
         'name' => 'Demandas (Admin Design)',
-        'category' => 'Sistema'
+        'category' => 'Administração'
     ],
+
+    // Entradas para outros sistemas (manter as que parecem corretas)
     'Biblioteca_usuario(4)' => [
         'url' => '../../../subsystems/biblioteca/app/main/index.php',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
@@ -144,8 +173,8 @@ $systemPermissionCardMap = [
         'name' => 'SS (Admin)',
         'category' => 'Sistema'
     ],
-    
-    // ... add more mappings based on your 'sistemas' and 'permissoes' tables
+
+    // ... adicione mais mapeamentos baseados nas suas tabelas 'sistemas' e 'permissoes' se necessário
 ];
 
 // Prepare an array of unique cards to display based on user's systems and permissions
@@ -155,16 +184,31 @@ $cardsToDisplay = $alwaysVisibleCards;
 
 // Then add cards based on user's permissions
 if (!empty($userSystemsPermissions)) {
+    // Coletar todas as informações de debug primeiro
+    $allDebugInfo = [];
+    
     foreach ($userSystemsPermissions as $item) {
-        // Use the exact system name and permission description from the database result
-        $key = $item['sistema_nome'] . '_' . $item['permissao_descricao'];
+        // Extrair o ID do sistema da descrição da permissão se existir
+        $permissaoBase = preg_replace('/\(\d+\)$/', '', $item['permissao_descricao']);
+        $key = $item['sistema_nome'] . '_' . $permissaoBase . '(' . $item['sistema_id'] . ')';
+        
+        $allDebugInfo[] = [
+            'sistema' => $item['sistema_nome'],
+            'permissao' => $item['permissao_descricao'],
+            'chave' => $key,
+            'encontrada' => isset($systemPermissionCardMap[$key]) ? 'Sim' : 'Não'
+        ];
 
-        // If this system-permission combination is in our map, add its card data
         if (isset($systemPermissionCardMap[$key])) {
-            // Use the key as a unique identifier to avoid duplicate cards for the same system-permission combo
             $cardsToDisplay[$key] = $systemPermissionCardMap[$key];
         }
     }
+    
+    // Gerar um único script com todas as informações de debug
+    echo '<script>';
+    echo 'const allDebugInfo = ' . json_encode($allDebugInfo, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS) . ';';
+    echo 'allDebugInfo.forEach(info => console.log("DEBUG KEY CHECK:", info));';
+    echo '</script>';
 }
 
 // TEMPORARY DEBUG OUTPUT: Check what cards are prepared for display

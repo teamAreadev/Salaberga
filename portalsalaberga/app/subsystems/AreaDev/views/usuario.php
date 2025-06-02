@@ -1,64 +1,92 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
-// require_once __DIR__ . '/../config/auth.php';
-require_once __DIR__ . '/../model/Demanda.php';
+session_start();
 
-// Verificar se é usuário normal
-function verificarUsuario() {
-    if (isset($_SESSION['demandas_adm_geral']) || isset($_SESSION['demandas_adm_dev'])) {
-        header('Location: admin.php');
+require_once __DIR__ . '/../model/Demanda.php';
+require_once __DIR__ . '/../model/Usuario.php';
+require_once __DIR__ . '/../../../main/config/Database.php';
+
+$conexao = Database::getAreadevConnection();
+
+$demanda = new Demanda($conexao);
+$usuario = new Usuario($conexao);
+
+// DEBUG: Verificar dados da sessão e permissões
+error_log("DEBUG SESSION DATA: " . print_r($_SESSION, true));
+error_log("DEBUG USER SYSTEMS PERMISSIONS: " . print_r($_SESSION['user_systems_permissions'] ?? 'Não definido', true));
+
+// Verifica se o usuário está logado
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    // Redireciona para a página de login se não estiver logado
+    header('Location: ../../main/views/autenticacao/login.php');
         exit();
     }
-}
-verificarUsuario();
 
-// Inicializa a conexão com o banco de dados
-$database = Database::getInstance();
-$pdo = $database->getConnection();
+$usuario_id = $_SESSION['user_id'] ?? null;
 
-$demanda = new Demanda($pdo);
+// DEBUG: Verificar ID do usuário
+error_log("DEBUG USER ID: " . $usuario_id);
 
-// Processar atualização de status
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['acao'] === 'atualizar_status' && isset($_POST['id'])) {
-    if (isset($_POST['novo_status'])) {
-        $novo_status = $_POST['novo_status'];
-        // Se for usuário normal, usa os métodos existentes
-        if ($novo_status === 'em_andamento') {
-            $demanda->marcarEmAndamento($_POST['id'], $_SESSION['usuario_id']);
-        } elseif ($novo_status === 'concluida') {
-            $demanda->marcarConcluida($_POST['id'], $_SESSION['usuario_id']);
-        }
-    }
-    // Redireciona para a página do usuário
-    header("Location: usuario.php");
+// Verifica se o ID do usuário está disponível na sessão
+if ($usuario_id === null) {
+    error_log("Erro: ID do usuário não encontrado na sessão ao acessar usuario.php");
+    header('Location: ../../main/views/autenticacao/login.php?error=user_id_missing');
     exit();
 }
 
-// Processar ações de aceitar/recusar
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && isset($_POST['id'])) {
-    $demanda_id = $_POST['id'];
-    $usuario_id = $_SESSION['usuario_id'];
-    
-    if ($_POST['acao'] === 'aceitar_demanda') {
+// --- Início do código para obter a área do usuário --- //
+$user_area = 'Não Definida'; // Valor padrão
+if (isset($_SESSION['user_systems_permissions']) && is_array($_SESSION['user_systems_permissions'])) {
+    error_log("DEBUG: Verificando permissões do usuário");
+    foreach ($_SESSION['user_systems_permissions'] as $permission_info) {
+        error_log("DEBUG PERMISSION INFO: " . print_r($permission_info, true));
+        if ((isset($permission_info['sistema_nome']) && $permission_info['sistema_nome'] === 'Demandas') || 
+            (isset($permission_info['sistema_id']) && $permission_info['sistema_id'] === 3)) {
+            if (isset($permission_info['permissao_descricao'])) {
+                $permissao = $permission_info['permissao_descricao'];
+                error_log("DEBUG PERMISSÃO ENCONTRADA: " . $permissao);
+                if (strpos($permissao, 'usuario_') === 0) {
+                    $area_slug = substr($permissao, strlen('usuario_'));
+                    $user_area = ucfirst(str_replace('_', ' ', $area_slug));
+                    error_log("DEBUG ÁREA DEFINIDA (usuario): " . $user_area);
+                    break;
+                } elseif (strpos($permissao, 'adm_area_') === 0) {
+                    $area_slug = substr($permissao, strlen('adm_area_'));
+                    $user_area = 'Admin ' . ucfirst(str_replace('_', ' ', $area_slug));
+                    error_log("DEBUG ÁREA DEFINIDA (admin): " . $user_area);
+                    break;
+                }
+            }
+        }
+    }
+}
+error_log("DEBUG ÁREA FINAL DO USUÁRIO: " . $user_area);
+// --- Fim do código para obter a área do usuário --- //
+
+// Processar ações do formulário (aceitar/recusar demanda)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action']) && isset($_POST['demanda_id'])) {
+        $demanda_id = $_POST['demanda_id'];
+
+        if ($_POST['action'] === 'aceitar') {
         $sucesso = $demanda->aceitarDemanda($demanda_id, $usuario_id);
         if ($sucesso) {
             header("Location: usuario.php?success=Demanda aceita com sucesso!");
         } else {
             header("Location: usuario.php?error=Erro ao aceitar demanda.");
         }
-        exit();
-    } elseif ($_POST['acao'] === 'recusar_demanda') {
+        } elseif ($_POST['action'] === 'recusar') {
         $sucesso = $demanda->recusarDemanda($demanda_id, $usuario_id);
         if ($sucesso) {
             header("Location: usuario.php?success=Demanda recusada com sucesso!");
         } else {
             header("Location: usuario.php?error=Erro ao recusar demanda.");
+            }
         }
         exit();
     }
 }
 
-$demandas = $demanda->listarDemandasPorUsuario($_SESSION['usuario_id']);
+$demandas = $demanda->listarDemandasPorUsuario($usuario_id);
 
 // Calcular estatísticas
 $totalDemandas = count($demandas);
@@ -79,6 +107,27 @@ foreach ($demandas as $d) {
             break;
     }
 }
+
+// DEBUG: Adicionado para verificar o status do usuário antes de exibir os botões
+// Remova este bloco após a depuração
+echo '<script>';
+echo 'console.log("DEBUG - Status do usuário para cada demanda:");';
+foreach ($demandas as $d) {
+    $usuario_logado_atribuido = false;
+    $status_usuario_debug = null;
+    if (!empty($d['usuarios_atribuidos'])) {
+        foreach ($d['usuarios_atribuidos'] as $u_atrib) {
+            if ($u_atrib['id'] == $usuario_id) {
+                $usuario_logado_atribuido = true;
+                $status_usuario_debug = $u_atrib['status'];
+                break;
+            }
+        }
+    }
+    echo 'console.log("  Demanda ID: ' . $d['id'] . ', Status Usuário: ' . ($status_usuario_debug ?? 'null') . ', Atribuído: ' . ($usuario_logado_atribuido ? 'Sim' : 'Não') . '");';
+}
+echo '</script>';
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -704,7 +753,11 @@ foreach ($demandas as $d) {
                     <!-- Informações do Usuário -->
                     <div class="flex items-center gap-2 text-gray-300 bg-dark-300/50 px-4 py-2 rounded-lg">
                         <i class="fas fa-user text-primary-50"></i>
-                        <span class="text-sm truncate max-w-[200px]"><?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></span>
+                        <span class="text-sm truncate max-w-[200px]"><?php echo htmlspecialchars($_SESSION['Nome']); ?></span>
+                        <!-- Adicionar box com o nome da área -->
+                        <span class="bg-primary-600 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                            <?php echo htmlspecialchars($user_area); ?>
+                        </span>
                     </div>
 
                     <!-- Botões de Ação -->
@@ -713,7 +766,7 @@ foreach ($demandas as $d) {
                             <i class="fas fa-chart-bar btn-icon"></i>
                             <span>Relatórios</span>
                         </a>
-                        <a href="logout.php" class="custom-btn bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-2 px-4 rounded-lg flex items-center gap-2 text-sm w-full sm:w-auto justify-center">
+                        <a href="../../../main/views/autenticacao/login.php?sair=true" class="custom-btn bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-2 px-4 rounded-lg flex items-center gap-2 text-sm w-full sm:w-auto justify-center">
                             <i class="fas fa-sign-out-alt btn-icon"></i>
                             <span>Sair</span>
                         </a>
@@ -783,7 +836,7 @@ foreach ($demandas as $d) {
                         $usuario_pendente = false;
                         if (!empty($d['usuarios_atribuidos'])) {
                             foreach ($d['usuarios_atribuidos'] as $u_atrib) {
-                                if ($u_atrib['id'] == $_SESSION['usuario_id'] && $u_atrib['status'] === 'pendente') {
+                                if ($u_atrib['id'] == $usuario_id && $u_atrib['status'] === 'pendente') {
                                     $usuario_pendente = true;
                                     break;
                                 }
@@ -803,7 +856,7 @@ foreach ($demandas as $d) {
                             $user_status = null;
                             if (!empty($d['usuarios_atribuidos'])) {
                                 foreach ($d['usuarios_atribuidos'] as $u_atrib) {
-                                    if ($u_atrib['id'] == $_SESSION['usuario_id']) {
+                                    if ($u_atrib['id'] == $usuario_id) {
                                         $user_status = $u_atrib['status'];
                                         break;
                                     }
@@ -906,7 +959,7 @@ foreach ($demandas as $d) {
                         $status_usuario = null;
                         if (!empty($d['usuarios_atribuidos'])) {
                             foreach ($d['usuarios_atribuidos'] as $u_atrib) {
-                                if ($u_atrib['id'] == $_SESSION['usuario_id']) {
+                                if ($u_atrib['id'] == $usuario_id) {
                                     $usuario_logado_atribuido = true;
                                     $status_usuario = $u_atrib['status'];
                                     break;
@@ -934,29 +987,36 @@ foreach ($demandas as $d) {
                                     </form>
                                 </div>
                             <?php elseif ($status_usuario === 'aceito'): ?>
-                                    <form method="POST" action="../controllers/DemandaController.php" class="inline ml-auto">
-                                    <input type="hidden" name="acao" value="atualizar_status">
+                                    <?php error_log("DEBUG: Bloco de status 'aceito' alcançado para Demanda ID: " . $d['id']); ?>
+                                    <script>console.log("DEBUG JS: Bloco de status 'aceito' alcançado para Demanda ID: <?php echo $d['id']; ?>");</script>
+                                    <form method="POST" action="../controllers/DemandaController.php?action=updateStatus" class="d-inline">
                                     <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                                    <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['usuario_id']; ?>">
                                     <input type="hidden" name="novo_status" value="em_andamento">
-                                    <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg" title="Marcar como Em Andamento">
-                                        <i class="fas fa-spinner"></i>
-                                        Realizar Tarefa
+                                    <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['user_id']; ?>">
+                                    <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg">
+                                        <i class="fas fa-clock btn-icon"></i> Realizar Tarefa
                                     </button>
                                 </form>
                             <?php elseif ($status_usuario === 'em_andamento'): ?>
-                                    <form method="POST" action="../controllers/DemandaController.php" class="inline ml-auto">
-                                    <input type="hidden" name="acao" value="atualizar_status">
+                                    <form method="POST" action="../controllers/DemandaController.php?action=updateStatus" class="d-inline">
                                     <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                                    <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['usuario_id']; ?>">
                                     <input type="hidden" name="novo_status" value="concluida">
-                                    <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg" title="Marcar como Concluída">
-                                        <i class="fas fa-check"></i>
-                                        Concluir Minha Parte
+                                    <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['user_id']; ?>">
+                                    <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg">
+                                        <i class="fas fa-check btn-icon"></i> Concluir
                                     </button>
                                 </form>
                             <?php endif; ?>
                         <?php endif; ?>
+
+                        <!-- DEBUG: Adicionado para verificar a lógica de exibição dos botões -->
+                        <script>
+                        console.log('DEBUG - Demanda ID: ', <?php echo json_encode($d['id']); ?>);
+                        console.log('DEBUG - Usuário Logado ID: ', <?php echo json_encode($usuario_id); ?>);
+                        console.log('DEBUG - Status do Usuário nesta Demanda: ', <?php echo json_encode($status_usuario); ?>);
+                        console.log('DEBUG - Usuário Logado Atribuído: ', '<?php echo $usuario_logado_atribuido ? 'Sim' : 'Não'; ?>');
+                        console.log('DEBUG - Usuários Atribuídos (para esta demanda): ', <?php echo json_encode($d['usuarios_atribuidos'], JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS); ?>);
+                        </script>
                     </div>
 
                     <!-- Status dos Usuários -->
@@ -1021,7 +1081,7 @@ foreach ($demandas as $d) {
                          $usuario_pendente = false;
                          if (!empty($d['usuarios_atribuidos'])) {
                              foreach ($d['usuarios_atribuidos'] as $u_atrib) {
-                                 if ($u_atrib['id'] == $_SESSION['usuario_id'] && $u_atrib['status'] === 'pendente') {
+                                 if ($u_atrib['id'] == $usuario_id && $u_atrib['status'] === 'pendente') {
                                      $usuario_pendente = true;
                                      break;
                                  }
@@ -1041,7 +1101,7 @@ foreach ($demandas as $d) {
                             $user_status = null;
                             if (!empty($d['usuarios_atribuidos'])) {
                                 foreach ($d['usuarios_atribuidos'] as $u_atrib) {
-                                    if ($u_atrib['id'] == $_SESSION['usuario_id']) {
+                                    if ($u_atrib['id'] == $usuario_id) {
                                         $user_status = $u_atrib['status'];
                                         break;
                                     }
@@ -1144,7 +1204,7 @@ foreach ($demandas as $d) {
                              $status_usuario = null;
                              if (!empty($d['usuarios_atribuidos'])) {
                                  foreach ($d['usuarios_atribuidos'] as $u_atrib) {
-                                     if ($u_atrib['id'] == $_SESSION['usuario_id']) {
+                                     if ($u_atrib['id'] == $usuario_id) {
                                          $usuario_logado_atribuido = true;
                                          $status_usuario = $u_atrib['status'];
                                          break;
@@ -1172,25 +1232,23 @@ foreach ($demandas as $d) {
                                          </form>
                                      </div>
                                  <?php elseif ($status_usuario === 'aceito'): ?>
-                                     <form method="POST" action="../controllers/DemandaController.php" class="inline ml-auto">
-                                         <input type="hidden" name="acao" value="atualizar_status">
+                                     <?php error_log("DEBUG: Bloco de status 'aceito' alcançado para Demanda ID: " . $d['id']); ?>
+                                     <script>console.log("DEBUG JS: Bloco de status 'aceito' alcançado para Demanda ID: <?php echo $d['id']; ?>");</script>
+                                     <form method="POST" action="../controllers/DemandaController.php?action=updateStatus" class="d-inline">
                                          <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                                         <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['usuario_id']; ?>">
                                          <input type="hidden" name="novo_status" value="em_andamento">
-                                         <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg" title="Marcar como Em Andamento">
-                                             <i class="fas fa-spinner"></i>
-                                             Realizar Tarefa
+                                     <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['user_id']; ?>">
+                                     <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg">
+                                         <i class="fas fa-clock btn-icon"></i> Realizar Tarefa
                                          </button>
                                      </form>
                                  <?php elseif ($status_usuario === 'em_andamento'): ?>
-                                     <form method="POST" action="../controllers/DemandaController.php" class="inline ml-auto">
-                                         <input type="hidden" name="acao" value="atualizar_status">
+                                     <form method="POST" action="../controllers/DemandaController.php?action=updateStatus" class="d-inline">
                                          <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                                         <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['usuario_id']; ?>">
                                          <input type="hidden" name="novo_status" value="concluida">
-                                         <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg" title="Marcar como Concluída">
-                                             <i class="fas fa-check"></i>
-                                             Concluir Minha Parte
+                                     <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['user_id']; ?>">
+                                     <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg">
+                                         <i class="fas fa-check btn-icon"></i> Concluir
                                          </button>
                                      </form>
                                  <?php endif; ?>

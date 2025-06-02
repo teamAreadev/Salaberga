@@ -1,9 +1,30 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+set_error_handler(function(
+    $errno, $errstr, $errfile, $errline
+) {
+    $msg = addslashes("[$errno] $errstr em $errfile na linha $errline");
+    echo "<script>console.log('PHP: $msg');</script>";
+    return false;
+});
+
+set_exception_handler(function($exception) {
+    $msg = addslashes($exception->getMessage() . ' em ' . $exception->getFile() . ' na linha ' . $exception->getLine());
+    echo "<script>console.log('Exceção: $msg');</script>";
+});
+
 // Removido controle de sessão e permissões para acesso livre
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../model/Demanda.php';
 require_once __DIR__ . '/../model/Usuario.php';
 require_once __DIR__ . '/../model/Area.php';
+
 // Função para mapear a área a partir da permissão
 function areaFromPermissao($permissao) {
     if (strpos($permissao, 'adm_area_design') === 0) return 'Design';
@@ -13,16 +34,18 @@ function areaFromPermissao($permissao) {
     if (strpos($permissao, 'usuario') === 0) return 'Usuário Comum';
     return 'Desconhecida';
 }
-// Removido bloqueio de permissão
+
 // Inicializa a conexão com o banco de dados
 $database = Database::getInstance();
-$pdo_salaberga = $database->getSalabergaConnection(); // Conexão centralizada
+$pdo_salaberga = $database->getSalabergaConnection();
 $pdo_area_dev = $database->getAreaDevConnection();
+
 // Inicializa os modelos
 $demanda = new Demanda($pdo_area_dev);
-$usuario = new Usuario($pdo_salaberga); // Busca usuários do banco centralizado
+$usuario = new Usuario($pdo_salaberga);
 $area = new Area($pdo_area_dev);
 $areas = $area->listarAreas();
+
 // Remover áreas duplicadas pelo nome
 $nomesVistos = [];
 $areas_unicas = [];
@@ -33,12 +56,16 @@ foreach ($areas as $a) {
     }
 }
 $areas = $areas_unicas;
+
+$permissoes = $usuario->listarPermissoes();
+
 // Buscar usuários conforme permissões do sistema de demandas
-$id_sistema_demandas = 3; // <-- AJUSTE para o ID correto do sistema de demandas na tabela sistemas
+$id_sistema_demandas = 3;
 $usuarios_permissoes = $usuario->listarUsuariosComPermissoes($id_sistema_demandas);
 $admins_gerais = Usuario::filtrarAdminsGerais($usuarios_permissoes);
 $admins_area = Usuario::filtrarAdminsArea($usuarios_permissoes);
 $usuarios = Usuario::filtrarUsuariosComuns($usuarios_permissoes);
+
 // Processar ações POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
@@ -49,11 +76,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $_POST['titulo'],
                         $_POST['descricao'],
                         $_POST['prioridade'],
-                        1, // admin_id fixo
+                        1,
                         [],
                         null,
                         $_POST['area_id'],
-                        $usuario // Passa o model Usuario
+                        $usuario
                     );
                 }
                 break;
@@ -74,8 +101,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
 // Listar todas as demandas
 $demandas = $demanda->listarDemandas();
+
 // Calcular totais de demandas por status
 $totalDemandas = count($demandas);
 $demandasEmAndamento = 0;
@@ -157,6 +186,7 @@ foreach ($demandas as $d) {
                     'fade-in': 'fadeIn 0.5s ease-out',
                     'slide-up': 'slideUp 0.6s ease-out',
                     'scale-in': 'scaleIn 0.3s ease-out',
+                    'float': 'float 3s ease-in-out infinite',
                 },
                 boxShadow: {
                     'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.36)',
@@ -192,8 +222,8 @@ foreach ($demandas as $d) {
     /* Cards Styles */
     .demand-card {
         background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
-        border-radius: 16px;
-        padding: 1.25rem;
+        border-radius: 20px;
+        padding: 1.75rem;
         margin-bottom: 1rem;
         box-shadow: 0 8px 32px rgba(0,0,0,0.2);
         border: 1px solid rgba(0, 122, 51, 0.1);
@@ -201,10 +231,6 @@ foreach ($demandas as $d) {
         position: relative;
         overflow: hidden;
         cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        padding: 1.25rem; /* Padding padrão para o card */
     }
 
     .demand-card::before {
@@ -220,8 +246,8 @@ foreach ($demandas as $d) {
     }
 
     .demand-card:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(0, 122, 51, 0.15);
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(0, 122, 51, 0.15);
         border-color: rgba(0, 255, 107, 0.3);
     }
 
@@ -229,264 +255,20 @@ foreach ($demandas as $d) {
         transform: scaleX(1);
     }
 
-    .demand-card.no-participants {
-        /* Ajusta o padding inferior e potencialmente outros espaçamentos */
-        padding-bottom: 1.5rem; /* Aumenta ligeiramente o padding inferior */
-        /* Adicionar outras regras se necessário para reduzir espaço vertical */
-    }
-
-    .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 0.75rem;
-    }
-
-    .card-title {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .card-title h3 {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #ffffff;
-        margin-bottom: 0.375rem;
-        line-height: 1.3;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .card-meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.375rem;
-        margin-bottom: 0.375rem;
-    }
-
-    .card-id {
-        font-size: 0.7rem;
-        color: #888888;
-        background: rgba(255, 255, 255, 0.1);
-        padding: 0.2rem 0.4rem;
-        border-radius: 8px;
-    }
-
-    .card-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .card-description {
-        color: #cccccc;
-        font-size: 0.813rem;
-        line-height: 1.4;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .card-details {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
-        padding: 0.75rem;
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 8px;
-    }
-
-    .detail-item {
-        display: flex;
-        flex-direction: column;
-        gap: 0.2rem;
-    }
-
-    .detail-label {
-        font-size: 0.7rem;
-        color: #888888;
-    }
-
-    .detail-value {
-        font-size: 0.813rem;
-        color: #ffffff;
-        font-weight: 500;
-    }
-
-    .card-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 0.75rem; /* Espaço acima dos botões de ação */
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .card-actions {
-        display: flex;
-        gap: 0.375rem;
-    }
-
-    .card-participants {
-        margin-top: 0.75rem; /* Espaço entre o rodapé e a lista de participantes */
-        padding-top: 0.75rem; /* Espaço interno acima da lista de participantes */
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .participants-title {
-        font-size: 0.813rem;
-        color: #888888;
-        margin-bottom: 0.5rem;
-    }
-
-    .participants-list {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .participants-details {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .participant-item {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        padding: 0.5rem;
-        background: rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-    .participant-item:hover {
-        background: rgba(0, 0, 0, 0.2);
-    }
-
-    .participant-info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .participant-name {
-        font-weight: 500;
-        color: #ffffff;
-    }
-
-    .participant-completion {
-        font-size: 0.75rem;
-        color: #888888;
-        padding-left: 0.5rem;
-    }
-
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-
-    .status-badge i {
-        font-size: 0.875rem;
-    }
-
-    .status-badge:hover {
-        transform: scale(1.05);
-    }
-
-    .status-pendente {
-        background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(234, 179, 8, 0.1));
-        color: #fbbf24;
-        border: 1px solid rgba(234, 179, 8, 0.3);
-    }
-
-    .status-aceito {
-        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
-        color: #4ade80;
-        border: 1px solid rgba(34, 197, 94, 0.3);
-    }
-
-    .status-recusado {
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    .status-em_andamento {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
-        color: #60a5fa;
-        border: 1px solid rgba(59, 130, 246, 0.3);
-    }
-
-    .status-concluida {
-        background: rgba(34, 197, 94, 0.2);
-        color: #4ade80;
-        border: 1px solid rgba(34, 197, 94, 0.3);
-    }
-    
-    .status-concluida i {
-        color: #4ade80;
-    }
-
-    .status-cancelada {
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    /* Priority Badges */
-    .priority-badge {
-        padding: 0.2rem 0.5rem;
-        border-radius: 15px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-    }
-
-    .priority-alta {
-        background: rgba(239, 68, 68, 0.2);
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    .priority-media {
-        background: rgba(234, 179, 8, 0.2);
-        color: #fbbf24;
-        border: 1px solid rgba(234, 179, 8, 0.3);
-    }
-
-    .priority-baixa {
-        background: rgba(34, 197, 94, 0.2);
-        color: #4ade80;
-        border: 1px solid rgba(34, 197, 94, 0.3);
-    }
-
-    /* Modal Styles */
-    .modal {
-        background: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(8px);
-        transition: all 0.3s ease;
-    }
-
-    .modal-content {
+    .stats-card {
         background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
-        border: 1px solid rgba(0, 122, 51, 0.2);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-        border-radius: 24px;
-        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        border: 1px solid rgba(0, 122, 51, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 122, 51, 0.1);
     }
 
     /* Button Styles */
@@ -528,8 +310,17 @@ foreach ($demandas as $d) {
         transform: translateX(3px) scale(1.1);
     }
 
-    /* Input Styles */
-    .custom-input, .custom-select {
+    /* Search and Filter Styles */
+    .search-container {
+        background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        border: 1px solid rgba(0, 122, 51, 0.1);
+    }
+
+    .custom-input {
         background: rgba(35, 35, 35, 0.95);
         border: 2px solid rgba(0, 122, 51, 0.2);
         border-radius: 12px;
@@ -539,7 +330,7 @@ foreach ($demandas as $d) {
         font-weight: 500;
     }
 
-    .custom-input:focus, .custom-select:focus {
+    .custom-input:focus {
         border-color: #00FF6B;
         box-shadow: 0 0 0 4px rgba(0, 255, 107, 0.1);
         outline: none;
@@ -549,221 +340,6 @@ foreach ($demandas as $d) {
     .custom-input::placeholder {
         color: #888888;
         font-weight: 400;
-    }
-
-    /* Custom Multi-Select Styles */
-    .custom-multi-select {
-        position: relative;
-        width: 100%;
-    }
-
-    .multi-select-container {
-        background: rgba(35, 35, 35, 0.95);
-        border: 2px solid rgba(0, 122, 51, 0.2);
-        border-radius: 12px;
-        min-height: 50px;
-        padding: 8px 12px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-    }
-
-    .multi-select-container:hover {
-        border-color: rgba(0, 122, 51, 0.4);
-    }
-
-    .multi-select-container.active {
-        border-color: #00FF6B;
-        box-shadow: 0 0 0 4px rgba(0, 255, 107, 0.1);
-    }
-
-    .multi-select-display {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        min-height: 32px;
-        align-items: center;
-    }
-
-    .multi-select-placeholder {
-        color: #888888;
-        font-weight: 400;
-        font-size: 14px;
-    }
-
-    .selected-user-tag {
-        background: linear-gradient(135deg, rgba(0, 122, 51, 0.3), rgba(0, 122, 51, 0.2));
-        border: 1px solid rgba(0, 122, 51, 0.4);
-        border-radius: 20px;
-        padding: 4px 12px;
-        font-size: 12px;
-        font-weight: 500;
-        color: #00FF6B;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        animation: slideIn 0.3s ease;
-        transition: all 0.2s ease;
-    }
-
-    .selected-user-tag:hover {
-        background: linear-gradient(135deg, rgba(0, 122, 51, 0.4), rgba(0, 122, 51, 0.3));
-        transform: scale(1.05);
-    }
-
-    .remove-user-btn {
-        background: rgba(255, 255, 255, 0.2);
-        border: none;
-        border-radius: 50%;
-        width: 16px;
-        height: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 10px;
-        color: #ffffff;
-    }
-
-    .remove-user-btn:hover {
-        background: rgba(239, 68, 68, 0.8);
-        transform: scale(1.1);
-    }
-
-    .multi-select-arrow {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        transition: transform 0.3s ease;
-        color: #888888;
-        pointer-events: none;
-    }
-
-    .multi-select-container.active .multi-select-arrow {
-        transform: translateY(-50%) rotate(180deg);
-    }
-
-    .multi-select-dropdown {
-        position: absolute;
-        bottom: 100%; /* Position above the container */
-        left: 0;
-        right: 0;
-        background: rgba(35, 35, 35, 0.98);
-        border: 2px solid rgba(0, 122, 51, 0.2);
-        border-radius: 12px;
-        margin-bottom: 4px; /* Space between container and dropdown */
-        max-height: 200px; /* Limit height */
-        overflow-y: auto;
-        z-index: 1000;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(10px); /* Start slightly below */
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px); /* Optional: add blur effect */
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Optional: add shadow */
-    }
-
-    .multi-select-dropdown.active {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0); /* Slide up to final position */
-    }
-
-    .multi-select-search {
-        padding: 12px;
-        border-bottom: 1px solid rgba(0, 122, 51, 0.1);
-    }
-
-    .multi-select-search input {
-        width: 100%;
-        background: rgba(45, 45, 45, 0.8);
-        border: 1px solid rgba(0, 122, 51, 0.2);
-        border-radius: 8px;
-        padding: 8px 12px;
-        color: #ffffff;
-        font-size: 14px;
-        outline: none;
-        transition: all 0.3s ease;
-    }
-
-    .multi-select-search input:focus {
-        border-color: #00FF6B;
-        box-shadow: 0 0 0 2px rgba(0, 255, 107, 0.1);
-    }
-
-    .multi-select-search input::placeholder {
-        color: #888888;
-    }
-
-    .multi-select-option {
-        padding: 12px 16px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .multi-select-option:last-child {
-        border-bottom: none;
-    }
-
-    .multi-select-option:hover {
-        background: rgba(0, 122, 51, 0.1);
-        color: #00FF6B;
-    }
-
-    .multi-select-option.selected {
-        background: rgba(0, 122, 51, 0.2);
-        color: #00FF6B;
-    }
-
-    .multi-select-option.selected::before {
-        content: '✓';
-        font-weight: bold;
-        margin-right: 8px;
-    }
-
-    .user-avatar {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #007A33, #00FF6B);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        font-size: 12px;
-        color: white;
-        flex-shrink: 0;
-    }
-
-    .user-info {
-        flex: 1;
-    }
-
-    .user-name {
-        font-weight: 500;
-        font-size: 14px;
-        margin-bottom: 2px;
-    }
-
-    .user-email {
-        font-size: 12px;
-        color: #888888;
-    }
-
-    /* Search and Filter Styles */
-    .search-container {
-        background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
-        border-radius: 20px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-        border: 1px solid rgba(0, 122, 51, 0.1);
     }
 
     .filter-btn {
@@ -788,6 +364,247 @@ foreach ($demandas as $d) {
         border-color: #00FF6B;
         background: rgba(0, 122, 51, 0.1);
         transform: translateY(-2px);
+    }
+
+    /* Status Badges */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .status-badge i {
+        font-size: 0.875rem;
+    }
+
+    .status-badge:hover {
+        transform: scale(1.05);
+    }
+
+    .status-pendente {
+        background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(234, 179, 8, 0.1));
+        color: #fbbf24;
+        border: 1px solid rgba(234, 179, 8, 0.3);
+    }
+
+    .status-aceito {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-aceito i {
+        color: #4ade80;
+    }
+
+    .status-em_andamento {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+        color: #60a5fa;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .status-concluida {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .status-concluida i {
+        color: #4ade80;
+    }
+
+    .status-concluido {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-concluido i {
+        color: #4ade80;
+    }
+
+    .status-cancelada {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .status-cancelada i {
+        color: #f87171;
+    }
+
+    .status-recusado {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .status-recusado i {
+        color: #f87171;
+    }
+
+    /* Priority Badges */
+    .priority-badge {
+        padding: 0.2rem 0.5rem;
+        border-radius: 15px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+    }
+
+    .priority-alta {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .priority-media {
+        background: rgba(234, 179, 8, 0.2);
+        color: #fbbf24;
+        border: 1px solid rgba(234, 179, 8, 0.3);
+    }
+
+    .priority-baixa {
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    /* Modal Styles */
+    .modal {
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(12px);
+        transition: all 0.3s ease;
+    }
+
+    .modal-content {
+        background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
+        border: 1px solid rgba(0, 122, 51, 0.2);
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        border-radius: 24px;
+        backdrop-filter: blur(20px);
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes scaleIn {
+        from {
+        opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+        opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    .slide-up {
+        animation: slideUp 0.6s ease-out forwards;
+    }
+
+    .scale-in {
+        animation: scaleIn 0.3s ease-out forwards;
+    }
+
+    .float {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+        width: 100%;
+        height: 6px;
+        background: rgba(0, 122, 51, 0.1);
+        border-radius: 3px;
+        overflow: hidden;
+        margin: 1rem 0;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #007A33, #00FF6B);
+        border-radius: 3px;
+        transition: width 0.3s ease;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #1a1a1a;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #007A33, #00FF6B);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #00FF6B, #007A33);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #888888;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .demand-card {
+            padding: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .stats-card {
+            padding: 1.5rem;
+        }
+        
+        .search-container {
+            padding: 1.5rem;
+        }
     }
 
     /* Loading Animation */
@@ -831,50 +648,91 @@ foreach ($demandas as $d) {
         transform: none;
     }
 
-    /* Empty State */
-    .empty-state {
-        text-align: center;
-        padding: 4rem 2rem;
-        color: #888888;
-    }
-
-    .empty-state i {
-        font-size: 4rem;
-        margin-bottom: 1rem;
-        opacity: 0.5;
-    }
-
-    /* Hide original select */
-    .hidden-select {
-        display: none;
-    }
-
-    /* Estilização para o status 'concluido' dos participantes */
-    .status-concluido {
-        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
-        color: #4ade80;
-        border: 1px solid rgba(34, 197, 94, 0.3);
-    }
-
-    .status-concluido i {
-        color: #4ade80;
-    }
-
-    .prazo-info-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        background: rgba(0, 122, 51, 0.2); /* Subtle green background */
-        color: #4ade80; /* Green text color */
-        font-size: 0.875rem;
+    /* Select Styles */
+    .custom-select {
+        background: rgba(35, 35, 35, 0.95);
+        border: 2px solid rgba(0, 122, 51, 0.2);
+        border-radius: 12px;
+        padding: 0.875rem 1.25rem;
+        color: #ffffff;
+        transition: all 0.3s ease;
         font-weight: 500;
-        border: 1px solid rgba(0, 122, 51, 0.3);
+        min-width: 200px;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
     }
 
-    .prazo-info-badge i {
-        color: #00FF6B; /* Brighter green icon */
+    .custom-select:focus {
+        border-color: #00FF6B;
+        box-shadow: 0 0 0 4px rgba(0, 255, 107, 0.1);
+        outline: none;
+        background: rgba(35, 35, 35, 1);
+    }
+
+    .custom-select option {
+        background: #232323;
+        color: #ffffff;
+        padding: 1rem;
+    }
+
+    .custom-select:hover {
+        border-color: rgba(0, 122, 51, 0.4);
+    }
+
+    .select-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .select-wrapper::after {
+        content: '\f078';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #888888;
+        pointer-events: none;
+    }
+
+    .demand-card h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 0.375rem;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .card-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+        margin-bottom: 0.375rem;
+    }
+
+    /* User Cards */
+    .user-card {
+        background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        border: 1px solid rgba(0, 122, 51, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .user-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 122, 51, 0.1);
+        border-color: rgba(0, 255, 107, 0.3);
     }
 </style>
 
@@ -899,16 +757,15 @@ foreach ($demandas as $d) {
                     <!-- Informações do Usuário -->
                     <div class="flex items-center gap-2 text-gray-300 bg-dark-300/50 px-4 py-2 rounded-lg">
                         <i class="fas fa-user-shield text-primary-50"></i>
-                        <span class="text-sm truncate max-w-[200px]"><?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></span>
+                        <span class="text-sm truncate max-w-[200px]"><?php echo htmlspecialchars($_SESSION['Nome'] ?? 'Admin'); ?></span>
+                        <span class="bg-red-600 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                            Admin
+                        </span>
                     </div>
 
                     <!-- Botões de Ação -->
                     <div class="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-end">
-                        <a href="relatorio.php" class="custom-btn bg-primary-500 hover:bg-primary-600 text-white py-2 px-4 rounded-lg flex items-center gap-2 text-sm w-full sm:w-auto justify-center">
-                            <i class="fas fa-chart-bar btn-icon"></i>
-                            <span>Relatórios</span>
-                        </a>
-                        <a href="logout.php" class="custom-btn bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-2 px-4 rounded-lg flex items-center gap-2 text-sm w-full sm:w-auto justify-center">
+                        <a href="../../../main/views/autenticacao/login.php?sair=true" class="custom-btn bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-2 px-4 rounded-lg flex items-center gap-2 text-sm w-full sm:w-auto justify-center">
                             <i class="fas fa-sign-out-alt btn-icon"></i>
                             <span>Sair</span>
                         </a>
@@ -918,22 +775,48 @@ foreach ($demandas as $d) {
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
-        <?php if (!empty($erro)): ?>
-        <div class="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg mb-6 fade-in">
-            <div class="flex items-center gap-2">
-                <i class="fas fa-exclamation-circle"></i>
-                <span><?php echo htmlspecialchars($erro); ?></span>
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 fade-in">
+            <div class="stats-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-medium">Total de Demandas</p>
+                        <p class="text-3xl font-bold text-white"><?php echo $totalDemandas; ?></p>
+            </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-50 rounded-full flex items-center justify-center">
+                        <i class="fas fa-tasks text-white text-xl"></i>
+        </div>
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-medium">Em Andamento</p>
+                        <p class="text-3xl font-bold text-white"><?php echo $demandasEmAndamento; ?></p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-400 rounded-full flex items-center justify-center">
+                        <i class="fas fa-spinner text-white text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-medium">Concluídas</p>
+                        <p class="text-3xl font-bold text-white"><?php echo $demandasConcluidas; ?></p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-400 rounded-full flex items-center justify-center">
+                        <i class="fas fa-check-circle text-white text-xl"></i>
+                    </div>
+                </div>
             </div>
         </div>
-        <?php endif; ?>
-
-        <!-- Espaço restaurado antes dos filtros -->
-        <div style="height: 2rem;"></div>
 
         <!-- Search and Filters -->
-        <div class="search-container slide-up" style="animation-delay: 0.5s">
+        <div class="search-container slide-up" style="animation-delay: 0.6s">
             <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
                 <div class="flex-1 w-full lg:max-w-md">
                     <div class="relative">
@@ -971,15 +854,13 @@ foreach ($demandas as $d) {
                 <button onclick="openModal('criarDemandaModal')" class="custom-btn bg-gradient-to-r from-primary-500 to-primary-50 hover:from-primary-400 hover:to-primary-100 text-white font-bold py-3 px-6 rounded-lg flex items-center gap-2">
                     <i class="fas fa-plus btn-icon"></i> Nova Demanda
                 </button>
-
-               
             </div>
         </div>
 
-        <!-- Demands Cards -->
+        <!-- Demands Section -->
         <div class="mb-8">
             <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                <i class="fas fa-tasks text-primary-50"></i>
+                <i class="fas fa-clipboard-list text-primary-50"></i>
                 Gerenciar Demandas
             </h2>
             
@@ -990,17 +871,11 @@ foreach ($demandas as $d) {
                     <?php 
                     $count_espera = 0;
                     foreach ($demandas as $index => $d): 
-                        // Verifica se o status é 'pendente' para a seção 'Em Espera'
                         if ($d['status'] === 'pendente'):
                             $count_espera++;
                     ?>
                 
-                <?php
-                    // Determina se há participantes atribuídos para ajustar o padding
-                    $has_participants = !empty($d['usuarios_atribuidos']);
-                    ?>
-
-                    <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300 <?php echo $has_participants ? '' : 'no-participants'; ?>"
+                <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300"
                     data-title="<?php echo htmlspecialchars($d['titulo']); ?>"
                     data-description="<?php echo htmlspecialchars($d['descricao']); ?>"
                     data-status="<?php echo $d['status']; ?>"
@@ -1027,7 +902,6 @@ foreach ($demandas as $d) {
                                     $display_status = $d['status'];
                                     $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
 
-                                        // Lógica para status do card baseado no participante único concluído (se houver)
                                     if (!empty($d['usuarios_atribuidos']) && count($d['usuarios_atribuidos']) === 1) {
                                                         $single_participant_status = $d['usuarios_atribuidos'][0]['status'] ?? null;
                                                         if ($single_participant_status === 'concluido') {
@@ -1068,37 +942,31 @@ foreach ($demandas as $d) {
                                 </p>
                             </div>
                             <div>
-                                    <?php if ($d['status'] === 'concluida'): ?>
-                                        <span class="text-gray-400">Concluído em:</span>
+                                <span class="text-gray-400">
+                                    <?php echo !empty($d['data_conclusao']) ? 'Concluído em:' : 'Prazo:'; ?>
+                                </span>
                                 <p class="text-white font-medium">
-                                            <?php echo date('d/m/Y', strtotime($d['data_conclusao'])); ?>
-                                        </p>
-                                        <p class="text-gray-400">
-                                            <?php echo date('H:i', strtotime($d['data_conclusao'])); ?>
-                                        </p>
-                                    <?php else: ?>
-                                        <span class="text-gray-400">Prazo:</span>
                                     <?php 
+                                    if (!empty($d['data_conclusao'])) {
+                                        echo date('d/m/Y', strtotime($d['data_conclusao']));
+                                    } else {
                                         $dias_prazo = 0;
                                         switch ($d['prioridade']) {
-                                            case 'baixa':
-                                                $dias_prazo = 5;
-                                                break;
-                                            case 'media':
-                                                $dias_prazo = 3;
-                                                break;
-                                            case 'alta':
-                                                $dias_prazo = 1;
-                                                break;
+                                            case 'baixa': $dias_prazo = 5; break;
+                                            case 'media': $dias_prazo = 3; break;
+                                            case 'alta': $dias_prazo = 1; break;
                                         }
-                                        $data_prazo = date('d/m/Y', strtotime($d['data_criacao'] . " +{$dias_prazo} days"));
-                                        $data_prazo_hora = date('H:i', strtotime($d['data_criacao']));
-                                        ?>
-                                        <p class="text-white font-medium">
-                                            <?php echo $data_prazo; ?>
-                                        </p>
+                                        echo date('d/m/Y', strtotime($d['data_criacao'] . " +{$dias_prazo} days"));
+                                    }
+                                    ?>
+                                </p>
+                                <?php if (!empty($d['data_conclusao'])): ?>
                                 <p class="text-gray-400">
-                                            <?php echo $data_prazo_hora; ?>
+                                    <?php echo date('H:i', strtotime($d['data_conclusao'])); ?>
+                                </p>
+                                <?php else: ?>
+                                <p class="text-gray-400">
+                                    <?php echo date('H:i', strtotime($d['data_criacao'])); ?>
                                 </p>
                                 <?php endif; ?>
                             </div>
@@ -1107,7 +975,14 @@ foreach ($demandas as $d) {
                     
                     <!-- Card Actions -->
                     <div class="flex items-center justify-between pt-4 border-t border-gray-700">
-                            <div class="flex items-center gap-2">
+                        <button 
+                            onclick="mostrarDescricao('<?php echo htmlspecialchars($d['titulo']); ?>', '<?php echo htmlspecialchars($d['descricao']); ?>', '<?php echo $d['status']; ?>', '<?php echo date('d/m/Y H:i', strtotime($d['data_criacao'])); ?>', '<?php echo !empty($d['data_conclusao']) ? date('d/m/Y H:i', strtotime($d['data_conclusao'])) : ''; ?>')"
+                            class="custom-btn bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg"
+                            title="Ver detalhes">
+                            <i class="fas fa-eye"></i>
+                        </button>
+
+                        <div class="flex items-center gap-2 ml-auto">
                                 <?php if ($d['status'] !== 'concluida'): ?>
                                     <?php if ($d['status'] === 'pendente'): ?>
                                         <button onclick="realizarTarefa(<?php echo $d['id']; ?>, '<?php echo $d['status']; ?>')" 
@@ -1139,7 +1014,7 @@ foreach ($demandas as $d) {
                             <div class="flex flex-wrap gap-2">
                                 <?php foreach ($d['usuarios_atribuidos'] as $u_atrib): ?>
                                     <div class="flex items-center gap-2">
-                                        <span class="text-xs text-gray-300"><?php echo htmlspecialchars($u_atrib['nome']); ?>:</span>
+                                        <span class="text-xs text-gray-300"><?php echo isset($u_atrib['nome']) && $u_atrib['nome'] ? htmlspecialchars($u_atrib['nome']) : '<span class="text-gray-500">Sem nome</span>'; ?>:</span>
                                         <span class="status-badge status-<?php echo $u_atrib['status']; ?>">
                                             <?php
                                             $statusIconsParticipante = [
@@ -1160,7 +1035,7 @@ foreach ($demandas as $d) {
                         <?php endif; ?>
                     </div>
                     <?php 
-                        endif; // Fim da condição 'pendente'
+                        endif;
                     endforeach; 
                     ?>
                 </div>
@@ -1173,25 +1048,18 @@ foreach ($demandas as $d) {
                 <?php endif; ?>
             </div>
 
-        
-             <!-- O resto dos cards (Concluídas, Canceladas, etc.) -->
+            <!-- Seção Outras Demandas -->
             <div class="mb-8">
                  <h3 class="text-xl font-bold text-white mb-4">Outras Demandas</h3>
                  <div id="demandasOutrasContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
                      <?php 
                      $count_outras = 0;
                      foreach ($demandas as $index => $d): 
-                         // Verifica se o status NÃO é 'pendente' para a seção 'Outras Demandas'
                          if ($d['status'] !== 'pendente'):
                              $count_outras++;
                      ?>
                      
-                     <?php
-                     // Determina se há participantes atribuídos para ajustar o padding
-                     $has_participants = !empty($d['usuarios_atribuidos']);
-                     ?>
-
-                     <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300 <?php echo $has_participants ? '' : 'no-participants'; ?>"
+                     <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300"
                          data-title="<?php echo htmlspecialchars($d['titulo']); ?>"
                          data-description="<?php echo htmlspecialchars($d['descricao']); ?>"
                          data-status="<?php echo $d['status']; ?>"
@@ -1218,7 +1086,6 @@ foreach ($demandas as $d) {
                                          $display_status = $d['status'];
                                          $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
 
-                                         // Lógica para status do card baseado no participante único concluído (se houver)
                                          if (!empty($d['usuarios_atribuidos']) && count($d['usuarios_atribuidos']) === 1) {
                                              $single_participant_status = $d['usuarios_atribuidos'][0]['status'] ?? null;
                                              if ($single_participant_status === 'concluido') {
@@ -1259,37 +1126,31 @@ foreach ($demandas as $d) {
                                      </p>
                                  </div>
                                  <div>
-                                     <?php if ($d['status'] === 'concluida'): ?>
-                                         <span class="text-gray-400">Concluído em:</span>
+                                     <span class="text-gray-400">
+                                         <?php echo !empty($d['data_conclusao']) ? 'Concluído em:' : 'Prazo:'; ?>
+                                     </span>
                                          <p class="text-white font-medium">
-                                             <?php echo date('d/m/Y', strtotime($d['data_conclusao'])); ?>
-                                         </p>
-                                         <p class="text-gray-400">
-                                             <?php echo date('H:i', strtotime($d['data_conclusao'])); ?>
-                                         </p>
-                                     <?php else: ?>
-                                         <span class="text-gray-400">Prazo:</span>
                                          <?php
+                                         if (!empty($d['data_conclusao'])) {
+                                             echo date('d/m/Y', strtotime($d['data_conclusao']));
+                                         } else {
                                          $dias_prazo = 0;
                                          switch ($d['prioridade']) {
-                                             case 'baixa':
-                                                 $dias_prazo = 5;
-                                                 break;
-                                             case 'media':
-                                                 $dias_prazo = 3;
-                                                 break;
-                                             case 'alta':
-                                                 $dias_prazo = 1;
-                                                 break;
+                                                 case 'baixa': $dias_prazo = 5; break;
+                                                 case 'media': $dias_prazo = 3; break;
+                                                 case 'alta': $dias_prazo = 1; break;
+                                             }
+                                             echo date('d/m/Y', strtotime($d['data_criacao'] . " +{$dias_prazo} days"));
                                          }
-                                         $data_prazo = date('d/m/Y', strtotime($d['data_criacao'] . " +{$dias_prazo} days"));
-                                         $data_prazo_hora = date('H:i', strtotime($d['data_criacao']));
                                          ?>
-                                         <p class="text-white font-medium">
-                                             <?php echo $data_prazo; ?>
-                                         </p>
+                                     </p>
+                                     <?php if (!empty($d['data_conclusao'])): ?>
                                          <p class="text-gray-400">
-                                             <?php echo $data_prazo_hora; ?>
+                                         <?php echo date('H:i', strtotime($d['data_conclusao'])); ?>
+                                     </p>
+                                     <?php else: ?>
+                                     <p class="text-gray-400">
+                                         <?php echo date('H:i', strtotime($d['data_criacao'])); ?>
                                          </p>
                                      <?php endif; ?>
                                  </div>
@@ -1298,7 +1159,14 @@ foreach ($demandas as $d) {
                          
                          <!-- Card Actions -->
                          <div class="flex items-center justify-between pt-4 border-t border-gray-700">
-                        <div class="flex items-center gap-2">
+                             <button 
+                                 onclick="mostrarDescricao('<?php echo htmlspecialchars($d['titulo']); ?>', '<?php echo htmlspecialchars($d['descricao']); ?>', '<?php echo $d['status']; ?>', '<?php echo date('d/m/Y H:i', strtotime($d['data_criacao'])); ?>', '<?php echo !empty($d['data_conclusao']) ? date('d/m/Y H:i', strtotime($d['data_conclusao'])) : ''; ?>')"
+                                 class="custom-btn bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg"
+                                 title="Ver detalhes">
+                                 <i class="fas fa-eye"></i>
+                             </button>
+
+                             <div class="flex items-center gap-2 ml-auto">
                             <?php if ($d['status'] !== 'concluida'): ?>
                                 <?php if ($d['status'] === 'pendente'): ?>
                                          <button onclick="realizarTarefa(<?php echo $d['id']; ?>, '<?php echo $d['status']; ?>')" 
@@ -1330,7 +1198,7 @@ foreach ($demandas as $d) {
                         <div class="flex flex-wrap gap-2">
                             <?php foreach ($d['usuarios_atribuidos'] as $u_atrib): ?>
                                 <div class="flex items-center gap-2">
-                                    <span class="text-xs text-gray-300"><?php echo htmlspecialchars($u_atrib['nome']); ?>:</span>
+                                    <span class="text-xs text-gray-300"><?php echo isset($u_atrib['nome']) && $u_atrib['nome'] ? htmlspecialchars($u_atrib['nome']) : '<span class="text-gray-500">Sem nome</span>'; ?>:</span>
                                     <span class="status-badge status-<?php echo $u_atrib['status']; ?>">
                                         <?php
                                         $statusIconsParticipante = [
@@ -1351,7 +1219,7 @@ foreach ($demandas as $d) {
                     <?php endif; ?>
                 </div>
                      <?php 
-                         endif; // Fim da condição para 'Outras Demandas'
+                         endif;
                      endforeach; 
                      ?>
             </div>
@@ -1363,9 +1231,6 @@ foreach ($demandas as $d) {
             </div>
                  <?php endif; ?>
              </div>
-
-            
-            <!-- O Empty State geral foi removido daqui -->
         </div>
 
         <!-- User Management Section -->
@@ -1392,7 +1257,7 @@ foreach ($demandas as $d) {
                         </div>
                         <div class="flex-1">
                             <h3 class="text-lg font-semibold text-white">
-                                <?php echo htmlspecialchars($user['nome']); ?>
+                                <?php echo isset($user['nome']) && $user['nome'] ? htmlspecialchars($user['nome']) : '<span class="text-gray-500">Sem nome</span>'; ?>
                             </h3>
                             <p class="text-gray-400 text-sm"><?php echo htmlspecialchars($user['email']); ?></p>
                             <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full bg-red-500/20 text-red-400">
@@ -1417,11 +1282,41 @@ foreach ($demandas as $d) {
                         </div>
                         <div class="flex-1">
                             <h3 class="text-lg font-semibold text-white">
-                                <?php echo htmlspecialchars($user['nome']); ?>
+                                <?php echo isset($user['nome']) && $user['nome'] ? htmlspecialchars($user['nome']) : '<span class="text-gray-500">Sem nome</span>'; ?>
                             </h3>
                             <p class="text-gray-400 text-sm"><?php echo htmlspecialchars($user['email']); ?></p>
                             <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full bg-yellow-500/20 text-yellow-400">
                                 Admin de Área - <?php echo areaFromPermissao($user['permissao']); ?>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+
+            <!-- Usuários de Área -->
+            <?php
+            $usuarios_area = array_filter($usuarios, function($user) {
+                return strpos($user['permissao'], 'usuario_area_') === 0;
+            });
+            ?>
+            <?php if (!empty($usuarios_area)): ?>
+            <h3 class="text-lg font-semibold text-primary-100 mb-2">Usuários de Área</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                <?php foreach ($usuarios_area as $index => $user): ?>
+                <div class="user-card fade-in" style="animation-delay: <?php echo ($index * 0.1); ?>s">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white">
+                                <?php echo isset($user['nome']) && $user['nome'] ? htmlspecialchars($user['nome']) : '<span class="text-gray-500">Sem nome</span>'; ?>
+                            </h3>
+                            <p class="text-gray-400 text-sm"><?php echo htmlspecialchars($user['email']); ?></p>
+                            <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">
+                                Usuário de Área - <?php echo areaFromPermissao($user['permissao']); ?>
                             </span>
                         </div>
                     </div>
@@ -1441,7 +1336,7 @@ foreach ($demandas as $d) {
                         </div>
                         <div class="flex-1">
                             <h3 class="text-lg font-semibold text-white">
-                                <?php echo htmlspecialchars($user['nome']); ?>
+                                <?php echo isset($user['nome']) && $user['nome'] ? htmlspecialchars($user['nome']) : '<span class="text-gray-500">Sem nome</span>'; ?>
                             </h3>
                             <p class="text-gray-400 text-sm"><?php echo htmlspecialchars($user['email']); ?></p>
                             <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">
@@ -1454,6 +1349,36 @@ foreach ($demandas as $d) {
             </div>
         </div>
     </main>
+
+    <!-- Modal de Descrição -->
+    <div id="modalDescricao" class="modal fixed inset-0 hidden items-center justify-center p-4 z-50">
+        <div class="modal-content w-full max-w-2xl p-8 scale-in">
+            <div class="flex justify-between items-start mb-6">
+                <h3 id="modalTitulo" class="text-2xl font-bold text-white pr-4"></h3>
+                <button onclick="closeModal('modalDescricao')" class="text-gray-400 hover:text-white transition-colors p-2">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="mb-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <span id="modalStatus" class="status-badge"></span>
+                    <span class="text-gray-400 text-sm" id="modalDates"></span>
+                </div>
+            </div>
+            
+            <div class="bg-gray-800/50 rounded-lg p-4 mb-6">
+                <h4 class="text-sm font-semibold text-gray-400 mb-2">Descrição:</h4>
+                <p id="modalDescricaoTexto" class="text-gray-300 text-base leading-relaxed"></p>
+            </div>
+            
+            <div class="flex justify-end">
+                <button onclick="closeModal('modalDescricao')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Create Demand Modal -->
     <div id="criarDemandaModal" class="modal fixed inset-0 hidden items-center justify-center p-4 z-50">
@@ -1529,16 +1454,26 @@ foreach ($demandas as $d) {
                 </div>
                 <div>
                     <label for="tipo" class="block text-sm font-medium text-gray-300 mb-2">Tipo de Usuário</label>
-                    <select id="tipo" name="tipo" required class="custom-select w-full">
-                        <option value="usuario">Usuário Comum</option>
-                        <option value="admin">Administrador</option>
+                    <select id="tipo" name="tipo" required class="custom-select w-full" onchange="toggleAreaField()">
+                        <option value="">Selecione o tipo/permissão</option>
+                        <optgroup label="Usuários">
+                            <option value="usuario_area_dev">Usuário - Área de Desenvolvimento</option>
+                            <option value="usuario_area_design">Usuário - Área de Design</option>
+                            <option value="usuario_area_suporte">Usuário - Área de Suporte</option>
+                        </optgroup>
+                        <optgroup label="Administradores">
+                            <option value="adm_area_dev">Administrador - Área de Desenvolvimento</option>
+                            <option value="adm_area_design">Administrador - Área de Design</option>
+                            <option value="adm_area_suporte">Administrador - Área de Suporte</option>
+                            <option value="adm_geral">Administrador Geral</option>
+                        </optgroup>
                     </select>
                 </div>
                 <div class="flex justify-end gap-4 mt-6">
                     <button type="button" onclick="closeModal('criarUsuarioModal')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
                         Cancelar
                     </button>
-                    <button type="submit" name="criar_usuario" class="custom-btn bg-gradient-to-r from-secondary-500 to-secondary-400 hover:from-secondary-400 hover:to-secondary-300 text-white font-bold py-2 px-4 rounded-lg">
+                    <button type="submit" name="criar_usuario" class="custom-btn bg-gradient-to-r from-primary-500 to-primary-50 hover:from-primary-400 hover:to-primary-100 text-white font-bold py-2 px-4 rounded-lg">
                         Criar Usuário
                     </button>
                 </div>
@@ -1594,7 +1529,6 @@ foreach ($demandas as $d) {
     <div id="excluirDemandaModal" class="modal fixed inset-0 hidden items-center justify-center p-4 z-50">
         <div class="modal-content w-full max-w-md p-8 scale-in">
             <div class="flex flex-col items-center text-center">
-                <!-- Ícone de Alerta -->
                 <div class="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-6">
                     <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
             </div>
@@ -1628,161 +1562,26 @@ foreach ($demandas as $d) {
     </div>
 
     <script>
-        // Multi-Select functionality
-        const multiSelectData = {};
-
-        function initializeMultiSelect(selectId) {
-            if (!multiSelectData[selectId]) {
-                multiSelectData[selectId] = {
-                    selectedUsers: [],
-                    isOpen: false
-                };
-            }
-        }
-
-        function toggleMultiSelect(selectId) {
-            initializeMultiSelect(selectId);
-            
-            const container = document.querySelector(`#${selectId}_dropdown`).parentElement.querySelector('.multi-select-container');
-            const dropdown = document.getElementById(`${selectId}_dropdown`);
-            
-            // Close other dropdowns
-            document.querySelectorAll('.multi-select-dropdown.active').forEach(dd => {
-                if (dd.id !== `${selectId}_dropdown`) {
-                    dd.classList.remove('active');
-                    dd.parentElement.querySelector('.multi-select-container').classList.remove('active');
-                }
-            });
-            
-            multiSelectData[selectId].isOpen = !multiSelectData[selectId].isOpen;
-            
-            if (multiSelectData[selectId].isOpen) {
-                container.classList.add('active');
-                dropdown.classList.add('active');
-            } else {
-                container.classList.remove('active');
-                dropdown.classList.remove('active');
-            }
-        }
-
-        function toggleUserSelection(selectId, userId, userName, userEmail) {
-            initializeMultiSelect(selectId);
-            
-            const selectedUsers = multiSelectData[selectId].selectedUsers;
-            const existingIndex = selectedUsers.findIndex(user => user.id === userId);
-            
-            if (existingIndex > -1) {
-                // Remove user
-                selectedUsers.splice(existingIndex, 1);
-            } else {
-                // Add user
-                selectedUsers.push({
-                    id: userId,
-                    name: userName,
-                    email: userEmail
-                });
-            }
-            
-            updateMultiSelectDisplay(selectId);
-            updateHiddenSelect(selectId);
-            updateOptionStates(selectId);
-        }
-
-        function updateMultiSelectDisplay(selectId) {
-            const display = document.getElementById(`${selectId}_display`);
-            const selectedUsers = multiSelectData[selectId].selectedUsers;
-            
-            if (selectedUsers.length === 0) {
-                display.innerHTML = '<span class="multi-select-placeholder">Selecione os usuários</span>';
-            } else {
-                display.innerHTML = selectedUsers.map(user => `
-                    <div class="selected-user-tag">
-                        <span>${user.name}</span>
-                        <button type="button" class="remove-user-btn" onclick="removeUser('${selectId}', ${user.id})">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function updateHiddenSelect(selectId) {
-            const hiddenSelect = document.getElementById(`${selectId}_hidden`);
-            const selectedUsers = multiSelectData[selectId].selectedUsers;
-            
-            // Clear all selections
-            Array.from(hiddenSelect.options).forEach(option => {
-                option.selected = false;
-            });
-            
-            // Select the chosen users
-            selectedUsers.forEach(user => {
-                const option = hiddenSelect.querySelector(`option[value="${user.id}"]`);
-                if (option) {
-                    option.selected = true;
-                }
-            });
-        }
-
-        function updateOptionStates(selectId) {
-            const selectedUsers = multiSelectData[selectId].selectedUsers;
-            const options = document.querySelectorAll(`#${selectId}_options .multi-select-option`);
-            
-            options.forEach(option => {
-                const userId = parseInt(option.dataset.value);
-                const isSelected = selectedUsers.some(user => user.id === userId);
-                
-                if (isSelected) {
-                    option.classList.add('selected');
-                } else {
-                    option.classList.remove('selected');
-                }
-            });
-        }
-
-        function removeUser(selectId, userId) {
-            const selectedUsers = multiSelectData[selectId].selectedUsers;
-            const index = selectedUsers.findIndex(user => user.id === userId);
-            
-            if (index > -1) {
-                selectedUsers.splice(index, 1);
-                updateMultiSelectDisplay(selectId);
-                updateHiddenSelect(selectId);
-                updateOptionStates(selectId);
-            }
-        }
-
-        function filterUsers(selectId, searchTerm) {
-            const options = document.querySelectorAll(`#${selectId}_options .multi-select-option`);
-            const term = searchTerm.toLowerCase();
-            
-            options.forEach(option => {
-                const userName = option.querySelector('.user-name').textContent.toLowerCase();
-                const userEmail = option.querySelector('.user-email').textContent.toLowerCase();
-                
-                if (userName.includes(term) || userEmail.includes(term)) {
-                    option.style.display = 'flex';
-                } else {
-                    option.style.display = 'none';
-                }
-            });
-        }
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('.custom-multi-select')) {
-                document.querySelectorAll('.multi-select-dropdown.active').forEach(dropdown => {
-                    dropdown.classList.remove('active');
-                    dropdown.parentElement.querySelector('.multi-select-container').classList.remove('active');
-                });
-                
-                Object.keys(multiSelectData).forEach(selectId => {
-                    multiSelectData[selectId].isOpen = false;
-                });
-            }
-        });
-
         // Modal Functions
+        function mostrarDescricao(titulo, descricao, status, dataCriacao, dataConclusao) {
+            document.getElementById('modalTitulo').textContent = titulo;
+            document.getElementById('modalDescricaoTexto').textContent = descricao;
+            
+            // Update status badge
+            const statusBadge = document.getElementById('modalStatus');
+            statusBadge.textContent = status;
+            statusBadge.className = `status-badge status-${status.toLowerCase().replace(' ', '-')}`;
+            
+            // Update dates
+            let datesText = `Criado em: ${dataCriacao}`;
+            if (dataConclusao) {
+                datesText += ` • Concluído em: ${dataConclusao}`;
+            }
+            document.getElementById('modalDates').textContent = datesText;
+            
+            openModal('modalDescricao');
+        }
+
         function openModal(modalId) {
             const modal = document.getElementById(modalId);
             modal.classList.remove('hidden');
@@ -1795,26 +1594,6 @@ foreach ($demandas as $d) {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
             document.body.style.overflow = 'auto';
-            
-            // Reset multi-selects when closing modals
-            if (modalId === 'criarDemandaModal') {
-                resetMultiSelect('usuario_id');
-            } else if (modalId === 'editarDemandaModal') {
-                resetMultiSelect('editar_usuario_id');
-            }
-        }
-
-        function resetMultiSelect(selectId) {
-            if (multiSelectData[selectId]) {
-                multiSelectData[selectId].selectedUsers = [];
-                multiSelectData[selectId].isOpen = false;
-                updateMultiSelectDisplay(selectId);
-                updateHiddenSelect(selectId);
-                updateOptionStates(selectId);
-                
-                const container = document.querySelector(`#${selectId}_dropdown`).parentElement.querySelector('.multi-select-container');
-                container.classList.remove('active');
-            }
         }
 
         // Função para editar demanda
@@ -1832,9 +1611,7 @@ foreach ($demandas as $d) {
                     document.getElementById('editDescricao').value = data.descricao;
                     document.getElementById('editPrioridade').value = data.prioridade;
                     
-                    // Atualiza a exibição do prazo calculado para edição
                     updateEditPrazoCalculadoInfo();
-
                     openModal('editarDemandaModal');
                 } else {
                     alert('Erro ao carregar dados da demanda');
@@ -1859,29 +1636,22 @@ foreach ($demandas as $d) {
             const prioridade = prioridadeSelect.value;
             let dias = 0;
             switch (prioridade) {
-                case 'baixa':
-                    dias = 5;
-                    break;
-                case 'media':
-                    dias = 3;
-                    break;
-                case 'alta':
-                    dias = 1;
-                    break;
+                case 'baixa': dias = 5; break;
+                case 'media': dias = 3; break;
+                case 'alta': dias = 1; break;
             }
             prazoCalculadoInfo.innerHTML = `
-                <span class="prazo-info-badge">
+                <span class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-primary-500/20 text-primary-50 text-sm font-medium">
                     <i class="fas fa-clock"></i>
                     Prazo: até ${dias} dia${dias > 1 ? 's' : ''}
                 </span>
             `;
         }
 
-        // Atualizar ao carregar a página e ao mudar a seleção
-        updatePrazoCalculadoInfo(); // Chama uma vez ao carregar para mostrar o prazo inicial
+        updatePrazoCalculadoInfo();
         prioridadeSelect.addEventListener('change', updatePrazoCalculadoInfo);
 
-        // Atualizar informação de prazo calculado ao selecionar prioridade no modal de edição
+        // Atualizar informação de prazo calculado no modal de edição
         const editPrioridadeSelect = document.getElementById('editPrioridade');
         const editPrazoCalculadoInfo = document.getElementById('editPrazoCalculadoInfo');
 
@@ -1889,35 +1659,26 @@ foreach ($demandas as $d) {
             const prioridade = editPrioridadeSelect.value;
             let dias = 0;
             switch (prioridade) {
-                case 'baixa':
-                    dias = 5;
-                    break;
-                case 'media':
-                    dias = 3;
-                    break;
-                case 'alta':
-                    dias = 1;
-                    break;
+                case 'baixa': dias = 5; break;
+                case 'media': dias = 3; break;
+                case 'alta': dias = 1; break;
             }
             editPrazoCalculadoInfo.innerHTML = `
-                <span class="prazo-info-badge">
+                <span class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-primary-500/20 text-primary-50 text-sm font-medium">
                     <i class="fas fa-clock"></i>
                     Prazo: até ${dias} dia${dias > 1 ? 's' : ''}
                 </span>
             `;
         }
 
-        // Atualizar ao mudar a seleção no modal de edição
         editPrioridadeSelect.addEventListener('change', updateEditPrazoCalculadoInfo);
 
         // Função para realizar tarefa
         function realizarTarefa(demandaId, statusAtual) {
-                // Criar um formulário dinâmico
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = '../controllers/DemandaController.php';
 
-                // Adicionar campos necessários
                 const acaoInput = document.createElement('input');
                 acaoInput.type = 'hidden';
                 acaoInput.name = 'acao';
@@ -1933,12 +1694,10 @@ foreach ($demandas as $d) {
                 statusInput.name = 'novo_status';
                 statusInput.value = statusAtual === 'em_andamento' ? 'concluida' : 'em_andamento';
 
-                // Adicionar inputs ao formulário
                 form.appendChild(acaoInput);
                 form.appendChild(idInput);
                 form.appendChild(statusInput);
 
-                // Adicionar formulário ao documento e enviar
                 document.body.appendChild(form);
                 form.submit();
         }
@@ -1974,49 +1733,32 @@ foreach ($demandas as $d) {
         // Filter Functions
         function filterByStatus(status) {
             const cards = document.querySelectorAll('.demand-card');
-            const emptyState = document.getElementById('emptyState');
-            let visibleCount = 0;
 
             cards.forEach(card => {
-                // Use dataset para obter o status do card
                 const cardStatus = card.dataset.status;
                 
                 if (status === 'all' || cardStatus === status) {
                     card.style.display = 'block';
-                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
             });
 
-            if (emptyState) {
-                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
-            }
-            // Após filtrar por status, reaplica o filtro de texto e prioridade
+            updateEmptyState('demandasEsperaContainer');
+            updateEmptyState('demandasOutrasContainer');
             filterDemands();
         }
 
         function filterByPriority(priority) {
             const cards = document.querySelectorAll('.demand-card');
-            const emptyState = document.getElementById('emptyState');
-            let visibleCount = 0;
 
             cards.forEach(card => {
-                // Use dataset para obter a prioridade do card
                 const cardPriority = card.dataset.priority;
 
-                if (priority === 'all' || cardPriority === priority) {
-                    card.style.display = 'block';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
+                let isVisibleByPriority = (priority === 'all' || cardPriority === priority);
+                card.style.display = isVisibleByPriority ? 'block' : 'none';
             });
 
-            if (emptyState) {
-                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
-            }
-            // Após filtrar por prioridade, reaplica o filtro de texto e status
             filterDemands();
         }
 
@@ -2025,18 +1767,15 @@ foreach ($demandas as $d) {
             const statusSelect = document.querySelector('select[onchange="filterByStatus(this.value)"]');
             const prioritySelect = document.querySelector('select[onchange="filterByPriority(this.value)"]');
             const cards = document.querySelectorAll('.demand-card');
-            const emptyState = document.getElementById('emptyState');
-            let visibleCount = 0;
+            
+            const activeStatus = statusSelect ? statusSelect.value : 'all';
+            const activePriority = prioritySelect ? prioritySelect.value : 'all';
 
             cards.forEach(card => {
                 const title = card.dataset.title.toLowerCase();
                 const description = card.dataset.description.toLowerCase();
-                // Use dataset para obter status e prioridade
                 const status = card.dataset.status;
                 const priority = card.dataset.priority;
-                
-                const activeStatus = statusSelect ? statusSelect.value : 'all'; // Verifica se o select existe
-                const activePriority = prioritySelect ? prioritySelect.value : 'all'; // Verifica se o select existe
 
                 const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
                 const matchesStatus = activeStatus === 'all' || status === activeStatus;
@@ -2044,25 +1783,32 @@ foreach ($demandas as $d) {
 
                 if (matchesSearch && matchesStatus && matchesPriority) {
                     card.style.display = 'block';
-                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
             });
 
-            if (emptyState) {
-                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
-            }
+            updateEmptyState('demandasEsperaContainer');
+            updateEmptyState('demandasOutrasContainer');
         }
 
-        // Função para atualizar o estado vazio de um container específico
         function updateEmptyState(containerId) {
             const container = document.getElementById(containerId);
+            if (!container) return;
+
             const cards = container.querySelectorAll('.demand-card');
             let visibleCount = 0;
 
             cards.forEach(card => {
-                if (card.style.display !== 'none') {
+                const cardStatus = card.dataset.status;
+                let belongsToContainer = false;
+                if (containerId === 'demandasEsperaContainer' && cardStatus === 'pendente') {
+                    belongsToContainer = true;
+                } else if (containerId === 'demandasOutrasContainer' && cardStatus !== 'pendente') {
+                    belongsToContainer = true;
+                }
+
+                if (card.style.display !== 'none' && belongsToContainer) {
                     visibleCount++;
                 }
             });
@@ -2074,27 +1820,67 @@ foreach ($demandas as $d) {
         }
 
         // Close modal when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('.custom-multi-select')) {
-                document.querySelectorAll('.multi-select-dropdown.active').forEach(dropdown => {
-                    dropdown.classList.remove('active');
-                    dropdown.parentElement.querySelector('.multi-select-container').classList.remove('active');
-                });
-                
-                Object.keys(multiSelectData).forEach(selectId => {
-                    multiSelectData[selectId].isOpen = false;
-                });
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                const modalId = event.target.id;
+                closeModal(modalId);
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const openModal = document.querySelector('.modal.flex');
+                if (openModal) {
+                    closeModal(openModal.id);
+                }
             }
         });
 
-        // Função para mapear a área a partir da permissão
-        function areaFromPermissao($permissao) {
-            if (strpos($permissao, 'adm_area_design') === 0) return 'Design';
-            if (strpos($permissao, 'adm_area_dev') === 0) return 'Desenvolvimento';
-            if (strpos($permissao, 'adm_area_suporte') === 0) return 'Suporte';
-            if (strpos($permissao, 'adm_geral') === 0) return 'Geral';
-            if (strpos($permissao, 'usuario') === 0) return 'Usuário Comum';
-            return 'Desconhecida';
+        // Add loading states to forms
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function() {
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.innerHTML = '<div class="loading"></div> Processando...';
+                    submitBtn.disabled = true;
+                }
+            });
+        });
+
+        // Initialize animations and interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to cards
+            document.querySelectorAll('.demand-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Add click animation to buttons
+            document.querySelectorAll('.custom-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        });
+
+        function toggleAreaField() {
+            const tipoSelect = document.getElementById('tipo');
+            const areaField = document.getElementById('areaField');
+            
+            if (tipoSelect.value.startsWith('adm_area_')) {
+                if (areaField) areaField.style.display = 'block';
+            } else {
+                if (areaField) areaField.style.display = 'none';
+            }
         }
     </script>
 </body>
