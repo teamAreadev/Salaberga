@@ -19,7 +19,8 @@ if (isset($_GET['id_aluno'])){
     require_once('app/main/model/model_indexClass.php');
     $model = new MainModel();
     if($model->registrarSaidaEstagio($aluno, $date_time)){
-        header('Location: success.php');
+        header('Location: success.php?id_aluno=' . $aluno);
+        exit();
     }
 }
 

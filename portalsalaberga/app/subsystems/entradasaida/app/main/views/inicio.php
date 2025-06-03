@@ -311,6 +311,9 @@ footer::before {
         <button class="menu-btn saida-est" type="submit" name="action" value="saida_estagio" onclick="registrar('saída_estagio')">Registrar Saída-Estágio</button>
 
         <button class="menu-btn relatorio" type="submit" name="action" value="relatorios">Relatórios</button>
+
+        <a class="menu-btn relatorio" href="relatorios/ultimo_registro.php">Ultimas Saídas</a>
+        </form>
     </div>
   </div>
 

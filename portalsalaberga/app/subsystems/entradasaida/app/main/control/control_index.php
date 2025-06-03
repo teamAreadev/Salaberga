@@ -279,4 +279,9 @@ if (isset($_POST['GerarRelatorio']) && isset($_POST['tipo_relatorio'])) {
 } else {
     echo "Selecione um tipo de relatório e clique em Gerar!";
 }
-exit();
+
+if (isset($_POST['ultimas_saidas'])) {
+    header('location:../views/relatorios/ultimo_registro.php');
+    exit();
+}
+

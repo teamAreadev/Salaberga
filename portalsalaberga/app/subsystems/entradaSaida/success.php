@@ -227,7 +227,7 @@ if (!isset($_SESSION['Email'])) {
       <div class="success-icon">
         <i class="fas fa-check"></i>
       </div>
-      <h1>Saida realizada com sucesso!</h1>
+      <h1>Aluno(a) <?php echo $_GET['id_aluno']; ?> saiu com sucesso!</h1>
       <p class="message">
         <span class="congratulations">Parabéns!</span>
         <br>
