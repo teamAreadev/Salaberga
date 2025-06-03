@@ -1,0 +1,96 @@
+2025-05-07 13:26:52: <br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_0\mask_41_0.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_1\mask_41_1.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_2\mask_41_2.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_3\mask_41_3.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_4\mask_41_4.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_5\mask_41_5.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_6\mask_41_6.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_7\mask_41_7.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+2025-05-07 13:27:03: <br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_0\mask_41_0.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_1\mask_41_1.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_2\mask_41_2.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_3\mask_41_3.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_4\mask_41_4.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_5\mask_41_5.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_6\mask_41_6.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_7\mask_41_7.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+2025-05-13 16:04:34: <br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_0\mask_41_0.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_1\mask_41_1.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_2\mask_41_2.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_3\mask_41_3.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_4\mask_41_4.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_5\mask_41_5.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_6\mask_41_6.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />
+<br />
+<b>Warning</b>:  mkdir(): No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>154</b><br />
+<br />
+<b>Warning</b>:  file_put_contents(C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\cache\mask_7\mask_41_7.dat): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Projeto-Integrador-mainAtual\app\main\assets\phpqrcode\qrmask.php</b> on line <b>155</b><br />

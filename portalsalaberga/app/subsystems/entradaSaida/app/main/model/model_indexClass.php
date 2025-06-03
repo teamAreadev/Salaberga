@@ -1,8 +1,6 @@
 <?php
 
-
-
-//require_once '../config/Database.php';
+require_once(__DIR__ . '/../config/Database.php');
 
 class UserAuth
 {
@@ -18,7 +16,6 @@ class UserAuth
         try {
 
             $pdo = $this->db->connect();
-
 
             $queryStr = "SELECT email, senha, status FROM usuario WHERE email = :email AND senha = :senha";
             $query = $pdo->prepare($queryStr);
@@ -46,66 +43,249 @@ class UserAuth
             $this->db->closeConnection();
         }
     }
-}
+};
 
 
-class CadastroAluno
+class MainModel
 {
 
-    public function cadastrar($nome, $turma, $curso, $matricula)
+    private $db;
+    private $pdo;
+
+    public function __construct()
     {
-        $pdo = new PDO("mysql:host=localhost;dbname=entrada_saida", "root", "");
-        $cadastrar = "INSERT INTO    aluno   VALUES(null, :nome,:turma, :curso, :matricula)";
-        $query = $pdo->prepare($cadastrar);
-        $query->bindValue(":nome", $nome);
-        $query->bindValue(":turma", $turma);
-        $query->bindValue(":curso", $curso);
-        $query->bindValue(":matricula", $matricula);
-        $query->execute();
+        $this->db = new Database();
+        $this->pdo = $this->db->connect();
     }
-}
+    
+    public function cadastrar($id_turma, $matricula, $nome, $id_curso, $id_usuario = null)
+    {
+        try {
+            echo "Validando campos: id_turma=$id_turma, matricula=$matricula, nome=$nome, id_curso=$id_curso, id_usuario=$id_usuario<br>";
+            if (empty($id_turma) || empty($matricula) || empty($nome) || empty($id_curso)) {
+                error_log("Erro: Todos os campos são obrigatórios (id_turma=$id_turma, matricula=$matricula, nome=$nome, id_curso=$id_curso)");
+                echo "Erro: Campos obrigatórios vazios<br>";
+                return false;
+            }
+
+            echo "Validando matrícula: $matricula<br>";
+            if (!preg_match('/^\d{7}$/', $matricula)) {
+                error_log("Erro: Matrícula inválida ($matricula). Deve conter 7 dígitos.");
+                echo "Erro: Matrícula inválida<br>";
+                return false;
+            }
+
+            $turma_map = [
+                '1° ano a' => 1,
+                '1° ano b' => 2,
+                '1° ano c' => 3,
+                '1° ano d' => 4,
+                '2° ano a' => 5,
+                '2° ano b' => 6,
+                '2° ano c' => 7,
+                '2° ano d' => 8,
+                '3° ano a' => 9,
+                '3° ano b' => 10,
+                '3° ano c' => 11,
+                '3° ano d' => 12
+            ];
+
+            $id_turma = strtolower(trim($id_turma));
+            echo "Validando turma: $id_turma<br>";
+            if (!isset($turma_map[$id_turma])) {
+                error_log("Erro: Turma inválida ($id_turma)");
+                echo "Erro: Turma inválida<br>";
+                return false;
+            }
+            $id_turma_mapped = $turma_map[$id_turma];
+
+            $curso_map = [
+                'enfermagem' => 1,
+                'informática' => 2,
+                'administração' => 3,
+                'edificações' => 4,
+                'meio ambiente' => 5
+            ];
+            $id_curso = strtolower(trim($id_curso));
+            echo "Validando curso: $id_curso<br>";
+            if (!isset($curso_map[$id_curso])) {
+                error_log("Erro: Curso inválido ($id_curso)");
+                echo "Erro: Curso inválido<br>";
+                return false;
+            }
+            $id_curso_mapped = $curso_map[$id_curso];
+
+            echo "Verificando matrícula duplicada: $matricula<br>";
+            $checkMatricula = $this->pdo->prepare("SELECT id_aluno FROM aluno WHERE matricula = :matricula");
+            $checkMatricula->bindValue(":matricula", $matricula);
+            $checkMatricula->execute();
+            if ($checkMatricula->rowCount() > 0) {
+                error_log("Erro: Matrícula já cadastrada ($matricula)");
+                echo "Erro: Matrícula já cadastrada<br>";
+                return false;
+            }
+
+            echo "Executando inserção: id_turma=$id_turma_mapped, matricula=$matricula, nome=$nome, id_curso=$id_curso_mapped<br>";
+            $cadastrar = "INSERT INTO aluno (id_turma, matricula, nome, id_curso) VALUES (:id_turma, :matricula, :nome, :id_curso)";
+            $query = $this->pdo->prepare($cadastrar);
+            $query->bindValue(":id_turma", $id_turma_mapped, PDO::PARAM_INT);
+            $query->bindValue(":matricula", $matricula, PDO::PARAM_STR);
+            $query->bindValue(":nome", $nome, PDO::PARAM_STR);
+            $query->bindValue(":id_curso", $id_curso_mapped, PDO::PARAM_INT);
+
+            if ($query->execute()) {
+                $id_aluno = $this->pdo->lastInsertId();
+                error_log("Aluno cadastrado com sucesso: id_aluno=$id_aluno, id_turma=$id_turma_mapped, matricula=$matricula, nome=$nome, id_curso=$id_curso_mapped");
+
+                // Inserir na tabela `cadastrar` se id_usuario for fornecido
+                if ($id_usuario) {
+                    $cadastrar_usuario = "INSERT INTO cadastrar (id_aluno, id_usuario) VALUES (:id_aluno, :id_usuario)";
+                    $query_usuario = $this->pdo->prepare($cadastrar_usuario);
+                    $query_usuario->bindValue(":id_aluno", $id_aluno, PDO::PARAM_INT);
+                    $query_usuario->bindValue(":id_usuario", $id_usuario, PDO::PARAM_INT);
+                    if ($query_usuario->execute()) {
+                        error_log("Registro na tabela cadastrar inserido: id_aluno=$id_aluno, id_usuario=$id_usuario");
+                    } else {
+                        error_log("Erro ao inserir na tabela cadastrar: id_aluno=$id_aluno, id_usuario=$id_usuario");
+                    }
+                }
+
+                echo "Inserção bem-sucedida<br>";
+                return true;
+            } else {
+                error_log("Erro: Falha ao executar a query de cadastro para matricula=$matricula");
+                echo "Erro: Falha na execução da query<br>";
+                return false;
+            }
+        } catch (PDOException $e) {
+            error_log("Erro ao cadastrar aluno: " . $e->getMessage());
+            echo "Erro PDO: " . $e->getMessage() . "<br>";
+            return false;
+        }
+    }
+
+    public function RegistroEstagio($id_aluno, $date_time)
+    {
+        try {
+            if (empty($id_aluno) || empty($date_time)) {
+                error_log("Erro: id_aluno ou date_time vazios (id_aluno=$id_aluno, date_time=$date_time)");
+                return false;
+            }
+
+            if (!DateTime::createFromFormat('Y-m-d H:i:s', $date_time)) {
+                error_log("Erro: Formato de data e hora inválido ($date_time)");
+                return false;
+            }
+
+            $registrar = "INSERT INTO saida_estagio (id_aluno, dae) VALUES (:id_aluno, :dae)";
+            $query = $this->pdo->prepare($registrar);
+            $query->bindValue(":id_aluno", $id_aluno, PDO::PARAM_INT);
+            $query->bindValue(":dae", $date_time, PDO::PARAM_STR);
+
+            if ($query->execute()) {
+                error_log("Saída de estágio registrada: id_aluno=$id_aluno, dae=$date_time");
+                return true;
+            } else {
+                error_log("Erro: Falha ao executar a query para id_aluno=$id_aluno");
+                return false;
+            }
+        } catch (PDOException $e) {
+            error_log("Erro ao registrar saída de estágio: " . $e->getMessage());
+            return false;
+        }
+    }
 
 
-class RegistroAluno
-{
 
-    public function registrarSaida($id_aluno, $date_time)
+
+
+
+
+    public function registrarSaida($nome_responsavel, $nome_conducente, $id_tipo_conducente, $id_tipo_responsavel, $date_time, $id_motivo, $id_usuario, $id_aluno)
+    {
+        try {
+
+            $pdo = new PDO("mysql:host=localhost;dbname=entrada e saída neww", "root", "", [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]);
+
+
+            $registrar = "INSERT INTO registro_saida  VALUES (NULL, :nome_responsavel, :nome_conducente, :id_tipo_conducente, :id_tipo_responsavel, :date_time, :id_motivo, :id_usuario, :id_aluno)";
+            $query = $pdo->prepare($registrar);
+
+            // Vincula os parâmetros
+            $query->bindValue(":nome_responsavel", $nome_responsavel);
+            $query->bindValue(":nome_conducente", $nome_conducente);
+            $query->bindValue(":id_tipo_conducente", $id_tipo_conducente);
+            $query->bindValue(":id_tipo_responsavel", $id_tipo_responsavel);
+            $query->bindValue(":date_time", $date_time);
+            $query->bindValue(":id_motivo", $id_motivo);
+            $query->bindValue(":id_usuario", $id_usuario);
+            $query->bindValue(":id_aluno", $id_aluno);
+
+
+
+            $query->execute();
+        } catch (PDOException $e) {
+
+            echo "Erro: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    /* function verificarParametroGet($id_tipo_conducente)
+    {
+        if (!isset($_GET[$id_tipo_conducente])) {
+            return 0;
+        } elseif (empty($_GET[$id_tipo_conducente])) {
+            return 2;
+        } else {
+            return 1;
+        }
+  }*/
+
+
+
+    public function registrarEntrada($nome_responsavel, $nome_conducente, $id_tipo_conducente, $id_tipo_responsavel, $date_time, $id_motivo, $id_usuario, $id_aluno)
+    {
+        try {
+            // Conexão com o banco de dados
+            $pdo = new PDO("mysql:host=localhost;dbname=entrada e saída neww", "root", "", [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]);
+
+
+            $registrar = "INSERT INTO registro_entrada VALUES (NULL, :nome_responsavel, :nome_conducente, :id_tipo_conducente, :id_tipo_responsavel, :date_time, :id_motivo, :id_usuario, :id_aluno)";
+            $query = $pdo->prepare($registrar);
+
+
+            $query->bindValue(":nome_responsavel", $nome_responsavel);
+            $query->bindValue(":nome_conducente", $nome_conducente);
+            $query->bindValue(":id_tipo_conducente", $id_tipo_conducente);
+            $query->bindValue("id_tipo_responsavel", $id_tipo_responsavel);
+            $query->bindValue(":date_time", $date_time);
+            $query->bindValue(":id_motivo", $id_motivo);
+            $query->bindValue(":id_usuario", $id_usuario);
+            $query->bindValue(":id_aluno", $id_aluno);
+
+
+            $query->execute();
+
+            return true;
+        } catch (PDOException $e) {
+
+            echo "Erro: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    public function registrarSaidaEstagio($aluno, $date_time)
     {
         try {
             // Conexão com o banco de dados
             $pdo = new PDO("mysql:host=localhost;dbname=entradasaida", "root", "", [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
             ]);
-
-            // Query SQL para inserir id_aluno e date_time na coluna dae
-            $registrar = "INSERT INTO saida_estagio (id_aluno, dae) VALUES (:id_aluno, :dae)";
-            $query = $pdo->prepare($registrar);
-
-            // Vincula os parâmetros
-            $query->bindValue(":id_aluno", $id_aluno, PDO::PARAM_INT);
-            $query->bindValue(":dae", $date_time, PDO::PARAM_STR);
-
-            // Executa a query
-            $query->execute();
-
-            return true; // Sucesso
-        } catch (PDOException $e) {
-            // Tratamento de erro
-            echo "Erro: " . $e->getMessage();
-            return false;
-        }
-    }
-        
-        public function registrarSaidaEstagio($aluno, $date_time)
-    {
-        try {
-            // Conexão com o banco de dados
-            $pdo = new PDO("mysql:host=localhost;dbname=u750204740_entradasaida", "u750204740_entradasaida", "paoComOvo123!@##", [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-            ]);
-            /*$pdo = new PDO("mysql:host=localhost;dbname=entradasaida", "root", "", [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-            ]);*/
 
             // Verifica se o aluno existe na tabela aluno com base no nome
             $verificarAluno = "SELECT id_aluno FROM aluno WHERE nome = :nome";
@@ -132,7 +312,7 @@ class RegistroAluno
 
                 return true; // Sucesso
             } else {
-                echo "Erro: O usuário ". $aluno ." o aluno não encontrado na tabela aluno.";
+                echo "Erro: O usuário " . $aluno . " o aluno não encontrado na tabela aluno.";
                 return false;
             }
         } catch (PDOException $e) {
@@ -141,12 +321,169 @@ class RegistroAluno
             return false;
         }
     }
-
-     public function fpdf (){
-
+};
 
 
-        
-     }
+/*public function cadastrar($id_aluno, $startDate = null, $endDate = null)
+    {
+        if (empty($id_aluno)) {
+            return [];
+        }
 
+        $sql = "SELECT * from  registro_saida
+                FROM saida_estagio se
+                LEFT JOIN aluno a ON se.id_aluno = a.id_aluno 
+                WHERE se.id_aluno = :id_aluno";
+        if ($startDate && $endDate) {
+            $sql .= " AND se.dae BETWEEN :start AND :end";
+        }
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':id_aluno', $id_aluno, PDO::PARAM_INT);
+        if ($startDate && $endDate) {
+            $stmt->bindParam(':start', $startDate);
+            $stmt->bindParam(':end', $endDate);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+*/
+
+
+class SaidaEstagioModel
+{
+
+    private $db;
+    private $pdo;
+
+    public function __construct()
+    {
+        $this->db = new Database();
+        $this->pdo = $this->db->connect();
+    }
+
+    public function getSaidasByDateRange($id_aluno, $startDate = null, $endDate = null)
+    {
+        if (empty($id_aluno)) {
+            return [];
+        }
+
+        $sql = "SELECT se.*, a.nome AS nome_aluno 
+                FROM saida_estagio se
+                LEFT JOIN aluno a ON se.id_aluno = a.id_aluno 
+                WHERE se.id_aluno = :id_aluno";
+        if ($startDate && $endDate) {
+            $sql .= " AND se.dae BETWEEN :start AND :end";
+        }
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':id_aluno', $id_aluno, PDO::PARAM_INT);
+        if ($startDate && $endDate) {
+            $stmt->bindParam(':start', $startDate);
+            $stmt->bindParam(':end', $endDate);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
+
+
+class EntradaPDF
+{
+
+
+    private $db;
+    private $pdo;
+
+    public function __construct()
+    {
+        $this->db = new Database();
+        $this->pdo = $this->db->connect();
+    }
+
+    public function getSaidasByDateRange($id_aluno, $startDate = null, $endDate = null)
+    {
+        if (empty($id_aluno)) {
+            return [];
+        }
+
+        $sql = "SELECT r.*, a.nome AS nome_aluno 
+                FROM registro_entrada r
+                LEFT JOIN aluno a ON r.id_aluno = a.id_aluno 
+                WHERE r.id_aluno = :id_aluno";
+        if ($startDate && $endDate) {
+            $sql .= " AND r.date_time BETWEEN :start AND :end";
+        }
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':id_aluno', $id_aluno, PDO::PARAM_INT);
+        if ($startDate && $endDate) {
+            $stmt->bindParam(':start', $startDate);
+            $stmt->bindParam(':end', $endDate);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+}
+
+
+
+class SaidaPDF
+{
+    private $db;
+    private $pdo;
+
+    public function __construct()
+    {
+        $this->db = new Database();
+        $this->pdo = $this->db->connect();
+    }
+
+    public function getSaidasByDateRange($id_aluno, $startDate = null, $endDate = null)
+    {
+        if (empty($id_aluno)) {
+            return [];
+        }
+
+        $sql = "SELECT r.*, a.nome AS nome_aluno 
+                FROM registro_saida r
+                LEFT JOIN aluno a ON r.id_aluno = a.id_aluno 
+                WHERE r.id_aluno = :id_aluno";
+        if ($startDate && $endDate) {
+            $sql .= " AND r.date_time BETWEEN :start AND :end";
+        }
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':id_aluno', $id_aluno, PDO::PARAM_INT);
+        if ($startDate && $endDate) {
+            $stmt->bindParam(':start', $startDate);
+            $stmt->bindParam(':end', $endDate);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+}
+
+
+
+    
+
+
+
+/* private $pdo;
+
+    public function __construct() {
+        $this->pdo = new PDO("mysql:host=localhost;dbname=entrada e saída neww", "root", "");
+        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+
+    public function getSaidasByDateRange($id_aluno, $startDate = null, $endDate = null) {
+        $sql = "SELECT * FROM saida-estagio WHERE id_aluno = :id_aluno";
+        if ($startDate && $endDate) {
+            $sql .= " AND date_time BETWEEN :start AND :end";
+        }
+        $stmt = $this->pdo->prepare($sql);
+        if ($startDate && $endDate) {
+            $stmt->bindParam(':start', $startDate);
+            $stmt->bindParam(':end', $endDate);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+}*/

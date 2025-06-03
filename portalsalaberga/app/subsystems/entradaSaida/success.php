@@ -1,3 +1,13 @@
+<?php
+session_start();
+function redirect_to_login()
+{
+  header('Location: ../../main/views/autenticacao/login.php');
+}
+if (!isset($_SESSION['Email'])) {
+  redirect_to_login();
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -217,7 +227,7 @@
       <div class="success-icon">
         <i class="fas fa-check"></i>
       </div>
-      <h1>Saida realizada com sucesso!</h1>
+      <h1>Aluno(a) <?php echo $_GET['id_aluno']; ?> saiu com sucesso!</h1>
       <p class="message">
         <span class="congratulations">Parabéns!</span>
         <br>
