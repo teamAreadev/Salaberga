@@ -86,7 +86,7 @@ $systemPermissionCardMap = [
         'category' => 'Sistema'
     ],
     'Entrada/saída_vigilante(1)' => [
-        'url' => '../../../subsystems/entradaSaida/app/main/views/inicio.php',
+        'url' => '../../../subsystems/entradasaida/app/main/views/inicio.php',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
         'name' => 'Entrada/saída',
         'category' => 'Sistema'

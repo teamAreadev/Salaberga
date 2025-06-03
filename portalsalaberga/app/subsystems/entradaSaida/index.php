@@ -1,8 +1,12 @@
 <?php
-require_once('../../main/models/sessions.php');
-$session = new sessions();
-$session->autenticar_session();
 
+session_start();
+function redirect_to_login(){
+    header('Location: ../../main/views/autenticacao/login.php');
+}
+if(!isset($_SESSION['Email'])){
+    redirect_to_login();
+}
 // Configura o time zone para o fuso horário desejado (exemplo: América/São Paulo)
 date_default_timezone_set('America/Sao_Paulo');
 
@@ -17,8 +21,6 @@ if (isset($_GET['id_aluno'])){
     if($model->registrarSaidaEstagio($aluno, $date_time)){
         header('Location: success.php');
     }
-    
-    
 }
 
 ?>

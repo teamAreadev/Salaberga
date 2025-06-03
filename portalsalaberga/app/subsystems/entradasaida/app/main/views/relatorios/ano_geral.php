@@ -9,7 +9,7 @@ ini_set('log_errors', 1);
 ini_set('error_log', 'C:/xampp/htdocs/Projeto-Integrador-mainAtual/logs/php_error.log');
 
 require_once('../../assets/lib/fpdf/fpdf.php');
-require_once __DIR__. '/../../assets/config/Database.php';
+require_once(__DIR__ . '/../../config/Database.php');
 require_once('../../model/model_indexClass.php');
 
 class qrCode1

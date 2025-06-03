@@ -1,8 +1,12 @@
 <?php
-
-require_once('../../main/models/sessions.php');
-$session = new sessions();
-$session->autenticar_session();
+session_start();
+function redirect_to_login()
+{
+  header('Location: ../../main/views/autenticacao/login.php');
+}
+if (!isset($_SESSION['Email'])) {
+  redirect_to_login();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -239,7 +243,7 @@ $session->autenticar_session();
       </div>
     </div>
   </div>
-    
+
 </body>
 
 </html>

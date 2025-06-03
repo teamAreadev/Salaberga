@@ -1,6 +1,6 @@
 <?php
 
-require_once '../assets/config/Database.php';
+require_once(__DIR__ . '/../config/Database.php');
 
 class select_model
 {
@@ -10,8 +10,6 @@ class select_model
     {
         $this->db = new Database();
     }
-
-
 
     public function select_alunos()
     {
