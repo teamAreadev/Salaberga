@@ -1,0 +1,961 @@
+[03-Jun-2025 13:51:02 Europe/Berlin] REQUEST METHOD: POST
+[03-Jun-2025 13:51:02 Europe/Berlin] POST DATA: Array
+(
+    [acao] => atualizar_status
+    [id] => 66
+    [novo_status] => em_andamento
+)
+
+[03-Jun-2025 13:51:02 Europe/Berlin] GET DATA: Array
+(
+)
+
+[03-Jun-2025 13:51:02 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 2
+                    [permissao_descricao] => usuario(1)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+        )
+
+    [ultimo_acesso] => 1748951133
+    [entrada_saida_usuario] => 1
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+)
+
+[03-Jun-2025 13:51:47 Europe/Berlin] REQUEST METHOD: POST
+[03-Jun-2025 13:51:47 Europe/Berlin] POST DATA: Array
+(
+    [acao] => atualizar_status
+    [id] => 66
+    [novo_status] => em_andamento
+)
+
+[03-Jun-2025 13:51:47 Europe/Berlin] GET DATA: Array
+(
+)
+
+[03-Jun-2025 13:51:47 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 2
+                    [permissao_descricao] => usuario(1)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+        )
+
+    [ultimo_acesso] => 1748951133
+    [entrada_saida_usuario] => 1
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+)
+
+[03-Jun-2025 13:51:47 Europe/Berlin] Ação não reconhecida: atualizar_status
+[03-Jun-2025 13:51:47 Europe/Berlin] Redirecionando para: /portalsalaberga/app/subsystems/AreaDev/views/error.php?error=A%C3%A7%C3%A3o+n%C3%A3o+reconhecida%3A+atualizar_status
+[03-Jun-2025 13:52:29 Europe/Berlin] REQUEST METHOD: POST
+[03-Jun-2025 13:52:29 Europe/Berlin] POST DATA: Array
+(
+    [acao] => atualizar_status
+    [id] => 66
+    [novo_status] => em_andamento
+)
+
+[03-Jun-2025 13:52:29 Europe/Berlin] GET DATA: Array
+(
+)
+
+[03-Jun-2025 13:52:29 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 2
+                    [permissao_descricao] => usuario(1)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+        )
+
+    [ultimo_acesso] => 1748951133
+    [entrada_saida_usuario] => 1
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+)
+
+[03-Jun-2025 13:52:29 Europe/Berlin] Redirecionando para: /portalsalaberga/app/subsystems/AreaDev/views/usuario.php?success=Status+atualizado+com+sucesso%21
+[03-Jun-2025 13:53:09 Europe/Berlin] REQUEST METHOD: POST
+[03-Jun-2025 13:53:09 Europe/Berlin] POST DATA: Array
+(
+    [acao] => atualizar_status
+    [id] => 65
+    [novo_status] => em_andamento
+)
+
+[03-Jun-2025 13:53:09 Europe/Berlin] GET DATA: Array
+(
+)
+
+[03-Jun-2025 13:53:09 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 2
+                    [permissao_descricao] => usuario(1)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+        )
+
+    [ultimo_acesso] => 1748951133
+    [entrada_saida_usuario] => 1
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+)
+
+[03-Jun-2025 13:53:09 Europe/Berlin] Redirecionando para: /portalsalaberga/app/subsystems/AreaDev/views/usuario.php?success=Status+atualizado+com+sucesso%21
+[03-Jun-2025 13:53:12 Europe/Berlin] REQUEST METHOD: POST
+[03-Jun-2025 13:53:12 Europe/Berlin] POST DATA: Array
+(
+    [acao] => atualizar_status
+    [id] => 64
+    [novo_status] => em_andamento
+)
+
+[03-Jun-2025 13:53:12 Europe/Berlin] GET DATA: Array
+(
+)
+
+[03-Jun-2025 13:53:12 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 2
+                    [permissao_descricao] => usuario(1)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+        )
+
+    [ultimo_acesso] => 1748951133
+    [entrada_saida_usuario] => 1
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+)
+
+[03-Jun-2025 13:53:12 Europe/Berlin] Redirecionando para: /portalsalaberga/app/subsystems/AreaDev/views/usuario.php?success=Status+atualizado+com+sucesso%21
+[03-Jun-2025 13:53:29 Europe/Berlin] REQUEST METHOD: POST
+[03-Jun-2025 13:53:29 Europe/Berlin] POST DATA: Array
+(
+    [acao] => atualizar_status
+    [id] => 66
+    [novo_status] => concluida
+)
+
+[03-Jun-2025 13:53:29 Europe/Berlin] GET DATA: Array
+(
+)
+
+[03-Jun-2025 13:53:29 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 2
+                    [permissao_descricao] => usuario(1)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+        )
+
+    [ultimo_acesso] => 1748951133
+    [entrada_saida_usuario] => 1
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+)
+
+[03-Jun-2025 13:53:29 Europe/Berlin] Redirecionando para: /portalsalaberga/app/subsystems/AreaDev/views/usuario.php?success=Status+atualizado+com+sucesso%21
+[03-Jun-2025 13:54:54 Europe/Berlin] REQUEST METHOD: POST
+[03-Jun-2025 13:54:54 Europe/Berlin] POST DATA: Array
+(
+    [acao] => realizar_tarefa
+    [id] => 62
+    [novo_status] => em_andamento
+)
+
+[03-Jun-2025 13:54:54 Europe/Berlin] GET DATA: Array
+(
+)
+
+[03-Jun-2025 13:54:54 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 2
+                    [permissao_descricao] => usuario(1)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+        )
+
+    [ultimo_acesso] => 1748951133
+    [entrada_saida_usuario] => 1
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+)
+
+[03-Jun-2025 13:54:54 Europe/Berlin] Redirecionando para: ../views/usuario.php?success=Status+atualizado+com+sucesso%21
+[03-Jun-2025 13:55:32 Europe/Berlin] REQUEST METHOD: POST
+[03-Jun-2025 13:55:32 Europe/Berlin] POST DATA: Array
+(
+    [acao] => realizar_tarefa
+    [id] => 63
+    [novo_status] => em_andamento
+)
+
+[03-Jun-2025 13:55:32 Europe/Berlin] GET DATA: Array
+(
+)
+
+[03-Jun-2025 13:55:32 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 2
+                    [permissao_descricao] => usuario(1)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+        )
+
+    [ultimo_acesso] => 1748951133
+    [entrada_saida_usuario] => 1
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+)
+
+[03-Jun-2025 13:55:32 Europe/Berlin] Redirecionando para: ../views/admin.php?success=Status+atualizado+com+sucesso%21
+[03-Jun-2025 13:58:47 Europe/Berlin] REQUEST METHOD: GET
+[03-Jun-2025 13:58:47 Europe/Berlin] POST DATA: Array
+(
+)
+
+[03-Jun-2025 13:58:47 Europe/Berlin] GET DATA: Array
+(
+    [action] => get_demanda
+    [id] => 66
+)
+
+[03-Jun-2025 13:58:47 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 2
+                    [permissao_descricao] => usuario(1)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+        )
+
+    [ultimo_acesso] => 1748951133
+    [entrada_saida_usuario] => 1
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+)
+
+[03-Jun-2025 14:06:44 Europe/Berlin] REQUEST METHOD: POST
+[03-Jun-2025 14:06:44 Europe/Berlin] POST DATA: Array
+(
+    [acao] => criar
+    [area_id] => 3
+    [titulo] => 2
+    [descricao] => 2
+    [prioridade] => baixa
+)
+
+[03-Jun-2025 14:06:44 Europe/Berlin] GET DATA: Array
+(
+)
+
+[03-Jun-2025 14:06:44 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 2
+                    [permissao_descricao] => usuario(1)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+        )
+
+    [ultimo_acesso] => 1748952163
+    [entrada_saida_usuario] => 1
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+)
+
+[03-Jun-2025 14:06:44 Europe/Berlin] ERRO AO CRIAR DEMANDA: Você não tem permissão para criar demandas nesta área | Título: 2 | Admin: 3 | Área: 3
+[03-Jun-2025 14:06:44 Europe/Berlin] ERRO COMPLETO: #0 C:\xampp\htdocs\GitHub\Salaberga\portalsalaberga\app\subsystems\AreaDev\controllers\DemandaController.php(112): Demanda->criarDemanda('2', '2', 'baixa', '3', Array, NULL, '3', Object(Usuario))
+#1 {main}
+[03-Jun-2025 14:06:44 Europe/Berlin] ERRO NO CONTROLLER: Você não tem permissão para criar demandas nesta área
+[03-Jun-2025 14:06:44 Europe/Berlin] Redirecionando para: ../views/admin.php?error=Voc%C3%AA+n%C3%A3o+tem+permiss%C3%A3o+para+criar+demandas+nesta+%C3%A1rea
+[03-Jun-2025 14:07:32 Europe/Berlin] REQUEST METHOD: POST
+[03-Jun-2025 14:07:32 Europe/Berlin] POST DATA: Array
+(
+    [acao] => criar
+    [area_id] => 3
+    [titulo] => w
+    [descricao] => w
+    [prioridade] => baixa
+)
+
+[03-Jun-2025 14:07:32 Europe/Berlin] GET DATA: Array
+(
+)
+
+[03-Jun-2025 14:07:32 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 2
+                    [permissao_descricao] => usuario(1)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+        )
+
+    [ultimo_acesso] => 1748952163
+    [entrada_saida_usuario] => 1
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+)
+
+[03-Jun-2025 14:07:32 Europe/Berlin] ERRO AO CRIAR DEMANDA: Você não tem permissão para criar demandas nesta área | Título: w | Admin: 3 | Área: 3
+[03-Jun-2025 14:07:32 Europe/Berlin] ERRO COMPLETO: #0 C:\xampp\htdocs\GitHub\Salaberga\portalsalaberga\app\subsystems\AreaDev\controllers\DemandaController.php(112): Demanda->criarDemanda('w', 'w', 'baixa', '3', Array, NULL, '3', Object(Usuario))
+#1 {main}
+[03-Jun-2025 14:07:32 Europe/Berlin] ERRO NO CONTROLLER: Você não tem permissão para criar demandas nesta área
+[03-Jun-2025 14:07:32 Europe/Berlin] Redirecionando para: ../views/admin.php?error=Voc%C3%AA+n%C3%A3o+tem+permiss%C3%A3o+para+criar+demandas+nesta+%C3%A1rea
+[03-Jun-2025 14:10:44 Europe/Berlin] REQUEST METHOD: POST
+[03-Jun-2025 14:10:44 Europe/Berlin] POST DATA: Array
+(
+    [acao] => criar
+    [area_id] => 1
+    [titulo] => ww
+    [descricao] => w
+    [prioridade] => baixa
+)
+
+[03-Jun-2025 14:10:44 Europe/Berlin] GET DATA: Array
+(
+)
+
+[03-Jun-2025 14:10:44 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 2
+                    [permissao_descricao] => usuario(1)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+        )
+
+    [ultimo_acesso] => 1748952163
+    [entrada_saida_usuario] => 1
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+)
+
+[03-Jun-2025 14:10:44 Europe/Berlin] ERRO AO CRIAR DEMANDA: Você não tem permissão para criar demandas nesta área | Título: ww | Admin: 3 | Área: 1
+[03-Jun-2025 14:10:44 Europe/Berlin] ERRO COMPLETO: #0 C:\xampp\htdocs\GitHub\Salaberga\portalsalaberga\app\subsystems\AreaDev\controllers\DemandaController.php(112): Demanda->criarDemanda('ww', 'w', 'baixa', '3', Array, NULL, '1', Object(Usuario))
+#1 {main}
+[03-Jun-2025 14:10:44 Europe/Berlin] ERRO NO CONTROLLER: Você não tem permissão para criar demandas nesta área
+[03-Jun-2025 14:10:44 Europe/Berlin] Redirecionando para: ../views/admin.php?error=Voc%C3%AA+n%C3%A3o+tem+permiss%C3%A3o+para+criar+demandas+nesta+%C3%A1rea
+[03-Jun-2025 14:13:30 Europe/Berlin] REQUEST METHOD: POST
+[03-Jun-2025 14:13:30 Europe/Berlin] POST DATA: Array
+(
+    [acao] => criar
+    [area_id] => 3
+    [titulo] => w
+    [descricao] => w
+    [prioridade] => baixa
+)
+
+[03-Jun-2025 14:13:30 Europe/Berlin] GET DATA: Array
+(
+)
+
+[03-Jun-2025 14:13:30 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 2
+                    [permissao_descricao] => usuario(1)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+        )
+
+    [ultimo_acesso] => 1748952163
+    [entrada_saida_usuario] => 1
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+)
+
+[03-Jun-2025 14:13:30 Europe/Berlin] Verificando permissão para admin_id: 3, área: 3, permissão: adm_area_design
+[03-Jun-2025 14:13:30 Europe/Berlin] É admin geral? Não
+[03-Jun-2025 14:13:30 Europe/Berlin] Tem permissão específica? Não
+[03-Jun-2025 14:13:30 Europe/Berlin] ERRO AO CRIAR DEMANDA: Você não tem permissão para criar demandas nesta área | Título: w | Admin: 3 | Área: 3
+[03-Jun-2025 14:13:30 Europe/Berlin] ERRO COMPLETO: #0 C:\xampp\htdocs\GitHub\Salaberga\portalsalaberga\app\subsystems\AreaDev\controllers\DemandaController.php(112): Demanda->criarDemanda('w', 'w', 'baixa', '3', Array, NULL, '3', Object(Usuario))
+#1 {main}
+[03-Jun-2025 14:13:30 Europe/Berlin] ERRO NO CONTROLLER: Você não tem permissão para criar demandas nesta área
+[03-Jun-2025 14:13:30 Europe/Berlin] Redirecionando para: ../views/admin.php?error=Voc%C3%AA+n%C3%A3o+tem+permiss%C3%A3o+para+criar+demandas+nesta+%C3%A1rea

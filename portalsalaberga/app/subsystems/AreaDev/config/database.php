@@ -60,3 +60,14 @@ class Database {
         return $this->area_dev;
     }
 }
+
+try {
+    $pdo = new PDO(
+        "mysql:host=localhost;dbname=u750204740_areadev;charset=utf8mb4",
+        "root",
+        "",
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+    );
+} catch (PDOException $e) {
+    die("Erro na conexão com o banco de dados: " . $e->getMessage());
+}

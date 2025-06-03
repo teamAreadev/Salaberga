@@ -61,34 +61,39 @@ try {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
     ");
 
-    // Inserir permissões para o sistema de demandas no banco salaberga
-    $pdo_salaberga->exec("
-        INSERT INTO permissoes (descricao) VALUES 
-        ('usuario_area_dev'),
-        ('usuario_area_design'),
-        ('usuario_area_suporte'),
+    // Inserir permissões para o sistema de demandas
+    $stmt = $pdo_salaberga->prepare("INSERT IGNORE INTO permissoes (descricao) VALUES 
+        ('adm_geral'),
         ('adm_area_dev'),
         ('adm_area_design'),
         ('adm_area_suporte'),
-        ('adm_geral')
-        ON DUPLICATE KEY UPDATE descricao = VALUES(descricao);
+        ('usuario_area_dev'),
+        ('usuario_area_design'),
+        ('usuario_area_suporte')
     ");
+    $stmt->execute();
 
-    // Obter IDs das permissões do banco salaberga
-    $stmt = $pdo_salaberga->query("SELECT id, descricao FROM permissoes WHERE descricao LIKE 'usuario_%' OR descricao LIKE 'adm_%'");
-    $permissoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Inserir sistema de demandas se não existir
+    $stmt = $pdo_salaberga->prepare("INSERT IGNORE INTO sistemas (nome, descricao) VALUES ('Demandas', 'Sistema de Gestão de Demandas')");
+    $stmt->execute();
 
-    // Inserir relacionamentos sistema-permissão no banco salaberga
-    foreach ($permissoes as $permissao) {
-        $pdo_salaberga->exec("
-            INSERT INTO sist_perm (sistema_id, permissao_id)
-            SELECT 3, {$permissao['id']}
-            WHERE NOT EXISTS (
-                SELECT 1 FROM sist_perm 
-                WHERE sistema_id = 3 AND permissao_id = {$permissao['id']}
-            );
-        ");
-    }
+    // Obter ID do sistema de demandas
+    $stmt = $pdo_salaberga->prepare("SELECT id FROM sistemas WHERE nome = 'Demandas'");
+    $stmt->execute();
+    $sistema_id = $stmt->fetchColumn();
+
+    // Relacionar permissões com o sistema
+    $stmt = $pdo_salaberga->prepare("INSERT IGNORE INTO sist_perm (sistema_id, permissao_id) 
+        SELECT ?, id FROM permissoes WHERE descricao IN (
+            'adm_geral',
+            'adm_area_dev',
+            'adm_area_design',
+            'adm_area_suporte',
+            'usuario_area_dev',
+            'usuario_area_design',
+            'usuario_area_suporte'
+        )");
+    $stmt->execute([$sistema_id]);
 
     echo "Tabelas criadas com sucesso!";
 } catch (PDOException $e) {

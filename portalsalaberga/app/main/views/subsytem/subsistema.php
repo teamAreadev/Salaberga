@@ -117,7 +117,7 @@ $systemPermissionCardMap = [
         'name' => 'Demandas (Usuário)',
         'category' => 'Sistema'
     ],
-    'Demandas_usuario_area_desenvolvimento(3)' => [
+    'Demandas_usuario_area_dev(3)' => [
         'url' => '../../../subsystems/areadev/views/usuario.php',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
         'name' => 'Demandas (Desenvolvimento)',
@@ -263,6 +263,17 @@ if (!empty($userSystemsPermissions)) {
                 $_SESSION['ss_adm'] = true;
             } else if ($item['permissao_descricao'] === 'usuario(5)') {
                 $_SESSION['ss_usuario'] = true;
+            }
+        }
+
+        // Demandas - Usuários de Área
+        if ($item['sistema_nome'] === 'Demandas') {
+            if ($item['permissao_descricao'] === 'usuario_area_dev(3)') {
+                $_SESSION['demandas_usuario_area_desenvolvimento'] = true;
+            } else if ($item['permissao_descricao'] === 'usuario_area_suporte(3)') {
+                $_SESSION['demandas_usuario_area_suporte'] = true;
+            } else if ($item['permissao_descricao'] === 'usuario_area_design(3)') {
+                $_SESSION['demandas_usuario_area_design'] = true;
             }
         }
     }

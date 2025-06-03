@@ -27,12 +27,10 @@ require_once __DIR__ . '/../model/Area.php';
 
 // Função para mapear a área a partir da permissão
 function areaFromPermissao($permissao) {
-    if (strpos($permissao, 'adm_area_design') === 0) return 'Design';
-    if (strpos($permissao, 'adm_area_dev') === 0) return 'Desenvolvimento';
-    if (strpos($permissao, 'adm_area_suporte') === 0) return 'Suporte';
-    if (strpos($permissao, 'adm_geral') === 0) return 'Geral';
-    if (strpos($permissao, 'usuario') === 0) return 'Usuário Comum';
-    return 'Desconhecida';
+    if (strpos($permissao, 'usuario_area_design') === 0 || strpos($permissao, 'adm_area_design') === 0) return 'Design';
+    if (strpos($permissao, 'usuario_area_dev') === 0 || strpos($permissao, 'adm_area_dev') === 0) return 'Desenvolvimento';
+    if (strpos($permissao, 'usuario_area_suporte') === 0 || strpos($permissao, 'adm_area_suporte') === 0) return 'Suporte';
+    return 'Sem Área';
 }
 
 // Inicializa a conexão com o banco de dados
@@ -61,16 +59,58 @@ $permissoes = $usuario->listarPermissoes();
 
 // Buscar usuários conforme permissões do sistema de demandas
 $id_sistema_demandas = 3;
+error_log("Buscando usuários para o sistema ID: " . $id_sistema_demandas);
+error_log("SESSION DATA: " . print_r($_SESSION, true));
+
+// Verificar permissões do usuário atual
+if (isset($_SESSION['user_id'])) {
+    $stmt = $pdo_salaberga->prepare("
+        SELECT p.descricao
+        FROM usu_sist us
+        INNER JOIN sist_perm sp ON us.sist_perm_id = sp.id
+        INNER JOIN permissoes p ON sp.permissao_id = p.id
+        WHERE us.usuario_id = ? AND sp.sistema_id = ?
+    ");
+    $stmt->execute([$_SESSION['user_id'], $id_sistema_demandas]);
+    $permissoes_usuario = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    error_log("Permissões do usuário atual: " . print_r($permissoes_usuario, true));
+}
+
 $usuarios_permissoes = $usuario->listarUsuariosComPermissoes($id_sistema_demandas);
+error_log("Total de usuários encontrados: " . count($usuarios_permissoes));
+
 $admins_gerais = Usuario::filtrarAdminsGerais($usuarios_permissoes);
 $admins_area = Usuario::filtrarAdminsArea($usuarios_permissoes);
 $usuarios = Usuario::filtrarUsuariosComuns($usuarios_permissoes);
 
+error_log("Admins gerais: " . count($admins_gerais));
+error_log("Admins área: " . count($admins_area));
+error_log("Usuários comuns: " . count($usuarios));
+
+// Exibir todos os usuários de área se for admin geral
+$isAdminGeral = false;
+if (isset($_SESSION['permissao']) && strpos($_SESSION['permissao'], 'adm_geral') !== false) {
+    $isAdminGeral = true;
+}
+
+// Combinar todos os tipos de usuários
+$todos_usuarios = array_merge($admins_gerais, $admins_area, $usuarios);
+
+// Agrupar usuários por área
+$usuarios_por_area = [];
+foreach ($todos_usuarios as $user) {
+    $area = areaFromPermissao($user['permissao']);
+    if (!isset($usuarios_por_area[$area])) {
+        $usuarios_por_area[$area] = [];
+    }
+    $usuarios_por_area[$area][] = $user;
+}
+
 // Processar ações POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['action'])) {
-        switch ($_POST['action']) {
-            case 'create':
+    if (isset($_POST['acao'])) {
+        switch ($_POST['acao']) {
+            case 'criar':
                 if (isset($_POST['titulo'], $_POST['descricao'], $_POST['area_id'], $_POST['prioridade'])) {
                     $demanda->criarDemanda(
                         $_POST['titulo'],
@@ -103,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Listar todas as demandas
-$demandas = $demanda->listarDemandas();
+$demandas = $demanda->listarDemandas($_SESSION['user_id']);
 
 // Calcular totais de demandas por status
 $totalDemandas = count($demandas);
@@ -119,6 +159,33 @@ foreach ($demandas as $d) {
         $demandasPendentes++;
     }
 }
+
+$areas_permitidas = [];
+$id_sistema = 3; // ID do sistema de demandas
+if (isset($_SESSION['user_id'])) {
+    $stmt = $pdo_salaberga->prepare("
+        SELECT p.descricao
+        FROM usu_sist us
+        INNER JOIN sist_perm sp ON us.sist_perm_id = sp.id
+        INNER JOIN permissoes p ON sp.permissao_id = p.id
+        WHERE us.usuario_id = ? AND p.descricao LIKE 'adm_area_%' AND sp.sistema_id = ?
+    ");
+    $stmt->execute([$_SESSION['user_id'], $id_sistema]);
+    $permissoes_admin = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    foreach ($permissoes_admin as $permissao) {
+        $permissao = preg_replace('/\(\d+\)$/', '', $permissao); // remove (3) do final
+        if (preg_match('/adm_area_([a-z]+)/', $permissao, $matches)) {
+            $area_slug = strtolower($matches[1]);
+            foreach ($areas as $a) {
+                if (strpos(strtolower($a['nome']), $area_slug) !== false) {
+                    $areas_permitidas[] = $a;
+                }
+            }
+        }
+    }
+}
+if (empty($areas_permitidas)) $areas_permitidas = $areas; // fallback para admin geral ou erro
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -776,45 +843,6 @@ foreach ($demandas as $d) {
     </header>
 
     <main class="container mx-auto px-4 py-8">
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 fade-in">
-            <div class="stats-card">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-400 text-sm font-medium">Total de Demandas</p>
-                        <p class="text-3xl font-bold text-white"><?php echo $totalDemandas; ?></p>
-            </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-50 rounded-full flex items-center justify-center">
-                        <i class="fas fa-tasks text-white text-xl"></i>
-        </div>
-                </div>
-            </div>
-
-            <div class="stats-card">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-400 text-sm font-medium">Em Andamento</p>
-                        <p class="text-3xl font-bold text-white"><?php echo $demandasEmAndamento; ?></p>
-                    </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-400 rounded-full flex items-center justify-center">
-                        <i class="fas fa-spinner text-white text-xl"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="stats-card">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-400 text-sm font-medium">Concluídas</p>
-                        <p class="text-3xl font-bold text-white"><?php echo $demandasConcluidas; ?></p>
-                    </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-400 rounded-full flex items-center justify-center">
-                        <i class="fas fa-check-circle text-white text-xl"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Search and Filters -->
         <div class="search-container slide-up" style="animation-delay: 0.6s">
             <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
@@ -864,373 +892,128 @@ foreach ($demandas as $d) {
                 Gerenciar Demandas
             </h2>
             
-            <!-- Seção Em Espera -->
-            <div class="mb-8">
-                <h3 class="text-xl font-bold text-white mb-4">Em Espera</h3>
-                <div id="demandasEsperaContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
-                    <?php 
-                    $count_espera = 0;
-                    foreach ($demandas as $index => $d): 
-                        if ($d['status'] === 'pendente'):
-                            $count_espera++;
-                    ?>
-                
-                <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300"
-                    data-title="<?php echo htmlspecialchars($d['titulo']); ?>"
-                    data-description="<?php echo htmlspecialchars($d['descricao']); ?>"
-                    data-status="<?php echo $d['status']; ?>"
-                    data-priority="<?php echo $d['prioridade']; ?>">
-                    
-                    <!-- Card Header -->
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white mb-2 line-clamp-2 cursor-pointer hover:text-primary-50 transition-colors duration-300"
-                                onclick="mostrarDescricao('<?php echo htmlspecialchars($d['titulo']); ?>', '<?php echo htmlspecialchars($d['descricao']); ?>', '<?php echo $d['status']; ?>', '<?php echo date('d/m/Y H:i', strtotime($d['data_criacao'])); ?>', '<?php echo !empty($d['data_conclusao']) ? date('d/m/Y H:i', strtotime($d['data_conclusao'])) : ''; ?>')">
-                                <?php echo htmlspecialchars($d['titulo']); ?>
-                            </h3>
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="status-badge status-<?php echo $d['status']; ?>">
-                                    <?php
-                                    $statusIcons = [
-                                        'pendente' => 'fas fa-clock',
-                                        'em_andamento' => 'fas fa-spinner fa-spin',
-                                        'concluida' => 'fas fa-check-circle',
-                                        'cancelada' => 'fas fa-ban',
-                                        'aceito' => 'fas fa-check-circle'
-                                    ];
-                                    
-                                    $display_status = $d['status'];
-                                    $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
-
-                                    if (!empty($d['usuarios_atribuidos']) && count($d['usuarios_atribuidos']) === 1) {
-                                                        $single_participant_status = $d['usuarios_atribuidos'][0]['status'] ?? null;
-                                                        if ($single_participant_status === 'concluido') {
-                                                $display_status = 'concluida';
-                                                            $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
-                                                        }
-                                                    }
-                                    
-                                        $status_display = ucfirst(str_replace('_', ' ', $display_status));
-                                    ?>
-                                    <i class="<?php echo $display_icon; ?>"></i>
-                                    <?php echo $status_display; ?>
-                                </span>
-                                <span class="priority-badge priority-<?php echo $d['prioridade']; ?>">
-                                    <?php echo ucfirst($d['prioridade']); ?>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs text-gray-400">ID: #<?php echo $d['id']; ?></span>
-                        </div>
-                    </div>
-                    
-                    <!-- Card Content -->
-                    <div class="mb-4">
-                        <p class="text-gray-300 text-sm line-clamp-3 mb-3">
-                            <?php echo htmlspecialchars($d['descricao']); ?>
-                        </p>
+            <!-- Grid de 3 colunas -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Coluna Em Espera -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-clock text-yellow-500"></i>
+                        Em Espera
+                    </h3>
+                    <div id="demandasEsperaContainer" class="space-y-4">
+                        <?php 
+                        $demandas_espera = array_filter($demandas, function($d) {
+                            return $d['status'] === 'pendente';
+                        });
                         
-                        <div class="grid grid-cols-2 gap-4 text-xs">
-                            <div>
-                                <span class="text-gray-400">Criado em:</span>
-                                <p class="text-white font-medium">
-                                    <?php echo date('d/m/Y', strtotime($d['data_criacao'])); ?>
-                                </p>
-                                <p class="text-gray-400">
-                                    <?php echo date('H:i', strtotime($d['data_criacao'])); ?>
-                                </p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400">
-                                    <?php echo !empty($d['data_conclusao']) ? 'Concluído em:' : 'Prazo:'; ?>
-                                </span>
-                                <p class="text-white font-medium">
-                                    <?php 
-                                    if (!empty($d['data_conclusao'])) {
-                                        echo date('d/m/Y', strtotime($d['data_conclusao']));
-                                    } else {
-                                        $dias_prazo = 0;
-                                        switch ($d['prioridade']) {
-                                            case 'baixa': $dias_prazo = 5; break;
-                                            case 'media': $dias_prazo = 3; break;
-                                            case 'alta': $dias_prazo = 1; break;
-                                        }
-                                        echo date('d/m/Y', strtotime($d['data_criacao'] . " +{$dias_prazo} days"));
-                                    }
-                                    ?>
-                                </p>
-                                <?php if (!empty($d['data_conclusao'])): ?>
-                                <p class="text-gray-400">
-                                    <?php echo date('H:i', strtotime($d['data_conclusao'])); ?>
-                                </p>
-                                <?php else: ?>
-                                <p class="text-gray-400">
-                                    <?php echo date('H:i', strtotime($d['data_criacao'])); ?>
-                                </p>
-                                <?php endif; ?>
-                            </div>
+                        // Ordenar por prioridade
+                        usort($demandas_espera, function($a, $b) {
+                            $prioridades = ['alta' => 3, 'media' => 2, 'baixa' => 1];
+                            return $prioridades[$b['prioridade']] - $prioridades[$a['prioridade']];
+                        });
+                        
+                        foreach ($demandas_espera as $d): 
+                        ?>
+                        <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300"
+                            data-title="<?php echo htmlspecialchars($d['titulo']); ?>"
+                            data-description="<?php echo htmlspecialchars($d['descricao']); ?>"
+                            data-status="<?php echo $d['status']; ?>"
+                            data-priority="<?php echo $d['prioridade']; ?>">
+                            <!-- Conteúdo do card (mantido igual) -->
+                            <?php include 'components/demand_card.php'; ?>
                         </div>
-                    </div>
-                    
-                    <!-- Card Actions -->
-                    <div class="flex items-center justify-between pt-4 border-t border-gray-700">
-                        <button 
-                            onclick="mostrarDescricao('<?php echo htmlspecialchars($d['titulo']); ?>', '<?php echo htmlspecialchars($d['descricao']); ?>', '<?php echo $d['status']; ?>', '<?php echo date('d/m/Y H:i', strtotime($d['data_criacao'])); ?>', '<?php echo !empty($d['data_conclusao']) ? date('d/m/Y H:i', strtotime($d['data_conclusao'])) : ''; ?>')"
-                            class="custom-btn bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg"
-                            title="Ver detalhes">
-                            <i class="fas fa-eye"></i>
-                        </button>
-
-                        <div class="flex items-center gap-2 ml-auto">
-                                <?php if ($d['status'] !== 'concluida'): ?>
-                                    <?php if ($d['status'] === 'pendente'): ?>
-                                        <button onclick="realizarTarefa(<?php echo $d['id']; ?>, '<?php echo $d['status']; ?>')" 
-                                                class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg transition-all duration-300 flex items-center gap-2">
-                                            <i class="fas fa-tasks"></i>
-                                            Realizar Tarefa
-                        </button>
-                                    <?php elseif ($d['status'] === 'em_andamento'): ?>
-                                        <button onclick="concluirDemanda(<?php echo $d['id']; ?>)" 
-                                                class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg transition-all duration-300 flex items-center gap-2">
-                                            <i class="fas fa-check"></i>
-                                            Concluir
-                                        </button>
-                                    <?php endif; ?>
-                                <?php endif; ?>
-                                <button onclick="editarDemanda(<?php echo $d['id']; ?>)" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="excluirDemanda(<?php echo $d['id']; ?>)" class="custom-btn bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded-lg" title="Excluir">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Status dos Usuários -->
-                        <?php if (!empty($d['usuarios_atribuidos'])): ?>
-                        <div class="mt-4 pt-4 border-t border-gray-700">
-                            <h4 class="text-sm font-semibold text-gray-400 mb-2">Status dos Participantes:</h4>
-                            <div class="flex flex-wrap gap-2">
-                                <?php foreach ($d['usuarios_atribuidos'] as $u_atrib): ?>
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-xs text-gray-300"><?php echo isset($u_atrib['nome']) && $u_atrib['nome'] ? htmlspecialchars($u_atrib['nome']) : '<span class="text-gray-500">Sem nome</span>'; ?>:</span>
-                                        <span class="status-badge status-<?php echo $u_atrib['status']; ?>">
-                                            <?php
-                                            $statusIconsParticipante = [
-                                                'pendente' => 'fas fa-clock',
-                                                'aceito' => 'fas fa-check-circle',
-                                                'em_andamento' => 'fas fa-spinner fa-spin',
-                                                'concluido' => 'fas fa-check-circle',
-                                                'recusado' => 'fas fa-times-circle'
-                                            ];
-                                            ?>
-                                            <i class="<?php echo $statusIconsParticipante[$u_atrib['status']] ?? 'fas fa-question'; ?>"></i>
-                                            <?php echo ucfirst($u_atrib['status']); ?>
-                                        </span>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
+                        <?php endforeach; ?>
+                        
+                        <?php if (empty($demandas_espera)): ?>
+                        <div class="empty-state">
+                            <i class="fas fa-clipboard"></i>
+                            <h3 class="text-xl font-semibold mb-2">Nenhuma demanda em espera</h3>
+                            <p>Todas as demandas pendentes estão sendo feitas ou foram concluídas/canceladas.</p>
                         </div>
                         <?php endif; ?>
                     </div>
-                    <?php 
-                        endif;
-                    endforeach; 
-                    ?>
                 </div>
-                 <?php if ($count_espera === 0): ?>
-                    <div class="empty-state">
-                        <i class="fas fa-clipboard"></i>
-                        <h3 class="text-xl font-semibold mb-2">Nenhuma demanda em espera</h3>
-                        <p>Todas as demandas pendentes estão sendo feitas ou foram concluídas/canceladas.</p>
-                    </div>
-                <?php endif; ?>
-            </div>
 
-            <!-- Seção Outras Demandas -->
-            <div class="mb-8">
-                 <h3 class="text-xl font-bold text-white mb-4">Outras Demandas</h3>
-                 <div id="demandasOutrasContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
-                     <?php 
-                     $count_outras = 0;
-                     foreach ($demandas as $index => $d): 
-                         if ($d['status'] !== 'pendente'):
-                             $count_outras++;
-                     ?>
-                     
-                     <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300"
-                         data-title="<?php echo htmlspecialchars($d['titulo']); ?>"
-                         data-description="<?php echo htmlspecialchars($d['descricao']); ?>"
-                         data-status="<?php echo $d['status']; ?>"
-                         data-priority="<?php echo $d['prioridade']; ?>">
-                         
-                         <!-- Card Header -->
-                         <div class="flex items-start justify-between mb-4">
-                             <div class="flex-1">
-                                 <h3 class="text-lg font-semibold text-white mb-2 line-clamp-2 cursor-pointer hover:text-primary-50 transition-colors duration-300"
-                                     onclick="mostrarDescricao('<?php echo htmlspecialchars($d['titulo']); ?>', '<?php echo htmlspecialchars($d['descricao']); ?>', '<?php echo $d['status']; ?>', '<?php echo date('d/m/Y H:i', strtotime($d['data_criacao'])); ?>', '<?php echo !empty($d['data_conclusao']) ? date('d/m/Y H:i', strtotime($d['data_conclusao'])) : ''; ?>')">
-                                     <?php echo htmlspecialchars($d['titulo']); ?>
-                                 </h3>
-                                 <div class="flex items-center gap-2 mb-2">
-                                     <span class="status-badge status-<?php echo $d['status']; ?>">
-                                         <?php
-                                         $statusIcons = [
-                                             'pendente' => 'fas fa-clock',
-                                             'em_andamento' => 'fas fa-spinner fa-spin',
-                                             'concluida' => 'fas fa-check-circle',
-                                             'cancelada' => 'fas fa-ban',
-                                             'aceito' => 'fas fa-check-circle'
-                                         ];
-                                         
-                                         $display_status = $d['status'];
-                                         $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
-
-                                         if (!empty($d['usuarios_atribuidos']) && count($d['usuarios_atribuidos']) === 1) {
-                                             $single_participant_status = $d['usuarios_atribuidos'][0]['status'] ?? null;
-                                             if ($single_participant_status === 'concluido') {
-                                                 $display_status = 'concluida';
-                                                 $display_icon = $statusIcons[$display_status] ?? 'fas fa-question';
-                                             }
-                                         }
-
-                                         $status_display = ucfirst(str_replace('_', ' ', $display_status));
-                                         ?>
-                                         <i class="<?php echo $display_icon; ?>"></i>
-                                         <?php echo $status_display; ?>
-                                     </span>
-                                     <span class="priority-badge priority-<?php echo $d['prioridade']; ?>">
-                                         <?php echo ucfirst($d['prioridade']); ?>
-                                     </span>
-                                 </div>
-                             </div>
-                             <div class="text-right">
-                                 <span class="text-xs text-gray-400">ID: #<?php echo $d['id']; ?></span>
-            </div>
-                         </div>
-                         
-                         <!-- Card Content -->
-                         <div class="mb-4">
-                             <p class="text-gray-300 text-sm line-clamp-3 mb-3">
-                                 <?php echo htmlspecialchars($d['descricao']); ?>
-                             </p>
-                             
-                             <div class="grid grid-cols-2 gap-4 text-xs">
-                                 <div>
-                                     <span class="text-gray-400">Criado em:</span>
-                                     <p class="text-white font-medium">
-                                         <?php echo date('d/m/Y', strtotime($d['data_criacao'])); ?>
-                                     </p>
-                                     <p class="text-gray-400">
-                                         <?php echo date('H:i', strtotime($d['data_criacao'])); ?>
-                                     </p>
-                                 </div>
-                                 <div>
-                                     <span class="text-gray-400">
-                                         <?php echo !empty($d['data_conclusao']) ? 'Concluído em:' : 'Prazo:'; ?>
-                                     </span>
-                                         <p class="text-white font-medium">
-                                         <?php
-                                         if (!empty($d['data_conclusao'])) {
-                                             echo date('d/m/Y', strtotime($d['data_conclusao']));
-                                         } else {
-                                         $dias_prazo = 0;
-                                         switch ($d['prioridade']) {
-                                                 case 'baixa': $dias_prazo = 5; break;
-                                                 case 'media': $dias_prazo = 3; break;
-                                                 case 'alta': $dias_prazo = 1; break;
-                                             }
-                                             echo date('d/m/Y', strtotime($d['data_criacao'] . " +{$dias_prazo} days"));
-                                         }
-                                         ?>
-                                     </p>
-                                     <?php if (!empty($d['data_conclusao'])): ?>
-                                         <p class="text-gray-400">
-                                         <?php echo date('H:i', strtotime($d['data_conclusao'])); ?>
-                                     </p>
-                                     <?php else: ?>
-                                     <p class="text-gray-400">
-                                         <?php echo date('H:i', strtotime($d['data_criacao'])); ?>
-                                         </p>
-                                     <?php endif; ?>
-                                 </div>
-                             </div>
-                         </div>
-                         
-                         <!-- Card Actions -->
-                         <div class="flex items-center justify-between pt-4 border-t border-gray-700">
-                             <button 
-                                 onclick="mostrarDescricao('<?php echo htmlspecialchars($d['titulo']); ?>', '<?php echo htmlspecialchars($d['descricao']); ?>', '<?php echo $d['status']; ?>', '<?php echo date('d/m/Y H:i', strtotime($d['data_criacao'])); ?>', '<?php echo !empty($d['data_conclusao']) ? date('d/m/Y H:i', strtotime($d['data_conclusao'])) : ''; ?>')"
-                                 class="custom-btn bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg"
-                                 title="Ver detalhes">
-                                 <i class="fas fa-eye"></i>
-                             </button>
-
-                             <div class="flex items-center gap-2 ml-auto">
-                            <?php if ($d['status'] !== 'concluida'): ?>
-                                <?php if ($d['status'] === 'pendente'): ?>
-                                         <button onclick="realizarTarefa(<?php echo $d['id']; ?>, '<?php echo $d['status']; ?>')" 
-                                                 class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg transition-all duration-300 flex items-center gap-2">
-                                        <i class="fas fa-tasks"></i>
-                                        Realizar Tarefa
-                                    </button>
-                                <?php elseif ($d['status'] === 'em_andamento'): ?>
-                                    <button onclick="concluirDemanda(<?php echo $d['id']; ?>)" 
-                                                 class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg transition-all duration-300 flex items-center gap-2">
-                                        <i class="fas fa-check"></i>
-                                        Concluir
-                                    </button>
-                                <?php endif; ?>
-                            <?php endif; ?>
-                                 <button onclick="editarDemanda(<?php echo $d['id']; ?>)" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg" title="Editar">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                                 <button onclick="excluirDemanda(<?php echo $d['id']; ?>)" class="custom-btn bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded-lg" title="Excluir">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                <!-- Coluna Em Andamento -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-spinner fa-spin text-blue-500"></i>
+                        Em Andamento
+                    </h3>
+                    <div id="demandasAndamentoContainer" class="space-y-4">
+                        <?php 
+                        $demandas_andamento = array_filter($demandas, function($d) {
+                            return $d['status'] === 'em_andamento';
+                        });
+                        
+                        // Ordenar por prioridade
+                        usort($demandas_andamento, function($a, $b) {
+                            $prioridades = ['alta' => 3, 'media' => 2, 'baixa' => 1];
+                            return $prioridades[$b['prioridade']] - $prioridades[$a['prioridade']];
+                        });
+                        
+                        foreach ($demandas_andamento as $d): 
+                        ?>
+                        <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300"
+                            data-title="<?php echo htmlspecialchars($d['titulo']); ?>"
+                            data-description="<?php echo htmlspecialchars($d['descricao']); ?>"
+                            data-status="<?php echo $d['status']; ?>"
+                            data-priority="<?php echo $d['prioridade']; ?>">
+                            <!-- Conteúdo do card (mantido igual) -->
+                            <?php include 'components/demand_card.php'; ?>
                         </div>
-                    </div>
-
-                    <!-- Status dos Usuários -->
-                    <?php if (!empty($d['usuarios_atribuidos'])): ?>
-                    <div class="mt-4 pt-4 border-t border-gray-700">
-                        <h4 class="text-sm font-semibold text-gray-400 mb-2">Status dos Participantes:</h4>
-                        <div class="flex flex-wrap gap-2">
-                            <?php foreach ($d['usuarios_atribuidos'] as $u_atrib): ?>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs text-gray-300"><?php echo isset($u_atrib['nome']) && $u_atrib['nome'] ? htmlspecialchars($u_atrib['nome']) : '<span class="text-gray-500">Sem nome</span>'; ?>:</span>
-                                    <span class="status-badge status-<?php echo $u_atrib['status']; ?>">
-                                        <?php
-                                        $statusIconsParticipante = [
-                                            'pendente' => 'fas fa-clock',
-                                            'aceito' => 'fas fa-check-circle',
-                                            'em_andamento' => 'fas fa-spinner fa-spin',
-                                            'concluido' => 'fas fa-check-circle',
-                                            'recusado' => 'fas fa-times-circle'
-                                        ];
-                                        ?>
-                                        <i class="<?php echo $statusIconsParticipante[$u_atrib['status']] ?? 'fas fa-question'; ?>"></i>
-                                        <?php echo ucfirst($u_atrib['status']); ?>
-                                    </span>
-                                </div>
-                            <?php endforeach; ?>
+                        <?php endforeach; ?>
+                        
+                        <?php if (empty($demandas_andamento)): ?>
+                        <div class="empty-state">
+                            <i class="fas fa-tasks"></i>
+                            <h3 class="text-xl font-semibold mb-2">Nenhuma demanda em andamento</h3>
+                            <p>Não há demandas sendo trabalhadas no momento.</p>
                         </div>
+                        <?php endif; ?>
                     </div>
-                    <?php endif; ?>
                 </div>
-                     <?php 
-                         endif;
-                     endforeach; 
-                     ?>
+
+                <!-- Coluna Concluídas -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-check-circle text-green-500"></i>
+                        Concluídas
+                    </h3>
+                    <div id="demandasConcluidasContainer" class="space-y-4">
+                        <?php 
+                        $demandas_concluidas = array_filter($demandas, function($d) {
+                            return $d['status'] === 'concluida';
+                        });
+                        
+                        // Ordenar por prioridade
+                        usort($demandas_concluidas, function($a, $b) {
+                            $prioridades = ['alta' => 3, 'media' => 2, 'baixa' => 1];
+                            return $prioridades[$b['prioridade']] - $prioridades[$a['prioridade']];
+                        });
+                        
+                        foreach ($demandas_concluidas as $d): 
+                        ?>
+                        <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300"
+                            data-title="<?php echo htmlspecialchars($d['titulo']); ?>"
+                            data-description="<?php echo htmlspecialchars($d['descricao']); ?>"
+                            data-status="<?php echo $d['status']; ?>"
+                            data-priority="<?php echo $d['prioridade']; ?>">
+                            <!-- Conteúdo do card (mantido igual) -->
+                            <?php include 'components/demand_card.php'; ?>
+                        </div>
+                        <?php endforeach; ?>
+                        
+                        <?php if (empty($demandas_concluidas)): ?>
+                        <div class="empty-state">
+                            <i class="fas fa-check-double"></i>
+                            <h3 class="text-xl font-semibold mb-2">Nenhuma demanda concluída</h3>
+                            <p>Não há demandas concluídas no momento.</p>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
-                  <?php if ($count_outras === 0): ?>
-                     <div class="empty-state">
-                         <i class="fas fa-list"></i>
-                         <h3 class="text-xl font-semibold mb-2">Nenhuma outra demanda</h3>
-                         <p>Todas as demandas estão em espera ou sendo feitas.</p>
-            </div>
-                 <?php endif; ?>
-             </div>
         </div>
 
         <!-- User Management Section -->
@@ -1245,108 +1028,49 @@ foreach ($demandas as $d) {
                 </button>
             </div>
 
-            <!-- Admins Gerais -->
-            <?php if (!empty($admins_gerais)): ?>
-            <h3 class="text-lg font-semibold text-primary-100 mb-2">Administradores Gerais</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                <?php foreach ($admins_gerais as $index => $user): ?>
-                <div class="user-card fade-in" style="animation-delay: <?php echo ($index * 0.1); ?>s">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-50 rounded-full flex items-center justify-center">
-                            <i class="fas fa-user-shield text-white"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white">
-                                <?php echo isset($user['nome']) && $user['nome'] ? htmlspecialchars($user['nome']) : '<span class="text-gray-500">Sem nome</span>'; ?>
-                            </h3>
-                            <p class="text-gray-400 text-sm"><?php echo htmlspecialchars($user['email']); ?></p>
-                            <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full bg-red-500/20 text-red-400">
-                                Admin Geral - <?php echo areaFromPermissao($user['permissao']); ?>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            </div>
-            <?php endif; ?>
-
-            <!-- Admins de Área -->
-            <?php if (!empty($admins_area)): ?>
-            <h3 class="text-lg font-semibold text-primary-100 mb-2">Administradores de Área</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                <?php foreach ($admins_area as $index => $user): ?>
-                <div class="user-card fade-in" style="animation-delay: <?php echo ($index * 0.1); ?>s">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-50 rounded-full flex items-center justify-center">
-                            <i class="fas fa-user-cog text-white"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white">
-                                <?php echo isset($user['nome']) && $user['nome'] ? htmlspecialchars($user['nome']) : '<span class="text-gray-500">Sem nome</span>'; ?>
-                            </h3>
-                            <p class="text-gray-400 text-sm"><?php echo htmlspecialchars($user['email']); ?></p>
-                            <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full bg-yellow-500/20 text-yellow-400">
-                                Admin de Área - <?php echo areaFromPermissao($user['permissao']); ?>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            </div>
-            <?php endif; ?>
-
-            <!-- Usuários de Área -->
             <?php
-            $usuarios_area = array_filter($usuarios, function($user) {
-                return strpos($user['permissao'], 'usuario_area_') === 0;
-            });
+            // Exibir usuários por área
+            foreach ($usuarios_por_area as $area => $usuarios_area):
+                if (empty($usuarios_area)) continue;
             ?>
-            <?php if (!empty($usuarios_area)): ?>
-            <h3 class="text-lg font-semibold text-primary-100 mb-2">Usuários de Área</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                <?php foreach ($usuarios_area as $index => $user): ?>
-                <div class="user-card fade-in" style="animation-delay: <?php echo ($index * 0.1); ?>s">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-50 rounded-full flex items-center justify-center">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white">
-                                <?php echo isset($user['nome']) && $user['nome'] ? htmlspecialchars($user['nome']) : '<span class="text-gray-500">Sem nome</span>'; ?>
-                            </h3>
-                            <p class="text-gray-400 text-sm"><?php echo htmlspecialchars($user['email']); ?></p>
-                            <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">
-                                Usuário de Área - <?php echo areaFromPermissao($user['permissao']); ?>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            </div>
-            <?php endif; ?>
-
-            <!-- Usuários Comuns -->
-            <h3 class="text-lg font-semibold text-primary-100 mb-2">Usuários</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <?php foreach ($usuarios as $index => $user): ?>
-                <div class="user-card fade-in" style="animation-delay: <?php echo ($index * 0.1); ?>s">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-50 rounded-full flex items-center justify-center">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white">
-                                <?php echo isset($user['nome']) && $user['nome'] ? htmlspecialchars($user['nome']) : '<span class="text-gray-500">Sem nome</span>'; ?>
-                            </h3>
-                            <p class="text-gray-400 text-sm"><?php echo htmlspecialchars($user['email']); ?></p>
-                            <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">
-                                Usuário - <?php echo areaFromPermissao($user['permissao']); ?>
-                            </span>
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-primary-100 mb-4"><?php echo $area; ?></h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <?php foreach ($usuarios_area as $index => $user): ?>
+                    <div class="user-card fade-in" style="animation-delay: <?php echo ($index * 0.1); ?>s">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-50 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-semibold text-white">
+                                    <?php echo isset($user['nome']) && $user['nome'] ? htmlspecialchars($user['nome']) : '<span class="text-gray-500">Sem nome</span>'; ?>
+                                </h3>
+                                <p class="text-gray-400 text-sm"><?php echo htmlspecialchars($user['email']); ?></p>
+                                <?php
+                                $tipo_usuario = '';
+                                $cor_badge = '';
+                                if (strpos($user['permissao'], 'adm_geral') === 0) {
+                                    $tipo_usuario = 'Administrador Geral';
+                                    $cor_badge = 'bg-purple-500/20 text-purple-400';
+                                } elseif (strpos($user['permissao'], 'adm_area_') === 0) {
+                                    $tipo_usuario = 'Administrador - ' . $area;
+                                    $cor_badge = 'bg-blue-500/20 text-blue-400';
+                                } else {
+                                    $tipo_usuario = 'Usuário - ' . $area;
+                                    $cor_badge = 'bg-green-500/20 text-green-400';
+                                }
+                                ?>
+                                <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full <?php echo $cor_badge; ?>">
+                                    <?php echo $tipo_usuario; ?>
+                                </span>
+                            </div>
                         </div>
                     </div>
+                    <?php endforeach; ?>
                 </div>
-                <?php endforeach; ?>
             </div>
+            <?php endforeach; ?>
         </div>
     </main>
 
@@ -1389,17 +1113,21 @@ foreach ($demandas as $d) {
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            <form action="../controllers/DemandaController.php" method="POST" class="space-y-4">
+            <form action="../controllers/DemandaController.php" method="POST" class="space-y-4" id="formCriarDemanda">
                 <input type="hidden" name="acao" value="criar">
+                <?php if (count($areas_permitidas) > 1): ?>
                 <div>
                     <label for="area_id" class="block text-sm font-medium text-gray-300 mb-2">Área</label>
                     <select id="area_id" name="area_id" required class="custom-select w-full">
                         <option value="">Selecione a área</option>
-                        <?php foreach ($areas as $area): ?>
+                        <?php foreach ($areas_permitidas as $area): ?>
                             <option value="<?= $area['id'] ?>"><?= htmlspecialchars($area['nome']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
+                <?php elseif (count($areas_permitidas) === 1): ?>
+                    <input type="hidden" name="area_id" value="<?= $areas_permitidas[0]['id'] ?>">
+                <?php endif; ?>
                 <div>
                     <label for="titulo" class="block text-sm font-medium text-gray-300 mb-2">Título</label>
                     <input type="text" id="titulo" name="titulo" required class="custom-input w-full">
@@ -1457,15 +1185,15 @@ foreach ($demandas as $d) {
                     <select id="tipo" name="tipo" required class="custom-select w-full" onchange="toggleAreaField()">
                         <option value="">Selecione o tipo/permissão</option>
                         <optgroup label="Usuários">
-                            <option value="usuario_area_dev">Usuário - Área de Desenvolvimento</option>
-                            <option value="usuario_area_design">Usuário - Área de Design</option>
-                            <option value="usuario_area_suporte">Usuário - Área de Suporte</option>
+                            <option value="usuario_area_dev(3)">Usuário - Área de Desenvolvimento</option>
+                            <option value="usuario_area_design(3)">Usuário - Área de Design</option>
+                            <option value="usuario_area_suporte(3)">Usuário - Área de Suporte</option>
                         </optgroup>
                         <optgroup label="Administradores">
-                            <option value="adm_area_dev">Administrador - Área de Desenvolvimento</option>
-                            <option value="adm_area_design">Administrador - Área de Design</option>
-                            <option value="adm_area_suporte">Administrador - Área de Suporte</option>
-                            <option value="adm_geral">Administrador Geral</option>
+                            <option value="adm_area_dev(3)">Administrador - Área de Desenvolvimento</option>
+                            <option value="adm_area_design(3)">Administrador - Área de Design</option>
+                            <option value="adm_area_suporte(3)">Administrador - Área de Suporte</option>
+                            <option value="adm_geral(3)">Administrador Geral</option>
                         </optgroup>
                     </select>
                 </div>
@@ -1600,7 +1328,7 @@ foreach ($demandas as $d) {
         async function editarDemanda(id) {
             try {
                 const response = await fetch(`../controllers/DemandaController.php?action=get_demanda&id=${id}`);
-                    if (!response.ok) {
+                if (!response.ok) {
                     throw new Error('Erro ao buscar dados da demanda');
                 }
                 const data = await response.json();
@@ -1675,121 +1403,171 @@ foreach ($demandas as $d) {
 
         // Função para realizar tarefa
         function realizarTarefa(demandaId, statusAtual) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '../controllers/DemandaController.php';
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '../controllers/DemandaController.php';
 
-                const acaoInput = document.createElement('input');
-                acaoInput.type = 'hidden';
-                acaoInput.name = 'acao';
-                acaoInput.value = 'atualizar_status';
+            const acaoInput = document.createElement('input');
+            acaoInput.type = 'hidden';
+            acaoInput.name = 'acao';
+            acaoInput.value = 'realizar_tarefa';
 
-                const idInput = document.createElement('input');
-                idInput.type = 'hidden';
-                idInput.name = 'id';
-                idInput.value = demandaId;
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = 'id';
+            idInput.value = demandaId;
 
-                const statusInput = document.createElement('input');
-                statusInput.type = 'hidden';
-                statusInput.name = 'novo_status';
-                statusInput.value = statusAtual === 'em_andamento' ? 'concluida' : 'em_andamento';
+            const statusInput = document.createElement('input');
+            statusInput.type = 'hidden';
+            statusInput.name = 'novo_status';
+            statusInput.value = statusAtual === 'em_andamento' ? 'concluida' : 'em_andamento';
 
-                form.appendChild(acaoInput);
-                form.appendChild(idInput);
-                form.appendChild(statusInput);
+            form.appendChild(acaoInput);
+            form.appendChild(idInput);
+            form.appendChild(statusInput);
 
-                document.body.appendChild(form);
-                form.submit();
+            document.body.appendChild(form);
+            form.submit();
         }
 
         function concluirDemanda(demandaId) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '../controllers/DemandaController.php';
-                
-                const actionInput = document.createElement('input');
-                actionInput.type = 'hidden';
-                actionInput.name = 'acao';
-                actionInput.value = 'atualizar_status';
-                
-                const idInput = document.createElement('input');
-                idInput.type = 'hidden';
-                idInput.name = 'id';
-                idInput.value = demandaId;
-                
-                const statusInput = document.createElement('input');
-                statusInput.type = 'hidden';
-                statusInput.name = 'novo_status';
-                statusInput.value = 'concluida';
-                
-                form.appendChild(actionInput);
-                form.appendChild(idInput);
-                form.appendChild(statusInput);
-                
-                document.body.appendChild(form);
-                form.submit();
-            }
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '../controllers/DemandaController.php';
+            
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'acao';
+            actionInput.value = 'atualizar_status';
+            
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = 'id';
+            idInput.value = demandaId;
+            
+            const statusInput = document.createElement('input');
+            statusInput.type = 'hidden';
+            statusInput.name = 'novo_status';
+            statusInput.value = 'concluida';
+            
+            form.appendChild(actionInput);
+            form.appendChild(idInput);
+            form.appendChild(statusInput);
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
 
         // Filter Functions
         function filterByStatus(status) {
-            const cards = document.querySelectorAll('.demand-card');
+            const containers = [
+                'demandasEsperaContainer',
+                'demandasAndamentoContainer',
+                'demandasConcluidasContainer'
+            ];
 
-            cards.forEach(card => {
-                const cardStatus = card.dataset.status;
-                
-                if (status === 'all' || cardStatus === status) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+            containers.forEach(containerId => {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                const cards = container.querySelectorAll('.demand-card');
+                cards.forEach(card => {
+                    if (status === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        const cardStatus = card.dataset.status;
+                        card.style.display = cardStatus === status ? 'block' : 'none';
+                    }
+                });
+
+                updateEmptyState(containerId);
             });
 
-            updateEmptyState('demandasEsperaContainer');
-            updateEmptyState('demandasOutrasContainer');
             filterDemands();
         }
 
         function filterByPriority(priority) {
-            const cards = document.querySelectorAll('.demand-card');
+            const containers = [
+                'demandasEsperaContainer',
+                'demandasAndamentoContainer',
+                'demandasConcluidasContainer'
+            ];
 
-            cards.forEach(card => {
-                const cardPriority = card.dataset.priority;
+            containers.forEach(containerId => {
+                const container = document.getElementById(containerId);
+                if (!container) return;
 
-                let isVisibleByPriority = (priority === 'all' || cardPriority === priority);
-                card.style.display = isVisibleByPriority ? 'block' : 'none';
+                const cards = container.querySelectorAll('.demand-card');
+                cards.forEach(card => {
+                    const cardPriority = card.dataset.priority;
+                    const cardStatus = card.dataset.status;
+                    
+                    let isVisibleByPriority = (priority === 'all' || cardPriority === priority);
+                    let isVisibleByStatus = true;
+                    
+                    // Verificar se o card pertence ao container correto
+                    if (containerId === 'demandasEsperaContainer' && cardStatus !== 'pendente') {
+                        isVisibleByStatus = false;
+                    } else if (containerId === 'demandasAndamentoContainer' && cardStatus !== 'em_andamento') {
+                        isVisibleByStatus = false;
+                    } else if (containerId === 'demandasConcluidasContainer' && cardStatus !== 'concluida') {
+                        isVisibleByStatus = false;
+                    }
+                    
+                    card.style.display = (isVisibleByPriority && isVisibleByStatus) ? 'block' : 'none';
+                });
+
+                updateEmptyState(containerId);
             });
-
-            filterDemands();
         }
 
         function filterDemands() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const statusSelect = document.querySelector('select[onchange="filterByStatus(this.value)"]');
             const prioritySelect = document.querySelector('select[onchange="filterByPriority(this.value)"]');
-            const cards = document.querySelectorAll('.demand-card');
             
+            const containers = [
+                'demandasEsperaContainer',
+                'demandasAndamentoContainer',
+                'demandasConcluidasContainer'
+            ];
+
             const activeStatus = statusSelect ? statusSelect.value : 'all';
             const activePriority = prioritySelect ? prioritySelect.value : 'all';
 
-            cards.forEach(card => {
-                const title = card.dataset.title.toLowerCase();
-                const description = card.dataset.description.toLowerCase();
-                const status = card.dataset.status;
-                const priority = card.dataset.priority;
+            containers.forEach(containerId => {
+                const container = document.getElementById(containerId);
+                if (!container) return;
 
-                const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
-                const matchesStatus = activeStatus === 'all' || status === activeStatus;
-                const matchesPriority = activePriority === 'all' || priority === activePriority;
+                const cards = container.querySelectorAll('.demand-card');
+                cards.forEach(card => {
+                    const title = card.dataset.title.toLowerCase();
+                    const description = card.dataset.description.toLowerCase();
+                    const status = card.dataset.status;
+                    const priority = card.dataset.priority;
 
-                if (matchesSearch && matchesStatus && matchesPriority) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                    const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+                    const matchesStatus = activeStatus === 'all' || status === activeStatus;
+                    const matchesPriority = activePriority === 'all' || priority === activePriority;
+
+                    let isVisibleByStatus = true;
+                    if (containerId === 'demandasEsperaContainer' && status !== 'pendente') {
+                        isVisibleByStatus = false;
+                    } else if (containerId === 'demandasAndamentoContainer' && status !== 'em_andamento') {
+                        isVisibleByStatus = false;
+                    } else if (containerId === 'demandasConcluidasContainer' && status !== 'concluida') {
+                        isVisibleByStatus = false;
+                    }
+
+                    if (matchesSearch && matchesStatus && matchesPriority && isVisibleByStatus) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                updateEmptyState(containerId);
             });
-
-            updateEmptyState('demandasEsperaContainer');
-            updateEmptyState('demandasOutrasContainer');
         }
 
         function updateEmptyState(containerId) {
@@ -1800,15 +1578,7 @@ foreach ($demandas as $d) {
             let visibleCount = 0;
 
             cards.forEach(card => {
-                const cardStatus = card.dataset.status;
-                let belongsToContainer = false;
-                if (containerId === 'demandasEsperaContainer' && cardStatus === 'pendente') {
-                    belongsToContainer = true;
-                } else if (containerId === 'demandasOutrasContainer' && cardStatus !== 'pendente') {
-                    belongsToContainer = true;
-                }
-
-                if (card.style.display !== 'none' && belongsToContainer) {
+                if (card.style.display !== 'none') {
                     visibleCount++;
                 }
             });

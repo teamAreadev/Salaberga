@@ -87,19 +87,43 @@ class Usuario {
 
     // Busca todos os usuários e suas permissões para um sistema específico
     public function listarUsuariosComPermissoes($sistema_id) {
-        $sql = "
-            SELECT u.*, p.descricao as permissao, sp.id as sist_perm_id
-            FROM usuarios u
-            INNER JOIN usu_sist us ON u.id = us.usuario_id
-            INNER JOIN sist_perm sp ON us.sist_perm_id = sp.id
-            INNER JOIN permissoes p ON sp.permissao_id = p.id
-            WHERE sp.sistema_id = ?
-              AND p.id IN (13,12,11,6,5)
-            ORDER BY u.nome
-        ";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$sistema_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $sql = "SELECT DISTINCT u.id, u.nome, u.email, p.descricao as permissao
+                    FROM usuarios u
+                    INNER JOIN usu_sist us ON u.id = us.usuario_id
+                    INNER JOIN sist_perm sp ON us.sist_perm_id = sp.id
+                    INNER JOIN permissoes p ON sp.permissao_id = p.id
+                    WHERE sp.sistema_id = ?
+                    AND (p.descricao LIKE 'usuario_area_%' 
+                         OR p.descricao LIKE 'adm_area_%' 
+                         OR p.descricao = 'adm_geral')";
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$sistema_id]);
+            
+            error_log("SQL Query: " . $sql);
+            $sql = "SELECT DISTINCT u.*, p.descricao as permissao 
+                    FROM usuarios u 
+                    INNER JOIN usu_sist us ON u.id = us.usuario_id 
+                    INNER JOIN sist_perm sp ON us.sist_perm_id = sp.id 
+                    INNER JOIN permissoes p ON sp.permissao_id = p.id 
+                    WHERE sp.sistema_id = ? 
+                    AND (p.descricao LIKE 'usuario_area_%' OR p.descricao LIKE 'adm_area_%' OR p.descricao = 'adm_geral')
+                    ORDER BY u.nome";
+            
+            error_log("SQL Query: " . $sql);
+            error_log("ID Sistema: " . $id_sistema);
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$id_sistema]);
+            $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            error_log("Total de usuários encontrados: " . count($usuarios));
+            return $usuarios;
+        } catch (Exception $e) {
+            error_log("Erro ao listar usuários com permissões: " . $e->getMessage());
+            return [];
+        }
     }
 
     // Utilitários para filtrar tipos de usuário a partir do resultado de listarUsuariosComPermissoes

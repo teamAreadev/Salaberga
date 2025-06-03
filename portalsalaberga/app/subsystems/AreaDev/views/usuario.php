@@ -1,37 +1,114 @@
 <?php
 session_start();
 
+require_once __DIR__ . '/../../../main/config/Database.php';
 require_once __DIR__ . '/../model/Demanda.php';
 require_once __DIR__ . '/../model/Usuario.php';
 require_once __DIR__ . '/../../../main/config/Database.php';
 
-$conexao = Database::getAreadevConnection();
-
-$demanda = new Demanda($conexao);
-$usuario = new Usuario($conexao);
-
-// DEBUG: Verificar dados da sessão e permissões
-error_log("DEBUG SESSION DATA: " . print_r($_SESSION, true));
-error_log("DEBUG USER SYSTEMS PERMISSIONS: " . print_r($_SESSION['user_systems_permissions'] ?? 'Não definido', true));
-
-// Verifica se o usuário está logado
-if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
-    // Redireciona para a página de login se não estiver logado
-    header('Location: ../../main/views/autenticacao/login.php');
-        exit();
-    }
-
+// Obter o ID do usuário da sessão
 $usuario_id = $_SESSION['user_id'] ?? null;
 
-// DEBUG: Verificar ID do usuário
-error_log("DEBUG USER ID: " . $usuario_id);
+// Obter as conexões com o banco de dados
+$conexao = Database::getAreadevConnection();
+$pdo_salaberga = Database::getInstance()->getSalabergaConnection();
 
-// Verifica se o ID do usuário está disponível na sessão
-if ($usuario_id === null) {
-    error_log("Erro: ID do usuário não encontrado na sessão ao acessar usuario.php");
-    header('Location: ../../main/views/autenticacao/login.php?error=user_id_missing');
-    exit();
+// Verificar se o usuário está logado
+if (!$usuario_id) {
+    header('Location: ../../../main/views/autenticacao/login.php');
+    exit;
 }
+
+// Instanciar o modelo de Demanda
+$demandaModel = new Demanda($conexao);
+
+// Processar formulários
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    error_log("\n=== PROCESSANDO FORMULÁRIO POST ===");
+    error_log("Dados do POST: " . print_r($_POST, true));
+    
+    if (isset($_POST['acao'])) {
+        error_log("Ação detectada: " . $_POST['acao']);
+        
+        switch ($_POST['acao']) {
+            case 'aceitar':
+                if (isset($_POST['demanda_id'])) {
+                    error_log("Tentando aceitar demanda ID: " . $_POST['demanda_id']);
+                    if ($demandaModel->aceitarDemanda($_POST['demanda_id'], $usuario_id)) {
+                        error_log("Demanda aceita com sucesso");
+                        $_SESSION['mensagem'] = 'Demanda aceita com sucesso!';
+                    } else {
+                        error_log("ERRO ao aceitar demanda");
+                        $_SESSION['erro'] = 'Erro ao aceitar demanda.';
+                    }
+                }
+                break;
+            case 'recusar':
+                if (isset($_POST['demanda_id'])) {
+                    error_log("Tentando recusar demanda ID: " . $_POST['demanda_id']);
+                    if ($demandaModel->recusarDemanda($_POST['demanda_id'], $usuario_id)) {
+                        error_log("Demanda recusada com sucesso");
+                        $_SESSION['mensagem'] = 'Demanda recusada com sucesso.';
+                    } else {
+                        error_log("ERRO ao recusar demanda");
+                        $_SESSION['erro'] = 'Erro ao recusar demanda.';
+                    }
+                }
+                break;
+            case 'update_status':
+                if (isset($_POST['demanda_id']) && isset($_POST['novo_status'])) {
+                    error_log("Tentando atualizar status da demanda ID: " . $_POST['demanda_id'] . " para: " . $_POST['novo_status']);
+                    if ($_POST['novo_status'] === 'em_andamento') {
+                        if ($demandaModel->marcarEmAndamento($_POST['demanda_id'], $usuario_id)) {
+                            error_log("Status atualizado para em_andamento com sucesso");
+                            $_SESSION['mensagem'] = 'Demanda marcada como em andamento!';
+                        } else {
+                            error_log("ERRO ao marcar como em_andamento");
+                            $_SESSION['erro'] = 'Erro ao atualizar status da demanda.';
+                        }
+                    } elseif ($_POST['novo_status'] === 'concluida') {
+                        if ($demandaModel->marcarConcluida($_POST['demanda_id'], $usuario_id)) {
+                            error_log("Status atualizado para concluida com sucesso");
+                            $_SESSION['mensagem'] = 'Demanda marcada como concluída!';
+                        } else {
+                            error_log("ERRO ao marcar como concluida");
+                            $_SESSION['erro'] = 'Erro ao atualizar status da demanda.';
+                        }
+                    }
+                }
+                break;
+        }
+    }
+}
+
+// Listar demandas do usuário
+error_log("\n=== BUSCANDO DEMANDAS DO USUÁRIO ===");
+$demandas = $demandaModel->listarDemandasPorUsuario($usuario_id);
+error_log("Número de demandas encontradas: " . count($demandas));
+error_log("Demandas encontradas: " . print_r($demandas, true));
+
+// Verificar permissões do usuário
+error_log("\n=== VERIFICANDO PERMISSÕES DO USUÁRIO ===");
+$stmt = $pdo_salaberga->prepare("
+    SELECT p.descricao 
+    FROM usu_sist us
+    INNER JOIN sist_perm sp ON us.sist_perm_id = sp.id
+    INNER JOIN permissoes p ON sp.permissao_id = p.id
+    WHERE us.usuario_id = ? AND sp.sistema_id = 3
+");
+$stmt->execute([$usuario_id]);
+$permissoes = $stmt->fetchAll(PDO::FETCH_COLUMN);
+error_log("Permissões do usuário: " . print_r($permissoes, true));
+
+// Verificar se é admin
+$is_admin = false;
+foreach ($permissoes as $permissao) {
+    if (strpos($permissao, 'adm_') === 0) {
+        $is_admin = true;
+        break;
+    }
+}
+error_log("Usuário é admin? " . ($is_admin ? 'Sim' : 'Não'));
 
 // --- Início do código para obter a área do usuário --- //
 $user_area = 'Não Definida'; // Valor padrão
@@ -62,32 +139,6 @@ if (isset($_SESSION['user_systems_permissions']) && is_array($_SESSION['user_sys
 error_log("DEBUG ÁREA FINAL DO USUÁRIO: " . $user_area);
 // --- Fim do código para obter a área do usuário --- //
 
-// Processar ações do formulário (aceitar/recusar demanda)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['action']) && isset($_POST['demanda_id'])) {
-        $demanda_id = $_POST['demanda_id'];
-
-        if ($_POST['action'] === 'aceitar') {
-        $sucesso = $demanda->aceitarDemanda($demanda_id, $usuario_id);
-        if ($sucesso) {
-            header("Location: usuario.php?success=Demanda aceita com sucesso!");
-        } else {
-            header("Location: usuario.php?error=Erro ao aceitar demanda.");
-        }
-        } elseif ($_POST['action'] === 'recusar') {
-        $sucesso = $demanda->recusarDemanda($demanda_id, $usuario_id);
-        if ($sucesso) {
-            header("Location: usuario.php?success=Demanda recusada com sucesso!");
-        } else {
-            header("Location: usuario.php?error=Erro ao recusar demanda.");
-            }
-        }
-        exit();
-    }
-}
-
-$demandas = $demanda->listarDemandasPorUsuario($usuario_id);
-
 // Calcular estatísticas
 $totalDemandas = count($demandas);
 $demandasPendentes = 0;
@@ -109,7 +160,6 @@ foreach ($demandas as $d) {
 }
 
 // DEBUG: Adicionado para verificar o status do usuário antes de exibir os botões
-// Remova este bloco após a depuração
 echo '<script>';
 echo 'console.log("DEBUG - Status do usuário para cada demanda:");';
 foreach ($demandas as $d) {
@@ -125,6 +175,7 @@ foreach ($demandas as $d) {
         }
     }
     echo 'console.log("  Demanda ID: ' . $d['id'] . ', Status Usuário: ' . ($status_usuario_debug ?? 'null') . ', Atribuído: ' . ($usuario_logado_atribuido ? 'Sim' : 'Não') . '");';
+    echo 'console.log("  Usuários Atribuídos: " + ' . json_encode($d['usuarios_atribuidos']) . ');';
 }
 echo '</script>';
 
@@ -728,7 +779,12 @@ echo '</script>';
     }
 
     .card-id {
-        // ... existing code ...
+        font-size: 0.75rem;
+        color: #888888;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        display: inline-block;
     }
 </style>
 
@@ -987,25 +1043,29 @@ echo '</script>';
                                     </form>
                                 </div>
                             <?php elseif ($status_usuario === 'aceito'): ?>
-                                    <?php error_log("DEBUG: Bloco de status 'aceito' alcançado para Demanda ID: " . $d['id']); ?>
-                                    <script>console.log("DEBUG JS: Bloco de status 'aceito' alcançado para Demanda ID: <?php echo $d['id']; ?>");</script>
-                                    <form method="POST" action="../controllers/DemandaController.php?action=updateStatus" class="d-inline">
-                                    <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                                    <input type="hidden" name="novo_status" value="em_andamento">
-                                    <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['user_id']; ?>">
-                                    <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg">
-                                        <i class="fas fa-clock btn-icon"></i> Realizar Tarefa
-                                    </button>
-                                </form>
+                                <div class="flex items-center gap-2 ml-auto">
+                                    <form method="POST" action="../controllers/DemandaController.php" class="inline">
+                                        <input type="hidden" name="acao" value="update_status">
+                                        <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                        <input type="hidden" name="novo_status" value="em_andamento">
+                                        <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['user_id']; ?>">
+                                        <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg">
+                                            <i class="fas fa-clock btn-icon"></i> Realizar Tarefa
+                                        </button>
+                                    </form>
+                                </div>
                             <?php elseif ($status_usuario === 'em_andamento'): ?>
-                                    <form method="POST" action="../controllers/DemandaController.php?action=updateStatus" class="d-inline">
-                                    <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                                    <input type="hidden" name="novo_status" value="concluida">
-                                    <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['user_id']; ?>">
-                                    <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg">
-                                        <i class="fas fa-check btn-icon"></i> Concluir
-                                    </button>
-                                </form>
+                                <div class="flex items-center gap-2 ml-auto">
+                                    <form method="POST" action="../controllers/DemandaController.php" class="inline">
+                                        <input type="hidden" name="acao" value="update_status">
+                                        <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                        <input type="hidden" name="novo_status" value="concluida">
+                                        <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['user_id']; ?>">
+                                        <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg">
+                                            <i class="fas fa-check btn-icon"></i> Concluir
+                                        </button>
+                                    </form>
+                                </div>
                             <?php endif; ?>
                         <?php endif; ?>
 
@@ -1232,25 +1292,29 @@ echo '</script>';
                                          </form>
                                      </div>
                                  <?php elseif ($status_usuario === 'aceito'): ?>
-                                     <?php error_log("DEBUG: Bloco de status 'aceito' alcançado para Demanda ID: " . $d['id']); ?>
-                                     <script>console.log("DEBUG JS: Bloco de status 'aceito' alcançado para Demanda ID: <?php echo $d['id']; ?>");</script>
-                                     <form method="POST" action="../controllers/DemandaController.php?action=updateStatus" class="d-inline">
-                                         <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                                         <input type="hidden" name="novo_status" value="em_andamento">
-                                     <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['user_id']; ?>">
-                                     <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg">
-                                         <i class="fas fa-clock btn-icon"></i> Realizar Tarefa
-                                         </button>
-                                     </form>
+                                     <div class="flex items-center gap-2 ml-auto">
+                                         <form method="POST" action="../controllers/DemandaController.php" class="inline">
+                                             <input type="hidden" name="acao" value="update_status">
+                                             <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                             <input type="hidden" name="novo_status" value="em_andamento">
+                                             <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['user_id']; ?>">
+                                             <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg">
+                                                 <i class="fas fa-clock btn-icon"></i> Realizar Tarefa
+                                             </button>
+                                         </form>
+                                     </div>
                                  <?php elseif ($status_usuario === 'em_andamento'): ?>
-                                     <form method="POST" action="../controllers/DemandaController.php?action=updateStatus" class="d-inline">
-                                         <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                                         <input type="hidden" name="novo_status" value="concluida">
-                                     <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['user_id']; ?>">
-                                     <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg">
-                                         <i class="fas fa-check btn-icon"></i> Concluir
-                                         </button>
-                                     </form>
+                                     <div class="flex items-center gap-2 ml-auto">
+                                         <form method="POST" action="../controllers/DemandaController.php" class="inline">
+                                             <input type="hidden" name="acao" value="update_status">
+                                             <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                             <input type="hidden" name="novo_status" value="concluida">
+                                             <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['user_id']; ?>">
+                                             <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg">
+                                                 <i class="fas fa-check btn-icon"></i> Concluir
+                                             </button>
+                                         </form>
+                                     </div>
                                  <?php endif; ?>
                              <?php endif; ?>
                          </div>
