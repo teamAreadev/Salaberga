@@ -1,8 +1,8 @@
 <?php
-define('FPDF_FONTPATH', __DIR__ . '/../assets/fpdf/font/');
-require_once('../assets/fpdf/fpdf.php');
-require_once('../config/Database.php');
-require_once('../assets/phpqrcode/qrlib.php');
+define('FPDF_FONTPATH', __DIR__ . '/../assets/lib/fpdf/font/');
+require_once(__DIR__.'/../assets/lib/fpdf/fpdf.php');
+require_once(__DIR__.'/../config/Database.php');
+require_once('../assets/lib/phpqrcode/qrlib.php');
 
 class qrCode1 extends Database
 {
