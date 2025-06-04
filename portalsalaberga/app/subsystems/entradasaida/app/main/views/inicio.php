@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <!--CÓDIGO PARA VERIFICAR SE O USUÁRIO TEM LOGIN POR MEIO DA SESSÃO-->
+  <?php 
+ session_start();
+ function redirect_to_login()
+ {
+   header('Location: ../../../../../main/views/autenticacao/login.php');
+ }
+ if (!isset($_SESSION['Email'])) {
+   session_destroy();
+   redirect_to_login();
+ }    
+  ?>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">

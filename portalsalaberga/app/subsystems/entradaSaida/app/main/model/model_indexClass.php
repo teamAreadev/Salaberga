@@ -299,6 +299,19 @@ class MainModel
                 $row = $queryVerificar->fetch(PDO::FETCH_ASSOC);
                 $id_aluno = $row['id_aluno'];
 
+                // Verifica se o aluno já foi registrado hoje
+                $verificarRegistro = "SELECT id_aluno FROM saida_estagio 
+                                    WHERE id_aluno = :id_aluno 
+                                    AND DATE(dae) = CURDATE()";
+                $queryVerificarRegistro = $pdo->prepare($verificarRegistro);
+                $queryVerificarRegistro->bindValue(":id_aluno", $id_aluno, PDO::PARAM_INT);
+                $queryVerificarRegistro->execute();
+
+                if ($queryVerificarRegistro->rowCount() > 0) {
+                    echo "Erro: O aluno " . $aluno . " já foi registrado hoje.";
+                    return 1;
+                }
+
                 // Query SQL para inserir id_aluno e date_time na coluna dae
                 $registrar = "INSERT INTO saida_estagio (id_aluno, dae) VALUES (:id_aluno, :dae)";
                 $query = $pdo->prepare($registrar);
@@ -310,15 +323,15 @@ class MainModel
                 // Executa a query
                 $query->execute();
 
-                return true; // Sucesso
+                return 0; // Sucesso
             } else {
-                echo "Erro: O usuário " . $aluno . " o aluno não encontrado na tabela aluno.";
-                return false;
+                echo "Erro: O usuário " . $aluno . " não foi encontrado na tabela aluno.";
+                return 2;
             }
         } catch (PDOException $e) {
             // Tratamento de erro
             echo "Erro: " . $e->getMessage();
-            return false;
+            return 3;
         }
     }
 };

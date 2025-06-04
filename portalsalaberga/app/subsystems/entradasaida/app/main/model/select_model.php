@@ -38,28 +38,40 @@ class select_model
     public function saida_estagio_3A()
     {
         $pdo = $this->db->connect();
-        $queryStr = "SELECT a.nome, s.dae FROM aluno a JOIN saida_estagio s ON a.id_aluno = s.id_aluno WHERE a.id_turma = 9 ORDER BY s.dae DESC LIMIT 1";
+        $queryStr = "SELECT a.nome, s.dae FROM aluno a 
+                    JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                    WHERE a.id_turma = 9 
+                    AND DATE(s.dae) = CURDATE()";
         $query = $pdo->query($queryStr);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
     public function saida_estagio_3B()
     {
         $pdo = $this->db->connect();
-        $queryStr = "SELECT a.nome, s.dae FROM aluno a JOIN saida_estagio s ON a.id_aluno = s.id_aluno WHERE a.id_turma = 10 ORDER BY s.dae DESC LIMIT 1";
+        $queryStr = "SELECT a.nome, s.dae FROM aluno a 
+                    JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                    WHERE a.id_turma = 10 
+                    AND DATE(s.dae) = CURDATE()";
         $query = $pdo->query($queryStr);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
     public function saida_estagio_3C()
     {
         $pdo = $this->db->connect();
-        $queryStr = "SELECT a.nome, s.dae FROM aluno a JOIN saida_estagio s ON a.id_aluno = s.id_aluno WHERE a.id_turma = 11 ORDER BY s.dae DESC LIMIT 1";
+        $queryStr = "SELECT a.nome, s.dae FROM aluno a 
+                    JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                    WHERE a.id_turma = 11 
+                    AND DATE(s.dae) = CURDATE()";
         $query = $pdo->query($queryStr);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
     public function saida_estagio_3D()
     {
         $pdo = $this->db->connect();
-        $queryStr = "SELECT a.nome, s.dae FROM aluno a JOIN saida_estagio s ON a.id_aluno = s.id_aluno WHERE a.id_turma = 12 ORDER BY s.dae DESC LIMIT 1";
+        $queryStr = "SELECT a.nome, s.dae FROM aluno a 
+                    JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                    WHERE a.id_turma = 12 
+                    AND DATE(s.dae) = CURDATE()";
         $query = $pdo->query($queryStr);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }   

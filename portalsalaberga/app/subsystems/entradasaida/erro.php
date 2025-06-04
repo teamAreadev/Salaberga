@@ -8,6 +8,14 @@ if (!isset($_SESSION['Email'])) {
   session_destroy();
   redirect_to_login();
 }
+
+if (isset($_GET['id_aluno']) && isset($_GET['erro'])) {
+
+    $id_aluno = $_GET['id_aluno'];
+    $error = $_GET['erro'];
+} else {
+    header('Location: logado.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -31,6 +39,7 @@ if (!isset($_SESSION['Email'])) {
       --ceara-green-light: #00b357;
       --ceara-orange: #FFA500;
       --ceara-white: #FFFFFF;
+      --ceara-red: #dc3545;
     }
 
     * {
@@ -101,7 +110,6 @@ if (!isset($_SESSION['Email'])) {
     .success-icon {
       width: 90px;
       height: 90px;
-      background: var(--ceara-green);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -109,6 +117,14 @@ if (!isset($_SESSION['Email'])) {
       margin: 0 auto 2rem;
       position: relative;
       animation: pulseAnimation 2s infinite;
+    }
+
+    .success-icon.success {
+      background: var(--ceara-green);
+    }
+
+    .success-icon.error {
+      background: var(--ceara-red);
     }
 
     .success-icon i {
@@ -124,7 +140,6 @@ if (!isset($_SESSION['Email'])) {
       letter-spacing: 0.5px;
     }
 
-
     .message {
       color: #666;
       font-size: 1.1rem;
@@ -134,11 +149,17 @@ if (!isset($_SESSION['Email'])) {
 
     .congratulations {
       display: block;
-      color: var(--ceara-green);
       font-size: 1.4rem;
       font-weight: 700;
-      margin-bottom: -15px;
+      margin-bottom: 1rem;
+    }
 
+    .congratulations.success {
+      color: var(--ceara-green);
+    }
+
+    .congratulations.error {
+      color: var(--ceara-red);
     }
 
     .loading-indicator {
@@ -190,7 +211,6 @@ if (!isset($_SESSION['Email'])) {
     }
 
     @keyframes dotAnimation {
-
       0%,
       100% {
         transform: translateY(0);
@@ -225,16 +245,27 @@ if (!isset($_SESSION['Email'])) {
 <body>
   <div class="container text-center">
     <div class="success-card">
-      <div class="success-icon">
-        <i class="fas fa-check"></i>
-      </div>
-      <h1>Aluno(a) <?php echo $_GET['id_aluno']; ?> saiu com sucesso!</h1>
-      <p class="message">
-        <span class="congratulations">Parabéns!</span>
-        <br>
-        Sua saida foi processada e confirmada em nosso sistema.
-      </p>
-      <div class="loading-indicator" style="margin-left: 30px">
+      <?php if ($error == 1): ?>
+        <div class="success-icon error">
+          <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <span class="congratulations error">Atenção!</span>
+        <h1>Aluno Já Registrado</h1>
+      <?php elseif ($error == 2): ?>
+        <div class="success-icon error">
+          <i class="fas fa-user-slash"></i>
+        </div>
+        <span class="congratulations error">Erro!</span>
+        <h1>Aluno Não Encontrado</h1>
+      <?php else: ?>
+        <div class="success-icon error">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <span class="congratulations error">Erro no Sistema</span>
+        <h1>Falha no Registro</h1>
+      <?php endif; ?>
+
+      <div class="loading-indicator">
         Redirecionando
         <div class="loading-dots">
           <div class="dot"></div>
@@ -245,14 +276,6 @@ if (!isset($_SESSION['Email'])) {
     </div>
   </div>
 
-  <script>
-    function redirect() {
-      setTimeout(() => {
-        window.location = 'logado.php';
-      }, 3000);
-    }
-    redirect();
-  </script>
 </body>
 
 </html>
