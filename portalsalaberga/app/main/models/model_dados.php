@@ -4,8 +4,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-session_start();
-
 function pre_cadastro($email, $cpf)
 {
     require_once('../../config/Database.php');
@@ -181,6 +179,46 @@ function login($email, $senha)
     }
 }
 
+function login_parcial($email, $senha)
+{
+    error_log("Debug: login_parcial function called.");
+    try {
+        // Conexão direta com o banco de dados login_parcial
+        $conexao = new PDO("mysql:host=localhost;dbname=login_parcial", "root", "");
+        $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        error_log("Debug: Database connection successful in login_parcial.");
+
+        // Prepara e executa a consulta para verificar o usuário na tabela 'usuarios'
+        $querySelectUser = "SELECT id, email, senha, equipe FROM usuarios WHERE email = :email AND senha = :senha";
+        $stmtSelectUser = $conexao->prepare($querySelectUser);
+        $stmtSelectUser->bindParam(':email', $email);
+        $stmtSelectUser->bindParam(':senha', $senha);
+        $stmtSelectUser->execute();
+        $user = $stmtSelectUser->fetch(PDO::FETCH_ASSOC);
+
+        error_log("Debug: User query executed in login_parcial.");
+
+        if (!empty($user)) {
+            error_log("Debug: User found in login_parcial. User ID: " . $user['id'] . ", Equipe: " . $user['equipe']);
+            // Armazena dados relevantes do usuário e sistemas/permissões na sessão
+            $_SESSION['login'] = true;
+            $_SESSION['user_id'] = $user['id']; // Armazena o ID do usuário na sessão
+            $_SESSION['Email'] = $user['email'];
+            $_SESSION['Senha'] = str_repeat('•', strlen($senha)); // Evitar armazenar senha real
+            $_SESSION['equipe'] = $user['equipe'];
+            error_log("Debug: Session variables set in login_parcial.");
+            return true;
+        } else {
+            error_log("Debug: User not found or password incorrect in login_parcial.");
+            return false;
+        }
+
+    } catch (PDOException $e) {
+        error_log("Erro no banco de dados durante login_parcial: " . $e->getMessage());
+        return false;
+    }
+}
+
 function recSenha($email)
 {
     require_once('../../config/Database.php');
@@ -350,5 +388,55 @@ function alterarEmail($email,$senha)
         // Changed redirect location to profile page with error
         header('Location: ../../views/autenticacao/perfil.php?erro=3&msg=' . urlencode($e->getMessage()));
         exit();
+    }
+}
+
+function getAlunosByEquipe($id_equipe)
+{
+    error_log("Debug: getAlunosByEquipe called with equipe ID: " . $id_equipe);
+    try {
+        // Conexão direta com o banco de dados login_parcial
+        $conexao = new PDO("mysql:host=localhost;dbname=login_parcial", "root", "");
+        $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        error_log("Debug: Database connection successful in getAlunosByEquipe.");
+
+        // Prepara e executa a consulta para verificar os alunos na tabela 'aluno' pela equipe
+        $querySelectAlunos = "SELECT id, nome FROM aluno WHERE equipe = :id_equipe";
+        $stmtSelectAlunos = $conexao->prepare($querySelectAlunos);
+        $stmtSelectAlunos->bindParam(':id_equipe', $id_equipe);
+        $stmtSelectAlunos->execute();
+        $alunos = $stmtSelectAlunos->fetchAll(PDO::FETCH_ASSOC);
+
+        error_log("Debug: getAlunosByEquipe query executed. Found " . count($alunos) . " alunos.");
+        error_log("Debug: getAlunosByEquipe results: " . print_r($alunos, true));
+
+        return $alunos;
+
+    } catch (PDOException $e) {
+        error_log("Erro no banco de dados ao buscar alunos por equipe (getAlunosByEquipe): " . $e->getMessage());
+        return []; // Retorna um array vazio em caso de erro
+    }
+}
+
+// Nova função para obter o nome da equipe
+function getEquipeNome($id_equipe)
+{
+    try {
+        // Conexão direta com o banco de dados login_parcial
+        $conexao = new PDO("mysql:host=localhost;dbname=login_parcial", "root", "");
+        $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Prepara e executa a consulta para buscar o nome da equipe
+        $querySelectEquipe = "SELECT nome FROM equipes WHERE id = :id_equipe LIMIT 1";
+        $stmtSelectEquipe = $conexao->prepare($querySelectEquipe);
+        $stmtSelectEquipe->bindParam(':id_equipe', $id_equipe);
+        $stmtSelectEquipe->execute();
+        $equipe = $stmtSelectEquipe->fetch(PDO::FETCH_ASSOC);
+
+        return $equipe ? $equipe['nome'] : 'Nome da Equipe não encontrado';
+
+    } catch (PDOException $e) {
+        error_log("Erro no banco de dados ao buscar nome da equipe (getEquipeNome): " . $e->getMessage());
+        return 'Erro ao carregar nome da Equipe'; // Retorna mensagem de erro em caso de falha
     }
 }
