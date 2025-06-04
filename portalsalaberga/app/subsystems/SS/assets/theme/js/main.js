@@ -80,7 +80,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (!email || !senha) {
                 e.preventDefault();
-                alert('Por favor, preencha todos os campos!');
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Campos obrigatórios',
+                  text: 'Por favor, preencha todos os campos!',
+                  customClass: {
+                    popup: 'rounded-xl shadow-xl',
+                  },
+                });
                 return false;
             }
         });
