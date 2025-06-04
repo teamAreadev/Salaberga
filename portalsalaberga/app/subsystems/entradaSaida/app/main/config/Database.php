@@ -1,28 +1,30 @@
 <?php
-//CONEXÃO COM O BANCO
-class Database {
-    private $dsn = 'mysql:host=localhost;dbname=entradasaida';
-    private $username = 'root';
-    private $password = '';
-    private $connection = null;
 
-    public function connect() {
+class connect
+{
+    protected $connect;
+
+    function __construct()
+    {
+        $this->connect_database();
+    }
+
+    function connect_database()
+    {
         try {
-            $this->connection = new PDO($this->dsn, $this->username, $this->password);
-          
-          $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $this->connection;
-        } catch (PDOException $exception) {
-            throw new Exception("Connection error: " . $exception->getMessage());
+            $HOST = 'localhost';
+            $DATABASE = 'entradasaida';
+            $USER = 'root';
+            $PASSWORD = '';
+            $this->connect = new PDO('mysql:host=' . $HOST . ';dbname=' . $DATABASE, $USER, $PASSWORD);
+        } catch (PDOException $e) {
+            $HOST = 'localhost';
+            $DATABASE = 'u750204740_entradasaida';
+            $USER = 'u750204740_entradasaida';
+            $PASSWORD = 'paoComOvo123!@##';
+            $this->connect = new PDO('mysql:host=' . $HOST . ';dbname=' . $DATABASE, $USER, $PASSWORD);
+        } catch (PDOException $e) {
+            die('Erro! O sistema não possui conexão com o banco de dados.');
         }
     }
-
-    public function getConnection() {
-        return $this->connection;
-    }
-
-    public function closeConnection() {
-        $this->connection = null;
-    }
-    
-};
+}
