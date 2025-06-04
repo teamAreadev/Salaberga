@@ -50,13 +50,23 @@ session_start();
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        body {
+            background: url('../../assets/img/fundo.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .content-bg {
+            background: rgba(255,255,255,0.85);
+            border-radius: 1rem;
+            box-shadow: 0 2px 16px 0 rgba(0,0,0,0.08);
+        }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-ceara-white to-gray-100 text-gray-800 min-h-screen">
-    <div class="max-w-7xl mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold gradient-text mb-8 text-center" style="font-family: 'Anton', serif;">
-            Últimas Saídas
+<body class="min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 py-8 content-bg">
+        <h1 class="text-3xl mb-8 text-center" style="font-family: 'Anton', serif;">
+            <span class="gradient-text text-4x1">Frequências registradas em:</span>
+            <span class="text-2xl" style="color: black !important; -webkit-text-fill-color: black !important;"><?php echo date('d/m/Y'); ?></span>
         </h1>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -37,7 +37,8 @@ class select_model extends connect
         $queryStr = "SELECT a.nome, s.dae FROM aluno a 
                     JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
                     WHERE a.id_turma = 9 
-                    AND DATE(s.dae) = CURDATE()";
+                    AND DATE(s.dae) = CURDATE() 
+                    ORDER BY s.dae DESC";
         $query = $this->connect->query($queryStr);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -46,7 +47,8 @@ class select_model extends connect
         $queryStr = "SELECT a.nome, s.dae FROM aluno a 
                     JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
                     WHERE a.id_turma = 10 
-                    AND DATE(s.dae) = CURDATE()";
+                    AND DATE(s.dae) = CURDATE()
+                    ORDER BY s.dae DESC";
         $query = $this->connect->query($queryStr);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -55,7 +57,8 @@ class select_model extends connect
         $queryStr = "SELECT a.nome, s.dae FROM aluno a 
                     JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
                     WHERE a.id_turma = 11 
-                    AND DATE(s.dae) = CURDATE()";
+                    AND DATE(s.dae) = CURDATE()
+                    ORDER BY s.dae DESC";
         $query = $this->connect->query($queryStr);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -64,7 +67,8 @@ class select_model extends connect
         $queryStr = "SELECT a.nome, s.dae FROM aluno a 
                     JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
                     WHERE a.id_turma = 12 
-                    AND DATE(s.dae) = CURDATE()";
+                    AND DATE(s.dae) = CURDATE()
+                    ORDER BY s.dae DESC";
         $query = $this->connect->query($queryStr);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }   

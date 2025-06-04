@@ -230,7 +230,7 @@ if (!isset($_SESSION['Email'])) {
       </div>
       <h1>Aluno(a) <?php echo $_GET['id_aluno']; ?> saiu com sucesso!</h1>
       <p class="message">
-        <span class="congratulations">Parabéns!</span>
+        
         <br>
         Sua saida foi processada e confirmada em nosso sistema.
       </p>
@@ -244,15 +244,6 @@ if (!isset($_SESSION['Email'])) {
       </div>
     </div>
   </div>
-
-  <script>
-    function redirect() {
-      setTimeout(() => {
-        window.location = 'logado.php';
-      }, 3000);
-    }
-    redirect();
-  </script>
 </body>
 
 </html>
