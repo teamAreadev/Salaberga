@@ -311,18 +311,78 @@ if (isset($_POST['layout'])) {
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-cols-5 gap-6">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-3 gap-6">
+                
+                <div class="dashboard-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold">Empresas</h3>
+                            <?php
+                            $dados = $select_model->total_empresa();
+                            foreach ($dados as $dado) {
+
+                            ?>
+                                <p class="text-3xl font-bold mt-2 text-info"><?= $dado ?></p>
+                            <?php } ?>
+                        </div>
+                        <div class="h-12 w-12 rounded-lg bg-info/10 flex items-center justify-center text-info">
+                            <i class="fas fa-building text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold">Vagas Captadas</h3>
+                            <?php
+                            $dados = $select_model->total_vagas();
+                            foreach ($dados as $dado) {
+                            ?>
+                                <p class="text-3xl font-bold mt-2 text-success"><?= $dado ?? 0 ?></p>
+                            <?php
+                            }
+                            ?>
+                        </div>
+                        <div class="h-12 w-12 rounded-lg bg-success/10 flex items-center justify-center text-success">
+                            <i class="fas fa-briefcase text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold">Déficit Vagas</h3>
+                            <?php
+                            $dados2 = $select_model->total_alunos();
+                            $dados = $select_model->total_vagas();
+                            foreach ($dados as $dado) {
+                            ?>
+                                <p class="text-3xl font-bold mt-2 text-danger"><?= $dados2-$dado ?? 0 ?></p>
+                            <?php
+                            }
+                            ?>
+                        </div>
+                        <div class="h-12 w-12 rounded-lg bg-danger/10 flex items-center justify-center text-danger">
+                            <i class="fas fa-briefcase text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="dashboard-card">
                     <div class="flex items-center justify-between">
                         <div>
                             <h3 class="text-lg font-semibold">Alunos</h3>
-                            <p class="text-3xl font-bold mt-2 text-primary">
+                            <p class="text-3xl font-bold mt-2 text-info">
                             <?php 
                             echo $dados = $select_model->total_alunos();
                             ?>
                             </p>
                         </div>
-                        <div class="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                        <div class="h-12 w-12 rounded-lg bg-info/10 flex items-center justify-center text-info">
                             <i class="fas fa-user-graduate text-xl"></i>
                         </div>
                     </div>
@@ -345,6 +405,7 @@ if (isset($_POST['layout'])) {
                         </div>
                     </div>
                 </div>
+                
                 <div class="dashboard-card">
                     <div class="flex items-center justify-between">
                         <div>
@@ -370,42 +431,9 @@ if (isset($_POST['layout'])) {
                     </div>
                 </div>
                 
-                <div class="dashboard-card">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h3 class="text-lg font-semibold">Empresas</h3>
-                            <?php
-                            $dados = $select_model->total_empresa();
-                            foreach ($dados as $dado) {
 
-                            ?>
-                                <p class="text-3xl font-bold mt-2 text-info"><?= $dado ?></p>
-                            <?php } ?>
-                        </div>
-                        <div class="h-12 w-12 rounded-lg bg-info/10 flex items-center justify-center text-info">
-                            <i class="fas fa-building text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dashboard-card">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h3 class="text-lg font-semibold">Vagas</h3>
-                            <?php
-                            $dados = $select_model->total_vagas();
-                            foreach ($dados as $dado) {
-                            ?>
-                                <p class="text-3xl font-bold mt-2 text-secondary"><?= $dado ?? 0 ?></p>
-                            <?php
-                            }
-                            ?>
-                        </div>
-                        <div class="h-12 w-12 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
-                            <i class="fas fa-briefcase text-xl"></i>
-                        </div>
-                    </div>
-                </div>
+                
+                
             </div>
 
             <div class="mt-8 grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -438,7 +466,7 @@ if (isset($_POST['layout'])) {
                 <!-- Estatísticas por Área -->
                 <div class="dashboard-card lg:col-span-3">
                     <h3 class="text-lg font-semibold mb-4">Perfil das Vagas</h3>
-                    <div class="grid grid-cols-3 gap-4">
+                    <div class="grid grid-cols-4 gap-4">
                         
                         <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                             <h4 class="font-medium text-blue-600 dark:text-blue-400">Desenvolvimento</h4>
@@ -482,6 +510,21 @@ if (isset($_POST['layout'])) {
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Vagas</span>
                             </div>
                         </div>
+                        
+                        <div class="p-4 bg-gray-50 dark:bg-gray-900/20 rounded-lg">
+                            <h4 class="font-medium text-gray-600 dark:text-gray-400">Tutoria</h4>
+                            <div class="mt-2 flex justify-between items-end">
+                                <?php
+                                $dados = $select_model->total_vagas_tut();
+                                foreach ($dados as $dado) {
+                                ?>
+                                    <p class="text-lg text-gray-500 dark:text-gray-400"><?= $dado ?? 0 ?></p>
+                                <?php } ?>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">Vagas</span>
+                            </div>
+                        </div>
+                        
+                        
                     </div>
                 </div>
             </div>

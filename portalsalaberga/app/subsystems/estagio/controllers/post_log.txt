@@ -9,3 +9,54 @@ Array
     [data_editar_vaga] => 2222-02-22
     [hora_editar_vaga] => 22:02
 )
+Array
+(
+    [id_editar_vaga] => 53
+    [empresa_editar_vaga] => 52
+    [perfil_editar_vaga] => 2
+    [quantidade_editar_vaga] => 1
+    [quant_candidatos_editar_vaga] => 2
+    [tipo_editar_vaga] => Presencial
+    [data_editar_vaga] => 2025-06-04
+    [hora_editar_vaga] => 13:00
+)
+Array
+(
+    [id_editar_empresa] => 57
+    [nome_editar_empresa] => Pref. MM - FITEC
+    [nome_contato_editar_empresa] => Nilsinho
+    [endereco_editar_empresa] => R. Mundica Paula, 418 - Outra Banda, Maranguape - CE, 61940-145 (Casa Chá)
+    [contato_editar_empresa] => 85992511565
+)
+Array
+(
+    [id_editar_vaga] => 55
+    [empresa_editar_vaga] => 57
+    [quantidade_editar_vaga] => 1
+    [quant_candidatos_editar_vaga] => 2
+    [tipo_editar_vaga] => Presencial
+    [data_editar_vaga] => 
+    [hora_editar_vaga] => 
+)
+Array
+(
+    [id_editar_vaga] => 36
+    [empresa_editar_vaga] => 45
+    [perfil_editar_vaga] => 1
+    [quantidade_editar_vaga] => 3
+    [quant_candidatos_editar_vaga] => 3
+    [tipo_editar_vaga] => Presencial
+    [data_editar_vaga] => 
+    [hora_editar_vaga] => 
+)
+Array
+(
+    [id_editar_vaga] => 56
+    [empresa_editar_vaga] => 58
+    [perfil_editar_vaga] => 1
+    [quantidade_editar_vaga] => 2
+    [quant_candidatos_editar_vaga] => 5
+    [tipo_editar_vaga] => Presencial
+    [data_editar_vaga] => 2025-06-06
+    [hora_editar_vaga] => 08:30
+)
