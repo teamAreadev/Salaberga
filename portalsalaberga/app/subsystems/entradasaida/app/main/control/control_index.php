@@ -1,45 +1,7 @@
 <?php
 
-
 require_once '../model/model_indexClass.php';
 
-class LoginController
-{
-    private $auth;
-
-    public function __construct()
-    {
-        $this->auth = new UserAuth();
-    }
-
-    public function handleLogin()
-    {
-
-        if (isset($_POST["btn"]) && $_POST["btn"] == "on") {
-
-            if (empty($_POST['email']) || empty($_POST['password'])) {
-                return "Erro: Email e senha são obrigatórios.";
-            }
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-
-            try {
-                // Chama o método login
-                if ($this->auth->login($email, $password)) {
-                    header('Location: ../views/inicio.php');
-                } else {
-                    header('Location: ../index.php?login=1');
-                }
-            } catch (Exception $e) {
-                return "Erro ao realizar login: " . $e->getMessage();
-            }
-        }
-    }
-}
-
-
-$controller = new LoginController();
-echo $controller->handleLogin();
 
 if (isset($_POST['cadastrar'])) {
     $id_turma = $_POST['id_turma'] ?? '';
@@ -62,9 +24,6 @@ if (isset($_POST['cadastrar'])) {
 }
 
 
-
-
-
 //registro saida-estagio//
 
 if (isset($_POST["Registrar"])) {
@@ -82,57 +41,6 @@ if (isset($_POST["Registrar"])) {
     }
     exit();
 }
-
-
-
-if (isset($_POST['action'])) {
-    $opc = $_POST['action'];
-
-    switch ($opc) {
-        case "cadastrar":
-            header('location:../views/cadastrar.php');
-            break;
-
-        case "entrada":
-            header('location:../views/registro_entrada.php');
-            break;
-
-        case "saida":
-            header('location:../views/registro_saida.php');
-            break;
-
-        case "saida_estagio":
-            header('location:../views/saida_Estagio.php');
-            break;
-
-        case "relatorios":
-            header('location:../views/relatorio.php');
-            break;
-    }
-};
-
-
-
-
-if (isset($_POST['btn'])) {
-    $opc = $_POST['btn'];
-
-    switch ($opc) {
-        case "Entrada":
-            header('location:../views/relatorioEntrada.php');
-            break;
-
-        case "Saída":
-            header('location:../views/relatorioSaida.php');
-            break;
-
-        case "Saída-Estágio":
-            header('location:../views/relatorioSaida_Estagio.php');
-            break;
-    }
-}
-
-
 
 if (isset($_POST['saida'])) {
     $nome_responsavel = $_POST['nome_responsavel'];

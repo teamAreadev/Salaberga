@@ -379,7 +379,7 @@
                 <input id="btn" type="submit" value="Entrada" name="btn" class=" btn-submit" method="POST">
                 <input id="btn" type="submit" value="Saída" name="btn" class=" btn-submit" method="POST">
                 <input id="btn" type="submit" value="Saída-Estágio" name="btn" class=" btn-submit" method="POST">
-
+                <a href="relatorios/alunos_geral.php">Relatórios</a>
                 <footer>
                     © 2025 Salaberga - Todos os direitos reservados
                 </footer>

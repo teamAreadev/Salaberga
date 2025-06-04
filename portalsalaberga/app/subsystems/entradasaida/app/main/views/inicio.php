@@ -310,21 +310,19 @@ footer::before {
 
   <div class="container">
     <div>
-      <form action="../control/control_index.php" method="post">
         <h1>Sistema de Entradas e Saídas</h1>
 
-        <button class="menu-btn cadastro" type="submit" name="action" value="cadastrar" onclick="cadastrar('aluno')">Cadastrar Aluno</button>
+        <a class="menu-btn cadastro" href="cadastro/cadastro_aluno.php">Cadastrar Aluno</a>
 
-        <button class="menu-btn entrada" type="submit" name="action" value="entrada">Registrar Entrada</button>
+        <a class="menu-btn entrada" href="entrada/entrada_aluno.php">Registrar Entrada</a>
 
-        <button class="menu-btn saida" type="submit" name="action" value="saida" >Registrar Saída</button>
+        <a class="menu-btn saida" href="saida/saida_aluno.php">Registrar Saída</a>
 
-        <button class="menu-btn saida-est" type="submit" name="action" value="saida_estagio" onclick="registrar('saída_estagio')">Registrar Saída-Estágio</button>
+        <a class="menu-btn saida-estagio" href="saida_estagio/saida_estagio_aluno.php">Registrar Saída-Estágio</a>
 
-        <button class="menu-btn relatorio" type="submit" name="action" value="relatorios">Relatórios</button>
+        <a class="menu-btn relatorio" href="relatorio.php">Relatórios</a>
 
         <a class="menu-btn relatorio" href="relatorios/ultimo_registro.php">Ultimas Saídas</a>
-        </form>
     </div>
   </div>
 

@@ -260,6 +260,8 @@ class MainModel extends connect
             return 3;
         }
     }
+
+    // Retorna nome e matrícula dos alunos de uma turma, ordenados por nom
 };
 
 class SaidaEstagioModel extends connect
