@@ -108,20 +108,57 @@ foreach ($todos_usuarios as $user) {
 
 // Processar ações POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    error_log("\n=== PROCESSANDO FORMULÁRIO POST (ADMIN) ===");
+    error_log("Dados do POST: " . print_r($_POST, true));
+
     if (isset($_POST['acao'])) {
+        $admin_id_logado = $_SESSION['user_id'] ?? null; // Obter admin_id da sessão
+        error_log("Admin ID Logado: " . $admin_id_logado);
+
+        if (!$admin_id_logado) {
+            error_log("Erro: Admin ID não encontrado na sessão.");
+            // Redirecionar ou mostrar mensagem de erro se necessário
+            // header('Location: erro.php?msg=admin_nao_logado');
+            // exit;
+        }
+
         switch ($_POST['acao']) {
             case 'criar':
                 if (isset($_POST['titulo'], $_POST['descricao'], $_POST['area_id'], $_POST['prioridade'])) {
-                    $demanda->criarDemanda(
-                        $_POST['titulo'],
-                        $_POST['descricao'],
-                        $_POST['prioridade'],
-                        1,
-                        [],
-                        null,
-                        $_POST['area_id'],
-                        $usuario
-                    );
+                    error_log("Dados para criarDemanda:");
+                    error_log("Título: " . $_POST['titulo']);
+                    error_log("Descrição: " . $_POST['descricao']);
+                    error_log("Prioridade: " . $_POST['prioridade']);
+                    error_log("Admin ID: " . $admin_id_logado);
+                    error_log("Area ID: " . $_POST['area_id']);
+
+                    try {
+                        $nova_demanda_id = $demanda->criarDemanda(
+                            $_POST['titulo'],
+                            $_POST['descricao'],
+                            $_POST['prioridade'],
+                            $admin_id_logado, // Usar admin_id da sessão
+                            [], // Manter atribuição individual vazia por enquanto
+                            null, // Prazo
+                            $_POST['area_id'],
+                            null // UsuarioModel não é mais necessário aqui
+                        );
+
+                        if ($nova_demanda_id) {
+                            error_log("Demanda criada com sucesso. ID: " . $nova_demanda_id);
+                            // Redirecionar para a mesma página para evitar re-submissão do formulário
+                            header('Location: admin.php');
+                            exit;
+                        } else {
+                             error_log("Falha ao criar demanda no modelo.");
+                             // Tratar erro de criação
+                        }
+
+                    } catch (Exception $e) {
+                        error_log("Exceção ao criar demanda: " . $e->getMessage());
+                        // Tratar exceção, talvez mostrar uma mensagem para o usuário
+                    }
+
                 }
                 break;
             case 'delete':
@@ -185,6 +222,16 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 if (empty($areas_permitidas)) $areas_permitidas = $areas; // fallback para admin geral ou erro
+
+// Buscar permissões de usuários comuns para atribuição
+$stmtPermissoesAtribuicao = $pdo_salaberga->prepare("
+    SELECT p.id, p.descricao
+    FROM sist_perm sp
+    INNER JOIN permissoes p ON sp.permissao_id = p.id
+    WHERE sp.sistema_id = 3 AND p.descricao LIKE 'usuario_area_%'
+");
+$stmtPermissoesAtribuicao->execute();
+$permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -1144,6 +1191,20 @@ if (empty($areas_permitidas)) $areas_permitidas = $areas; // fallback para admin
                         <option value="alta">Alta</option>
                     </select>
                 </div>
+                
+                <!-- Novo campo para selecionar a Permissão de Atribuição -->
+                <?php if (!empty($permissoes_atribuicao)): ?>
+                <div>
+                    <label for="permissao_atribuicao_id" class="block text-sm font-medium text-gray-300 mb-2">Atribuir à Permissão</label>
+                    <select id="permissao_atribuicao_id" name="permissao_atribuicao_id" class="custom-select w-full">
+                        <option value="">Selecionar Permissão (Opcional)</option>
+                        <?php foreach ($permissoes_atribuicao as $permissao): ?>
+                            <option value="<?= $permissao['id'] ?>"><?= htmlspecialchars($permissao['descricao']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php endif; ?>
+
                 <div id="prazoCalculadoInfo" class="mt-2"></div>
                 <div class="flex justify-end gap-4 mt-6">
                     <button type="button" onclick="closeModal('criarDemandaModal')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
