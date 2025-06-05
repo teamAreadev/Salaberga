@@ -33,7 +33,6 @@
     <link rel="stylesheet" href="../main/assets/css/acessibility.css">
     <link rel="stylesheet" href="../main/assets/css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="shortcut icon" href="../main/assets/img/Design sem nome.svg" type="image/x-icon">
 
@@ -47,50 +46,108 @@
                         'ceara-white': '#FFFFFF',
                         primary: '#4CAF50',
                         secondary: '#FFB74D',
+                        'accent-green': '#00A651',
+                        'dark-green': '#006B35',
+                        'light-orange': '#FFD54F',
+                        'gradient-start': '#008C45',
+                        'gradient-end': '#00A651'
+                    },
+                    backgroundImage: {
+                        'gradient-primary': 'linear-gradient(135deg, #008C45 0%, #00A651 100%)',
+                        'gradient-secondary': 'linear-gradient(135deg, #FFA500 0%, #FFD54F 100%)',
+                        'gradient-dark': 'linear-gradient(135deg, #006B35 0%, #008C45 100%)'
+                    },
+                    boxShadow: {
+                        'custom': '0 10px 25px -5px rgba(0, 140, 69, 0.3)',
+                        'custom-orange': '0 10px 25px -5px rgba(255, 165, 0, 0.3)',
+                        'glow': '0 0 20px rgba(0, 140, 69, 0.4)'
                     }
                 }
             }
         }
     </script>
+    
     <style>
+        /* Enhanced Styling */
         .gallery-img {
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .gallery-img:hover {
-            transform: scale(1.05);
+            transform: scale(1.08) translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 140, 69, 0.3);
         }
 
         #imageModal {
-            transition: opacity 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
         }
 
         #modalImage {
-            transition: opacity 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         #prevButton,
         #nextButton {
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 10px;
+            background: linear-gradient(135deg, rgba(0, 140, 69, 0.8) 0%, rgba(0, 166, 81, 0.8) 100%);
+            padding: 12px;
             border-radius: 50%;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
-        @keyframes fadeIn {
+        #prevButton:hover,
+        #nextButton:hover {
+            background: linear-gradient(135deg, rgba(0, 140, 69, 0.9) 0%, rgba(0, 166, 81, 0.9) 100%);
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
         .fade-in {
-            animation: fadeIn 1s ease-out forwards;
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
         }
 
         section {
@@ -98,59 +155,202 @@
         }
 
         .hover-scale {
-            transition: transform 0.3s ease-in-out;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .hover-scale:hover {
-            transform: scale(1.05);
+            transform: scale(1.05) translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 140, 69, 0.2);
         }
 
-
+        /* Enhanced Section Styling */
         .section.lb.page-section {
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
             color: #333;
-            padding: 80px 0;
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section.lb.page-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #008C45 0%, #FFA500 50%, #008C45 100%);
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 15px;
+            padding: 0 20px;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
         }
 
         .section-title h3 {
-            color: #007a33;
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 20px;
+            color: #008C45;
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 24px;
             position: relative;
             display: inline-block;
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .section-title h3::after {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: -15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 50%;
-            height: 3px;
-            background-color: #ffa500;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, #FFA500 0%, #FFD54F 100%);
+            border-radius: 2px;
         }
 
         .section-title p.lead {
             color: #555;
-            font-size: 20px;
+            font-size: 22px;
             line-height: 1.8;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
+            font-weight: 400;
         }
 
+        /* Enhanced Cards */
+        .card-enhanced {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 1px solid rgba(0, 140, 69, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .card-enhanced::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #008C45 0%, #FFA500 100%);
+        }
+
+        .card-enhanced:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px rgba(0, 140, 69, 0.2);
+            border-color: rgba(0, 140, 69, 0.3);
+        }
+
+        /* Enhanced Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 140, 69, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #006B35 0%, #008C45 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 140, 69, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #FFA500 0%, #FFD54F 100%);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 165, 0, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #FF8F00 0%, #FFA500 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(255, 165, 0, 0.4);
+        }
+
+        /* Enhanced Timeline */
+        .timeline__content {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+            border: 2px solid rgba(0, 140, 69, 0.2) !important;
+            border-radius: 16px !important;
+            padding: 24px !important;
+            box-shadow: 0 10px 30px rgba(0, 140, 69, 0.1) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .timeline__content:hover {
+            transform: translateY(-4px) !important;
+            box-shadow: 0 20px 40px rgba(0, 140, 69, 0.2) !important;
+            border-color: rgba(0, 140, 69, 0.4) !important;
+        }
+
+        .timeline__content h2 {
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800 !important;
+            font-size: 28px !important;
+            margin-bottom: 16px !important;
+        }
+
+        .timeline__content h2::after {
+            display: none !important;
+        }
+
+        /* Enhanced Header */
+        .header-enhanced {
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Enhanced Footer */
+        .footer-enhanced {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            position: relative;
+        }
+
+        .footer-enhanced::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #008C45 0%, #FFA500 50%, #008C45 100%);
+        }
+
+        /* Responsive Design */
         @media (max-width: 1200px) {
             .container {
                 max-width: 960px;
@@ -163,25 +363,30 @@
             }
 
             .section-title h3 {
-                font-size: 36px;
+                font-size: 40px;
             }
 
             .section-title p.lead {
-                font-size: 18px;
+                font-size: 20px;
             }
         }
 
         @media (max-width: 768px) {
             .container {
                 max-width: 540px;
+                padding: 0 16px;
             }
 
             .section-title h3 {
-                font-size: 32px;
+                font-size: 36px;
             }
 
             .section-title p.lead {
-                font-size: 16px;
+                font-size: 18px;
+            }
+
+            .section.lb.page-section {
+                padding: 60px 0;
             }
         }
 
@@ -189,37 +394,230 @@
             .container {
                 max-width: 100%;
             }
-        }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+            .section-title h3 {
+                font-size: 28px;
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .section-title p.lead {
+                font-size: 16px;
             }
         }
 
-        .fadeIn {
-            animation: fadeIn 0.5s ease-out;
+        /* Enhanced Accessibility */
+        [x-cloak] {
+            display: none !important;
         }
 
-        body {
-            min-height: 100vh;
-            overflow-x: hidden;
+        .header-active {
+            color: #FFA500 !important;
+            text-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
         }
 
-        .content-wrapper {
-            position: fixed;
+        /* Enhanced Animations */
+        .pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0, 140, 69, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(0, 140, 69, 0.6);
+            }
+        }
+
+        /* Enhanced Course Cards */
+        .course-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #008C45 0%, #FFA500 100%);
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 140, 69, 0.25);
+            border-color: rgba(0, 140, 69, 0.3);
+        }
+
+        .course-card .content-overlay {
+            background: linear-gradient(135deg, rgba(0, 140, 69, 0.95) 0%, rgba(0, 166, 81, 0.95) 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Enhanced Location Section */
+        .location-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .location-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #008C45 0%, #FFA500 50%, #008C45 100%);
+        }
+
+        .map-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: start;
+            margin-top: 40px;
+        }
+
+        .map-frame {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 140, 69, 0.2);
+            border: 4px solid rgba(0, 140, 69, 0.1);
+        }
+
+        .map-frame iframe {
             width: 100%;
-            will-change: transform;
+            height: 450px;
+            border: none;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 140, 69, 0.1);
+            border: 2px solid rgba(0, 140, 69, 0.1);
+        }
+
+        .contact-info h3 {
+            color: #008C45;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .contact-info ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px 0;
+        }
+
+        .contact-info li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .contact-info li i {
+            color: #FFA500;
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .directions-button {
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 140, 69, 0.3);
+        }
+
+        .directions-button:hover {
+            background: linear-gradient(135deg, #006B35 0%, #008C45 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 140, 69, 0.4);
+        }
+
+        .localfont {
+            color: #008C45;
+            font-size: 48px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .informefont {
+            color: #008C45;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .map-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .contact-info {
+                padding: 30px 20px;
+            }
+            
+            .localfont {
+                font-size: 36px;
+            }
+        }
+
+        /* Enhanced Scroll Behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Enhanced Focus States */
+        *:focus {
+            outline: 2px solid #FFA500;
+            outline-offset: 2px;
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            border: 4px solid rgba(0, 140, 69, 0.3);
+            border-top: 4px solid #008C45;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
+</head>
 
 <body class="select-none" x-data="{ 
     mobileMenuOpen: false, 
@@ -240,7 +638,6 @@
                     
                     const subscription = await registration.pushManager.subscribe(subscribeOptions);
                     
-                    // Envie a subscription para o seu servidor
                     await fetch('/api/save-subscription', {
                         method: 'POST',
                         headers: {
@@ -249,7 +646,6 @@
                         body: JSON.stringify(subscription),
                     });
                     
-                    // Agende a notificação no servidor
                     await fetch('/api/schedule-notification', {
                         method: 'POST',
                         headers: {
@@ -257,7 +653,7 @@
                         },
                         body: JSON.stringify({
                             subscription: subscription,
-                            delay: 600000 // 10 minutos em milissegundos
+                            delay: 600000
                         }),
                     });
                 }
@@ -267,70 +663,14 @@
         }
     }
     }">
+    
     <script>
-        //Adiciona um novo estado no histórico, assim o botão de voltar não vai sair da página atual
         window.history.pushState(null, '', window.location.href);
-
-        // Escuta o evento de popstate, que é acionado quando o usuário tenta voltar
         window.onpopstate = function() {
-            // Redireciona o usuário para a página desejada
-            window.location.href = ''; // Substitua pelo URL da página que você deseja
+            window.location.href = '';
         };
     </script>
-    <!--x-show="showEditalMessage"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 transform translate-y-4 sm:translate-y-0 sm:scale-95"
-        x-transition:enter-end="opacity-100 transform translate-y-0 sm:scale-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100 transform translate-y-0 sm:scale-100"
-        x-transition:leave-end="opacity-0 transform translate-y-4 sm:translate-y-0 sm:scale-95"
-        class="fixed inset-0 flex items-center justify-center z-50 px-4 sm:px-0">-->
 
-    <!-- class="absolute inset-0 bg-gray-900 bg-opacity-75 backdrop-filter backdrop-blur-sm"></div>
-
-       
-        <div class="bg-white rounded-lg shadow-2xl p-6 sm:p-8 m-4 max-w-lg w-full relative z-10 border-t-4 border-ceara-green">
-         
-            <button @click="showEditalMessage = false" class="absolute top-4 right-4 text-gray-400 hover:text-ceara-orange transition duration-150">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-
-            <div class="flex items-center mb-6">
-                <svg class="h-10 w-10 text-ceara-green mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <h2 class="text-2xl font-bold text-gray-800">Atenção, futuros alunos!</h2>
-            </div>
-
-            <p class="text-lg text-gray-600 mb-6">
-                O edital para novos alunos 2025 está disponível. Não perca essa oportunidade de fazer parte da nossa instituição!
-            </p>
-
-        <div class="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
-    <button @click="remindLater()"
-        class="w-full sm:w-auto px-6 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ceara-green flex items-center justify-center">
-        <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Lembrar depois
-    </button>
-    <a href="https://www.crede01.seduc.ce.gov.br/wp-content/uploads/sites/124/2024/11/EEEP-Salaberga-Torquato-Maranguape-Edital-Selecao-Alunos-2025.pdf"
-        target="_blank"
-        class="w-full sm:w-auto bg-gradient-to-r from-ceara-green to-primary hover:from-primary hover:to-ceara-green text-ceara-white font-medium py-2 px-6 rounded-lg transition-all duration-300 text-center inline-flex items-center justify-center group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ceara-green shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-        <span>Acessar Edital</span>
-        <svg class="w-5 h-5 ml-2 transform transition-transform duration-200 group-hover:translate-x-1"
-            fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clip-rule="evenodd"></path>
-        </svg>
-    </a>
-</div>
- -->
-    </div>
-    </div>
     <script>
         function urlBase64ToUint8Array(base64String) {
             const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -347,6 +687,7 @@
             return outputArray;
         }
     </script>
+    
     <script type="text/javascript">
         (function(d, t) {
             var g = d.createElement(t),
@@ -355,152 +696,166 @@
             s.parentNode.insertBefore(g, s);
         }(document, "script"));
     </script>
-    </head>
-    <style>
-        [x-cloak] {
-            display: none !important;
-        }
 
-        .header-active {
-            color: #FFA500 !important;
-        }
-    </style>
-    </head>
-
-   <header x-data="{ mobileMenuOpen: false, mobileDropdownOpen: false, init() { this.$watch('mobileMenuOpen', value => { if (value) { document.body.classList.add('overflow-hidden'); } else { document.body.classList.remove('overflow-hidden'); } }); window.addEventListener('resize', () => { if (window.innerWidth >= 1024) { this.mobileMenuOpen = false; } }); } }" class="bg-ceara-green text-ceara-white sticky top-0 z-50 shadow-md">
-    <div class="container mx-auto px-4">
-        <nav class="flex items-center justify-between flex-wrap py-4">
-            <div class="flex items-center space-x-2">
-                <span class="text-sm"><b>Acessibilidade</b></span>
-                <button class="text-sm hover:text-ceara-orange transition duration-300 px-1" aria-label="Diminuir tamanho do texto">
-                    <i class="fa-solid fa-a"></i><b>-</b>
-                </button>
-                <button class="text-sm hover:text-ceara-orange transition duration-300 px-1" aria-label="Tamanho padrão do texto">
-                    <i class="fa-solid fa-a"></i>
-                </button>
-                <button class="text-sm hover:text-ceara-orange transition duration-300 px-1" aria-label="Aumentar tamanho do texto">
-                    <i class="fa-solid fa-a"></i><b>+</b>
-                </button>
-                <button id="screenReaderBtn" class="text-sm hover:text-ceara-orange transition duration-300 px-1 flex items-center" aria-label="Ativar narração de tela">
-                    <i class="fa-solid fa-ear-listen mr-1"></i>
-                </button>
-                <div class="theme-toggle-container">
-                    <button class="theme-toggle-btn hover:text-ceara-orange transition duration-300 px-1" aria-label="Opções de visualização" aria-expanded="false">
-                        <i class="fa-solid fa-circle-half-stroke" style="color: white;"></i>
+    <header x-data="{ mobileMenuOpen: false, mobileDropdownOpen: false, init() { this.$watch('mobileMenuOpen', value => { if (value) { document.body.classList.add('overflow-hidden'); } else { document.body.classList.remove('overflow-hidden'); } }); window.addEventListener('resize', () => { if (window.innerWidth >= 1024) { this.mobileMenuOpen = false; } }); } }" class="header-enhanced text-ceara-white sticky top-0 z-50 shadow-lg backdrop-blur-md">
+        <div class="container mx-auto px-4">
+            <nav class="flex items-center justify-between flex-wrap py-4">
+                <div class="flex items-center space-x-3">
+                    <span class="text-sm font-semibold"><b>Acessibilidade</b></span>
+                    <button class="text-sm hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Diminuir tamanho do texto">
+                        <i class="fa-solid fa-a"></i><b>-</b>
                     </button>
-                    <div class="theme-options" style="color: #000000;">
-                        <button class="theme-option" data-theme="monochrome" aria-label="Ativar monocromático">Monocromático</button>
-                        <button class="theme-option" data-theme="inverted-grayscale" aria-label="Ativar escala de cinza invertida">Escala de cinza invertida</button>
-                        <button class="theme-option" data-theme="inverted-color" aria-label="Ativar cor invertida">Cor invertida</button>
-                        <button class="theme-option" data-theme="original" aria-label="Restaurar cores originais">Cores originais</button>
+                    <button class="text-sm hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Tamanho padrão do texto">
+                        <i class="fa-solid fa-a"></i>
+                    </button>
+                    <button class="text-sm hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Aumentar tamanho do texto">
+                        <i class="fa-solid fa-a"></i><b>+</b>
+                    </button>
+                    <button id="screenReaderBtn" class="text-sm hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10 flex items-center" aria-label="Ativar narração de tela">
+                        <i class="fa-solid fa-ear-listen mr-1"></i>
+                    </button>
+                    <div class="theme-toggle-container">
+                        <button class="theme-toggle-btn hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Opções de visualização" aria-expanded="false">
+                            <i class="fa-solid fa-circle-half-stroke" style="color: white;"></i>
+                        </button>
+                        <div class="theme-options bg-white rounded-lg shadow-lg p-2 mt-2" style="color: #000000;">
+                            <button class="theme-option block w-full text-left px-3 py-2 rounded hover:bg-gray-100" data-theme="monochrome" aria-label="Ativar monocromático">Monocromático</button>
+                            <button class="theme-option block w-full text-left px-3 py-2 rounded hover:bg-gray-100" data-theme="inverted-grayscale" aria-label="Ativar escala de cinza invertida">Escala de cinza invertida</button>
+                            <button class="theme-option block w-full text-left px-3 py-2 rounded hover:bg-gray-100" data-theme="inverted-color" aria-label="Ativar cor invertida">Cor invertida</button>
+                            <button class="theme-option block w-full text-left px-3 py-2 rounded hover:bg-gray-100" data-theme="original" aria-label="Restaurar cores originais">Cores originais</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="flex items-center">
-                <div class="hidden lg:flex space-x-4">
-                    <a href="#home" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
-                        <i class="fas fa-home mr-1"></i> Início
-                    </a>
-                    <a href="#sobre" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
-                        <i class="fas fa-info-circle mr-1"></i> Sobre
-                    </a>
-                    <a href="#cursos" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
-                        <i class="fas fa-book mr-1"></i> Cursos
-                    </a>
-                    <a href="#galeria" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
-                        <i class="fas fa-newspaper mr-1"></i> Galeria
-                    </a>
-                    <a href="#parceiros" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
-                        <i class="fas fa-images mr-1"></i> Parceiros
-                    </a>
-                    <a href="../main/views/autenticacao/login.php" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link">
-                        <i class="fas fa-sign-in-alt mr-1"></i> Entrar
-                    </a>
+                
+                <div class="flex items-center">
+                    <div class="hidden lg:flex space-x-6">
+                        <a href="#home" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link font-medium px-3 py-2 rounded-md hover:bg-white/10">
+                            <i class="fas fa-home mr-2"></i> Início
+                        </a>
+                        <a href="#sobre" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link font-medium px-3 py-2 rounded-md hover:bg-white/10">
+                            <i class="fas fa-info-circle mr-2"></i> Sobre
+                        </a>
+                        <a href="#cursos" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link font-medium px-3 py-2 rounded-md hover:bg-white/10">
+                            <i class="fas fa-book mr-2"></i> Cursos
+                        </a>
+                        <a href="#galeria" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link font-medium px-3 py-2 rounded-md hover:bg-white/10">
+                            <i class="fas fa-newspaper mr-2"></i> Galeria
+                        </a>
+                        <a href="#parceiros" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link font-medium px-3 py-2 rounded-md hover:bg-white/10">
+                            <i class="fas fa-images mr-2"></i> Parceiros
+                        </a>
+                        <div class="relative group">
+                            <button class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link flex items-center font-medium px-3 py-2 rounded-md hover:bg-white/10">
+                                <i class="fas fa-sign-in-alt mr-2"></i> Entrar
+                                <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                            </button>
+                            <div class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-3 hidden group-hover:block z-50 border border-gray-100">
+                                <a href="../main/views/autenticacao/login.php" class="block px-4 py-3 text-gray-800 hover:bg-gradient-primary hover:text-white transition duration-300 rounded-lg mx-2">
+                                    <i class="fas fa-user mr-3"></i> Login Principal
+                                </a>
+                                <a href="../main/views/autenticacao/login_parcial.php" class="block px-4 py-3 text-gray-800 hover:bg-gradient-primary hover:text-white transition duration-300 rounded-lg mx-2">
+                                    <i class="fas fa-users mr-3"></i> Login Parcial
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="block lg:hidden">
-                <button @click="mobileMenuOpen = !mobileMenuOpen" class="flex items-center px-3 py-2 border rounded text-ceara-orange border-ceara-orange hover:text-ceara-white hover:border-ceara-white transition duration-300" aria-label="Toggle menu" :aria-expanded="mobileMenuOpen">
-                    <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <title>Menu</title>
-                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-                    </svg>
-                </button>
-            </div>
-        </nav>
-    </div>
-    <!-- Mobile Menu -->
-    <div x-show="mobileMenuOpen"
-        x-cloak
-        @click.away="mobileMenuOpen = false"
-        x-transition:enter="transition ease-out duration-200"
-        x-transition:enter-start="opacity-0 transform -translate-y-4"
-        x-transition:enter-end="opacity-100 transform translate-y-0"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100 transform translate-y-0"
-        x-transition:leave-end="opacity-0 transform -translate-y-4"
-        class="fixed inset-0 z-50 lg:hidden bg-ceara-green/95 backdrop-blur-sm">
-        <div class="min-h-screen px-4 py-6 overflow-y-auto">
-            <div class="flex items-center justify-between mb-8">
-                <h2 class="text-xl font-semibold text-ceara-white">Menu</h2>
-                <button @click="mobileMenuOpen = false"
-                    class="p-2 text-ceara-white hover:text-ceara-orange transition-colors duration-200">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <nav class="space-y-6">
-                <a href="#home"
-                    @click="mobileMenuOpen = false"
-                    class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                        <i class="fas fa-home"></i>
-                    </div>
-                    <span class="text-lg font-medium">Início</span>
-                </a>
-                <a href="#sobre"
-                    @click="mobileMenuOpen = false"
-                    class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                        <i class="fas fa-info-circle"></i>
-                    </div>
-                    <span class="text-lg font-medium">Sobre</span>
-                </a>
-                <a href="#cursos"
-                    @click="mobileMenuOpen = false"
-                    class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <span class="text-lg font-medium">Cursos</span>
-                </a>
-                <a href="#galeria"
-                    @click="mobileMenuOpen = false"
-                    class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                        <i class="fas fa-newspaper"></i>
-                    </div>
-                    <span class="text-lg font-medium">Galeria</span>
-                </a>
-                <a href="#parceiros"
-                    @click="mobileMenuOpen = false"
-                    class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                        <i class="fas fa-images"></i>
-                    </div>
-                    <span class="text-lg font-medium">Parceiros</span>
-                </a>
-                <a href="../main/views/autenticacao/login.php"
-                    @click="mobileMenuOpen = false"
-                    class="group flex items-center space-x-3 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                        <i class="fas fa-sign-in-alt"></i>
-                    </div>
-                    <span class="text-lg font-medium">Entrar</span>
-                </a>
+                
+                <div class="block lg:hidden">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="flex items-center px-4 py-2 border-2 rounded-lg text-ceara-orange border-ceara-orange hover:text-ceara-white hover:border-ceara-white hover:bg-white/10 transition duration-300" aria-label="Toggle menu" :aria-expanded="mobileMenuOpen">
+                        <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <title>Menu</title>
+                            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+                        </svg>
+                    </button>
+                </div>
             </nav>
         </div>
-    </div>
-</header>
-
+        
+        <!-- Enhanced Mobile Menu -->
+        <div x-show="mobileMenuOpen"
+            x-cloak
+            @click.away="mobileMenuOpen = false"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 transform -translate-y-4"
+            x-transition:enter-end="opacity-100 transform translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 transform translate-y-0"
+            x-transition:leave-end="opacity-0 transform -translate-y-4"
+            class="fixed inset-0 z-50 lg:hidden bg-gradient-primary/98 backdrop-blur-lg">
+            <div class="min-h-screen px-6 py-8 overflow-y-auto">
+                <div class="flex items-center justify-between mb-12">
+                    <h2 class="text-2xl font-bold text-ceara-white">Menu</h2>
+                    <button @click="mobileMenuOpen = false"
+                        class="p-3 text-ceara-white hover:text-ceara-orange transition-colors duration-200 rounded-full hover:bg-white/10">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <nav class="space-y-8">
+                    <a href="#home"
+                        @click="mobileMenuOpen = false"
+                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+                            <i class="fas fa-home text-lg"></i>
+                        </div>
+                        <span class="text-xl font-semibold">Início</span>
+                    </a>
+                    <a href="#sobre"
+                        @click="mobileMenuOpen = false"
+                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+                            <i class="fas fa-info-circle text-lg"></i>
+                        </div>
+                        <span class="text-xl font-semibold">Sobre</span>
+                    </a>
+                    <a href="#cursos"
+                        @click="mobileMenuOpen = false"
+                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+                            <i class="fas fa-book text-lg"></i>
+                        </div>
+                        <span class="text-xl font-semibold">Cursos</span>
+                    </a>
+                    <a href="#galeria"
+                        @click="mobileMenuOpen = false"
+                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+                            <i class="fas fa-newspaper text-lg"></i>
+                        </div>
+                        <span class="text-xl font-semibold">Galeria</span>
+                    </a>
+                    <a href="#parceiros"
+                        @click="mobileMenuOpen = false"
+                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+                            <i class="fas fa-images text-lg"></i>
+                        </div>
+                        <span class="text-xl font-semibold">Parceiros</span>
+                    </a>
+                    <div class="space-y-4">
+                        <div class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+                                <i class="fas fa-sign-in-alt text-lg"></i>
+                            </div>
+                            <span class="text-xl font-semibold">Entrar</span>
+                        </div>
+                        <div class="pl-16 space-y-3">
+                            <a href="../main/views/autenticacao/login.php"
+                                @click="mobileMenuOpen = false"
+                                class="block text-ceara-white hover:text-ceara-orange transition-all duration-300 text-lg">
+                                <i class="fas fa-user mr-3"></i> Login Principal
+                            </a>
+                            <a href="../main/views/autenticacao/login_parcial.php"
+                                @click="mobileMenuOpen = false"
+                                class="block text-ceara-white hover:text-ceara-orange transition-all duration-300 text-lg">
+                                <i class="fas fa-users mr-3"></i> Login Parcial
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
 
     <script>
         let isReading = false;
@@ -598,8 +953,6 @@
             speakText(message);
         }
 
-
-
         function handleElementClick(event) {
             if (!isReading) return;
 
@@ -692,43 +1045,44 @@
     </script>
 
     <main>
+        <!-- Enhanced Hero Section -->
         <section id="home"
             class="relative bg-cover bg-center bg-no-repeat min-h-screen flex flex-col items-center justify-center fade-in overflow-hidden">
-            <img src="../main/assets/img/background03.jpeg" class="absolute top-0 left-0 w-full h-full object-cover z-0" autoplay loop muted playsinline>
-
-            </img>
-            <div class="absolute inset-0 bg-black opacity-50"></div>
-
+            <img src="../main/assets/img/background03.jpeg" class="absolute top-0 left-0 w-full h-full object-cover z-0" alt="Background da escola">
+            <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/50 to-black/60"></div>
 
             <div class="container mx-auto px-4 text-center relative z-10 mt-20 md:mt-0">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight">EEEP Salaberga
-                    Torquato<br>Gomes de Matos</h1>
-                <p class="text-xl md:text-2xl mb-12 text-white">Educação de qualidade para um futuro brilhante</p>
-                <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="#cursos"
-                        class="bg-ceara-white text-ceara-green hover:bg-ceara-orange hover:text-ceara-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110 shadow-lg flex items-center justify-center">
-                        <i class="fas fa-graduation-cap mr-2"></i> Conheça nossos cursos
-                    </a> <!--
-                    <a href="../main/views/autenticação/precadastro.php"
-                        class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-ceara-green font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110 shadow-lg flex items-center justify-center">
-                        <i class="fas fa-user mr-2"></i> Pré-Cadastro
+                <div class="slide-in-left">
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 text-white leading-tight">
+                        EEEP Salaberga<br>
+                        <span class="bg-gradient-secondary bg-clip-text text-transparent">Torquato</span><br>
+                        Gomes de Matos
+                    </h1>
+                </div>
+                <div class="slide-in-right">
+                    <p class="text-xl md:text-3xl mb-16 text-white font-light">Educação de qualidade para um futuro brilhante</p>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-6 sm:space-y-0 sm:space-x-8 fade-in">
+                    <a href="#cursos" class="btn-primary text-lg px-8 py-4">
+                        <i class="fas fa-graduation-cap mr-3"></i> Conheça nossos cursos
                     </a>
-                        -->
                 </div>
             </div>
-            <div class="absolute bottom-0 left-0 right-0 text-center pb-8">
-                <a href="#sobre" class="text-white hover:text-ceara-orange transition duration-300">
-                    <i class="fas fa-chevron-down text-3xl animate-bounce"></i>
+            
+            <div class="absolute bottom-8 left-0 right-0 text-center">
+                <a href="#sobre" class="text-white hover:text-ceara-orange transition duration-300 pulse-glow">
+                    <i class="fas fa-chevron-down text-4xl animate-bounce"></i>
                 </a>
             </div>
         </section>
 
+        <!-- Enhanced About Section -->
         <section class="section lb page-section" id="sobre">
             <div class="container">
                 <div class="section-title row text-center">
                     <div class="col-md-8 offset-md-2">
                         <h3>Nossa História</h3>
-
+                        <p class="lead">Uma jornada de excelência educacional e transformação social</p>
                     </div>
                 </div>
                 <div class="timeline timeline--loaded timeline--horizontal" style="opacity: 1;">
@@ -739,8 +1093,8 @@
                                 style="width: 207.25px; height: 341px;">
                                 <div class="timeline__item__inner">
                                     <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-01 border-2 shadow-md  p-5 rounded-xl  ">
-                                            <h2 style="color:#008C45">2009</h2>
+                                        <div class="timeline__content img-bg-01">
+                                            <h2>2009</h2>
                                             <p>A escola Santa Rita se torna a primeira escola profissionalizante do município, agora chamada de EEEP Santa Rita, oferecendo cursos técnicos em Enfermagem, Informática e Meio Ambiente.</p>
                                         </div>
                                     </div>
@@ -750,8 +1104,8 @@
                                 style="width: 207.25px; height: 341px; transform: translateY(341px);">
                                 <div class="timeline__item__inner">
                                     <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-02  border-2 shadow-md  p-5 rounded-xl">
-                                            <h2 style="color:#008C45">2011</h2>
+                                        <div class="timeline__content img-bg-02">
+                                            <h2>2011</h2>
                                             <p>Formamos as primeiras turmas da nossa escola. Técnicos em Enfermagem, Informática e Meio Ambiente.</p>
                                         </div>
                                     </div>
@@ -761,8 +1115,8 @@
                                 style="width: 207.25px; height: 341px;">
                                 <div class="timeline__item__inner">
                                     <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-03  border-2 shadow-md  p-5 rounded-xl">
-                                            <h2 style="color:#008C45">2014</h2>
+                                        <div class="timeline__content img-bg-03">
+                                            <h2>2014</h2>
                                             <p>Neste ano deixamos o prédio da Eeep Santa Rita no bairro da Guabiraba para ocupar o prédio atual, passando a se chamar Eeep Salaberga Torquato Gomes de Matos.</p>
                                         </div>
                                     </div>
@@ -772,8 +1126,8 @@
                                 style="width: 207.25px; height: 341px; transform: translateY(341px);">
                                 <div class="timeline__item__inner">
                                     <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-05  border-2 shadow-md  p-4 rounded-xl">
-                                            <h2 style="color:#008C45">2016</h2>
+                                        <div class="timeline__content img-bg-05">
+                                            <h2>2016</h2>
                                             <p>Os alunos José Carlos, Ana Byatriz e Gabriella Vital representaram o Brasil na 13ª Olimpíada Internacional de Geografia (IGEO) em Pequi - China, depois de concorrer com 35.000 inscritos até a final.</p>
                                         </div>
                                     </div>
@@ -783,21 +1137,19 @@
                                 style="width: 207.25px; height: 341px;">
                                 <div class="timeline__item__inner">
                                     <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-06  border-2 shadow-md  p-5 rounded-xl">
-                                            <h2 style="color:#008C45">2019</h2>
+                                        <div class="timeline__content img-bg-06">
+                                            <h2>2019</h2>
                                             <p>Conquistamos o selo escola sustentável de organização da Secretaria Estadual de Educação com validação da Secretaria Estadual de Meio Ambiente.</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
                             <div class="timeline__item timeline__item--bottom fadeIn"
                                 style="width: 207.25px; height: 341px; transform: translateY(341px);">
                                 <div class="timeline__item__inner">
                                     <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-09  border-2 shadow-md  p-5 rounded-xl">
-                                            <h2 style="color:#008C45">2021</h2>
+                                        <div class="timeline__content img-bg-09">
+                                            <h2>2021</h2>
                                             <p>Nos colocamos no seleto grupo das 100 melhores escolas públicas do país, ficando em 20º do estado. 77 das 100 melhores foram do nosso estado.</p>
                                         </div>
                                     </div>
@@ -807,34 +1159,30 @@
                                 style="width: 207.25px; height: 341px;">
                                 <div class="timeline__item__inner">
                                     <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-11  border-2 shadow-md  p-5 rounded-xl">
-                                            <h2 style="color:#008C45">2022</h2>
+                                        <div class="timeline__content img-bg-11">
+                                            <h2>2022</h2>
                                             <p>Os alunos Kaiky Diniz e Leonardo de Sousa conquistaram vaga na final presencial da ONHB em Campinas (Unicamp).</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
-
                             <div class="timeline__item timeline__item--bottom fadeIn"
                                 style="width: 207.25px; height: 341px; transform: translateY(341px);">
                                 <div class="timeline__item__inner">
                                     <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-14  border-2 shadow-md  p-5 rounded-xl">
-                                            <h2 style="color:#008C45">2023</h2>
+                                        <div class="timeline__content img-bg-14">
+                                            <h2>2023</h2>
                                             <p>É ofertado pela primeira vez o curso técnico em Administração.</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="timeline__item timeline__item--top fadeIn"
                                 style="width: 207.25px; height: 341px;">
                                 <div class="timeline__item__inner">
                                     <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-16  border-2 shadow-md  p-5 rounded-xl">
-                                            <h2 style="color:#008C45">2024</h2>
+                                        <div class="timeline__content img-bg-16">
+                                            <h2>2024</h2>
                                             <p>Representamos o Brasil na primeira Expociência na Costa Rica por meio do projeto das alunas Natassa Uchôa e Gabriele Ferreira. Orientadas pela professora Diva.</p>
                                         </div>
                                     </div>
@@ -850,124 +1198,83 @@
             </div>
         </section>
 
-        <style>
-            .timeline__content h2::after {
-                display: none !important;
-            }
-        </style>
-
-        <section id="cursos" class="bg-gray-100 py-12 fade-in" x-data="{ activeSlide: 0 }">
+        <!-- Enhanced Courses Section -->
+        <section id="cursos" class="bg-gradient-to-br from-gray-50 to-white py-24 fade-in" x-data="{ activeSlide: 0 }">
             <div class="container mx-auto px-4">
-                <h2 class="text-3xl font-bold text-center mb-8 text-ceara-green">Nossos Cursos</h2>
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold mb-6 text-ceara-green bg-gradient-primary bg-clip-text text-transparent">Nossos Cursos</h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">Formação técnica de excelência para preparar você para o mercado de trabalho</p>
+                </div>
                 <div class="overflow-x-auto">
-                    <div class="flex space-x-6 pb-6 carousel"
-                        x-init="setInterval(() => { activeSlide = (activeSlide + 1) % 5; document.querySelector('.carousel').scrollLeft += 300; if(activeSlide === 0) { document.querySelector('.carousel').scrollLeft = 0; } }, 5000)">
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale min-w-[300px] relative group card"
+                    <div class="flex space-x-8 pb-6 carousel"
+                        x-init="setInterval(() => { activeSlide = (activeSlide + 1) % 5; document.querySelector('.carousel').scrollLeft += 320; if(activeSlide === 0) { document.querySelector('.carousel').scrollLeft = 0; } }, 5000)">
+                        
+                        <div class="course-card min-w-[320px] relative group"
                             :class="{ 'active': activeSlide === 0 }">
                             <img src="../main/assets/img/img-logoscursos/enfermagem.jpg" alt="Curso de Enfermagem"
-                                class="w-full h-48 object-cover">
-                            <div class="p-4">
-                                <h3
-                                    class="font-bold text-xl mb-2 text-ceara-green border-b-2 border-ceara-green text-center">
-                                    Enfermagem</h3>
-                                <div
-                                    class="absolute inset-0 bg-black bg-opacity-75 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div class="content-overlay">
-                                        <p class="text-white text-center text-xs"> O Curso Técnico em Enfermagem tem
-                                            como objetivo formar profissionais para atuarem no processo de promoção,
-                                            recuperação e manutenção da saúde da comunidade sob a supervisão do
-                                            enfermeiro, com os objetivos de proporcionar ao aluno o desenvolvimento de
-                                            conhecimentos e habilidades para o exercício da profissão, como também
-                                            inserir no mercado de trabalho profissionais
-                                            qualificados e competentes para atuarem nos diversos campos de prestação de
-                                            serviços de técnico em Enfermagem.</p>
-                                    </div>
+                                class="w-full h-56 object-cover">
+                            <div class="p-6">
+                                <h3 class="font-bold text-2xl mb-4 text-ceara-green text-center border-b-2 border-ceara-green pb-2">
+                                    Enfermagem
+                                </h3>
+                                <div class="content-overlay absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center p-6">
+                                    <p class="text-white text-center text-sm leading-relaxed">O Curso Técnico em Enfermagem tem como objetivo formar profissionais para atuarem no processo de promoção, recuperação e manutenção da saúde da comunidade sob a supervisão do enfermeiro, com os objetivos de proporcionar ao aluno o desenvolvimento de conhecimentos e habilidades para o exercício da profissão, como também inserir no mercado de trabalho profissionais qualificados e competentes para atuarem nos diversos campos de prestação de serviços de técnico em Enfermagem.</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale min-w-[300px] relative group card"
+                        
+                        <div class="course-card min-w-[320px] relative group"
                             :class="{ 'active': activeSlide === 1 }">
                             <img src="../main/assets/img/img-logoscursos/informatica.jpg" alt="Curso de Informática"
-                                class="w-full h-48 object-cover">
-                            <div class="p-4">
-                                <h3
-                                    class="font-bold text-xl mb-2 text-ceara-green border-b-2 border-ceara-green text-center">
-                                    Informática</h3>
-                                <div
-                                    class="absolute inset-0 bg-black bg-opacity-75 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div class="content-overlay">
-                                        <p class="text-white text-center text-xs">O Curso Técnico em Informática com
-                                            ênfase em
-                                            Desenvolvimento Web oferece formação prática focada no mercado. Os alunos
-                                            aprendem a desenvolver softwares, abrangendo modelagem, banco de dados e
-                                            testes, além de disciplinas em design, robótica e gestão de startups. Essa
-                                            formação diversificada amplia as oportunidades de carreira e prepara os
-                                            estudantes para se destacarem na tecnologia. Venha construir seu futuro!
-
-                                        </p>
-                                    </div>
+                                class="w-full h-56 object-cover">
+                            <div class="p-6">
+                                <h3 class="font-bold text-2xl mb-4 text-ceara-green text-center border-b-2 border-ceara-green pb-2">
+                                    Informática
+                                </h3>
+                                <div class="content-overlay absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center p-6">
+                                    <p class="text-white text-center text-sm leading-relaxed">O Curso Técnico em Informática com ênfase em Desenvolvimento Web oferece formação prática focada no mercado. Os alunos aprendem a desenvolver softwares, abrangendo modelagem, banco de dados e testes, além de disciplinas em design, robótica e gestão de startups. Essa formação diversificada amplia as oportunidades de carreira e prepara os estudantes para se destacarem na tecnologia. Venha construir seu futuro!</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale min-w-[300px] relative group card"
+                        
+                        <div class="course-card min-w-[320px] relative group"
                             :class="{ 'active': activeSlide === 2 }">
                             <img src="../main/assets/img/img-logoscursos/meio_ambiente.jpg" alt="Curso de Meio Ambiente"
-                                class="w-full h-48 object-cover">
-                            <div class="p-4">
-                                <h3
-                                    class="font-bold text-xl mb-2 text-ceara-green border-b-2 border-ceara-green text-center">
-                                    Meio Ambiente</h3>
-                                <div
-                                    class="absolute inset-0 bg-black bg-opacity-75 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div class="content-overlay">
-                                        <p class="text-white text-center text-xs"> O Curso Técnico em Meio Ambiente
-                                            forma profissionais para a preservação, recuperação e gestão dos recursos
-                                            naturais, promovendo a sustentabilidade e a conscientização ambiental. O
-                                            objetivo é desenvolver conhecimentos e habilidades essenciais para enfrentar
-                                            desafios na proteção do meio ambiente, preparando os alunos para atuar em
-                                            consultorias, órgãos públicos e empresas, contribuindo para um futuro
-                                            sustentável. </p>
-                                    </div>
+                                class="w-full h-56 object-cover">
+                            <div class="p-6">
+                                <h3 class="font-bold text-2xl mb-4 text-ceara-green text-center border-b-2 border-ceara-green pb-2">
+                                    Meio Ambiente
+                                </h3>
+                                <div class="content-overlay absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center p-6">
+                                    <p class="text-white text-center text-sm leading-relaxed">O Curso Técnico em Meio Ambiente forma profissionais para a preservação, recuperação e gestão dos recursos naturais, promovendo a sustentabilidade e a conscientização ambiental. O objetivo é desenvolver conhecimentos e habilidades essenciais para enfrentar desafios na proteção do meio ambiente, preparando os alunos para atuar em consultorias, órgãos públicos e empresas, contribuindo para um futuro sustentável.</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale min-w-[300px] relative group card"
-                            :class="{ 'active': activeSlide === 4 }">
+                        <div class="course-card min-w-[320px] relative group"
+                            :class="{ 'active': activeSlide === 3 }">
                             <img src="../main/assets/img/img-logoscursos/edificações.jpg" alt="Curso de Edificações"
-                                class="w-full h-48 object-cover">
-                            <div class="p-4">
-                                <h3
-                                    class="font-bold text-xl mb-2 text-ceara-green border-b-2 border-ceara-green text-center">
-                                    Edificações</h3>
-                                <div
-                                    class="absolute inset-0 bg-black bg-opacity-75 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div class="content-overlay">
-                                        <p class="text-white text-center text-xs"> O curso Técnico de Edificações forma
-                                            profissionais para atuar na construção civil, como desenhar projetos,
-                                            elaborar orçamentos, coordenar manutenção e realizar pesquisas. O técnico
-                                            pode trabalhar
-                                            em empresas de construção, escritórios, canteiros de obras, laboratórios ou
-                                            como autônomo. </p>
-                                    </div>
+                                class="w-full h-56 object-cover">
+                            <div class="p-6">
+                                <h3 class="font-bold text-2xl mb-4 text-ceara-green text-center border-b-2 border-ceara-green pb-2">
+                                    Edificações
+                                </h3>
+                                <div class="content-overlay absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center p-6">
+                                    <p class="text-white text-center text-sm leading-relaxed">O curso Técnico de Edificações forma profissionais para atuar na construção civil, como desenhar projetos, elaborar orçamentos, coordenar manutenção e realizar pesquisas. O técnico pode trabalhar em empresas de construção, escritórios, canteiros de obras, laboratórios ou como autônomo.</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale min-w-[300px] relative group card"
-                            :class="{ 'active': activeSlide === 3 }">
+                        
+                        <div class="course-card min-w-[320px] relative group"
+                            :class="{ 'active': activeSlide === 4 }">
                             <img src="../main/assets/img/img-logoscursos/adm.jpg" alt="Curso de Administração"
-                                class="w-full h-48 object-cover">
-                            <div class="p-4">
-                                <h3
-                                    class="font-bold text-xl mb-2 text-ceara-green border-b-2 border-ceara-green text-center">
-                                    Administração</h3>
-                                <div
-                                    class="absolute inset-0 bg-black bg-opacity-75 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div class="content-overlay">
-                                        <p class="text-white text-center text-xs">O Curso Técnico em Administração forma profissionais para a gestão de empresas em diversos setores. O objetivo
-                                            é desenvolver conhecimentos e habilidades em planejamento, organização, direção e controle das atividades administrativas,
-                                            preparando os alunos para enfrentar desafios no mundo corporativo e contribuir para a eficiência e competitividade das organizações.</p>
-                                    </div>
+                                class="w-full h-56 object-cover">
+                            <div class="p-6">
+                                <h3 class="font-bold text-2xl mb-4 text-ceara-green text-center border-b-2 border-ceara-green pb-2">
+                                    Administração
+                                </h3>
+                                <div class="content-overlay absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center p-6">
+                                    <p class="text-white text-center text-sm leading-relaxed">O Curso Técnico em Administração forma profissionais para a gestão de empresas em diversos setores. O objetivo é desenvolver conhecimentos e habilidades em planejamento, organização, direção e controle das atividades administrativas, preparando os alunos para enfrentar desafios no mundo corporativo e contribuir para a eficiência e competitividade das organizações.</p>
                                 </div>
                             </div>
                         </div>
@@ -975,65 +1282,6 @@
                 </div>
             </div>
         </section>
-
-        <style>
-            .hide-scrollbar {
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-            }
-
-            .hide-scrollbar::-webkit-scrollbar {
-                display: none;
-            }
-
-            .perspective {
-                perspective: 1000px;
-            }
-
-            .card {
-                transform-style: preserve-3d;
-                transition: transform 0.5s ease;
-            }
-
-            .card:hover {
-                transform: scale(1.05) rotateY(10deg);
-            }
-
-            .carousel {
-                scroll-behavior: smooth;
-            }
-
-            .group:hover .group-hover\:opacity-100 {
-                transition: all 0.3s ease-in-out;
-            }
-
-
-
-            .card {
-                transition: all 0.5s ease-in-out;
-            }
-
-            .card:hover {
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-            }
-
-            .perspective {
-                perspective: 2000px;
-                perspective-origin: center;
-            }
-
-            .content-overlay {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                height: 100%;
-                padding: 1rem;
-                overflow-y: auto;
-                mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-                -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-            }
-        </style>
 
         <script>
             function smoothScroll(element, target, duration) {
@@ -1059,7 +1307,7 @@
             document.addEventListener('DOMContentLoaded', () => {
                 const carousel = document.querySelector('.carousel');
                 let currentIndex = 0;
-                const cardWidth = 300; // Ajustando a largura da carta
+                const cardWidth = 320;
                 setInterval(() => {
                     currentIndex = (currentIndex + 1) % 5;
                     smoothScroll(carousel, currentIndex * cardWidth, 1000);
@@ -1067,127 +1315,125 @@
             });
         </script>
 
-
-        <section id="eventos" class="py-24 fade-in">
+        <!-- Enhanced Events Section -->
+        <section id="eventos" class="py-24 fade-in bg-gradient-to-br from-white to-gray-50">
             <div class="container mx-auto px-4">
-                <h2 class="text-4xl font-bold text-center mb-12 text-ceara-green">Próximos Eventos</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-
-                <div class="bg-white rounded-lg shadow-lg p-6 hover-scale">
-                        <div class="flex items-center mb-4">
-                            <i class="fas fa-user-graduate text-3xl text-ceara-orange mr-4"></i>
-                            <div>
-                                <h3 class="font-bold text-xl mb-1 text-ceara-green">Curso Google</h3>
-                                <p class="text-gray-600">15 de maio, 2025</p>
-                            </div>
-                        </div>
-                        <a href="https://www.coursera.org/programs/c-jovem-2025-cresca-com-o-google-13lv3" target="_blank"
-                            class="inline-block bg-ceara-white text-ceara-green border border-ceara-green hover:bg-ceara-green hover:text-ceara-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
-                            <i class="fas fa-file-alt mr-1"></i> Acesse aqui
-                        </a>
-
-                    </div>
-                    <div class="bg-white rounded-lg shadow-lg p-6 hover-scale">
-                        <div class="flex items-center mb-4">
-                            <i class="fas fa-user-graduate text-3xl text-ceara-orange mr-4"></i>
-                            <div>
-                                <h3 class="font-bold text-xl mb-1 text-ceara-green">Curso Huawei 5g</h3>
-                                <p class="text-gray-600">02 de abril, 2025</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-700 mb-4">Código do curso: z4ttcV
-                        </p>
-                        <a href="https://id1.cloud.huawei.com/CAS/portal/userRegister/regbyphone.html?loginUrl=https%3A%2F%2Funiportal.huawei.com%2Funiportal1%2Fhwid-login.html%3Fx_app_id%3Dcom.huawei.prm.talent%26lang%3Den_US%26redirect%3Dhttps%253A%252F%252Fe.huawei.com%252Fen%252Ftalent%252F%2523%252Fcourse%252Fcourse-details%253FapplicationId%253D1743527126781%2526courseType%253DICT%2526invitedCode%253Dz4ttcV%2526urlForm%253Dmyclass%26relationKey%3D4bc61e81ea2c4353bb25076259f69af0&service=https%3A%2F%2Foauth-login1.cloud.huawei.com%2Foauth2%2Fv3%2Fauthorize%3Fclient_id%3D104526677%26redirect_uri%3Dhttps%253A%252F%252Funiportal.huawei.com%252Funiportal1%252Fhwid-login-result.html%253FrelationKey%253Ddd7045ae84f748d4933ea2341aefe8ab%26response_type%3Dcode%26state%3Ddd7045ae84f748d4933ea2341aefe8ab%26scope%3Dhttps%253A%252F%252Fwww.huawei.com%252Fauth%252Faccount%252Funified.profile1%2Bhttps%253A%252F%252Fwww.huawei.com%252Fauth%252Faccount%252Fpetal.email%26access_type%3Doffline%26lang%3Den-us%26display%3Dpage&lang=en-us&scope=https%3A%2F%2Fwww.huawei.com%2Fauth%2Faccount%2Funified.profile1+https%3A%2F%2Fwww.huawei.com%2Fauth%2Faccount%2Fpetal.email&state=dd7045ae84f748d4933ea2341aefe8ab&themeName=red" target="_blank"
-                            class="inline-block bg-ceara-white text-ceara-green border border-ceara-green hover:bg-ceara-green hover:text-ceara-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
-                            <i class="fas fa-file-alt mr-1"></i> Acesse aqui
-                        </a>
-
-                    </div>
-                    <div class="bg-white rounded-lg shadow-lg p-6 hover-scale">
-                        <div class="flex items-center mb-4">
-                            <i class="fas fa-user-graduate text-3xl text-ceara-orange mr-4"></i>
-                            <div>
-                                <h3 class="font-bold text-xl mb-1 text-ceara-green">Curso AWS</h3>
-                                <p class="text-gray-600">15 de maio, 2025</p>
-                            </div>
-                        </div>
-
-                        <a href="https://www.awsacademy.com/vforcesite/LMS_Login"
-                            class="inline-block bg-ceara-white text-ceara-green border border-ceara-green hover:bg-ceara-green hover:text-ceara-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
-                            <i class="fas fa-file-alt mr-1"></i> Acesse aqui
-                        </a>
-
-                    </div>
-
-
-
-                    
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold mb-6 text-ceara-green bg-gradient-primary bg-clip-text text-transparent">Próximos Eventos</h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">Fique por dentro das oportunidades e eventos da nossa escola</p>
                 </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="card-enhanced p-8 hover-scale">
+                        <div class="flex items-center mb-6">
+                            <div class="w-16 h-16 bg-gradient-secondary rounded-full flex items-center justify-center mr-6">
+                                <i class="fas fa-user-graduate text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-2xl mb-2 text-ceara-green">Curso Google</h3>
+                                <p class="text-gray-600 font-medium">15 de maio, 2025</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6 leading-relaxed">Oportunidade única de participar dos cursos oferecidos pelo Google para desenvolvimento profissional.</p>
+                        <a href="https://www.coursera.org/programs/c-jovem-2025-cresca-com-o-google-13lv3" target="_blank" class="btn-primary">
+                            <i class="fas fa-external-link-alt mr-2"></i> Acesse aqui
+                        </a>
+                    </div>
 
+                    <div class="card-enhanced p-8 hover-scale">
+                        <div class="flex items-center mb-6">
+                            <div class="w-16 h-16 bg-gradient-secondary rounded-full flex items-center justify-center mr-6">
+                                <i class="fas fa-signal text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-2xl mb-2 text-ceara-green">Curso Huawei 5G</h3>
+                                <p class="text-gray-600 font-medium">02 de abril, 2025</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-4 leading-relaxed">Curso especializado em tecnologia 5G oferecido pela Huawei.</p>
+                        <p class="text-sm text-gray-600 mb-6 bg-gray-100 p-3 rounded-lg">
+                            <strong>Código do curso:</strong> z4ttcV
+                        </p>
+                        <a href="https://id1.cloud.huawei.com/CAS/portal/userRegister/regbyphone.html?loginUrl=https%3A%2F%2Funiportal.huawei.com%2Funiportal1%2Fhwid-login.html%3Fx_app_id%3Dcom.huawei.prm.talent%26lang%3Den_US%26redirect%3Dhttps%253A%252F%252Fe.huawei.com%252Fen%252Ftalent%252F%2523%252Fcourse%252Fcourse-details%253FapplicationId%253D1743527126781%2526courseType%253DICT%2526invitedCode%253Dz4ttcV%2526urlForm%253Dmyclass%26relationKey%3D4bc61e81ea2c4353bb25076259f69af0&service=https%3A%2F%2Foauth-login1.cloud.huawei.com%2Foauth2%2Fv3%2Fauthorize%3Fclient_id%3D104526677%26redirect_uri%3Dhttps%253A%252F%252Funiportal.huawei.com%252Funiportal1%252Fhwid-login-result.html%253FrelationKey%253Ddd7045ae84f748d4933ea2341aefe8ab%26response_type%3Dcode%26state%3Ddd7045ae84f748d4933ea2341aefe8ab%26scope%3Dhttps%253A%252F%252Fwww.huawei.com%252Fauth%252Faccount%252Funified.profile1%2Bhttps%253A%252F%252Fwww.huawei.com%252Fauth%252Faccount%252Fpetal.email%26access_type%3Doffline%26lang%3Den-us%26display%3Dpage&lang=en-us&scope=https%3A%2F%2Fwww.huawei.com%2Fauth%2Faccount%2Funified.profile1+https%3A%2F%2Fwww.huawei.com%2Fauth%2Faccount%2Fpetal.email&state=dd7045ae84f748d4933ea2341aefe8ab&themeName=red" target="_blank" class="btn-primary">
+                            <i class="fas fa-external-link-alt mr-2"></i> Acesse aqui
+                        </a>
+                    </div>
 
-        </section>
-
-
-
-
-        <section id="galeria" class="py-24 fade-in">
-            <div class="container mx-auto px-4">
-                <h2 class="text-4xl font-bold text-center mb-12 text-ceara-green">Galeria de Fotos</h2>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <img src="../main/assets/img/galeria/galeria-1.png" alt="Imagem 1"
-                        class="gallery-img w-full h-64 object-cover rounded-lg shadow-lg hover-scale">
-                    <img src="../main/assets/img/galeria/galeria-2.jpg" alt="Imagem 2"
-                        class="gallery-img w-full h-64 object-cover rounded-lg shadow-lg hover-scale">
-                    <img src="../main/assets/img/galeria/galeria-3.jpg" alt="Imagem 3"
-                        class="gallery-img w-full h-64 object-cover rounded-lg shadow-lg hover-scale">
-                    <img src="../main/assets/img/galeria/galeria-4.jpg" alt="Imagem 4"
-                        class="gallery-img w-full h-64 object-cover rounded-lg shadow-lg hover-scale">
-                    <img src="../main/assets/img/galeria/galeria-5.jpg" alt="Imagem 5"
-                        class="gallery-img w-full h-64 object-cover rounded-lg shadow-lg hover-scale">
-                    <img src="../main/assets/img/galeria/galeria-6.jpg" alt="Imagem 6"
-                        class="gallery-img w-full h-64 object-cover rounded-lg shadow-lg hover-scale">
-                    <img src="../main/assets/img/galeria/galeria-7.jpg" alt="Imagem 7"
-                        class="gallery-img w-full h-64 object-cover rounded-lg shadow-lg hover-scale">
-                    <img src="../main/assets/img/galeria/galeria-8.jpg" alt="Imagem 8"
-                        class="gallery-img w-full h-64 object-cover rounded-lg shadow-lg hover-scale">
+                    <div class="card-enhanced p-8 hover-scale">
+                        <div class="flex items-center mb-6">
+                            <div class="w-16 h-16 bg-gradient-secondary rounded-full flex items-center justify-center mr-6">
+                                <i class="fas fa-cloud text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-2xl mb-2 text-ceara-green">Curso AWS</h3>
+                                <p class="text-gray-600 font-medium">15 de maio, 2025</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6 leading-relaxed">Capacitação em computação em nuvem com a plataforma Amazon Web Services.</p>
+                        <a href="https://www.awsacademy.com/vforcesite/LMS_Login" target="_blank" class="btn-primary">
+                            <i class="fas fa-external-link-alt mr-2"></i> Acesse aqui
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- Enhanced Gallery Section -->
+        <section id="galeria" class="py-24 fade-in bg-gradient-to-br from-gray-50 to-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold mb-6 text-ceara-green bg-gradient-primary bg-clip-text text-transparent">Galeria de Fotos</h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">Momentos especiais da nossa comunidade escolar</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <img src="../main/assets/img/galeria/galeria-1.png" alt="Imagem 1"
+                        class="gallery-img w-full h-64 object-cover shadow-custom">
+                    <img src="../main/assets/img/galeria/galeria-2.jpg" alt="Imagem 2"
+                        class="gallery-img w-full h-64 object-cover shadow-custom">
+                    <img src="../main/assets/img/galeria/galeria-3.jpg" alt="Imagem 3"
+                        class="gallery-img w-full h-64 object-cover shadow-custom">
+                    <img src="../main/assets/img/galeria/galeria-4.jpg" alt="Imagem 4"
+                        class="gallery-img w-full h-64 object-cover shadow-custom">
+                    <img src="../main/assets/img/galeria/galeria-5.jpg" alt="Imagem 5"
+                        class="gallery-img w-full h-64 object-cover shadow-custom">
+                    <img src="../main/assets/img/galeria/galeria-6.jpg" alt="Imagem 6"
+                        class="gallery-img w-full h-64 object-cover shadow-custom">
+                    <img src="../main/assets/img/galeria/galeria-7.jpg" alt="Imagem 7"
+                        class="gallery-img w-full h-64 object-cover shadow-custom">
+                    <img src="../main/assets/img/galeria/galeria-8.jpg" alt="Imagem 8"
+                        class="gallery-img w-full h-64 object-cover shadow-custom">
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Modal -->
         <div id="imageModal"
-            class="fixed inset-0 bg-black bg-opacity-90 hidden items-center justify-center z-50 transition-all duration-300 ease-in-out opacity-0">
-            <div class="relative max-w-4xl w-full mx-4">
+            class="fixed inset-0 bg-black/95 hidden items-center justify-center z-50 transition-all duration-300 ease-in-out opacity-0">
+            <div class="relative max-w-6xl w-full mx-4">
                 <button id="closeModal"
-                    class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors duration-200 z-50">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
+                    class="absolute top-6 right-6 text-white hover:text-ceara-orange transition-colors duration-200 z-50 bg-black/50 rounded-full p-3 backdrop-blur-sm">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
                 <div class="relative">
-                    <img id="modalImage" src="" alt="Imagem ampliada"
-                        class="w-full h-auto max-h-[80vh] object-contain rounded-lg">
+                    <img id="modalImage" src="/placeholder.svg" alt="Imagem ampliada"
+                        class="w-full h-auto max-h-[85vh] object-contain rounded-xl shadow-2xl">
                     <button id="prevButton"
-                        class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full transition-all duration-200">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
-                            </path>
+                        class="absolute left-6 top-1/2 transform -translate-y-1/2 text-white p-4 rounded-full transition-all duration-200">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
                     </button>
                     <button id="nextButton"
-                        class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full transition-all duration-200">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                            </path>
+                        class="absolute right-6 top-1/2 transform -translate-y-1/2 text-white p-4 rounded-full transition-all duration-200">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </button>
                 </div>
             </div>
         </div>
+
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const modal = document.getElementById('imageModal');
@@ -1299,130 +1545,102 @@
                         }
                     }
                 });
-
-                const style = document.createElement('style');
-                style.textContent = `
-                    #modalImage {
-                        transition: opacity 0.3s ease-in-out;
-                    }
-                    
-                    .modal-button {
-                        opacity: 0.7;
-                        transition: opacity 0.2s ease-in-out;
-                    }
-                    
-                    .modal-button:hover {
-                        opacity: 1;
-                    }
-                `;
-                document.head.appendChild(style);
             });
         </script>
 
-
-        <section id="parceiros" class="bg-white py-8 md:py-16 fade-in overflow-hidden">
+        <!-- Enhanced Partners Section -->
+        <section id="parceiros" class="bg-white py-20 fade-in overflow-hidden">
             <div class="container mx-auto px-4 md:px-8">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 text-ceara-green">Nossos Parceiros
-                </h2>
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold mb-6 text-ceara-green bg-gradient-primary bg-clip-text text-transparent">Nossos Parceiros</h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">Empresas e instituições que confiam no nosso trabalho</p>
+                </div>
 
                 <div class="relative w-full overflow-hidden">
                     <div class="swiper-container parceiros-swiper w-full">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/fenix Soluções.png" alt="Fenix"
-                                        class="h-24 md:h-40 w-auto object-contain hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-auto object-contain hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
-
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/crede1.png" alt="Crede"
-                                        class="h-24 md:h-40 w-auto object-contain hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-auto object-contain hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
-
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/netway cursoss.png" alt="netway"
-                                        class="h-24 md:h-40 w-auto object-contain hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-auto object-contain hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
-
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/r2_telecom.jpeg" alt="R2"
-                                        class="h-24 md:h-40 w-auto object-contain hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-auto object-contain hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
-
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/softway_fibra.webp" alt="software fibra"
-                                        class="h-24 md:h-40 w-auto object-contain hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-auto object-contain hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
-
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/TRE_CE.png" alt="tre"
-                                        class="h-24 md:h-40 w-auto object-contain hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-auto object-contain hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
-
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/vp23telecomm.png" alt="vp3"
-                                        class="h-24 md:h-40 w-auto object-contain hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-auto object-contain hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
-
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/ifce.png" alt="ifce"
-                                        class="h-24 md:h-40 w-auto object-contain hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-auto object-contain hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
-
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/prefeitura_municial.png" alt="prefeitura"
-                                        class="h-24 md:h-40 w-auto object-contain hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-auto object-contain hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
-
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/EUNICE WEVER HH.jpg" alt="eunice"
-                                        class="h-24 md:h-40 w-auto object-contain hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-auto object-contain hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
-
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/anchieta.png" alt="anchieta"
-                                        class="h-24 md:h-40 w-auto object-contain hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-auto object-contain hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
-
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/mallory.png" alt="mallory"
-                                        class="h-24 md:h-40 w-auto object-contain hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-auto object-contain hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
-
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/inovax (2).png" alt="inovax"
-                                        class="h-24 md:h-40 w-auto object-contain hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-auto object-contain hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
-
                             <div class="swiper-slide">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center p-4">
                                     <img src="../main/assets/img/logo empresas/cl_delecom.jpeg" alt="Cl-telecom"
-                                        class="h-24 md:h-40 w-32 md:w-40 object-contain rounded-full hover:grayscale-0 transition-all duration-300">
+                                        class="h-24 md:h-32 w-32 md:w-40 object-contain rounded-full hover:scale-110 transition-all duration-300 filter grayscale hover:grayscale-0">
                                 </div>
                             </div>
                         </div>
@@ -1441,7 +1659,7 @@
                     loop: true,
                     centeredSlides: false,
                     autoplay: {
-                        delay: 2000, // Alterado de 3000 para 2000 (2 segundos)
+                        delay: 2000,
                         disableOnInteraction: false,
                     },
                     breakpoints: {
@@ -1484,9 +1702,10 @@
             });
         </script>
 
-        <section id="location">
+        <!-- Enhanced Location Section -->
+        <section id="location" class="location-section">
             <div class="container">
-                <h2 class="localfont"><b>Localização</b></h2>
+                <h2 class="localfont">Localização</h2>
                 <div class="map-container">
                     <div class="map-frame">
                         <iframe
@@ -1498,30 +1717,27 @@
                     <div class="contact-info">
                         <h3 class="informefont">Informações de Contato</h3>
                         <ul>
-                            <li><i class="fas fa-map-marker-alt"></i>Av. Marta Maria Carvalho Nojoza, sn - Outra Banda,
-                                Maranguape - CE</li>
+                            <li><i class="fas fa-map-marker-alt"></i>Av. Marta Maria Carvalho Nojoza, sn - Outra Banda, Maranguape - CE</li>
                             <li><i class="fas fa-phone"></i> (85) 3101-2100</li>
                             <li><i class="fas fa-envelope"></i> eeepsalaberga@escola.ce.gov.br</li>
                         </ul>
                         <a href="https://www.google.com/maps/place/Escola+Estadual+de+Educa%C3%A7%C3%A3o+Profissional+Salaberga+Torquato+Gomes+de+Matos/@-3.888242,-38.6765803,17z/"
                             target="_blank" class="directions-button">
-                            <i class="fas fa-directions"></i> Como Chegar
+                            <i class="fas fa-directions mr-2"></i> Como Chegar
                         </a>
                     </div>
                 </div>
             </div>
         </section>
-
-
     </main>
 
-    <footer class="bg-gradient-to-b from-black via-[#000] to-black text-white py-20">
+    <!-- Enhanced Footer -->
+    <footer class="footer-enhanced text-white py-20">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-
                 <div class="md:col-span-3 space-y-6">
                     <img src="https://i.postimg.cc/yx26GhLv/lavosier-nas-3.png" alt="stgm Logo"
-                        class="h-12 transition-all duration-300 hover:grayscale-0" style="background-color: #000000;">
+                        class="h-16 transition-all duration-300 hover:scale-105">
                     <p class="text-gray-400 text-sm leading-relaxed">
                         © 2024 Eeep salaberga torquato gomes de matos. Todos os direitos reservados.
                         Sistema Educacional Integrado | CNPJ: 07.954.514/0256-24 |
@@ -1532,92 +1748,144 @@
                 </div>
 
                 <div class="md:col-span-3 space-y-4">
-                    <h3 class="text-lg font-semibold text-[#FFF]">Links Rápidos</h3>
-                    <ul class="space-y-2">
+                    <h3 class="text-xl font-semibold text-white bg-gradient-secondary bg-clip-text text-transparent">Links Rápidos</h3>
+                    <ul class="space-y-3">
                         <li><a href="https://www.instagram.com/eeepsalabergampe/"
-                                class="text-gray-400 hover:text-[#FFA500] transition-colors duration-300">Instagram</a>
+                                class="text-gray-400 hover:text-ceara-orange transition-colors duration-300 flex items-center">
+                                <i class="fab fa-instagram mr-3"></i>Instagram</a>
                         </li>
                         <li><a href="https://www.facebook.com/groups/salaberga/"
-                                class="text-gray-400 hover:text-[#FFA500] transition-colors duration-300">Facebook</a>
+                                class="text-gray-400 hover:text-ceara-orange transition-colors duration-300 flex items-center">
+                                <i class="fab fa-facebook mr-3"></i>Facebook</a>
                         </li>
-                        <li><a href="#sobre" class="text-gray-400 hover:text-[#FFA500] transition-colors duration-300">Sobre
-                                Nós</a>
+                        <li><a href="#sobre" class="text-gray-400 hover:text-ceara-orange transition-colors duration-300 flex items-center">
+                                <i class="fas fa-info-circle mr-3"></i>Sobre Nós</a>
                         </li>
-                        <li><a href="#"
-                                class="text-gray-400 hover:text-[#FFA500] transition-colors duration-300">Contato</a>
+                        <li><a href="#location"
+                                class="text-gray-400 hover:text-ceara-orange transition-colors duration-300 flex items-center">
+                                <i class="fas fa-map-marker-alt mr-3"></i>Contato</a>
                         </li>
                     </ul>
                 </div>
 
                 <div class="md:col-span-3 space-y-4">
-                    <h3 class="text-lg font-semibold text-[#FFF]">Desenvolvedores</h3>
-                    <ul class="space-y-2">
+                    <h3 class="text-xl font-semibold text-white bg-gradient-secondary bg-clip-text text-transparent">Desenvolvedores</h3>
+                    <ul class="space-y-3">
                         <li><a href="https://www.instagram.com/otavio.ce/"
-                                class="text-gray-400 hover:text-[#FFA500] transition-colors duration-300">
-                                <i class="fab fa-instagram text-sm mr-2"></i>Otavio Menezes</a>
+                                class="text-gray-400 hover:text-ceara-orange transition-colors duration-300 flex items-center">
+                                <i class="fab fa-instagram text-sm mr-3"></i>Otavio Menezes</a>
                         </li>
                         <li><a href="https://www.instagram.com/mth_fl/"
-                                class="text-gray-400 hover:text-[#FFA500] transition-colors duration-300">
-                                <i class="fab fa-instagram text-sm mr-2"></i>Matheus Felix</a>
+                                class="text-gray-400 hover:text-ceara-orange transition-colors duration-300 flex items-center">
+                                <i class="fab fa-instagram text-sm mr-3"></i>Matheus Felix</a>
                         </li>
                         <li><a href="https://www.instagram.com/lvnas._/"
-                                class="text-gray-400 hover:text-[#FFA500] transition-colors duration-300">
-                                <i class="fab fa-instagram text-sm mr-2"></i>Lavosier Nascimento</a>
+                                class="text-gray-400 hover:text-ceara-orange transition-colors duration-300 flex items-center">
+                                <i class="fab fa-instagram text-sm mr-3"></i>Lavosier Nascimento</a>
                         </li>
                         <li><a href="https://www.instagram.com/rogercavalcantetz/"
-                                class="text-gray-400 hover:text-[#FFA500] transition-colors duration-300">
-                                <i class="fab fa-instagram text-sm mr-2"></i>Roger Cavalcante</a>
+                                class="text-gray-400 hover:text-ceara-orange transition-colors duration-300 flex items-center">
+                                <i class="fab fa-instagram text-sm mr-3"></i>Roger Cavalcante</a>
                         </li>
                         <li><a href="https://www.instagram.com/p_.uchoa/"
-                                class="text-gray-400 hover:text-[#FFA500] transition-colors duration-300">
-                                <i class="fab fa-instagram text-sm mr-2"></i>Pedro Uchôa</a>
+                                class="text-gray-400 hover:text-ceara-orange transition-colors duration-300 flex items-center">
+                                <i class="fab fa-instagram text-sm mr-3"></i>Pedro Uchôa</a>
                         </li>
                     </ul>
 
-                    <h3 class="text-lg font-semibold text-[#FFF] mt-6">Colaboradores</h3>
-                    <ul class="space-y-2">
+                    <h3 class="text-xl font-semibold text-white bg-gradient-secondary bg-clip-text text-transparent mt-8">Colaboradores</h3>
+                    <ul class="space-y-3">
                         <li><a href="https://www.instagram.com/_jefferson.castro/"
-                                class="text-gray-400 hover:text-[#FFA500] transition-colors duration-300">
-                                <i class="fab fa-instagram text-sm mr-2"></i>Jefferson Castro</a>
+                                class="text-gray-400 hover:text-ceara-orange transition-colors duration-300 flex items-center">
+                                <i class="fab fa-instagram text-sm mr-3"></i>Jefferson Castro</a>
                         </li>
                     </ul>
                 </div>
 
-                <div class="md:col-span-3 flex flex-col items-center justify-center space-y-4">
+                <div class="md:col-span-3 flex flex-col items-center justify-center space-y-6">
                     <img src="https://i.postimg.cc/SsTx6bC0/Dev-2.jpg" alt="DevStgm Logo"
-                        class="h-16 w-16 transition-all duration-300 filter grayscale hover:grayscale-0">
-                    <p class="text-xs text-gray-400 text-center">Desenvolvido por Dev.Stgm</p>
+                        class="h-20 w-20 rounded-full transition-all duration-300 filter grayscale hover:grayscale-0 hover:scale-110 shadow-glow">
+                    <p class="text-sm text-gray-400 text-center font-medium">Desenvolvido por Dev.Stgm</p>
                 </div>
             </div>
 
-            <div class="mt-12 pt-8 border-t border-gray-800 text-center">
+            <div class="mt-16 pt-8 border-t border-gray-800 text-center">
                 <p class="text-gray-400 text-sm">&copy; 2024 DevStgm. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
+
+    <!-- Accessibility Widget -->
     <div vw class="enabled">
         <div vw-access-button class="active"></div>
         <div vw-plugin-wrapper>
             <div class="vw-plugin-top-wrapper"></div>
         </div>
     </div>
-    <!-- <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+
+    <!-- Enhanced Scroll Animation Script -->
     <script>
-        new window.VLibras.Widget('https://vlibras.gov.br/app');
-    </script>
-    <script>
-        document.getElementById('vlibrasButton').addEventListener('click', function () {
-            window.open('https://www.gov.br/governodigital/pt-br/acessibilidade-e-usuario/vlibras', '_blank');
+        // Enhanced scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
         });
 
-    </script> -->
+        // Enhanced smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
 
+        // Header active link highlighting
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const scrollPos = window.scrollY + 100;
 
-    <style>
-        *:focus {
-            outline: none;
-        }
-    </style>
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                const navLink = document.querySelector(`a[href="#${sectionId}"]`);
+
+                if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                    document.querySelectorAll('.header-link').forEach(link => {
+                        link.classList.remove('header-active');
+                    });
+                    if (navLink) {
+                        navLink.classList.add('header-active');
+                    }
+                }
+            });
+        });
+
+        // Loading animation
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
 </body>
 
 </html>

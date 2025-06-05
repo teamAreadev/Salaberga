@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/../config/database.php');
+require_once(__DIR__ . '/../config/Database.php');
 
 class select_model extends connect
 {
@@ -75,14 +75,14 @@ class select_model extends connect
 
     public function getSaidasEstagioPorTurma($id_turma, $data) {
         try {
-            $sql = "SELECT a.nome, s.dae as data_saida, TIME(s.dae) as hora_saida 
-                    FROM aluno a 
-                    JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+            $sql = "SELECT a.nome, se.data_saida, se.hora_saida 
+                    FROM saida_estagio se 
+                    INNER JOIN alunos a ON se.id_aluno = a.id 
                     WHERE a.id_turma = :id_turma 
-                    AND DATE(s.dae) = :data 
+                    AND DATE(se.data_saida) = :data 
                     ORDER BY a.nome";
             
-            $stmt = $this->connect->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':id_turma', $id_turma);
             $stmt->bindParam(':data', $data);
             $stmt->execute();

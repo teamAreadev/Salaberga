@@ -6,12 +6,7 @@ $select = new select_model;
 
 <!DOCTYPE html>
 <html>
-<!--CÓDIGO PARA VERIFICAR SE O USUÁRIO TEM LOGIN POR MEIO DA SESSÃO-->
-<?php
-require_once('../control/controller_sessao/autenticar_sessao.php');
-require_once('../control/controller_sessao/verificar_sessao.php');
-verificarSessao(600);
-?>
+
 
 <head>
   <meta charset="UTF-8">
