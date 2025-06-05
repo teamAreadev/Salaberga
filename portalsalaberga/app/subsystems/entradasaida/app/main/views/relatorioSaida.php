@@ -4,413 +4,393 @@ $select = new select_model;
 ?>
 
 <!DOCTYPE html>
-<html>
-
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Relatório de Saída</title>
-  <style>
-    :root {
-      --primary-color: #4CAF50;
-      --primary-hover: #45a049;
-      --text-color: #333;
-      --border-color: #ddd;
-      --error-color: #ff4444;
-      --background-color: #f8f9fa;
-      --gradient-primary: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-      --gradient-accent: linear-gradient(135deg, #4CAF50 0%, #FFA500 100%);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Saída - Salaberga</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="https://salaberga.com/salaberga/portalsalaberga/app/main/assets/img/Design%20sem%20nome.svg" type="image/xicon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ceara-green': '#008C45',
+                        'ceara-light-green': '#3CB371',
+                        'ceara-olive': '#8CA03E',
+                        'ceara-orange': '#FFA500',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        body {
+            background: #f8fafc;
+            min-height: 100vh;
+        }
 
-    html,
-    body {
-      height: 100%;
-    }
+        .gradient-text {
+            background: linear-gradient(45deg, #008C45, #3CB371);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: var(--background-color);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      position: relative;
-      padding-bottom: 60px;
-      padding-top: 70px;
-    }
+        .header {
+            background: linear-gradient(90deg, #008C45, #3CB371);
+        }
 
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: var(--gradient-primary);
-      height: 60px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-    }
+        .report-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
 
-    .header-title {
-      color: white;
-      font-size: 1.2rem;
-      font-weight: 600;
-    }
+        .report-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #008C45, #3CB371);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-    .header-nav {
-      display: flex;
-      align-items: center;
-    }
+        .report-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 140, 69, 0.2), 0 4px 6px -2px rgba(0, 140, 69, 0.1);
+        }
 
-    .header-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background-color: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 8px;
-      color: white;
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
+        .report-card:hover::before {
+            opacity: 1;
+        }
 
-    .header-btn:hover,
-    .header-btn:focus {
-      background-color: rgba(255, 255, 255, 0.25);
-      transform: translateY(-2px);
-    }
+        .select-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background-color: white;
+            color: #374151;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
 
-    .header-btn i {
-      font-size: 1rem;
-    }
+        .select-field:focus {
+            outline: none;
+            border-color: #008C45;
+            box-shadow: 0 0 0 3px rgba(0, 140, 69, 0.1);
+        }
 
-    .input-field,
-    .btn-submit {
-      margin: 5px;
-    }
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
 
-    label {
-      display: block;
-      margin-bottom: -6px;
-      margin-top: 3rem;
-    }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            min-width: 140px;
+            justify-content: center;
+        }
 
-    .container {
-      margin: 0 auto;
-      padding: 20px;
-      width: 100%;
-      max-width: 700px;
-      background: white;
-      padding: 8rem;
-      border-radius: 16px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-      text-align: center;
-      margin-bottom: -60rem;
-      margin-top: -60;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-    }
+        .radio-option:hover {
+            border-color: #008C45;
+            background-color: #f0fdf4;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0, 140, 69, 0.15);
+        }
 
-    .logo-container {
-      margin-bottom: 2rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+        .radio-option input[type="radio"] {
+            accent-color: #008C45;
+            width: 16px;
+            height: 16px;
+        }
 
-    h1 {
-      font-size: 1.6rem;
-      font-weight: 600;
-      color: var(--text-color);
-      margin-bottom: 1.5rem;
-      margin-top: -2rem;
-      position: relative;
-      padding-bottom: 8px;
-    }
+        .radio-option span {
+            font-weight: 500;
+            color: #374151;
+        }
 
-    h1::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50px;
-      height: 3px;
-      background: var(--gradient-accent);
-      border-radius: 3px;
-    }
+        .btn-submit {
+            background: linear-gradient(45deg, #008C45, #3CB371);
+            color: white;
+            padding: 0.875rem 1.75rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
 
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--text-color);
-      margin-bottom: 1.5rem;
-      margin-top: 1rem;
-      position: relative;
-      padding-bottom: -10rem;
-    }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 140, 69, 0.2);
+        }
 
-    .form-group {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text-color);
-      margin-bottom: 1.5rem;
-      position: relative;
-      padding-bottom: 5px;
-      margin-bottom: 1rem;
-      margin-top: 2rem;
-      text-align: center;
-    }
+        .btn-submit:active {
+            transform: translateY(0);
+        }
 
-    .input-field {
-      width: 80%;
-      padding: 12px 15px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 0.95rem;
-      transition: all 0.3s ease;
-      background: white;
-      margin-bottom: 15px;
-      position: center;
-    }
+        .btn-submit i {
+            font-size: 1.1rem;
+        }
 
-    .input-field:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
-    }
+        .footer {
+            background: white;
+            border-top: 1px solid #e5e7eb;
+        }
 
-    .input-field::placeholder {
-      color: #999;
-    }
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(70deg, #008C45, rgb(225, 130, 6));
+        }
 
-    select.input-field {
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 15px center;
-      background-size: 15px;
-      cursor: pointer;
-    }
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
 
-    .btn-submit {
-      width: 40%;
-      padding: 12px;
-      background: var(--gradient-primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      margin-top: 1rem;
-      text-align: center;
-    }
+        .card-icon.aluno {
+            background: #E8F5E9;
+            color: #008C45;
+        }
 
-    .btn-submit::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--gradient-accent);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
+        .card-icon.ano {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
 
-    .btn-submit:hover::before {
-      opacity: 1;
-    }
+        .card-icon.turma {
+            background: #FFF3E0;
+            color: #FF9800;
+        }
 
-    .btn-submit span {
-      position: relative;
-      z-index: 1;
-    }
+        @media (max-width: 640px) {
+            .radio-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
 
-    .back-link {
-      display: inline-block;
-      margin-top: 1.5rem;
-      color: var(--primary-color);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-
-    .back-link:hover {
-      color: var(--primary-hover);
-    }
-
-    .back-link i {
-      margin-right: 5px;
-    }
-
-    footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      text-align: center;
-      padding: 1rem;
-      color: var(--text-color);
-      font-size: 0.9rem;
-      background: white;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-    }
-
-    footer::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 2px;
-      background: var(--gradient-accent);
-    }
-
-    @media (max-width: 480px) {
-      .container {
-        padding: 2rem;
-      }
-
-      footer {
-        padding: 0.8rem;
-        font-size: 0.8rem;
-      }
-
-      .header {
-        padding: 0 15px;
-        height: 56px;
-      }
-
-      .header-title {
-        font-size: 1rem;
-      }
-
-      .header-btn {
-        padding: 6px 12px;
-        font-size: 0.85rem;
-      }
-    }
-  </style>
+            .radio-option {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
-<body>
-  <header class="header">
-    <div class="header-title">Salaberga</div>
-    <nav class="header-nav">
-      <a href="index.php" class="header-btn">
-        <i class="fas fa-home"></i>
-        <span>Menu</span>
-      </a>
-    </nav>
-  </header>
-  <center>
-    <div class="container">
-      <h1>Relatório de Saída</h1>
-      <h2>Por Aluno</h2>
-      <form id="saida" action="../control/control_index.php" method="POST">
-        <div class="aluno-section">
-          <select id="id_aluno" name="id_aluno" class="input-field" required>
-            <option id="id_aluno" name="id_aluno" disabled selected>Selecione o Nome do Aluno</option>
-            <?php
-            $dados = $select->select_alunos();
-            foreach ($dados as $dado) {
-            ?>
-              <option value="<?= $dado['id_aluno'] ?>"><?= $dado['nome'] ?></option>
-            <?php
-            }
-            ?>
-          </select>
-          <br>
-          <label>Selecione o tipo de relatório:</label><br>
-          <input type="radio" name="tipo_relatorio" value="dia_atual" required> Dia Atual<br>
-          <input type="radio" name="tipo_relatorio" value="ultimos_30_dias"> Últimos 30 Dias<br>
-          <input type="radio" name="tipo_relatorio" value="ultimos_12_meses"> Últimos 12 Meses<br>
-          <br>
-          <input type="hidden" name="GerarRelatorio" value="por_alunoSaida">
-          <input type="hidden" name="form_id" value="entrada">
-          <input id="btn" type="submit" value="Gerar" name="btn" class="btn-submit">
-          </br></br></br>
+<body class="min-h-screen flex flex-col">
+    <header class="header fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-6 text-white shadow-md z-50">
+        <div class="text-xl font-semibold">
+            <i class="fas fa-graduation-cap mr-2"></i>
+            Salaberga
         </div>
-      </form>
-      <form id="saidaA" action="../control/control_index.php" method="POST">
-        <div class="form-group">
-          <div class="box">
-            <label>Por Ano:</label>
-            <select id="ano" name="Ano" class="input-field">
-              <option value="" disabled selected>Selecione o ano</option>
+        <nav>
+            <a href="index.php" class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors">
+                <i class="fas fa-home"></i>
+                <span>Menu</span>
+            </a>
+        </nav>
+    </header>
 
-              <option value="1">1° Anos </option>
-              <option value="2">2° Anos</option>
-              <option value="3">3° Anos </option>
+    <main class="flex-1 container mx-auto px-4 py-8 mt-16">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold mb-2">
+                    <span class="gradient-text">Relatório de Saída</span>
+                </h1>
+                <p class="text-gray-600">Selecione o tipo de relatório que deseja gerar</p>
+            </div>
 
-            </select>
+            <div class="space-y-8">
+                <!-- Relatório por Aluno -->
+                <div class="report-card p-6">
+                    <div class="card-icon aluno">
+                        <i class="fas fa-user-graduate text-xl"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Por Aluno</h2>
+                    <form id="saida" action="../control/control_index.php" method="POST" class="space-y-4">
+                        <select id="id_aluno" name="id_aluno" class="select-field" required>
+                            <option value="" disabled selected>Selecione o Nome do Aluno</option>
+                            <?php
+                            $dados = $select->select_alunos();
+                            foreach ($dados as $dado) {
+                            ?>
+                                <option value="<?= $dado['id_aluno'] ?>"><?= $dado['nome'] ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
 
-            <label>Selecione o tipo de relatório:</label><br>
-            <input type="radio" name="tipo_relatorio" value="dia_atual" required> Dia Atual<br>
-            <input type="radio" name="tipo_relatorio" value="ultimos_30_dias"> Últimos 30 Dias<br>
-            <input type="radio" name="tipo_relatorio" value="ultimos_12_meses"> Últimos 12 Meses<br>
-            <br>
-            <input type="hidden" name="GerarRelatorio" value="ano_geralSaida">
-            <input type="hidden" name="form_id" value="entradaA">
-            <input id="btn" type="submit" value="Gerar" name="btn" class="btn-submit">
-            <br>
-          </div>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="tipo_relatorio" value="dia_atual" required>
+                                <span>Dia Atual</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="tipo_relatorio" value="ultimos_30_dias">
+                                <span>Últimos 30 Dias</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="tipo_relatorio" value="ultimos_12_meses">
+                                <span>Últimos 12 Meses</span>
+                            </label>
+                        </div>
+
+                        <input type="hidden" name="GerarRelatorio" value="por_alunoSaida">
+                        <input type="hidden" name="form_id" value="entrada">
+                        <div class="flex justify-center">
+                            <button type="submit" name="btn" class="btn-submit">
+                                <i class="fas fa-file-alt"></i>
+                                Gerar Relatório
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Relatório por Ano -->
+                <div class="report-card p-6">
+                    <div class="card-icon ano">
+                        <i class="fas fa-calendar-alt text-xl"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Por Ano</h2>
+                    <form id="saidaA" action="../control/control_index.php" method="POST" class="space-y-4">
+                        <select id="ano" name="Ano" class="select-field" required>
+                            <option value="" disabled selected>Selecione o ano</option>
+                            <option value="1">1° Anos</option>
+                            <option value="2">2° Anos</option>
+                            <option value="3">3° Anos</option>
+                        </select>
+
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="tipo_relatorio" value="dia_atual" required>
+                                <span>Dia Atual</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="tipo_relatorio" value="ultimos_30_dias">
+                                <span>Últimos 30 Dias</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="tipo_relatorio" value="ultimos_12_meses">
+                                <span>Últimos 12 Meses</span>
+                            </label>
+                        </div>
+
+                        <input type="hidden" name="GerarRelatorio" value="ano_geralSaida">
+                        <input type="hidden" name="form_id" value="entradaA">
+                        <div class="flex justify-center">
+                            <button type="submit" name="btn" class="btn-submit">
+                                <i class="fas fa-file-alt"></i>
+                                Gerar Relatório
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Relatório por Turma -->
+                <div class="report-card p-6">
+                    <div class="card-icon turma">
+                        <i class="fas fa-users text-xl"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Por Turma</h2>
+                    <form id="saidaT" action="../control/control_index.php" method="POST" class="space-y-4">
+                        <select id="Turma" name="Turma" class="select-field" required>
+                            <option value="" disabled selected>Selecione a turma</option>
+                            <option value="1">1° Ano A</option>
+                            <option value="2">1° Ano B</option>
+                            <option value="3">1° Ano C</option>
+                            <option value="4">1° Ano D</option>
+                            <option value="5">2° Ano A</option>
+                            <option value="6">2° Ano B</option>
+                            <option value="7">2° Ano C</option>
+                            <option value="8">2° Ano D</option>
+                            <option value="9">3° Ano A</option>
+                            <option value="10">3° Ano B</option>
+                            <option value="11">3° Ano C</option>
+                            <option value="12">3° Ano D</option>
+                        </select>
+
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="tipo_relatorio" value="dia_atual" required>
+                                <span>Dia Atual</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="tipo_relatorio" value="ultimos_30_dias">
+                                <span>Últimos 30 Dias</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="tipo_relatorio" value="ultimos_12_meses">
+                                <span>Últimos 12 Meses</span>
+                            </label>
+                        </div>
+
+                        <input type="hidden" name="GerarRelatorio" value="por_turmaSaida">
+                        <input type="hidden" name="form_id" value="saidaT">
+                        <div class="flex justify-center">
+                            <button type="submit" name="btn" class="btn-submit">
+                                <i class="fas fa-file-alt"></i>
+                                Gerar Relatório
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-      </form>
-      <form id="saidaT" action="../control/control_index.php" method="POST">
-        <label>Por Turma:</label>
-        <select id="Turma" name="Turma" class="input-field">
-          <option value="" disabled selected>Selecione a turma</option>
-           <option value="1">1° Ano A</option>
-          <option value="2">1° Ano B</option>
-          <option value="3">1° Ano C</option>
-          <option value="4">1° Ano D</option>
-           <option value="5">2° Ano A</option>
-          <option value="6">2° Ano B</option>
-          <option value="7">2° Ano C</option>
-          <option value="8">2° Ano D</option>
-          <option value="9">3° Ano A</option>
-          <option value="10">3° Ano B</option>
-          <option value="11">3° Ano C</option>
-          <option value="12">3° Ano D</option>
-        </select>
-        <label>Selecione o tipo de relatório:</label><br>
-        <input type="radio" name="tipo_relatorio" value="dia_atual" required> Dia Atual<br>
-        <input type="radio" name="tipo_relatorio" value="ultimos_30_dias"> Últimos 30 Dias<br>
-        <input type="radio" name="tipo_relatorio" value="ultimos_12_meses"> Últimos 12 Meses<br>
-        <br>
-        <input type="hidden" name="GerarRelatorio" value="por_turmaSaida">
-        <input type="hidden" name="form_id" value="saidaT">
-        <input id="btn" type="submit" value="Gerar" name="btn" class="btn-submit">
-        <br></br>
-      </form>
-    </div>
-    <footer>
-      © 2025 Salaberga - Todos os direitos reservados
+    </main>
+
+    <footer class="footer relative py-4 text-center text-gray-600 text-sm">
+        <div class="container mx-auto">
+            <p>© 2025 Sistema Escolar Salaberga. Todos os direitos reservados.</p>
+        </div>
     </footer>
-  </center>
 </body>
-
 </html>
