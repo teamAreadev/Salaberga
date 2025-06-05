@@ -74,7 +74,7 @@ if ($id_equipe_logada !== null) {
         $opcoes_pontos = [4.00, 3.25, 2.75, 2.00, 1.50, 1.00];
     } else {
         // Opcional: definir um padrão ou exibir uma mensagem se o número de alunos for diferente dos esperados
-        $opcoes_pontos = ['-']; // Nenhuma opção de nota
+        $opcoes_pontos = []; // Define como array vazia quando o número de alunos não é 3, 4 ou 6
     }
 }
 
@@ -402,6 +402,9 @@ if ($_SESSION['login'] == true) {
     <script>
         // Sample data - replace with your PHP data
         const teamData = <?php echo json_encode($equipeData); ?>;
+
+        console.log('Debug JS: teamData:', teamData);
+        console.log('Debug JS: teamData.students:', teamData.students);
 
         let evaluatedCount = 0;
         const totalStudents = teamData.students.length;
