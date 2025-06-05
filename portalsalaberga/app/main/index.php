@@ -3,22 +3,55 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta http-equiv="content-language" content="pt-BR">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
     <title>EEEP Salaberga Torquato Gomes de Matos | Hub Educacional</title>
-    <meta name="description"
-        content="EEEP Salaberga Torquato Gomes de Matos: Hub Educacional em Maranguape.">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="EEEP Salaberga Torquato Gomes de Matos: Hub Educacional em Maranguape. Oferecemos educação profissional de qualidade com ensino médio integrado ao técnico.">
     <meta name="author" content="EEEP Salaberga Torquato Gomes de Matos">
-    <meta name="keywords"
-        content="educação profissional, ensino médio técnico, [Maranguape] educação, cursos técnicos, EEEP Salaberga Torquato">
-    <meta name="keywords" content="EEEP Salaberga, Salaberga, Escola Salaberga, Salaberga Torquato">
+    <meta name="keywords" content="educação profissional, ensino médio técnico, Maranguape educação, cursos técnicos, EEEP Salaberga Torquato, EEEP Salaberga, Salaberga, Escola Salaberga, Salaberga Torquato">
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://salaberga.com/">
     <meta property="og:title" content="EEEP Salaberga Torquato Gomes de Matos | Hub Educacional">
-    <meta property="og:description"
-        content="Educação profissional de qualidade em Maranguape. Preparando alunos para um futuro brilhante com ensino médio integrado ao técnico.">
+    <meta property="og:description" content="Educação profissional de qualidade em Maranguape. Preparando alunos para um futuro brilhante com ensino médio integrado ao técnico.">
     <meta property="og:image" content="https://www.seusite.com.br/imagem-da-escola.jpg">
+    <meta property="og:image:alt" content="EEEP Salaberga Torquato Gomes de Matos">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="EEEP Salaberga Torquato Gomes de Matos | Hub Educacional">
+    <meta name="twitter:description" content="Educação profissional de qualidade em Maranguape. Preparando alunos para um futuro brilhante com ensino médio integrado ao técnico.">
+    <meta name="twitter:image" content="https://www.seusite.com.br/imagem-da-escola.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Preload de recursos críticos -->
+    <link rel="preload" href="/assets/css/main.css" as="style">
+    <link rel="preload" href="/assets/js/main.js" as="script">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://salaberga.com/">
+    
     <meta name="geo.region" content="BR-Ceará">
     <meta name="geo.placename" content="Maranguape">
     <meta name="viewport" content="width = device-width, initial-scale = 1, maximum-scale = 1, user-scalable = no ">
@@ -66,7 +99,176 @@
             }
         }
     </script>
-    
+        <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Enhanced Header Styles */
+        .header-enhanced {
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header-scrolled {
+            background: rgba(0, 140, 69, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #FFA500;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+            opacity: 0;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 70%;
+            opacity: 1;
+        }
+        
+        .nav-link.active {
+            color: #FFA500 !important;
+            font-weight: 600;
+        }
+        
+        /* Mobile Menu Animation */
+        .mobile-menu-enter {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        
+        .mobile-menu-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 300ms, transform 300ms;
+        }
+        
+        .mobile-menu-exit {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .mobile-menu-exit-active {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 300ms, transform 300ms;
+        }
+        
+        /* Accessibility Menu */
+        .accessibility-option {
+            transition: all 0.2s ease;
+        }
+        
+        .accessibility-option:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .theme-options {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            display: none;
+            z-index: 50;
+            min-width: 200px;
+        }
+        
+        .theme-toggle-container:hover .theme-options {
+            display: block;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+        
+        /* Dropdown Animation */
+        .dropdown-menu {
+            visibility: hidden;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Mobile Menu Item Animation */
+        .mobile-menu-item {
+            transform: translateX(-20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu-open .mobile-menu-item {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .mobile-menu-item:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu-item:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu-item:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu-item:nth-child(4) { transition-delay: 0.4s; }
+        .mobile-menu-item:nth-child(5) { transition-delay: 0.5s; }
+        .mobile-menu-item:nth-child(6) { transition-delay: 0.6s; }
+        
+        /* Logo Animation */
+        .logo-container {
+            transition: all 0.3s ease;
+        }
+        
+        .header-scrolled .logo-container {
+            transform: scale(0.9);
+        }
+        
+        /* Accessibility Toggle Button Animation */
+        .accessibility-toggle {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .accessibility-toggle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease;
+        }
+        
+        .accessibility-toggle:hover::after {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+        
+        /* Focus Styles for Accessibility */
+        button:focus-visible, a:focus-visible {
+            outline: 2px solid #FFA500;
+            outline-offset: 2px;
+        }
+        
+        /* Hide Alpine elements before Alpine.js loads */
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
     <style>
         /* Enhanced Styling */
         .gallery-img {
@@ -388,6 +590,36 @@
             .section.lb.page-section {
                 padding: 60px 0;
             }
+
+            .mobile-menu {
+                background: #ffffff;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                border-radius: 12px;
+                margin-top: 0.5rem;
+                padding: 1rem;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            .mobile-menu button,
+            .mobile-menu a {
+                color: #333333;
+                padding: 0.75rem 1rem;
+                display: block;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                font-weight: 500;
+            }
+
+            .mobile-menu button:hover,
+            .mobile-menu a:hover {
+                background: rgba(0, 140, 69, 0.1);
+                color: #008C45;
+            }
+
+            .mobile-menu button:active,
+            .mobile-menu a:active {
+                background: rgba(0, 140, 69, 0.2);
+            }
         }
 
         @media (max-width: 576px) {
@@ -618,171 +850,255 @@
         }
     </style>
 </head>
-
-<body class="select-none" x-data="{ 
-    mobileMenuOpen: false, 
-    showEditalMessage: true,
-    async remindLater() {
-        this.showEditalMessage = false;
+<body class="select-none">
+    <header x-data="{ 
+        mobileMenuOpen: false, 
+        isScrolled: false,
+        activeSection: 'home',
+        accessibilityOpen: false,
+        fontSize: 'normal',
         
-        if ('serviceWorker' in navigator && 'PushManager' in window) {
-            try {
-                const registration = await navigator.serviceWorker.register('/service-worker.js');
-                const permission = await Notification.requestPermission();
+        init() {
+            window.addEventListener('scroll', () => {
+                this.isScrolled = window.scrollY > 20;
+            });
+            
+            // Track active section based on scroll position
+            window.addEventListener('scroll', () => {
+                const sections = document.querySelectorAll('section[id]');
+                const scrollPos = window.scrollY + 100;
                 
-                if (permission === 'granted') {
-                    const subscribeOptions = {
-                        userVisibleOnly: true,
-                        applicationServerKey: urlBase64ToUint8Array('YOUR_PUBLIC_VAPID_KEY')
-                    };
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
                     
-                    const subscription = await registration.pushManager.subscribe(subscribeOptions);
-                    
-                    await fetch('/api/save-subscription', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(subscription),
-                    });
-                    
-                    await fetch('/api/schedule-notification', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            subscription: subscription,
-                            delay: 600000
-                        }),
-                    });
-                }
-            } catch (error) {
-                console.error('Erro ao configurar notificações:', error);
-            }
+                    if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                        this.activeSection = sectionId;
+                    }
+                });
+            });
+        },
+        
+        increaseFontSize() {
+            if (this.fontSize === 'normal') this.fontSize = 'large';
+            else if (this.fontSize === 'small') this.fontSize = 'normal';
+            document.documentElement.style.fontSize = this.fontSize === 'small' ? '14px' : this.fontSize === 'normal' ? '16px' : '18px';
+        },
+        
+        decreaseFontSize() {
+            if (this.fontSize === 'normal') this.fontSize = 'small';
+            else if (this.fontSize === 'large') this.fontSize = 'normal';
+            document.documentElement.style.fontSize = this.fontSize === 'small' ? '14px' : this.fontSize === 'normal' ? '16px' : '18px';
+        },
+        
+        resetFontSize() {
+            this.fontSize = 'normal';
+            document.documentElement.style.fontSize = '16px';
         }
-    }
-    }">
-    
-    <script>
-        window.history.pushState(null, '', window.location.href);
-        window.onpopstate = function() {
-            window.location.href = '';
-        };
-    </script>
-
-    <script>
-        function urlBase64ToUint8Array(base64String) {
-            const padding = '='.repeat((4 - base64String.length % 4) % 4);
-            const base64 = (base64String + padding)
-                .replace(/\-/g, '+')
-                .replace(/_/g, '/');
-
-            const rawData = window.atob(base64);
-            const outputArray = new Uint8Array(rawData.length);
-
-            for (let i = 0; i < rawData.length; ++i) {
-                outputArray[i] = rawData.charCodeAt(i);
-            }
-            return outputArray;
-        }
-    </script>
-    
-    <script type="text/javascript">
-        (function(d, t) {
-            var g = d.createElement(t),
-                s = d.getElementsByTagName(t)[0];
-            g.src = "https://cdn.pushalert.co/integrate_3e3979b887cb8c83ce2f425dde988024.js";
-            s.parentNode.insertBefore(g, s);
-        }(document, "script"));
-    </script>
-
-    <header x-data="{ mobileMenuOpen: false, mobileDropdownOpen: false, init() { this.$watch('mobileMenuOpen', value => { if (value) { document.body.classList.add('overflow-hidden'); } else { document.body.classList.remove('overflow-hidden'); } }); window.addEventListener('resize', () => { if (window.innerWidth >= 1024) { this.mobileMenuOpen = false; } }); } }" class="header-enhanced text-ceara-white sticky top-0 z-50 shadow-lg backdrop-blur-md">
+    }" 
+    class="header-enhanced sticky top-0 z-50 w-full transition-all duration-300"
+    :class="{ 'header-scrolled': isScrolled }">
         <div class="container mx-auto px-4">
-            <nav class="flex items-center justify-between flex-wrap py-4">
-                <div class="flex items-center space-x-3">
-                    <span class="text-sm font-semibold"><b>Acessibilidade</b></span>
-                    <button class="text-sm hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Diminuir tamanho do texto">
-                        <i class="fa-solid fa-a"></i><b>-</b>
-                    </button>
-                    <button class="text-sm hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Tamanho padrão do texto">
-                        <i class="fa-solid fa-a"></i>
-                    </button>
-                    <button class="text-sm hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Aumentar tamanho do texto">
-                        <i class="fa-solid fa-a"></i><b>+</b>
-                    </button>
-                    <button id="screenReaderBtn" class="text-sm hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10 flex items-center" aria-label="Ativar narração de tela">
-                        <i class="fa-solid fa-ear-listen mr-1"></i>
-                    </button>
-                    <div class="theme-toggle-container">
-                        <button class="theme-toggle-btn hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Opções de visualização" aria-expanded="false">
-                            <i class="fa-solid fa-circle-half-stroke" style="color: white;"></i>
-                        </button>
-                        <div class="theme-options bg-white rounded-lg shadow-lg p-2 mt-2" style="color: #000000;">
-                            <button class="theme-option block w-full text-left px-3 py-2 rounded hover:bg-gray-100" data-theme="monochrome" aria-label="Ativar monocromático">Monocromático</button>
-                            <button class="theme-option block w-full text-left px-3 py-2 rounded hover:bg-gray-100" data-theme="inverted-grayscale" aria-label="Ativar escala de cinza invertida">Escala de cinza invertida</button>
-                            <button class="theme-option block w-full text-left px-3 py-2 rounded hover:bg-gray-100" data-theme="inverted-color" aria-label="Ativar cor invertida">Cor invertida</button>
-                            <button class="theme-option block w-full text-left px-3 py-2 rounded hover:bg-gray-100" data-theme="original" aria-label="Restaurar cores originais">Cores originais</button>
-                        </div>
-                    </div>
+            <div class="flex items-center justify-between py-4">
+                <!-- Logo Area (Optional) -->
+                <div class="logo-container flex items-center">
+                    <a href="#home" class="flex items-center space-x-3">
+                        <img src="https://i.postimg.cc/yx26GhLv/lavosier-nas-3.png" alt="EEEP Salaberga Logo" class="h-10 w-auto">
+      
+                    </a>
                 </div>
                 
-                <div class="flex items-center">
-                    <div class="hidden lg:flex space-x-6">
-                        <a href="#home" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link font-medium px-3 py-2 rounded-md hover:bg-white/10">
-                            <i class="fas fa-home mr-2"></i> Início
-                        </a>
-                        <a href="#sobre" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link font-medium px-3 py-2 rounded-md hover:bg-white/10">
-                            <i class="fas fa-info-circle mr-2"></i> Sobre
-                        </a>
-                        <a href="#cursos" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link font-medium px-3 py-2 rounded-md hover:bg-white/10">
-                            <i class="fas fa-book mr-2"></i> Cursos
-                        </a>
-                        <a href="#galeria" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link font-medium px-3 py-2 rounded-md hover:bg-white/10">
-                            <i class="fas fa-newspaper mr-2"></i> Galeria
-                        </a>
-                        <a href="#parceiros" class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link font-medium px-3 py-2 rounded-md hover:bg-white/10">
-                            <i class="fas fa-images mr-2"></i> Parceiros
-                        </a>
-                        <div class="relative group">
-                            <button class="text-ceara-white hover:text-ceara-orange transition duration-300 header-link flex items-center font-medium px-3 py-2 rounded-md hover:bg-white/10">
-                                <i class="fas fa-sign-in-alt mr-2"></i> Entrar
-                                <i class="fas fa-chevron-down ml-2 text-xs"></i>
-                            </button>
-                            <div class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-3 hidden group-hover:block z-50 border border-gray-100">
-                                <a href="../main/views/autenticacao/login.php" class="block px-4 py-3 text-gray-800 hover:bg-gradient-primary hover:text-white transition duration-300 rounded-lg mx-2">
-                                    <i class="fas fa-user mr-3"></i> Login Principal
-                                </a>
-                                <a href="../main/views/autenticacao/login_parcial.php" class="block px-4 py-3 text-gray-800 hover:bg-gradient-primary hover:text-white transition duration-300 rounded-lg mx-2">
-                                    <i class="fas fa-users mr-3"></i> Login Parcial
-                                </a>
+                <!-- Accessibility Tools -->
+                <div class="hidden md:flex items-center space-x-2 mr-6">
+                    <div x-data="{ accessibilityOpen: false }" class="relative">
+                        <button @click="accessibilityOpen = !accessibilityOpen" 
+                            class="text-white hover:text-ceara-orange transition-all duration-300 px-3 py-2 rounded-full hover:bg-white/10 accessibility-toggle flex items-center space-x-2"
+                            :aria-expanded="accessibilityOpen"
+                            aria-label="Opções de acessibilidade">
+                            <i class="fas fa-universal-access"></i>
+                            <span class="text-sm font-medium">Acessibilidade</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{ 'rotate-180': accessibilityOpen }"></i>
+                        </button>
+                        
+                        <div x-show="accessibilityOpen" 
+                            @click.away="accessibilityOpen = false"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 transform -translate-y-4"
+                            x-transition:enter-end="opacity-100 transform translate-y-0"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 transform translate-y-0"
+                            x-transition:leave-end="opacity-0 transform -translate-y-4"
+                            class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl py-3 z-50 border border-gray-100"
+                            x-cloak>
+                            
+                            <div class="px-4 py-2 border-b border-gray-100">
+                                <h3 class="text-sm font-semibold text-gray-700">Tamanho do texto</h3>
+                                <div class="flex items-center space-x-3 mt-2">
+                                    <button @click="decreaseFontSize()" class="text-gray-700 hover:text-ceara-green transition duration-300 px-2 py-1 rounded-md hover:bg-gray-100 accessibility-option" aria-label="Diminuir tamanho do texto">
+                                        <i class="fa-solid fa-a text-xs"></i><b>-</b>
+                                    </button>
+                                    <button @click="resetFontSize()" class="text-gray-700 hover:text-ceara-green transition duration-300 px-2 py-1 rounded-md hover:bg-gray-100 accessibility-option" aria-label="Tamanho padrão do texto">
+                                        <i class="fa-solid fa-a text-sm"></i>
+                                    </button>
+                                    <button @click="increaseFontSize()" class="text-gray-700 hover:text-ceara-green transition duration-300 px-2 py-1 rounded-md hover:bg-gray-100 accessibility-option" aria-label="Aumentar tamanho do texto">
+                                        <i class="fa-solid fa-a text-base"></i><b>+</b>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="px-4 py-2 border-b border-gray-100">
+                                <h3 class="text-sm font-semibold text-gray-700">Narração de tela</h3>
+                                <button id="screenReaderBtn" class="mt-2 w-full text-left text-gray-700 hover:text-ceara-green transition duration-300 px-3 py-2 rounded-md hover:bg-gray-100 accessibility-option flex items-center" aria-label="Ativar narração de tela">
+                                    <i class="fa-solid fa-ear-listen mr-2"></i>
+                                    <span>Ativar narração</span>
+                                </button>
+                            </div>
+                            
+                            <div class="px-4 py-2">
+                                <h3 class="text-sm font-semibold text-gray-700">Modo de visualização</h3>
+                                <div class="mt-2 space-y-1">
+                                    <button class="w-full text-left text-gray-700 hover:text-ceara-green transition duration-300 px-3 py-2 rounded-md hover:bg-gray-100 accessibility-option" data-theme="monochrome" aria-label="Ativar monocromático">
+                                        <i class="fas fa-adjust mr-2"></i> Monocromático
+                                    </button>
+                                    <button class="w-full text-left text-gray-700 hover:text-ceara-green transition duration-300 px-3 py-2 rounded-md hover:bg-gray-100 accessibility-option" data-theme="inverted-grayscale" aria-label="Ativar escala de cinza invertida">
+                                        <i class="fas fa-circle-half-stroke mr-2"></i> Escala de cinza invertida
+                                    </button>
+                                    <button class="w-full text-left text-gray-700 hover:text-ceara-green transition duration-300 px-3 py-2 rounded-md hover:bg-gray-100 accessibility-option" data-theme="inverted-color" aria-label="Ativar cor invertida">
+                                        <i class="fas fa-palette mr-2"></i> Cor invertida
+                                    </button>
+                                    <button class="w-full text-left text-gray-700 hover:text-ceara-green transition duration-300 px-3 py-2 rounded-md hover:bg-gray-100 accessibility-option" data-theme="original" aria-label="Restaurar cores originais">
+                                        <i class="fas fa-undo mr-2"></i> Cores originais
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="block lg:hidden">
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="flex items-center px-4 py-2 border-2 rounded-lg text-ceara-orange border-ceara-orange hover:text-ceara-white hover:border-ceara-white hover:bg-white/10 transition duration-300" aria-label="Toggle menu" :aria-expanded="mobileMenuOpen">
+                <!-- Desktop Navigation -->
+                <nav class="hidden lg:flex items-center space-x-1">
+                    <a href="#home" 
+                       class="nav-link text-ceara-white hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                       :class="{ 'active': activeSection === 'home' }">
+                        <i class="fas fa-home mr-2"></i> Início
+                    </a>
+                    <a href="#sobre" 
+                       class="nav-link text-ceara-white hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                       :class="{ 'active': activeSection === 'sobre' }">
+                        <i class="fas fa-info-circle mr-2"></i> Sobre
+                    </a>
+                    <a href="#cursos" 
+                       class="nav-link text-ceara-white hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                       :class="{ 'active': activeSection === 'cursos' }">
+                        <i class="fas fa-book mr-2"></i> Cursos
+                    </a>
+                    <a href="#galeria" 
+                       class="nav-link text-ceara-white hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                       :class="{ 'active': activeSection === 'galeria' }">
+                        <i class="fas fa-newspaper mr-2"></i> Galeria
+                    </a>
+                    <a href="#parceiros" 
+                       class="nav-link text-ceara-white hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                       :class="{ 'active': activeSection === 'parceiros' }">
+                        <i class="fas fa-images mr-2"></i> Parceiros
+                    </a>
+                    
+                    <!-- Login Dropdown -->
+                    <div class="relative dropdown">
+                        <button class="nav-link text-ceara-white hover:text-ceara-orange transition duration-300 flex items-center font-medium px-4 py-2 rounded-md hover:bg-white/10">
+                            <i class="fas fa-sign-in-alt mr-2"></i> Entrar
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div class="dropdown-menu absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-3 z-50 border border-gray-100">
+                            <a href="../main/views/autenticacao/login.php" class="block px-4 py-3 text-gray-800 hover:bg-gradient-primary hover:text-white transition duration-300 rounded-lg mx-2">
+                                <i class="fas fa-user mr-3"></i> Login Principal
+                            </a>
+                            <a href="../main/views/autenticacao/login_parcial.php" class="block px-4 py-3 text-gray-800 hover:bg-gradient-primary hover:text-white transition duration-300 rounded-lg mx-2">
+                                <i class="fas fa-users mr-3"></i> Login Parcial
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <div class="lg:hidden flex items-center">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" 
+                            class="flex items-center px-3 py-2 border-2 rounded-lg text-ceara-orange border-ceara-orange hover:text-ceara-white hover:border-ceara-white hover:bg-white/10 transition duration-300" 
+                            aria-label="Toggle menu" 
+                            :aria-expanded="mobileMenuOpen">
                         <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <title>Menu</title>
-                            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+                            <path x-show="!mobileMenuOpen" d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+                            <path x-show="mobileMenuOpen" d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z" />
                         </svg>
                     </button>
                 </div>
-            </nav>
+            </div>
+        </div>
+        
+        <!-- Mobile Accessibility Menu (Shown on small screens) -->
+        <div x-show="isScrolled" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform -translate-y-4"
+             x-transition:enter-end="opacity-100 transform translate-y-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 transform translate-y-0"
+             x-transition:leave-end="opacity-0 transform -translate-y-4"
+             class="md:hidden bg-gradient-dark py-2 border-t border-white/10">
+            <div class="container mx-auto px-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <button @click="decreaseFontSize()" class="text-white hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Diminuir tamanho do texto">
+                            <i class="fa-solid fa-a text-xs"></i><b>-</b>
+                        </button>
+                        <button @click="resetFontSize()" class="text-white hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Tamanho padrão do texto">
+                            <i class="fa-solid fa-a text-sm"></i>
+                        </button>
+                        <button @click="increaseFontSize()" class="text-white hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Aumentar tamanho do texto">
+                            <i class="fa-solid fa-a text-base"></i><b>+</b>
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button id="mobileScreenReaderBtn" class="text-white hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Ativar narração de tela">
+                            <i class="fa-solid fa-ear-listen"></i>
+                        </button>
+                        <div x-data="{ themeOpen: false }" class="relative">
+                            <button @click="themeOpen = !themeOpen" class="text-white hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Opções de visualização">
+                                <i class="fa-solid fa-circle-half-stroke"></i>
+                            </button>
+                            <div x-show="themeOpen" 
+                                 @click.away="themeOpen = false"
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0 transform -translate-y-4"
+                                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                                 x-transition:leave="transition ease-in duration-150"
+                                 x-transition:leave-start="opacity-100 transform translate-y-0"
+                                 x-transition:leave-end="opacity-0 transform -translate-y-4"
+                                 class="mobile-menu absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-3 z-50 border border-gray-100"
+                                 x-cloak>
+                                <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-theme="monochrome">Monocromático</button>
+                                <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-theme="inverted-grayscale">Escala de cinza invertida</button>
+                                <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-theme="inverted-color">Cor invertida</button>
+                                <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-theme="original">Cores originais</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <!-- Enhanced Mobile Menu -->
         <div x-show="mobileMenuOpen"
-            x-cloak
-            @click.away="mobileMenuOpen = false"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 transform -translate-y-4"
-            x-transition:enter-end="opacity-100 transform translate-y-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 transform translate-y-0"
-            x-transition:leave-end="opacity-0 transform -translate-y-4"
-            class="fixed inset-0 z-50 lg:hidden bg-gradient-primary/98 backdrop-blur-lg">
+             x-cloak
+             @click.away="mobileMenuOpen = false"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform -translate-y-4"
+             x-transition:enter-end="opacity-100 transform translate-y-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 transform translate-y-0"
+             x-transition:leave-end="opacity-0 transform -translate-y-4"
+             class="fixed inset-0 z-50 lg:hidden bg-gradient-primary/98 backdrop-blur-lg mobile-menu-open">
             <div class="min-h-screen px-6 py-8 overflow-y-auto">
                 <div class="flex items-center justify-between mb-12">
                     <h2 class="text-2xl font-bold text-ceara-white">Menu</h2>
@@ -794,7 +1110,8 @@
                 <nav class="space-y-8">
                     <a href="#home"
                         @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
+                        :class="{ 'text-ceara-orange': activeSection === 'home' }">
                         <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
                             <i class="fas fa-home text-lg"></i>
                         </div>
@@ -802,7 +1119,8 @@
                     </a>
                     <a href="#sobre"
                         @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
+                        :class="{ 'text-ceara-orange': activeSection === 'sobre' }">
                         <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
                             <i class="fas fa-info-circle text-lg"></i>
                         </div>
@@ -810,7 +1128,8 @@
                     </a>
                     <a href="#cursos"
                         @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
+                        :class="{ 'text-ceara-orange': activeSection === 'cursos' }">
                         <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
                             <i class="fas fa-book text-lg"></i>
                         </div>
@@ -818,7 +1137,8 @@
                     </a>
                     <a href="#galeria"
                         @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
+                        :class="{ 'text-ceara-orange': activeSection === 'galeria' }">
                         <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
                             <i class="fas fa-newspaper text-lg"></i>
                         </div>
@@ -826,20 +1146,33 @@
                     </a>
                     <a href="#parceiros"
                         @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
+                        :class="{ 'text-ceara-orange': activeSection === 'parceiros' }">
                         <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
                             <i class="fas fa-images text-lg"></i>
                         </div>
                         <span class="text-xl font-semibold">Parceiros</span>
                     </a>
-                    <div class="space-y-4">
-                        <div class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300">
-                            <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-                                <i class="fas fa-sign-in-alt text-lg"></i>
+                    
+                    <!-- Mobile Login Options -->
+                    <div x-data="{ loginExpanded: false }" class="space-y-4 mobile-menu-item">
+                        <button @click="loginExpanded = !loginExpanded" class="group flex items-center justify-between w-full text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+                                    <i class="fas fa-sign-in-alt text-lg"></i>
+                                </div>
+                                <span class="text-xl font-semibold">Entrar</span>
                             </div>
-                            <span class="text-xl font-semibold">Entrar</span>
-                        </div>
-                        <div class="pl-16 space-y-3">
+                            <i class="fas fa-chevron-down transition-transform duration-300" :class="{ 'rotate-180': loginExpanded }"></i>
+                        </button>
+                        <div x-show="loginExpanded" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform -translate-y-4"
+                             x-transition:enter-end="opacity-100 transform translate-y-0"
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100 transform translate-y-0"
+                             x-transition:leave-end="opacity-0 transform -translate-y-4"
+                             class="pl-16 space-y-4">
                             <a href="../main/views/autenticacao/login.php"
                                 @click="mobileMenuOpen = false"
                                 class="block text-ceara-white hover:text-ceara-orange transition-all duration-300 text-lg">
@@ -853,196 +1186,26 @@
                         </div>
                     </div>
                 </nav>
+                
+                <!-- Social Media Links in Mobile Menu -->
+                <div class="mt-12 pt-8 border-t border-white/10">
+                    <h3 class="text-lg font-semibold text-white mb-4">Siga-nos</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://www.instagram.com/eeepsalabergampe/" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 hover:text-ceara-orange transition-all duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.facebook.com/groups/salaberga/" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 hover:text-ceara-orange transition-all duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 hover:text-ceara-orange transition-all duration-300">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
-    <script>
-        let isReading = false;
-        let currentSection = 0;
-        const synth = window.speechSynthesis;
-        let utterance = null;
-        let initialInstructionsGiven = false;
-
-        function toggleScreenReader() {
-            if (isReading) {
-                stopReading();
-            } else {
-                startReading();
-            }
-        }
-
-        function startReading() {
-            isReading = true;
-            currentSection = 0;
-            readNextSection();
-            updateButtonState();
-            window.addEventListener('scroll', handleScroll);
-            document.addEventListener('click', handleElementClick);
-            document.addEventListener('focus', handleElementFocus, true);
-            announceStatus('Narração ativada');
-        }
-
-        function stopReading() {
-            if (synth.speaking) {
-                synth.cancel();
-            }
-            isReading = false;
-            updateButtonState();
-            window.removeEventListener('scroll', handleScroll);
-            document.removeEventListener('click', handleElementClick);
-            document.removeEventListener('focus', handleElementFocus, true);
-            announceStatus('Narração desativada');
-        }
-
-        function readNextSection() {
-            const sections = document.querySelectorAll('section, article, div.section');
-            if (currentSection < sections.length) {
-                const textToRead = sections[currentSection].innerText;
-                speakText(textToRead);
-            } else {
-                stopReading();
-            }
-        }
-
-        function handleScroll() {
-            if (!isReading) return;
-
-            const sections = document.querySelectorAll('section, article, div.section');
-            const scrollPosition = window.scrollY + window.innerHeight / 2;
-
-            for (let i = 0; i < sections.length; i++) {
-                const section = sections[i];
-                const sectionTop = section.offsetTop;
-                const sectionBottom = sectionTop + section.offsetHeight;
-
-                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                    if (i !== currentSection) {
-                        currentSection = i;
-                        if (synth.speaking) {
-                            synth.cancel();
-                        }
-                        readNextSection();
-                    }
-                    break;
-                }
-            }
-        }
-
-        function scrollToSection(sectionIndex) {
-            const sections = document.querySelectorAll('section, article, div.section');
-            if (sections[sectionIndex]) {
-                sections[sectionIndex].scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-        }
-
-        function updateButtonState() {
-            const btn = document.getElementById('screenReaderBtn');
-            if (isReading) {
-                btn.classList.add('text-ceara-orange');
-                btn.setAttribute('aria-label', 'Desativar narração de tela');
-            } else {
-                btn.classList.remove('text-ceara-orange');
-                btn.setAttribute('aria-label', 'Ativar narração de tela');
-            }
-        }
-
-        function announceStatus(message) {
-            speakText(message);
-        }
-
-        function handleElementClick(event) {
-            if (!isReading) return;
-
-            const element = event.target;
-            const textToSpeak = getElementDescription(element);
-
-            if (textToSpeak) {
-                speakText(textToSpeak);
-            }
-        }
-
-        function handleElementFocus(event) {
-            if (!isReading) return;
-
-            const element = event.target;
-            const textToSpeak = getElementDescription(element);
-
-            if (textToSpeak) {
-                speakText(textToSpeak);
-            }
-        }
-
-        function getElementDescription(element) {
-            if (element.tagName === 'IMG') {
-                return element.alt || 'Imagem sem descrição';
-            } else if (element.tagName === 'A') {
-                return `Link: ${element.textContent || element.href}`;
-            } else if (element.tagName === 'BUTTON') {
-                return `Botão: ${element.textContent || element.value || 'Sem texto'}`;
-            } else if (element.tagName === 'INPUT') {
-                return `Campo de entrada: ${element.placeholder || element.name || 'Sem descrição'}`;
-            } else {
-                return element.textContent || 'Elemento sem texto';
-            }
-        }
-
-        function speakText(text) {
-            if (synth.speaking) {
-                synth.cancel();
-            }
-            utterance = new SpeechSynthesisUtterance(text);
-
-            const voices = synth.getVoices();
-            const portugueseVoice = voices.find(voice => voice.lang === 'pt-BR');
-            if (portugueseVoice) {
-                utterance.voice = portugueseVoice;
-            }
-
-            synth.speak(utterance);
-        }
-
-        const screenReaderBtn = document.getElementById('screenReaderBtn');
-        screenReaderBtn.addEventListener('click', toggleScreenReader);
-
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'n' || event.key === 'N') {
-                toggleScreenReader();
-            }
-        });
-
-        window.addEventListener('load', function() {
-            screenReaderBtn.focus();
-            provideInitialInstructions();
-        });
-
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = function() {
-                const voices = synth.getVoices();
-                console.log('Vozes disponíveis:', voices);
-            };
-        }
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                const targetID = this.getAttribute('href');
-                const targetElement = document.querySelector(targetID);
-
-                if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-
-                    window.scrollBy(0, -100);
-                }
-            });
-        });
-    </script>
 
     <main>
         <!-- Enhanced Hero Section -->
@@ -1433,6 +1596,220 @@
                 </div>
             </div>
         </div>
+
+        
+    <!-- Screen Reader Script -->
+    <script>
+        let isReading = false;
+        let currentSection = 0;
+        const synth = window.speechSynthesis;
+        let utterance = null;
+
+        function toggleScreenReader() {
+            if (isReading) {
+                stopReading();
+            } else {
+                startReading();
+            }
+        }
+
+        function startReading() {
+            isReading = true;
+            currentSection = 0;
+            readNextSection();
+            updateButtonState();
+            window.addEventListener('scroll', handleScroll);
+            document.addEventListener('click', handleElementClick);
+            document.addEventListener('focus', handleElementFocus, true);
+            announceStatus('Narração ativada');
+        }
+
+        function stopReading() {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            isReading = false;
+            updateButtonState();
+            window.removeEventListener('scroll', handleScroll);
+            document.removeEventListener('click', handleElementClick);
+            document.removeEventListener('focus', handleElementFocus, true);
+            announceStatus('Narração desativada');
+        }
+
+        function readNextSection() {
+            const sections = document.querySelectorAll('section, article, div.section');
+            if (currentSection < sections.length) {
+                const textToRead = sections[currentSection].innerText;
+                speakText(textToRead);
+            } else {
+                stopReading();
+            }
+        }
+
+        function handleScroll() {
+            if (!isReading) return;
+
+            const sections = document.querySelectorAll('section, article, div.section');
+            const scrollPosition = window.scrollY + window.innerHeight / 2;
+
+            for (let i = 0; i < sections.length; i++) {
+                const section = sections[i];
+                const sectionTop = section.offsetTop;
+                const sectionBottom = sectionTop + section.offsetHeight;
+
+                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                    if (i !== currentSection) {
+                        currentSection = i;
+                        if (synth.speaking) {
+                            synth.cancel();
+                        }
+                        readNextSection();
+                    }
+                    break;
+                }
+            }
+        }
+
+        function updateButtonState() {
+            const btn = document.getElementById('screenReaderBtn');
+            const mobileBtn = document.getElementById('mobileScreenReaderBtn');
+            
+            if (isReading) {
+                if (btn) {
+                    btn.classList.add('text-ceara-orange');
+                    btn.setAttribute('aria-label', 'Desativar narração de tela');
+                    btn.innerHTML = '<i class="fa-solid fa-ear-listen mr-2"></i><span>Desativar narração</span>';
+                }
+                if (mobileBtn) {
+                    mobileBtn.classList.add('text-ceara-orange');
+                    mobileBtn.setAttribute('aria-label', 'Desativar narração de tela');
+                }
+            } else {
+                if (btn) {
+                    btn.classList.remove('text-ceara-orange');
+                    btn.setAttribute('aria-label', 'Ativar narração de tela');
+                    btn.innerHTML = '<i class="fa-solid fa-ear-listen mr-2"></i><span>Ativar narração</span>';
+                }
+                if (mobileBtn) {
+                    mobileBtn.classList.remove('text-ceara-orange');
+                    mobileBtn.setAttribute('aria-label', 'Ativar narração de tela');
+                }
+            }
+        }
+
+        function announceStatus(message) {
+            speakText(message);
+        }
+
+        function handleElementClick(event) {
+            if (!isReading) return;
+
+            const element = event.target;
+            const textToSpeak = getElementDescription(element);
+
+            if (textToSpeak) {
+                speakText(textToSpeak);
+            }
+        }
+
+        function handleElementFocus(event) {
+            if (!isReading) return;
+
+            const element = event.target;
+            const textToSpeak = getElementDescription(element);
+
+            if (textToSpeak) {
+                speakText(textToSpeak);
+            }
+        }
+
+        function getElementDescription(element) {
+            if (element.tagName === 'IMG') {
+                return element.alt || 'Imagem sem descrição';
+            } else if (element.tagName === 'A') {
+                return `Link: ${element.textContent || element.href}`;
+            } else if (element.tagName === 'BUTTON') {
+                return `Botão: ${element.textContent || element.value || 'Sem texto'}`;
+            } else if (element.tagName === 'INPUT') {
+                return `Campo de entrada: ${element.placeholder || element.name || 'Sem descrição'}`;
+            } else {
+                return element.textContent || 'Elemento sem texto';
+            }
+        }
+
+        function speakText(text) {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            utterance = new SpeechSynthesisUtterance(text);
+
+            const voices = synth.getVoices();
+            const portugueseVoice = voices.find(voice => voice.lang === 'pt-BR');
+            if (portugueseVoice) {
+                utterance.voice = portugueseVoice;
+            }
+
+            synth.speak(utterance);
+        }
+
+        // Initialize screen reader buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const screenReaderBtn = document.getElementById('screenReaderBtn');
+            const mobileScreenReaderBtn = document.getElementById('mobileScreenReaderBtn');
+            
+            if (screenReaderBtn) {
+                screenReaderBtn.addEventListener('click', toggleScreenReader);
+            }
+            
+            if (mobileScreenReaderBtn) {
+                mobileScreenReaderBtn.addEventListener('click', toggleScreenReader);
+            }
+            
+            // Initialize theme buttons
+            document.querySelectorAll('[data-theme]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-theme');
+                    applyTheme(theme);
+                });
+            });
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(event) {
+                // Alt+N for screen reader
+                if (event.altKey && (event.key === 'n' || event.key === 'N')) {
+                    toggleScreenReader();
+                }
+            });
+        });
+
+        // Theme application function
+        function applyTheme(theme) {
+            const html = document.documentElement;
+            
+            // Remove any existing theme classes
+            html.classList.remove('theme-monochrome', 'theme-inverted-grayscale', 'theme-inverted-color');
+            
+            // Apply the selected theme
+            switch(theme) {
+                case 'monochrome':
+                    html.classList.add('theme-monochrome');
+                    document.body.style.filter = 'grayscale(100%)';
+                    break;
+                case 'inverted-grayscale':
+                    html.classList.add('theme-inverted-grayscale');
+                    document.body.style.filter = 'grayscale(100%) invert(100%)';
+                    break;
+                case 'inverted-color':
+                    html.classList.add('theme-inverted-color');
+                    document.body.style.filter = 'invert(100%)';
+                    break;
+                case 'original':
+                default:
+                    document.body.style.filter = 'none';
+                    break;
+            }
+        }
+    </script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
