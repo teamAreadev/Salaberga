@@ -4,413 +4,818 @@ $select = new select_model;
 ?>
 
 <!DOCTYPE html>
-<html>
-
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Relatório de Entrada</title>
-  <style>
-    :root {
-      --primary-color: #4CAF50;
-      --primary-hover: #45a049;
-      --text-color: #333;
-      --border-color: #ddd;
-      --error-color: #ff4444;
-      --background-color: #f8f9fa;
-      --gradient-primary: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-      --gradient-accent: linear-gradient(135deg, #4CAF50 0%, #FFA500 100%);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Entrada - Salaberga</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
-    html,
-    body {
-      height: 100%;
-    }
+        body {
+            background: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: var(--background-color);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      position: relative;
-      padding-bottom: 60px;
-      padding-top: 70px;
-    }
+        .header {
+            background: linear-gradient(90deg, #008C45, #3CB371);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
 
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: var(--gradient-primary);
-      height: 60px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-    }
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    .header-title {
-      color: white;
-      font-size: 1.2rem;
-      font-weight: 600;
-    }
+        .header-nav {
+            display: flex;
+            gap: 12px;
+        }
 
-    .header-nav {
-      display: flex;
-      align-items: center;
-    }
+        .header-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
 
-    .header-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background-color: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 8px;
-      color: white;
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
+        .header-btn:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
 
-    .header-btn:hover,
-    .header-btn:focus {
-      background-color: rgba(255, 255, 255, 0.25);
-      transform: translateY(-2px);
-    }
+        .main-content {
+            flex: 1;
+            margin-top: 64px;
+            padding: 32px 16px 80px;
+        }
 
-    .header-btn i {
-      font-size: 1rem;
-    }
+        .container {
+            max-width: 768px;
+            margin: 0 auto;
+        }
 
-    .input-field,
-    .btn-submit {
-      margin: 5px;
-    }
+        .title-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
 
-    label {
-      display: block;
-      margin-bottom: -6px;
-      margin-top: 3rem;
-    }
+        .icon-container {
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 140, 69, 0.1);
+            color: #008C45;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
 
-    .container {
-      margin: 0 auto;
-      padding: 20px;
-      width: 100%;
-      max-width: 700px;
-      background: white;
-      padding: 8rem;
-      border-radius: 16px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-      text-align: center;
-      margin-bottom: -60rem;
-      margin-top: -60;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-    }
+        .gradient-text {
+            background: linear-gradient(45deg, #008C45, #3CB371);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
 
-    .logo-container {
-      margin-bottom: 2rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+        .subtitle {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
 
-    h1 {
-      font-size: 1.6rem;
-      font-weight: 600;
-      color: var(--text-color);
-      margin-bottom: 1.5rem;
-      margin-top: -2rem;
-      position: relative;
-      padding-bottom: 8px;
-    }
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
 
-    h1::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50px;
-      height: 3px;
-      background: var(--gradient-accent);
-      border-radius: 3px;
-    }
+        .tabs-nav {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+        }
 
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--text-color);
-      margin-bottom: 1.5rem;
-      margin-top: 1rem;
-      position: relative;
-      padding-bottom: -10rem;
-    }
+        .tab-btn {
+            flex: 1;
+            padding: 16px;
+            background: none;
+            border: none;
+            font-weight: 500;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
 
-    .form-group {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text-color);
-      margin-bottom: 1.5rem;
-      position: relative;
-      padding-bottom: 5px;
-      margin-bottom: 1rem;
-      margin-top: 2rem;
-      text-align: center;
-    }
+        .tab-btn.active {
+            color: #008C45;
+            border-bottom-color: #008C45;
+        }
 
-    .input-field {
-      width: 80%;
-      padding: 12px 15px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 0.95rem;
-      transition: all 0.3s ease;
-      background: white;
-      margin-bottom: 15px;
-      position: center;
-    }
+        .tab-content {
+            padding: 24px;
+            display: none;
+        }
 
-    .input-field:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
-    }
+        .tab-content.active {
+            display: block;
+        }
 
-    .input-field::placeholder {
-      color: #999;
-    }
+        .form-group {
+            margin-bottom: 24px;
+        }
 
-    select.input-field {
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 15px center;
-      background-size: 15px;
-      cursor: pointer;
-    }
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 0.875rem;
+        }
 
-    .btn-submit {
-      width: 40%;
-      padding: 12px;
-      background: var(--gradient-primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      margin-top: 1rem;
-      text-align: center;
-    }
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            background: white;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            cursor: pointer;
+        }
 
-    .btn-submit::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--gradient-accent);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
+        .form-select:focus {
+            outline: none;
+            border-color: #008C45;
+            box-shadow: 0 0 0 3px rgba(0, 140, 69, 0.1);
+        }
 
-    .btn-submit:hover::before {
-      opacity: 1;
-    }
+        .form-select:hover {
+            border-color: #d1d5db;
+        }
 
-    .btn-submit span {
-      position: relative;
-      z-index: 1;
-    }
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
 
-    .back-link {
-      display: inline-block;
-      margin-top: 1.5rem;
-      color: var(--primary-color);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
+        .radio-item {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px 0;
+            transition: all 0.3s ease;
+        }
 
-    .back-link:hover {
-      color: var(--primary-hover);
-    }
+        .radio-item:hover {
+            background: #f9fafb;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 0 -12px;
+        }
 
-    .back-link i {
-      margin-right: 5px;
-    }
+        .radio-input {
+            position: absolute;
+            opacity: 0;
+        }
 
-    footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      text-align: center;
-      padding: 1rem;
-      color: var(--text-color);
-      font-size: 0.9rem;
-      background: white;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-    }
+        .radio-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            margin-right: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
 
-    footer::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 2px;
-      background: var(--gradient-accent);
-    }
+        .radio-input:checked + .radio-custom {
+            border-color: #008C45;
+        }
 
-    @media (max-width: 480px) {
-      .container {
-        padding: 2rem;
-      }
+        .radio-custom::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: #008C45;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-      footer {
-        padding: 0.8rem;
-        font-size: 0.8rem;
-      }
+        .radio-input:checked + .radio-custom::after {
+            opacity: 1;
+        }
 
-      .header {
-        padding: 0 15px;
-        height: 56px;
-      }
+        .radio-label {
+            font-size: 0.875rem;
+            color: #374151;
+            font-weight: 400;
+        }
 
-      .header-title {
-        font-size: 1rem;
-      }
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(90deg, #008C45, #3CB371);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
 
-      .header-btn {
-        padding: 6px 12px;
-        font-size: 0.85rem;
-      }
-    }
-  </style>
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #006d35, #2e8b57);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px -2px rgba(0, 140, 69, 0.2);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .info-card {
+            background: #dbeafe;
+            border: 1px solid #93c5fd;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .info-icon {
+            color: #2563eb;
+            flex-shrink: 0;
+        }
+
+        .info-content h3 {
+            font-weight: 500;
+            color: #1e40af;
+            margin-bottom: 4px;
+            font-size: 0.875rem;
+        }
+
+        .info-content p {
+            color: #1e40af;
+            font-size: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .footer {
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 16px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.75rem;
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(70deg, #008C45, #FFA500);
+        }
+
+        /* Select2 Custom Styling */
+        .select2-container--default .select2-selection--single {
+            height: 44px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .select2-container--default .select2-selection--single:hover {
+            border-color: #d1d5db;
+            background-color: #f9fafb;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 40px;
+            padding-left: 12px;
+            color: #374151;
+            font-size: 0.875rem;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 40px;
+            right: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow {
+            transform: rotate(180deg);
+        }
+
+        .select2-container--default.select2-container--focus .select2-selection--single {
+            border-color: #008C45;
+            box-shadow: 0 0 0 3px rgba(0, 140, 69, 0.1);
+            background-color: white;
+        }
+
+        .select2-dropdown {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            margin-top: 4px;
+        }
+
+        .select2-container--default .select2-results__option {
+            padding: 12px 16px;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .select2-container--default .select2-results__option:hover {
+            background-color: #f3f4f6;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #008C45;
+            color: white;
+        }
+
+        .select2-container--default .select2-results__option[aria-selected=true] {
+            background-color: #f3f4f6;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .select2-search--dropdown {
+            padding: 8px;
+        }
+
+        .select2-search--dropdown .select2-search__field {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .select2-search--dropdown .select2-search__field:hover {
+            border-color: #9ca3af;
+        }
+
+        .select2-search--dropdown .select2-search__field:focus {
+            border-color: #008C45;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 140, 69, 0.1);
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__clear {
+            color: #6b7280;
+            margin-right: 32px;
+            font-size: 1.25rem;
+            transition: color 0.2s ease;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__clear:hover {
+            color: #ef4444;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: #9ca3af;
+        }
+
+        /* Loading state for Select2 */
+        .select2-container--default.select2-container--loading .select2-selection--single {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23008C45' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 40px center;
+            background-size: 16px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 640px) {
+            .header-nav {
+                gap: 8px;
+            }
+            
+            .header-btn span {
+                display: none;
+            }
+            
+            .tabs-nav {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                text-align: left;
+                border-bottom: 1px solid #e5e7eb;
+                border-right: none;
+            }
+            
+            .tab-btn.active {
+                border-bottom-color: #e5e7eb;
+                border-left: 3px solid #008C45;
+                background: #f9fafb;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <header class="header">
-    <div class="header-title">Salaberga</div>
-    <nav class="header-nav">
-      <a href="index.php" class="header-btn">
-        <i class="fas fa-home"></i>
-        <span>Menu</span>
-      </a>
-    </nav>
-  </header>
-  <center>
-    <div class="container">
-      <h1>Relatório de Entrada</h1>
-      <h2>Por Aluno</h2>
-      <form id="entrada" action="../control/control_index.php" method="POST">
-        <div class="aluno-section">
-          <select id="id_aluno" name="id_aluno" class="input-field" required>
-            <option id="id_aluno" name="id_aluno" disabled selected>Selecione o Nome do Aluno</option>
-            <?php
-            $dados = $select->select_alunos();
-            foreach ($dados as $dado) {
-            ?>
-              <option value="<?= $dado['id_aluno'] ?>"><?= $dado['nome'] ?></option>
-            <?php
-            }
-            ?>
-          </select>
-          <br>
-          <label>Selecione o tipo de relatório:</label><br>
-          <input type="radio" name="tipo_relatorio" value="dia_atual" required> Dia Atual<br>
-          <input type="radio" name="tipo_relatorio" value="ultimos_30_dias"> Últimos 30 Dias<br>
-          <input type="radio" name="tipo_relatorio" value="ultimos_12_meses"> Últimos 12 Meses<br>
-          <br>
-          <input type="hidden" name="GerarRelatorio" value="por_alunoEntrada">
-          <input type="hidden" name="form_id" value="entrada">
-          <input id="btn" type="submit" value="Gerar" name="btn" class="btn-submit">
-          </br></br></br>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-title">
+            <i class="fas fa-graduation-cap"></i>
+            Salaberga
         </div>
-      </form>
-      <form id="entradaA" action="../control/control_index.php" method="POST">
-        <div class="form-group">
-          <div class="box">
-            <label>Por Ano:</label>
-            <select id="ano" name="Ano" class="input-field">
-              <option value="" disabled selected>Selecione o ano</option>
+        <nav class="header-nav">
+            <a href="inicio.php" class="header-btn">
+                <i class="fas fa-home"></i>
+                <span>Menu</span>
+            </a>
+        </nav>
+    </header>
 
-              <option value="1">1° Anos </option>
-              <option value="2">2° Anos</option>
-              <option value="3">3° Anos </option>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Title Section -->
+            <div class="title-section">
+                <div class="icon-container">
+                    <i class="fas fa-sign-in-alt"></i>
+                </div>
+                <h1 class="gradient-text">Relatório de Entrada</h1>
+                <p class="subtitle">Gere relatórios detalhados de entradas no sistema</p>
+            </div>
 
-            </select>
+            <!-- Form Card -->
+            <div class="form-card">
+                <!-- Tabs Navigation -->
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-tab="aluno">
+                        <i class="fas fa-user"></i> Por Aluno
+                    </button>
+                    <button class="tab-btn" data-tab="ano">
+                        <i class="fas fa-calendar-alt"></i> Por Ano
+                    </button>
+                    <button class="tab-btn" data-tab="turma">
+                        <i class="fas fa-users"></i> Por Turma
+                    </button>
+                </div>
 
-            <label>Selecione o tipo de relatório:</label><br>
-            <input type="radio" name="tipo_relatorio" value="dia_atual" required> Dia Atual<br>
-            <input type="radio" name="tipo_relatorio" value="ultimos_30_dias"> Últimos 30 Dias<br>
-            <input type="radio" name="tipo_relatorio" value="ultimos_12_meses"> Últimos 12 Meses<br>
-            <br>
-            <input type="hidden" name="GerarRelatorio" value="ano_geralEntrada">
-            <input type="hidden" name="form_id" value="entradaA">
-            <input id="btn" type="submit" value="Gerar" name="btn" class="btn-submit">
-            <br>
-          </div>
+                <!-- Tab Contents -->
+                <!-- Por Aluno -->
+                <div class="tab-content active" id="tab-aluno">
+                    <form action="../control/control_index.php" method="POST">
+                        <div class="form-group">
+                            <label class="form-label">Selecione o Aluno</label>
+                            <select class="js-example-basic-single" name="id_aluno" required>
+                                <option value="" disabled selected>Selecione o aluno</option>
+                                <?php
+                                $dados = $select->select_alunos();
+                                foreach ($dados as $dado) {
+                                ?>
+                                    <option value="<?= $dado['id_aluno'] ?>"><?= $dado['nome'] ?></option>
+                                <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Período do Relatório</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="tipo_relatorio" value="dia_atual" class="radio-input" required>
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-label">Dia Atual</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="tipo_relatorio" value="ultimos_30_dias" class="radio-input">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-label">Últimos 30 Dias</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="tipo_relatorio" value="ultimos_12_meses" class="radio-input">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-label">Últimos 12 Meses</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="GerarRelatorio" value="por_alunoEntrada">
+                        <input type="hidden" name="form_id" value="entrada">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-file-export"></i>
+                            Gerar Relatório
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Por Ano -->
+                <div class="tab-content" id="tab-ano">
+                    <form action="../control/control_index.php" method="POST">
+                        <div class="form-group">
+                            <label class="form-label">Selecione o Ano</label>
+                            <select name="Ano" class="form-select" required>
+                                <option value="" disabled selected>Selecione o ano</option>
+                                <option value="1">1° Anos</option>
+                                <option value="2">2° Anos</option>
+                                <option value="3">3° Anos</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Período do Relatório</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="tipo_relatorio" value="dia_atual" class="radio-input" required>
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-label">Dia Atual</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="tipo_relatorio" value="ultimos_30_dias" class="radio-input">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-label">Últimos 30 Dias</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="tipo_relatorio" value="ultimos_12_meses" class="radio-input">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-label">Últimos 12 Meses</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="GerarRelatorio" value="ano_geralEntrada">
+                        <input type="hidden" name="form_id" value="entradaA">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-file-export"></i>
+                            Gerar Relatório
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Por Turma -->
+                <div class="tab-content" id="tab-turma">
+                    <form action="../control/control_index.php" method="POST">
+                        <div class="form-group">
+                            <label class="form-label">Selecione a Turma</label>
+                            <select name="Turma" class="form-select" required>
+                                <option value="" disabled selected>Selecione a turma</option>
+                                <option value="1">1° Ano A</option>
+                                <option value="2">1° Ano B</option>
+                                <option value="3">1° Ano C</option>
+                                <option value="4">1° Ano D</option>
+                                <option value="5">2° Ano A</option>
+                                <option value="6">2° Ano B</option>
+                                <option value="7">2° Ano C</option>
+                                <option value="8">2° Ano D</option>
+                                <option value="9">3° Ano A</option>
+                                <option value="10">3° Ano B</option>
+                                <option value="11">3° Ano C</option>
+                                <option value="12">3° Ano D</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Período do Relatório</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="tipo_relatorio" value="dia_atual" class="radio-input" required>
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-label">Dia Atual</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="tipo_relatorio" value="ultimos_30_dias" class="radio-input">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-label">Últimos 30 Dias</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="tipo_relatorio" value="ultimos_12_meses" class="radio-input">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-label">Últimos 12 Meses</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="GerarRelatorio" value="por_turmaEntrada">
+                        <input type="hidden" name="form_id" value="entradaT">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-file-export"></i>
+                            Gerar Relatório
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Info Card -->
+            <div class="info-card">
+                <div class="info-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="info-content">
+                    <h3>Informação</h3>
+                    <p>Os relatórios de entrada mostram dados sobre o acesso dos estudantes ao sistema. Escolha o período desejado para análises mais precisas.</p>
+                </div>
+            </div>
         </div>
-      </form>
-      <form id="entradaT" action="../control/control_index.php" method="POST">
-        <label>Por Turma:</label>
-        <select id="Turma" name="Turma" class="input-field">
-          <option value="" disabled selected>Selecione a turma</option>
-           <option value="1">1° Ano A</option>
-          <option value="2">1° Ano B</option>
-          <option value="3">1° Ano C</option>
-          <option value="4">1° Ano D</option>
-           <option value="5">2° Ano A</option>
-          <option value="6">2° Ano B</option>
-          <option value="7">2° Ano C</option>
-          <option value="8">2° Ano D</option>
-          <option value="9">3° Ano A</option>
-          <option value="10">3° Ano B</option>
-          <option value="11">3° Ano C</option>
-          <option value="12">3° Ano D</option>
-        </select>
-        <label>Selecione o tipo de relatório:</label><br>
-        <input type="radio" name="tipo_relatorio" value="dia_atual" required> Dia Atual<br>
-        <input type="radio" name="tipo_relatorio" value="ultimos_30_dias"> Últimos 30 Dias<br>
-        <input type="radio" name="tipo_relatorio" value="ultimos_12_meses"> Últimos 12 Meses<br>
-        <br>
-        <input type="hidden" name="GerarRelatorio" value="por_turmaEntrada">
-        <input type="hidden" name="form_id" value="entradaT">
-        <input id="btn" type="submit" value="Gerar" name="btn" class="btn-submit">
-        <br></br>
-      </form>
-    </div>
-    <footer>
-      © 2025 Salaberga - Todos os direitos reservados
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 Sistema Escolar Salaberga. Todos os direitos reservados.</p>
     </footer>
-  </center>
-</body>
 
+    <script>
+        // Initialize Select2 with enhanced options
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2({
+                placeholder: "Buscar aluno...",
+                allowClear: true,
+                width: '100%',
+                language: {
+                    noResults: function() {
+                        return "Nenhum aluno encontrado";
+                    },
+                    searching: function() {
+                        return "Buscando...";
+                    }
+                },
+                templateResult: formatStudent,
+                templateSelection: formatStudentSelection
+            });
+
+            // Custom formatting for student options
+            function formatStudent(student) {
+                if (!student.id) return student.text;
+                
+                return $(`
+                    <div class="flex items-center gap-2 py-1">
+                        <i class="fas fa-user-graduate text-ceara-green"></i>
+                        <span>${student.text}</span>
+                    </div>
+                `);
+            }
+
+            function formatStudentSelection(student) {
+                if (!student.id) return student.text;
+                
+                return $(`
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-user-graduate text-ceara-green"></i>
+                        <span>${student.text}</span>
+                    </div>
+                `);
+            }
+
+            // Add hover effect to select container
+            $('.select2-container').hover(
+                function() {
+                    $(this).find('.select2-selection--single').addClass('hover');
+                },
+                function() {
+                    $(this).find('.select2-selection--single').removeClass('hover');
+                }
+            );
+        });
+
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+
+                    // Remove active class from all tabs and contents
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    document.getElementById('tab-' + targetTab).classList.add('active');
+                });
+            });
+
+            // Form validation
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    const radios = form.querySelectorAll('input[type="radio"]');
+                    const selects = form.querySelectorAll('select');
+                    let isValid = true;
+
+                    // Check radio buttons
+                    const radioGroups = {};
+                    radios.forEach(radio => {
+                        const name = radio.name;
+                        if (!radioGroups[name]) radioGroups[name] = [];
+                        radioGroups[name].push(radio);
+                    });
+
+                    Object.values(radioGroups).forEach(group => {
+                        const checked = group.some(radio => radio.checked);
+                        if (!checked) isValid = false;
+                    });
+
+                    // Check selects
+                    selects.forEach(select => {
+                        if (!select.value) {
+                            isValid = false;
+                            select.style.borderColor = '#ef4444';
+                            setTimeout(() => {
+                                select.style.borderColor = '#e5e7eb';
+                            }, 2000);
+                        }
+                    });
+
+                    if (!isValid) {
+                        e.preventDefault();
+                        alert('Por favor, preencha todos os campos obrigatórios.');
+                    } else {
+                        // Show loading state
+                        const button = this.querySelector('.btn-primary');
+                        button.disabled = true;
+                        button.innerHTML = '<div style="width: 16px; height: 16px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 8px;"></div> Gerando...';
+                    }
+                });
+            });
+        });
+
+        // Add spin animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
 </html>
