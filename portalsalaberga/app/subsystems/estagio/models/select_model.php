@@ -505,4 +505,26 @@ class select_model extends connect
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    function getAlunosByEquipe($id_equipe)
+    {
+        try {
+            // Conexão direta com o banco de dados parcial_alunos
+            $conexao = new PDO("mysql:host=localhost;dbname=parcial_alunos", "root", "");
+            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            // Prepara e executa a consulta para verificar os alunos na tabela 'aluno' pela equipe
+            $querySelectAlunos = "SELECT id, nome FROM aluno WHERE equipe = :id_equipe";
+            $stmtSelectAlunos = $conexao->prepare($querySelectAlunos);
+            $stmtSelectAlunos->bindParam(':id_equipe', $id_equipe);
+            $stmtSelectAlunos->execute();
+            $alunos = $stmtSelectAlunos->fetchAll(PDO::FETCH_ASSOC);
+
+            return $alunos;
+
+        } catch (PDOException $e) {
+            error_log("Erro no banco de dados ao buscar alunos por equipe: " . $e->getMessage());
+            return []; // Retorna um array vazio em caso de erro
+        }
+    }
 }

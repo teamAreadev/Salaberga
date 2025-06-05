@@ -139,6 +139,32 @@ if (isset($_POST['layout'])) {
             box-shadow: 0 2px 8px rgba(0, 122, 51, 0.15);
         }
 
+        .bg-dark-50 {
+            background-color: #1a1a1a;
+        }
+
+        .admin-indicator {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.1) 100%);
+            border: 0px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .status-dot {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+
         /* Company card styling */
         .empresa-card {
             background: linear-gradient(135deg, rgba(49, 49, 49, 0.95) 0%, rgba(37, 37, 37, 0.95) 100%);
@@ -684,7 +710,7 @@ if (isset($_POST['layout'])) {
                         <i class="fa fa-user-circle w-5 mr-3"></i>
                         Resultados
                     </a>
-                   
+
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
@@ -745,7 +771,7 @@ if (isset($_POST['layout'])) {
                         <i class="fa fa-user-circle w-5 mr-3"></i>
                         Resultados
                     </a>
-                   
+
                 </nav>
                 <div class="mt-auto pt-4 border-t border-gray-700">
                     <a href="#" class="sidebar-link">
@@ -767,11 +793,15 @@ if (isset($_POST['layout'])) {
             <!-- Header -->
             <header class="bg-dark-50 shadow-md sticky top-0 z-30 border-b border-gray-800">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <h1 class="text-xl font-bold text-white text-center sm:text-left w-full">Gerenciamento de Empresas</h1>
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs text-gray-400">
-                            <i class="fas fa-user-circle mr-1"></i> Admin
-                        </span>
+                    <h1 class="text-xl font-bold text-white text-center sm:text-left w-full sm:w-auto">Gerenciamento de Empresas</h1>
+
+                    <!-- Admin Badge - Versão Visual Aprimorada -->
+                    <div class="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-end">
+                        <div class="admin-indicator rounded-lg px-3 py-2 flex w-10 items-center gap-2">
+                            <div class="relative">
+                                <i class="fas fa-user-shield text-green-400 text-sm"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -863,6 +893,12 @@ if (isset($_POST['layout'])) {
                                     <a href="./vagas.php?empresa_id=<?= htmlspecialchars($dado['id']) ?>" class="ver-vagas-link text-primary-400 font-medium">
                                         <span>Ver vagas</span>
                                         <i class="fas fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                                <div class="mt-5 pt-4 ">
+                                    <a href="javascript:void(0)" onclick="copiarLink()" class="ver-vagas-link text-primary-400 font-medium">
+                                        <span>Formulário Concedentes</span>
+                                        <i class="fas fa-copy"></i>
                                     </a>
                                 </div>
                             </div>
@@ -974,7 +1010,7 @@ if (isset($_POST['layout'])) {
         <!-- Modal de Relatório com Filtros -->
         <div id="relatorioEmpresasModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
             <div class="candidatura-modal rounded-lg p-8 max-w-md w-full mx-4">
-                
+
                 <form id="formRelatorioEmpresas" action="relatorio/relatorio_empresas.php" method="get" target="_blank" class="space-y-4">
                     <div class="text-center mb-6">
                         <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-500/10 text-primary-400 mb-4">
@@ -1305,6 +1341,16 @@ if (isset($_POST['layout'])) {
                     });
                 }, type === 'success' ? 3000 : 4000);
             }
+
+            // Função para copiar o link
+            window.copiarLink = function() {
+                const link = 'https://salaberga.com.br/portalsalaberga/app/subsystems/estagio/views/form_concedentes.php';
+                navigator.clipboard.writeText(link).then(() => {
+                    showToast('Link copiado com sucesso!', 'success');
+                }).catch(() => {
+                    showToast('Erro ao copiar o link', 'error');
+                });
+            };
         });
     </script>
 </body>

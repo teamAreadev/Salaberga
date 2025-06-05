@@ -1,5 +1,5 @@
 <?php
-class Database {
+class DatabaseManager {
     private static $instance = null;
     private static $conexaoSalaberga = null;
     private static $conexaoAreadev = null;

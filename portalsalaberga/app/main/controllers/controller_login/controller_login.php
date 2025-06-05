@@ -25,10 +25,14 @@ if (isset($_POST['login']) && isset($_POST['email']) && isset($_POST['senha']) &
     $email = $_POST['email'];
     $senha = $_POST['senha'];
     
-    error_log("Tentativa de login para o email: " . $email);
+    error_log("Debug Controller: Recebido email para login: " . $email);
+    // Não logar a senha real por segurança
+    // error_log("Debug Controller: Recebida senha para login: " . $senha);
     
-    require_once('../../models/model_dados.php');
+    require_once(__DIR__ . '/../../models/model_dados.php');
     $login = login($email, $senha);
+    
+    error_log("Debug Controller: Resultado da função login(): " . ($login ? 'Sucesso' : 'Falha'));
     
     if ($login) {
         error_log("Login bem sucedido para o email: " . $email);
