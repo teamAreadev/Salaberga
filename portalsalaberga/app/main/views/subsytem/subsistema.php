@@ -176,7 +176,6 @@ $systemPermissionCardMap = [
 
     // ... adicione mais mapeamentos baseados nas suas tabelas 'sistemas' e 'permissoes' se necessário
 ];
-
 // Prepare an array of unique cards to display based on user's systems and permissions
 $cardsToDisplay = [];
 // First, add the always visible cards

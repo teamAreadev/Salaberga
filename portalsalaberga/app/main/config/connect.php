@@ -16,9 +16,9 @@ class Database {
         // Configurações do banco de dados da hospedagem
         $hostedConfig = [
             'host' => 'localhost', // Substitua pelo host da hospedagem
-            'dbname' => 'u123456789_login_parcial', // Substitua pelo nome do banco na hospedagem
-            'user' => 'u123456789_user', // Substitua pelo usuário da hospedagem
-            'pass' => 'sua_senha_aqui' // Substitua pela senha da hospedagem
+            'dbname' => 'u750204740_parcial', // Substitua pelo nome do banco na hospedagem
+            'user' => 'u750204740_parcial', // Substitua pelo usuário da hospedagem
+            'pass' => 'paoComOvo123!@##' // Substitua pela senha da hospedagem
         ];
 
         try {
