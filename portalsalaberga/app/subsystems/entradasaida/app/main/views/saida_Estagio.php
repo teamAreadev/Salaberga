@@ -1,361 +1,473 @@
-
+<!DOCTYPE html>
+<html lang="pt-BR">
 <?php
 require_once('../model/select_model.php');
 $select = new select_model;
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Saída Estágio - Salaberga</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ceara-green': '#008C45',
+                        'ceara-light-green': '#3CB371',
+                        'ceara-olive': '#8CA03E',
+                        'ceara-orange': '#FFA500',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #008C45, #3CB371);
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #008C45, #3CB371);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .input-focus-ring:focus {
+            box-shadow: 0 0 0 3px rgba(0, 140, 69, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #008C45, #3CB371);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #006d35, #2e8b57);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px -2px rgba(0, 140, 69, 0.2);
+        }
+
+        .loading-spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #008C45;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            background: white;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(70deg, #008C45, #FFA500);
+        }
+
+        .icon-container {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(0, 140, 69, 0.1);
+            color: #008C45;
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .success-message {
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
-<style>
-  :root {
-    --primary-color: #4CAF50;
-    --primary-hover: #45a049;
-    --text-color: #333;
-    --border-color: #ddd;
-    --error-color: #ff4444;
-    --background-color: #f8f9fa;
-    --gradient-primary: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-    --gradient-accent: linear-gradient(135deg, #4CAF50 0%, #FFA500 100%);
-  }
 
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  html,
-  body {
-    height: 100%;
-  }
-
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: var(--background-color);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    position: relative;
-    padding-bottom: 60px;
-    padding-top: 70px;
-  }
-
-  .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--gradient-primary);
-    height: 60px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-  }
-
-  .header-title {
-    color: white;
-    font-size: 1.2rem;
-    font-weight: 600;
-  }
-
-  .header-nav {
-    display: flex;
-    align-items: center;
-  }
-
-  .header-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background-color: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    color: white;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-  }
-
-  .header-btn:hover,
-  .header-btn:focus {
-    background-color: rgba(255, 255, 255, 0.25);
-    transform: translateY(-2px);
-  }
-
-  .header-btn i {
-    font-size: 1rem;
-  }
-
-
-  .container {
-    width: 200%;
-    max-width: 700px;
-    background: white;
-    padding: 5rem;
-    border-radius: 16px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    text-align: center;
-    margin-bottom: -5rem;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-
-  }
-
-
-
-  .logo-container {
-    margin-bottom: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  h1 {
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: var(--text-color);
-    margin-bottom: 1.5rem;
-    position: relative;
-    padding-bottom: 8px;
-  }
-
-  h1::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 3px;
-    background: var(--gradient-accent);
-    border-radius: 3px;
-  }
-
-  .form-group {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--text-color);
-    margin-bottom: 1.5rem;
-    position: relative;
-    padding-bottom: 8px;
-    margin-bottom: 1rem;
-    margin-top: 2rem;
-    text-align: center;
-
-
-  }
-
-  .input-field {
-    width: 80%;
-    padding: 12px 15px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-    background: white;
-    margin-bottom: 15px;
-    position: center;
-  }
-
-  .input-field:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
-  }
-
-  .input-field::placeholder {
-    color: #999;
-  }
-
-  select.input-field {
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-    background-size: 15px;
-    cursor: pointer;
-  }
-
-  .btn-submit {
-    width: 70%;
-    padding: 12px;
-    background: var(--gradient-primary);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    margin-top: 1rem;
-    text-align: center;
-  }
-
-  .btn-submit::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--gradient-accent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .btn-submit:hover::before {
-    opacity: 1;
-  }
-
-  .btn-submit span {
-    position: relative;
-    z-index: 1;
-  }
-
-  .back-link {
-    display: inline-block;
-    margin-top: 1.5rem;
-    color: var(--primary-color);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
-
-  .back-link:hover {
-    color: var(--primary-hover);
-  }
-
-  .back-link i {
-    margin-right: 5px;
-  }
-
-  footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    text-align: center;
-    padding: 1rem;
-    color: var(--text-color);
-    font-size: 0.9rem;
-    background: white;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-  }
-
-  footer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 2px;
-    background: var(--gradient-accent);
-  }
-
-  @media (max-width: 480px) {
-    .container {
-      padding: 2rem;
-    }
-
-    footer {
-      padding: 0.8rem;
-      font-size: 0.8rem;
-    }
-
-    .header {
-      padding: 0 15px;
-      height: 56px;
-    }
-
-    .header-title {
-      font-size: 1rem;
-    }
-
-    .header-btn {
-      padding: 6px 12px;
-      font-size: 0.85rem;
-    }
-  }
-</style>
-
-<body>
-
-  <header class="header">
-    <div class="header-title">Salaberga</div>
-    <nav class="header-nav">
-      <a href="../index.php" class="header-btn">
-        <i class="fas fa-home"></i>
-        <span>Menu</span>
-      </a>
-      <a href="saida_estagio_view.php" class="header-btn">
-        <i class="fas fa-home"></i>
-        <span>Visualizar em Tempo Real</span><br>
-      </a>
-
-    </nav>
-  </header>
-
-  <center>
-    <div class="container">
-      <h1>Registro Saida Estagio</h1>
-      <form id="saida-estagio" action="../control/control_index.php" method="POST">
-
-        <select id="id_aluno" name="id_aluno" class="input-field" required>
-          <option id="id_aluno" name="id_aluno" disabled selected>Selecione o Nome do Aluno</option>
-
-          <?php
-    $dados = $select->select_alunosE();
-    foreach ($dados as $dado) {
-    ?>
-        <option value="<?=$dado['id_aluno']?>"><?=$dado['nome']?></option>
-    <?php
-    }
-    ?>
-          </select>
-        <br>
-        <div class="form-group">
-          <label for="dae">Data de Saida-Estagio:</label>
-          <input type="date" name="data" class="input-field" required>
-
-          <input type="time" name="hora" class="input-field" required>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="header fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-6 text-white shadow-md z-50">
+        <div class="text-xl font-semibold">
+            <i class="fas fa-graduation-cap mr-2"></i>
+            Salaberga
         </div>
-        </select>
-        </input>
-        <br>
+        <nav class="flex items-center gap-3">
+            <a href="../index.php" class="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
+                <i class="fas fa-home"></i>
+                <span>Menu</span>
+            </a>
+            <a href="saida_estagio_view.php" class="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
+                <i class="fas fa-eye"></i>
+                <span class="hidden sm:inline">Tempo Real</span>
+                <span class="sm:hidden">Ver</span>
+            </a>
+        </nav>
+    </header>
 
-        <input id="btn" type="submit" value="Registrar" name="Registrar" class=" btn-submit" method="POST">
+    <!-- Main Content -->
+    <main class="flex-1 container mx-auto px-4 py-8 mt-16">
+        <div class="max-w-lg mx-auto slide-in">
+            <!-- Title Section -->
+            <div class="text-center mb-8">
+                <div class="icon-container mx-auto mb-4">
+                    <i class="fas fa-briefcase text-2xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold mb-2">
+                    <span class="gradient-text">Registro de Saída Estágio</span>
+                </h1>
+                <p class="text-gray-600 text-sm">Registre a saída dos alunos para estágio</p>
+            </div>
 
-        <br>
-    </div>
+            <!-- Success Message -->
+            <div id="successMessage" class="hidden mb-6 p-4 bg-green-50 border border-green-200 rounded-lg success-message">
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle text-green-600 mr-3"></i>
+                    <span class="text-green-700 font-medium">Saída registrada com sucesso!</span>
+                </div>
+            </div>
 
-    <footer>
-      © 2025 Salaberga - Todos os direitos reservados
+            <!-- Form Container -->
+            <div class="form-card p-8 border-t-4 border-ceara-green">
+                <form id="saida-estagio" action="../control/control_index.php" method="POST" class="space-y-6">
+                    
+                    <!-- Aluno Selection -->
+                    <div class="space-y-2">
+                        <label for="id_aluno" class="block text-sm font-medium text-gray-700">
+                            <i class="fas fa-user mr-2 text-ceara-green"></i>
+                            Aluno
+                        </label>
+                        <select 
+                            id="id_aluno" 
+                            name="id_aluno" 
+                            class="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-ceara-green input-focus-ring outline-none transition-all duration-300 bg-white text-sm"
+                            required
+                        >
+                            <option value="" disabled selected>Selecione o aluno</option>
+                            <?php
+                            $dados = $select->select_alunosE();
+                            foreach ($dados as $dado) {
+                            ?>
+                                <option value="<?=$dado['id_aluno']?>"><?=$dado['nome']?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                        <div id="aluno-error" class="hidden text-red-500 text-xs flex items-center mt-1">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            <span>Por favor, selecione um aluno</span>
+                        </div>
+                    </div>
+
+                    <!-- Data e Hora Section -->
+                    <div class="space-y-4">
+                        <h3 class="text-sm font-medium text-gray-700 flex items-center">
+                            <i class="fas fa-calendar-alt mr-2 text-ceara-green"></i>
+                            Data e Hora da Saída
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Data -->
+                            <div class="space-y-2">
+                                <label for="data" class="block text-xs font-medium text-gray-600">
+                                    Data
+                                </label>
+                                <input 
+                                    type="date" 
+                                    id="data"
+                                    name="data" 
+                                    class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-ceara-green input-focus-ring outline-none transition-all duration-300 text-sm"
+                                    required
+                                >
+                                <div id="data-error" class="hidden text-red-500 text-xs flex items-center mt-1">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    <span>Data é obrigatória</span>
+                                </div>
+                            </div>
+
+                            <!-- Hora -->
+                            <div class="space-y-2">
+                                <label for="hora" class="block text-xs font-medium text-gray-600">
+                                    Hora
+                                </label>
+                                <input 
+                                    type="time" 
+                                    id="hora"
+                                    name="hora" 
+                                    class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-ceara-green input-focus-ring outline-none transition-all duration-300 text-sm"
+                                    required
+                                >
+                                <div id="hora-error" class="hidden text-red-500 text-xs flex items-center mt-1">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    <span>Hora é obrigatória</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button 
+                        type="submit" 
+                        id="submitBtn"
+                        name="Registrar"
+                        class="w-full btn-primary text-white font-medium py-4 px-6 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    >
+                        <span id="submitText" class="flex items-center justify-center gap-2">
+                            <i class="fas fa-save"></i>
+                            Registrar Saída
+                        </span>
+                        <span id="submitLoading" class="hidden flex items-center justify-center gap-2">
+                            <div class="loading-spinner"></div>
+                            Registrando...
+                        </span>
+                    </button>
+                </form>
+
+              
+
+                <!-- Back Links -->
+                <div class="flex flex-col sm:flex-row gap-3 mt-6 text-center">
+                    <a href="../index.php" class="flex-1 inline-flex items-center justify-center gap-2 text-ceara-green hover:text-ceara-light-green font-medium transition-colors duration-300 text-sm">
+                        <i class="fas fa-arrow-left text-sm"></i>
+                        Voltar ao Menu
+                    </a>
+                    <a href="saida_estagio_view.php" class="flex-1 inline-flex items-center justify-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-300 text-sm">
+                        <i class="fas fa-eye text-sm"></i>
+                        Ver em Tempo Real
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer relative py-4 text-center text-gray-600 text-xs">
+        <div class="container mx-auto">
+            <p>© 2025 Sistema Escolar Salaberga. Todos os direitos reservados.</p>
+        </div>
     </footer>
 
-  </center>
-  </form>
-  </div>
+    <script>
+        class SaidaEstagioForm {
+            constructor() {
+                this.form = document.getElementById('saida-estagio');
+                this.fields = {
+                    aluno: document.getElementById('id_aluno'),
+                    data: document.getElementById('data'),
+                    hora: document.getElementById('hora')
+                };
+                this.submitBtn = document.getElementById('submitBtn');
+                this.init();
+            }
 
+            init() {
+                // Set current date and time as default
+                this.setCurrentDateTime();
 
+                // Add event listeners for validation
+                Object.keys(this.fields).forEach(fieldName => {
+                    const field = this.fields[fieldName];
+                    field.addEventListener('change', () => this.validateField(fieldName));
+                    field.addEventListener('blur', () => this.validateField(fieldName));
+                });
+
+                // Form submission
+                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+
+                // Add visual feedback on field changes
+                Object.values(this.fields).forEach(field => {
+                    field.addEventListener('change', () => {
+                        if (field.value) {
+                            field.classList.add('border-green-500');
+                            field.classList.remove('border-gray-200');
+                        } else {
+                            field.classList.remove('border-green-500');
+                            field.classList.add('border-gray-200');
+                        }
+                    });
+                });
+            }
+
+            setCurrentDateTime() {
+                const now = new Date();
+                const today = now.toISOString().split('T')[0];
+                const currentTime = now.toTimeString().slice(0, 5);
+                
+                this.fields.data.value = today;
+                this.fields.hora.value = currentTime;
+                
+                // Trigger change events to update visual feedback
+                this.fields.data.dispatchEvent(new Event('change'));
+                this.fields.hora.dispatchEvent(new Event('change'));
+            }
+
+            validateField(fieldName) {
+                const field = this.fields[fieldName];
+                const errorElement = document.getElementById(`${fieldName}-error`);
+                
+                if (!field.value) {
+                    if (errorElement) {
+                        errorElement.classList.remove('hidden');
+                    }
+                    return false;
+                } else {
+                    if (errorElement) {
+                        errorElement.classList.add('hidden');
+                    }
+                    return true;
+                }
+            }
+
+            validateForm() {
+                let isValid = true;
+                Object.keys(this.fields).forEach(fieldName => {
+                    if (!this.validateField(fieldName)) {
+                        isValid = false;
+                    }
+                });
+                return isValid;
+            }
+
+            handleSubmit(e) {
+                if (!this.validateForm()) {
+                    e.preventDefault();
+                    
+                    // Shake effect for invalid form
+                    const container = document.querySelector('.form-card');
+                    container.classList.add('shake');
+                    
+                    setTimeout(() => {
+                        container.classList.remove('shake');
+                    }, 500);
+                    
+                    return;
+                }
+
+                // Show loading state
+                this.showLoadingState();
+            }
+
+            showLoadingState() {
+                const submitText = document.getElementById('submitText');
+                const submitLoading = document.getElementById('submitLoading');
+                
+                submitText.classList.add('hidden');
+                submitLoading.classList.remove('hidden');
+                this.submitBtn.disabled = true;
+            }
+
+            showSuccessState() {
+                const successMessage = document.getElementById('successMessage');
+                const container = document.querySelector('.form-card');
+                
+                // Reset button state
+                const submitText = document.getElementById('submitText');
+                const submitLoading = document.getElementById('submitLoading');
+                submitText.classList.remove('hidden');
+                submitLoading.classList.add('hidden');
+                this.submitBtn.disabled = false;
+
+                // Show success message
+                successMessage.classList.remove('hidden');
+                
+                // Reset form
+                this.form.reset();
+                this.setCurrentDateTime();
+                
+                // Remove visual feedback
+                Object.values(this.fields).forEach(field => {
+                    field.classList.remove('border-green-500');
+                    field.classList.add('border-gray-200');
+                });
+
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMessage.classList.add('hidden');
+                }, 5000);
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new SaidaEstagioForm();
+        });
+
+        // Handle URL parameters for success messages
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('successMessage').classList.remove('hidden');
+            });
+        }
+    </script>
 </body>
-
 </html>
