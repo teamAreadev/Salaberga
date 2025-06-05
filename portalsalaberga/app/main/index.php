@@ -107,19 +107,22 @@
         
         /* Enhanced Header Styles */
         .header-enhanced {
-            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
+            background: linear-gradient(135deg, rgba(0, 140, 69, 1) 0%, rgba(0, 166, 81, 1) 100%) !important; /* Opacidade total com !important */
             backdrop-filter: blur(10px);
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
         }
         
         .header-scrolled {
-            background: rgba(0, 140, 69, 0.95);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, rgba(0, 140, 69, 1) 0%, rgba(0, 166, 81, 1) 100%) !important; /* Opacidade total com !important */
         }
         
-        .nav-link {
+        /* Estilo padrão para links de navegação no header - Cor de alto contraste */
+        nav .nav-link {
             position: relative;
             transition: all 0.3s ease;
+            color:rgb(255, 255, 255); /* Cor de texto escura para garantir alto contraste */
         }
         
         .nav-link::after {
@@ -135,15 +138,31 @@
             opacity: 0;
         }
         
+        .nav-link:hover {
+            color: #FFA500; /* Cor laranja no hover */
+        }
+        
         .nav-link:hover::after,
         .nav-link.active::after {
             width: 70%;
             opacity: 1;
         }
         
-        .nav-link.active {
-            color: #FFA500 !important;
+        .nav-link.active,
+        .nav-link.header-active {
+            color: #FFA500 !important; /* Cor laranja para links ativos, usando !important para garantir */
             font-weight: 600;
+        }
+        
+        /* Mobile Menu Background - CORRIGIDO */
+        .mobile-menu-overlay {
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%); /* Usa gradiente primário */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
         }
         
         /* Mobile Menu Animation */
@@ -175,7 +194,7 @@
         }
         
         .accessibility-option:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.1); /* Leve fundo branco no hover */
             transform: translateY(-2px);
         }
         
@@ -248,7 +267,7 @@
             left: 50%;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1); /* Fundo semi-transparente no hover */
             border-radius: 50%;
             transform: translate(-50%, -50%) scale(0);
             transition: transform 0.5s ease;
@@ -267,6 +286,31 @@
         /* Hide Alpine elements before Alpine.js loads */
         [x-cloak] {
             display: none !important;
+        }
+        
+        /* Prevent body scroll when mobile menu is open */
+        .mobile-menu-open-body {
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Mobile Menu Panel Styles */
+        .mobile-menu-open > div {
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%); /* Gradiente primário */
+            color: #ffffff; /* Texto branco */
+            /* Mantém outros estilos como largura, sombra, etc. */
+        }
+
+        /* Mobile Menu Item Styles */
+        .mobile-menu-open a,
+        .mobile-menu-open button {
+            color: #ffffff; /* Cor do texto dos itens */
+        }
+
+        .mobile-menu-open a:hover,
+        .mobile-menu-open button:hover {
+            background-color: rgba(255, 165, 0, 0.1); /* Leve fundo laranja no hover */
+            color: #FFA500; /* Texto laranja no hover */
         }
     </style>
     <style>
@@ -849,7 +893,24 @@
             100% { transform: rotate(360deg); }
         }
     </style>
+    <style>
+        /* Estilos para melhorar o contraste dos links de navegação no header */
+        /* Estas regras foram movidas e consolidadas no bloco de estilo principal */
+        /* .nav-link {
+            color: #000000; 
+        }
+  
+        .nav-link:hover {
+            color: #FFA500; 
+        }
+  
+        .nav-link.active,
+        .nav-link.header-active {
+            color: #FFA500 !important; 
+        } */
+    </style>
 </head>
+
 <body class="select-none">
     <header x-data="{ 
         mobileMenuOpen: false, 
@@ -878,6 +939,15 @@
                     }
                 });
             });
+            
+            // Watch for mobile menu changes to control body scroll
+            this.$watch('mobileMenuOpen', value => {
+                if (value) {
+                    document.body.classList.add('mobile-menu-open-body');
+                } else {
+                    document.body.classList.remove('mobile-menu-open-body');
+                }
+            });
         },
         
         increaseFontSize() {
@@ -901,11 +971,11 @@
     :class="{ 'header-scrolled': isScrolled }">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between py-4">
-                <!-- Logo Area (Optional) -->
+                <!-- Logo Area -->
                 <div class="logo-container flex items-center">
                     <a href="#home" class="flex items-center space-x-3">
                         <img src="https://i.postimg.cc/yx26GhLv/lavosier-nas-3.png" alt="EEEP Salaberga Logo" class="h-10 w-auto">
-      
+               
                     </a>
                 </div>
                 
@@ -976,37 +1046,37 @@
                     </div>
                 </div>
                 
-                <!-- Desktop Navigation -->
+          
                 <nav class="hidden lg:flex items-center space-x-1">
                     <a href="#home" 
-                       class="nav-link text-ceara-white hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                       class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
                        :class="{ 'active': activeSection === 'home' }">
                         <i class="fas fa-home mr-2"></i> Início
                     </a>
                     <a href="#sobre" 
-                       class="nav-link text-ceara-white hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                       class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
                        :class="{ 'active': activeSection === 'sobre' }">
                         <i class="fas fa-info-circle mr-2"></i> Sobre
                     </a>
                     <a href="#cursos" 
-                       class="nav-link text-ceara-white hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                       class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
                        :class="{ 'active': activeSection === 'cursos' }">
                         <i class="fas fa-book mr-2"></i> Cursos
                     </a>
                     <a href="#galeria" 
-                       class="nav-link text-ceara-white hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                       class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
                        :class="{ 'active': activeSection === 'galeria' }">
                         <i class="fas fa-newspaper mr-2"></i> Galeria
                     </a>
                     <a href="#parceiros" 
-                       class="nav-link text-ceara-white hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                       class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
                        :class="{ 'active': activeSection === 'parceiros' }">
                         <i class="fas fa-images mr-2"></i> Parceiros
                     </a>
                     
                     <!-- Login Dropdown -->
                     <div class="relative dropdown">
-                        <button class="nav-link text-ceara-white hover:text-ceara-orange transition duration-300 flex items-center font-medium px-4 py-2 rounded-md hover:bg-white/10">
+                        <button class="nav-link hover:text-ceara-orange transition duration-300 flex items-center font-medium px-4 py-2 rounded-md hover:bg-white/10">
                             <i class="fas fa-sign-in-alt mr-2"></i> Entrar
                             <i class="fas fa-chevron-down ml-2 text-xs"></i>
                         </button>
@@ -1075,7 +1145,7 @@
                                  x-transition:leave="transition ease-in duration-150"
                                  x-transition:leave-start="opacity-100 transform translate-y-0"
                                  x-transition:leave-end="opacity-0 transform -translate-y-4"
-                                 class="mobile-menu absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-3 z-50 border border-gray-100"
+                                 class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100"
                                  x-cloak>
                                 <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-theme="monochrome">Monocromático</button>
                                 <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-theme="inverted-grayscale">Escala de cinza invertida</button>
@@ -1088,7 +1158,7 @@
             </div>
         </div>
         
-        <!-- Enhanced Mobile Menu -->
+        <!-- Enhanced Mobile Menu - CORRIGIDO -->
         <div x-show="mobileMenuOpen"
              x-cloak
              @click.away="mobileMenuOpen = false"
@@ -1098,19 +1168,19 @@
              x-transition:leave="transition ease-in duration-200"
              x-transition:leave-start="opacity-100 transform translate-y-0"
              x-transition:leave-end="opacity-0 transform -translate-y-4"
-             class="fixed inset-0 z-50 lg:hidden bg-gradient-primary/98 backdrop-blur-lg mobile-menu-open">
+             class="mobile-menu-overlay lg:hidden mobile-menu-open">
             <div class="min-h-screen px-6 py-8 overflow-y-auto">
                 <div class="flex items-center justify-between mb-12">
-                    <h2 class="text-2xl font-bold text-ceara-white">Menu</h2>
+                    <h2 class="text-2xl font-bold text-white">Menu</h2>
                     <button @click="mobileMenuOpen = false"
-                        class="p-3 text-ceara-white hover:text-ceara-orange transition-colors duration-200 rounded-full hover:bg-white/10">
+                        class="p-3 text-white hover:text-ceara-orange transition-colors duration-200 rounded-full hover:bg-white/10">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
                 <nav class="space-y-8">
                     <a href="#home"
                         @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
+                        class="group flex items-center space-x-4 text-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
                         :class="{ 'text-ceara-orange': activeSection === 'home' }">
                         <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
                             <i class="fas fa-home text-lg"></i>
@@ -1119,7 +1189,7 @@
                     </a>
                     <a href="#sobre"
                         @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
+                        class="group flex items-center space-x-4 text-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
                         :class="{ 'text-ceara-orange': activeSection === 'sobre' }">
                         <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
                             <i class="fas fa-info-circle text-lg"></i>
@@ -1128,7 +1198,7 @@
                     </a>
                     <a href="#cursos"
                         @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
+                        class="group flex items-center space-x-4 text-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
                         :class="{ 'text-ceara-orange': activeSection === 'cursos' }">
                         <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
                             <i class="fas fa-book text-lg"></i>
@@ -1137,7 +1207,7 @@
                     </a>
                     <a href="#galeria"
                         @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
+                        class="group flex items-center space-x-4 text-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
                         :class="{ 'text-ceara-orange': activeSection === 'galeria' }">
                         <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
                             <i class="fas fa-newspaper text-lg"></i>
@@ -1146,7 +1216,7 @@
                     </a>
                     <a href="#parceiros"
                         @click="mobileMenuOpen = false"
-                        class="group flex items-center space-x-4 text-ceara-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
+                        class="group flex items-center space-x-4 text-white hover:text-ceara-orange transition-all duration-300 mobile-menu-item"
                         :class="{ 'text-ceara-orange': activeSection === 'parceiros' }">
                         <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
                             <i class="fas fa-images text-lg"></i>
@@ -1156,7 +1226,7 @@
                     
                     <!-- Mobile Login Options -->
                     <div x-data="{ loginExpanded: false }" class="space-y-4 mobile-menu-item">
-                        <button @click="loginExpanded = !loginExpanded" class="group flex items-center justify-between w-full text-ceara-white hover:text-ceara-orange transition-all duration-300">
+                        <button @click="loginExpanded = !loginExpanded" class="group flex items-center justify-between w-full text-white hover:text-ceara-orange transition-all duration-300">
                             <div class="flex items-center space-x-4">
                                 <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-all duration-200">
                                     <i class="fas fa-sign-in-alt text-lg"></i>
@@ -1175,36 +1245,23 @@
                              class="pl-16 space-y-4">
                             <a href="../main/views/autenticacao/login.php"
                                 @click="mobileMenuOpen = false"
-                                class="block text-ceara-white hover:text-ceara-orange transition-all duration-300 text-lg">
+                                class="block text-white hover:text-ceara-orange transition-all duration-300 text-lg">
                                 <i class="fas fa-user mr-3"></i> Login Principal
                             </a>
                             <a href="../main/views/autenticacao/login_parcial.php"
                                 @click="mobileMenuOpen = false"
-                                class="block text-ceara-white hover:text-ceara-orange transition-all duration-300 text-lg">
+                                class="block text-white hover:text-ceara-orange transition-all duration-300 text-lg">
                                 <i class="fas fa-users mr-3"></i> Login Parcial
                             </a>
                         </div>
                     </div>
                 </nav>
                 
-                <!-- Social Media Links in Mobile Menu -->
-                <div class="mt-12 pt-8 border-t border-white/10">
-                    <h3 class="text-lg font-semibold text-white mb-4">Siga-nos</h3>
-                    <div class="flex space-x-4">
-                        <a href="https://www.instagram.com/eeepsalabergampe/" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 hover:text-ceara-orange transition-all duration-300">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="https://www.facebook.com/groups/salaberga/" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 hover:text-ceara-orange transition-all duration-300">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 hover:text-ceara-orange transition-all duration-300">
-                            <i class="fab fa-youtube"></i>
-                        </a>
-                    </div>
-                </div>
+              
             </div>
         </div>
     </header>
+
 
 
     <main>
@@ -2279,6 +2336,69 @@
             document.body.classList.add('loaded');
         });
     </script>
+
+    <!-- Enhanced Mobile Menu Styles -->
+    <style>
+        /* Enhanced Mobile Menu */
+        .mobile-menu-open {
+            background-color: rgba(0, 0, 0, 0.8); /* Fundo semi-transparente escuro para o overlay */
+            backdrop-filter: blur(5px); /* Desfoque sutil no fundo */
+            -webkit-backdrop-filter: blur(5px); /* Desfoque sutil no fundo para webkit */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 50; /* Garante que fique sobre outros elementos */
+            display: flex;
+            justify-content: flex-start; /* Alinha o conteúdo do menu à esquerda */
+            /* Remove largura fixa ou alinhamento à direita se existirem */
+        }
+
+        /* Mobile Menu inner container styles */
+        /* Mantém os estilos existentes para o painel do menu */
+        .mobile-menu-open > div {
+             width: 80%; /* Ajuste a largura do painel do menu conforme necessário */
+             max-width: 400px; /* Ajuste a largura máxima do painel */
+             background: linear-gradient(135deg, #008C45 0%, #00A651 100%); /* Gradiente primário */
+             box-shadow: 4px 0 10px rgba(0, 0, 0, 0.3); /* Sombra à direita do painel mais escura */
+             /* Garante que o painel não seja transparente */
+             opacity: 1 !important;
+             transform: translateX(0) !important;
+             color: #ffffff; /* Texto branco para o painel */
+             padding: 1.5rem; /* Espaçamento interno */
+        }
+
+        /* Estilos para os itens do menu dentro do painel */
+        .mobile-menu-open a,
+        .mobile-menu-open button {
+            display: flex; /* Usa flexbox para alinhar ícone e texto */
+            align-items: center; /* Centraliza verticalmente */
+            gap: 1rem; /* Espaçamento entre ícone e texto */
+            padding: 0.75rem 1rem;
+            color: #ffffff; /* Cor do texto dos itens - branco */
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .mobile-menu-open a:hover,
+        .mobile-menu-open button:hover {
+            background-color: rgba(255, 165, 0, 0.2); /* Fundo semi-transparente laranja no hover */
+            color: #FFA500; /* Texto laranja no hover */
+        }
+
+        /* Estilos para o ícone dentro do item do menu */
+        .mobile-menu-open .mobile-menu-item .w-12 {
+             flex-shrink: 0; /* Impede que o ícone diminua */
+        }
+
+        @media (min-width: 1024px) {
+            .mobile-menu-open {
+                display: none; /* Oculta o menu mobile em telas maiores */
+            }
+        }
+    </style>
 </body>
 
 </html>
