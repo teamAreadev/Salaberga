@@ -20,7 +20,7 @@ if (!isset($_SESSION['Email'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <title>Últimas Saídas</title>
+    <title>Relatório de Saídas</title>
     <script>
         tailwind.config = {
             theme: {
@@ -49,7 +49,7 @@ if (!isset($_SESSION['Email'])) {
         }
 
         body {
-            background: #ffffff;
+            background: #f8fafc;
             min-height: 100vh;
             position: relative;
             padding-bottom: 100px; 
@@ -61,124 +61,196 @@ if (!isset($_SESSION['Email'])) {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
+        /* Estilos para Cards (Mobile) */
         .class-card {
             background: white;
-            border-radius: 8px;
+            border-radius: 12px;
             border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .class-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .student-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 6px;
             transition: all 0.2s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .student-card:hover {
+            background: #f3f4f6;
+        }
+
+        /* Estilos para Tabelas (Desktop) */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+            height: 100%;
             display: flex;
             flex-direction: column;
         }
 
-        .class-card:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .table-header {
+            background: linear-gradient(90deg, #008C45, #3CB371);
+            color: white;
+            padding: 12px 16px;
         }
 
-        .student-item {
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: background-color 0.15s ease;
+        .table-content {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 600px;
         }
 
-        .student-item:hover {
+        .table-row {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background-color 0.2s ease;
+        }
+
+        .table-row:hover {
             background-color: #f9fafb;
         }
 
-        .student-list {
-            max-height: 300px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #e5e7eb #ffffff;
+        .table-row:last-child {
+            border-bottom: none;
         }
 
-        .student-list::-webkit-scrollbar {
+        /* Classes específicas para cada turma */
+        .turma-3a .table-header { background: linear-gradient(90deg, #dc3545, #c82333); }
+        .turma-3b .table-header { background: linear-gradient(90deg, #4169E1, #3651d1); }
+        .turma-3c .table-header { background: linear-gradient(90deg, #0dcaf0, #0bb5d6); }
+        .turma-3d .table-header { background: linear-gradient(90deg, #6c757d, #5a6268); }
+
+        .card-header-3a { background: linear-gradient(90deg, #dc3545, #c82333); }
+        .card-header-3b { background: linear-gradient(90deg, #4169E1, #3651d1); }
+        .card-header-3c { background: linear-gradient(90deg, #0dcaf0, #0bb5d6); }
+        .card-header-3d { background: linear-gradient(90deg, #6c757d, #5a6268); }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #008C45, #3CB371);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Responsividade */
+        .desktop-view {
+            display: none;
+        }
+
+        .mobile-view {
+            display: block;
+        }
+
+        @media (min-width: 1024px) {
+            .desktop-view {
+                display: block;
+            }
+            
+            .mobile-view {
+                display: none;
+            }
+        }
+
+        /* Scrollbar personalizada */
+        .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
 
-        .student-list::-webkit-scrollbar-track {
-            background: #ffffff;
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
             border-radius: 3px;
         }
 
-        .student-list::-webkit-scrollbar-thumb {
-            background-color: #e5e7eb;
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
             border-radius: 3px;
         }
 
-        .student-list::-webkit-scrollbar-thumb:hover {
-            background-color: #d1d5db;
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
         }
 
-        .header-bar-3a { background: linear-gradient(90deg, #dc3545, #c82333); }
-        .header-bar-3b { background: linear-gradient(90deg, #4169E1, #3651d1); }
-        .header-bar-3c { background: linear-gradient(90deg, #0dcaf0, #0bb5d6); }
-        .header-bar-3d { background: linear-gradient(90deg, #6c757d, #5a6268); }
-
-        .gradient-text {
-            background: linear-gradient(45deg, #008C45, #008C45);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        /* Otimizações para muitos alunos */
+        .compact-table td {
+            padding-top: 6px;
+            padding-bottom: 6px;
+            font-size: 0.875rem;
         }
 
-        .gradient-name-1 {
-            background: linear-gradient(45deg, #008C45, #00BFA5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .compact-table th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: #f9fafb;
         }
 
-        .gradient-name-2 {
-            background: linear-gradient(45deg, #6C63FF, #4A90E2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .compact-cards {
+            max-height: 400px;
+            overflow-y: auto;
         }
 
-        .gradient-name-3 {
-            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .compact-card {
+            padding: 8px 12px;
+            margin-bottom: 4px;
         }
 
-        .gradient-name-4 {
-            background: linear-gradient(45deg, #9B59B6, #8E44AD);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        /* Filtro de busca */
+        .search-input {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 6px;
+            padding: 4px 12px;
+            width: 100%;
+            max-width: 200px;
+            font-size: 0.875rem;
         }
 
-        .gradient-text-3a {
-            background: linear-gradient(45deg, #dc3545, #ff6b6b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        .gradient-text-3b {
-            background: linear-gradient(45deg, #4169E1, #6c8fff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .search-input:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.3);
         }
 
-        .gradient-text-3c {
-            background: linear-gradient(45deg, #0dcaf0, #4dd4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        /* Paginação */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 8px;
+            padding: 8px;
+            border-top: 1px solid #f3f4f6;
         }
 
-        .gradient-text-3d {
-            background: linear-gradient(45deg, #6c757d, #9ca3af);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .pagination-btn {
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: #f3f4f6;
+            color: #374151;
+            font-size: 0.75rem;
+            cursor: pointer;
         }
 
+        .pagination-btn.active {
+            background: #008C45;
+            color: white;
+        }
+
+        /* Footer geométrico */
         .geometric-footer {
             position: fixed;
             bottom: 0;
@@ -248,16 +320,6 @@ if (!isset($_SESSION['Email'])) {
         }
 
         @media (max-width: 768px) {
-            .main-container {
-                margin: 16px;
-                padding: 24px;
-            }
-            
-            .grid-responsive {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
             .shape-1 { border-left-width: 120px; }
             .shape-2 { border-left-width: 150px; left: 100px; }
             .shape-3 { border-left-width: 180px; left: 200px; }
@@ -266,151 +328,452 @@ if (!isset($_SESSION['Email'])) {
             .shape-5 { border-right-width: 150px; right: 100px; }
             .shape-6 { border-right-width: 180px; right: 200px; }
         }
-
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .grid-responsive {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 24px;
-            }
-        }
-
-        @media (min-width: 1025px) {
-            .grid-responsive {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 24px;
-            }
-        }
     </style>
 </head>
 
-<body class="min-h-screen p-4 md:p-8">
-    <div class="main-container max-w-7xl mx-auto p-6 md:p-8">
-        <div class="text-center mb-6">
-            <div class="flex items-center justify-center gap-4">
-                <h1 class="text-2xl md:text-3xl font-semibold">
+<body class="min-h-screen p-4 lg:p-8">
+    <div class="main-container max-w-7xl mx-auto p-6 lg:p-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex flex-col lg:flex-row items-center justify-center gap-4">
+                <h1 class="text-2xl lg:text-3xl font-semibold">
                     <span class="gradient-text">Relatório de Frequências em:</span>
                 </h1>
-                <div class="inline-flex items-center bg-white rounded-lg px-3 py-1.5 shadow-sm border">
+                <div class="inline-flex items-center bg-white rounded-lg px-4 py-2 shadow-sm border">
                     <i class="fas fa-calendar-day text-ceara-green mr-2"></i>
                     <span class="text-base font-medium text-gray-700"><?php echo date('d/m/Y'); ?></span>
                 </div>
             </div>
-        </div>
-
-        <div class="grid grid-responsive">
-            <div class="class-card card-3a">
-                <div class="p-3 flex-1">
-                    <div class="flex items-center justify-between mb-3">
-                        <h2 class="text-lg font-medium text-danger flex items-center">
-                            <i class="fas fa-users mr-2"></i>
-                            3º Ano A
-                        </h2>
-                        <?php
-                        $dados_3a = $select->saida_estagio_3A();
-                        $count_3a = count($dados_3a);
-                        ?>
-                        <span class="bg-red-100 text-danger px-2 py-0.5 rounded-full text-sm">
-                            <?= $count_3a ?>
-                        </span>
-                    </div>
-                    <div class="student-list space-y-1">
-                        <?php foreach ($dados_3a as $dado) { ?>
-                            <div class="student-item">
-                                <i class="fas fa-user-graduate mr-2 text-danger text-sm"></i>
-                                <span class="text-gray-900"><?= $dado['nome'] ?></span>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="class-card card-3b">
-                <div class="p-3 flex-1">
-                    <div class="flex items-center justify-between mb-3">
-                        <h2 class="text-lg font-medium text-info flex items-center">
-                            <i class="fas fa-users mr-2"></i>
-                            3º Ano B
-                        </h2>
-                        <?php
-                        $dados_3b = $select->saida_estagio_3B();
-                        $count_3b = count($dados_3b);
-                        ?>
-                        <span class="bg-blue-100 text-info px-2 py-0.5 rounded-full text-sm">
-                            <?= $count_3b ?>
-                        </span>
-                    </div>
-                    <div class="student-list space-y-1">
-                        <?php foreach ($dados_3b as $dado) { ?>
-                            <div class="student-item">
-                                <i class="fas fa-user-graduate mr-2 text-info text-sm"></i>
-                                <span class="text-gray-900"><?= $dado['nome'] ?></span>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="class-card card-3c">
-                <div class="p-3 flex-1">
-                    <div class="flex items-center justify-between mb-3">
-                        <h2 class="text-lg font-medium text-admin flex items-center">
-                            <i class="fas fa-users mr-2"></i>
-                            3º Ano C
-                        </h2>
-                        <?php
-                        $dados_3c = $select->saida_estagio_3C();
-                        $count_3c = count($dados_3c);
-                        ?>
-                        <span class="bg-cyan-100 text-admin px-2 py-0.5 rounded-full text-sm">
-                            <?= $count_3c ?>
-                        </span>
-                    </div>
-                    <div class="student-list space-y-1">
-                        <?php foreach ($dados_3c as $dado) { ?>
-                            <div class="student-item">
-                                <i class="fas fa-user-graduate mr-2 text-admin text-sm"></i>
-                                <span class="text-gray-900"><?= $dado['nome'] ?></span>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="class-card card-3d">
-                <div class="p-3 flex-1">
-                    <div class="flex items-center justify-between mb-3">
-                        <h2 class="text-lg font-medium text-grey flex items-center">
-                            <i class="fas fa-users mr-2"></i>
-                            3º Ano D
-                        </h2>
-                        <?php
-                        $dados_3d = $select->saida_estagio_3D();
-                        $count_3d = count($dados_3d);
-                        ?>
-                        <span class="bg-gray-100 text-grey px-2 py-0.5 rounded-full text-sm">
-                            <?= $count_3d ?>
-                        </span>
-                    </div>
-                    <div class="student-list space-y-1">
-                        <?php foreach ($dados_3d as $dado) { ?>
-                            <div class="student-item">
-                                <i class="fas fa-user-graduate mr-2 text-grey text-sm"></i>
-                                <span class="text-gray-900"><?= $dado['nome'] ?></span>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </div>
+            <div class="mt-4 text-sm text-gray-500">
+                <i class="fas fa-info-circle mr-1"></i>
+                Mostrando alunos que saíram para estágio hoje
             </div>
         </div>
 
+        <!-- Vista Desktop (Tabelas) -->
+        <div class="desktop-view">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                <!-- 3º Ano A -->
+                <div class="table-container turma-3a">
+                    <div class="table-header">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano A
+                            </h2>
+                            <?php
+                            $dados_3a = $select->saida_estagio_3A();
+                            $count_3a = count($dados_3a);
+                            ?>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium">
+                                <?= $count_3a ?> alunos
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-3a" placeholder="Buscar aluno..." onkeyup="filterTable('3a')">
+                    </div>
+                    <div class="table-content custom-scrollbar">
+                        <table class="w-full compact-table" id="table-3a">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-user mr-1"></i>Nome do Aluno
+                                    </th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-clock mr-1"></i>Horário
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <?php foreach ($dados_3a as $dado) { ?>
+                                    <tr class="table-row">
+                                        <td class="px-4 py-2 text-sm text-gray-900">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-user-graduate mr-2 text-danger"></i>
+                                                <?= htmlspecialchars($dado['nome']) ?>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-2 text-sm text-gray-500">
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                <?php if (empty($dados_3a)) { ?>
+                                    <tr>
+                                        <td colspan="2" class="px-4 py-8 text-center text-gray-500 italic">
+                                            Nenhum aluno registrado hoje
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 3º Ano B -->
+                <div class="table-container turma-3b">
+                    <div class="table-header">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano B
+                            </h2>
+                            <?php
+                            $dados_3b = $select->saida_estagio_3B();
+                            $count_3b = count($dados_3b);
+                            ?>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium">
+                                <?= $count_3b ?> alunos
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-3b" placeholder="Buscar aluno..." onkeyup="filterTable('3b')">
+                    </div>
+                    <div class="table-content custom-scrollbar">
+                        <table class="w-full compact-table" id="table-3b">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-user mr-1"></i>Nome do Aluno
+                                    </th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-clock mr-1"></i>Horário
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <?php foreach ($dados_3b as $dado) { ?>
+                                    <tr class="table-row">
+                                        <td class="px-4 py-2 text-sm text-gray-900">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-user-graduate mr-2 text-info"></i>
+                                                <?= htmlspecialchars($dado['nome']) ?>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-2 text-sm text-gray-500">
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                <?php if (empty($dados_3b)) { ?>
+                                    <tr>
+                                        <td colspan="2" class="px-4 py-8 text-center text-gray-500 italic">
+                                            Nenhum aluno registrado hoje
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 3º Ano C -->
+                <div class="table-container turma-3c">
+                    <div class="table-header">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano C
+                            </h2>
+                            <?php
+                            $dados_3c = $select->saida_estagio_3C();
+                            $count_3c = count($dados_3c);
+                            ?>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium">
+                                <?= $count_3c ?> alunos
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-3c" placeholder="Buscar aluno..." onkeyup="filterTable('3c')">
+                    </div>
+                    <div class="table-content custom-scrollbar">
+                        <table class="w-full compact-table" id="table-3c">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-user mr-1"></i>Nome do Aluno
+                                    </th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-clock mr-1"></i>Horário
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <?php foreach ($dados_3c as $dado) { ?>
+                                    <tr class="table-row">
+                                        <td class="px-4 py-2 text-sm text-gray-900">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-user-graduate mr-2 text-admin"></i>
+                                                <?= htmlspecialchars($dado['nome']) ?>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-2 text-sm text-gray-500">
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                <?php if (empty($dados_3c)) { ?>
+                                    <tr>
+                                        <td colspan="2" class="px-4 py-8 text-center text-gray-500 italic">
+                                            Nenhum aluno registrado hoje
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 3º Ano D -->
+                <div class="table-container turma-3d">
+                    <div class="table-header">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano D
+                            </h2>
+                            <?php
+                            $dados_3d = $select->saida_estagio_3D();
+                            $count_3d = count($dados_3d);
+                            ?>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium">
+                                <?= $count_3d ?> alunos
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-3d" placeholder="Buscar aluno..." onkeyup="filterTable('3d')">
+                    </div>
+                    <div class="table-content custom-scrollbar">
+                        <table class="w-full compact-table" id="table-3d">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-user mr-1"></i>Nome do Aluno
+                                    </th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-clock mr-1"></i>Horário
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <?php foreach ($dados_3d as $dado) { ?>
+                                    <tr class="table-row">
+                                        <td class="px-4 py-2 text-sm text-gray-900">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-user-graduate mr-2 text-grey"></i>
+                                                <?= htmlspecialchars($dado['nome']) ?>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-2 text-sm text-gray-500">
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                <?php if (empty($dados_3d)) { ?>
+                                    <tr>
+                                        <td colspan="2" class="px-4 py-8 text-center text-gray-500 italic">
+                                            Nenhum aluno registrado hoje
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista Mobile (Cards) -->
+        <div class="mobile-view">
+            <div class="space-y-6">
+                <!-- 3º Ano A -->
+                <div class="class-card">
+                    <div class="card-header-3a p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center text-white">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano A
+                            </h2>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium text-white">
+                                <?= $count_3a ?>
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-mobile-3a" placeholder="Buscar aluno..." onkeyup="filterCards('3a')">
+                    </div>
+                    <div class="p-4 compact-cards custom-scrollbar" id="cards-3a">
+                        <?php if ($count_3a > 0) { ?>
+                            <?php foreach ($dados_3a as $index => $dado) { ?>
+                                <div class="student-card compact-card">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-red-100 text-danger text-xs font-medium">
+                                                <?= $index + 1 ?>
+                                            </div>
+                                            <span class="ml-3 font-medium text-gray-900"><?= htmlspecialchars($dado['nome']) ?></span>
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            <i class="fas fa-clock mr-1"></i>
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($count_3a > 10) { ?>
+                                <div class="pagination" id="pagination-3a">
+                                    <!-- Paginação será gerada via JavaScript -->
+                                </div>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <div class="text-center py-8 text-gray-500 italic">
+                                Nenhum aluno registrado hoje
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+
+                <!-- 3º Ano B -->
+                <div class="class-card">
+                    <div class="card-header-3b p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center text-white">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano B
+                            </h2>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium text-white">
+                                <?= $count_3b ?>
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-mobile-3b" placeholder="Buscar aluno..." onkeyup="filterCards('3b')">
+                    </div>
+                    <div class="p-4 compact-cards custom-scrollbar" id="cards-3b">
+                        <?php if ($count_3b > 0) { ?>
+                            <?php foreach ($dados_3b as $index => $dado) { ?>
+                                <div class="student-card compact-card">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-blue-100 text-info text-xs font-medium">
+                                                <?= $index + 1 ?>
+                                            </div>
+                                            <span class="ml-3 font-medium text-gray-900"><?= htmlspecialchars($dado['nome']) ?></span>
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            <i class="fas fa-clock mr-1"></i>
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($count_3b > 10) { ?>
+                                <div class="pagination" id="pagination-3b">
+                                    <!-- Paginação será gerada via JavaScript -->
+                                </div>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <div class="text-center py-8 text-gray-500 italic">
+                                Nenhum aluno registrado hoje
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+
+                <!-- 3º Ano C -->
+                <div class="class-card">
+                    <div class="card-header-3c p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center text-white">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano C
+                            </h2>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium text-white">
+                                <?= $count_3c ?>
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-mobile-3c" placeholder="Buscar aluno..." onkeyup="filterCards('3c')">
+                    </div>
+                    <div class="p-4 compact-cards custom-scrollbar" id="cards-3c">
+                        <?php if ($count_3c > 0) { ?>
+                            <?php foreach ($dados_3c as $index => $dado) { ?>
+                                <div class="student-card compact-card">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-cyan-100 text-admin text-xs font-medium">
+                                                <?= $index + 1 ?>
+                                            </div>
+                                            <span class="ml-3 font-medium text-gray-900"><?= htmlspecialchars($dado['nome']) ?></span>
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            <i class="fas fa-clock mr-1"></i>
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($count_3c > 10) { ?>
+                                <div class="pagination" id="pagination-3c">
+                                    <!-- Paginação será gerada via JavaScript -->
+                                </div>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <div class="text-center py-8 text-gray-500 italic">
+                                Nenhum aluno registrado hoje
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+
+                <!-- 3º Ano D -->
+                <div class="class-card">
+                    <div class="card-header-3d p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center text-white">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano D
+                            </h2>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium text-white">
+                                <?= $count_3d ?>
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-mobile-3d" placeholder="Buscar aluno..." onkeyup="filterCards('3d')">
+                    </div>
+                    <div class="p-4 compact-cards custom-scrollbar" id="cards-3d">
+                        <?php if ($count_3d > 0) { ?>
+                            <?php foreach ($dados_3d as $index => $dado) { ?>
+                                <div class="student-card compact-card">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-gray-100 text-grey text-xs font-medium">
+                                                <?= $index + 1 ?>
+                                            </div>
+                                            <span class="ml-3 font-medium text-gray-900"><?= htmlspecialchars($dado['nome']) ?></span>
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            <i class="fas fa-clock mr-1"></i>
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($count_3d > 10) { ?>
+                                <div class="pagination" id="pagination-3d">
+                                    <!-- Paginação será gerada via JavaScript -->
+                                </div>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <div class="text-center py-8 text-gray-500 italic">
+                                Nenhum aluno registrado hoje
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer com botão de atualização manual -->
         <div class="text-center mt-8">
-            <div class="inline-flex items-center text-gray-600 bg-white rounded-lg px-4 py-2 shadow-sm border">
-                <i class="fas fa-sync-alt mr-2 text-ceara-green animate-spin"></i>
-                <span class="text-sm">Atualizando automaticamente...</span>
-            </div>
+            <button onclick="window.location.reload()" class="inline-flex items-center text-gray-600 bg-white rounded-lg px-4 py-2 shadow-sm border hover:bg-gray-50 transition-colors">
+                <i class="fas fa-sync-alt mr-2 text-ceara-green"></i>
+                <span class="text-sm">Atualizar dados</span>
+            </button>
         </div>
     </div>
 
+    <!-- Footer geométrico -->
     <div class="geometric-footer">
         <div class="geometric-shape shape-1"></div>
         <div class="geometric-shape shape-2"></div>
@@ -421,12 +784,108 @@ if (!isset($_SESSION['Email'])) {
     </div>
 
     <script>
-        function redirect() {
-            setTimeout(() => {
-                window.location = 'ultimo_registro.php';
-            }, 1000);
+        // Função para filtrar tabelas
+        function filterTable(turma) {
+            const input = document.querySelector(`.search-${turma}`);
+            const filter = input.value.toUpperCase();
+            const table = document.getElementById(`table-${turma}`);
+            const rows = table.getElementsByTagName('tr');
+            
+            for (let i = 1; i < rows.length; i++) { // Começar do 1 para pular o cabeçalho
+                const nameCell = rows[i].getElementsByTagName('td')[0];
+                if (nameCell) {
+                    const nameText = nameCell.textContent || nameCell.innerText;
+                    if (nameText.toUpperCase().indexOf(filter) > -1) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
         }
-        redirect();
+        
+        // Função para filtrar cards
+        function filterCards(turma) {
+            const input = document.querySelector(`.search-mobile-${turma}`);
+            const filter = input.value.toUpperCase();
+            const container = document.getElementById(`cards-${turma}`);
+            const cards = container.getElementsByClassName('student-card');
+            
+            for (let i = 0; i < cards.length; i++) {
+                const nameText = cards[i].querySelector('span').textContent || cards[i].querySelector('span').innerText;
+                if (nameText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = '';
+                } else {
+                    cards[i].style.display = 'none';
+                }
+            }
+        }
+        
+        // Função para inicializar paginação
+        function initPagination() {
+            const turmas = ['3a', '3b', '3c', '3d'];
+            const itemsPerPage = 10;
+            
+            turmas.forEach(turma => {
+                const container = document.getElementById(`cards-${turma}`);
+                if (!container) return;
+                
+                const cards = container.getElementsByClassName('student-card');
+                const totalPages = Math.ceil(cards.length / itemsPerPage);
+                
+                if (totalPages <= 1) return;
+                
+                const paginationContainer = document.getElementById(`pagination-${turma}`);
+                if (!paginationContainer) return;
+                
+                // Criar botões de paginação
+                let paginationHTML = '';
+                for (let i = 1; i <= totalPages; i++) {
+                    paginationHTML += `<span class="pagination-btn ${i === 1 ? 'active' : ''}" data-page="${i}">${i}</span>`;
+                }
+                paginationContainer.innerHTML = paginationHTML;
+                
+                // Mostrar apenas a primeira página inicialmente
+                showPage(turma, 1, itemsPerPage);
+                
+                // Adicionar event listeners aos botões
+                const buttons = paginationContainer.getElementsByClassName('pagination-btn');
+                for (let i = 0; i < buttons.length; i++) {
+                    buttons[i].addEventListener('click', function() {
+                        const page = parseInt(this.getAttribute('data-page'));
+                        showPage(turma, page, itemsPerPage);
+                        
+                        // Atualizar classe ativa
+                        for (let j = 0; j < buttons.length; j++) {
+                            buttons[j].classList.remove('active');
+                        }
+                        this.classList.add('active');
+                    });
+                }
+            });
+        }
+        
+        // Função para mostrar uma página específica
+        function showPage(turma, page, itemsPerPage) {
+            const container = document.getElementById(`cards-${turma}`);
+            const cards = container.getElementsByClassName('student-card');
+            
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            
+            for (let i = 0; i < cards.length; i++) {
+                if (i >= startIndex && i < endIndex) {
+                    cards[i].style.display = '';
+                } else {
+                    cards[i].style.display = 'none';
+                }
+            }
+        }
+        
+        // Inicializar paginação quando o documento estiver pronto
+        document.addEventListener('DOMContentLoaded', function() {
+            initPagination();
+        });
     </script>
 </body>
 
