@@ -1548,7 +1548,7 @@
                             </div>
                         </div>
                         <p class="text-gray-700 mb-6 leading-relaxed">Capacitação em computação em nuvem com a plataforma Amazon Web Services.</p>
-                        <a href="assets/img/pdf/Edital DEV aprendiz - 2024.docx.pdf" target="_blank" class="btn-primary">
+                        <a href="views/form/form_areaDev.php" target="_blank" class="btn-primary">
                             <i class="fas fa-external-link-alt mr-2"></i> Acesse aqui
                         </a>
                     </div>

@@ -5,6 +5,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once(__DIR__ . '/../config/connect.php');
+// Inclui o novo arquivo de configuração do banco 'areadev'
+require_once(__DIR__ . '/../config/database_areadev.php');
 
 function pre_cadastro($email, $cpf)
 {
@@ -421,5 +423,41 @@ function getEquipeNome($id_equipe)
     } catch (PDOException $e) {
         error_log("Erro no banco de dados ao buscar nome da equipe (getEquipeNome): " . $e->getMessage());
         return 'Erro ao carregar nome da Equipe'; // Retorna mensagem de erro em caso de falha
+    }
+}
+
+function inserirAlunoAreaDev($nome, $funcao)
+{
+    error_log("Debug Model: inserirAlunoAreaDev function called with Nome: " . $nome . ", Funcao: " . $funcao);
+    try {
+        // Usa a nova função para obter a conexão com o banco 'areadev'
+        $conexao = getAreadevConnection();
+        $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        error_log("Debug Model: Database connection successful in inserirAlunoAreaDev.");
+
+        // Prepara a consulta SQL para inserir na tabela 'alunos' (sem turma e curso)
+        $queryInsert = "INSERT INTO alunos (nome, funcao) VALUES (:nome, :funcao)";
+        $stmtInsert = $conexao->prepare($queryInsert);
+
+        // Bind dos parâmetros
+        $stmtInsert->bindParam(':nome', $nome);
+        $stmtInsert->bindParam(':funcao', $funcao);
+
+        // Executa a consulta
+        $executou = $stmtInsert->execute();
+
+        if ($executou) {
+            error_log("Debug Model: Inserção bem sucedida para Nome: " . $nome);
+            return true;
+        } else {
+            error_log("Debug Model: Falha na inserção para Nome: " . $nome);
+            // Loga informações de erro do PDO, se disponíveis
+            error_log("Erro PDO: " . print_r($stmtInsert->errorInfo(), true));
+            return false;
+        }
+
+    } catch (PDOException $e) {
+        error_log("Erro no banco de dados durante inserirAlunoAreaDev: " . $e->getMessage());
+        return false;
     }
 }

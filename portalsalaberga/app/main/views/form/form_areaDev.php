@@ -33,7 +33,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
@@ -54,253 +54,128 @@
             z-index: -1;
         }
 
-        .floating-shape {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.1;
-            animation: float 6s ease-in-out infinite;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
 
-        .floating-shape:nth-child(1) {
-            width: 120px;
-            height: 120px;
-            background: #007A33;
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .floating-shape:nth-child(2) {
-            width: 80px;
-            height: 80px;
-            background: #FFA500;
-            top: 20%;
-            right: 15%;
-            animation-delay: 2s;
-        }
-
-        .floating-shape:nth-child(3) {
-            width: 100px;
-            height: 100px;
-            background: #3B82F6;
-            bottom: 15%;
-            left: 20%;
-            animation-delay: 4s;
-        }
-
-        .floating-shape:nth-child(4) {
-            width: 60px;
-            height: 60px;
-            background: #10B981;
-            bottom: 25%;
-            right: 25%;
-            animation-delay: 1s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-20px) rotate(120deg); }
-            66% { transform: translateY(10px) rotate(240deg); }
-        }
-
-        .form-container {
-            background: rgba(75, 85, 99, 0.95);
+        .field-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(156, 163, 175, 0.2);
-            border-radius: 20px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-            position: relative;
-            z-index: 10;
         }
 
-        .title {
-            color: #10B981;
-            font-size: 2.5rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 8px;
-            position: relative;
+        .field-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 122, 51, 0.3);
+            transform: translateY(-2px);
         }
 
-        .title::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 4px;
-            background: linear-gradient(90deg, #007A33, #FFA500);
-            border-radius: 2px;
+        .custom-input {
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
         }
 
-        .subtitle {
-            color: #d1d5db;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 1rem;
-        }
-
-        .field-label {
-            color: #f3f4f6;
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            font-size: 0.9rem;
-        }
-
-        .field-label::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: #007A33;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #6b7280;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: #4b5563;
-            color: #f9fafb;
-        }
-
-        .input-field:focus {
+        .custom-input:focus {
+            border-color: #007A33;
+            box-shadow: 0 0 0 3px rgba(0, 122, 51, 0.1);
             outline: none;
-            border-color: #007A33;
-            background: #374151;
-            box-shadow: 0 0 0 4px rgba(0, 122, 51, 0.2);
+            background: rgba(15, 23, 42, 0.9);
         }
 
-        .input-field::placeholder {
-            color: #9ca3af;
+        .custom-input:hover {
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
-        .options-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-top: 12px;
+        .custom-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
 
-        .option-item {
-            position: relative;
-        }
-
-        .option-input {
-            display: none;
-        }
-
-        .option-label {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 16px 8px;
-            border: 2px solid #6b7280;
-            border-radius: 12px;
+        .option-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: #4b5563;
-            text-align: center;
-            color: #f3f4f6;
         }
 
-        .option-label:hover {
+        .option-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 122, 51, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 122, 51, 0.15);
+        }
+
+        .option-card.selected {
+            background: rgba(0, 122, 51, 0.2);
             border-color: #007A33;
-            background: #374151;
+            box-shadow: 0 10px 25px rgba(0, 122, 51, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #007A33 0%, #00a843 100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 25px -5px rgba(0, 122, 51, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #00a843 0%, #00c250 100%);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 122, 51, 0.25);
+            box-shadow: 0 15px 35px -5px rgba(0, 122, 51, 0.4);
         }
 
-        .option-input:checked + .option-label {
-            border-color: #007A33;
-            background: #007A33;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 122, 51, 0.4);
-        }
-
-        .option-icon {
-            font-size: 1.5rem;
-            margin-bottom: 4px;
-        }
-
-        .option-text {
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #007A33, #10B981);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 122, 51, 0.4);
-        }
-
-        .submit-btn:active {
+        .btn-primary:active {
             transform: translateY(0);
         }
 
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+        .btn-secondary {
+            background: linear-gradient(135deg, #FFA500 0%, #ff8c00 100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 25px -5px rgba(255, 165, 0, 0.3);
+            border: none;
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .submit-btn:hover::before {
-            left: 100%;
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #ff8c00 0%, #ff7700 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -5px rgba(255, 165, 0, 0.4);
+            color: white;
+            text-decoration: none;
         }
 
-        .result-message {
-            margin-top: 20px;
-            padding: 16px;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: 500;
-            display: none;
-            animation: slideIn 0.5s ease;
+        .btn-secondary:active {
+            transform: translateY(0);
         }
 
-        .result-message.success {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10B981;
-            border: 2px solid #10b981;
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
         }
 
-        .result-message.error {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border: 2px solid #ef4444;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
-        @keyframes slideIn {
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateY(20px);
@@ -311,221 +186,357 @@
             }
         }
 
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 8px;
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .stagger-animation {
+            animation-delay: calc(var(--index) * 0.1s);
         }
 
-        .fade-in {
-            animation: fadeIn 0.5s ease forwards;
+        .progress-bar {
+            background: linear-gradient(90deg, #007A33 0%, #00a843 50%, #00c250 100%);
+            height: 4px;
+            border-radius: 2px;
+            transition: width 0.3s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #3d3d3d;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #007A33;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(20px); }
+        }
+        
+        .fade-out {
+            animation: fadeOut 0.6s ease-out forwards;
         }
 
         @media (max-width: 640px) {
-            .form-container {
-                padding: 30px 20px;
-                margin: 20px;
+            .glass-card {
+                margin: 16px;
+                padding: 24px;
             }
             
-            .title {
-                font-size: 2rem;
+            .options-grid {
+                grid-template-columns: 1fr !important;
             }
-            
-            .options-container {
-                grid-template-columns: 1fr;
-                gap: 8px;
+
+            .button-group {
+                flex-direction: column !important;
+                gap: 12px !important;
             }
-            
-            .option-label {
-                flex-direction: row;
-                justify-content: center;
-                padding: 12px;
-            }
-            
-            .option-icon {
-                margin-bottom: 0;
-                margin-right: 8px;
+
+            .btn-secondary {
+                width: 100%;
             }
         }
     </style>
 </head>
-<body>
-    <!-- Floating Shapes -->
-    <div class="floating-shape"></div>
-    <div class="floating-shape"></div>
-    <div class="floating-shape"></div>
-    <div class="floating-shape"></div>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <!-- Background Effects -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl"></div>
+        <div class="absolute top-3/4 left-3/4 w-48 h-48 bg-info/5 rounded-full blur-3xl"></div>
+    </div>
 
-    <div class="min-h-screen flex items-center justify-center p-4">
-        <div class="form-container fade-in">
-            <h1 class="title">Seleção Área Dev</h1>
-            <p class="subtitle">Escolha sua área de especialização</p>
+    <div class="glass-card rounded-2xl p-8 max-w-2xl w-full mx-4 fade-in">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/20 rounded-full mb-4 floating-icon">
+                <i class="fas fa-code text-2xl text-primary"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-white mb-2">Seleção Área Dev</h1>
+            <p class="text-xl text-gray-300 font-medium">Escolha sua área de especialização</p>
             
-            <form id="devForm">
-                <div style="margin-bottom: 24px;">
-                    <label class="field-label">Nome Completo</label>
-                    <input 
-                        type="text" 
-                        id="nome" 
-                        name="nome" 
-                        class="input-field"
-                        placeholder="Digite seu nome completo"
-                        required
-                    >
+            <!-- Botão do Edital -->
+            <div class="mt-4 mb-6">
+                <a href="#" id="edital-btn" class="btn-secondary px-6 py-3 rounded-xl font-semibold text-lg gap-3" target="_blank">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Ver Edital Completo</span>
+                    <i class="fas fa-external-link-alt text-sm"></i>
+                </a>
+            </div>
+
+            <div class="bg-slate-800/50 rounded-lg p-3">
+                <div class="flex items-center justify-between text-sm text-gray-400 mb-2">
+                    <span>Progresso do Formulário</span>
+                    <span id="progress-text">0/2 preenchidos</span>
                 </div>
-                
-                <div style="margin-bottom: 24px;">
-                    <label class="field-label">Área de Especialização</label>
-                    <div class="options-container">
-                        <div class="option-item">
-                            <input type="radio" id="backend" name="funcao" value="Back-end" class="option-input" required>
-                            <label for="backend" class="option-label">
-                                <span class="option-icon">⚙️</span>
-                                <span class="option-text">Back-end</span>
-                            </label>
-                        </div>
-                        <div class="option-item">
-                            <input type="radio" id="frontend" name="funcao" value="Front-end" class="option-input">
-                            <label for="frontend" class="option-label">
-                                <span class="option-icon">🎨</span>
-                                <span class="option-text">Front-end</span>
-                            </label>
-                        </div>
-                        <div class="option-item">
-                            <input type="radio" id="design" name="funcao" value="Design" class="option-input">
-                            <label for="design" class="option-label">
-                                <span class="option-icon">✨</span>
-                                <span class="option-text">Design</span>
-                            </label>
-                        </div>
+                <div class="w-full bg-slate-700 rounded-full h-2">
+                    <div class="progress-bar w-0" id="progress-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <form id="dev-form" class="space-y-6" action="../../controllers/controller_areaDev.php" method="POST">
+            <!-- Nome Field -->
+            <div class="field-card rounded-xl p-6 slide-up" style="--index: 0">
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-primary to-primary/70 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-white">Nome Completo</h3>
+                        <p class="text-sm text-gray-400">Informe seu nome completo</p>
+                    </div>
+                </div>
+                <input 
+                    type="text" 
+                    id="nome" 
+                    name="nome" 
+                    class="custom-input w-full rounded-lg px-4 py-3 text-white"
+                    placeholder="Digite seu nome completo"
+                    required
+                >
+            </div>
+
+            <!-- Função Field -->
+            <div class="field-card rounded-xl p-6 slide-up" style="--index: 1">
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-secondary to-secondary/70 rounded-full flex items-center justify-center">
+                        <i class="fas fa-briefcase text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-white">Área de Especialização</h3>
+                        <p class="text-sm text-gray-400">Selecione sua área de interesse</p>
                     </div>
                 </div>
                 
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <span id="btnText">Enviar Inscrição</span>
-                    <span id="btnLoading" style="display: none;">
-                        <span class="loading"></span>
+                <div class="grid grid-cols-3 gap-4 options-grid">
+                    <div class="option-card rounded-lg p-4 text-center" data-value="Back-end">
+                        <input type="radio" id="backend" name="funcao" value="Back-end" class="hidden" required>
+                        <div class="text-3xl mb-2">⚙️</div>
+                        <div class="text-white font-medium">Back-end</div>
+                        <div class="text-xs text-gray-400 mt-1">Servidor & APIs</div>
+                    </div>
+                    
+                    <div class="option-card rounded-lg p-4 text-center" data-value="Front-end">
+                        <input type="radio" id="frontend" name="funcao" value="Front-end" class="hidden">
+                        <div class="text-3xl mb-2">🎨</div>
+                        <div class="text-white font-medium">Front-end</div>
+                        <div class="text-xs text-gray-400 mt-1">Interface & UX</div>
+                    </div>
+                    
+                    <div class="option-card rounded-lg p-4 text-center" data-value="Design">
+                        <input type="radio" id="design" name="funcao" value="Design" class="hidden">
+                        <div class="text-3xl mb-2">✨</div>
+                        <div class="text-white font-medium">Design</div>
+                        <div class="text-xs text-gray-400 mt-1">UI/UX Design</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-center pt-6">
+                <button type="submit" class="btn-primary px-8 py-4 rounded-xl text-white font-semibold text-lg flex items-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed" id="submit-btn" disabled>
+                    <i class="fas fa-paper-plane"></i>
+                    <span id="btn-text">Enviar Inscrição</span>
+                    <span id="btn-loading" class="hidden">
+                        <i class="fas fa-spinner fa-spin"></i>
                         Processando...
                     </span>
                 </button>
-            </form>
-            
-            <div id="resultMessage" class="result-message"></div>
+            </div>
+        </form>
+
+        <!-- Success Message -->
+        <div id="success-message" class="hidden mt-6 p-4 bg-success/20 border border-success/30 rounded-lg text-success text-center">
+            <i class="fas fa-check-circle mr-2" id="success-icon"></i>
+            <div class="font-semibold text-lg mb-2" id="success-title">Mensagem</div>
+            <div id="success-content"></div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('devForm');
-            const resultMessage = document.getElementById('resultMessage');
-            const submitBtn = document.getElementById('submitBtn');
-            const btnText = document.getElementById('btnText');
-            const btnLoading = document.getElementById('btnLoading');
-            const nomeInput = document.getElementById('nome');
+        let filledFields = 0;
+        const totalFields = 2;
 
-            // Validação em tempo real
-            nomeInput.addEventListener('input', function() {
-                if (this.value.trim().length > 0 && this.value.trim().length < 2) {
-                    this.style.borderColor = '#ef4444';
-                } else {
-                    this.style.borderColor = '#6b7280';
-                }
-            });
-
-            // Efeitos visuais nas opções
-            const radioInputs = document.querySelectorAll('input[name="funcao"]');
-            radioInputs.forEach(input => {
-                input.addEventListener('change', function() {
-                    // Remover efeito de todas as labels
-                    document.querySelectorAll('.option-label').forEach(label => {
-                        label.style.transform = '';
-                    });
-                    
-                    // Adicionar efeito na label selecionada
-                    if (this.checked) {
-                        const label = document.querySelector(`label[for="${this.id}"]`);
-                        label.style.transform = 'translateY(-2px) scale(1.05)';
-                        setTimeout(() => {
-                            label.style.transform = 'translateY(-2px)';
-                        }, 200);
-                    }
-                });
-            });
-
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Mostrar loading
-                btnText.style.display = 'none';
-                btnLoading.style.display = 'inline-flex';
-                submitBtn.disabled = true;
-                
-                // Simular processamento
-                setTimeout(() => {
-                    const nome = document.getElementById('nome').value.trim();
-                    const funcaoSelecionada = document.querySelector('input[name="funcao"]:checked');
-                    
-                    if (!nome || nome.length < 2) {
-                        showResult('Por favor, digite um nome válido com pelo menos 2 caracteres.', 'error');
-                        resetButton();
-                        return;
-                    }
-                    
-                    if (!funcaoSelecionada) {
-                        showResult('Por favor, selecione uma área de especialização.', 'error');
-                        resetButton();
-                        return;
-                    }
-                    
-                    // Sucesso
-                    showResult(`
-                        <div style="text-align: center;">
-                            <div style="font-size: 2rem; margin-bottom: 8px;">🎉</div>
-                            <div style="font-weight: 600; margin-bottom: 8px;">Inscrição realizada com sucesso!</div>
-                            <div><strong>Nome:</strong> ${nome}</div>
-                            <div><strong>Área:</strong> ${funcaoSelecionada.value}</div>
-                        </div>
-                    `, 'success');
-                    
-                    // Limpar formulário após 3 segundos
-                    setTimeout(() => {
-                        form.reset();
-                        hideResult();
-                    }, 3000);
-                    
-                    resetButton();
-                }, 1500);
-            });
+        function updateProgress() {
+            const percentage = (filledFields / totalFields) * 100;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-text').textContent = `${filledFields}/${totalFields} preenchidos`;
             
-            function showResult(message, type) {
-                resultMessage.innerHTML = message;
-                resultMessage.className = `result-message ${type}`;
-                resultMessage.style.display = 'block';
-            }
-            
-            function hideResult() {
-                resultMessage.style.display = 'none';
-            }
-            
-            function resetButton() {
-                btnText.style.display = 'inline';
-                btnLoading.style.display = 'none';
+            const submitBtn = document.getElementById('submit-btn');
+            if (filledFields === totalFields) {
                 submitBtn.disabled = false;
+                submitBtn.classList.add('pulse');
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.remove('pulse');
             }
+        }
+
+        // Nome field validation
+        const nomeInput = document.getElementById('nome');
+        let nomeValid = false;
+
+        nomeInput.addEventListener('input', function() {
+            const isValid = this.value.trim().length >= 2;
+            
+            if (isValid && !nomeValid) {
+                filledFields++;
+                nomeValid = true;
+            } else if (!isValid && nomeValid) {
+                filledFields--;
+                nomeValid = false;
+            }
+            
+            // Visual feedback
+            if (this.value.trim().length > 0 && this.value.trim().length < 2) {
+                this.style.borderColor = '#ef4444';
+            } else {
+                this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            }
+            
+            updateProgress();
+        });
+
+        // Function selection
+        const optionCards = document.querySelectorAll('.option-card');
+        let funcaoValid = false;
+
+        optionCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const value = this.dataset.value;
+                const radioInput = document.querySelector(`input[value="${value}"]`);
+                
+                // Remove selection from all cards
+                optionCards.forEach(c => c.classList.remove('selected'));
+                
+                // Add selection to clicked card
+                this.classList.add('selected');
+                radioInput.checked = true;
+                
+                // Update progress
+                if (!funcaoValid) {
+                    filledFields++;
+                    funcaoValid = true;
+                    updateProgress();
+                }
+                
+                // Animation effect
+                this.style.transform = 'translateY(-2px) scale(1.05)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-2px)';
+                }, 200);
+            });
+        });
+
+        // Edital button configuration
+        document.getElementById('edital-btn').addEventListener('click', function(e) {
+            // Substitua a URL abaixo pela URL real do seu edital
+            const editalUrl = '../../assets/img/pdf/Edital-area-dev.pdf'; // ALTERE AQUI
+            
+            // Se você quiser que abra em uma nova aba
+            window.open(editalUrl, '_blank');
+            
+            // Ou se quiser que abra na mesma aba, descomente a linha abaixo e comente a de cima
+            // window.location.href = editalUrl;
+            
+            e.preventDefault();
+        });
+
+        // Form submission - mantém toda a funcionalidade original
+        document.getElementById('dev-form').addEventListener('submit', function(e) {
+            const btnText = document.getElementById('btn-text');
+            const btnLoading = document.getElementById('btn-loading');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            // Show loading state
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            submitBtn.disabled = true;
+            submitBtn.classList.remove('pulse');
+        });
+
+        // Verifica o status na URL ao carregar a página (após redirecionamento do controller)
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('status');
+            const messageArea = document.getElementById('success-message');
+            const messageIcon = document.getElementById('success-icon');
+            const messageTitle = document.getElementById('success-title');
+            const messageContent = document.getElementById('success-content');
+
+            if (status) {
+                messageArea.classList.remove('hidden');
+                // Limpa classes de cor anteriores
+                messageArea.classList.remove('bg-success/20', 'border-success/30', 'text-success', 'bg-danger/20', 'border-danger/30', 'text-danger');
+
+                if (status === 'sucesso') {
+                    messageIcon.textContent = '🎉';
+                    messageTitle.textContent = 'Inscrição realizada com sucesso!';
+                    messageContent.textContent = '';
+                    messageArea.classList.add('bg-success/20', 'border-success/30', 'text-success', 'fade-in');
+                } else if (status === 'erro') {
+                    messageIcon.textContent = '❌';
+                    messageTitle.textContent = 'Erro ao realizar a inscrição.';
+                    messageContent.textContent = 'Por favor, tente novamente.';
+                    messageArea.classList.add('bg-danger/20', 'border-danger/30', 'text-danger', 'fade-in');
+                } else if (status === 'erro_dados') {
+                    messageIcon.textContent = '⚠️';
+                    messageTitle.textContent = 'Dados incompletos!';
+                    messageContent.textContent = 'Por favor, preencha todos os campos.';
+                    messageArea.classList.add('bg-danger/20', 'border-danger/30', 'text-danger', 'fade-in');
+                }
+
+                // Ocultar a mensagem após alguns segundos
+                setTimeout(() => {
+                   messageArea.classList.remove('fade-in');
+                   messageArea.classList.add('fade-out');
+                   setTimeout(() => {
+                       messageArea.style.display = 'none';
+                       messageArea.classList.add('hidden');
+                       messageArea.classList.remove('fade-out');
+                   }, 600);
+                }, 5000);
+
+                // Limpar o parâmetro da URL após mostrar a mensagem
+                history.replaceState({}, document.title, window.location.pathname);
+            }
+            
+            // Initialize progress on page load
+            updateProgress();
         });
     </script>
 </body>
