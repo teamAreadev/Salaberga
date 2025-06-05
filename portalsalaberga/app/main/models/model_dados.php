@@ -101,18 +101,20 @@ function login($email, $senha)
         // Prepara e executa a consulta para verificar o usuário na tabela 'usuarios'
         // Included 'nome' in select as it's in the new schema
         $querySelectUser = "SELECT id, email, nome FROM usuarios WHERE email = :email AND senha = MD5(:senha)";
-        $stmtSelectUser = $conexao->prepare(query: $querySelectUser);
+        $stmtSelectUser = $conexao->prepare($querySelectUser);
         $stmtSelectUser->bindParam(':email', $email);
         $stmtSelectUser->bindParam(':senha', $senha);
         $stmtSelectUser->execute();
-        $user = $stmtSelectUser->fetchAll(PDO::FETCH_ASSOC);
-        print_r($user);
-        print($email);
-        print($senha);
+        $user = $stmtSelectUser->fetch(PDO::FETCH_ASSOC);
 
         if (!empty($user)) {
-            // Login successful, fetch systems and permissions for this user
-            // UPDATED QUERY TO USE NEW usu_sist STRUCTURE (usuario_id links to sist_perm_id)
+            // Usuário encontrado e senha MD5 correta
+            error_log("Debug Model: Login bem sucedido com MD5 para o email: " . $email);
+
+            // Debug: Conteúdo do usuário após busca inicial
+            error_log("Debug Model: Conteúdo do array $user antes de setar sessão: " . print_r($user, true));
+
+            // Busca sistemas e permissões para este usuário
             $queryUserSystemsPermissions = "
                 SELECT
                     s.id AS sistema_id,
@@ -138,17 +140,18 @@ function login($email, $senha)
             $stmtUserSystemsPermissions->execute();
             $userSystemsPermissions = $stmtUserSystemsPermissions->fetchAll(PDO::FETCH_ASSOC);
 
-            // Store relevant user data and systems/permissions in session
+            // Debug: Conteúdo de user_systems_permissions antes de setar sessão
+            error_log("Debug Model: Conteúdo do array $userSystemsPermissions antes de setar sessão: " . print_r($userSystemsPermissions, true));
+
+            // Armazena dados relevantes do usuário e sistemas/permissões na sessão
             $_SESSION['login'] = true;
+            $_SESSION['user_id'] = $user['id']; // Armazena o ID do usuário na sessão
             $_SESSION['Email'] = $user['email'];
-             // Note: Storing raw password (even masked) is not recommended.
-            $_SESSION['Senha'] = str_repeat('•', strlen($senha)); // Example: store masked password
+            $_SESSION['Senha'] = str_repeat('•', strlen($senha)); // Evitar armazenar senha real
+            $_SESSION['Nome'] = $user['nome'];
+            $_SESSION['user_systems_permissions'] = $userSystemsPermissions; // Armazena as permissões buscadas
 
-            $_SESSION['Nome'] = $user['nome']; // 'nome' is available in the new 'usuarios' table
-
-            $_SESSION['user_systems_permissions'] = $userSystemsPermissions; // Store fetched data
-
-            return true; // Indicate successful login
+            return true;
 
         } else {
             return false; // Indicate login failure
