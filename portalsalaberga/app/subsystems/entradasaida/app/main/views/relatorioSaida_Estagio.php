@@ -474,6 +474,10 @@ $select = new select_model;
                 <i class="fas fa-eye"></i>
                 <span>Visualizar</span>
             </a>
+            <a href="relatorio_diario_estagio.php" target="_blank" class="header-btn" style="background: linear-gradient(90deg, #FFA500, #FF8C00);">
+                <i class="fas fa-calendar-day"></i>
+                <span>Relatório Diário</span>
+            </a>
         </nav>
     </header>
 
