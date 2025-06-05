@@ -99,50 +99,41 @@
 
     <!-- Action Buttons -->
     <div class="flex flex-col xs:flex-row gap-1 w-full sm:w-auto order-1 sm:order-2">
-        <?php if ($d['status'] !== 'concluida'): ?>
-            <form class="w-full xs:w-auto" onsubmit="realizarTarefa(<?php echo $d['id']; ?>, '<?php echo $d['status']; ?>', event); return false;">
-                <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
-                <input type="hidden" name="status_atual" value="<?php echo $d['status']; ?>">
-                <?php if ($d['status'] === 'pendente'): ?>
-                    <button type="submit"
+        <?php
+            // Use o status específico do usuário se disponível, senão use o status geral da demanda
+            $current_user_status = $d['status_usuario'] ?? $d['status'];
+
+            // DEBUG: Logar os status
+            error_log("DEBUG CARD - Demanda ID: " . $d['id'] . ", Status Geral: " . $d['status'] . ", Status Usuário: " . ($d['status_usuario'] ?? 'NULL') . ", Status Atual para Lógica: " . $current_user_status);
+        ?>
+        <?php if ($current_user_status !== 'concluida' && $current_user_status !== 'concluido' && $current_user_status !== 'recusado'): ?>
+            <div class="w-full xs:w-auto">
+                <?php if ($current_user_status === 'pendente' || $current_user_status === 'aceito'): ?>
+                    <button type="button"
+                            onclick="realizarTarefa(<?php echo $d['id']; ?>, '<?php echo $current_user_status; ?>')"
                             class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1.5 px-2 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-xs w-full xs:w-auto">
                         <i class="fas fa-tasks"></i>
                         <span class="hidden xs:inline">Realizar Tarefa</span>
                         <span class="xs:hidden">Realizar</span>
                     </button>
-                <?php elseif ($d['status'] === 'em_andamento'): ?>
-                    <button type="submit"
+                <?php elseif ($current_user_status === 'em_andamento'): ?>
+                    <button type="button"
+                            onclick="realizarTarefa(<?php echo $d['id']; ?>, '<?php echo $current_user_status; ?>')"
                             class="custom-btn bg-green-600 hover:bg-green-700 text-white py-1.5 px-2 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-xs flex-1 sm:flex-none w-full xs:w-auto">
                         <i class="fas fa-check"></i>
                         <span class="hidden xs:inline">Concluir</span>
                         <span class="xs:hidden">Concluir</span>
                     </button>
                 <?php endif; ?>
-            </form>
+            </div>
         <?php endif; ?>
-        
-        <!-- Edit and Delete Buttons -->
-        <div class="flex gap-1 w-full xs:w-auto">
-            <button onclick="editarDemanda(<?php echo $d['id']; ?>)" 
-                    class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white py-1.5 px-2 rounded-lg flex items-center justify-center gap-2 flex-1 xs:flex-none text-xs" 
-                    title="Editar">
-                <i class="fas fa-edit"></i>
-                <span class="xs:hidden">Editar</span>
-            </button>
-            <button onclick="excluirDemanda(<?php echo $d['id']; ?>)" 
-                    class="custom-btn bg-red-600 hover:bg-red-700 text-white py-1.5 px-2 rounded-lg flex items-center justify-center gap-2 flex-1 xs:flex-none text-xs" 
-                    title="Excluir">
-                <i class="fas fa-trash"></i>
-                <span class="xs:hidden">Excluir</span>
-            </button>
-        </div>
     </div>
 </div>
 
 <!-- Status dos Usuários - Improved Mobile Layout -->
 <?php if (!empty($d['usuarios_atribuidos'])): ?>
 <div class="mt-2 pt-2 border-t border-gray-700">
-    <h retiring="text-xs font-semibold text-gray-400 mb-2">Status dos Participantes:</h4>
+    <h4 class="text-xs font-semibold text-gray-400 mb-2">Status dos Participantes:</h4>
     <div class="space-y-1 sm:space-y-0 sm:flex sm:flex-wrap sm:gap-2">
         <?php foreach ($d['usuarios_atribuidos'] as $u_atrib): ?>
             <div class="flex items-center justify-between sm:justify-start gap-1 bg-gray-800/30 p-1.5 rounded-lg sm:bg-transparent sm:p-0">
@@ -166,43 +157,4 @@
         <?php endforeach; ?>
     </div>
 </div>
-<?php endif; ?>
-
-<!-- Função para realizar tarefa -->
-<script>
-    async function realizarTarefa(demandaId, statusAtual, event) {
-        // Prevenir o comportamento padrão do formulário
-        if (event) {
-            event.preventDefault();
-        }
-
-        try {
-            const formData = new FormData();
-            formData.append('acao', 'realizar_tarefa');
-            formData.append('id', demandaId);
-            const novoStatus = statusAtual === 'em_andamento' ? 'concluida' : 'em_andamento';
-            formData.append('novo_status', novoStatus);
-
-            const response = await fetch('../controllers/DemandaController.php', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                alert('Erro na requisição: Status ' + response.status);
-                return;
-            }
-
-            const result = await response.json();
-            alert(result.message);
-
-            if (result.success || result.type === 'info') {
-                window.location.href = 'admin.php?_t=' + new Date().getTime();
-            }
-
-        } catch (error) {
-            alert('Ocorreu um erro na comunicação com o servidor ou ao processar a resposta.');
-        }
-    }
-</script>
+<?php endif; ?> 

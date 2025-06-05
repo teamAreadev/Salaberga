@@ -3,6 +3,9 @@
 session_start();
 ob_start();
 
+// Definir BASE_URL
+define('BASE_URL', '/portalsalaberga/app/subsystems/AreaDev');
+
 // Configuração de erros
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -154,8 +157,83 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $acao) {
             redirecionar('usuario', $sucesso ? 'Demanda recusada com sucesso!' : 'Erro ao recusar demanda', $sucesso ? 'success' : 'error');
             break;
 
-        case 'update_status':
         case 'atualizar_status':
+            error_log("\n=== INÍCIO DO PROCESSAMENTO DE ATUALIZAR_STATUS ===");
+            error_log("POST data: " . print_r($_POST, true));
+            error_log("Usuário ID: " . $usuario_id);
+            
+            // Limpar qualquer saída anterior
+            ob_clean();
+            
+            // Garantir que a resposta será JSON
+            header('Content-Type: application/json; charset=utf-8');
+            
+            if (!isset($_POST['id']) || !isset($_POST['novo_status'])) {
+                error_log("Parâmetros ausentes - id: " . (isset($_POST['id']) ? $_POST['id'] : 'não definido') . 
+                         ", novo_status: " . (isset($_POST['novo_status']) ? $_POST['novo_status'] : 'não definido'));
+                echo json_encode(['success' => false, 'error' => 'Parâmetros ausentes']);
+                exit;
+            }
+            
+            $demandaId = intval($_POST['id']);
+            $novoStatus = $_POST['novo_status'];
+            $usuarioId = intval($_SESSION['user_id']);
+            
+            error_log("Dados recebidos - Demanda ID: $demandaId, Novo Status: $novoStatus, Usuário ID: $usuarioId");
+            
+            // Validar status
+            if (!in_array($novoStatus, ['em_andamento', 'concluida'])) {
+                error_log("Status inválido: $novoStatus");
+                echo json_encode(['success' => false, 'error' => 'Status inválido']);
+                exit;
+            }
+            
+            try {
+                // Verificar se a demanda existe
+                $demandaAtual = $demanda->buscarDemanda($demandaId);
+                if (!$demandaAtual) {
+                    error_log("Demanda não encontrada - ID: $demandaId");
+                    echo json_encode(['success' => false, 'error' => 'Demanda não encontrada']);
+                    exit;
+                }
+                
+                error_log("Demanda encontrada - Status atual: " . $demandaAtual['status']);
+                
+                // Verificar se o usuário tem permissão para atualizar o status
+                $temPermissao = $demanda->verificarPermissaoUsuario($demandaId, $usuarioId);
+                error_log("Resultado da verificação de permissão: " . ($temPermissao ? 'tem permissão' : 'sem permissão'));
+                
+                if (!$temPermissao) {
+                    error_log("Usuário não tem permissão para atualizar esta demanda");
+                    echo json_encode(['success' => false, 'error' => 'Sem permissão para atualizar esta demanda']);
+                    exit;
+                }
+                
+                if ($novoStatus === 'em_andamento') {
+                    error_log("Chamando marcarEmAndamento");
+                    $resultado = $demanda->marcarEmAndamento($demandaId, $usuarioId);
+                } elseif ($novoStatus === 'concluida') {
+                    error_log("Chamando marcarConcluida");
+                    $resultado = $demanda->marcarConcluida($demandaId, $usuarioId);
+                }
+                
+                error_log("Resultado da operação: " . ($resultado ? 'sucesso' : 'falha'));
+                
+                if ($resultado) {
+                    echo json_encode(['success' => true, 'message' => 'Status atualizado com sucesso']);
+                } else {
+                    error_log("Erro ao atualizar status - Operação retornou false");
+                    echo json_encode(['success' => false, 'error' => 'Erro ao atualizar status']);
+                }
+            } catch (Exception $e) {
+                error_log("Exceção ao atualizar status: " . $e->getMessage());
+                error_log("Stack trace: " . $e->getTraceAsString());
+                echo json_encode(['success' => false, 'error' => 'Erro ao atualizar status: ' . $e->getMessage()]);
+            }
+            exit;
+            break;
+
+        case 'realizar_tarefa':
             if (!isset($_POST['id']) || !isset($_POST['novo_status'])) {
                 redirecionar('usuario', 'Parâmetros inválidos');
             }
@@ -170,19 +248,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $acao) {
             redirecionar('usuario', $sucesso ? 'Status atualizado com sucesso!' : 'Erro ao atualizar status', $sucesso ? 'success' : 'error');
             break;
 
-        case 'realizar_tarefa':
-            if (!isset($_POST['id']) || !isset($_POST['novo_status'])) {
-                redirecionar('admin', 'Parâmetros inválidos');
+        case 'criar_teste':
+            error_log("Iniciando criação de demanda de teste via controlador");
+            try {
+                $demanda_id = $demanda->criarDemandaTeste();
+                error_log("Demanda de teste criada com sucesso. ID: " . $demanda_id);
+                header('Location: ' . BASE_URL . '?subsystem=AreaDev&action=usuario');
+                exit;
+            } catch (Exception $e) {
+                error_log("Erro ao criar demanda de teste: " . $e->getMessage());
+                error_log("Stack trace: " . $e->getTraceAsString());
+                header('Location: ' . BASE_URL . '?subsystem=AreaDev&action=usuario&error=Erro ao criar demanda de teste');
+                exit;
             }
-
-            $sucesso = false;
-            if ($_POST['novo_status'] === 'em_andamento') {
-                $sucesso = $demanda->marcarEmAndamento($_POST['id'], $usuario_id);
-            } elseif ($_POST['novo_status'] === 'concluida') {
-                $sucesso = $demanda->marcarConcluida($_POST['id'], $usuario_id);
-            }
-
-            redirecionar('admin', $sucesso ? 'Status atualizado com sucesso!' : 'Erro ao atualizar status', $sucesso ? 'success' : 'error');
             break;
 
         default:

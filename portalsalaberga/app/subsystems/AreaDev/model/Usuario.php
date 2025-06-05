@@ -112,10 +112,10 @@ class Usuario {
                     ORDER BY u.nome";
             
             error_log("SQL Query: " . $sql);
-            error_log("ID Sistema: " . $id_sistema);
+            error_log("ID Sistema: " . $sistema_id);
             
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$id_sistema]);
+            $stmt->execute([$sistema_id]);
             $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
             error_log("Total de usuários encontrados: " . count($usuarios));
