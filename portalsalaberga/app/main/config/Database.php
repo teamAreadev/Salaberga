@@ -18,7 +18,7 @@ class DatabaseManager {
                 $is_local = $_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1';
 
                 if ($is_local) {
-                    $dsn = 'mysql:host=localhost;dbname=u750204740_salaberga'; // Local DB Name
+                    $dsn = 'mysql:host=localhost;dbname=salaberga'; // Local DB Name
                     $username = "root";
                     $password = "";
                 } else {
