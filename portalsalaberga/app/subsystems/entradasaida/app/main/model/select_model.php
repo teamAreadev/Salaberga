@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/../config/Database.php');
+require_once(__DIR__ . '/../config/database.php');
 
 class select_model extends connect
 {
@@ -73,4 +73,24 @@ class select_model extends connect
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }   
 
+    public function getSaidasEstagioPorTurma($id_turma, $data) {
+        try {
+            $sql = "SELECT a.nome, s.dae as data_saida, TIME(s.dae) as hora_saida 
+                    FROM aluno a 
+                    JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                    WHERE a.id_turma = :id_turma 
+                    AND DATE(s.dae) = :data 
+                    ORDER BY a.nome";
+            
+            $stmt = $this->connect->prepare($sql);
+            $stmt->bindParam(':id_turma', $id_turma);
+            $stmt->bindParam(':data', $data);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar saídas de estágio: " . $e->getMessage());
+            return [];
+        }
+    }
 };
