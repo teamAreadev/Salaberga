@@ -82,7 +82,7 @@ class select_model extends connect
                     AND DATE(se.data_saida) = :data 
                     ORDER BY a.nome";
             
-            $stmt = $this->pdo->prepare($sql);
+            $stmt = $this->connect->prepare($sql);
             $stmt->bindParam(':id_turma', $id_turma);
             $stmt->bindParam(':data', $data);
             $stmt->execute();

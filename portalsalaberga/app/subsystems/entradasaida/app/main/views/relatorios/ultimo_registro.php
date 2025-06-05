@@ -5,12 +5,12 @@ $select = new select_model();
 session_start();
 function redirect_to_login()
 {
-  header('Location: ../../../../../../main/views/autenticacao/login.php');
+    header('Location: ../../../../../../main/views/autenticacao/login.php');
 }
 if (!isset($_SESSION['Email'])) {
-  session_destroy();
-  redirect_to_login();
-}   
+    session_destroy();
+    redirect_to_login();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -20,6 +20,7 @@ if (!isset($_SESSION['Email'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <meta http-equiv="refresh" content="1">
     <title>Relatório de Saídas</title>
     <script>
         tailwind.config = {
@@ -43,7 +44,7 @@ if (!isset($_SESSION['Email'])) {
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+
         * {
             font-family: 'Inter', sans-serif;
         }
@@ -52,7 +53,7 @@ if (!isset($_SESSION['Email'])) {
             background: #f8fafc;
             min-height: 100vh;
             position: relative;
-            padding-bottom: 100px; 
+            padding-bottom: 100px;
         }
 
         .main-container {
@@ -126,15 +127,37 @@ if (!isset($_SESSION['Email'])) {
         }
 
         /* Classes específicas para cada turma */
-        .turma-3a .table-header { background: linear-gradient(90deg, #dc3545, #c82333); }
-        .turma-3b .table-header { background: linear-gradient(90deg, #4169E1, #3651d1); }
-        .turma-3c .table-header { background: linear-gradient(90deg, #0dcaf0, #0bb5d6); }
-        .turma-3d .table-header { background: linear-gradient(90deg, #6c757d, #5a6268); }
+        .turma-3a .table-header {
+            background: linear-gradient(90deg, #dc3545, #c82333);
+        }
 
-        .card-header-3a { background: linear-gradient(90deg, #dc3545, #c82333); }
-        .card-header-3b { background: linear-gradient(90deg, #4169E1, #3651d1); }
-        .card-header-3c { background: linear-gradient(90deg, #0dcaf0, #0bb5d6); }
-        .card-header-3d { background: linear-gradient(90deg, #6c757d, #5a6268); }
+        .turma-3b .table-header {
+            background: linear-gradient(90deg, #4169E1, #3651d1);
+        }
+
+        .turma-3c .table-header {
+            background: linear-gradient(90deg, #0dcaf0, #0bb5d6);
+        }
+
+        .turma-3d .table-header {
+            background: linear-gradient(90deg, #6c757d, #5a6268);
+        }
+
+        .card-header-3a {
+            background: linear-gradient(90deg, #dc3545, #c82333);
+        }
+
+        .card-header-3b {
+            background: linear-gradient(90deg, #4169E1, #3651d1);
+        }
+
+        .card-header-3c {
+            background: linear-gradient(90deg, #0dcaf0, #0bb5d6);
+        }
+
+        .card-header-3d {
+            background: linear-gradient(90deg, #6c757d, #5a6268);
+        }
 
         .gradient-text {
             background: linear-gradient(45deg, #008C45, #3CB371);
@@ -156,7 +179,7 @@ if (!isset($_SESSION['Email'])) {
             .desktop-view {
                 display: block;
             }
-            
+
             .mobile-view {
                 display: none;
             }
@@ -320,13 +343,33 @@ if (!isset($_SESSION['Email'])) {
         }
 
         @media (max-width: 768px) {
-            .shape-1 { border-left-width: 120px; }
-            .shape-2 { border-left-width: 150px; left: 100px; }
-            .shape-3 { border-left-width: 180px; left: 200px; }
-            
-            .shape-4 { border-right-width: 120px; }
-            .shape-5 { border-right-width: 150px; right: 100px; }
-            .shape-6 { border-right-width: 180px; right: 200px; }
+            .shape-1 {
+                border-left-width: 120px;
+            }
+
+            .shape-2 {
+                border-left-width: 150px;
+                left: 100px;
+            }
+
+            .shape-3 {
+                border-left-width: 180px;
+                left: 200px;
+            }
+
+            .shape-4 {
+                border-right-width: 120px;
+            }
+
+            .shape-5 {
+                border-right-width: 150px;
+                right: 100px;
+            }
+
+            .shape-6 {
+                border-right-width: 180px;
+                right: 200px;
+            }
         }
     </style>
 </head>
@@ -790,7 +833,7 @@ if (!isset($_SESSION['Email'])) {
             const filter = input.value.toUpperCase();
             const table = document.getElementById(`table-${turma}`);
             const rows = table.getElementsByTagName('tr');
-            
+
             for (let i = 1; i < rows.length; i++) { // Começar do 1 para pular o cabeçalho
                 const nameCell = rows[i].getElementsByTagName('td')[0];
                 if (nameCell) {
@@ -803,14 +846,14 @@ if (!isset($_SESSION['Email'])) {
                 }
             }
         }
-        
+
         // Função para filtrar cards
         function filterCards(turma) {
             const input = document.querySelector(`.search-mobile-${turma}`);
             const filter = input.value.toUpperCase();
             const container = document.getElementById(`cards-${turma}`);
             const cards = container.getElementsByClassName('student-card');
-            
+
             for (let i = 0; i < cards.length; i++) {
                 const nameText = cards[i].querySelector('span').textContent || cards[i].querySelector('span').innerText;
                 if (nameText.toUpperCase().indexOf(filter) > -1) {
@@ -820,41 +863,41 @@ if (!isset($_SESSION['Email'])) {
                 }
             }
         }
-        
+
         // Função para inicializar paginação
         function initPagination() {
             const turmas = ['3a', '3b', '3c', '3d'];
             const itemsPerPage = 10;
-            
+
             turmas.forEach(turma => {
                 const container = document.getElementById(`cards-${turma}`);
                 if (!container) return;
-                
+
                 const cards = container.getElementsByClassName('student-card');
                 const totalPages = Math.ceil(cards.length / itemsPerPage);
-                
+
                 if (totalPages <= 1) return;
-                
+
                 const paginationContainer = document.getElementById(`pagination-${turma}`);
                 if (!paginationContainer) return;
-                
+
                 // Criar botões de paginação
                 let paginationHTML = '';
                 for (let i = 1; i <= totalPages; i++) {
                     paginationHTML += `<span class="pagination-btn ${i === 1 ? 'active' : ''}" data-page="${i}">${i}</span>`;
                 }
                 paginationContainer.innerHTML = paginationHTML;
-                
+
                 // Mostrar apenas a primeira página inicialmente
                 showPage(turma, 1, itemsPerPage);
-                
+
                 // Adicionar event listeners aos botões
                 const buttons = paginationContainer.getElementsByClassName('pagination-btn');
                 for (let i = 0; i < buttons.length; i++) {
                     buttons[i].addEventListener('click', function() {
                         const page = parseInt(this.getAttribute('data-page'));
                         showPage(turma, page, itemsPerPage);
-                        
+
                         // Atualizar classe ativa
                         for (let j = 0; j < buttons.length; j++) {
                             buttons[j].classList.remove('active');
@@ -864,15 +907,15 @@ if (!isset($_SESSION['Email'])) {
                 }
             });
         }
-        
+
         // Função para mostrar uma página específica
         function showPage(turma, page, itemsPerPage) {
             const container = document.getElementById(`cards-${turma}`);
             const cards = container.getElementsByClassName('student-card');
-            
+
             const startIndex = (page - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
-            
+
             for (let i = 0; i < cards.length; i++) {
                 if (i >= startIndex && i < endIndex) {
                     cards[i].style.display = '';
@@ -881,11 +924,15 @@ if (!isset($_SESSION['Email'])) {
                 }
             }
         }
-        
+
         // Inicializar paginação quando o documento estiver pronto
         document.addEventListener('DOMContentLoaded', function() {
             initPagination();
         });
+    </script>
+    <script>
+
+        
     </script>
 </body>
 
