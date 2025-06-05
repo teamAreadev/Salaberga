@@ -4,306 +4,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatorio</title>
-
+    <title>Relatórios - Salaberga</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="https://salaberga.com/salaberga/portalsalaberga/app/main/assets/img/Design%20sem%20nome.svg" type="image/xicon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ceara-green': '#008C45',
+                        'ceara-light-green': '#3CB371',
+                        'ceara-olive': '#8CA03E',
+                        'ceara-orange': '#FFA500',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --primary-color: #4CAF50;
-            --primary-hover: #45a049;
-            --text-color: #333;
-            --border-color: #ddd;
-            --error-color: #ff4444;
-            --background-color: #f8f9fa;
-            --gradient-primary: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            --gradient-accent: linear-gradient(135deg, #4CAF50 0%, #FFA500 100%);
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            height: 100%;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--background-color);
+            background: #f8fafc;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            position: relative;
-            padding-bottom: 60px;
-            padding-top: 70px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #008C45, #3CB371);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--gradient-primary);
-            height: 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
+            background: linear-gradient(90deg, #008C45, #3CB371);
         }
 
-        .header-title {
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .header-nav {
-            display: flex;
-            align-items: center;
-        }
-
-        .header-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background-color: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            color: white;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .header-btn:hover,
-        .header-btn:focus {
-            background-color: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-        }
-
-        .header-btn i {
-            font-size: 1rem;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
+        .report-card {
             background: white;
-            padding: 2.5rem;
             border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            text-align: center;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-accent);
-        }
-
-        .logo-container {
-            margin-bottom: 2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #logoSalaberga {
-            max-width: 160px;
-            height: auto;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: all 0.3s ease;
-            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
-        }
-
-        #logoSalaberga:hover {
-            transform: scale(1.05);
-        }
-
-        h1 {
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 1.5rem;
-            position: relative;
-            padding-bottom: 8px;
-        }
-
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 3px;
-            background: var(--gradient-accent);
-            border-radius: 3px;
-        }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-            text-align: left;
-            position: relative;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            background: white;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
-        }
-
-        .input-field::placeholder {
-            color: #999;
-        }
-
-        .select-field {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            background: white;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            background-size: 15px;
             cursor: pointer;
-        }
-
-        .select-field:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background: var(--gradient-primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            margin-top: 1.5rem;
-            box-shadow: 0 4px 10px rgba(69, 160, 73, 0.2);
-        }
-
-        .btn-submit::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--gradient-accent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .btn-submit:hover::before {
-            opacity: 1;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(69, 160, 73, 0.3);
-        }
-
-        .btn-submit span {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            margin-top: 1.5rem;
-            color: var(--primary-color);
             text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 8px 12px;
-            border-radius: 8px;
         }
 
-        .back-link:hover {
-            color: var(--primary-hover);
-            background-color: rgba(76, 175, 80, 0.05);
+        .report-card:hover {
             transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        .back-link i {
-            margin-right: 8px;
+        .report-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            transition: all 0.3s ease;
         }
 
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.85rem;
-            margin-top: 5px;
-            display: none;
-            text-align: left;
-            padding-left: 5px;
+        .report-card:hover .report-icon {
+            transform: scale(1.1);
         }
 
-        .input-field.error {
-            border-color: var(--error-color);
-        }
-
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            text-align: center;
-            padding: 1rem;
-            color: var(--text-color);
-            font-size: 0.9rem;
+        .footer {
             background: white;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            z-index: 1000;
+            border-top: 1px solid #e5e7eb;
         }
 
-        footer::before {
+        .footer::before {
             content: '';
             position: absolute;
             top: 0;
@@ -311,81 +86,90 @@
             transform: translateX(-50%);
             width: 100px;
             height: 2px;
-            background: var(--gradient-accent);
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 2rem;
-            }
-
-            footer {
-                padding: 0.8rem;
-                font-size: 0.8rem;
-            }
-
-            .header {
-                padding: 0 15px;
-                height: 56px;
-            }
-
-            .header-title {
-                font-size: 1rem;
-            }
-
-            .header-btn {
-                padding: 6px 12px;
-                font-size: 0.85rem;
-            }
-
-            h1 {
-                font-size: 1.4rem;
-            }
-
-            .input-field,
-            .select-field {
-                padding: 12px 14px;
-            }
-
-            .btn-submit {
-                padding: 12px;
-            }
+            background: linear-gradient(70deg, #008C45, rgb(225, 130, 6));
         }
     </style>
-
-
-
-
 </head>
 
-<body>
-
-    <header class="header">
-        <div class="header-title">Salaberga</div>
-        <nav class="header-nav">
-            <a href="../index.php" class="header-btn">
+<body class="min-h-screen flex flex-col">
+    <header class="header fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-6 text-white shadow-md z-50">
+        <div class="text-xl font-semibold">Salaberga</div>
+        <nav>
+            <a href="../index.php" class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors">
                 <i class="fas fa-home"></i>
                 <span>Menu</span>
             </a>
         </nav>
     </header>
 
-    <center>
-        <div class="container">
-            <h1>Gerar Relatório</h1>
+    <main class="flex-1 container mx-auto px-4 py-8 mt-16">
+        <div class="max-w-2xl mx-auto">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold mb-2">
+                    <span class="gradient-text">Relatórios do Sistema</span>
+                </h1>
+                <p class="text-gray-600">Selecione o tipo de relatório que deseja gerar</p>
+            </div>
 
-            <form id="saida-estagio" action="../control/control_index.php" method="POST">
+            <div class="space-y-4">
+                <form action="../control/control_index.php" method="POST" class="space-y-4">
+                    <button type="submit" name="btn" value="Entrada" class="report-card block w-full p-6 text-left">
+                        <div class="flex items-center gap-4">
+                            <div class="report-icon bg-blue-50 text-blue-600">
+                                <i class="fas fa-sign-in-alt text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Relatório de Entradas</h3>
+                                <p class="text-sm text-gray-500">Visualize o histórico de entradas dos alunos</p>
+                            </div>
+                        </div>
+                    </button>
 
-                <input id="btn" type="submit" value="Entrada" name="btn" class=" btn-submit" method="POST">
-                <input id="btn" type="submit" value="Saída" name="btn" class=" btn-submit" method="POST">
-                <input id="btn" type="submit" value="Saída-Estágio" name="btn" class=" btn-submit" method="POST">
-                <a href="relatorios/alunos_geral.php">Relatórios</a>
-                <footer>
-                    © 2025 Salaberga - Todos os direitos reservados
-                </footer>
+                    <button type="submit" name="btn" value="Saída" class="report-card block w-full p-6 text-left">
+                        <div class="flex items-center gap-4">
+                            <div class="report-icon bg-red-50 text-red-600">
+                                <i class="fas fa-sign-out-alt text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Relatório de Saídas</h3>
+                                <p class="text-sm text-gray-500">Visualize o histórico de saídas dos alunos</p>
+                            </div>
+                        </div>
+                    </button>
 
-    </center>
+                    <button type="submit" name="btn" value="Saída-Estágio" class="report-card block w-full p-6 text-left">
+                        <div class="flex items-center gap-4">
+                            <div class="report-icon bg-purple-50 text-purple-600">
+                                <i class="fas fa-briefcase text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Relatório de Saídas-Estágio</h3>
+                                <p class="text-sm text-gray-500">Visualize o histórico de saídas para estágio</p>
+                            </div>
+                        </div>
+                    </button>
+                </form>
 
+                <a href="relatorios/alunos_geral.php" class="report-card block p-6 text-left">
+                    <div class="flex items-center gap-4">
+                        <div class="report-icon bg-yellow-50 text-yellow-600">
+                            <i class="fas fa-users text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Relatório Geral de Alunos</h3>
+                            <p class="text-sm text-gray-500">Visualize informações gerais sobre todos os alunos</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer relative py-4 text-center text-gray-600 text-sm">
+        <div class="container mx-auto">
+            <p>© 2025 Sistema Escolar Salaberga. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 </body>
 
 </html>
