@@ -237,7 +237,7 @@
   <script>
     function redirect() {
       setTimeout(() => {
-        window.location = 'form_parcial.php';
+        window.location = '../autenticacao/login_parcial.php';
       }, 3000);
     }
     redirect();

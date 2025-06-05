@@ -4,15 +4,15 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+require_once(__DIR__ . '/../config/connect.php');
+
 function pre_cadastro($email, $cpf)
 {
-    require_once('../../config/Database.php');
-
     try {
         // NOTE: This function uses 'cpf' which is in the 'usuarios' table according to salaberga(1).sql.
         // Changed table name to 'usuarios'.
         $stmtSelect = "SELECT email, cpf FROM usuarios WHERE email = :email AND cpf = :cpf";
-        $stmt = $conexao->prepare($stmtSelect);
+        $stmt = getConnection()->prepare($stmtSelect);
 
         // Bind dos valores
         $stmt->bindParam(':email', $email);
@@ -41,13 +41,11 @@ function pre_cadastro($email, $cpf)
 
 function cadastrar($nome, $cpf, $email, $senha)
 {
-    require_once('../../config/Database.php');
-
     try {
         // NOTE: This function uses 'cpf' and 'nome', which are in the 'usuarios' table according to salaberga(1).sql.
         // Changed table name to 'usuarios'.
         $querySelect = "SELECT id FROM usuarios WHERE email = :email AND cpf = :cpf";
-        $stmtSelect = $conexao->prepare($querySelect);
+        $stmtSelect = getConnection()->prepare($querySelect);
         $stmtSelect->bindParam(':email', $email);
         $stmtSelect->bindParam(':cpf', $cpf);
         $stmtSelect->execute();
@@ -61,7 +59,7 @@ function cadastrar($nome, $cpf, $email, $senha)
                 UPDATE usuarios SET senha = MD5(:senha), nome = :nome WHERE email = :email AND (senha IS NULL OR senha = '')
             ";
 
-            $stmtUpdate = $conexao->prepare($queryUpdate);
+            $stmtUpdate = getConnection()->prepare($queryUpdate);
             $stmtUpdate->bindParam(':email', $email);
             $stmtUpdate->bindParam(':senha', $senha);
             $stmtUpdate->bindParam(':nome', $nome); // 'nome' is now in 'usuarios'
@@ -98,42 +96,23 @@ function login($email, $senha)
 {
     require_once('../../config/Database.php');
     try {
-        $conexao = Database::getSalabergaConnection();
-
+        $conexao = DatabaseManager::getSalabergaConnection();
+        
         // Prepara e executa a consulta para verificar o usuário na tabela 'usuarios'
-        $querySelectUser = "SELECT id, email, nome, senha FROM usuarios WHERE email = :email";
-        $stmtSelectUser = $conexao->prepare($querySelectUser);
+        // Included 'nome' in select as it's in the new schema
+        $querySelectUser = "SELECT id, email, nome FROM usuarios WHERE email = :email AND senha = MD5(:senha)";
+        $stmtSelectUser = $conexao->prepare(query: $querySelectUser);
         $stmtSelectUser->bindParam(':email', $email);
+        $stmtSelectUser->bindParam(':senha', $senha);
         $stmtSelectUser->execute();
-        $user = $stmtSelectUser->fetch(PDO::FETCH_ASSOC);
-
-        $login_successful = false;
+        $user = $stmtSelectUser->fetchAll(PDO::FETCH_ASSOC);
+        print_r($user);
+        print($email);
+        print($senha);
 
         if (!empty($user)) {
-            // Verifica se a senha corresponde usando bcrypt (para senhas já migradas)
-            if (password_verify($senha, $user['senha'])) {
-                $login_successful = true;
-            } else {
-                // Se não corresponder com bcrypt, verifica se é uma senha MD5 antiga
-                // MD5 hashes são tipicamente 32 caracteres hexadecimais
-                if (strlen($user['senha']) === 32 && ctype_xdigit($user['senha'])) {
-                    if (md5($senha) === $user['senha']) {
-                        $login_successful = true;
-                        // Senha MD5 correta, agora faça a migração para bcrypt
-                        $new_senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-                        $update_query = "UPDATE usuarios SET senha = :new_senha WHERE id = :userId";
-                        $update_stmt = $conexao->prepare($update_query);
-                        $update_stmt->bindParam(':new_senha', $new_senha_hash);
-                        $update_stmt->bindParam(':userId', $user['id']);
-                        $update_stmt->execute();
-                        error_log("Senha MD5 migrada para bcrypt para o usuário: " . $email);
-                    }
-                }
-            }
-        }
-
-        if ($login_successful) {
-            // Login bem sucedido, busca sistemas e permissões para este usuário
+            // Login successful, fetch systems and permissions for this user
+            // UPDATED QUERY TO USE NEW usu_sist STRUCTURE (usuario_id links to sist_perm_id)
             $queryUserSystemsPermissions = "
                 SELECT
                     s.id AS sistema_id,
@@ -142,14 +121,14 @@ function login($email, $senha)
                     p.descricao AS permissao_descricao
                 FROM
                     usuarios u
-                LEFT JOIN
+                INNER JOIN
                     usu_sist us ON u.id = us.usuario_id
-                LEFT JOIN
-                    sist_perm sp ON us.sist_perm_id = sp.id
-                LEFT JOIN
-                    sistemas s ON sp.sistema_id = s.id
-                LEFT JOIN
-                    permissoes p ON sp.permissao_id = p.id
+                INNER JOIN
+                    sist_perm sp ON us.sist_perm_id = sp.id -- Join usu_sist to sist_perm
+                INNER JOIN
+                    sistemas s ON sp.sistema_id = s.id     -- Join sist_perm to sistemas
+                INNER JOIN
+                    permissoes p ON sp.permissao_id = p.id -- Join sist_perm to permissoes
                 WHERE
                     u.id = :userId
             ";
@@ -159,23 +138,26 @@ function login($email, $senha)
             $stmtUserSystemsPermissions->execute();
             $userSystemsPermissions = $stmtUserSystemsPermissions->fetchAll(PDO::FETCH_ASSOC);
 
-            // Armazena dados relevantes do usuário e sistemas/permissões na sessão
+            // Store relevant user data and systems/permissions in session
             $_SESSION['login'] = true;
-            $_SESSION['user_id'] = $user['id']; // Armazena o ID do usuário na sessão
             $_SESSION['Email'] = $user['email'];
-            $_SESSION['Senha'] = str_repeat('•', strlen($senha)); // Evitar armazenar senha real
-            $_SESSION['Nome'] = $user['nome'];
-            $_SESSION['user_systems_permissions'] = $userSystemsPermissions;
+             // Note: Storing raw password (even masked) is not recommended.
+            $_SESSION['Senha'] = str_repeat('•', strlen($senha)); // Example: store masked password
 
-            return true;
+            $_SESSION['Nome'] = $user['nome']; // 'nome' is available in the new 'usuarios' table
+
+            $_SESSION['user_systems_permissions'] = $userSystemsPermissions; // Store fetched data
+
+            return true; // Indicate successful login
+
         } else {
-            error_log("Tentativa de login falhou para o email: " . $email);
-            return false;
+            return false; // Indicate login failure
         }
 
     } catch (PDOException $e) {
-        error_log("Erro no banco de dados durante login: " . $e->getMessage());
-        return false;
+        error_log("Erro no banco de dados: " . $e->getMessage());
+        echo "Erro no banco de dados: " . $e->getMessage();
+        return false; // Indicate error
     }
 }
 
@@ -183,16 +165,14 @@ function login_parcial($email, $senha)
 {
     error_log("Debug: login_parcial function called.");
     try {
-        // Conexão direta com o banco de dados login_parcial
-        $conexao = new PDO("mysql:host=localhost;dbname=login_parcial", "root", "");
+        $conexao = getConnection();
         $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         error_log("Debug: Database connection successful in login_parcial.");
 
-        // Prepara e executa a consulta para verificar o usuário na tabela 'usuarios'
-        $querySelectUser = "SELECT id, email, senha, equipe FROM usuarios WHERE email = :email AND senha = :senha";
+        // Primeiro, busca o usuário apenas pelo email
+        $querySelectUser = "SELECT id, email, senha, equipe, voto FROM usuarios WHERE email = :email";
         $stmtSelectUser = $conexao->prepare($querySelectUser);
         $stmtSelectUser->bindParam(':email', $email);
-        $stmtSelectUser->bindParam(':senha', $senha);
         $stmtSelectUser->execute();
         $user = $stmtSelectUser->fetch(PDO::FETCH_ASSOC);
 
@@ -200,19 +180,21 @@ function login_parcial($email, $senha)
 
         if (!empty($user)) {
             error_log("Debug: User found in login_parcial. User ID: " . $user['id'] . ", Equipe: " . $user['equipe']);
-            // Armazena dados relevantes do usuário e sistemas/permissões na sessão
-            $_SESSION['login'] = true;
-            $_SESSION['user_id'] = $user['id']; // Armazena o ID do usuário na sessão
-            $_SESSION['Email'] = $user['email'];
-            $_SESSION['Senha'] = str_repeat('•', strlen($senha)); // Evitar armazenar senha real
-            $_SESSION['equipe'] = $user['equipe'];
-            error_log("Debug: Session variables set in login_parcial.");
-            return true;
-        } else {
-            error_log("Debug: User not found or password incorrect in login_parcial.");
-            return false;
+            
+            // Comparação direta da senha, já que está em texto puro no banco login_parcial
+            if ($senha === $user['senha']) {
+                $_SESSION['login'] = true;
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['Email'] = $user['email'];
+                $_SESSION['Senha'] = str_repeat('•', strlen($senha));
+                $_SESSION['equipe'] = $user['equipe'];
+                $_SESSION['voto'] = $user['voto'];
+                return true;
+            }
         }
-
+        
+        error_log("Debug: Login failed in login_parcial for email: " . $email);
+        return false;
     } catch (PDOException $e) {
         error_log("Erro no banco de dados durante login_parcial: " . $e->getMessage());
         return false;
@@ -221,11 +203,10 @@ function login_parcial($email, $senha)
 
 function recSenha($email)
 {
-    require_once('../../config/Database.php');
     try {
         // Uses 'email', which is in the 'usuarios' table in salaberga(1).sql.
         $querySelect = "SELECT email FROM usuarios WHERE email = :email";
-        $stmtSelect = $conexao->prepare($querySelect);
+        $stmtSelect = getConnection()->prepare($querySelect);
         $stmtSelect->bindParam(':email', $email);
         $stmtSelect->execute();
         $result = $stmtSelect->fetch(PDO::FETCH_ASSOC);
@@ -282,20 +263,19 @@ function recSenha($email)
 
 function alterarTelefone($telefone)
 {
-    require_once('../../config/Database.php');
     try {
         // NOTE: This function uses 'telefone', which is NOT in the 'usuarios' table according to salaberga(1).sql.
         // This function will likely fail unless 'telefone' is added to 'usuarios' or handled elsewhere.
         // Original logic kept for now, assuming 'telefone' might be added to 'usuarios'.
         $querySelect = "SELECT id FROM usuarios WHERE email = :email";
-        $stmtSelect = $conexao->prepare($querySelect);
+        $stmtSelect = getConnection()->prepare($querySelect);
         $stmtSelect->bindParam(':email', $_SESSION['Email']);
         $stmtSelect->execute();
         $resultSelect = $stmtSelect->fetch(PDO::FETCH_ASSOC);
 
         if (!empty($resultSelect)) {
             $queryUpdate = "UPDATE usuarios SET telefone = :telefone WHERE id = :id"; // Assumes 'telefone' is in 'usuarios'
-            $stmtUpdate = $conexao->prepare($queryUpdate);
+            $stmtUpdate = getConnection()->prepare($queryUpdate);
             $stmtUpdate->bindParam(':id', $resultSelect['id']);
             $stmtUpdate->bindParam(':telefone', $telefone);
             $stmtUpdate->execute();
@@ -314,7 +294,7 @@ function alterarTelefone($telefone)
 
 function alterarSenha($novaSenha, $confSenha, $senhaAntiga) {
     try {
-        require_once('../../config/Database.php');
+        $conexao = getConnection();
 
         // Busca a senha criptografada na tabela 'usuarios'
         $querySelect = "SELECT id, senha FROM usuarios WHERE email = :email";
@@ -357,7 +337,7 @@ function alterarSenha($novaSenha, $confSenha, $senhaAntiga) {
 function alterarEmail($email,$senha)
 {
     try {
-        require_once('../../config/Database.php');
+        $conexao = getConnection();
 
         // Busca o usuário pela senha e email da sessão para verificação na tabela 'usuarios'
         $querySelect = "SELECT id, email FROM usuarios where senha = MD5(:senha) AND email = :emailAtual";
@@ -396,7 +376,7 @@ function getAlunosByEquipe($id_equipe)
     error_log("Debug: getAlunosByEquipe called with equipe ID: " . $id_equipe);
     try {
         // Conexão direta com o banco de dados login_parcial
-        $conexao = new PDO("mysql:host=localhost;dbname=login_parcial", "root", "");
+        $conexao = getConnection();
         $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         error_log("Debug: Database connection successful in getAlunosByEquipe.");
 
@@ -423,7 +403,7 @@ function getEquipeNome($id_equipe)
 {
     try {
         // Conexão direta com o banco de dados login_parcial
-        $conexao = new PDO("mysql:host=localhost;dbname=login_parcial", "root", "");
+        $conexao = getConnection();
         $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Prepara e executa a consulta para buscar o nome da equipe

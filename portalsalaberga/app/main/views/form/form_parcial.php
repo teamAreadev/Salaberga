@@ -86,6 +86,14 @@ $equipeData = [
 
 error_log("Debug: alunos_da_equipe before JSON encode: " . print_r($alunos_da_equipe, true));
 
+if ($_SESSION['login'] == true) {
+    if ($_SESSION['voto'] == 1) {
+        // Usuário já votou, redirecionar
+        header('Location: ../../views/form/already_voted.php');
+        exit();
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">

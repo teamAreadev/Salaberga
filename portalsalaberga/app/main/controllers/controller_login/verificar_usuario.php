@@ -1,8 +1,8 @@
 <?php
-require_once('../../config/Database.php');
+require_once(__DIR__ . '/../../config/connect.php');
 
 try {
-    $conexao = Database::getConnection();
+    $conexao = getConnection();
     
     // Verifica se o usuário existe
     $email = '1@gmail.com';

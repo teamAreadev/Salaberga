@@ -395,16 +395,31 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
             });
 
 
+            // Add CSS for ripple animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(2);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
 
+            // Auto-focus first input
+            document.getElementById('email').focus();
+        });
 
-            function calculatePasswordStrength(password) {
-                const length = password.length;
-                if (length === 0) return 0;
-                if (length < 4) return 25;
-                if (length < 8) return 50;
-                if (length < 12) return 75;
-                return 100;
+        // Enhanced accessibility
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-navigation');
             }
+        });
+
+        document.addEventListener('mousedown', function() {
+            document.body.classList.remove('keyboard-navigation');
         });
     </script>
 </body>
