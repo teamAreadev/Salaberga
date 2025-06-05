@@ -169,7 +169,7 @@
     <header class="header fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-6 text-white shadow-md z-50">
         <div class="text-xl font-semibold">Salaberga</div>
         <nav>
-            <a href="index.php" class="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
+            <a href="inicio.php" class="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
                 <i class="fas fa-home"></i>
                 <span>Menu</span>
             </a>

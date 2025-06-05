@@ -319,31 +319,115 @@ $select = new select_model;
             height: 44px;
             border: 2px solid #e5e7eb;
             border-radius: 8px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .select2-container--default .select2-selection--single:hover {
+            border-color: #d1d5db;
+            background-color: #f9fafb;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: 40px;
             padding-left: 12px;
             color: #374151;
+            font-size: 0.875rem;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 40px;
             right: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow {
+            transform: rotate(180deg);
         }
 
         .select2-container--default.select2-container--focus .select2-selection--single {
             border-color: #008C45;
             box-shadow: 0 0 0 3px rgba(0, 140, 69, 0.1);
+            background-color: white;
         }
 
         .select2-dropdown {
             border: 2px solid #e5e7eb;
             border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            margin-top: 4px;
+        }
+
+        .select2-container--default .select2-results__option {
+            padding: 12px 16px;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .select2-container--default .select2-results__option:hover {
+            background-color: #f3f4f6;
         }
 
         .select2-container--default .select2-results__option--highlighted[aria-selected] {
             background-color: #008C45;
+            color: white;
+        }
+
+        .select2-container--default .select2-results__option[aria-selected=true] {
+            background-color: #f3f4f6;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .select2-search--dropdown {
+            padding: 8px;
+        }
+
+        .select2-search--dropdown .select2-search__field {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .select2-search--dropdown .select2-search__field:hover {
+            border-color: #9ca3af;
+        }
+
+        .select2-search--dropdown .select2-search__field:focus {
+            border-color: #008C45;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 140, 69, 0.1);
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__clear {
+            color: #6b7280;
+            margin-right: 32px;
+            font-size: 1.25rem;
+            transition: color 0.2s ease;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__clear:hover {
+            color: #ef4444;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: #9ca3af;
+        }
+
+        /* Loading state for Select2 */
+        .select2-container--default.select2-container--loading .select2-selection--single {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23008C45' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 40px center;
+            background-size: 16px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         @media (max-width: 640px) {
@@ -382,7 +466,7 @@ $select = new select_model;
             Salaberga
         </div>
         <nav class="header-nav">
-            <a href="index.php" class="header-btn">
+            <a href="inicio.php" class="header-btn">
                 <i class="fas fa-home"></i>
                 <span>Menu</span>
             </a>
@@ -565,13 +649,56 @@ $select = new select_model;
     </footer>
 
     <script>
-        // Initialize Select2
+        // Initialize Select2 with enhanced options
         $(document).ready(function() {
             $('.js-example-basic-single').select2({
                 placeholder: "Buscar aluno...",
                 allowClear: true,
-                width: '100%'
+                width: '100%',
+                language: {
+                    noResults: function() {
+                        return "Nenhum aluno encontrado";
+                    },
+                    searching: function() {
+                        return "Buscando...";
+                    }
+                },
+                templateResult: formatStudent,
+                templateSelection: formatStudentSelection
             });
+
+            // Custom formatting for student options
+            function formatStudent(student) {
+                if (!student.id) return student.text;
+                
+                return $(`
+                    <div class="flex items-center gap-2 py-1">
+                        <i class="fas fa-user-graduate text-ceara-green"></i>
+                        <span>${student.text}</span>
+                    </div>
+                `);
+            }
+
+            function formatStudentSelection(student) {
+                if (!student.id) return student.text;
+                
+                return $(`
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-user-graduate text-ceara-green"></i>
+                        <span>${student.text}</span>
+                    </div>
+                `);
+            }
+
+            // Add hover effect to select container
+            $('.select2-container').hover(
+                function() {
+                    $(this).find('.select2-selection--single').addClass('hover');
+                },
+                function() {
+                    $(this).find('.select2-selection--single').removeClass('hover');
+                }
+            );
         });
 
         // Tab functionality

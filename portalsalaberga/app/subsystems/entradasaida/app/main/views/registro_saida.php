@@ -1,4 +1,3 @@
-
 <?php
 require_once('../model/select_model.php');
 $select = new select_model;
@@ -300,7 +299,7 @@ verificarSessao(600);
   <header class="header">
     <div class="header-title">Salaberga</div>
     <nav class="header-nav">
-      <a href="index.php" class="header-btn">
+      <a href="inicio.php" class="header-btn">
         <i class="fas fa-home"></i>
         <span>Menu</span>
       </a>

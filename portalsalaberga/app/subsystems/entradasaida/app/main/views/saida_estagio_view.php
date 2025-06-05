@@ -261,7 +261,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
             Salaberga
         </div>
         <nav class="flex items-center gap-3">
-            <a href="/inicio.php" class="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
+            <a href="inicio.php" class="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
                 <i class="fas fa-home"></i>
                 <span>Menu</span>
             </a>
