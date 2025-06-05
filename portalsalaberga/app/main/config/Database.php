@@ -22,7 +22,7 @@ class DatabaseManager {
                     $username = "root";
                     $password = "";
                 } else {
-                    $dsn = 'mysql:host=localhost;dbname=u750204740_salaberga'; // Production DB Name
+                    $dsn = 'mysql:host=localhost;dbname=u750204740_portalsaberga'; // Production DB Name
                     $username = "u750204740_salaberga";
                     $password = "paoComOvo123!@##"; // Production Password
                 }
