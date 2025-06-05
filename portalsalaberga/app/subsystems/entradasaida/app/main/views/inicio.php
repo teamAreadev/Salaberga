@@ -16,317 +16,179 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema Escolar - Menu</title>
-  <link rel="stylesheet" href="../assets/css/index.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'ceara-green': '#008C45',
+            'ceara-light-green': '#3CB371',
+            'ceara-olive': '#8CA03E',
+            'ceara-orange': '#FFA500',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #f8fafc;
+      min-height: 100vh;
+    }
+
+    .menu-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .menu-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .menu-card:hover .menu-icon {
+      transform: scale(1.1);
+    }
+
+    .gradient-text {
+      background: linear-gradient(45deg, #008C45, #3CB371);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header {
+      background: linear-gradient(90deg, #008C45, #3CB371);
+    }
+
+    .footer {
+      background: white;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 2px;
+      background: linear-gradient(70deg, #008C45,rgb(225, 130, 6));
+    }
+  </style>
 </head>
-<style>
-:root {
-    --primary-color: #007A33;
-    --secondary-color: #FFA500;
-    --accent-color: #005522;
-    --success-color: #00A34F;
-    --text-color: #333333;
-    --light-bg: #f8f9fa;
-    --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    height: 100%;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    padding-bottom: 60px;
-    padding-top: 70px;
-}
-
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-    height: 60px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-}
-
-.header-title {
-    color: white;
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-.header-nav {
-    display: flex;
-    align-items: center;
-}
-
-.logout-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background-color: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    color: white;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-.logout-btn:hover, 
-.logout-btn:focus {
-    background-color: rgba(255, 255, 255, 0.25);
-    transform: translateY(-2px);
-}
-
-.logout-btn i {
-    font-size: 1rem;
-}
-
-.container {
-    width: 100%;
-    max-width: 600px;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 2.5rem;
-    border-radius: 20px;
-    box-shadow: var(--card-shadow);
-    backdrop-filter: blur(10px);
-    position: relative;
-    overflow: hidden;
-    margin: 2rem auto;
-    border: 1px solid rgba(0, 122, 51, 0.1);
-}
-
-.container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-}
-
-.logo-container {
-    margin-bottom: 2.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    padding: 1rem;
-    background: rgba(0, 122, 51, 0.05);
-    border-radius: 15px;
-}
-
-#logoSalaberga {
-    max-width: 220px;
-    height: auto;
-    transition: var(--transition);
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
-}
-
-#logoSalaberga:hover {
-    transform: scale(1.05) rotate(-2deg);
-}
-
-.menu-btn {
-    position: relative;
-    width: 100%;
-    padding: 1.2rem;
-    background: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    border: 1px solid rgba(0, 122, 51, 0.1);
-}
-
-.menu-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    transition: var(--transition);
-}
-
-.menu-btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 122, 51, 0.1);
-    border-color: var(--primary-color);
-}
-
-.menu-btn:hover::before {
-    height: 100%;
-    opacity: 0.1;
-}
-
-.menu-btn .icon {
-    width: 24px;
-    height: 24px;
-    min-width: 24px;
-    transition: var(--transition);
-    stroke: var(--primary-color);
-    stroke-width: 1.5;
-    fill: none;
-}
-
-.menu-btn:hover .icon {
-    transform: scale(1.1);
-    stroke: var(--secondary-color);
-}
-
-.menu-btn span {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-color);
-    z-index: 1;
-}
-
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    text-align: center;
-    padding: 1rem;
-    color: var(--text-color);
-    font-size: 0.9rem;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(0, 122, 51, 0.1);
-    z-index: 1000;
-}
-
-footer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 2px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-}
-
-@media (max-width: 480px) {
-    .container {
-        padding: 1.5rem;
-        margin: 1rem auto;
-    }
-
-    .menu-btn {
-        padding: 1rem;
-    }
-
-    .menu-btn .icon {
-        width: 20px;
-        height: 20px;
-        min-width: 20px;
-    }
-
-    .logo-container {
-        padding: 0.8rem;
-    }
-
-    footer {
-        padding: 0.8rem;
-        font-size: 0.8rem;
-    }
-    
-    .header {
-        padding: 0 15px;
-        height: 56px;
-    }
-    
-    .header-title {
-        font-size: 1rem;
-    }
-    
-    .logout-btn {
-        padding: 6px 12px;
-        font-size: 0.85rem;
-    }
-}
-
-@media (max-width: 360px) {
-    .header {
-        padding: 0 10px;
-    }
-    
-    .header-title {
-        font-size: 0.9rem;
-    }
-    
-    .logout-btn {
-        padding: 5px 10px;
-        font-size: 0.8rem;
-    }
-    
-    .logout-btn i {
-        font-size: 0.9rem;
-    }
-}</style>
-<body>
-
-<header class="header">
-    <div class="header-title">Salaberga</div>
-    <nav class="header-nav">
-      <a href="../control/controller_sessao/verificar_sessao.php?sair=1" class="logout-btn">
+<body class="min-h-screen flex flex-col">
+  <header class="header fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-6 text-white shadow-md z-50">
+    <div class="text-xl font-semibold">Salaberga</div>
+    <nav>
+      <a href="../control/controller_sessao/verificar_sessao.php?sair=1" 
+         class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors">
         <i class="fas fa-sign-out-alt"></i>
         <span>Sair</span>
       </a>
     </nav>
   </header>
 
-  <div class="container">
-    <div>
-        <h1>Sistema de Entradas e Saídas</h1>
+  <main class="flex-1 container mx-auto px-4 py-8 mt-16">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold mb-2">
+          <span class="gradient-text">Sistema de Entradas e Saídas</span>
+        </h1>
+        <p class="text-gray-600">Gerencie as entradas e saídas dos alunos de forma eficiente</p>
+      </div>
 
-        <a class="menu-btn cadastro" href="cadastro/cadastro_aluno.php">Cadastrar Aluno</a>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <a href="cadastro/cadastro_aluno.php" class="menu-card p-6 flex items-center gap-4 group">
+          <div class="menu-icon bg-green-50 text-ceara-green">
+            <i class="fas fa-user-plus text-xl"></i>
+          </div>
+          <div>
+            <h3 class="font-semibold text-gray-900 group-hover:text-ceara-green transition-colors">Cadastrar Aluno</h3>
+            <p class="text-sm text-gray-500">Adicione novos alunos ao sistema</p>
+          </div>
+        </a>
 
-        <a class="menu-btn entrada" href="entrada/entrada_aluno.php">Registrar Entrada</a>
+        <a href="entrada/entrada_aluno.php" class="menu-card p-6 flex items-center gap-4 group">
+          <div class="menu-icon bg-blue-50 text-blue-600">
+            <i class="fas fa-sign-in-alt text-xl"></i>
+          </div>
+          <div>
+            <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">Registrar Entrada</h3>
+            <p class="text-sm text-gray-500">Registre a entrada dos alunos</p>
+          </div>
+        </a>
 
-        <a class="menu-btn saida" href="saida/saida_aluno.php">Registrar Saída</a>
+        <a href="saida/saida_aluno.php" class="menu-card p-6 flex items-center gap-4 group">
+          <div class="menu-icon bg-red-50 text-red-600">
+            <i class="fas fa-sign-out-alt text-xl"></i>
+          </div>
+          <div>
+            <h3 class="font-semibold text-gray-900 group-hover:text-red-600 transition-colors">Registrar Saída</h3>
+            <p class="text-sm text-gray-500">Registre a saída dos alunos</p>
+          </div>
+        </a>
 
-        <a class="menu-btn saida-estagio" href="saida_estagio/saida_estagio_aluno.php">Registrar Saída-Estágio</a>
+        <a href="saida_estagio/saida_estagio_aluno.php" class="menu-card p-6 flex items-center gap-4 group">
+          <div class="menu-icon bg-purple-50 text-purple-600">
+            <i class="fas fa-briefcase text-xl"></i>
+          </div>
+          <div>
+            <h3 class="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">Registrar Saída-Estágio</h3>
+            <p class="text-sm text-gray-500">Registre saídas para estágio</p>
+          </div>
+        </a>
 
-        <a class="menu-btn relatorio" href="relatorio.php">Relatórios</a>
+        <a href="relatorio.php" class="menu-card p-6 flex items-center gap-4 group">
+          <div class="menu-icon bg-yellow-50 text-yellow-600">
+            <i class="fas fa-chart-bar text-xl"></i>
+          </div>
+          <div>
+            <h3 class="font-semibold text-gray-900 group-hover:text-yellow-600 transition-colors">Relatórios</h3>
+            <p class="text-sm text-gray-500">Visualize relatórios do sistema</p>
+          </div>
+        </a>
 
-        <a class="menu-btn relatorio" href="relatorios/ultimo_registro.php">Ultimas Saídas</a>
+        <a href="relatorios/ultimo_registro.php" class="menu-card p-6 flex items-center gap-4 group">
+          <div class="menu-icon bg-cyan-50 text-cyan-600">
+            <i class="fas fa-history text-xl"></i>
+          </div>
+          <div>
+            <h3 class="font-semibold text-gray-900 group-hover:text-cyan-600 transition-colors">Últimas Saídas</h3>
+            <p class="text-sm text-gray-500">Acompanhe as últimas saídas registradas</p>
+          </div>
+        </a>
+      </div>
     </div>
-  </div>
+  </main>
 
-
+  <footer class="footer relative py-4 text-center text-gray-600 text-sm">
+    <div class="container mx-auto">
+      <p>© 2024 Sistema Escolar Salaberga. Todos os direitos reservados.</p>
+    </div>
+  </footer>
 </body>
 
 </html>

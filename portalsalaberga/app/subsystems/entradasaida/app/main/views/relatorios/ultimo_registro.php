@@ -63,32 +63,53 @@ if (!isset($_SESSION['Email'])) {
 
         .class-card {
             background: white;
-            border-radius: 12px;
+            border-radius: 8px;
             border: 1px solid #e5e7eb;
             transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
         }
 
         .class-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .student-item {
-            padding: 12px 16px;
-            border-radius: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
             transition: background-color 0.15s ease;
-            border-left: 3px solid transparent;
         }
 
         .student-item:hover {
             background-color: #f9fafb;
         }
 
-        .card-3a .student-item:hover { border-left-color: #dc3545; background-color: #fef2f2; }
-        .card-3b .student-item:hover { border-left-color: #4169E1; background-color: #eff6ff; }
-        .card-3c .student-item:hover { border-left-color: #0dcaf0; background-color: #f0fdff; }
-        .card-3d .student-item:hover { border-left-color: #6c757d; background-color: #f8f9fa; }
+        .student-list {
+            max-height: 300px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #e5e7eb #ffffff;
+        }
+
+        .student-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .student-list::-webkit-scrollbar-track {
+            background: #ffffff;
+            border-radius: 3px;
+        }
+
+        .student-list::-webkit-scrollbar-thumb {
+            background-color: #e5e7eb;
+            border-radius: 3px;
+        }
+
+        .student-list::-webkit-scrollbar-thumb:hover {
+            background-color: #d1d5db;
+        }
 
         .header-bar-3a { background: linear-gradient(90deg, #dc3545, #c82333); }
         .header-bar-3b { background: linear-gradient(90deg, #4169E1, #3651d1); }
@@ -96,7 +117,63 @@ if (!isset($_SESSION['Email'])) {
         .header-bar-3d { background: linear-gradient(90deg, #6c757d, #5a6268); }
 
         .gradient-text {
-            background: linear-gradient(45deg, #008C45, #FFA500);
+            background: linear-gradient(45deg, #008C45, #008C45);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-name-1 {
+            background: linear-gradient(45deg, #008C45, #00BFA5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-name-2 {
+            background: linear-gradient(45deg, #6C63FF, #4A90E2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-name-3 {
+            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-name-4 {
+            background: linear-gradient(45deg, #9B59B6, #8E44AD);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text-3a {
+            background: linear-gradient(45deg, #dc3545, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text-3b {
+            background: linear-gradient(45deg, #4169E1, #6c8fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text-3c {
+            background: linear-gradient(45deg, #0dcaf0, #4dd4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text-3d {
+            background: linear-gradient(45deg, #6c757d, #9ca3af);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -208,22 +285,23 @@ if (!isset($_SESSION['Email'])) {
 
 <body class="min-h-screen p-4 md:p-8">
     <div class="main-container max-w-7xl mx-auto p-6 md:p-8">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold mb-4">
-                <span class="gradient-text">Frequências Registradas em:</span>
-            </h1>
-            <div class="inline-flex items-center bg-white rounded-lg px-4 py-2 shadow-sm border">
-                <i class="fas fa-calendar-day text-ceara-green mr-2"></i>
-                <span class="text-xl font-semibold text-gray-700"><?php echo date('d/m/Y'); ?></span>
+        <div class="text-center mb-6">
+            <div class="flex items-center justify-center gap-4">
+                <h1 class="text-2xl md:text-3xl font-semibold">
+                    <span class="gradient-text">Relatório de Frequências em:</span>
+                </h1>
+                <div class="inline-flex items-center bg-white rounded-lg px-3 py-1.5 shadow-sm border">
+                    <i class="fas fa-calendar-day text-ceara-green mr-2"></i>
+                    <span class="text-base font-medium text-gray-700"><?php echo date('d/m/Y'); ?></span>
+                </div>
             </div>
         </div>
 
         <div class="grid grid-responsive">
             <div class="class-card card-3a">
-                <div class="header-bar-3a h-2 rounded-t-xl"></div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-semibold text-danger flex items-center">
+                <div class="p-3 flex-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-lg font-medium text-danger flex items-center">
                             <i class="fas fa-users mr-2"></i>
                             3º Ano A
                         </h2>
@@ -231,15 +309,15 @@ if (!isset($_SESSION['Email'])) {
                         $dados_3a = $select->saida_estagio_3A();
                         $count_3a = count($dados_3a);
                         ?>
-                        <span class="bg-red-100 text-danger px-3 py-1 rounded-full text-sm font-medium">
+                        <span class="bg-red-100 text-danger px-2 py-0.5 rounded-full text-sm">
                             <?= $count_3a ?>
                         </span>
                     </div>
-                    <div class="space-y-2">
+                    <div class="student-list space-y-1">
                         <?php foreach ($dados_3a as $dado) { ?>
                             <div class="student-item">
-                                <i class="fas fa-user-graduate mr-3 text-danger text-sm"></i>
-                                <span class="text-gray-700"><?= $dado['nome'] ?></span>
+                                <i class="fas fa-user-graduate mr-2 text-danger text-sm"></i>
+                                <span class="text-gray-900"><?= $dado['nome'] ?></span>
                             </div>
                         <?php } ?>
                     </div>
@@ -247,10 +325,9 @@ if (!isset($_SESSION['Email'])) {
             </div>
 
             <div class="class-card card-3b">
-                <div class="header-bar-3b h-2 rounded-t-xl"></div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-semibold text-info flex items-center">
+                <div class="p-3 flex-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-lg font-medium text-info flex items-center">
                             <i class="fas fa-users mr-2"></i>
                             3º Ano B
                         </h2>
@@ -258,15 +335,15 @@ if (!isset($_SESSION['Email'])) {
                         $dados_3b = $select->saida_estagio_3B();
                         $count_3b = count($dados_3b);
                         ?>
-                        <span class="bg-blue-100 text-info px-3 py-1 rounded-full text-sm font-medium">
+                        <span class="bg-blue-100 text-info px-2 py-0.5 rounded-full text-sm">
                             <?= $count_3b ?>
                         </span>
                     </div>
-                    <div class="space-y-2">
+                    <div class="student-list space-y-1">
                         <?php foreach ($dados_3b as $dado) { ?>
                             <div class="student-item">
-                                <i class="fas fa-user-graduate mr-3 text-info text-sm"></i>
-                                <span class="text-gray-700"><?= $dado['nome'] ?></span>
+                                <i class="fas fa-user-graduate mr-2 text-info text-sm"></i>
+                                <span class="text-gray-900"><?= $dado['nome'] ?></span>
                             </div>
                         <?php } ?>
                     </div>
@@ -274,10 +351,9 @@ if (!isset($_SESSION['Email'])) {
             </div>
 
             <div class="class-card card-3c">
-                <div class="header-bar-3c h-2 rounded-t-xl"></div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-semibold text-admin flex items-center">
+                <div class="p-3 flex-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-lg font-medium text-admin flex items-center">
                             <i class="fas fa-users mr-2"></i>
                             3º Ano C
                         </h2>
@@ -285,15 +361,15 @@ if (!isset($_SESSION['Email'])) {
                         $dados_3c = $select->saida_estagio_3C();
                         $count_3c = count($dados_3c);
                         ?>
-                        <span class="bg-cyan-100 text-admin px-3 py-1 rounded-full text-sm font-medium">
+                        <span class="bg-cyan-100 text-admin px-2 py-0.5 rounded-full text-sm">
                             <?= $count_3c ?>
                         </span>
                     </div>
-                    <div class="space-y-2">
+                    <div class="student-list space-y-1">
                         <?php foreach ($dados_3c as $dado) { ?>
                             <div class="student-item">
-                                <i class="fas fa-user-graduate mr-3 text-admin text-sm"></i>
-                                <span class="text-gray-700"><?= $dado['nome'] ?></span>
+                                <i class="fas fa-user-graduate mr-2 text-admin text-sm"></i>
+                                <span class="text-gray-900"><?= $dado['nome'] ?></span>
                             </div>
                         <?php } ?>
                     </div>
@@ -301,10 +377,9 @@ if (!isset($_SESSION['Email'])) {
             </div>
 
             <div class="class-card card-3d">
-                <div class="header-bar-3d h-2 rounded-t-xl"></div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-semibold text-grey flex items-center">
+                <div class="p-3 flex-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-lg font-medium text-grey flex items-center">
                             <i class="fas fa-users mr-2"></i>
                             3º Ano D
                         </h2>
@@ -312,15 +387,15 @@ if (!isset($_SESSION['Email'])) {
                         $dados_3d = $select->saida_estagio_3D();
                         $count_3d = count($dados_3d);
                         ?>
-                        <span class="bg-gray-100 text-grey px-3 py-1 rounded-full text-sm font-medium">
+                        <span class="bg-gray-100 text-grey px-2 py-0.5 rounded-full text-sm">
                             <?= $count_3d ?>
                         </span>
                     </div>
-                    <div class="space-y-2">
+                    <div class="student-list space-y-1">
                         <?php foreach ($dados_3d as $dado) { ?>
                             <div class="student-item">
-                                <i class="fas fa-user-graduate mr-3 text-grey text-sm"></i>
-                                <span class="text-gray-700"><?= $dado['nome'] ?></span>
+                                <i class="fas fa-user-graduate mr-2 text-grey text-sm"></i>
+                                <span class="text-gray-900"><?= $dado['nome'] ?></span>
                             </div>
                         <?php } ?>
                     </div>
