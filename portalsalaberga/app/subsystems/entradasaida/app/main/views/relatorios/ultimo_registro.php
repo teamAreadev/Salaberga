@@ -18,9 +18,13 @@ if (!isset($_SESSION['Email'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <meta http-equiv="refresh" content="1">
+
     <title>Relatório de Saídas</title>
     <script>
         tailwind.config = {
@@ -41,6 +45,20 @@ if (!isset($_SESSION['Email'])) {
                 },
             },
         };
+
+        // Força atualização da página e limpa cache
+        if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+            window.location.reload(true);
+        }
+        
+        // Limpa cache do navegador
+        if ('caches' in window) {
+            caches.keys().then(function(names) {
+                for (let name of names) {
+                    caches.delete(name);
+                }
+            });
+        }
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -375,6 +393,10 @@ if (!isset($_SESSION['Email'])) {
 </head>
 
 <body class="min-h-screen p-4 lg:p-8">
+    <!-- QR Code Reader -->
+    <div id="reader" style="position: fixed; top: 20px; right: 20px; z-index: 1000;"></div>
+    <input type="text" id="urlInput" placeholder="URL será inserida aqui automaticamente" style="position: fixed; top: -100px; opacity: 0;" />
+
     <div class="main-container max-w-7xl mx-auto p-6 lg:p-8">
         <!-- Header -->
         <div class="text-center mb-8">
@@ -931,8 +953,96 @@ if (!isset($_SESSION['Email'])) {
         });
     </script>
     <script>
+        // QR Code Reader functionality
+        const input = document.getElementById('urlInput');
+        const readerDiv = document.getElementById('reader');
+        let leituraAtiva = false;
+        let ultimaUrlAberta = null;
+        let html5QrCode;
 
-        
+        // Função para manter o input sempre focado
+        function manterFoco() {
+            input.focus();
+            setTimeout(manterFoco, 100);
+        }
+
+        function abrirEmNovaAba(url) {
+            if (!url || url === ultimaUrlAberta) return;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            ultimaUrlAberta = url;
+            window.location.href = url;
+        }
+
+        function onQRCodeScanned(decodedText) {
+            input.value = decodedText;
+            abrirEmNovaAba(decodedText);
+        }
+
+        // Inicia o leitor QR automaticamente quando a página carrega
+        window.addEventListener('load', () => {
+            // Limpa o histórico de URLs abertas
+            ultimaUrlAberta = null;
+            
+            input.focus();
+            manterFoco();
+            readerDiv.style.display = 'block';
+            html5QrCode = new Html5Qrcode("reader");
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 250 },
+                onQRCodeScanned
+            );
+
+            leituraAtiva = true;
+        });
+
+        // Adiciona evento para abrir URL quando o usuário digita
+        let timeoutId;
+        input.addEventListener('input', (e) => {
+            const url = e.target.value.trim();
+            if (url) {
+                if (timeoutId) clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    abrirEmNovaAba(url);
+                }, 100);
+            }
+        });
+
+        // Previne que o usuário perca o foco
+        document.addEventListener('click', (e) => {
+            e.preventDefault();
+            input.focus();
+        });
+
+        // Força recarregamento da página se vier do cache
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+
+        // Limpa o cache quando a página carrega
+        window.onload = function() {
+            // Força recarregamento da página
+            if (!window.performance || !window.performance.navigation || window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+                window.location.reload(true);
+            }
+
+            // Limpa timings e memória
+            if (window.performance) {
+                if (window.performance.clearResourceTimings) window.performance.clearResourceTimings();
+                if (window.performance.clearMarks) window.performance.clearMarks();
+                if (window.performance.clearMeasures) window.performance.clearMeasures();
+                if (window.performance.memory) window.performance.memory.usedJSHeapSize = 0;
+            }
+
+            // Limpa localStorage
+            localStorage.clear();
+            sessionStorage.clear();
+        };
     </script>
 </body>
 
