@@ -415,7 +415,12 @@ if (!isset($_SESSION['Email'])) {
             </div>
         </div>
 
-        <!-- Vista Desktop (Tabelas) -->
+        <!-- Vista Desktop (Tabelas) -->   
+
+
+
+
+        
         <div class="desktop-view">
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 <!-- 3º Ano A -->
