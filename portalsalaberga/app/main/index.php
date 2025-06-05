@@ -1373,6 +1373,22 @@
                             <i class="fas fa-external-link-alt mr-2"></i> Acesse aqui
                         </a>
                     </div>
+
+                    <div class="card-enhanced p-8 hover-scale">
+                        <div class="flex items-center mb-6">
+                            <div class="w-16 h-16 bg-gradient-secondary rounded-full flex items-center justify-center mr-6">
+                                <i class="fas fa-cloud text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-2xl mb-2 text-ceara-green">Formulário de Seleção Área Dev</h3>
+                                <p class="text-gray-600 font-medium">05 de junho, 2025</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6 leading-relaxed">Capacitação em computação em nuvem com a plataforma Amazon Web Services.</p>
+                        <a href="assets/img/pdf/Edital DEV aprendiz - 2024.docx.pdf" target="_blank" class="btn-primary">
+                            <i class="fas fa-external-link-alt mr-2"></i> Acesse aqui
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
