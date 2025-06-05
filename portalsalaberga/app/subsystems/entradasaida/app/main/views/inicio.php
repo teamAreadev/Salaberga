@@ -186,7 +186,7 @@
 
   <footer class="footer relative py-4 text-center text-gray-600 text-sm">
     <div class="container mx-auto">
-      <p>© 2024 Sistema Escolar Salaberga. Todos os direitos reservados.</p>
+      <p>© 2025 Sistema Escolar Salaberga. Todos os direitos reservados.</p>
     </div>
   </footer>
 </body>
