@@ -11,33 +11,6 @@ if (!isset($_SESSION['Email'])) {
     session_destroy();
     redirect_to_login();
 }
-
-// Garante que as variáveis de dados das turmas sejam sempre arrays
-$dados_3a = $select->saida_estagio_3A();
-if (!is_array($dados_3a)) {
-    $dados_3a = [];
-}
-
-$dados_3b = $select->saida_estagio_3B();
-if (!is_array($dados_3b)) {
-    $dados_3b = [];
-}
-
-$dados_3c = $select->saida_estagio_3C();
-if (!is_array($dados_3c)) {
-    $dados_3c = [];
-}
-
-$dados_3d = $select->saida_estagio_3D();
-if (!is_array($dados_3d)) {
-    $dados_3d = [];
-}
-
-// Calcula a contagem de alunos para cada turma
-$count_3a = count($dados_3a);
-$count_3b = count($dados_3b);
-$count_3c = count($dados_3c);
-$count_3d = count($dados_3d);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -443,31 +416,37 @@ $count_3d = count($dados_3d);
         </div>
 
         <!-- Vista Desktop (Tabelas) -->   
+
+
+
+
+        
         <div class="desktop-view">
-            <div class="grid grid-cols-1 gap-6">
-                <!-- Tabela Principal -->
-                <div class="table-container">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                <!-- 3º Ano A -->
+                <div class="table-container turma-3a">
                     <div class="table-header">
                         <div class="flex items-center justify-between mb-2">
-                            <h2 class="text-lg font-semibold flex items-center text-white">
+                            <h2 class="text-lg font-semibold flex items-center">
                                 <i class="fas fa-users mr-2"></i>
-                                Registro de Saídas
+                                3º Ano A
                             </h2>
-                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium text-white">
-                                Total: <?= $count_3a + $count_3b + $count_3c + $count_3d ?> alunos
+                            <?php
+                            $dados_3a = $select->saida_estagio_3A();
+                            $count_3a = count($dados_3a);
+                            ?>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium">
+                                <?= $count_3a ?> alunos
                             </span>
                         </div>
-                        <input type="text" class="search-input search-all" placeholder="Buscar aluno..." onkeyup="filterTable('all')">
+                        <input type="text" class="search-input search-3a" placeholder="Buscar aluno..." onkeyup="filterTable('3a')">
                     </div>
                     <div class="table-content custom-scrollbar">
-                        <table class="w-full compact-table" id="table-all">
+                        <table class="w-full compact-table" id="table-3a">
                             <thead>
                                 <tr class="bg-gray-50">
                                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         <i class="fas fa-user mr-1"></i>Nome do Aluno
-                                    </th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        <i class="fas fa-graduation-cap mr-1"></i>Turma
                                     </th>
                                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         <i class="fas fa-clock mr-1"></i>Horário
@@ -475,58 +454,190 @@ $count_3d = count($dados_3d);
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
-                                <?php 
-                                // Combinar dados de todas as turmas
-                                $all_data = array_merge(
-                                    array_map(function($item) { $item['turma'] = '3º Ano A'; return $item; }, $dados_3a),
-                                    array_map(function($item) { $item['turma'] = '3º Ano B'; return $item; }, $dados_3b),
-                                    array_map(function($item) { $item['turma'] = '3º Ano C'; return $item; }, $dados_3c),
-                                    array_map(function($item) { $item['turma'] = '3º Ano D'; return $item; }, $dados_3d)
-                                );
-                                
-                                // Ordenar por horário
-                                usort($all_data, function($a, $b) {
-                                    // Handle potential null or non-string 'dae' values
-                                    $time_a = isset($a['dae']) ? strtotime($a['dae']) : 0;
-                                    $time_b = isset($b['dae']) ? strtotime($b['dae']) : 0;
-                                    return $time_a - $time_b;
-                                });
-
-                                foreach ($all_data as $dado) { 
-                                    $turma_class = '';
-                                    switch($dado['turma']) {
-                                        case '3º Ano A':
-                                            $turma_class = 'text-danger';
-                                            break;
-                                        case '3º Ano B':
-                                            $turma_class = 'text-info';
-                                            break;
-                                        case '3º Ano C':
-                                            $turma_class = 'text-admin';
-                                            break;
-                                        case '3º Ano D':
-                                            $turma_class = 'text-grey';
-                                            break;
-                                    }
-                                ?>
+                                <?php foreach ($dados_3a as $dado) { ?>
                                     <tr class="table-row">
                                         <td class="px-4 py-2 text-sm text-gray-900">
                                             <div class="flex items-center">
-                                                <i class="fas fa-user-graduate mr-2 <?= $turma_class ?>"></i>
+                                                <i class="fas fa-user-graduate mr-2 text-danger"></i>
                                                 <?= htmlspecialchars($dado['nome']) ?>
                                             </div>
                                         </td>
-                                        <td class="px-4 py-2 text-sm <?= $turma_class ?>">
-                                            <?= $dado['turma'] ?>
-                                        </td>
                                         <td class="px-4 py-2 text-sm text-gray-500">
-                                            <?= isset($dado['dae']) ? date('H:i', strtotime($dado['dae'])) : '--:--' ?>
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
-                                <?php if (empty($all_data)) { ?>
+                                <?php if (empty($dados_3a)) { ?>
                                     <tr>
-                                        <td colspan="3" class="px-4 py-8 text-center text-gray-500 italic">
+                                        <td colspan="2" class="px-4 py-8 text-center text-gray-500 italic">
+                                            Nenhum aluno registrado hoje
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 3º Ano B -->
+                <div class="table-container turma-3b">
+                    <div class="table-header">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano B
+                            </h2>
+                            <?php
+                            $dados_3b = $select->saida_estagio_3B();
+                            $count_3b = count($dados_3b);
+                            ?>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium">
+                                <?= $count_3b ?> alunos
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-3b" placeholder="Buscar aluno..." onkeyup="filterTable('3b')">
+                    </div>
+                    <div class="table-content custom-scrollbar">
+                        <table class="w-full compact-table" id="table-3b">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-user mr-1"></i>Nome do Aluno
+                                    </th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-clock mr-1"></i>Horário
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <?php foreach ($dados_3b as $dado) { ?>
+                                    <tr class="table-row">
+                                        <td class="px-4 py-2 text-sm text-gray-900">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-user-graduate mr-2 text-info"></i>
+                                                <?= htmlspecialchars($dado['nome']) ?>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-2 text-sm text-gray-500">
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                <?php if (empty($dados_3b)) { ?>
+                                    <tr>
+                                        <td colspan="2" class="px-4 py-8 text-center text-gray-500 italic">
+                                            Nenhum aluno registrado hoje
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 3º Ano C -->
+                <div class="table-container turma-3c">
+                    <div class="table-header">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano C
+                            </h2>
+                            <?php
+                            $dados_3c = $select->saida_estagio_3C();
+                            $count_3c = count($dados_3c);
+                            ?>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium">
+                                <?= $count_3c ?> alunos
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-3c" placeholder="Buscar aluno..." onkeyup="filterTable('3c')">
+                    </div>
+                    <div class="table-content custom-scrollbar">
+                        <table class="w-full compact-table" id="table-3c">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-user mr-1"></i>Nome do Aluno
+                                    </th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-clock mr-1"></i>Horário
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <?php foreach ($dados_3c as $dado) { ?>
+                                    <tr class="table-row">
+                                        <td class="px-4 py-2 text-sm text-gray-900">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-user-graduate mr-2 text-admin"></i>
+                                                <?= htmlspecialchars($dado['nome']) ?>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-2 text-sm text-gray-500">
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                <?php if (empty($dados_3c)) { ?>
+                                    <tr>
+                                        <td colspan="2" class="px-4 py-8 text-center text-gray-500 italic">
+                                            Nenhum aluno registrado hoje
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 3º Ano D -->
+                <div class="table-container turma-3d">
+                    <div class="table-header">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano D
+                            </h2>
+                            <?php
+                            $dados_3d = $select->saida_estagio_3D();
+                            $count_3d = count($dados_3d);
+                            ?>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium">
+                                <?= $count_3d ?> alunos
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-3d" placeholder="Buscar aluno..." onkeyup="filterTable('3d')">
+                    </div>
+                    <div class="table-content custom-scrollbar">
+                        <table class="w-full compact-table" id="table-3d">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-user mr-1"></i>Nome do Aluno
+                                    </th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-clock mr-1"></i>Horário
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <?php foreach ($dados_3d as $dado) { ?>
+                                    <tr class="table-row">
+                                        <td class="px-4 py-2 text-sm text-gray-900">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-user-graduate mr-2 text-grey"></i>
+                                                <?= htmlspecialchars($dado['nome']) ?>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-2 text-sm text-gray-500">
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                <?php if (empty($dados_3d)) { ?>
+                                    <tr>
+                                        <td colspan="2" class="px-4 py-8 text-center text-gray-500 italic">
                                             Nenhum aluno registrado hoje
                                         </td>
                                     </tr>
@@ -541,51 +652,185 @@ $count_3d = count($dados_3d);
         <!-- Vista Mobile (Cards) -->
         <div class="mobile-view">
             <div class="space-y-6">
-                <?php foreach ($all_data as $index => $dado) { 
-                    $turma_class = '';
-                    $bg_class = '';
-                    switch($dado['turma']) {
-                        case '3º Ano A':
-                            $turma_class = 'text-danger';
-                            $bg_class = 'bg-red-50';
-                            break;
-                        case '3º Ano B':
-                            $turma_class = 'text-info';
-                            $bg_class = 'bg-blue-50';
-                            break;
-                        case '3º Ano C':
-                            $turma_class = 'text-admin';
-                            $bg_class = 'bg-cyan-50';
-                            break;
-                        case '3º Ano D':
-                            $turma_class = 'text-grey';
-                            $bg_class = 'bg-gray-50';
-                            break;
-                    }
-                ?>
-                    <div class="student-card <?= $bg_class ?>">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full <?= $bg_class ?> <?= $turma_class ?> text-sm font-medium">
-                                    <?= $index + 1 ?>
-                                </div>
-                                <div class="ml-3">
-                                    <span class="font-medium text-gray-900"><?= htmlspecialchars($dado['nome']) ?></span>
-                                    <div class="text-sm <?= $turma_class ?>"><?= $dado['turma'] ?></div>
-                                </div>
-                            </div>
-                            <div class="text-sm text-gray-500">
-                                <i class="fas fa-clock mr-1"></i>
-                                <?= isset($dado['dae']) ? date('H:i', strtotime($dado['dae'])) : '--:--' ?>
-                            </div>
+                <!-- 3º Ano A -->
+                <div class="class-card">
+                    <div class="card-header-3a p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center text-white">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano A
+                            </h2>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium text-white">
+                                <?= $count_3a ?>
+                            </span>
                         </div>
+                        <input type="text" class="search-input search-mobile-3a" placeholder="Buscar aluno..." onkeyup="filterCards('3a')">
                     </div>
-                <?php } ?>
-                <?php if (empty($all_data)) { ?>
-                    <div class="text-center py-8 text-gray-500 italic">
-                        Nenhum aluno registrado hoje
+                    <div class="p-4 compact-cards custom-scrollbar" id="cards-3a">
+                        <?php if ($count_3a > 0) { ?>
+                            <?php foreach ($dados_3a as $index => $dado) { ?>
+                                <div class="student-card compact-card">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-red-100 text-danger text-xs font-medium">
+                                                <?= $index + 1 ?>
+                                            </div>
+                                            <span class="ml-3 font-medium text-gray-900"><?= htmlspecialchars($dado['nome']) ?></span>
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            <i class="fas fa-clock mr-1"></i>
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($count_3a > 10) { ?>
+                                <div class="pagination" id="pagination-3a">
+                                    <!-- Paginação será gerada via JavaScript -->
+                                </div>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <div class="text-center py-8 text-gray-500 italic">
+                                Nenhum aluno registrado hoje
+                            </div>
+                        <?php } ?>
                     </div>
-                <?php } ?>
+                </div>
+
+                <!-- 3º Ano B -->
+                <div class="class-card">
+                    <div class="card-header-3b p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center text-white">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano B
+                            </h2>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium text-white">
+                                <?= $count_3b ?>
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-mobile-3b" placeholder="Buscar aluno..." onkeyup="filterCards('3b')">
+                    </div>
+                    <div class="p-4 compact-cards custom-scrollbar" id="cards-3b">
+                        <?php if ($count_3b > 0) { ?>
+                            <?php foreach ($dados_3b as $index => $dado) { ?>
+                                <div class="student-card compact-card">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-blue-100 text-info text-xs font-medium">
+                                                <?= $index + 1 ?>
+                                            </div>
+                                            <span class="ml-3 font-medium text-gray-900"><?= htmlspecialchars($dado['nome']) ?></span>
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            <i class="fas fa-clock mr-1"></i>
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($count_3b > 10) { ?>
+                                <div class="pagination" id="pagination-3b">
+                                    <!-- Paginação será gerada via JavaScript -->
+                                </div>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <div class="text-center py-8 text-gray-500 italic">
+                                Nenhum aluno registrado hoje
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+
+                <!-- 3º Ano C -->
+                <div class="class-card">
+                    <div class="card-header-3c p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center text-white">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano C
+                            </h2>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium text-white">
+                                <?= $count_3c ?>
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-mobile-3c" placeholder="Buscar aluno..." onkeyup="filterCards('3c')">
+                    </div>
+                    <div class="p-4 compact-cards custom-scrollbar" id="cards-3c">
+                        <?php if ($count_3c > 0) { ?>
+                            <?php foreach ($dados_3c as $index => $dado) { ?>
+                                <div class="student-card compact-card">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-cyan-100 text-admin text-xs font-medium">
+                                                <?= $index + 1 ?>
+                                            </div>
+                                            <span class="ml-3 font-medium text-gray-900"><?= htmlspecialchars($dado['nome']) ?></span>
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            <i class="fas fa-clock mr-1"></i>
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($count_3c > 10) { ?>
+                                <div class="pagination" id="pagination-3c">
+                                    <!-- Paginação será gerada via JavaScript -->
+                                </div>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <div class="text-center py-8 text-gray-500 italic">
+                                Nenhum aluno registrado hoje
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+
+                <!-- 3º Ano D -->
+                <div class="class-card">
+                    <div class="card-header-3d p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-lg font-semibold flex items-center text-white">
+                                <i class="fas fa-users mr-2"></i>
+                                3º Ano D
+                            </h2>
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-medium text-white">
+                                <?= $count_3d ?>
+                            </span>
+                        </div>
+                        <input type="text" class="search-input search-mobile-3d" placeholder="Buscar aluno..." onkeyup="filterCards('3d')">
+                    </div>
+                    <div class="p-4 compact-cards custom-scrollbar" id="cards-3d">
+                        <?php if ($count_3d > 0) { ?>
+                            <?php foreach ($dados_3d as $index => $dado) { ?>
+                                <div class="student-card compact-card">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-gray-100 text-grey text-xs font-medium">
+                                                <?= $index + 1 ?>
+                                            </div>
+                                            <span class="ml-3 font-medium text-gray-900"><?= htmlspecialchars($dado['nome']) ?></span>
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            <i class="fas fa-clock mr-1"></i>
+                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($count_3d > 10) { ?>
+                                <div class="pagination" id="pagination-3d">
+                                    <!-- Paginação será gerada via JavaScript -->
+                                </div>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <div class="text-center py-8 text-gray-500 italic">
+                                Nenhum aluno registrado hoje
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -611,18 +856,16 @@ $count_3d = count($dados_3d);
     <script>
         // Função para filtrar tabelas
         function filterTable(turma) {
-            const input = document.querySelector('.search-all');
+            const input = document.querySelector(`.search-${turma}`);
             const filter = input.value.toUpperCase();
-            const table = document.getElementById('table-all');
+            const table = document.getElementById(`table-${turma}`);
             const rows = table.getElementsByTagName('tr');
 
-            for (let i = 1; i < rows.length; i++) {
+            for (let i = 1; i < rows.length; i++) { // Começar do 1 para pular o cabeçalho
                 const nameCell = rows[i].getElementsByTagName('td')[0];
-                const turmaCell = rows[i].getElementsByTagName('td')[1];
-                if (nameCell && turmaCell) {
+                if (nameCell) {
                     const nameText = nameCell.textContent || nameCell.innerText;
-                    const turmaText = turmaCell.textContent || turmaCell.innerText;
-                    if (nameText.toUpperCase().indexOf(filter) > -1 || turmaText.toUpperCase().indexOf(filter) > -1) {
+                    if (nameText.toUpperCase().indexOf(filter) > -1) {
                         rows[i].style.display = '';
                     } else {
                         rows[i].style.display = 'none';
@@ -633,15 +876,14 @@ $count_3d = count($dados_3d);
 
         // Função para filtrar cards
         function filterCards(turma) {
-            const input = document.querySelector('.search-all');
+            const input = document.querySelector(`.search-mobile-${turma}`);
             const filter = input.value.toUpperCase();
-            const container = document.querySelector('.mobile-view');
+            const container = document.getElementById(`cards-${turma}`);
             const cards = container.getElementsByClassName('student-card');
 
             for (let i = 0; i < cards.length; i++) {
-                const nameText = cards[i].querySelector('.font-medium').textContent;
-                const turmaText = cards[i].querySelector('.text-sm').textContent;
-                if (nameText.toUpperCase().indexOf(filter) > -1 || turmaText.toUpperCase().indexOf(filter) > -1) {
+                const nameText = cards[i].querySelector('span').textContent || cards[i].querySelector('span').innerText;
+                if (nameText.toUpperCase().indexOf(filter) > -1) {
                     cards[i].style.display = '';
                 } else {
                     cards[i].style.display = 'none';
@@ -713,21 +955,6 @@ $count_3d = count($dados_3d);
         // Inicializar paginação quando o documento estiver pronto
         document.addEventListener('DOMContentLoaded', function() {
             initPagination();
-
-            // Adicionar event listeners para permitir cliques nos inputs de busca
-            const searchInputs = document.querySelectorAll('.search-input, .search-all, .search-3a, .search-3b, .search-3c, .search-3d, .search-mobile-3a, .search-mobile-3b, .search-mobile-3c, .search-mobile-3d');
-            searchInputs.forEach(inputElement => {
-                inputElement.addEventListener('blur', () => {
-                    // Refocus the QR input shortly after a search input loses focus
-                    setTimeout(() => { input.focus(); }, 10);
-                });
-                // Add a click listener to explicitly focus the search input on click
-                inputElement.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Stop the click from propagating
-                    // Use a small timeout to ensure focus is set after any potential interference
-                    setTimeout(() => { inputElement.focus(); }, 0);
-                });
-            });
         });
     </script>
     <script>
@@ -737,6 +964,12 @@ $count_3d = count($dados_3d);
         let leituraAtiva = false;
         let ultimaUrlAberta = null;
         let html5QrCode;
+
+        // Função para manter o input sempre focado
+        function manterFoco() {
+            input.focus();
+            setTimeout(manterFoco, 100);
+        }
 
         function abrirEmNovaAba(url) {
             if (!url || url === ultimaUrlAberta) return;
@@ -757,9 +990,8 @@ $count_3d = count($dados_3d);
             // Limpa o histórico de URLs abertas
             ultimaUrlAberta = null;
             
-            // Initially focus the QR code input on load
             input.focus();
-
+            manterFoco();
             readerDiv.style.display = 'block';
             html5QrCode = new Html5Qrcode("reader");
 
@@ -770,19 +1002,6 @@ $count_3d = count($dados_3d);
             );
 
             leituraAtiva = true;
-
-            // Add blur listeners to search inputs to refocus QR input when they lose focus
-            const searchInputs = document.querySelectorAll('.search-input, .search-all, .search-3a, .search-3b, .search-3c, .search-3d, .search-mobile-3a, .search-mobile-3b, .search-mobile-3c, .search-mobile-3d');
-            searchInputs.forEach(inputElement => {
-                 inputElement.addEventListener('blur', () => {
-                     // Refocus the QR input shortly after a search input loses focus
-                     setTimeout(() => { input.focus(); }, 10);
-                 });
-                 // Add a click listener to explicitly focus the search input on click
-                 inputElement.addEventListener('click', () => {
-                     inputElement.focus();
-                 });
-            });
         });
 
         // Adiciona evento para abrir URL quando o usuário digita
@@ -795,6 +1014,12 @@ $count_3d = count($dados_3d);
                     abrirEmNovaAba(url);
                 }, 100);
             }
+        });
+
+        // Previne que o usuário perca o foco
+        document.addEventListener('click', (e) => {
+            e.preventDefault();
+            input.focus();
         });
 
         // Força recarregamento da página se vier do cache
