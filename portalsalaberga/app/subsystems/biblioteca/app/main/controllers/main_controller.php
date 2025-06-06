@@ -10,7 +10,9 @@ if (isset($_POST['titulo2']) && !empty($_POST['titulo2'])) {
 
     header('Location: ../views/QRCode/geradorQR_especifico_livro.php');
     exit();
-} else if (isset($_POST['relatorio'])) {
+} 
+//verificar tipo de relatório
+else if (isset($_POST['relatorio'])) {
     $relatorio = $_POST['relatorio'];
 
     switch ($relatorio) {
@@ -35,7 +37,8 @@ if (isset($_POST['titulo2']) && !empty($_POST['titulo2'])) {
     header('Location: ../views/relatorios/relatorio_pra_est.php?estante=' . $estante . '&prateleira=p' . $prateleira);
     exit();
 }
-// Ajustando a condição para tornar 'edicao' opcional
+
+//cadastrar livros 
 else if (
     isset($_POST['nomesubGenero']) && !empty($_POST['nomesubGenero']) &&
     isset($_POST['nome']) && !empty($_POST['nome']) &&

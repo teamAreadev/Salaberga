@@ -39,11 +39,13 @@ class PDF extends FPDF {
         // Título principal
         $this->SetFont('Arial', 'B', 18);
         $this->SetTextColor(255, 255, 255); // Texto branco
-        $this->Cell(0, 8, utf8_decode('Relatório de Saídas para Estágio'), 0, 1, 'C');
+        $this->Cell(0, 8, utf8_decode('Frequência de Saída', 1, 1, 'C'));
+        $this->Cell(0, 8, utf8_decode('Estágio 2025'), 0, 1, 'C');
 
         // Data e hora
         $this->SetFont('Arial', '', 12);
-        $this->Cell(0, 23, utf8_decode('Data: ' . date('d/m/Y') . ' | Hora: ' . date('H:i')) , 0, 1, 'C');
+//        $this->Cell(0, 23, utf8_decode('Data: ' . date('d/m/Y') . ' | Hora: ' . date('H:i')) , 0, 1, 'C');
+        $this->Cell(0, 23, "", 0, 1, 'C');
 
         // Linha decorativa
         $this->SetDrawColor($this->colors['secondary'][0], $this->colors['secondary'][1], $this->colors['secondary'][2]);;
@@ -87,7 +89,7 @@ class PDF extends FPDF {
         $this->Cell(0, 15, utf8_decode('3º Ano A'), 0, 1, 'L', true);
         $this->SetFillColor(255, 255, 255);
         $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
-        $dados_3a = $this->select->saida_estagio_3A();
+        $dados_3a = $this->select->saida_estagio_3A_relatorio();
         $this->imprimirAlunos($dados_3a);
         $this->Ln(15);
 
@@ -97,7 +99,7 @@ class PDF extends FPDF {
         $this->Cell(0, 15, utf8_decode('3º Ano B'), 0, 1, 'L', true);
         $this->SetFillColor(255, 255, 255);
         $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
-        $dados_3b = $this->select->saida_estagio_3B();
+        $dados_3b = $this->select->saida_estagio_3B_relatorio();
         $this->imprimirAlunos($dados_3b);
         $this->Ln(15);
 
@@ -107,7 +109,7 @@ class PDF extends FPDF {
         $this->Cell(0, 15, utf8_decode('3º Ano C'), 0, 1, 'L', true);
         $this->SetFillColor(255, 255, 255);
         $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
-        $dados_3c = $this->select->saida_estagio_3C();
+        $dados_3c = $this->select->saida_estagio_3C_relatorio();
         $this->imprimirAlunos($dados_3c);
         $this->Ln(15);
 
@@ -117,7 +119,7 @@ class PDF extends FPDF {
         $this->Cell(0, 15, utf8_decode('3º Ano D'), 0, 1, 'L', true);
         $this->SetFillColor(255, 255, 255);
         $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
-        $dados_3d = $this->select->saida_estagio_3D();
+        $dados_3d = $this->select->saida_estagio_3D_relatorio();
         $this->imprimirAlunos($dados_3d);
     }
 
@@ -147,7 +149,7 @@ class PDF extends FPDF {
         $this->Cell($colWidthHorario, 10, utf8_decode('Horário'), 1, 1, 'C', true);
 
         // Dados dos alunos
-        $this->SetFont('Arial', '', 10);
+        $this->SetFont('Arial', '', 8);
         $rowCounter = 0;
         foreach ($dados as $dado) {
             $this->SetFillColor($rowCounter % 2 == 0 ? 255 : $this->colors['light_gray_row'][0],
@@ -156,8 +158,8 @@ class PDF extends FPDF {
             $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
 
             // Ajuste de alinhamento explícito
-            $this->Cell($colWidthNome, 10, utf8_decode($dado['nome']), 1, 0, 'L', true); // Nome: Left
-            $this->Cell($colWidthHorario, 10, isset($dado['dae']) ? date('H:i', strtotime($dado['dae'])) : '--:--',
+            $this->Cell($colWidthNome, 10, utf8_decode(strtoUpper($dado['nome'])), 1, 0, 'L', true); // Nome: Left
+            $this->Cell($colWidthHorario, 10, isset($dado['dae']) ? date('d/m/Y     H:i:s', strtotime($dado['dae'])) : '--:--',
                         1, 1, 'C', true); // Horário: Center
 
             $rowCounter++;

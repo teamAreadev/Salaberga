@@ -6,5 +6,4 @@ if (isset($_POST['estante']) && isset($_POST['prateleira']) && !empty($_POST['es
 
     header('Location: ../views/QRCode/QRCodes.php?estante=' . $estante . '&prateleira=p' . $prateleira);
 }
-
 ?>
