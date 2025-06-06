@@ -79,13 +79,6 @@ class select_model extends connect
 
         return $nome;
     }
-    public function select_nome_livro_geral()
-    {
-        $sql_nome_livro = $this->connect->query("SELECT * FROM catalogo");
-        $nome = $sql_nome_livro->fetchAll(PDO::FETCH_ASSOC);
-
-        return $nome;
-    }
 
     public function select_livro_especifico($titulos)
     {
@@ -103,7 +96,8 @@ class select_model extends connect
 
         return $array_dados;
     }
-    public function select_nome_autor(){
+    public function select_nome_autor()
+    {
         $sql_nome_autor = $this->connect->query("SELECT * FROM autores");
         $nome_autor = $sql_nome_autor->fetchAll(PDO::FETCH_ASSOC);
 

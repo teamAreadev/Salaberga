@@ -175,7 +175,7 @@ $select = new select_model;
                 <div class="relative">
                     <select id="titulos" class="js-example-basic-multiple" name="titulo[]" multiple="multiple">
                         <?php
-                        $titulos = $select->select_nome_livro_geral();
+                        $titulos = $select->select_nome_livro();
                         foreach ($titulos as $titulo) {
                         ?>
                             <option value="<?= htmlspecialchars($titulo['titulo_livro'] . '_' . $titulo['editora']) ?>">
