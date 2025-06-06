@@ -112,43 +112,41 @@
             </div>
 
             <div class="space-y-4">
-                <form action="../control/control_index.php" method="POST" class="space-y-4">
-                    <button type="submit" name="btn" value="Entrada" class="report-card block w-full p-6 text-left">
-                        <div class="flex items-center gap-4">
-                            <div class="report-icon bg-blue-50 text-blue-600">
-                                <i class="fas fa-sign-in-alt text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-900">Relatório de Entradas</h3>
-                                <p class="text-sm text-gray-500">Visualize o histórico de entradas dos alunos</p>
-                            </div>
+                <a href="#" class="report-card block w-full p-6 text-left">
+                    <div class="flex items-center gap-4">
+                        <div class="report-icon bg-blue-50 text-blue-600">
+                            <i class="fas fa-sign-in-alt text-xl"></i>
                         </div>
-                    </button>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Relatório de Entradas</h3>
+                            <p class="text-sm text-gray-500">Visualize o histórico de entradas dos alunos</p>
+                        </div>
+                    </div>
+                </a>
 
-                    <button type="submit" name="btn" value="Saída" class="report-card block w-full p-6 text-left">
-                        <div class="flex items-center gap-4">
-                            <div class="report-icon bg-red-50 text-red-600">
-                                <i class="fas fa-sign-out-alt text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-900">Relatório de Saídas</h3>
-                                <p class="text-sm text-gray-500">Visualize o histórico de saídas dos alunos</p>
-                            </div>
+                <a href="#" class="report-card block w-full p-6 text-left">
+                    <div class="flex items-center gap-4">
+                        <div class="report-icon bg-red-50 text-red-600">
+                            <i class="fas fa-sign-out-alt text-xl"></i>
                         </div>
-                    </button>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Relatório de Saídas</h3>
+                            <p class="text-sm text-gray-500">Visualize o histórico de saídas dos alunos</p>
+                        </div>
+                    </div>
+                </a>
 
-                    <button type="submit" name="btn" value="Saída-Estágio" class="report-card block w-full p-6 text-left">
-                        <div class="flex items-center gap-4">
-                            <div class="report-icon bg-purple-50 text-purple-600">
-                                <i class="fas fa-briefcase text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-900">Relatório de Saídas-Estágio</h3>
-                                <p class="text-sm text-gray-500">Visualize o histórico de saídas para estágio</p>
-                            </div>
+                <a href="relatorios/relatorio_diario_estagio.php" class="report-card block w-full p-6 text-left">
+                    <div class="flex items-center gap-4">
+                        <div class="report-icon bg-purple-50 text-purple-600">
+                            <i class="fas fa-briefcase text-xl"></i>
                         </div>
-                    </button>
-                </form>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Relatório de Saídas-Estágio</h3>
+                            <p class="text-sm text-gray-500">Visualize o histórico de saídas para estágio</p>
+                        </div>
+                    </div>
+                </a>
 
                 <a href="relatorios/alunos_geral.php" class="report-card block p-6 text-left">
                     <div class="flex items-center gap-4">
