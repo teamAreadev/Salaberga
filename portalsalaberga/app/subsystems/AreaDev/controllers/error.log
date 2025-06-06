@@ -7773,3 +7773,519 @@
 [04-Jun-2025 21:03:01 Europe/Berlin] Dados recebidos - Demanda ID: 42, Novo Status: concluida, Usuário ID: 12
 [04-Jun-2025 21:03:01 Europe/Berlin] Demanda encontrada - Status atual: em_andamento
 [04-Jun-2025 21:03:01 Europe/Berlin] Usuário não tem permissão para atualizar esta demanda
+[06-Jun-2025 16:30:04 Europe/Berlin] REQUEST METHOD: POST
+[06-Jun-2025 16:30:04 Europe/Berlin] POST DATA: Array
+(
+    [acao] => realizar_tarefa
+    [id] => 31
+    [novo_status] => em_andamento
+)
+
+[06-Jun-2025 16:30:04 Europe/Berlin] GET DATA: Array
+(
+)
+
+[06-Jun-2025 16:30:04 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 1
+                    [permissao_descricao] => vigilante(1)
+                )
+
+        )
+
+    [ultimo_acesso] => 1749219724
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+    [entrada_saida_vigilante] => 1
+)
+
+[06-Jun-2025 16:30:04 Europe/Berlin] 
+=== VERIFICANDO CONEXÕES COM BANCO DE DADOS ===
+[06-Jun-2025 16:30:04 Europe/Berlin] Conexão com banco areadev: OK
+[06-Jun-2025 16:30:04 Europe/Berlin] Conexão com banco salaberga: OK
+[06-Jun-2025 16:30:04 Europe/Berlin] 
+=== INÍCIO marcarEmAndamento ===
+[06-Jun-2025 16:30:04 Europe/Berlin] Demanda ID: 31, Usuário ID: 3
+[06-Jun-2025 16:30:04 Europe/Berlin] Demanda encontrada. Status atual: pendente, Status usuário: não atribuído
+[06-Jun-2025 16:30:04 Europe/Berlin] Usuário não está atribuído à demanda e não é admin
+[06-Jun-2025 16:30:04 Europe/Berlin] Redirecionando para: ../views/usuario.php?error=Erro+ao+atualizar+status
+[06-Jun-2025 16:30:19 Europe/Berlin] REQUEST METHOD: POST
+[06-Jun-2025 16:30:19 Europe/Berlin] POST DATA: Array
+(
+    [acao] => realizar_tarefa
+    [id] => 26
+    [novo_status] => em_andamento
+)
+
+[06-Jun-2025 16:30:19 Europe/Berlin] GET DATA: Array
+(
+)
+
+[06-Jun-2025 16:30:19 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 1
+                    [permissao_descricao] => vigilante(1)
+                )
+
+        )
+
+    [ultimo_acesso] => 1749219724
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+    [entrada_saida_vigilante] => 1
+)
+
+[06-Jun-2025 16:30:19 Europe/Berlin] 
+=== VERIFICANDO CONEXÕES COM BANCO DE DADOS ===
+[06-Jun-2025 16:30:19 Europe/Berlin] Conexão com banco areadev: OK
+[06-Jun-2025 16:30:19 Europe/Berlin] Conexão com banco salaberga: OK
+[06-Jun-2025 16:30:19 Europe/Berlin] 
+=== INÍCIO marcarEmAndamento ===
+[06-Jun-2025 16:30:19 Europe/Berlin] Demanda ID: 26, Usuário ID: 3
+[06-Jun-2025 16:30:19 Europe/Berlin] Demanda encontrada. Status atual: pendente, Status usuário: não atribuído
+[06-Jun-2025 16:30:19 Europe/Berlin] Usuário não está atribuído à demanda e não é admin
+[06-Jun-2025 16:30:19 Europe/Berlin] Redirecionando para: ../views/usuario.php?error=Erro+ao+atualizar+status
+[06-Jun-2025 16:30:36 Europe/Berlin] REQUEST METHOD: POST
+[06-Jun-2025 16:30:36 Europe/Berlin] POST DATA: Array
+(
+    [acao] => realizar_tarefa
+    [id] => 31
+    [novo_status] => em_andamento
+)
+
+[06-Jun-2025 16:30:36 Europe/Berlin] GET DATA: Array
+(
+)
+
+[06-Jun-2025 16:30:36 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 1
+                    [permissao_descricao] => vigilante(1)
+                )
+
+        )
+
+    [ultimo_acesso] => 1749219724
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+    [entrada_saida_vigilante] => 1
+)
+
+[06-Jun-2025 16:30:36 Europe/Berlin] 
+=== VERIFICANDO CONEXÕES COM BANCO DE DADOS ===
+[06-Jun-2025 16:30:36 Europe/Berlin] Conexão com banco areadev: OK
+[06-Jun-2025 16:30:36 Europe/Berlin] Conexão com banco salaberga: OK
+[06-Jun-2025 16:30:36 Europe/Berlin] 
+=== INÍCIO marcarEmAndamento ===
+[06-Jun-2025 16:30:36 Europe/Berlin] Demanda ID: 31, Usuário ID: 3
+[06-Jun-2025 16:30:36 Europe/Berlin] Demanda encontrada. Status atual: pendente, Status usuário: não atribuído
+[06-Jun-2025 16:30:36 Europe/Berlin] Usuário não está atribuído à demanda e não é admin
+[06-Jun-2025 16:30:36 Europe/Berlin] Redirecionando para: ../views/usuario.php?error=Erro+ao+atualizar+status
+[06-Jun-2025 16:30:54 Europe/Berlin] REQUEST METHOD: POST
+[06-Jun-2025 16:30:54 Europe/Berlin] POST DATA: Array
+(
+    [acao] => realizar_tarefa
+    [id] => 31
+    [novo_status] => em_andamento
+)
+
+[06-Jun-2025 16:30:54 Europe/Berlin] GET DATA: Array
+(
+)
+
+[06-Jun-2025 16:30:54 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 1
+                    [permissao_descricao] => vigilante(1)
+                )
+
+        )
+
+    [ultimo_acesso] => 1749219724
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+    [entrada_saida_vigilante] => 1
+)
+
+[06-Jun-2025 16:30:54 Europe/Berlin] 
+=== VERIFICANDO CONEXÕES COM BANCO DE DADOS ===
+[06-Jun-2025 16:30:54 Europe/Berlin] Conexão com banco areadev: OK
+[06-Jun-2025 16:30:54 Europe/Berlin] Conexão com banco salaberga: OK
+[06-Jun-2025 16:30:54 Europe/Berlin] 
+=== INÍCIO marcarEmAndamento ===
+[06-Jun-2025 16:30:54 Europe/Berlin] Demanda ID: 31, Usuário ID: 3
+[06-Jun-2025 16:30:54 Europe/Berlin] Demanda encontrada. Status atual: pendente, Status usuário: não atribuído
+[06-Jun-2025 16:30:54 Europe/Berlin] Usuário não está atribuído à demanda e não é admin
+[06-Jun-2025 16:30:54 Europe/Berlin] Redirecionando para: ../views/usuario.php?error=Erro+ao+atualizar+status
+[06-Jun-2025 16:31:00 Europe/Berlin] REQUEST METHOD: POST
+[06-Jun-2025 16:31:00 Europe/Berlin] POST DATA: Array
+(
+    [id] => 28
+    [acao] => atualizar_status
+    [novo_status] => em_andamento
+)
+
+[06-Jun-2025 16:31:00 Europe/Berlin] GET DATA: Array
+(
+)
+
+[06-Jun-2025 16:31:00 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 1
+                    [permissao_descricao] => vigilante(1)
+                )
+
+        )
+
+    [ultimo_acesso] => 1749219724
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+    [entrada_saida_vigilante] => 1
+)
+
+[06-Jun-2025 16:31:00 Europe/Berlin] 
+=== VERIFICANDO CONEXÕES COM BANCO DE DADOS ===
+[06-Jun-2025 16:31:00 Europe/Berlin] Conexão com banco areadev: OK
+[06-Jun-2025 16:31:00 Europe/Berlin] Conexão com banco salaberga: OK
+[06-Jun-2025 16:31:00 Europe/Berlin] 
+=== INÍCIO DO PROCESSAMENTO DE ATUALIZAR_STATUS ===
+[06-Jun-2025 16:31:00 Europe/Berlin] POST data: Array
+(
+    [id] => 28
+    [acao] => atualizar_status
+    [novo_status] => em_andamento
+)
+
+[06-Jun-2025 16:31:00 Europe/Berlin] Usuário ID: 3
+[06-Jun-2025 16:31:00 Europe/Berlin] Dados recebidos - Demanda ID: 28, Novo Status: em_andamento, Usuário ID: 3
+[06-Jun-2025 16:31:00 Europe/Berlin] Demanda encontrada - Status atual: pendente
+[06-Jun-2025 16:31:00 Europe/Berlin] 
+=== VERIFICANDO PERMISSÃO DO USUÁRIO ===
+[06-Jun-2025 16:31:00 Europe/Berlin] Demanda ID: 28, Usuário ID: 3
+[06-Jun-2025 16:31:00 Europe/Berlin] Erro ao verificar permissão: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'u750204740_salaberga.usu_sist' doesn't exist
+[06-Jun-2025 16:31:00 Europe/Berlin] Stack trace: #0 C:\xampp\htdocs\GitHub\Salaberga\portalsalaberga\app\subsystems\AreaDev\model\Demanda.php(733): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\GitHub\Salaberga\portalsalaberga\app\subsystems\AreaDev\controllers\DemandaController.php(203): Demanda->verificarPermissaoUsuario(28, 3)
+#2 {main}
+[06-Jun-2025 16:31:00 Europe/Berlin] Resultado da verificação de permissão: sem permissão
+[06-Jun-2025 16:31:00 Europe/Berlin] Usuário não tem permissão para atualizar esta demanda
+[06-Jun-2025 16:31:39 Europe/Berlin] REQUEST METHOD: POST
+[06-Jun-2025 16:31:39 Europe/Berlin] POST DATA: Array
+(
+    [id] => 31
+    [acao] => atualizar_status
+    [novo_status] => em_andamento
+)
+
+[06-Jun-2025 16:31:39 Europe/Berlin] GET DATA: Array
+(
+)
+
+[06-Jun-2025 16:31:39 Europe/Berlin] SESSION DATA: Array
+(
+    [login] => 1
+    [user_id] => 3
+    [Email] => otavio.ce@gmail.com
+    [Senha] => •
+    [Nome] => otavio filho
+    [user_systems_permissions] => Array
+        (
+            [0] => Array
+                (
+                    [sistema_id] => 2
+                    [sistema_nome] => Estágio
+                    [permissao_id] => 4
+                    [permissao_descricao] => adm(2)
+                )
+
+            [1] => Array
+                (
+                    [sistema_id] => 3
+                    [sistema_nome] => Demandas
+                    [permissao_id] => 6
+                    [permissao_descricao] => adm_geral(3)
+                )
+
+            [2] => Array
+                (
+                    [sistema_id] => 4
+                    [sistema_nome] => Biblioteca
+                    [permissao_id] => 8
+                    [permissao_descricao] => usuario(4)
+                )
+
+            [3] => Array
+                (
+                    [sistema_id] => 5
+                    [sistema_nome] => SS
+                    [permissao_id] => 10
+                    [permissao_descricao] => adm(5)
+                )
+
+            [4] => Array
+                (
+                    [sistema_id] => 1
+                    [sistema_nome] => Entrada/saída
+                    [permissao_id] => 1
+                    [permissao_descricao] => vigilante(1)
+                )
+
+        )
+
+    [ultimo_acesso] => 1749219724
+    [estagio_adm] => 1
+    [demandas_adm_geral] => 1
+    [biblioteca_usuario] => 1
+    [ss_adm] => 1
+    [entrada_saida_vigilante] => 1
+)
+
+[06-Jun-2025 16:31:39 Europe/Berlin] 
+=== VERIFICANDO CONEXÕES COM BANCO DE DADOS ===
+[06-Jun-2025 16:31:39 Europe/Berlin] Conexão com banco areadev: OK
+[06-Jun-2025 16:31:39 Europe/Berlin] Conexão com banco salaberga: OK
+[06-Jun-2025 16:31:39 Europe/Berlin] 
+=== INÍCIO DO PROCESSAMENTO DE ATUALIZAR_STATUS ===
+[06-Jun-2025 16:31:39 Europe/Berlin] POST data: Array
+(
+    [id] => 31
+    [acao] => atualizar_status
+    [novo_status] => em_andamento
+)
+
+[06-Jun-2025 16:31:39 Europe/Berlin] Usuário ID: 3
+[06-Jun-2025 16:31:39 Europe/Berlin] Dados recebidos - Demanda ID: 31, Novo Status: em_andamento, Usuário ID: 3
+[06-Jun-2025 16:31:39 Europe/Berlin] Demanda encontrada - Status atual: pendente
+[06-Jun-2025 16:31:39 Europe/Berlin] 
+=== VERIFICANDO PERMISSÃO DO USUÁRIO ===
+[06-Jun-2025 16:31:39 Europe/Berlin] Demanda ID: 31, Usuário ID: 3
+[06-Jun-2025 16:31:39 Europe/Berlin] Erro ao verificar permissão: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'u750204740_salaberga.usu_sist' doesn't exist
+[06-Jun-2025 16:31:39 Europe/Berlin] Stack trace: #0 C:\xampp\htdocs\GitHub\Salaberga\portalsalaberga\app\subsystems\AreaDev\model\Demanda.php(733): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\GitHub\Salaberga\portalsalaberga\app\subsystems\AreaDev\controllers\DemandaController.php(203): Demanda->verificarPermissaoUsuario(31, 3)
+#2 {main}
+[06-Jun-2025 16:31:39 Europe/Berlin] Resultado da verificação de permissão: sem permissão
+[06-Jun-2025 16:31:39 Europe/Berlin] Usuário não tem permissão para atualizar esta demanda

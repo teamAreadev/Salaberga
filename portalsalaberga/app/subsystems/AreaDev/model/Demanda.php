@@ -44,7 +44,7 @@ class Demanda {
                     $stmt = $this->pdo->prepare("
                         SELECT d.*, u.nome as admin_nome
                         FROM demandas d 
-                        LEFT JOIN u750204740_salaberga.usuarios u ON d.admin_id = u.id 
+                        LEFT JOIN salaberga.usuarios u ON d.admin_id = u.id 
                         ORDER BY d.data_criacao DESC
                     ");
                     $stmt->execute();
@@ -53,12 +53,12 @@ class Demanda {
                     foreach ($demandas as &$demanda) {
                         $stmtUsuarios = $this->pdo->prepare("
                             SELECT u.id, u.nome, du.status, du.data_conclusao 
-                            FROM u750204740_salaberga.usuarios u
+                            FROM salaberga.usuarios u
                             INNER JOIN demanda_usuarios du ON u.id = du.usuario_id
                             WHERE du.demanda_id = ? AND du.status IN ('aceito', 'em_andamento', 'concluido')
                             UNION
                             SELECT u.id, u.nome, d.status as status, d.data_conclusao
-                            FROM u750204740_salaberga.usuarios u
+                            FROM salaberga.usuarios u
                             INNER JOIN demandas d ON u.id = d.admin_id
                             WHERE d.id = ? AND u.id = d.admin_id AND d.status IN ('em_andamento', 'concluida')
                         ");
@@ -93,7 +93,7 @@ class Demanda {
             $sql = "
                 SELECT d.*, u.nome as admin_nome
                 FROM demandas d 
-                LEFT JOIN u750204740_salaberga.usuarios u ON d.admin_id = u.id 
+                LEFT JOIN salaberga.usuarios u ON d.admin_id = u.id 
                 WHERE d.area_id IN ($placeholders)
                 ORDER BY d.data_criacao DESC
             ";
@@ -104,7 +104,7 @@ class Demanda {
             $stmt = $this->pdo->prepare("
                 SELECT d.*, u.nome as admin_nome
                 FROM demandas d 
-                LEFT JOIN u750204740_salaberga.usuarios u ON d.admin_id = u.id 
+                LEFT JOIN salaberga.usuarios u ON d.admin_id = u.id 
                 ORDER BY d.data_criacao DESC
             ");
             $stmt->execute();
@@ -116,12 +116,12 @@ class Demanda {
         foreach ($demandas as &$demanda) {
             $stmtUsuarios = $this->pdo->prepare("
                 SELECT u.id, u.nome, du.status, du.data_conclusao 
-                FROM u750204740_salaberga.usuarios u
+                FROM salaberga.usuarios u
                 INNER JOIN demanda_usuarios du ON u.id = du.usuario_id
                 WHERE du.demanda_id = ? AND du.status IN ('aceito', 'em_andamento', 'concluido')
                 UNION
                 SELECT u.id, u.nome, d.status as status, d.data_conclusao
-                FROM u750204740_salaberga.usuarios u
+                FROM salaberga.usuarios u
                 INNER JOIN demandas d ON u.id = d.admin_id
                 WHERE d.id = ? AND u.id = d.admin_id AND d.status IN ('em_andamento', 'concluida')
             ");
@@ -139,9 +139,9 @@ class Demanda {
         // Verificar se o usuário tem permissão para ver demandas e qual sua área
         $sql_perm = "
             SELECT DISTINCT p.descricao 
-            FROM u750204740_salaberga.usu_sist us
-            INNER JOIN u750204740_salaberga.sist_perm sp ON us.sist_perm_id = sp.id
-            INNER JOIN u750204740_salaberga.permissoes p ON sp.permissao_id = p.id
+            FROM salaberga.usu_sist us
+            INNER JOIN salaberga.sist_perm sp ON us.sist_perm_id = sp.id
+            INNER JOIN salaberga.permissoes p ON sp.permissao_id = p.id
             WHERE us.usuario_id = ? AND sp.sistema_id = 3
         ";
         $stmt_perm = $this->pdo_salaberga->prepare($sql_perm);
@@ -167,7 +167,7 @@ class Demanda {
                     d.status as status_usuario,
                     d.data_conclusao as data_conclusao_usuario
                 FROM demandas d
-                LEFT JOIN u750204740_salaberga.usuarios u ON d.admin_id = u.id
+                LEFT JOIN salaberga.usuarios u ON d.admin_id = u.id
                 ORDER BY d.data_criacao DESC";
             
             $stmt = $this->pdo->prepare($sql);
@@ -195,31 +195,28 @@ class Demanda {
             }
 
             // Buscar demandas onde o usuário está atribuído OU é o admin OU a demanda é da área do usuário
-            // Modificada para incluir demandas baseadas em permissao_atribuicao_id
             $placeholders = str_repeat('?,', count($area_ids) - 1) . '?';
             $sql = "
                 SELECT DISTINCT 
                     d.*,
                     u.nome as admin_nome,
-                    du.status as status_usuario_individual, -- Status da atribuição individual
-                    d.status as status_geral, -- Status geral da demanda
-                    d.data_conclusao as data_conclusao_geral, -- Data de conclusão geral
-                    du.data_conclusao as data_conclusao_individual -- Data de conclusão individual
+                    du.status as status_usuario_individual,
+                    d.status as status_geral,
+                    d.data_conclusao as data_conclusao_geral,
+                    du.data_conclusao as data_conclusao_individual
                 FROM demandas d
                 LEFT JOIN demanda_usuarios du ON d.id = du.demanda_id AND du.usuario_id = ?
-                LEFT JOIN u750204740_salaberga.usuarios u ON d.admin_id = u.id
+                LEFT JOIN salaberga.usuarios u ON d.admin_id = u.id
                 WHERE (
-                    d.admin_id = ? -- Usuário é admin da demanda
-                    OR du.usuario_id = ? -- Usuário está atribuído individualmente via demanda_usuarios
-                    OR d.area_id IN ($placeholders) -- Demanda da área do usuário
+                    d.admin_id = ?
+                    OR du.usuario_id = ?
+                    OR d.area_id IN ($placeholders)
                 )
                 ORDER BY d.data_criacao DESC";
             
-            // Ajustar parâmetros para a nova query
             $params = array_merge([$usuario_id, $usuario_id, $usuario_id], $area_ids);
             $stmt = $this->pdo->prepare($sql);
             
-            // DEBUG: Logar a query e parâmetros
             error_log("DEBUG MODEL - SQL listarDemandasPorUsuario: " . $sql);
             error_log("DEBUG MODEL - Params listarDemandasPorUsuario: " . print_r($params, true));
 
@@ -233,88 +230,39 @@ class Demanda {
             error_log("Número de demandas: " . count($demandas));
             error_log(print_r($demandas, true));
 
-            // DEBUG: Logar as demandas brutas antes de buscar usuários atribuídos
             error_log("DEBUG MODEL - Demandas brutas antes de buscar usuários atribuídos:");
             error_log(print_r($demandas, true));
 
-            // Para cada demanda, buscar os usuários atribuídos E definir o status_usuario para a interface
             foreach ($demandas as &$demanda) {
                 error_log("\n=== PROCESSANDO DEMANDA ID: " . $demanda['id'] . " PARA USUÁRIO ID: " . $usuario_id . " ===");
 
-                // Buscar usuários atribuídos individualmente (mantém a lógica existente para exibir)
                 $stmtUsuarios = $this->pdo->prepare("
                     SELECT 
                         u.id,
                         u.nome,
                         du.status,
                         du.data_conclusao
-                    FROM demanda_usuarios du
-                    INNER JOIN u750204740_salaberga.usuarios u ON u.id = du.usuario_id
-                    WHERE du.demanda_id = ?
+                    FROM salaberga.usuarios u
+                    INNER JOIN demanda_usuarios du ON u.id = du.usuario_id
+                    WHERE du.demanda_id = ? AND du.status IN ('aceito', 'em_andamento', 'concluido')
+                    UNION
+                    SELECT 
+                        u.id,
+                        u.nome,
+                        d.status as status,
+                        d.data_conclusao
+                    FROM salaberga.usuarios u
+                    INNER JOIN demandas d ON u.id = d.admin_id
+                    WHERE d.id = ? AND u.id = d.admin_id AND d.status IN ('em_andamento', 'concluida')
                 ");
-                
-                error_log("SQL Usuários Atribuídos: " . $stmtUsuarios->queryString);
-                error_log("Parâmetros Usuários Atribuídos: [" . $demanda['id'] . "]");
-                
-                $stmtUsuarios->execute([$demanda['id']]);
-                $usuarios_atribuidos = $stmtUsuarios->fetchAll(PDO::FETCH_ASSOC);
-                
-                error_log("Usuários atribuídos encontrados para demanda " . $demanda['id'] . ": " . count($usuarios_atribuidos));
-                error_log("Detalhes dos usuários atribuídos: " . print_r($usuarios_atribuidos, true));
-                
-                $demanda['usuarios_atribuidos'] = $usuarios_atribuidos;
-
-                // === Lógica para definir o status_usuario e data_conclusao_usuario para a interface ===
-                $demanda['status_usuario'] = null; // Inicializa com null
-                $demanda['data_conclusao_usuario'] = null; // Inicializa com null
-
-                // 1. Verificar se o usuário logado está individualmente atribuído a esta demanda
-                $usuario_atribuido_diretamente = false;
-                foreach ($usuarios_atribuidos as $u_atrib) {
-                    if (isset($u_atrib['id']) && $u_atrib['id'] == $usuario_id) {
-                        $usuario_atribuido_diretamente = true;
-                        // Se atribuído diretamente, o status e data de conclusão vêm da tabela demanda_usuarios
-                        $demanda['status_usuario'] = $u_atrib['status'];
-                        $demanda['data_conclusao_usuario'] = $u_atrib['data_conclusao'];
-                        error_log("DEBUG MODEL - Usuário ID " . $usuario_id . " encontrado nos atribuidos diretos. Status/Data do usuário definidos a partir de demanda_usuarios.");
-                        break; // Encontrou o usuário atribuído diretamente, pode parar
-                    }
-                }
-
-                // 2. Se o usuário NÃO está atribuído diretamente, verificar o status baseado na permissão ou status geral
-                if (!$usuario_atribuido_diretamente) {
-                    error_log("DEBUG MODEL - Usuário ID " . $usuario_id . " NÃO atribuído diretamente a demanda ID " . $demanda['id'] . ". Verificando status baseado em permissão ou status geral.");
-                    // Se a demanda tem uma permissão de atribuição e o usuário tem essa permissão
-                    // Ou se a demanda é da área do usuário (e ele tem permissão na área - já tratado na query WHERE)
-                    // Use o status geral da demanda. Note que a query WHERE já filtrou as demandas relevantes.
-                    
-                    // No entanto, precisamos mapear o status geral 'concluida' para 'concluido' para consistência da interface se necessário
-                    $demanda['status_usuario'] = ($demanda['status_geral'] === 'concluida') ? 'concluido' : $demanda['status_geral'];
-                    $demanda['data_conclusao_usuario'] = $demanda['data_conclusao_geral'];
-                    error_log("DEBUG MODEL - Status/Data do usuário definidos a partir do status geral da demanda: " . $demanda['status_usuario'] . ", " . $demanda['data_conclusao_usuario']);
-
-                    // Lógica adicional para o status 'aceito' se ainda for relevante para a exibição inicial
-                    // Pelo log anterior, vi que uma demanda tinha status_usuario 'inscrito'. Vamos garantir que 'inscrito' seja tratado como 'pendente' para exibição.
-                    if ($demanda['status_usuario'] === 'inscrito') {
-                         $demanda['status_usuario'] = 'pendente';
-                         error_log("DEBUG MODEL - Status 'inscrito' mapeado para 'pendente' para exibição.");
-                    }
-
-                }
-                // === Fim da Lógica para definir o status_usuario ===
-
-                error_log("DEBUG MODEL - Status final definido para Demanda ID " . $demanda['id'] . ": " . $demanda['status_usuario']);
+                $stmtUsuarios->execute([$demanda['id'], $demanda['id']]);
+                $demanda['usuarios_atribuidos'] = $stmtUsuarios->fetchAll(PDO::FETCH_ASSOC);
             }
-
-            error_log("\n=== DEMANDAS PROCESSADAS PARA EXIBIÇÃO NO USUÁRIO ===");
-            error_log(print_r($demandas, true));
 
             return $demandas;
         } catch (PDOException $e) {
-            error_log("ERRO AO BUSCAR DEMANDAS: " . $e->getMessage());
-            error_log("SQL: " . $sql);
-            error_log("Parâmetros: [" . implode(", ", $params ?? [$usuario_id]) . "]");
-            return [];
+            error_log("ERRO ao buscar demandas: " . $e->getMessage());
+            throw $e;
         }
     }
 
@@ -343,7 +291,7 @@ class Demanda {
         $stmt = $this->pdo->prepare("
             SELECT d.*, u.nome as admin_nome
             FROM demandas d 
-            LEFT JOIN u750204740_salaberga.usuarios u ON d.admin_id = u.id 
+            LEFT JOIN salaberga.usuarios u ON d.admin_id = u.id 
             WHERE d.area_id = ?
             ORDER BY d.data_criacao DESC
         ");
@@ -353,12 +301,12 @@ class Demanda {
         foreach ($demandas as &$demanda) {
             $stmtUsuarios = $this->pdo->prepare("
                 SELECT u.id, u.nome, du.status, du.data_conclusao 
-                FROM u750204740_salaberga.usuarios u
+                FROM salaberga.usuarios u
                 INNER JOIN demanda_usuarios du ON u.id = du.usuario_id
                 WHERE du.demanda_id = ? AND du.status IN ('aceito', 'em_andamento', 'concluido')
                 UNION
                 SELECT u.id, u.nome, d.status as status, d.data_conclusao
-                FROM u750204740_salaberga.usuarios u
+                FROM salaberga.usuarios u
                 INNER JOIN demandas d ON u.id = d.admin_id
                 WHERE d.id = ? AND u.id = d.admin_id AND d.status IN ('em_andamento', 'concluida')
             ");

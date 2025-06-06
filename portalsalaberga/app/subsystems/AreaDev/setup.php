@@ -2,102 +2,101 @@
 require_once __DIR__ . '/config/database.php';
 
 try {
-    $database = Database::getInstance();
-    $pdo_area_dev = $database->getAreadevConnection();
-    $pdo_salaberga = $database->getSalabergaConnection(); // Necessário para verificar a existência da tabela usuarios
+    // Obtém a conexão com o banco de dados
+    $db = Database::getInstance();
+    $pdo = $db->getAreaDevConnection();
 
-    // --- Corrigir a chave estrangeira da tabela demanda_usuarios ---
-    // Verificar se a chave estrangeira existe antes de tentar excluí-la (opcional, mas evita erro se rodar várias vezes)
-    $sql_check_fk = "SELECT CONSTRAINT_NAME FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'demanda_usuarios' AND CONSTRAINT_TYPE = 'FOREIGN KEY' AND CONSTRAINT_NAME = 'demanda_usuarios_ibfk_2'";
-    $stmt_check_fk = $pdo_area_dev->query($sql_check_fk);
-    
-    if ($stmt_check_fk->fetch()) {
-        // Excluir a chave estrangeira incorreta
-        $sql_drop_fk = "ALTER TABLE demanda_usuarios DROP FOREIGN KEY demanda_usuarios_ibfk_2;";
-        error_log("SETUP_LOG: Excluindo FK incorreta: " . $sql_drop_fk);
-        $pdo_area_dev->exec($sql_drop_fk);
-        error_log("SETUP_LOG: FK incorreta excluída.");
-    } else {
-         error_log("SETUP_LOG: FK demanda_usuarios_ibfk_2 não encontrada para exclusão ou já corrigida.");
+    // Cria a tabela areas
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `areas` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `nome` varchar(100) NOT NULL,
+        `descricao` text DEFAULT NULL,
+        `status` enum('ativo','inativo') NOT NULL DEFAULT 'ativo',
+        PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
+
+    // Verifica se já existem áreas cadastradas
+    $stmt = $pdo->query("SELECT COUNT(*) FROM areas");
+    $count = $stmt->fetchColumn();
+
+    if ($count == 0) {
+        // Insere dados iniciais na tabela areas apenas se estiver vazia
+        $pdo->exec("INSERT INTO `areas` (`id`, `nome`, `descricao`, `status`) VALUES
+            (1, 'Desenvolvimento', 'Área responsável pelo desenvolvimento de sistemas e aplicações', 'ativo'),
+            (2, 'Suporte', 'Área responsável pelo suporte técnico e manutenção', 'ativo'),
+            (3, 'Infraestrutura', 'Área responsável pela infraestrutura de TI', 'ativo')
+        ");
     }
 
-    // Adicionar a chave estrangeira correta referenciando a tabela usuarios no banco salaberga
-    $sql_add_fk = "ALTER TABLE demanda_usuarios ADD CONSTRAINT demanda_usuarios_ibfk_2 FOREIGN KEY (usuario_id) REFERENCES u750204740_salaberga.usuarios(id) ON DELETE CASCADE;";
-    error_log("SETUP_LOG: Adicionando FK correta: " . $sql_add_fk);
-    $pdo_area_dev->exec($sql_add_fk);
-    error_log("SETUP_LOG: FK correta adicionada.");
-    // --- Fim da correção da chave estrangeira ---
+    // Cria a tabela demandas
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `demandas` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `titulo` varchar(200) NOT NULL,
+        `descricao` text NOT NULL,
+        `prioridade` enum('baixa','media','alta') NOT NULL,
+        `status` enum('pendente','em_andamento','concluida') NOT NULL DEFAULT 'pendente',
+        `admin_id` int(11) NOT NULL,
+        `data_criacao` timestamp NOT NULL DEFAULT current_timestamp(),
+        `data_conclusao` timestamp NULL DEFAULT NULL,
+        `prazo` date DEFAULT NULL,
+        `area_id` int(11) NOT NULL,
+        PRIMARY KEY (`id`),
+        KEY `admin_id` (`admin_id`),
+        KEY `area_id` (`area_id`),
+        CONSTRAINT `demandas_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `salaberga`.`usuarios` (`id`),
+        CONSTRAINT `demandas_ibfk_2` FOREIGN KEY (`area_id`) REFERENCES `areas` (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
 
-    echo "Correção da chave estrangeira em demanda_usuarios aplicada com sucesso.<br>";
+    // Verifica se já existem demandas cadastradas
+    $stmt = $pdo->query("SELECT COUNT(*) FROM demandas");
+    $count = $stmt->fetchColumn();
 
-    // Criar tabela de áreas
-    $sql_create_areas = "
-    CREATE TABLE IF NOT EXISTS areas (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        nome VARCHAR(100) NOT NULL,
-        descricao TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )";
-    $pdo_area_dev->exec($sql_create_areas);
-    error_log("SETUP_LOG: Tabela areas criada ou já existente.");
-
-    // Criar tabela de demandas
-    $sql_create_demandas = "
-    CREATE TABLE IF NOT EXISTS demandas (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        titulo VARCHAR(255) NOT NULL,
-        descricao TEXT,
-        prioridade ENUM('baixa', 'media', 'alta') NOT NULL,
-        status ENUM('pendente', 'em_andamento', 'concluida') NOT NULL DEFAULT 'pendente',
-        admin_id INT NOT NULL,
-        area_id INT NOT NULL,
-        prazo DATE,
-        data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        data_atualizacao TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
-        data_conclusao TIMESTAMP NULL,
-        FOREIGN KEY (admin_id) REFERENCES u750204740_salaberga.usuarios(id),
-        FOREIGN KEY (area_id) REFERENCES areas(id)
-    )";
-    $pdo_area_dev->exec($sql_create_demandas);
-    error_log("SETUP_LOG: Tabela demandas criada ou já existente.");
-
-    // Criar tabela de demanda_usuarios
-    $sql_create_demanda_usuarios = "
-    CREATE TABLE IF NOT EXISTS demanda_usuarios (
-        demanda_id INT NOT NULL,
-        usuario_id INT NOT NULL,
-        status ENUM('pendente', 'inscrito', 'em_andamento', 'concluido') NOT NULL DEFAULT 'pendente',
-        data_aceitacao TIMESTAMP NULL,
-        data_atualizacao TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
-        data_conclusao TIMESTAMP NULL,
-        PRIMARY KEY (demanda_id, usuario_id),
-        FOREIGN KEY (demanda_id) REFERENCES demandas(id) ON DELETE CASCADE,
-        FOREIGN KEY (usuario_id) REFERENCES u750204740_salaberga.usuarios(id) ON DELETE CASCADE
-    )";
-    $pdo_area_dev->exec($sql_create_demanda_usuarios);
-    error_log("SETUP_LOG: Tabela demanda_usuarios criada ou já existente.");
-
-    // Inserir áreas padrão se não existirem
-    $areas = [
-        ['nome' => 'Desenvolvimento', 'descricao' => 'Área de desenvolvimento de software'],
-        ['nome' => 'Suporte', 'descricao' => 'Área de suporte técnico'],
-        ['nome' => 'Design', 'descricao' => 'Área de design gráfico']
-    ];
-
-    foreach ($areas as $area) {
-        $stmt = $pdo_area_dev->prepare("INSERT IGNORE INTO areas (nome, descricao) VALUES (?, ?)");
-        $stmt->execute([$area['nome'], $area['descricao']]);
+    if ($count == 0) {
+        // Insere dados iniciais na tabela demandas apenas se estiver vazia
+        $pdo->exec("INSERT INTO `demandas` (`id`, `titulo`, `descricao`, `prioridade`, `status`, `admin_id`, `data_criacao`, `data_conclusao`, `prazo`, `area_id`) VALUES
+            (26, 'PDV Guarita', 'Máquina para receber o leitor de QrCode e registrar frequência de saida de estágio ', 'alta', 'pendente', 1, '2025-05-26 00:12:32', NULL, '2025-05-29', 1),
+            (28, 'Montar máquinas e organizar cabos ', 'Com a régua parafusada, organizar os cabos e ligar as máquinas. Use cabos de força bifurcados. Neste caso 4 máquinas e 8 monitores. Seriam necessários 12 cabos de força. Sendo estes bifurcados, ficam 6. No caso de não haver os 6 cabos bifurcados no mesmo padrão de entrada, coloque nos segundos monitores um cabo individual.', 'alta', 'pendente', 1, '2025-05-28 04:02:24', NULL, '2025-05-28', 3),
+            (30, 'Formulário de Avaliação da Equipe', 'Planejar e desenvolver este formulário de acordo com os critérios de avaliação parcial afixados em laboratório e entregues no grupo dos alunos', 'alta', 'em_andamento', 1, '2025-05-29 02:50:08', NULL, '2025-05-30', 1),
+            (31, 'Seleção Área Dev', 'Rever o edital estabelecer a avaliação e critérios. Colocar peso na indicação e na avaliação prática.', 'alta', 'pendente', 1, '2025-05-29 12:48:36', NULL, '2025-05-30', 1),
+            (32, 'Treinamento dos DEV\'s', 'Treinar os alunos que vão estagiar com perfil de desenvolvimento dentro dos padrões da Área Dev.', 'media', 'pendente', 1, '2025-05-29 12:50:32', NULL, '2025-06-01', 1),
+            (33, 'Alteração Interface Sistema de Demandas', 'Relatório de Estatísticas: Logo \"S\" de Salaberga. As tabela apresentadas devem acompanhar a largura da página. Em Estatísticas Gerais, trocar o nome da coluna \"Valor\" por \"Total\". Trocar a legenda da primeira linha de \"Total de Demandas\" por \"Demandas\" apenas. Trocar a legenda da última linha de \"Total de Usuários\" por \"Usuários\" apenas. ', 'baixa', 'em_andamento', 1, '2025-05-29 13:02:36', NULL, '2025-06-03', 1),
+            (34, 'Alterar metodologia de login da plataforma', 'Alterar de acordo com a modelagem previamente repassada, de modo a permitir uma única autenticação com as permissões devidas a aplicações que o usuário possui.', 'alta', 'em_andamento', 1, '2025-05-29 13:14:03', NULL, '2025-05-30', 1)
+        ");
     }
-    error_log("SETUP_LOG: Áreas padrão verificadas/inseridas.");
 
-    echo "Estrutura do banco de dados criada com sucesso.<br>";
+    // Cria a tabela demanda_usuarios
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `demanda_usuarios` (
+        `demanda_id` int(11) NOT NULL,
+        `usuario_id` int(11) NOT NULL,
+        `status` enum('pendente','aceito','recusado','em_andamento','concluido') DEFAULT 'pendente',
+        `data_conclusao` datetime DEFAULT NULL,
+        `data_aceitacao` datetime DEFAULT NULL,
+        PRIMARY KEY (`demanda_id`,`usuario_id`),
+        KEY `usuario_id` (`usuario_id`),
+        CONSTRAINT `demanda_usuarios_ibfk_1` FOREIGN KEY (`demanda_id`) REFERENCES `demandas` (`id`) ON DELETE CASCADE,
+        CONSTRAINT `demanda_usuarios_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `salaberga`.`usuarios` (`id`) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
+
+    // Verifica se já existem registros em demanda_usuarios
+    $stmt = $pdo->query("SELECT COUNT(*) FROM demanda_usuarios");
+    $count = $stmt->fetchColumn();
+
+    if ($count == 0) {
+        // Insere dados iniciais na tabela demanda_usuarios apenas se estiver vazia
+        $pdo->exec("INSERT INTO `demanda_usuarios` (`demanda_id`, `usuario_id`, `status`, `data_conclusao`, `data_aceitacao`) VALUES
+            (26, 2, 'pendente', NULL, NULL),
+            (28, 2, 'pendente', NULL, NULL),
+            (30, 2, 'pendente', NULL, NULL),
+            (31, 2, 'pendente', NULL, NULL),
+            (32, 2, 'pendente', NULL, NULL),
+            (33, 2, 'recusado', NULL, NULL),
+            (34, 2, 'em_andamento', NULL, '2025-05-29 15:08:32')
+        ");
+    }
+
+    echo "Tabelas criadas com sucesso!\n";
+    echo "Dados iniciais inseridos com sucesso!\n";
 
 } catch (PDOException $e) {
-    error_log("SETUP_LOG: ERRO PDO ao aplicar setup: " . $e->getMessage());
-    echo "Erro ao aplicar setup: " . $e->getMessage();
-} catch (Exception $e) {
-     error_log("SETUP_LOG: ERRO Geral ao aplicar setup: " . $e->getMessage());
-     echo "Erro ao aplicar setup: " . $e->getMessage();
-}
-
-?> 
+    die("Erro ao criar as tabelas: " . $e->getMessage() . "\n");
+} 

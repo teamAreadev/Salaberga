@@ -5,8 +5,8 @@ $is_local = $_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '
 // Configurações do banco de dados
 if ($is_local) {
     // Configurações para ambiente local
-    define('DB_SALABERGA_NAME', 'u750204740_salaberga');
-    define('DB_AREA_DEV_NAME', 'u750204740_areadev');
+    define('DB_SALABERGA_NAME', 'salaberga');
+    define('DB_AREA_DEV_NAME', 'areadev');
     define('DB_HOST', 'localhost');
     define('DB_USER', 'root');
     define('DB_PASS', '');
@@ -63,7 +63,7 @@ class Database {
 
 try {
     $pdo = new PDO(
-        "mysql:host=localhost;dbname=u750204740_areadev;charset=utf8mb4",
+        "mysql:host=localhost;dbname=areadev;charset=utf8mb4",
         "root",
         "",
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]

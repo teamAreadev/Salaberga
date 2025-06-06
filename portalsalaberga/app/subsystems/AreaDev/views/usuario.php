@@ -4,14 +4,14 @@ session_start();
 require_once __DIR__ . '/../../../main/config/Database.php';
 require_once __DIR__ . '/../model/Demanda.php';
 require_once __DIR__ . '/../model/Usuario.php';
-require_once __DIR__ . '/../../../main/config/Database.php';
 
 // Obter o ID do usuário da sessão
 $usuario_id = $_SESSION['user_id'] ?? null;
 
 // Obter as conexões com o banco de dados
-$conexao = Database::getAreadevConnection();
-$pdo_salaberga = Database::getInstance()->getSalabergaConnection();
+$database = Database::getInstance();
+$conexao = $database->getAreaDevConnection();
+$pdo_salaberga = $database->getSalabergaConnection();
 
 // Verificar se o usuário está logado
 if (!$usuario_id) {

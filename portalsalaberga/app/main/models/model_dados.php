@@ -432,6 +432,14 @@ function inserirAlunoAreaDev($nome, $funcao)
     try {
         // Usa a nova função para obter a conexão com o banco 'areadev'
         $conexao = getAreadevConnection();
+
+        // *** ADDED: Check if connection was successful ***
+        if ($conexao === null) {
+            error_log("Debug Model: Failed to get areadev database connection in inserirAlunoAreaDev.");
+            return false; // Indicate connection failure
+        }
+        // *** END ADDED ***
+
         $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         error_log("Debug Model: Database connection successful in inserirAlunoAreaDev.");
 
