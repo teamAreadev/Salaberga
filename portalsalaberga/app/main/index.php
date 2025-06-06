@@ -1661,7 +1661,6 @@
 
                     carousel.classList.add('loading');
 
-                    // Ajustar o raio com base no tamanho da tela
                     let radius = 600; // Raio padrão
                     if (window.innerWidth <= 768) {
                         radius = 300; // Raio menor para tablets e mobiles
