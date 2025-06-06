@@ -1116,16 +1116,23 @@ if (!isset($_SESSION['Email'])) {
             
             input.focus();
             manterFoco();
-            readerDiv.style.display = 'block';
-            html5QrCode = new Html5Qrcode("reader");
 
-            html5QrCode.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: 250 },
-                onQRCodeScanned
-            );
+            // Inicia o leitor QR apenas em dispositivos não-mobile (>= 768px)
+            if (window.innerWidth >= 768) { 
+                readerDiv.style.display = 'block';
+                html5QrCode = new Html5Qrcode("reader");
 
-            leituraAtiva = true;
+                html5QrCode.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: 250 },
+                    onQRCodeScanned
+                );
+
+                leituraAtiva = true;
+            } else {
+                readerDiv.style.display = 'none'; // Hide the reader div on mobile
+                leituraAtiva = false;
+            }
         });
 
         // Adiciona evento para abrir URL quando o usuário digita
