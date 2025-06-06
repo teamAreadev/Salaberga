@@ -249,7 +249,7 @@ if (!isset($_SESSION['Email'])) {
     // Fecha a página após 2 segundos
     setTimeout(function() {
       window.close();
-    }, 2000);
+    }, 1000);
   </script>
 </body>
 
