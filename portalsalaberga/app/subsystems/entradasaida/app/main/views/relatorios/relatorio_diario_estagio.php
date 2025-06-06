@@ -29,9 +29,12 @@ class PDF extends FPDF {
     // Header method (FPDF calls this automatically on new page)
     public function Header()
     {
+        // Define o fuso horário para Brasília
+        date_default_timezone_set('America/Sao_Paulo');
+
         // Fundo do cabeçalho com a cor primária
         $this->SetFillColor($this->colors['primary'][0], $this->colors['primary'][1], $this->colors['primary'][2]);
-        $this->Rect(0, 0, $this->GetPageWidth(), 50, 'F');
+        $this->Rect(0, 0, $this->GetPageWidth(), 60, 'F');
 
         // Título principal
         $this->SetFont('Arial', 'B', 18);
@@ -40,12 +43,10 @@ class PDF extends FPDF {
 
         // Data e hora
         $this->SetFont('Arial', '', 12);
-        $this->Cell(0, 17, utf8_decode('Data: ' . date('d/m/Y') . ' - Hora: ' . date('H:i')), 0, 1, 'C');
+        $this->Cell(0, 23, utf8_decode('Data: ' . date('d/m/Y') . ' | Hora: ' . date('H:i')) , 0, 1, 'C');
 
         // Linha decorativa
-        $this->SetDrawColor($this->colors['secondary'][0], $this->colors['secondary'][1], $this->colors['secondary'][2]);
-        $this->SetLineWidth(1);
-        $this->Line(40, 50, $this->GetPageWidth() - 40, 50);
+        $this->SetDrawColor($this->colors['secondary'][0], $this->colors['secondary'][1], $this->colors['secondary'][2]);;
 
         $this->Ln(15); // Espaço após o cabeçalho
     }
@@ -81,33 +82,41 @@ class PDF extends FPDF {
         $this->SetFont('Arial', 'B', 12);
 
         // 3º Ano A
-        $this->SetTextColor($this->colors['turma_3a'][0], $this->colors['turma_3a'][1], $this->colors['turma_3a'][2]);
-        $this->Cell(0, 15, utf8_decode('3º Ano A'), 0, 1, 'L');
-        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]); // Reset color
+        $this->SetFillColor($this->colors['turma_3a'][0], $this->colors['turma_3a'][1], $this->colors['turma_3a'][2]);
+        $this->SetTextColor(255, 255, 255);
+        $this->Cell(0, 15, utf8_decode('3º Ano A'), 0, 1, 'L', true);
+        $this->SetFillColor(255, 255, 255);
+        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
         $dados_3a = $this->select->saida_estagio_3A();
         $this->imprimirAlunos($dados_3a);
         $this->Ln(15);
 
         // 3º Ano B
-        $this->SetTextColor($this->colors['turma_3b'][0], $this->colors['turma_3b'][1], $this->colors['turma_3b'][2]);
-        $this->Cell(0, 15, utf8_decode('3º Ano B'), 0, 1, 'L');
-        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]); // Reset color
+        $this->SetFillColor($this->colors['turma_3b'][0], $this->colors['turma_3b'][1], $this->colors['turma_3b'][2]);
+        $this->SetTextColor(255, 255, 255);
+        $this->Cell(0, 15, utf8_decode('3º Ano B'), 0, 1, 'L', true);
+        $this->SetFillColor(255, 255, 255);
+        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
         $dados_3b = $this->select->saida_estagio_3B();
         $this->imprimirAlunos($dados_3b);
         $this->Ln(15);
 
         // 3º Ano C
-        $this->SetTextColor($this->colors['turma_3c'][0], $this->colors['turma_3c'][1], $this->colors['turma_3c'][2]);
-        $this->Cell(0, 15, utf8_decode('3º Ano C'), 0, 1, 'L');
-        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]); // Reset color
+        $this->SetFillColor($this->colors['turma_3c'][0], $this->colors['turma_3c'][1], $this->colors['turma_3c'][2]);
+        $this->SetTextColor(255, 255, 255);
+        $this->Cell(0, 15, utf8_decode('3º Ano C'), 0, 1, 'L', true);
+        $this->SetFillColor(255, 255, 255);
+        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
         $dados_3c = $this->select->saida_estagio_3C();
         $this->imprimirAlunos($dados_3c);
         $this->Ln(15);
 
         // 3º Ano D
-        $this->SetTextColor($this->colors['turma_3d'][0], $this->colors['turma_3d'][1], $this->colors['turma_3d'][2]);
-        $this->Cell(0, 15, utf8_decode('3º Ano D'), 0, 1, 'L');
-        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]); // Reset color
+        $this->SetFillColor($this->colors['turma_3d'][0], $this->colors['turma_3d'][1], $this->colors['turma_3d'][2]);
+        $this->SetTextColor(255, 255, 255);
+        $this->Cell(0, 15, utf8_decode('3º Ano D'), 0, 1, 'L', true);
+        $this->SetFillColor(255, 255, 255);
+        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
         $dados_3d = $this->select->saida_estagio_3D();
         $this->imprimirAlunos($dados_3d);
     }
@@ -130,7 +139,7 @@ class PDF extends FPDF {
         $this->SetLineWidth(0.2);
 
         // Larguras das colunas
-        $pageWidth = $this->GetPageWidth() - 40; // Considerando as margens padrão de 20pt de cada lado
+        $pageWidth = $this->GetPageWidth() - 57; // Considerando as margens padrão de 20pt de cada lado
         $colWidthNome = $pageWidth * 0.7; // 70% para o nome
         $colWidthHorario = $pageWidth * 0.3; // 30% para o horário
 
