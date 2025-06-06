@@ -37,6 +37,7 @@
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
+            padding: 1rem;
         }
 
         body::before {
@@ -59,6 +60,11 @@
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 42rem;
+            margin: 0 auto;
         }
 
         .field-card {
@@ -80,6 +86,9 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(10px);
             color: #ffffff;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
         }
 
         .custom-input:focus {
@@ -103,6 +112,8 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(10px);
             cursor: pointer;
+            padding: 1.5rem;
+            text-align: center;
         }
 
         .option-card:hover {
@@ -122,6 +133,11 @@
             background: linear-gradient(135deg, #007A33 0%, #00a843 100%);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 10px 25px -5px rgba(0, 122, 51, 0.3);
+            width: 100%;
+            max-width: 300px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            margin: 0 auto;
         }
 
         .btn-primary:hover {
@@ -144,6 +160,11 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            width: 100%;
+            max-width: 300px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            margin: 0 auto;
         }
 
         .btn-secondary:hover {
@@ -249,23 +270,120 @@
             animation: fadeOut 0.6s ease-out forwards;
         }
 
-        @media (max-width: 640px) {
+        /* Ajustes responsivos para o grid de opções */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Media queries para diferentes tamanhos de tela */
+        @media (max-width: 768px) {
             .glass-card {
-                margin: 16px;
-                padding: 24px;
+                padding: 1.5rem;
+                margin: 1rem;
             }
-            
+
             .options-grid {
-                grid-template-columns: 1fr !important;
+                grid-template-columns: 1fr;
             }
 
-            .button-group {
-                flex-direction: column !important;
-                gap: 12px !important;
+            .field-card {
+                padding: 1rem;
             }
 
-            .btn-secondary {
-                width: 100%;
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            p {
+                font-size: 0.875rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .glass-card {
+                padding: 1rem;
+                margin: 0.5rem;
+            }
+
+            .btn-primary, .btn-secondary {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+
+            .option-card {
+                padding: 1rem;
+            }
+
+            .custom-input {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Ajustes para telas muito pequenas */
+        @media (max-width: 320px) {
+            .glass-card {
+                padding: 0.75rem;
+            }
+
+            .field-card {
+                padding: 0.75rem;
+            }
+
+            .option-card {
+                padding: 0.75rem;
+            }
+        }
+
+        /* Ajustes para telas muito grandes */
+        @media (min-width: 1440px) {
+            .glass-card {
+                max-width: 48rem;
+            }
+
+            .options-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Ajustes para orientação paisagem em dispositivos móveis */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .glass-card {
+                margin: 0.5rem auto;
+            }
+
+            .field-card {
+                padding: 0.75rem;
+            }
+
+            .options-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Ajustes para melhor legibilidade em telas de alta resolução */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            body {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+        }
+
+        /* Ajustes para modo escuro do sistema */
+        @media (prefers-color-scheme: dark) {
+            .glass-card {
+                background: rgba(15, 23, 42, 0.7);
+            }
+        }
+
+        /* Ajustes para reduzir movimento em dispositivos que preferem menos movimento */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
             }
         }
     </style>
@@ -320,22 +438,22 @@
                         <p class="text-sm text-gray-400">Informe seu nome completo</p>
                     </div>
                 </div>
-                <input 
-                    type="text" 
-                    id="nome" 
-                    name="nome" 
+                    <input 
+                        type="text" 
+                        id="nome" 
+                        name="nome" 
                     class="custom-input w-full rounded-lg px-4 py-3 text-white"
-                    placeholder="Digite seu nome completo"
-                    required
-                >
-            </div>
-
+                        placeholder="Digite seu nome completo"
+                        required
+                    >
+                </div>
+                
             <!-- Função Field -->
             <div class="field-card rounded-xl p-6 slide-up" style="--index: 1">
                 <div class="flex items-center space-x-4 mb-4">
                     <div class="w-12 h-12 bg-gradient-to-br from-secondary to-secondary/70 rounded-full flex items-center justify-center">
                         <i class="fas fa-briefcase text-white"></i>
-                    </div>
+                        </div>
                     <div>
                         <h3 class="text-lg font-semibold text-white">Área de Especialização</h3>
                         <p class="text-sm text-gray-400">Selecione sua área de interesse</p>
@@ -377,8 +495,8 @@
                     </span>
                 </button>
             </div>
-        </form>
-
+            </form>
+            
         <!-- Success Message -->
         <div id="success-message" class="hidden mt-6 p-4 bg-success/20 border border-success/30 rounded-lg text-success text-center">
             <i class="fas fa-check-circle mr-2" id="success-icon"></i>
@@ -407,10 +525,10 @@
         }
 
         // Nome field validation
-        const nomeInput = document.getElementById('nome');
+            const nomeInput = document.getElementById('nome');
         let nomeValid = false;
 
-        nomeInput.addEventListener('input', function() {
+            nomeInput.addEventListener('input', function() {
             const isValid = this.value.trim().length >= 2;
             
             if (isValid && !nomeValid) {
@@ -422,9 +540,9 @@
             }
             
             // Visual feedback
-            if (this.value.trim().length > 0 && this.value.trim().length < 2) {
-                this.style.borderColor = '#ef4444';
-            } else {
+                if (this.value.trim().length > 0 && this.value.trim().length < 2) {
+                    this.style.borderColor = '#ef4444';
+                } else {
                 this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
             }
             

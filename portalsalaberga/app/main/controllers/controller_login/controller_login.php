@@ -21,7 +21,7 @@ if (isset($_GET['sair'])) {
     exit();
 }
 
-if (isset($_POST['login']) && isset($_POST['email']) && isset($_POST['senha']) && !empty($_POST['email']) && !empty($_POST['senha'])) {
+if (isset($_POST['email']) && isset($_POST['senha']) && !empty($_POST['email']) && !empty($_POST['senha'])) {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
     
