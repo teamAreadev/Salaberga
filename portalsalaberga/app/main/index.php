@@ -1517,22 +1517,16 @@
 
     <main>
         <section id="home"
-            class="relative bg-cover bg-center bg-no-repeat min-h-screen flex flex-col items-center justify-center fade-in overflow-hidden">
-            <img src="../main/assets/img/background03.jpeg" class="absolute top-0 left-0 w-full h-full object-cover z-0" alt="Background da escola">
+            class="relative bg-cover bg-center bg-no-repeat min-h-screen fade-in overflow-hidden pt-64">
+            <img src="../main/assets/img/img_index3.png" class="absolute top-0 left-0 w-full h-full object-cover z-0" alt="Background da escola">
             <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/50 to-black/60"></div>
 
-            <div class="container mx-auto px-4 text-center relative z-10 mt-20 md:mt-0">
+            <div class="container mx-auto px-4 text-center relative z-10">
                 <div class="slide-in-left">
-                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 text-white leading-tight">
-                        EEEP Salaberga<br>
-                        <span class="bg-gradient-secondary bg-clip-text text-transparent">Torquato</span><br>
-                        Gomes de Matos
-                    </h1>
+                    
                 </div>
-                <div class="slide-in-right">
-                    <p class="text-xl md:text-3xl mb-16 text-white font-light">Educação de qualidade para um futuro brilhante</p>
-                </div>
-                <div class="flex flex-col sm:flex-row justify-center items-center space-y-6 sm:space-y-0 sm:space-x-8 fade-in">
+
+                <div class="flex flex-col sm:flex-row justify-center mt-[40vh] relative items-center space-y-6 sm:space-y-0 sm:space-x-8 fade-in">
                     <a href="#cursos" class="btn-primary text-lg px-8 py-4">
                         <i class="fas fa-graduation-cap mr-3"></i> Conheça nossos cursos
                     </a>

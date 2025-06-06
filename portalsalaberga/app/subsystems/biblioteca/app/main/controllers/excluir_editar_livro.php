@@ -1,13 +1,12 @@
 <?php
-require_once '../models/main_model.php';
-print_r($_POST);
+require_once ('../models/main_model.php');
 
+/*controller para excluir livro*/
 if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
     $id_livro = $_POST['excluir_livro'];
     print_r($id_livro);
     $model = new main_model();
     $result = $model->excluir_livro($id_livro);
-
 
     switch ($result) {
         case 1:
@@ -17,6 +16,7 @@ if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
             header('location:../views/excluir_livro.php?error');
             break;
     }
+    /*controller para editar livro*/
 } else if (
     isset($_POST['id_livro']) && !empty($_POST['id_livro']) &&
     isset($_POST['titulo']) && !empty($_POST['titulo']) &&
@@ -58,6 +58,7 @@ if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
             header('location:../views/editar_livro.php?error');
             break;
     }
+    /*controller para editar autor*/
 } else if (
     isset($_POST['id_autor']) && !empty($_POST['id_autor']) &&
     isset($_POST['nome']) && !empty($_POST['nome']) &&
