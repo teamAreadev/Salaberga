@@ -27,6 +27,11 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <?php require_once('autenticar.php'); ?>
     
     <script>
@@ -34,33 +39,38 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
             theme: {
                 extend: {
                     colors: {
-                        'ceara-green': '#008C45',
-                        'ceara-orange': '#FFA500',
-                        'ceara-white': '#FFFFFF',
-                        'accent-green': '#00A651',
-                        'dark-green': '#006B35',
-                        'light-orange': '#FFD54F',
-                        'gradient-start': '#008C45',
-                        'gradient-end': '#00A651'
+                        'ghibli-sky': '#5BA3D4',
+                        'ghibli-cloud': '#F8F8F8',
+                        'ghibli-building': '#8B9DC3',
+                        'ghibli-accent': '#D4A574',
+                        'ghibli-green': '#7FB069',
+                        'ghibli-sage': '#A4C3A2',
+                        'ghibli-cream': '#F7F3E9',
+                        'ghibli-peach': '#F4A261',
+                        'ghibli-coral': '#E76F51',
+                        'ghibli-lavender': '#B19CD9',
+                        'ghibli-gold': '#F1C40F',
+                        'ghibli-brown': '#8B4513',
+                        'ghibli-forest': '#2D5016',
+                        'ghibli-mist': '#E8F4F8',
+                        'ghibli-sunset': '#FF6B6B'
                     },
                     backgroundImage: {
-                        'gradient-primary': 'linear-gradient(135deg, #008C45 0%, #00A651 100%)',
-                        'gradient-secondary': 'linear-gradient(135deg, #FFA500 0%, #FFD54F 100%)',
-                        'gradient-dark': 'linear-gradient(135deg, #006B35 0%, #008C45 100%)',
-                        'gradient-hero': 'linear-gradient(135deg, #008C45 0%, #FFA500 50%, #008C45 100%)'
-                    },
-                    boxShadow: {
-                        'custom': '0 10px 25px -5px rgba(0, 140, 69, 0.3)',
-                        'custom-orange': '0 10px 25px -5px rgba(255, 165, 0, 0.3)',
-                        'glow': '0 0 20px rgba(0, 140, 69, 0.4)',
-                        'inner-glow': 'inset 0 0 20px rgba(0, 140, 69, 0.1)'
+                        'ghibli-gradient': 'linear-gradient(135deg, #7FB069 0%, #A4C3A2 100%)',
+                        'ghibli-sunset': 'linear-gradient(135deg, #F4A261 0%, #E76F51 100%)',
+                        'ghibli-sky-gradient': 'linear-gradient(135deg, #5BA3D4 0%, #87CEEB 100%)',
+                        'ghibli-forest': 'linear-gradient(135deg, #2D5016 0%, #7FB069 100%)',
+                        'hero-ghibli': 'url("https://hebbkx1anhila5yf.public.blob.vercel-storage.com/img_index3-9IdYq3BVf9Sebk6O6b0ZJtyMde0HUW.png")'
                     },
                     fontFamily: {
-                        'poppins': ['Poppins', 'sans-serif']
+                        'ghibli': ['Comfortaa', 'cursive'],
+                        'ghibli-text': ['Nunito', 'sans-serif']
                     },
-                    screens: {
-                        'xs': '475px',
-                        // Adding a smaller breakpoint for better mobile responsiveness
+                    boxShadow: {
+                        'ghibli': '0 10px 25px -5px rgba(127, 176, 105, 0.3)',
+                        'ghibli-warm': '0 10px 25px -5px rgba(244, 162, 97, 0.3)',
+                        'ghibli-soft': '0 5px 15px -3px rgba(164, 195, 162, 0.2)',
+                        'ghibli-cloud': '0 8px 32px rgba(248, 248, 248, 0.4)'
                     }
                 }
             }
@@ -68,6 +78,12 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
     </script>
     
     <style>
+        /* Fonte principal */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #F7F3E9 0%, #E8F4F8 100%);
+        }
+
         /* Custom animations and enhanced styles */
         @keyframes fadeInUp {
             from {
@@ -104,10 +120,10 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
 
         @keyframes pulse-glow {
             0%, 100% {
-                box-shadow: 0 0 20px rgba(0, 140, 69, 0.4);
+                box-shadow: 0 0 20px rgba(127, 176, 105, 0.4);
             }
             50% {
-                box-shadow: 0 0 30px rgba(0, 140, 69, 0.6);
+                box-shadow: 0 0 30px rgba(127, 176, 105, 0.6);
             }
         }
 
@@ -151,7 +167,7 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
             transition: all 0.3s ease;
             pointer-events: none;
             padding: 0 5px;
-            background-color: var(--ceara-white);
+            background-color: var(--ghibli-cream);
             z-index: 1;
         }
 
@@ -160,16 +176,16 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
             top: -12px;
             left: 10px;
             font-size: 0.85rem;
-            color: var(--ceara-orange);
+            color: var(--ghibli-coral);
             transform: translateY(0);
-            background-color: var(--ceara-white);
+            background-color: var(--ghibli-cream);
             padding: 0 5px;
             font-weight: 600;
         }
 
         /* Enhanced button styles */
         .btn-enhanced {
-            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
+            background: linear-gradient(135deg, #7FB069 0%, #A4C3A2 100%);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
@@ -192,7 +208,7 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
 
         .btn-enhanced:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(0, 140, 69, 0.4);
+            box-shadow: 0 15px 35px rgba(127, 176, 105, 0.4);
         }
 
         /* Password strength indicator */
@@ -200,18 +216,18 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
             height: 4px;
             border-radius: 2px;
             transition: all 0.3s ease;
-            background: linear-gradient(90deg, #ff4444 0%, #ffaa00 50%, #00aa00 100%);
+            background: linear-gradient(90deg, #ff4444 0%, #ffaa00 50%, #7FB069 100%);
         }
 
         /* Error message styling */
         .error-message {
-            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+            background: linear-gradient(135deg, #E76F51 0%, #F4A261 100%);
             color: white;
             padding: 12px 20px;
             border-radius: 10px;
             margin: 16px 0;
             font-weight: 500;
-            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);
+            box-shadow: 0 4px 15px rgba(231, 111, 81, 0.3);
             animation: fadeInUp 0.5s ease-out;
         }
 
@@ -242,7 +258,7 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
 
         /* Focus states for accessibility */
         *:focus {
-            outline: 2px solid #FFA500;
+            outline: 2px solid #F4A261;
             outline-offset: 2px;
         }
 
@@ -257,12 +273,12 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
         }
 
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #008C45 0%, #FFA500 100%);
+            background: linear-gradient(135deg, #7FB069 0%, #F4A261 100%);
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #006B35 0%, #FF8F00 100%);
+            background: linear-gradient(135deg, #2D5016 0%, #E76F51 100%);
         }
         
         /* Enhanced responsive styles */
@@ -296,15 +312,15 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
     </style>
 </head>
 
-<body class="font-poppins bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-0 sm:p-4">
+<body class="font-ghibli-text bg-gradient-to-br from-ghibli-mist via-ghibli-cloud to-ghibli-sky min-h-screen flex items-center justify-center p-0 sm:p-4">
     
-    <div class="main-container w-full max-w-6xl bg-white rounded-none sm:rounded-3xl shadow-2xl overflow-hidden animate-fade-in-up">
+    <div class="main-container w-full max-w-6xl bg-ghibli-cream rounded-none sm:rounded-3xl shadow-ghibli overflow-hidden animate-fade-in-up">
         <div class="flex flex-col lg:flex-row min-h-[100vh] sm:min-h-[600px]">
             
-            <!-- Enhanced Image Container - Hidden on small screens, visible on medium and up -->
-            <div class="hidden md:block lg:flex-1 bg-gradient-hero relative overflow-hidden animate-slide-in-left">
+            <!-- Enhanced Image Container -->
+            <div class="hidden md:block lg:flex-1 bg-ghibli-forest relative overflow-hidden animate-slide-in-left">
                 <div class="absolute inset-0 bg-black/40"></div>
-                <div class="absolute inset-0 bg-gradient-to-br from-ceara-green/80 via-transparent to-ceara-orange/80"></div>
+                <div class="absolute inset-0 bg-gradient-to-br from-ghibli-forest/80 via-transparent to-ghibli-coral/80"></div>
                 
                 <!-- Decorative elements -->
                 <div class="absolute top-10 left-10 w-20 h-20 border-2 border-white/30 rounded-full"></div>
@@ -313,11 +329,11 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
                 
                 <div class="relative z-10 h-full flex flex-col justify-center items-center p-8 lg:p-12 text-center text-white">
                     <div class="mb-8 animate-pulse-glow">
-                        <i class="fas fa-graduation-cap text-6xl lg:text-8xl mb-6 text-ceara-orange"></i>
+                        <i class="fas fa-graduation-cap text-6xl lg:text-8xl mb-6 text-ghibli-peach"></i>
                     </div>
                     
                     <h1 class="text-3xl lg:text-5xl font-bold mb-6 leading-tight">
-                        EEEP <span class="text-ceara-orange">Salaberga</span>
+                        EEEP <span class="text-ghibli-peach">Salaberga</span>
                     </h1>
                     
                     <p class="text-lg lg:text-xl mb-8 max-w-md leading-relaxed opacity-90">
@@ -341,17 +357,17 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
                 </div>
             </div>
             
-            <!-- Enhanced Form Container - Full width on small screens -->
+            <!-- Enhanced Form Container -->
             <div class="w-full lg:flex-1 p-4 xs:p-6 sm:p-8 lg:p-12 flex flex-col justify-center animate-slide-in-right">
                 
-                <!-- Logo Container - Visible on all screens -->
+                <!-- Logo Container -->
                 <div class="text-center mb-6 sm:mb-8">
-                    <div class="inline-block p-3 sm:p-4  rounded-2xl ">
+                    <div class="inline-block p-3 sm:p-4 rounded-2xl">
                         <img src="../../assets/img/Design sem nome.svg" 
                              alt="Logo EEEP Salaberga" 
                              class="w-16 h-16 sm:w-20 sm:h-20 object-contain">
                     </div>
-                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-ceara-green mb-2">
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-ghibli-forest mb-2">
                         Bem-vindo
                     </h2>
                     <p class="text-gray-600 text-base sm:text-lg">
@@ -373,12 +389,12 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
                                    id="email" 
                                    placeholder=" " 
                                    required
-                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 border-2 border-gray-200 rounded-xl text-gray-800 bg-gray-50 focus:bg-white focus:shadow-custom transition-all duration-300 peer text-sm sm:text-base">
+                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 border-2 border-ghibli-sage/30 rounded-xl text-ghibli-forest bg-ghibli-cream focus:bg-white focus:shadow-ghibli-soft transition-all duration-300 peer text-sm sm:text-base">
                             <label for="email" 
-                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 text-gray-500 transition-all duration-300 peer-focus:text-ceara-green peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-ceara-green peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
+                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 text-ghibli-forest/60 transition-all duration-300 peer-focus:text-ghibli-coral peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-ghibli-coral peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 E-mail Institucional
                             </label>
-                            <i class="fas fa-envelope absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-ceara-green text-base sm:text-lg"></i>
+                            <i class="fas fa-envelope absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-ghibli-forest text-base sm:text-lg"></i>
                         </div>
                     </div>
 
@@ -390,21 +406,21 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
                                    id="password" 
                                    placeholder=" " 
                                    required
-                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 pr-10 sm:pr-12 border-2 border-gray-200 rounded-xl text-gray-800 bg-gray-50 focus:bg-white focus:shadow-custom transition-all duration-300 peer text-sm sm:text-base">
+                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 pr-10 sm:pr-12 border-2 border-ghibli-sage/30 rounded-xl text-ghibli-forest bg-ghibli-cream focus:bg-white focus:shadow-ghibli-soft transition-all duration-300 peer text-sm sm:text-base">
                             <label for="password" 
-                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 text-gray-500 transition-all duration-300 peer-focus:text-ceara-green peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-ceara-green peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
+                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 text-ghibli-forest/60 transition-all duration-300 peer-focus:text-ghibli-coral peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-ghibli-coral peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 Senha
                             </label>
-                            <i class="fas fa-lock absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-ceara-green text-base sm:text-lg"></i>
-                            <i class="fas fa-eye toggle-password absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-ceara-green cursor-pointer transition-colors duration-300 text-base sm:text-lg"></i>
+                            <i class="fas fa-lock absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-ghibli-forest text-base sm:text-lg"></i>
+                            <i class="fas fa-eye toggle-password absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-ghibli-forest/40 hover:text-ghibli-coral cursor-pointer transition-colors duration-300 text-base sm:text-lg"></i>
                         </div>
                         
                         <!-- Password Strength Indicator -->
                         <div class="mt-2">
-                            <div class="w-full bg-gray-200 rounded-full h-1">
+                            <div class="w-full bg-ghibli-sage/20 rounded-full h-1">
                                 <div id="passwordStrength" class="strength-bar h-1 rounded-full w-0"></div>
                             </div>
-                            <div class="flex justify-between text-xs text-gray-500 mt-1">
+                            <div class="flex justify-between text-xs text-ghibli-forest/60 mt-1">
                                 <span>Fraca</span>
                                 <span>Média</span>
                                 <span>Forte</span>
@@ -421,37 +437,21 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
                     <?php endif; ?>
 
                     <!-- Enhanced Submit Button -->
-                    <button type="submit" 
-                            name="login"
-                            value="login" 
-                            class="btn-enhanced w-full py-3 sm:py-4 px-4 sm:px-6 text-white font-semibold text-base sm:text-lg rounded-xl shadow-custom hover:shadow-glow transition-all duration-300 transform hover:-translate-y-1 focus:ring-4 focus:ring-ceara-green/30 mt-4 sm:mt-6">
-                        <span class="flex items-center justify-center">
-                            <i class="fas fa-sign-in-alt mr-2 sm:mr-3"></i>
-                            Entrar na Plataforma
-                        </span>
-                    </button>
+                    <div class="mt-4 sm:mt-6">
+                        <button type="submit" 
+                                class="w-full px-6 py-3 bg-ghibli-green text-white rounded-xl hover:bg-ghibli-forest transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-ghibli-sage focus:ring-opacity-50 shadow-ghibli-soft">
+                            Entrar
+                        </button>
+                    </div>
                 </form>
 
                 <!-- Additional Links -->
                 <div class="mt-6 sm:mt-8 text-center space-y-3 sm:space-y-4">
-                    <div class="flex flex-col xs:flex-row justify-between items-center space-y-2 xs:space-y-0">
-                        <a href="./cadastro.php" 
-                           class="text-ceara-green hover:text-ceara-orange transition-colors duration-300 font-medium flex items-center text-sm sm:text-base">
-                            <i class="fas fa-user-plus mr-2"></i>
-                            Criar conta
-                        </a>
-                        <a href="./recuperacaodesenha.php" 
-                           class="text-ceara-green hover:text-ceara-orange transition-colors duration-300 font-medium flex items-center text-sm sm:text-base">
-                            <i class="fas fa-key mr-2"></i>
-                            Esqueceu sua senha?
-                        </a>
-                    </div>
-                    
-                    <div class="pt-3 sm:pt-4 border-t border-gray-200">
-                        <p class="text-gray-500 text-xs sm:text-sm">
+                    <div class="pt-3 sm:pt-4 border-t border-ghibli-sage/20">
+                        <p class="text-ghibli-forest/60 text-xs sm:text-sm">
                             Precisa de ajuda? 
                             <a href="mailto:suporte@eeepsalaberga.edu.br" 
-                               class="text-ceara-green hover:text-ceara-orange transition-colors duration-300 font-medium">
+                               class="text-ghibli-forest hover:text-ghibli-coral transition-colors duration-300 font-medium">
                                 Entre em contato
                             </a>
                         </p>
@@ -523,7 +523,7 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
                 } else if (strength < 70) {
                     passwordStrength.style.background = 'linear-gradient(90deg, #ffaa00, #ffcc00)';
                 } else {
-                    passwordStrength.style.background = 'linear-gradient(90deg, #008C45, #00A651)';
+                    passwordStrength.style.background = 'linear-gradient(90deg, #7FB069, #A4C3A2)';
                 }
             }
 
