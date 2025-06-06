@@ -1,18 +1,8 @@
 <?php
 require_once('../models/main_model.php');
-
-if (isset($_POST['titulo2']) && !empty($_POST['titulo2'])) {
-
-    $titulo2 = $_POST['titulo2'];
-
-    $select = new select_model();
-    $result = $select->select_livro_especifico($titulo2);
-
-    header('Location: ../views/QRCode/geradorQR_especifico_livro.php');
-    exit();
-} 
+ 
 //verificar tipo de relatório
-else if (isset($_POST['relatorio'])) {
+if (isset($_POST['relatorio'])) {
     $relatorio = $_POST['relatorio'];
 
     switch ($relatorio) {
@@ -45,7 +35,6 @@ else if (
     isset($_POST['sobrenome']) && !empty($_POST['sobrenome']) &&
     isset($_POST['titulo']) && !empty($_POST['titulo']) &&
     isset($_POST['editora']) && !empty($_POST['editora']) &&
-    // Removendo a obrigatoriedade de 'edicao' estar preenchido
     isset($_POST['data']) && !empty($_POST['data']) &&
     isset($_POST['corredor']) && !empty($_POST['corredor']) &&
     isset($_POST['quantidade']) && !empty($_POST['quantidade']) &&
@@ -57,7 +46,6 @@ else if (
     $titulo = $_POST['titulo'];
     $data = $_POST['data'];
     $editora = $_POST['editora'];
-    // Definindo "ENI" se edicao estiver vazio ou não informado (ajustado de "EDIÇÃO NÃO INFORMADA" para "ENI")
     $edicao = (!isset($_POST['edicao']) || empty($_POST['edicao'])) ? "ENI*" : $_POST['edicao'];
     $quantidade = $_POST['quantidade'];
     $corredor = $_POST['corredor'];
@@ -86,7 +74,9 @@ else if (
             header('location:../index.php');
             exit();
     }
-} else if (isset($_POST['genero']) && !empty($_POST['genero']) && isset($_POST['subgenero']) && !empty($_POST['subgenero'])) {
+} 
+//cadastrar subgenero
+else if (isset($_POST['genero']) && !empty($_POST['genero']) && isset($_POST['subgenero']) && !empty($_POST['subgenero'])) {
     $genero = $_POST['genero'];
     $subgenero = $_POST['subgenero'];
 
@@ -107,7 +97,9 @@ else if (
             header('location:../index.php');
             exit();
     }
-} else if (isset($_POST['novo_genero']) && !empty($_POST['novo_genero'])) {
+} 
+//cadastrar genero
+else if (isset($_POST['novo_genero']) && !empty($_POST['novo_genero'])) {
     $novo_genero = $_POST['novo_genero'];
     $model = new main_model();
     $result = $model->cadastrar_genero($novo_genero);
@@ -126,23 +118,6 @@ else if (
             header('location:../index.php');
             exit();
     }
-} else if (isset($_POST['estante']) && isset($_POST['prateleira']) && !empty($_POST['estante']) && !empty($_POST['prateleira'])) {
-
-    $estante = $_POST['estante'];
-    $prateleira = $_POST['prateleira'];
-
-    header('location:../views/QRCode/QRCodes.php?estante=' . $estante . '&prateleira=' . $prateleira);
-    exit();
-} else if (isset($_POST['titulo']) && !empty($_POST['titulo'])) {
-
-    $titulo = $_POST['titulo'];
-    $dados = [
-        'titulo_livro' => $titulo
-    ];
-
-    $http = http_build_query($dados);
-    header('location:../views/QRCode/QRCodes_especifico.php?' . $http);
-    exit();
 } else {
 
     header('location:../index.php');

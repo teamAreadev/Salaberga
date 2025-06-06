@@ -9,7 +9,6 @@ if (file_exists($caminho)) {
 
 class select_model extends connect
 {
-
     private $catalogo;
 
     function __construct()
