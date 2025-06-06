@@ -162,7 +162,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 9999;
+            z-index: 10000; /* Garante que fique acima de todos os outros elementos, incluindo o header */
         }
         
         /* Mobile Menu Animation */
@@ -291,7 +291,7 @@
         /* Prevent body scroll when mobile menu is open */
         .mobile-menu-open-body {
             overflow: hidden;
-            height: 100vh;
+            /* Garante que o cabeçalho sticky permaneça visível mesmo com o body fixo */
         }
 
         /* Mobile Menu Panel Styles */
@@ -299,18 +299,43 @@
             background: linear-gradient(135deg, #008C45 0%, #00A651 100%); /* Gradiente primário */
             color: #ffffff; /* Texto branco */
             /* Mantém outros estilos como largura, sombra, etc. */
+            width: 80%; /* Ajuste a largura do painel do menu conforme necessário */
+            max-width: 400px; /* Ajuste a largura máxima do painel */
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.3); /* Sombra à direita do painel mais escura */
+            /* Garante que o painel não seja transparente */
+            opacity: 1 !important;
+            transform: translateX(0) !important;
+            padding: 1.5rem; /* Espaçamento interno */
         }
 
         /* Mobile Menu Item Styles */
         .mobile-menu-open a,
         .mobile-menu-open button {
             color: #ffffff; /* Cor do texto dos itens */
+            display: flex; /* Usa flexbox para alinhar ícone e texto */
+            align-items: center; /* Centraliza verticalmente */
+            gap: 1rem; /* Espaçamento entre ícone e texto */
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 4px;
         }
 
         .mobile-menu-open a:hover,
         .mobile-menu-open button:hover {
-            background-color: rgba(255, 165, 0, 0.1); /* Leve fundo laranja no hover */
+            background-color: rgba(255, 165, 0, 0.2); /* Fundo semi-transparente laranja no hover */
             color: #FFA500; /* Texto laranja no hover */
+        }
+
+        /* Estilos para o ícone dentro do item do menu */
+        .mobile-menu-open .mobile-menu-item .w-12 {
+             flex-shrink: 0; /* Impede que o ícone diminua */
+        }
+
+        @media (min-width: 1024px) {
+            .mobile-menu-open {
+                display: none; /* Oculta o menu mobile em telas maiores */
+            }
         }
     </style>
     <style>
@@ -2344,29 +2369,30 @@
             background-color: rgba(0, 0, 0, 0.8); /* Fundo semi-transparente escuro para o overlay */
             backdrop-filter: blur(5px); /* Desfoque sutil no fundo */
             -webkit-backdrop-filter: blur(5px); /* Desfoque sutil no fundo para webkit */
-            position: fixed;
+            position: fixed; /* Mantenha o overlay fixo para cobrir a tela */
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 50; /* Garante que fique sobre outros elementos */
+            z-index: 10000; /* Garante que fique acima de todos os outros elementos, incluindo o header */
             display: flex;
-            justify-content: flex-start; /* Alinha o conteúdo do menu à esquerda */
-            /* Remove largura fixa ou alinhamento à direita se existirem */
+            justify-content: flex-end; /* Alinha o conteúdo do menu à direita */
         }
 
         /* Mobile Menu inner container styles */
-        /* Mantém os estilos existentes para o painel do menu */
         .mobile-menu-open > div {
              width: 80%; /* Ajuste a largura do painel do menu conforme necessário */
              max-width: 400px; /* Ajuste a largura máxima do painel */
              background: linear-gradient(135deg, #008C45 0%, #00A651 100%); /* Gradiente primário */
-             box-shadow: 4px 0 10px rgba(0, 0, 0, 0.3); /* Sombra à direita do painel mais escura */
+             box-shadow: -4px 0 10px rgba(0, 0, 0, 0.3); /* Sombra à esquerda do painel mais escura */
              /* Garante que o painel não seja transparente */
              opacity: 1 !important;
-             transform: translateX(0) !important;
+             transform: translateX(0) !important; /* Garante que o painel esteja visível */
              color: #ffffff; /* Texto branco para o painel */
              padding: 1.5rem; /* Espaçamento interno */
+             overflow-y: auto; /* Permite rolar o conteúdo do menu se for longo */
+             position: relative; /* Permite que o conteúdo interno do menu seja posicionado normalmente */
+             height: 100%; /* Faz o painel ocupar a altura total do overlay fixo */
         }
 
         /* Estilos para os itens do menu dentro do painel */
