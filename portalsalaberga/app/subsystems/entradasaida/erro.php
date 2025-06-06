@@ -11,10 +11,10 @@ if (!isset($_SESSION['Email'])) {
 
 if (isset($_GET['id_aluno']) && isset($_GET['erro'])) {
 
-    $id_aluno = $_GET['id_aluno'];
-    $error = $_GET['erro'];
+  $id_aluno = $_GET['id_aluno'];
+  $error = $_GET['erro'];
 } else {
-    header('Location: logado.php');
+  header('Location: logado.php');
 }
 ?>
 <!DOCTYPE html>
@@ -26,7 +26,7 @@ if (isset($_GET['id_aluno']) && isset($_GET['erro'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Sistema SEEPS - Confirmação de Inscrição">
   <meta name="author" content="SEEPS">
-
+  <meta http-equiv="refresh" content="1; url=app/main/views/relatorios/ultimo_registro.php">
   <title>Saida - Confirmação</title>
 
   <link rel="shortcut icon" href="../assets/images/icone_salaberga.png" type="image">
@@ -211,6 +211,7 @@ if (isset($_GET['id_aluno']) && isset($_GET['erro'])) {
     }
 
     @keyframes dotAnimation {
+
       0%,
       100% {
         transform: translateY(0);

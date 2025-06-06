@@ -18,6 +18,7 @@ if (!isset($_SESSION['Email'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Sistema SEEPS - Confirmação de Inscrição">
   <meta name="author" content="SEEPS">
+  <meta http-equiv="refresh" content="1; url=app/main/views/relatorios/ultimo_registro.php">
 
   <title>Saida - Confirmação</title>
 
