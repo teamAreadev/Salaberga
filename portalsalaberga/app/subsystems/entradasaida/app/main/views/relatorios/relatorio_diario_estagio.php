@@ -29,23 +29,29 @@ class PDF extends FPDF {
     // Header method (FPDF calls this automatically on new page)
     public function Header()
     {
+        // Define o fuso horário para Brasília
+        date_default_timezone_set('America/Sao_Paulo');
+
         // Fundo do cabeçalho com a cor primária
         $this->SetFillColor($this->colors['primary'][0], $this->colors['primary'][1], $this->colors['primary'][2]);
-        $this->Rect(0, 0, $this->GetPageWidth(), 50, 'F');
+        $this->Rect(0, 0, $this->GetPageWidth(), 60, 'F');
 
+        $this->Image('../../assets/img/logo.png', 18, 8, 40, 40);
         // Título principal
         $this->SetFont('Arial', 'B', 18);
-        $this->SetTextColor(255, 255, 255); // Texto branco
-        $this->Cell(0, 8, utf8_decode('Relatório de Saídas para Estágio'), 0, 1, 'C');
+        $this->SetTextColor($this->colors['secondary'][0], $this->colors['secondary'][1], $this->colors['secondary'][2]); // Texto branco
+        $this->Cell(240, 0, utf8_decode('Frequência de Saída'), 0, 1, 'C');
+
+        $this->SetFont('Arial', 'B', 10);
+        $this->SetTextColor(255,255,255); // Texto branco
+        $this->Cell(128, 30, utf8_decode('Estágio 2025'), 0, 1, 'C');
 
         // Data e hora
         $this->SetFont('Arial', '', 12);
-        $this->Cell(0, 17, utf8_decode('Data: ' . date('d/m/Y') . ' - Hora: ' . date('H:i')), 0, 1, 'C');
+//        $this->Cell(0, 23, utf8_decode('Data: ' . date('d/m/Y') . ' | Hora: ' . date('H:i')) , 0, 1, 'C');
 
         // Linha decorativa
-        $this->SetDrawColor($this->colors['secondary'][0], $this->colors['secondary'][1], $this->colors['secondary'][2]);
-        $this->SetLineWidth(1);
-        $this->Line(40, 50, $this->GetPageWidth() - 40, 50);
+        $this->SetDrawColor($this->colors['secondary'][0], $this->colors['secondary'][1], $this->colors['secondary'][2]);;
 
         $this->Ln(15); // Espaço após o cabeçalho
     }
@@ -78,45 +84,55 @@ class PDF extends FPDF {
         $this->AliasNbPages(); // Necessário para o {nb} no footer
         $this->AddPage();
 
-        $this->SetFont('Arial', 'B', 12);
-
+        $this->SetFont('Arial', 'B', 10);
         // 3º Ano A
-        $this->SetTextColor($this->colors['turma_3a'][0], $this->colors['turma_3a'][1], $this->colors['turma_3a'][2]);
-        $this->Cell(0, 15, utf8_decode('3º Ano A'), 0, 1, 'L');
-        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]); // Reset color
-        $dados_3a = $this->select->saida_estagio_3A();
+        $this->SetFillColor($this->colors['turma_3a'][0], $this->colors['turma_3a'][1], $this->colors['turma_3a'][2]);
+        $this->SetTextColor(255, 255, 255);
+        $this->Cell(0, 15, utf8_decode('3ºA - ENFERMAGEM'), 0, 1, 'L', true);
+        $this->SetFillColor(255, 255, 255);
+        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
+        $dados_3a = $this->select->saida_estagio_3A_relatorio();
         $this->imprimirAlunos($dados_3a);
         $this->Ln(15);
 
+        $this->SetFont('Arial', 'B', 10);
         // 3º Ano B
-        $this->SetTextColor($this->colors['turma_3b'][0], $this->colors['turma_3b'][1], $this->colors['turma_3b'][2]);
-        $this->Cell(0, 15, utf8_decode('3º Ano B'), 0, 1, 'L');
-        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]); // Reset color
-        $dados_3b = $this->select->saida_estagio_3B();
+        $this->SetFillColor($this->colors['turma_3b'][0], $this->colors['turma_3b'][1], $this->colors['turma_3b'][2]);
+        $this->SetTextColor(255, 255, 255);
+        $this->Cell(0, 15, utf8_decode('3ºB - INFORMÁTICA'), 0, 1, 'L', true);
+        $this->SetFillColor(255, 255, 255);
+        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
+        $dados_3b = $this->select->saida_estagio_3B_relatorio();
         $this->imprimirAlunos($dados_3b);
         $this->Ln(15);
 
+        $this->SetFont('Arial', 'B', 10);
         // 3º Ano C
-        $this->SetTextColor($this->colors['turma_3c'][0], $this->colors['turma_3c'][1], $this->colors['turma_3c'][2]);
-        $this->Cell(0, 15, utf8_decode('3º Ano C'), 0, 1, 'L');
-        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]); // Reset color
-        $dados_3c = $this->select->saida_estagio_3C();
+        $this->SetFillColor($this->colors['turma_3c'][0], $this->colors['turma_3c'][1], $this->colors['turma_3c'][2]);
+        $this->SetTextColor(255, 255, 255);
+        $this->Cell(0, 15, utf8_decode('3ºC - ADMINISTRAÇÃO'), 0, 1, 'L', true);
+        $this->SetFillColor(255, 255, 255);
+        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
+        $dados_3c = $this->select->saida_estagio_3C_relatorio();
         $this->imprimirAlunos($dados_3c);
         $this->Ln(15);
 
+        $this->SetFont('Arial', 'B', 10);
         // 3º Ano D
-        $this->SetTextColor($this->colors['turma_3d'][0], $this->colors['turma_3d'][1], $this->colors['turma_3d'][2]);
-        $this->Cell(0, 15, utf8_decode('3º Ano D'), 0, 1, 'L');
-        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]); // Reset color
-        $dados_3d = $this->select->saida_estagio_3D();
+        $this->SetFillColor($this->colors['turma_3d'][0], $this->colors['turma_3d'][1], $this->colors['turma_3d'][2]);
+        $this->SetTextColor(255, 255, 255);
+        $this->Cell(0, 15, utf8_decode('3ºD - EDIFICAÇÃO'), 0, 1, 'L', true);
+        $this->SetFillColor(255, 255, 255);
+        $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
+        $dados_3d = $this->select->saida_estagio_3D_relatorio();
         $this->imprimirAlunos($dados_3d);
     }
 
     public function imprimirAlunos($dados) {
         if (empty($dados)) {
-            $this->SetFont('Arial', 'I', 10);
+            $this->SetFont('Arial', 'I', 8);
             $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
-            $this->Cell(0, 10, utf8_decode('Nenhum aluno registrado hoje'), 0, 1, 'L');
+            $this->Cell(0, 10, strtoUpper(utf8_decode('Nenhum aluno registrado hoje')), 0, 1, 'L');
             return;
         }
 
@@ -130,15 +146,12 @@ class PDF extends FPDF {
         $this->SetLineWidth(0.2);
 
         // Larguras das colunas
-        $pageWidth = $this->GetPageWidth() - 40; // Considerando as margens padrão de 20pt de cada lado
-        $colWidthNome = $pageWidth * 0.7; // 70% para o nome
-        $colWidthHorario = $pageWidth * 0.3; // 30% para o horário
-
-        $this->Cell($colWidthNome, 10, utf8_decode('Nome do Aluno'), 1, 0, 'C', true);
-        $this->Cell($colWidthHorario, 10, utf8_decode('Horário'), 1, 1, 'C', true);
+        $pageWidth = $this->GetPageWidth() - 57; // Considerando as margens padrão de 20pt de cada lado
+        $colWidthNome = $pageWidth * 0.8; // 70% para o nome
+        $colWidthHorario = $pageWidth * 0.2; // 30% para o horário;
 
         // Dados dos alunos
-        $this->SetFont('Arial', '', 10);
+        $this->SetFont('Arial', '', 8);
         $rowCounter = 0;
         foreach ($dados as $dado) {
             $this->SetFillColor($rowCounter % 2 == 0 ? 255 : $this->colors['light_gray_row'][0],
@@ -147,18 +160,16 @@ class PDF extends FPDF {
             $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
 
             // Ajuste de alinhamento explícito
-            $this->Cell($colWidthNome, 10, utf8_decode($dado['nome']), 1, 0, 'L', true); // Nome: Left
-            $this->Cell($colWidthHorario, 10, isset($dado['dae']) ? date('H:i', strtotime($dado['dae'])) : '--:--',
-                        1, 1, 'C', true); // Horário: Center
+            $this->Cell($colWidthNome, 10, utf8_decode(strtoUpper($dado['nome'])), 1, 0, 'L', true); // Nome: Left
+            $this->Cell($colWidthHorario, 10, isset($dado['dae']) ? date('d/m/Y     H:i:s', strtotime($dado['dae'])): '--:--', 1, 1, 'R', true); // Horário: Center
 
             $rowCounter++;
         }
     }
 }
 
-// Instantiate and generate the report
 $pdf = new PDF();
-$pdf->generateReport(); // Call the method to generate content
-$pdf->Output('relatorio_saidas_estagio.pdf', 'I');
+$pdf->generateReport();
+$pdf->Output('Frequência de Saída.pdf', 'I');
 ?>
 

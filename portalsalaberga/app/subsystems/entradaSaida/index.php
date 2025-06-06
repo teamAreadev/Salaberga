@@ -4,18 +4,18 @@ session_start();
 function redirect_to_login()
 {
     header('Location: ../../main/views/autenticacao/login.php');
+    exit();
 }
 if (!isset($_SESSION['Email'])) {
     session_destroy();
     redirect_to_login();
 } else {
-    // Configura o time zone para o fuso horário desejado (exemplo: América/São Paulo)
+
     date_default_timezone_set('America/Sao_Paulo');
 
-    // Obtém a data e hora atual no formato desejado
     $date_time = date('Y-m-d H:i:s');
 
-    if (isset($_GET['id_aluno'])) {
+    if (isset($_GET['id_aluno']) and !empty($_GET['id_aluno'])) {
         $aluno = $_GET['id_aluno'];
 
         require_once('app/main/model/model_indexClass.php');
@@ -40,5 +40,9 @@ if (!isset($_SESSION['Email'])) {
                 header('Location: erro.php');
                 exit();
         }
+    }else{
+
+        header('location:app/main/views/inicio.php');
+        exit();
     }
 }
