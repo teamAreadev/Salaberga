@@ -9,14 +9,14 @@
     <meta name="theme-color" content="#ffffff">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
+
     <title>EEEP Salaberga Torquato Gomes de Matos | Hub Educacional</title>
-    
+
     <!-- SEO Meta Tags -->
     <meta name="description" content="EEEP Salaberga Torquato Gomes de Matos: Hub Educacional em Maranguape. Oferecemos educação profissional de qualidade com ensino médio integrado ao técnico.">
     <meta name="author" content="EEEP Salaberga Torquato Gomes de Matos">
     <meta name="keywords" content="educação profissional, ensino médio técnico, Maranguape educação, cursos técnicos, EEEP Salaberga Torquato, EEEP Salaberga, Salaberga, Escola Salaberga, Salaberga Torquato">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://salaberga.com/">
@@ -24,34 +24,34 @@
     <meta property="og:description" content="Educação profissional de qualidade em Maranguape. Preparando alunos para um futuro brilhante com ensino médio integrado ao técnico.">
     <meta property="og:image" content="https://www.seusite.com.br/imagem-da-escola.jpg">
     <meta property="og:image:alt" content="EEEP Salaberga Torquato Gomes de Matos">
-    
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="EEEP Salaberga Torquato Gomes de Matos | Hub Educacional">
     <meta name="twitter:description" content="Educação profissional de qualidade em Maranguape. Preparando alunos para um futuro brilhante com ensino médio integrado ao técnico.">
     <meta name="twitter:image" content="https://www.seusite.com.br/imagem-da-escola.jpg">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
-    
+
     <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Preload de recursos críticos -->
     <link rel="preload" href="/assets/css/main.css" as="style">
     <link rel="preload" href="/assets/js/main.js" as="script">
-    
+
     <!-- CSS -->
     <link rel="stylesheet" href="/assets/css/main.css">
-    
+
     <!-- Canonical URL -->
     <link rel="canonical" href="https://salaberga.com/">
-    
+
     <meta name="geo.region" content="BR-Ceará">
     <meta name="geo.placename" content="Maranguape">
     <meta name="viewport" content="width = device-width, initial-scale = 1, maximum-scale = 1, user-scalable = no ">
@@ -99,32 +99,31 @@
             }
         }
     </script>
-        <style>
+    <style>
         /* Custom Styles */
         body {
             font-family: 'Inter', sans-serif;
         }
-        
+
         /* Enhanced Header Styles */
         .header-enhanced {
-            background: linear-gradient(135deg, rgba(0, 140, 69, 1) 0%, rgba(0, 166, 81, 1) 100%) !important; /* Opacidade total com !important */
+            background: linear-gradient(135deg, rgba(0, 140, 69, 1) 0%, rgba(0, 166, 81, 1) 100%) !important;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
-        
+
         .header-scrolled {
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(135deg, rgba(0, 140, 69, 1) 0%, rgba(0, 166, 81, 1) 100%) !important; /* Opacidade total com !important */
+            background: linear-gradient(135deg, rgba(0, 140, 69, 1) 0%, rgba(0, 166, 81, 1) 100%) !important;
         }
-        
-        /* Estilo padrão para links de navegação no header - Cor de alto contraste */
+
         nav .nav-link {
             position: relative;
             transition: all 0.3s ease;
-            color:rgb(255, 255, 255); /* Cor de texto escura para garantir alto contraste */
+            color: rgb(255, 255, 255);
         }
-        
+
         .nav-link::after {
             content: '';
             position: absolute;
@@ -137,26 +136,25 @@
             transform: translateX(-50%);
             opacity: 0;
         }
-        
+
         .nav-link:hover {
-            color: #FFA500; /* Cor laranja no hover */
+            color: #FFA500;
         }
-        
+
         .nav-link:hover::after,
         .nav-link.active::after {
             width: 70%;
             opacity: 1;
         }
-        
+
         .nav-link.active,
         .nav-link.header-active {
-            color: #FFA500 !important; /* Cor laranja para links ativos, usando !important para garantir */
+            color: #FFA500 !important;
             font-weight: 600;
         }
-        
-        /* Mobile Menu Background - CORRIGIDO */
+
         .mobile-menu-overlay {
-            background: linear-gradient(135deg, #008C45 0%, #00A651 100%); /* Usa gradiente primário */
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
             position: fixed;
             top: 0;
             left: 0;
@@ -164,40 +162,38 @@
             bottom: 0;
             z-index: 9999;
         }
-        
-        /* Mobile Menu Animation */
+
         .mobile-menu-enter {
             opacity: 0;
             transform: translateY(-20px);
         }
-        
+
         .mobile-menu-enter-active {
             opacity: 1;
             transform: translateY(0);
             transition: opacity 300ms, transform 300ms;
         }
-        
+
         .mobile-menu-exit {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         .mobile-menu-exit-active {
             opacity: 0;
             transform: translateY(-20px);
             transition: opacity 300ms, transform 300ms;
         }
-        
-        /* Accessibility Menu */
+
         .accessibility-option {
             transition: all 0.2s ease;
         }
-        
+
         .accessibility-option:hover {
-            background-color: rgba(255, 255, 255, 0.1); /* Leve fundo branco no hover */
+            background-color: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
         }
-        
+
         .theme-options {
             position: absolute;
             top: 100%;
@@ -206,60 +202,73 @@
             z-index: 50;
             min-width: 200px;
         }
-        
+
         .theme-toggle-container:hover .theme-options {
             display: block;
             animation: slideDown 0.3s ease-out forwards;
         }
-        
-        /* Dropdown Animation */
+
         .dropdown-menu {
             visibility: hidden;
             opacity: 0;
             transform: translateY(10px);
             transition: all 0.3s ease;
         }
-        
+
         .dropdown:hover .dropdown-menu {
             visibility: visible;
             opacity: 1;
             transform: translateY(0);
         }
-        
-        /* Mobile Menu Item Animation */
+
         .mobile-menu-item {
             transform: translateX(-20px);
             opacity: 0;
             transition: all 0.3s ease;
         }
-        
+
         .mobile-menu-open .mobile-menu-item {
             transform: translateX(0);
             opacity: 1;
         }
-        
-        .mobile-menu-item:nth-child(1) { transition-delay: 0.1s; }
-        .mobile-menu-item:nth-child(2) { transition-delay: 0.2s; }
-        .mobile-menu-item:nth-child(3) { transition-delay: 0.3s; }
-        .mobile-menu-item:nth-child(4) { transition-delay: 0.4s; }
-        .mobile-menu-item:nth-child(5) { transition-delay: 0.5s; }
-        .mobile-menu-item:nth-child(6) { transition-delay: 0.6s; }
-        
-        /* Logo Animation */
+
+        .mobile-menu-item:nth-child(1) {
+            transition-delay: 0.1s;
+        }
+
+        .mobile-menu-item:nth-child(2) {
+            transition-delay: 0.2s;
+        }
+
+        .mobile-menu-item:nth-child(3) {
+            transition-delay: 0.3s;
+        }
+
+        .mobile-menu-item:nth-child(4) {
+            transition-delay: 0.4s;
+        }
+
+        .mobile-menu-item:nth-child(5) {
+            transition-delay: 0.5s;
+        }
+
+        .mobile-menu-item:nth-child(6) {
+            transition-delay: 0.6s;
+        }
+
         .logo-container {
             transition: all 0.3s ease;
         }
-        
+
         .header-scrolled .logo-container {
             transform: scale(0.9);
         }
-        
-        /* Accessibility Toggle Button Animation */
+
         .accessibility-toggle {
             position: relative;
             overflow: hidden;
         }
-        
+
         .accessibility-toggle::after {
             content: '';
             position: absolute;
@@ -267,54 +276,48 @@
             left: 50%;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.1); /* Fundo semi-transparente no hover */
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             transform: translate(-50%, -50%) scale(0);
             transition: transform 0.5s ease;
         }
-        
+
         .accessibility-toggle:hover::after {
             transform: translate(-50%, -50%) scale(1.5);
         }
-        
-        /* Focus Styles for Accessibility */
-        button:focus-visible, a:focus-visible {
+
+        button:focus-visible,
+        a:focus-visible {
             outline: 2px solid #FFA500;
             outline-offset: 2px;
         }
-        
-        /* Hide Alpine elements before Alpine.js loads */
+
         [x-cloak] {
             display: none !important;
         }
-        
-        /* Prevent body scroll when mobile menu is open */
+
         .mobile-menu-open-body {
             overflow: hidden;
             height: 100vh;
         }
 
-        /* Mobile Menu Panel Styles */
-        .mobile-menu-open > div {
-            background: linear-gradient(135deg, #008C45 0%, #00A651 100%); /* Gradiente primário */
-            color: #ffffff; /* Texto branco */
-            /* Mantém outros estilos como largura, sombra, etc. */
+        .mobile-menu-open>div {
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
+            color: #ffffff;
         }
 
-        /* Mobile Menu Item Styles */
         .mobile-menu-open a,
         .mobile-menu-open button {
-            color: #ffffff; /* Cor do texto dos itens */
+            color: #ffffff;
         }
 
         .mobile-menu-open a:hover,
         .mobile-menu-open button:hover {
-            background-color: rgba(255, 165, 0, 0.1); /* Leve fundo laranja no hover */
-            color: #FFA500; /* Texto laranja no hover */
+            background-color: rgba(255, 165, 0, 0.1);
+            color: #FFA500;
         }
     </style>
     <style>
-        /* Enhanced Styling */
         .gallery-img {
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -356,6 +359,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -367,6 +371,7 @@
                 opacity: 0;
                 transform: translateX(-50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -378,6 +383,7 @@
                 opacity: 0;
                 transform: translateX(50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -409,7 +415,6 @@
             box-shadow: 0 20px 40px rgba(0, 140, 69, 0.2);
         }
 
-        /* Enhanced Section Styling */
         .section.lb.page-section {
             background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
             color: #333;
@@ -472,7 +477,6 @@
             font-weight: 400;
         }
 
-        /* Enhanced Cards */
         .card-enhanced {
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             border: 1px solid rgba(0, 140, 69, 0.1);
@@ -498,7 +502,6 @@
             border-color: rgba(0, 140, 69, 0.3);
         }
 
-        /* Enhanced Buttons */
         .btn-primary {
             background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
             color: white;
@@ -543,7 +546,6 @@
             box-shadow: 0 12px 30px rgba(255, 165, 0, 0.4);
         }
 
-        /* Enhanced Timeline */
         .timeline__content {
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
             border: 2px solid rgba(0, 140, 69, 0.2) !important;
@@ -573,14 +575,12 @@
             display: none !important;
         }
 
-        /* Enhanced Header */
         .header-enhanced {
             background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Enhanced Footer */
         .footer-enhanced {
             background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
             position: relative;
@@ -596,7 +596,6 @@
             background: linear-gradient(90deg, #008C45 0%, #FFA500 50%, #008C45 100%);
         }
 
-        /* Responsive Design */
         @media (max-width: 1200px) {
             .container {
                 max-width: 960px;
@@ -680,7 +679,6 @@
             }
         }
 
-        /* Enhanced Accessibility */
         [x-cloak] {
             display: none !important;
         }
@@ -690,21 +688,22 @@
             text-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
         }
 
-        /* Enhanced Animations */
         .pulse-glow {
             animation: pulse-glow 2s infinite;
         }
 
         @keyframes pulse-glow {
-            0%, 100% {
+
+            0%,
+            100% {
                 box-shadow: 0 0 20px rgba(0, 140, 69, 0.4);
             }
+
             50% {
                 box-shadow: 0 0 30px rgba(0, 140, 69, 0.6);
             }
         }
 
-        /* Enhanced Course Cards */
         .course-card {
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             border-radius: 20px;
@@ -735,7 +734,6 @@
             backdrop-filter: blur(10px);
         }
 
-        /* Enhanced Location Section */
         .location-section {
             background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
             padding: 100px 0;
@@ -857,28 +855,25 @@
                 grid-template-columns: 1fr;
                 gap: 30px;
             }
-            
+
             .contact-info {
                 padding: 30px 20px;
             }
-            
+
             .localfont {
                 font-size: 36px;
             }
         }
 
-        /* Enhanced Scroll Behavior */
         html {
             scroll-behavior: smooth;
         }
 
-        /* Enhanced Focus States */
         *:focus {
             outline: 2px solid #FFA500;
             outline-offset: 2px;
         }
 
-        /* Loading Animation */
         .loading-spinner {
             border: 4px solid rgba(0, 140, 69, 0.3);
             border-top: 4px solid #008C45;
@@ -889,25 +884,269 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
     <style>
-        /* Estilos para melhorar o contraste dos links de navegação no header */
-        /* Estas regras foram movidas e consolidadas no bloco de estilo principal */
-        /* .nav-link {
-            color: #000000; 
+        .carousel-3d {
+            perspective: 2000px;
+            width: 100%;
+            height: 700px;
+            position: relative;
+            margin: 0 auto 120px auto;
+            overflow: visible;
+
+            border-radius: 40px;
+            padding: 50px 30px;
         }
-  
-        .nav-link:hover {
-            color: #FFA500; 
+
+        .carousel-3d-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-  
-        .nav-link.active,
-        .nav-link.header-active {
-            color: #FFA500 !important; 
-        } */
+
+        .carousel-3d-item {
+            position: absolute;
+            width: 400px;
+            height: 520px;
+            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 30px;
+            padding: 50px;
+            text-align: center;
+            opacity: 0;
+            border: 3px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            backface-visibility: hidden;
+            transform-origin: center center;
+        }
+
+        /* Efeito de borda gradiente */
+        .carousel-3d-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #008C45, #FFA500, #008C45);
+            border-radius: 30px;
+            padding: 3px;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .carousel-3d-item.active {
+            opacity: 1;
+            border-color: rgba(0, 140, 69, 0.3);
+        }
+
+        .carousel-3d-item.active::before {
+            opacity: 1;
+        }
+
+        /* Efeito de partículas flutuantes */
+        .carousel-3d-item::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 140, 69, 0.15) 1px, transparent 1px);
+            background-size: 25px 25px;
+            animation: float 25s linear infinite;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .carousel-3d-item.active::after {
+            opacity: 1;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-30px, -30px) rotate(360deg);
+            }
+        }
+
+        .carousel-3d-item h2 {
+            color: #008C45;
+            font-size: 4em;
+            margin-bottom: 40px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        /* Efeito de brilho no ano */
+        .carousel-3d-item h2::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .carousel-3d-item.active h2::after {
+            left: 100%;
+        }
+
+        .carousel-3d-item p {
+            color: #444;
+            font-size: 1.4em;
+            line-height: 1.8;
+            font-weight: 400;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        /* Indicador de progresso */
+        .carousel-3d-item .progress-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 6px;
+            background: rgba(0, 140, 69, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .carousel-3d-item .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #008C45, #FFA500);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .carousel-3d-item.active .progress-bar {
+            width: 100%;
+        }
+
+        /* Indicadores de navegação */
+        .carousel-indicators {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .carousel-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(0, 140, 69, 0.2);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 1px solid transparent;
+        }
+
+        .carousel-indicator.active {
+            background: #008C45;
+            transform: scale(1.2);
+        }
+
+        .carousel-indicator:hover {
+            background: #00A651;
+        }
+
+        /* Media queries para responsividade melhorada */
+        @media (max-width: 768px) {
+            .carousel-3d {
+                height: 600px;
+                margin-bottom: 80px;
+                padding: 30px 20px;
+            }
+
+            .carousel-3d-item {
+                width: 340px;
+                height: 460px;
+                padding: 40px;
+            }
+
+            .carousel-3d-item h2 {
+                font-size: 3em;
+                margin-bottom: 30px;
+            }
+
+            .carousel-3d-item p {
+                font-size: 1.2em;
+            }
+
+            .carousel-indicators {
+                bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carousel-3d {
+                height: 550px;
+                padding: 20px 15px;
+            }
+
+            .carousel-3d-item {
+                width: 300px;
+                height: 420px;
+                padding: 35px;
+            }
+
+            .carousel-3d-item h2 {
+                font-size: 2.5em;
+            }
+
+            .carousel-3d-item p {
+                font-size: 1.1em;
+            }
+        }
+
+        /* Efeito de loading para transições */
+        .carousel-3d.loading .carousel-3d-item {
+            filter: blur(2px);
+            opacity: 0.4;
+        }
+
+        .carousel-3d.loading .carousel-3d-item.active {
+            filter: blur(0);
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -924,7 +1163,6 @@
                 this.isScrolled = window.scrollY > 20;
             });
             
-            // Track active section based on scroll position
             window.addEventListener('scroll', () => {
                 const sections = document.querySelectorAll('section[id]');
                 const scrollPos = window.scrollY + 100;
@@ -940,7 +1178,6 @@
                 });
             });
             
-            // Watch for mobile menu changes to control body scroll
             this.$watch('mobileMenuOpen', value => {
                 if (value) {
                     document.body.classList.add('mobile-menu-open-body');
@@ -966,23 +1203,20 @@
             this.fontSize = 'normal';
             document.documentElement.style.fontSize = '16px';
         }
-    }" 
-    class="header-enhanced sticky top-0 z-50 w-full transition-all duration-300"
-    :class="{ 'header-scrolled': isScrolled }">
+    }"
+        class="header-enhanced sticky top-0 z-50 w-full transition-all duration-300"
+        :class="{ 'header-scrolled': isScrolled }">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between py-4">
-                <!-- Logo Area -->
                 <div class="logo-container flex items-center">
                     <a href="#home" class="flex items-center space-x-3">
                         <img src="https://i.postimg.cc/yx26GhLv/lavosier-nas-3.png" alt="EEEP Salaberga Logo" class="h-10 w-auto">
-               
                     </a>
                 </div>
-                
-                <!-- Accessibility Tools -->
+
                 <div class="hidden md:flex items-center space-x-2 mr-6">
                     <div x-data="{ accessibilityOpen: false }" class="relative">
-                        <button @click="accessibilityOpen = !accessibilityOpen" 
+                        <button @click="accessibilityOpen = !accessibilityOpen"
                             class="text-white hover:text-ceara-orange transition-all duration-300 px-3 py-2 rounded-full hover:bg-white/10 accessibility-toggle flex items-center space-x-2"
                             :aria-expanded="accessibilityOpen"
                             aria-label="Opções de acessibilidade">
@@ -990,8 +1224,8 @@
                             <span class="text-sm font-medium">Acessibilidade</span>
                             <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{ 'rotate-180': accessibilityOpen }"></i>
                         </button>
-                        
-                        <div x-show="accessibilityOpen" 
+
+                        <div x-show="accessibilityOpen"
                             @click.away="accessibilityOpen = false"
                             x-transition:enter="transition ease-out duration-200"
                             x-transition:enter-start="opacity-0 transform -translate-y-4"
@@ -1001,7 +1235,7 @@
                             x-transition:leave-end="opacity-0 transform -translate-y-4"
                             class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl py-3 z-50 border border-gray-100"
                             x-cloak>
-                            
+
                             <div class="px-4 py-2 border-b border-gray-100">
                                 <h3 class="text-sm font-semibold text-gray-700">Tamanho do texto</h3>
                                 <div class="flex items-center space-x-3 mt-2">
@@ -1016,7 +1250,7 @@
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="px-4 py-2 border-b border-gray-100">
                                 <h3 class="text-sm font-semibold text-gray-700">Narração de tela</h3>
                                 <button id="screenReaderBtn" class="mt-2 w-full text-left text-gray-700 hover:text-ceara-green transition duration-300 px-3 py-2 rounded-md hover:bg-gray-100 accessibility-option flex items-center" aria-label="Ativar narração de tela">
@@ -1024,7 +1258,7 @@
                                     <span>Ativar narração</span>
                                 </button>
                             </div>
-                            
+
                             <div class="px-4 py-2">
                                 <h3 class="text-sm font-semibold text-gray-700">Modo de visualização</h3>
                                 <div class="mt-2 space-y-1">
@@ -1045,36 +1279,34 @@
                         </div>
                     </div>
                 </div>
-                
-          
+
                 <nav class="hidden lg:flex items-center space-x-1">
-                    <a href="#home" 
-                       class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
-                       :class="{ 'active': activeSection === 'home' }">
+                    <a href="#home"
+                        class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                        :class="{ 'active': activeSection === 'home' }">
                         <i class="fas fa-home mr-2"></i> Início
                     </a>
-                    <a href="#sobre" 
-                       class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
-                       :class="{ 'active': activeSection === 'sobre' }">
+                    <a href="#sobre"
+                        class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                        :class="{ 'active': activeSection === 'sobre' }">
                         <i class="fas fa-info-circle mr-2"></i> Sobre
                     </a>
-                    <a href="#cursos" 
-                       class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
-                       :class="{ 'active': activeSection === 'cursos' }">
+                    <a href="#cursos"
+                        class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                        :class="{ 'active': activeSection === 'cursos' }">
                         <i class="fas fa-book mr-2"></i> Cursos
                     </a>
-                    <a href="#galeria" 
-                       class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
-                       :class="{ 'active': activeSection === 'galeria' }">
+                    <a href="#galeria"
+                        class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                        :class="{ 'active': activeSection === 'galeria' }">
                         <i class="fas fa-newspaper mr-2"></i> Galeria
                     </a>
-                    <a href="#parceiros" 
-                       class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
-                       :class="{ 'active': activeSection === 'parceiros' }">
+                    <a href="#parceiros"
+                        class="nav-link hover:text-ceara-orange transition duration-300 font-medium px-4 py-2 rounded-md hover:bg-white/10"
+                        :class="{ 'active': activeSection === 'parceiros' }">
                         <i class="fas fa-images mr-2"></i> Parceiros
                     </a>
-                    
-                    <!-- Login Dropdown -->
+
                     <div class="relative dropdown">
                         <button class="nav-link hover:text-ceara-orange transition duration-300 flex items-center font-medium px-4 py-2 rounded-md hover:bg-white/10">
                             <i class="fas fa-sign-in-alt mr-2"></i> Entrar
@@ -1090,13 +1322,12 @@
                         </div>
                     </div>
                 </nav>
-                
-                <!-- Mobile Menu Button -->
+
                 <div class="lg:hidden flex items-center">
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" 
-                            class="flex items-center px-3 py-2 border-2 rounded-lg text-ceara-orange border-ceara-orange hover:text-ceara-white hover:border-ceara-white hover:bg-white/10 transition duration-300" 
-                            aria-label="Toggle menu" 
-                            :aria-expanded="mobileMenuOpen">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen"
+                        class="flex items-center px-3 py-2 border-2 rounded-lg text-ceara-orange border-ceara-orange hover:text-ceara-white hover:border-ceara-white hover:bg-white/10 transition duration-300"
+                        aria-label="Toggle menu"
+                        :aria-expanded="mobileMenuOpen">
                         <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <title>Menu</title>
                             <path x-show="!mobileMenuOpen" d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
@@ -1106,16 +1337,15 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Mobile Accessibility Menu (Shown on small screens) -->
-        <div x-show="isScrolled" 
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 transform -translate-y-4"
-             x-transition:enter-end="opacity-100 transform translate-y-0"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 transform translate-y-0"
-             x-transition:leave-end="opacity-0 transform -translate-y-4"
-             class="md:hidden bg-gradient-dark py-2 border-t border-white/10">
+
+        <div x-show="isScrolled"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 transform -translate-y-4"
+            x-transition:enter-end="opacity-100 transform translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 transform translate-y-0"
+            x-transition:leave-end="opacity-0 transform -translate-y-4"
+            class="md:hidden bg-gradient-dark py-2 border-t border-white/10">
             <div class="container mx-auto px-4">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-3">
@@ -1137,16 +1367,16 @@
                             <button @click="themeOpen = !themeOpen" class="text-white hover:text-ceara-orange transition duration-300 px-2 py-1 rounded-md hover:bg-white/10" aria-label="Opções de visualização">
                                 <i class="fa-solid fa-circle-half-stroke"></i>
                             </button>
-                            <div x-show="themeOpen" 
-                                 @click.away="themeOpen = false"
-                                 x-transition:enter="transition ease-out duration-200"
-                                 x-transition:enter-start="opacity-0 transform -translate-y-4"
-                                 x-transition:enter-end="opacity-100 transform translate-y-0"
-                                 x-transition:leave="transition ease-in duration-150"
-                                 x-transition:leave-start="opacity-100 transform translate-y-0"
-                                 x-transition:leave-end="opacity-0 transform -translate-y-4"
-                                 class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100"
-                                 x-cloak>
+                            <div x-show="themeOpen"
+                                @click.away="themeOpen = false"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 transform -translate-y-4"
+                                x-transition:enter-end="opacity-100 transform translate-y-0"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 transform translate-y-0"
+                                x-transition:leave-end="opacity-0 transform -translate-y-4"
+                                class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100"
+                                x-cloak>
                                 <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-theme="monochrome">Monocromático</button>
                                 <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-theme="inverted-grayscale">Escala de cinza invertida</button>
                                 <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-theme="inverted-color">Cor invertida</button>
@@ -1157,18 +1387,17 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Enhanced Mobile Menu - CORRIGIDO -->
+
         <div x-show="mobileMenuOpen"
-             x-cloak
-             @click.away="mobileMenuOpen = false"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 transform -translate-y-4"
-             x-transition:enter-end="opacity-100 transform translate-y-0"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 transform translate-y-0"
-             x-transition:leave-end="opacity-0 transform -translate-y-4"
-             class="mobile-menu-overlay lg:hidden mobile-menu-open">
+            x-cloak
+            @click.away="mobileMenuOpen = false"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 transform -translate-y-4"
+            x-transition:enter-end="opacity-100 transform translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 transform translate-y-0"
+            x-transition:leave-end="opacity-0 transform -translate-y-4"
+            class="mobile-menu-overlay lg:hidden mobile-menu-open">
             <div class="min-h-screen px-6 py-8 overflow-y-auto">
                 <div class="flex items-center justify-between mb-12">
                     <h2 class="text-2xl font-bold text-white">Menu</h2>
@@ -1223,8 +1452,7 @@
                         </div>
                         <span class="text-xl font-semibold">Parceiros</span>
                     </a>
-                    
-                    <!-- Mobile Login Options -->
+
                     <div x-data="{ loginExpanded: false }" class="space-y-4 mobile-menu-item">
                         <button @click="loginExpanded = !loginExpanded" class="group flex items-center justify-between w-full text-white hover:text-ceara-orange transition-all duration-300">
                             <div class="flex items-center space-x-4">
@@ -1235,14 +1463,14 @@
                             </div>
                             <i class="fas fa-chevron-down transition-transform duration-300" :class="{ 'rotate-180': loginExpanded }"></i>
                         </button>
-                        <div x-show="loginExpanded" 
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 transform -translate-y-4"
-                             x-transition:enter-end="opacity-100 transform translate-y-0"
-                             x-transition:leave="transition ease-in duration-150"
-                             x-transition:leave-start="opacity-100 transform translate-y-0"
-                             x-transition:leave-end="opacity-0 transform -translate-y-4"
-                             class="pl-16 space-y-4">
+                        <div x-show="loginExpanded"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 transform -translate-y-4"
+                            x-transition:enter-end="opacity-100 transform translate-y-0"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 transform translate-y-0"
+                            x-transition:leave-end="opacity-0 transform -translate-y-4"
+                            class="pl-16 space-y-4">
                             <a href="../main/views/autenticacao/login.php"
                                 @click="mobileMenuOpen = false"
                                 class="block text-white hover:text-ceara-orange transition-all duration-300 text-lg">
@@ -1256,16 +1484,11 @@
                         </div>
                     </div>
                 </nav>
-                
-              
             </div>
         </div>
     </header>
 
-
-
     <main>
-        <!-- Enhanced Hero Section -->
         <section id="home"
             class="relative bg-cover bg-center bg-no-repeat min-h-screen flex flex-col items-center justify-center fade-in overflow-hidden">
             <img src="../main/assets/img/background03.jpeg" class="absolute top-0 left-0 w-full h-full object-cover z-0" alt="Background da escola">
@@ -1288,7 +1511,7 @@
                     </a>
                 </div>
             </div>
-            
+
             <div class="absolute bottom-8 left-0 right-0 text-center">
                 <a href="#sobre" class="text-white hover:text-ceara-orange transition duration-300 pulse-glow">
                     <i class="fas fa-chevron-down text-4xl animate-bounce"></i>
@@ -1296,7 +1519,7 @@
             </div>
         </section>
 
-        <!-- Enhanced About Section -->
+        <!-- Enhanced About Section com Carrossel 3D Melhorado -->
         <section class="section lb page-section" id="sobre">
             <div class="container">
                 <div class="section-title row text-center">
@@ -1305,118 +1528,220 @@
                         <p class="lead">Uma jornada de excelência educacional e transformação social</p>
                     </div>
                 </div>
-                <div class="timeline timeline--loaded timeline--horizontal" style="opacity: 1;">
-                    <div class="timeline__wrap">
-                        <div class="timeline__items"
-                            style="width: 1658px; height: 682px; transform: translate3d(0px, 0px, 0px);">
-                            <div class="timeline__item timeline__item--top fadeIn"
-                                style="width: 207.25px; height: 341px;">
-                                <div class="timeline__item__inner">
-                                    <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-01">
-                                            <h2>2009</h2>
-                                            <p>A escola Santa Rita se torna a primeira escola profissionalizante do município, agora chamada de EEEP Santa Rita, oferecendo cursos técnicos em Enfermagem, Informática e Meio Ambiente.</p>
-                                        </div>
-                                    </div>
-                                </div>
+
+                <div class="carousel-3d">
+                    <div class="carousel-3d-container">
+                        <div class="carousel-3d-item" data-index="0">
+                            <h2>2009</h2>
+                            <p>A escola Santa Rita se torna a primeira escola profissionalizante do município, agora chamada de EEEP Santa Rita, oferecendo cursos técnicos em Enfermagem, Informática e Meio Ambiente.</p>
+                            <div class="progress-indicator">
+                                <div class="progress-bar"></div>
                             </div>
-                            <div class="timeline__item timeline__item--bottom fadeIn"
-                                style="width: 207.25px; height: 341px; transform: translateY(341px);">
-                                <div class="timeline__item__inner">
-                                    <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-02">
-                                            <h2>2011</h2>
-                                            <p>Formamos as primeiras turmas da nossa escola. Técnicos em Enfermagem, Informática e Meio Ambiente.</p>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="carousel-3d-item" data-index="1">
+                            <h2>2011</h2>
+                            <p>Formamos as primeiras turmas da nossa escola. Técnicos em Enfermagem, Informática e Meio Ambiente, marcando o início de nossa contribuição para a educação profissional.</p>
+                            <div class="progress-indicator">
+                                <div class="progress-bar"></div>
                             </div>
-                            <div class="timeline__item timeline__item--top fadeIn"
-                                style="width: 207.25px; height: 341px;">
-                                <div class="timeline__item__inner">
-                                    <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-03">
-                                            <h2>2014</h2>
-                                            <p>Neste ano deixamos o prédio da Eeep Santa Rita no bairro da Guabiraba para ocupar o prédio atual, passando a se chamar Eeep Salaberga Torquato Gomes de Matos.</p>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="carousel-3d-item" data-index="2">
+                            <h2>2014</h2>
+                            <p>Neste ano deixamos o prédio da Eeep Santa Rita no bairro da Guabiraba para ocupar o prédio atual, passando a se chamar Eeep Salaberga Torquato Gomes de Matos.</p>
+                            <div class="progress-indicator">
+                                <div class="progress-bar"></div>
                             </div>
-                            <div class="timeline__item timeline__item--bottom fadeIn"
-                                style="width: 207.25px; height: 341px; transform: translateY(341px);">
-                                <div class="timeline__item__inner">
-                                    <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-05">
-                                            <h2>2016</h2>
-                                            <p>Os alunos José Carlos, Ana Byatriz e Gabriella Vital representaram o Brasil na 13ª Olimpíada Internacional de Geografia (IGEO) em Pequi - China, depois de concorrer com 35.000 inscritos até a final.</p>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="carousel-3d-item" data-index="3">
+                            <h2>2016</h2>
+                            <p>Os alunos José Carlos, Ana Byatriz e Gabriella Vital representaram o Brasil na 13ª Olimpíada Internacional de Geografia (IGEO) em Pequim - China, depois de concorrer com 35.000 inscritos até a final.</p>
+                            <div class="progress-indicator">
+                                <div class="progress-bar"></div>
                             </div>
-                            <div class="timeline__item timeline__item--top fadeIn"
-                                style="width: 207.25px; height: 341px;">
-                                <div class="timeline__item__inner">
-                                    <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-06">
-                                            <h2>2019</h2>
-                                            <p>Conquistamos o selo escola sustentável de organização da Secretaria Estadual de Educação com validação da Secretaria Estadual de Meio Ambiente.</p>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="carousel-3d-item" data-index="4">
+                            <h2>2019</h2>
+                            <p>Conquistamos o selo escola sustentável de organização da Secretaria Estadual de Educação com validação da Secretaria Estadual de Meio Ambiente.</p>
+                            <div class="progress-indicator">
+                                <div class="progress-bar"></div>
                             </div>
-                            <div class="timeline__item timeline__item--bottom fadeIn"
-                                style="width: 207.25px; height: 341px; transform: translateY(341px);">
-                                <div class="timeline__item__inner">
-                                    <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-09">
-                                            <h2>2021</h2>
-                                            <p>Nos colocamos no seleto grupo das 100 melhores escolas públicas do país, ficando em 20º do estado. 77 das 100 melhores foram do nosso estado.</p>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="carousel-3d-item" data-index="5">
+                            <h2>2021</h2>
+                            <p>Nos colocamos no seleto grupo das 100 melhores escolas públicas do país, ficando em 20º do estado. 77 das 100 melhores foram do nosso estado.</p>
+                            <div class="progress-indicator">
+                                <div class="progress-bar"></div>
                             </div>
-                            <div class="timeline__item timeline__item--top fadeIn"
-                                style="width: 207.25px; height: 341px;">
-                                <div class="timeline__item__inner">
-                                    <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-11">
-                                            <h2>2022</h2>
-                                            <p>Os alunos Kaiky Diniz e Leonardo de Sousa conquistaram vaga na final presencial da ONHB em Campinas (Unicamp).</p>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="carousel-3d-item" data-index="6">
+                            <h2>2022</h2>
+                            <p>Os alunos Kaiky Diniz e Leonardo de Sousa conquistaram vaga na final presencial da ONHB em Campinas (Unicamp), demonstrando excelência acadêmica.</p>
+                            <div class="progress-indicator">
+                                <div class="progress-bar"></div>
                             </div>
-                            <div class="timeline__item timeline__item--bottom fadeIn"
-                                style="width: 207.25px; height: 341px; transform: translateY(341px);">
-                                <div class="timeline__item__inner">
-                                    <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-14">
-                                            <h2>2023</h2>
-                                            <p>É ofertado pela primeira vez o curso técnico em Administração.</p>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="carousel-3d-item" data-index="7">
+                            <h2>2023</h2>
+                            <p>É ofertado pela primeira vez o curso técnico em Administração, ampliando as oportunidades de formação profissional para nossos estudantes.</p>
+                            <div class="progress-indicator">
+                                <div class="progress-bar"></div>
                             </div>
-                            <div class="timeline__item timeline__item--top fadeIn"
-                                style="width: 207.25px; height: 341px;">
-                                <div class="timeline__item__inner">
-                                    <div class="timeline__content__wrap">
-                                        <div class="timeline__content img-bg-16">
-                                            <h2>2024</h2>
-                                            <p>Representamos o Brasil na primeira Expociência na Costa Rica por meio do projeto das alunas Natassa Uchôa e Gabriele Ferreira. Orientadas pela professora Diva.</p>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="carousel-3d-item" data-index="8">
+                            <h2>2024</h2>
+                            <p>Representamos o Brasil na primeira Expociência na Costa Rica por meio do projeto das alunas Natassa Uchôa e Gabriele Ferreira. Orientadas pela professora Diva.</p>
+                            <div class="progress-indicator">
+                                <div class="progress-bar"></div>
                             </div>
                         </div>
                     </div>
-                    <button class="timeline-nav-button timeline-nav-button--prev" disabled=""
-                        style="top: 341px;">Previous</button>
-                    <button class="timeline-nav-button timeline-nav-button--next" style="top: 341px;">Next</button>
-                    <span class="timeline-divider" style="top: 341px;"></span>
+
+                    <!-- Indicadores de navegação -->
+                    <div class="carousel-indicators">
+                        <div class="carousel-indicator active" data-index="0"></div>
+                        <div class="carousel-indicator" data-index="1"></div>
+                        <div class="carousel-indicator" data-index="2"></div>
+                        <div class="carousel-indicator" data-index="3"></div>
+                        <div class="carousel-indicator" data-index="4"></div>
+                        <div class="carousel-indicator" data-index="5"></div>
+                        <div class="carousel-indicator" data-index="6"></div>
+                        <div class="carousel-indicator" data-index="7"></div>
+                        <div class="carousel-indicator" data-index="8"></div>
+                    </div>
+
+
                 </div>
             </div>
         </section>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const container = document.querySelector('.carousel-3d-container');
+                const items = document.querySelectorAll('.carousel-3d-item');
+                const indicators = document.querySelectorAll('.carousel-indicator');
+                const carousel = document.querySelector('.carousel-3d');
+
+                let currentIndex = 0;
+                const totalItems = items.length;
+                const angleStep = 360 / totalItems;
+                let autoRotateInterval;
+                let isAutoRotating = true;
+                let isAnimating = false;
+
+                function updateCarousel() {
+                    if (isAnimating) return;
+                    isAnimating = true;
+
+                    carousel.classList.add('loading');
+
+                    // Ajustar o raio com base no tamanho da tela
+                    let radius = 600; // Raio padrão
+                    if (window.innerWidth <= 768) {
+                        radius = 300; // Raio menor para tablets e mobiles
+                    } else if (window.innerWidth <= 480) {
+                        radius = 200; // Raio ainda menor para mobiles pequenos
+                    }
+
+                    items.forEach((item, index) => {
+                        const angle = (index - currentIndex) * angleStep;
+                        const x = Math.sin(angle * Math.PI / 180) * radius;
+                        const z = Math.cos(angle * Math.PI / 180) * radius - radius;
+                        const scale = index === currentIndex ? 1 : Math.max(0.6, 1 - Math.abs(angle) / 180);
+                        const opacity = index === currentIndex ? 1 : Math.max(0.2, 1 - Math.abs(angle) / 180);
+
+                        item.style.transform = `translate3d(${x}px, 0, ${z}px) rotateY(${-angle}deg) scale(${scale})`;
+                        item.style.opacity = opacity;
+
+                        if (index === currentIndex) {
+                            item.classList.add('active');
+                        } else {
+                            item.classList.remove('active');
+                        }
+                    });
+
+                    indicators.forEach((indicator, index) => {
+                        if (index === currentIndex) {
+                            indicator.classList.add('active');
+                        } else {
+                            indicator.classList.remove('active');
+                        }
+                    });
+
+                    setTimeout(() => {
+                        carousel.classList.remove('loading');
+                        isAnimating = false;
+                    }, 1500);
+                }
+
+                function showNext() {
+                    if (currentIndex < totalItems - 1) {
+                        currentIndex++;
+                    } else {
+                        currentIndex = 0;
+                    }
+                    updateCarousel();
+                }
+
+                function startAutoRotate() {
+                    if (!isAutoRotating) return;
+                    autoRotateInterval = setInterval(showNext, 4000);
+                }
+
+                // Suporte para gestos de toque
+                let touchStartX = 0;
+                let touchEndX = 0;
+
+                carousel.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+
+                carousel.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                });
+
+                function handleSwipe() {
+                    const swipeThreshold = 50;
+                    const diff = touchStartX - touchEndX;
+
+                    if (Math.abs(diff) > swipeThreshold) {
+                        if (diff > 0) {
+                            showNext();
+                        } else {
+                            if (currentIndex > 0) {
+                                currentIndex--;
+                            } else {
+                                currentIndex = totalItems - 1;
+                            }
+                            updateCarousel();
+                        }
+                    }
+                }
+
+                // Inicializar
+                updateCarousel();
+                startAutoRotate();
+
+                // Adicionar indicadores dinamicamente
+                const indicatorsContainer = document.createElement('div');
+                indicatorsContainer.className = 'carousel-indicators';
+
+                items.forEach((_, index) => {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'carousel-indicator';
+                    indicator.addEventListener('click', () => {
+                        currentIndex = index;
+                        updateCarousel();
+                    });
+                    indicatorsContainer.appendChild(indicator);
+                });
+
+                carousel.appendChild(indicatorsContainer);
+
+                // Atualizar carrossel ao redimensionar a janela
+                window.addEventListener('resize', updateCarousel);
+            });
+        </script>
 
         <!-- Enhanced Courses Section -->
         <section id="cursos" class="bg-gradient-to-br from-gray-50 to-white py-24 fade-in" x-data="{ activeSlide: 0 }">
@@ -1428,7 +1753,7 @@
                 <div class="overflow-x-auto">
                     <div class="flex space-x-8 pb-6 carousel"
                         x-init="setInterval(() => { activeSlide = (activeSlide + 1) % 5; document.querySelector('.carousel').scrollLeft += 320; if(activeSlide === 0) { document.querySelector('.carousel').scrollLeft = 0; } }, 5000)">
-                        
+
                         <div class="course-card min-w-[320px] relative group"
                             :class="{ 'active': activeSlide === 0 }">
                             <img src="../main/assets/img/img-logoscursos/enfermagem.jpg" alt="Curso de Enfermagem"
@@ -1442,7 +1767,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="course-card min-w-[320px] relative group"
                             :class="{ 'active': activeSlide === 1 }">
                             <img src="../main/assets/img/img-logoscursos/informatica.jpg" alt="Curso de Informática"
@@ -1456,7 +1781,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="course-card min-w-[320px] relative group"
                             :class="{ 'active': activeSlide === 2 }">
                             <img src="../main/assets/img/img-logoscursos/meio_ambiente.jpg" alt="Curso de Meio Ambiente"
@@ -1484,7 +1809,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="course-card min-w-[320px] relative group"
                             :class="{ 'active': activeSlide === 4 }">
                             <img src="../main/assets/img/img-logoscursos/adm.jpg" alt="Curso de Administração"
@@ -1543,56 +1868,11 @@
                     <p class="text-xl text-gray-600 max-w-3xl mx-auto">Fique por dentro das oportunidades e eventos da nossa escola</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="card-enhanced p-8 hover-scale">
-                        <div class="flex items-center mb-6">
-                            <div class="w-16 h-16 bg-gradient-secondary rounded-full flex items-center justify-center mr-6">
-                                <i class="fas fa-user-graduate text-2xl text-white"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-2xl mb-2 text-ceara-green">Curso Google</h3>
-                                <p class="text-gray-600 font-medium">15 de maio, 2025</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-700 mb-6 leading-relaxed">Oportunidade única de participar dos cursos oferecidos pelo Google para desenvolvimento profissional.</p>
-                        <a href="https://www.coursera.org/programs/c-jovem-2025-cresca-com-o-google-13lv3" target="_blank" class="btn-primary">
-                            <i class="fas fa-external-link-alt mr-2"></i> Acesse aqui
-                        </a>
-                    </div>
+                   
 
-                    <div class="card-enhanced p-8 hover-scale">
-                        <div class="flex items-center mb-6">
-                            <div class="w-16 h-16 bg-gradient-secondary rounded-full flex items-center justify-center mr-6">
-                                <i class="fas fa-signal text-2xl text-white"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-2xl mb-2 text-ceara-green">Curso Huawei 5G</h3>
-                                <p class="text-gray-600 font-medium">02 de abril, 2025</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-700 mb-4 leading-relaxed">Curso especializado em tecnologia 5G oferecido pela Huawei.</p>
-                        <p class="text-sm text-gray-600 mb-6 bg-gray-100 p-3 rounded-lg">
-                            <strong>Código do curso:</strong> z4ttcV
-                        </p>
-                        <a href="https://id1.cloud.huawei.com/CAS/portal/userRegister/regbyphone.html?loginUrl=https%3A%2F%2Funiportal.huawei.com%2Funiportal1%2Fhwid-login.html%3Fx_app_id%3Dcom.huawei.prm.talent%26lang%3Den_US%26redirect%3Dhttps%253A%252F%252Fe.huawei.com%252Fen%252Ftalent%252F%2523%252Fcourse%252Fcourse-details%253FapplicationId%253D1743527126781%2526courseType%253DICT%2526invitedCode%253Dz4ttcV%2526urlForm%253Dmyclass%26relationKey%3D4bc61e81ea2c4353bb25076259f69af0&service=https%3A%2F%2Foauth-login1.cloud.huawei.com%2Foauth2%2Fv3%2Fauthorize%3Fclient_id%3D104526677%26redirect_uri%3Dhttps%253A%252F%252Funiportal.huawei.com%252Funiportal1%252Fhwid-login-result.html%253FrelationKey%253Ddd7045ae84f748d4933ea2341aefe8ab%26response_type%3Dcode%26state%3Ddd7045ae84f748d4933ea2341aefe8ab%26scope%3Dhttps%253A%252F%252Fwww.huawei.com%252Fauth%252Faccount%252Funified.profile1%2Bhttps%253A%252F%252Fwww.huawei.com%252Fauth%252Faccount%252Fpetal.email%26access_type%3Doffline%26lang%3Den-us%26display%3Dpage&lang=en-us&scope=https%3A%2F%2Fwww.huawei.com%2Fauth%2Faccount%2Funified.profile1+https%3A%2F%2Fwww.huawei.com%2Fauth%2Faccount%2Fpetal.email&state=dd7045ae84f748d4933ea2341aefe8ab&themeName=red" target="_blank" class="btn-primary">
-                            <i class="fas fa-external-link-alt mr-2"></i> Acesse aqui
-                        </a>
-                    </div>
+                  
 
-                    <div class="card-enhanced p-8 hover-scale">
-                        <div class="flex items-center mb-6">
-                            <div class="w-16 h-16 bg-gradient-secondary rounded-full flex items-center justify-center mr-6">
-                                <i class="fas fa-cloud text-2xl text-white"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-2xl mb-2 text-ceara-green">Curso AWS</h3>
-                                <p class="text-gray-600 font-medium">15 de maio, 2025</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-700 mb-6 leading-relaxed">Capacitação em computação em nuvem com a plataforma Amazon Web Services.</p>
-                        <a href="https://www.awsacademy.com/vforcesite/LMS_Login" target="_blank" class="btn-primary">
-                            <i class="fas fa-external-link-alt mr-2"></i> Acesse aqui
-                        </a>
-                    </div>
+                   
 
                     <div class="card-enhanced p-8 hover-scale">
                         <div class="flex items-center mb-6">
@@ -1670,219 +1950,219 @@
             </div>
         </div>
 
-        
-    <!-- Screen Reader Script -->
-    <script>
-        let isReading = false;
-        let currentSection = 0;
-        const synth = window.speechSynthesis;
-        let utterance = null;
 
-        function toggleScreenReader() {
-            if (isReading) {
-                stopReading();
-            } else {
-                startReading();
+        <!-- Screen Reader Script -->
+        <script>
+            let isReading = false;
+            let currentSection = 0;
+            const synth = window.speechSynthesis;
+            let utterance = null;
+
+            function toggleScreenReader() {
+                if (isReading) {
+                    stopReading();
+                } else {
+                    startReading();
+                }
             }
-        }
 
-        function startReading() {
-            isReading = true;
-            currentSection = 0;
-            readNextSection();
-            updateButtonState();
-            window.addEventListener('scroll', handleScroll);
-            document.addEventListener('click', handleElementClick);
-            document.addEventListener('focus', handleElementFocus, true);
-            announceStatus('Narração ativada');
-        }
-
-        function stopReading() {
-            if (synth.speaking) {
-                synth.cancel();
+            function startReading() {
+                isReading = true;
+                currentSection = 0;
+                readNextSection();
+                updateButtonState();
+                window.addEventListener('scroll', handleScroll);
+                document.addEventListener('click', handleElementClick);
+                document.addEventListener('focus', handleElementFocus, true);
+                announceStatus('Narração ativada');
             }
-            isReading = false;
-            updateButtonState();
-            window.removeEventListener('scroll', handleScroll);
-            document.removeEventListener('click', handleElementClick);
-            document.removeEventListener('focus', handleElementFocus, true);
-            announceStatus('Narração desativada');
-        }
 
-        function readNextSection() {
-            const sections = document.querySelectorAll('section, article, div.section');
-            if (currentSection < sections.length) {
-                const textToRead = sections[currentSection].innerText;
-                speakText(textToRead);
-            } else {
-                stopReading();
+            function stopReading() {
+                if (synth.speaking) {
+                    synth.cancel();
+                }
+                isReading = false;
+                updateButtonState();
+                window.removeEventListener('scroll', handleScroll);
+                document.removeEventListener('click', handleElementClick);
+                document.removeEventListener('focus', handleElementFocus, true);
+                announceStatus('Narração desativada');
             }
-        }
 
-        function handleScroll() {
-            if (!isReading) return;
+            function readNextSection() {
+                const sections = document.querySelectorAll('section, article, div.section');
+                if (currentSection < sections.length) {
+                    const textToRead = sections[currentSection].innerText;
+                    speakText(textToRead);
+                } else {
+                    stopReading();
+                }
+            }
 
-            const sections = document.querySelectorAll('section, article, div.section');
-            const scrollPosition = window.scrollY + window.innerHeight / 2;
+            function handleScroll() {
+                if (!isReading) return;
 
-            for (let i = 0; i < sections.length; i++) {
-                const section = sections[i];
-                const sectionTop = section.offsetTop;
-                const sectionBottom = sectionTop + section.offsetHeight;
+                const sections = document.querySelectorAll('section, article, div.section');
+                const scrollPosition = window.scrollY + window.innerHeight / 2;
 
-                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                    if (i !== currentSection) {
-                        currentSection = i;
-                        if (synth.speaking) {
-                            synth.cancel();
+                for (let i = 0; i < sections.length; i++) {
+                    const section = sections[i];
+                    const sectionTop = section.offsetTop;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                        if (i !== currentSection) {
+                            currentSection = i;
+                            if (synth.speaking) {
+                                synth.cancel();
+                            }
+                            readNextSection();
                         }
-                        readNextSection();
+                        break;
                     }
-                    break;
                 }
             }
-        }
 
-        function updateButtonState() {
-            const btn = document.getElementById('screenReaderBtn');
-            const mobileBtn = document.getElementById('mobileScreenReaderBtn');
-            
-            if (isReading) {
-                if (btn) {
-                    btn.classList.add('text-ceara-orange');
-                    btn.setAttribute('aria-label', 'Desativar narração de tela');
-                    btn.innerHTML = '<i class="fa-solid fa-ear-listen mr-2"></i><span>Desativar narração</span>';
+            function updateButtonState() {
+                const btn = document.getElementById('screenReaderBtn');
+                const mobileBtn = document.getElementById('mobileScreenReaderBtn');
+
+                if (isReading) {
+                    if (btn) {
+                        btn.classList.add('text-ceara-orange');
+                        btn.setAttribute('aria-label', 'Desativar narração de tela');
+                        btn.innerHTML = '<i class="fa-solid fa-ear-listen mr-2"></i><span>Desativar narração</span>';
+                    }
+                    if (mobileBtn) {
+                        mobileBtn.classList.add('text-ceara-orange');
+                        mobileBtn.setAttribute('aria-label', 'Desativar narração de tela');
+                    }
+                } else {
+                    if (btn) {
+                        btn.classList.remove('text-ceara-orange');
+                        btn.setAttribute('aria-label', 'Ativar narração de tela');
+                        btn.innerHTML = '<i class="fa-solid fa-ear-listen mr-2"></i><span>Ativar narração</span>';
+                    }
+                    if (mobileBtn) {
+                        mobileBtn.classList.remove('text-ceara-orange');
+                        mobileBtn.setAttribute('aria-label', 'Ativar narração de tela');
+                    }
                 }
-                if (mobileBtn) {
-                    mobileBtn.classList.add('text-ceara-orange');
-                    mobileBtn.setAttribute('aria-label', 'Desativar narração de tela');
+            }
+
+            function announceStatus(message) {
+                speakText(message);
+            }
+
+            function handleElementClick(event) {
+                if (!isReading) return;
+
+                const element = event.target;
+                const textToSpeak = getElementDescription(element);
+
+                if (textToSpeak) {
+                    speakText(textToSpeak);
                 }
-            } else {
-                if (btn) {
-                    btn.classList.remove('text-ceara-orange');
-                    btn.setAttribute('aria-label', 'Ativar narração de tela');
-                    btn.innerHTML = '<i class="fa-solid fa-ear-listen mr-2"></i><span>Ativar narração</span>';
+            }
+
+            function handleElementFocus(event) {
+                if (!isReading) return;
+
+                const element = event.target;
+                const textToSpeak = getElementDescription(element);
+
+                if (textToSpeak) {
+                    speakText(textToSpeak);
                 }
-                if (mobileBtn) {
-                    mobileBtn.classList.remove('text-ceara-orange');
-                    mobileBtn.setAttribute('aria-label', 'Ativar narração de tela');
+            }
+
+            function getElementDescription(element) {
+                if (element.tagName === 'IMG') {
+                    return element.alt || 'Imagem sem descrição';
+                } else if (element.tagName === 'A') {
+                    return `Link: ${element.textContent || element.href}`;
+                } else if (element.tagName === 'BUTTON') {
+                    return `Botão: ${element.textContent || element.value || 'Sem texto'}`;
+                } else if (element.tagName === 'INPUT') {
+                    return `Campo de entrada: ${element.placeholder || element.name || 'Sem descrição'}`;
+                } else {
+                    return element.textContent || 'Elemento sem texto';
                 }
             }
-        }
 
-        function announceStatus(message) {
-            speakText(message);
-        }
+            function speakText(text) {
+                if (synth.speaking) {
+                    synth.cancel();
+                }
+                utterance = new SpeechSynthesisUtterance(text);
 
-        function handleElementClick(event) {
-            if (!isReading) return;
+                const voices = synth.getVoices();
+                const portugueseVoice = voices.find(voice => voice.lang === 'pt-BR');
+                if (portugueseVoice) {
+                    utterance.voice = portugueseVoice;
+                }
 
-            const element = event.target;
-            const textToSpeak = getElementDescription(element);
-
-            if (textToSpeak) {
-                speakText(textToSpeak);
-            }
-        }
-
-        function handleElementFocus(event) {
-            if (!isReading) return;
-
-            const element = event.target;
-            const textToSpeak = getElementDescription(element);
-
-            if (textToSpeak) {
-                speakText(textToSpeak);
-            }
-        }
-
-        function getElementDescription(element) {
-            if (element.tagName === 'IMG') {
-                return element.alt || 'Imagem sem descrição';
-            } else if (element.tagName === 'A') {
-                return `Link: ${element.textContent || element.href}`;
-            } else if (element.tagName === 'BUTTON') {
-                return `Botão: ${element.textContent || element.value || 'Sem texto'}`;
-            } else if (element.tagName === 'INPUT') {
-                return `Campo de entrada: ${element.placeholder || element.name || 'Sem descrição'}`;
-            } else {
-                return element.textContent || 'Elemento sem texto';
-            }
-        }
-
-        function speakText(text) {
-            if (synth.speaking) {
-                synth.cancel();
-            }
-            utterance = new SpeechSynthesisUtterance(text);
-
-            const voices = synth.getVoices();
-            const portugueseVoice = voices.find(voice => voice.lang === 'pt-BR');
-            if (portugueseVoice) {
-                utterance.voice = portugueseVoice;
+                synth.speak(utterance);
             }
 
-            synth.speak(utterance);
-        }
+            // Initialize screen reader buttons
+            document.addEventListener('DOMContentLoaded', function() {
+                const screenReaderBtn = document.getElementById('screenReaderBtn');
+                const mobileScreenReaderBtn = document.getElementById('mobileScreenReaderBtn');
 
-        // Initialize screen reader buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            const screenReaderBtn = document.getElementById('screenReaderBtn');
-            const mobileScreenReaderBtn = document.getElementById('mobileScreenReaderBtn');
-            
-            if (screenReaderBtn) {
-                screenReaderBtn.addEventListener('click', toggleScreenReader);
-            }
-            
-            if (mobileScreenReaderBtn) {
-                mobileScreenReaderBtn.addEventListener('click', toggleScreenReader);
-            }
-            
-            // Initialize theme buttons
-            document.querySelectorAll('[data-theme]').forEach(button => {
-                button.addEventListener('click', function() {
-                    const theme = this.getAttribute('data-theme');
-                    applyTheme(theme);
+                if (screenReaderBtn) {
+                    screenReaderBtn.addEventListener('click', toggleScreenReader);
+                }
+
+                if (mobileScreenReaderBtn) {
+                    mobileScreenReaderBtn.addEventListener('click', toggleScreenReader);
+                }
+
+                // Initialize theme buttons
+                document.querySelectorAll('[data-theme]').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const theme = this.getAttribute('data-theme');
+                        applyTheme(theme);
+                    });
+                });
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', function(event) {
+                    // Alt+N for screen reader
+                    if (event.altKey && (event.key === 'n' || event.key === 'N')) {
+                        toggleScreenReader();
+                    }
                 });
             });
-            
-            // Keyboard shortcuts
-            document.addEventListener('keydown', function(event) {
-                // Alt+N for screen reader
-                if (event.altKey && (event.key === 'n' || event.key === 'N')) {
-                    toggleScreenReader();
-                }
-            });
-        });
 
-        // Theme application function
-        function applyTheme(theme) {
-            const html = document.documentElement;
-            
-            // Remove any existing theme classes
-            html.classList.remove('theme-monochrome', 'theme-inverted-grayscale', 'theme-inverted-color');
-            
-            // Apply the selected theme
-            switch(theme) {
-                case 'monochrome':
-                    html.classList.add('theme-monochrome');
-                    document.body.style.filter = 'grayscale(100%)';
-                    break;
-                case 'inverted-grayscale':
-                    html.classList.add('theme-inverted-grayscale');
-                    document.body.style.filter = 'grayscale(100%) invert(100%)';
-                    break;
-                case 'inverted-color':
-                    html.classList.add('theme-inverted-color');
-                    document.body.style.filter = 'invert(100%)';
-                    break;
-                case 'original':
-                default:
-                    document.body.style.filter = 'none';
-                    break;
+            // Theme application function
+            function applyTheme(theme) {
+                const html = document.documentElement;
+
+                // Remove any existing theme classes
+                html.classList.remove('theme-monochrome', 'theme-inverted-grayscale', 'theme-inverted-color');
+
+                // Apply the selected theme
+                switch (theme) {
+                    case 'monochrome':
+                        html.classList.add('theme-monochrome');
+                        document.body.style.filter = 'grayscale(100%)';
+                        break;
+                    case 'inverted-grayscale':
+                        html.classList.add('theme-inverted-grayscale');
+                        document.body.style.filter = 'grayscale(100%) invert(100%)';
+                        break;
+                    case 'inverted-color':
+                        html.classList.add('theme-inverted-color');
+                        document.body.style.filter = 'invert(100%)';
+                        break;
+                    case 'original':
+                    default:
+                        document.body.style.filter = 'none';
+                        break;
+                }
             }
-        }
-    </script>
+        </script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -2297,7 +2577,7 @@
 
         // Enhanced smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
@@ -2313,6 +2593,7 @@
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('section[id]');
             const scrollPos = window.scrollY + 100;
+            let foundActiveSection = false;
 
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
@@ -2321,14 +2602,22 @@
                 const navLink = document.querySelector(`a[href="#${sectionId}"]`);
 
                 if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-                    document.querySelectorAll('.header-link').forEach(link => {
-                        link.classList.remove('header-active');
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active', 'header-active');
                     });
                     if (navLink) {
-                        navLink.classList.add('header-active');
+                        navLink.classList.add('active', 'header-active');
                     }
+                    foundActiveSection = true;
                 }
             });
+
+            // Se não encontrou nenhuma seção ativa, remove todas as classes ativas
+            if (!foundActiveSection) {
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active', 'header-active');
+                });
+            }
         });
 
         // Loading animation
@@ -2341,42 +2630,57 @@
     <style>
         /* Enhanced Mobile Menu */
         .mobile-menu-open {
-            background-color: rgba(0, 0, 0, 0.8); /* Fundo semi-transparente escuro para o overlay */
-            backdrop-filter: blur(5px); /* Desfoque sutil no fundo */
-            -webkit-backdrop-filter: blur(5px); /* Desfoque sutil no fundo para webkit */
+            background-color: rgba(0, 0, 0, 0.8);
+            /* Fundo semi-transparente escuro para o overlay */
+            backdrop-filter: blur(5px);
+            /* Desfoque sutil no fundo */
+            -webkit-backdrop-filter: blur(5px);
+            /* Desfoque sutil no fundo para webkit */
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 50; /* Garante que fique sobre outros elementos */
+            z-index: 50;
+            /* Garante que fique sobre outros elementos */
             display: flex;
-            justify-content: flex-start; /* Alinha o conteúdo do menu à esquerda */
+            justify-content: flex-start;
+            /* Alinha o conteúdo do menu à esquerda */
             /* Remove largura fixa ou alinhamento à direita se existirem */
         }
 
         /* Mobile Menu inner container styles */
         /* Mantém os estilos existentes para o painel do menu */
-        .mobile-menu-open > div {
-             width: 80%; /* Ajuste a largura do painel do menu conforme necessário */
-             max-width: 400px; /* Ajuste a largura máxima do painel */
-             background: linear-gradient(135deg, #008C45 0%, #00A651 100%); /* Gradiente primário */
-             box-shadow: 4px 0 10px rgba(0, 0, 0, 0.3); /* Sombra à direita do painel mais escura */
-             /* Garante que o painel não seja transparente */
-             opacity: 1 !important;
-             transform: translateX(0) !important;
-             color: #ffffff; /* Texto branco para o painel */
-             padding: 1.5rem; /* Espaçamento interno */
+        .mobile-menu-open>div {
+            width: 80%;
+            /* Ajuste a largura do painel do menu conforme necessário */
+            max-width: 400px;
+            /* Ajuste a largura máxima do painel */
+            background: linear-gradient(135deg, #008C45 0%, #00A651 100%);
+            /* Gradiente primário */
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.3);
+            /* Sombra à direita do painel mais escura */
+            /* Garante que o painel não seja transparente */
+            opacity: 1 !important;
+            transform: translateX(0) !important;
+            color: #ffffff;
+            /* Texto branco para o painel */
+            padding: 1.5rem;
+            /* Espaçamento interno */
         }
 
         /* Estilos para os itens do menu dentro do painel */
         .mobile-menu-open a,
         .mobile-menu-open button {
-            display: flex; /* Usa flexbox para alinhar ícone e texto */
-            align-items: center; /* Centraliza verticalmente */
-            gap: 1rem; /* Espaçamento entre ícone e texto */
+            display: flex;
+            /* Usa flexbox para alinhar ícone e texto */
+            align-items: center;
+            /* Centraliza verticalmente */
+            gap: 1rem;
+            /* Espaçamento entre ícone e texto */
             padding: 0.75rem 1rem;
-            color: #ffffff; /* Cor do texto dos itens - branco */
+            color: #ffffff;
+            /* Cor do texto dos itens - branco */
             text-decoration: none;
             transition: all 0.3s ease;
             border-radius: 4px;
@@ -2384,18 +2688,22 @@
 
         .mobile-menu-open a:hover,
         .mobile-menu-open button:hover {
-            background-color: rgba(255, 165, 0, 0.2); /* Fundo semi-transparente laranja no hover */
-            color: #FFA500; /* Texto laranja no hover */
+            background-color: rgba(255, 165, 0, 0.2);
+            /* Fundo semi-transparente laranja no hover */
+            color: #FFA500;
+            /* Texto laranja no hover */
         }
 
         /* Estilos para o ícone dentro do item do menu */
         .mobile-menu-open .mobile-menu-item .w-12 {
-             flex-shrink: 0; /* Impede que o ícone diminua */
+            flex-shrink: 0;
+            /* Impede que o ícone diminua */
         }
 
         @media (min-width: 1024px) {
             .mobile-menu-open {
-                display: none; /* Oculta o menu mobile em telas maiores */
+                display: none;
+                /* Oculta o menu mobile em telas maiores */
             }
         }
     </style>
