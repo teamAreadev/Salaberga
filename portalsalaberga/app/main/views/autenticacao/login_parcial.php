@@ -138,6 +138,7 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
 
         .input-group input:focus {
             transform: translateY(-2px);
+            outline: none;
         }
 
         .input-group label {
@@ -160,7 +161,7 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
             left: 10px;
             font-size: 0.85rem;
             color: var(--ceara-orange);
-            transform: translateY(0) scale(0.85);
+            transform: translateY(0);
             background-color: var(--ceara-white);
             padding: 0 5px;
             font-weight: 600;
@@ -372,9 +373,9 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
                                    id="email" 
                                    placeholder=" " 
                                    required
-                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 border-2 border-gray-200 rounded-xl text-gray-800 bg-gray-50 focus:bg-white focus:border-ceara-green focus:shadow-custom transition-all duration-300 peer text-sm sm:text-base">
+                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 border-2 border-gray-200 rounded-xl text-gray-800 bg-gray-50 focus:bg-white focus:shadow-custom transition-all duration-300 peer text-sm sm:text-base">
                             <label for="email" 
-                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 text-gray-500 transition-all duration-300 peer-focus:text-ceara-green peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-7 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-ceara-green peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
+                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 text-gray-500 transition-all duration-300 peer-focus:text-ceara-green peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-ceara-green peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 E-mail Institucional
                             </label>
                             <i class="fas fa-envelope absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-ceara-green text-base sm:text-lg"></i>
@@ -389,9 +390,9 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
                                    id="password" 
                                    placeholder=" " 
                                    required
-                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 pr-10 sm:pr-12 border-2 border-gray-200 rounded-xl text-gray-800 bg-gray-50 focus:bg-white focus:border-ceara-green focus:shadow-custom transition-all duration-300 peer text-sm sm:text-base">
+                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 pr-10 sm:pr-12 border-2 border-gray-200 rounded-xl text-gray-800 bg-gray-50 focus:bg-white focus:shadow-custom transition-all duration-300 peer text-sm sm:text-base">
                             <label for="password" 
-                                   class="absolute left-6 mx-10 sm:left-12 top-3 sm:top-4 text-gray-500 transition-all duration-300 peer-focus:text-ceara-green peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-7 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-ceara-green peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
+                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 text-gray-500 transition-all duration-300 peer-focus:text-ceara-green peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-ceara-green peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 Senha
                             </label>
                             <i class="fas fa-lock absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-ceara-green text-base sm:text-lg"></i>
