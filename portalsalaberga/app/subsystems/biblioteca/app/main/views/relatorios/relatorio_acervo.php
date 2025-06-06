@@ -1,175 +1,191 @@
 <?php
 require_once('../../assets/fpdf/fpdf.php');
+require_once('../../config/connect.php');
 
-class PDF extends FPDF
+class PDF extends connect
 {
-    function Header()
+    public function __construct()
     {
-        if ($this->PageNo() == 1) {
-            $this->Image('../../assets/img/logo.png', 20, 14, 50);
-            $this->Ln(20);
+        parent::__construct();
+        $this->header();
+        $this->main();
+        $this->footer();
+    }
 
-            $this->SetX(20);
-            $this->SetFont('Arial', 'B', 20);
-            $this->SetTextColor(0, 122, 51);
-            $this->Cell($this->GetPageWidth() - 40, 20, utf8_decode('RELATÓRIO GERAL DE ACERVO'), 0, 1, 'C');
+    public function header()
+    {
+        $fpdf = new FPDF('L', 'pt', 'A4');
+        if ($fpdf->PageNo() == 1) {
+            $fpdf->Image('../../assets/img/logo.png', 20, 14, 50);
+            $fpdf->Ln(20);
 
-            $this->SetX(20);
-            $this->SetFont('Arial', 'B', 14);
-            $this->SetTextColor(255, 165, 0);
-            $this->Cell($this->GetPageWidth() - 40, 20, "BIBLIOTECA STGM", 0, 1, 'C');
+            $fpdf->SetX(20);
+            $fpdf->SetFont('Arial', 'B', 20);
+            $fpdf->SetTextColor(0, 122, 51);
+            $fpdf->Cell($fpdf->GetPageWidth() - 40, 20, utf8_decode('RELATÓRIO GERAL DE ACERVO'), 0, 1, 'C');
 
-            $pageWidth = $this->GetPageWidth() - 160;
+            $fpdf->SetX(20);
+            $fpdf->SetFont('Arial', 'B', 14);
+            $fpdf->SetTextColor(255, 165, 0);
+            $fpdf->Cell($fpdf->GetPageWidth() - 40, 20, "BIBLIOTECA STGM", 0, 1, 'C');
+
+            $pageWidth = $fpdf->GetPageWidth() - 160;
             $texto = utf8_decode('*ENI: Edição Não Informada');
-            $textoLargura = $this->GetStringWidth($texto);
+            $textoLargura = $fpdf->GetStringWidth($texto);
             $colunaQtdLargura = $pageWidth * 0.08;
             $posX = $pageWidth - $colunaQtdLargura;
 
-            $this->SetX($posX);
-            $this->SetFont('Arial', 'B', 10);
-            $this->SetTextColor(0, 122, 51);
-            $this->Cell($textoLargura, 10, $texto, 0, 1, 'R');
+            $fpdf->SetX($posX);
+            $fpdf->SetFont('Arial', 'B', 10);
+            $fpdf->SetTextColor(0, 122, 51);
+            $fpdf->Cell($textoLargura, 10, $texto, 0, 1, 'R');
 
-            $this->Ln(10);
+            $fpdf->Ln(10);
         }
+        return $fpdf;
     }
 
-    function Footer()
+    public function main()
     {
-        $this->SetY(-15);
-        $this->SetFont('Arial', 'I', 8);
-        $this->SetTextColor(0, 122, 51);
-        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo() . '/{nb}', 0, 0, 'C');
+        $fpdf = $this->header();
+        $fpdf->AliasNbPages();
+        $fpdf->AddPage();
+
+        $acervo = $this->connect->prepare(
+            "SELECT 
+                        c.id,
+                        c.titulo_livro, 
+                        a.nome_autor,
+                        a.sobrenome_autor,
+                        c.edicao,
+                        c.editora,
+                        c.quantidade,
+                        g.generos,
+                        sg.subgenero
+                    FROM catalogo c
+                    INNER JOIN livros_autores l ON c.id = l.id_livro
+                    INNER JOIN autores a ON l.id_autor = a.id
+                    LEFT JOIN genero g ON c.id_genero = g.id
+                    LEFT JOIN subgenero sg ON c.id_subgenero = sg.id
+                    ORDER BY c.titulo_livro, c.edicao"
+                    );
+        $acervo->execute();
+        $result = $acervo->fetchAll(PDO::FETCH_ASSOC);
+
+        // Agrupar os dados por livro, edição e editora, consolidando os autores
+        $livros = [];
+        foreach ($result as $row) {
+            $chave = $row['titulo_livro'] . '|' . ($row['edicao'] ?? 'ENI*') . '|' . ($row['editora'] ?? 'N/A');
+            if (!isset($livros[$chave])) {
+                $livros[$chave] = [
+                    'id' => $row['id'],
+                    'titulo_livro' => $row['titulo_livro'],
+                    'edicao' => $row['edicao'],
+                    'editora' => $row['editora'],
+                    'quantidade' => $row['quantidade'],
+                    'generos' => $row['generos'],
+                    'subgenero' => $row['subgenero'],
+                    'autores' => []
+                ];
+            }
+            $livros[$chave]['autores'][] = [
+                'nome_autor' => $row['nome_autor'],
+                'sobrenome_autor' => $row['sobrenome_autor']
+            ];
+        }
+
+        $pageWidth = $fpdf->GetPageWidth() - 40;
+        $colunas = array(
+            array('largura' => $pageWidth * 0.35, 'texto' => utf8_decode('TÍTULO')),
+            array('largura' => $pageWidth * 0.25, 'texto' => 'AUTOR'),
+            array('largura' => $pageWidth * 0.12, 'texto' => utf8_decode('GÊNERO')),
+            array('largura' => $pageWidth * 0.12, 'texto' => utf8_decode('SUBGÊNERO')),
+            array('largura' => $pageWidth * 0.08, 'texto' => utf8_decode('EDIÇÃO')),
+            array('largura' => $pageWidth * 0.08, 'texto' => 'QTD')
+        );
+
+        // Calcular o total de livros antes de exibir
+        $totalLivros = 0;
+        foreach ($livros as $livro) {
+            $totalLivros += (int)($livro['quantidade'] ?? 1);
+        }
+
+        // Adicionar ITENS EM ACERVO
+        $fpdf->SetX(20);
+        $fpdf->SetTextColor(0, 122, 51);
+        $fpdf->SetFont('Arial', 'B', 12);
+        $fpdf->Cell($pageWidth / 2, 10, 'ITENS EM ACERVO: ' . $totalLivros, 0, 1, 'L');
+        $fpdf->Ln(10);
+
+        // Cabeçalho das colunas
+        $fpdf->SetX(20);
+        $fpdf->SetFont('Arial', 'B', 10);
+        $fpdf->SetFillColor(0, 122, 51);
+        $fpdf->SetTextColor(255, 255, 255);
+
+        foreach ($colunas as $coluna) {
+            $fpdf->Cell($coluna['largura'], 20, $coluna['texto'], 1, 0, 'C', true);
+        }
+        $fpdf->Ln();
+
+        // Listagem dos livros
+        $fpdf->SetFont('Arial', '', 9);
+        $rowCounter = 0; // Contador para alternar cores
+        foreach ($livros as $livro) {
+            $fpdf->SetX(20); // Garantir que cada linha comece na mesma posição
+            // Alternar cores: branco (255, 255, 255) para par, cinza claro (220, 220, 220) para ímpar
+            $cor = ($rowCounter % 2 == 0) ? 255 : 220; // Branco para par, cinza para ímpar
+            $fpdf->SetFillColor($cor, $cor, $cor); // Define a cor de fundo da célula
+            $fpdf->SetTextColor(0, 0, 0); // Texto preto para legibilidade
+
+            $titulo = utf8_decode(mb_strtoupper($livro['titulo_livro'], 'UTF-8'));
+            $genero = utf8_decode(mb_strtoupper($livro['generos'] ?? 'N/A', 'UTF-8'));
+            $subgenero = utf8_decode(mb_strtoupper($livro['subgenero'] ?? 'N/A', 'UTF-8'));
+            $edicao = empty($livro['edicao']) ? utf8_decode('ENI*') : utf8_decode(mb_strtoupper($livro['edicao'], 'UTF-8'));
+            $quantidade = $livro['quantidade'] ?? 1;
+
+            $alturaLinha = 20;
+
+            $autores = [];
+            foreach ($livro['autores'] as $autor) {
+                $nomeAutor = utf8_decode(mb_strtoupper($autor['nome_autor'] ?? 'N/A', 'UTF-8'));
+                $sobrenome = utf8_decode(mb_strtoupper($autor['sobrenome_autor'] ?? 'N/A', 'UTF-8'));
+                $autores[] = $nomeAutor . " " . $sobrenome;
+            }
+
+            $numAutores = count($autores);
+            $alturaTotal = $numAutores > 1 ? $alturaLinha * $numAutores : $alturaLinha;
+
+            $fpdf->Cell($colunas[0]['largura'], $alturaTotal, $titulo, 1, 0, 'L', true);
+
+            $xAntesAutor = $fpdf->GetX();
+            $yAntesAutor = $fpdf->GetY();
+
+            if ($numAutores == 1) {
+                $fpdf->Cell($colunas[1]['largura'], $alturaLinha, $autores[0], 1, 0, 'L', true);
+            } else {
+                $fpdf->MultiCell($colunas[1]['largura'], $alturaLinha, implode("\n", $autores), 1, 'L', true);
+                $fpdf->SetXY($xAntesAutor + $colunas[1]['largura'], $yAntesAutor);
+            }
+
+            $fpdf->Cell($colunas[2]['largura'], $alturaTotal, $genero, 1, 0, 'L', true);
+            $fpdf->Cell($colunas[3]['largura'], $alturaTotal, $subgenero, 1, 0, 'L', true);
+            $fpdf->Cell($colunas[4]['largura'], $alturaTotal, $edicao, 1, 0, 'C', true);
+            $fpdf->Cell($colunas[5]['largura'], $alturaTotal, $quantidade, 1, 1, 'C', true);
+
+            $rowCounter++; // Incrementar o contador para a próxima linha
+        }
+
+        $this->footer($fpdf);
+        $fpdf->Output('relatorio_acervo.pdf', 'I');
+    }
+
+    function footer($fpdf)
+    {
+        $fpdf->SetY(-15);
+        $fpdf->SetFont('Arial', 'I', 8);
+        $fpdf->SetTextColor(0, 122, 51);
+        $fpdf->Cell(0, 10, utf8_decode('Página ') . $fpdf->PageNo() . '/{nb}', 0, 0, 'C');
     }
 }
-
-$pdf = new PDF("L", "pt", "A4");
-$pdf->AliasNbPages();
-$pdf->AddPage();
-$pdo = new PDO("mysql:host=localhost;dbname=sist_biblioteca;charset=utf8", "root", "");
-
-$acervo = $pdo->prepare("SELECT 
-    c.id,
-    c.titulo_livro, 
-    a.nome_autor,
-    a.sobrenome_autor,
-    c.edicao,
-    c.editora,
-    c.quantidade,
-    g.generos,
-    sg.subgenero
-    FROM catalogo c
-    INNER JOIN livros_autores l ON c.id = l.id_livro
-    INNER JOIN autores a ON l.id_autor = a.id
-    LEFT JOIN genero g ON c.id_genero = g.id
-    LEFT JOIN subgenero sg ON c.id_subgenero = sg.id
-    ORDER BY c.titulo_livro, c.edicao");
-$acervo->execute();
-$result = $acervo->fetchAll(PDO::FETCH_ASSOC);
-
-// Agrupar os dados por livro, edição e editora, consolidando os autores
-$livros = [];
-foreach ($result as $row) {
-    $chave = $row['titulo_livro'] . '|' . ($row['edicao'] ?? 'ENI*') . '|' . ($row['editora'] ?? 'N/A');
-    if (!isset($livros[$chave])) {
-        $livros[$chave] = [
-            'id' => $row['id'],
-            'titulo_livro' => $row['titulo_livro'],
-            'edicao' => $row['edicao'],
-            'editora' => $row['editora'],
-            'quantidade' => $row['quantidade'],
-            'generos' => $row['generos'],
-            'subgenero' => $row['subgenero'],
-            'autores' => []
-        ];
-    }
-    $livros[$chave]['autores'][] = [
-        'nome_autor' => $row['nome_autor'],
-        'sobrenome_autor' => $row['sobrenome_autor']
-    ];
-}
-
-$pageWidth = $pdf->GetPageWidth() - 40;
-$colunas = array(
-    array('largura' => $pageWidth * 0.35, 'texto' => utf8_decode('TÍTULO')),
-    array('largura' => $pageWidth * 0.25, 'texto' => 'AUTOR'),
-    array('largura' => $pageWidth * 0.12, 'texto' => utf8_decode('GÊNERO')),
-    array('largura' => $pageWidth * 0.12, 'texto' => utf8_decode('SUBGÊNERO')),
-    array('largura' => $pageWidth * 0.08, 'texto' => utf8_decode('EDIÇÃO')),
-    array('largura' => $pageWidth * 0.08, 'texto' => 'QTD')
-);
-
-// Calcular o total de livros antes de exibir
-$totalLivros = 0;
-foreach ($livros as $livro) {
-    $totalLivros += (int)($livro['quantidade'] ?? 1);
-}
-
-// Adicionar ITENS EM ACERVO
-$pdf->SetX(20);
-$pdf->SetTextColor(0, 122, 51);
-$pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell($pageWidth / 2, 10, 'ITENS EM ACERVO: ' . $totalLivros, 0, 1, 'L');
-$pdf->Ln(10);
-
-// Cabeçalho das colunas
-$pdf->SetX(20);
-$pdf->SetFont('Arial', 'B', 10);
-$pdf->SetFillColor(0, 122, 51);
-$pdf->SetTextColor(255, 255, 255);
-
-foreach ($colunas as $coluna) {
-    $pdf->Cell($coluna['largura'], 20, $coluna['texto'], 1, 0, 'C', true);
-}
-$pdf->Ln();
-
-// Listagem dos livros
-$pdf->SetFont('Arial', '', 9);
-$rowCounter = 0; // Contador para alternar cores
-foreach ($livros as $livro) {
-    $pdf->SetX(20); // Garantir que cada linha comece na mesma posição
-    // Alternar cores: branco (255, 255, 255) para par, cinza claro (220, 220, 220) para ímpar
-    $cor = ($rowCounter % 2 == 0) ? 255 : 220; // Branco para par, cinza para ímpar
-    $pdf->SetFillColor($cor, $cor, $cor); // Define a cor de fundo da célula
-    $pdf->SetTextColor(0, 0, 0); // Texto preto para legibilidade
-
-    $titulo = utf8_decode(mb_strtoupper($livro['titulo_livro'], 'UTF-8'));
-    $genero = utf8_decode(mb_strtoupper($livro['generos'] ?? 'N/A', 'UTF-8'));
-    $subgenero = utf8_decode(mb_strtoupper($livro['subgenero'] ?? 'N/A', 'UTF-8'));
-    $edicao = empty($livro['edicao']) ? utf8_decode('ENI*') : utf8_decode(mb_strtoupper($livro['edicao'], 'UTF-8'));
-    $quantidade = $livro['quantidade'] ?? 1;
-
-    $alturaLinha = 20;
-
-    $autores = [];
-    foreach ($livro['autores'] as $autor) {
-        $nomeAutor = utf8_decode(mb_strtoupper($autor['nome_autor'] ?? 'N/A', 'UTF-8'));
-        $sobrenome = utf8_decode(mb_strtoupper($autor['sobrenome_autor'] ?? 'N/A', 'UTF-8'));
-        $autores[] = $nomeAutor . " " . $sobrenome;
-    }
-
-    $numAutores = count($autores);
-    $alturaTotal = $numAutores > 1 ? $alturaLinha * $numAutores : $alturaLinha;
-
-    $pdf->Cell($colunas[0]['largura'], $alturaTotal, $titulo, 1, 0, 'L', true);
-
-    $xAntesAutor = $pdf->GetX();
-    $yAntesAutor = $pdf->GetY();
-
-    if ($numAutores == 1) {
-        $pdf->Cell($colunas[1]['largura'], $alturaLinha, $autores[0], 1, 0, 'L', true);
-    } else {
-        $pdf->MultiCell($colunas[1]['largura'], $alturaLinha, implode("\n", $autores), 1, 'L', true);
-        $pdf->SetXY($xAntesAutor + $colunas[1]['largura'], $yAntesAutor);
-    }
-
-    $pdf->Cell($colunas[2]['largura'], $alturaTotal, $genero, 1, 0, 'L', true);
-    $pdf->Cell($colunas[3]['largura'], $alturaTotal, $subgenero, 1, 0, 'L', true);
-    $pdf->Cell($colunas[4]['largura'], $alturaTotal, $edicao, 1, 0, 'C', true);
-    $pdf->Cell($colunas[5]['largura'], $alturaTotal, $quantidade, 1, 1, 'C', true);
-
-    $rowCounter++; // Incrementar o contador para a próxima linha
-}
-
-$pdf->Output('relatorio_acervo.pdf', 'I');
-?>
+$relatorio = new PDF();

@@ -15,10 +15,6 @@ class GerarPdf extends Database
 
     public function pdf()
     {
- 
-
-
-         
         $pdf = new FPDF("L", "cm", "A4");
         $pdf->AliasNbPages();
         $pdf->AddPage();

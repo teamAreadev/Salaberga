@@ -544,10 +544,6 @@ if (!isset($_SESSION['Email'])) {
         </div>
 
         <!-- Vista Desktop (Tabelas) -->   
-
-
-
-
         
         <div class="desktop-view">
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
@@ -591,7 +587,7 @@ if (!isset($_SESSION['Email'])) {
                                             </div>
                                         </td>
                                         <td class="px-4 py-2 text-sm text-gray-500">
-                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                            <?= isset($dado['dae']) ? date('H:i', strtotime($dado['dae'])) : '--:--' ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -647,7 +643,7 @@ if (!isset($_SESSION['Email'])) {
                                             </div>
                                         </td>
                                         <td class="px-4 py-2 text-sm text-gray-500">
-                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                            <?= isset($dado['dae']) ? date('H:i', strtotime($dado['dae'])) : '--:--' ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -703,7 +699,7 @@ if (!isset($_SESSION['Email'])) {
                                             </div>
                                         </td>
                                         <td class="px-4 py-2 text-sm text-gray-500">
-                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                            <?= isset($dado['dae']) ? date('H:i', strtotime($dado['dae'])) : '--:--' ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -759,7 +755,7 @@ if (!isset($_SESSION['Email'])) {
                                             </div>
                                         </td>
                                         <td class="px-4 py-2 text-sm text-gray-500">
-                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                            <?= isset($dado['dae']) ? date('H:i', strtotime($dado['dae'])) : '--:--' ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -807,7 +803,7 @@ if (!isset($_SESSION['Email'])) {
                                         </div>
                                         <div class="text-sm text-gray-500 flex items-center">
                                             <i class="fas fa-clock mr-2"></i>
-                                            <span class="font-medium"><?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?></span>
+                                            <span class="font-medium"><?= isset($dado['dae']) ? date('H:i', strtotime($dado['dae'])) : '--:--' ?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -852,7 +848,7 @@ if (!isset($_SESSION['Email'])) {
                                         </div>
                                         <div class="text-sm text-gray-500 flex items-center">
                                             <i class="fas fa-clock mr-2"></i>
-                                            <span class="font-medium"><?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?></span>
+                                            <span class="font-medium"><?= isset($dado['dae']) ? date('H:i', strtotime($dado['dae'])) : '--:--' ?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -897,7 +893,7 @@ if (!isset($_SESSION['Email'])) {
                                         </div>
                                         <div class="text-sm text-gray-500 flex items-center">
                                             <i class="fas fa-clock mr-2"></i>
-                                            <span class="font-medium"><?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?></span>
+                                            <span class="font-medium"><?= isset($dado['dae']) ? date('H:i', strtotime($dado['dae'])) : '--:--' ?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -942,7 +938,7 @@ if (!isset($_SESSION['Email'])) {
                                         </div>
                                         <div class="text-sm text-gray-500 flex items-center">
                                             <i class="fas fa-clock mr-2"></i>
-                                            <span class="font-medium"><?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?></span>
+                                            <span class="font-medium"><?= isset($dado['dae']) ? date('H:i', strtotime($dado['dae'])) : '--:--' ?></span>
                                         </div>
                                     </div>
                                 </div>
