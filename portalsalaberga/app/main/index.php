@@ -927,7 +927,7 @@
             height: 700px;
             position: relative;
             margin: 0 auto 120px auto;
-            overflow: visible;
+            overflow: hidden; /* Impede a rolagem horizontal da página causada por elementos 3D fora dos limites */
 
             border-radius: 40px;
             padding: 50px 30px;
