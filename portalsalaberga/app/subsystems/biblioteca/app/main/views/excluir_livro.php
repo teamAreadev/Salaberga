@@ -190,7 +190,7 @@ $select_model = new select_model();
                                 <select class="js-example-basic-multiple" name="excluir_livro[]" multiple="multiple">
         
                                     <?php
-                                    $livros = $select_model->select_nome_livro();
+                                    $livros = $select_model->select_nome_livro_geral();
                                     foreach ($livros as $livro) { ?>
                                         <option value="<?= $livro['id'] ?>"><?= $livro['titulo_livro'] ?> | edição: <?= $livro['edicao'] ?> | editora: <?= $livro['editora'] ?> | estante: <?= $livro['estantes'] ?> | prateleira: <?= $livro['prateleiras'] ?> | quantidade: <?= $livro['quantidade'] ?></option>
                                     <?php } ?>

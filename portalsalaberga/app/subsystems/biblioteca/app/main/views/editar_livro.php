@@ -203,12 +203,12 @@ $select_model = new select_model();
                                                                     ?>data-prateleira="P2" <?php
                                                                                         } else if ($livro['prateleiras'] == 'p3') {
                                                                                             ?>data-prateleira="P3" <?php
-                                                                                                                    } else if ($livro['prateleiras'] == 'p4') {
-                                                                                                                        ?>data-prateleira="P4" <?php
-                                                                                                                    } else if ($livro['prateleiras'] == 'p5') {
-                                                                                                                        ?>data-prateleira="P5" <?php
-                                                                                                                    }
-                                                                                                                        ?>
+                                                                                                                } else if ($livro['prateleiras'] == 'p4') {
+                                                                                                                    ?>data-prateleira="P4" <?php
+                                                                                                                                        } else if ($livro['prateleiras'] == 'p5') {
+                                                                                                                                            ?>data-prateleira="P5" <?php
+                                                                                                                                                                }
+                                                                                                                                                                    ?>
                                             data-quantidade="<?= $livro['quantidade'] ?>"
                                             data-genero="<?= $livro['generos'] ?>"
                                             data-subgenero="<?= $livro['subgenero'] ?>"
