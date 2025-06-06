@@ -78,6 +78,8 @@ if (!isset($_SESSION['Email'])) {
             background: #ffffff;
             border-radius: 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            max-width: 1800px !important;
+            padding: 1rem !important;
         }
 
         /* Estilos para Cards (Mobile) */
@@ -88,10 +90,19 @@ if (!isset($_SESSION['Email'])) {
             transition: all 0.3s ease;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            min-height: 350px;
+            max-height: 500px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin: 0;
         }
 
         .class-card:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         .student-card {
@@ -186,21 +197,138 @@ if (!isset($_SESSION['Email'])) {
 
         /* Responsividade */
         .desktop-view {
-            display: none;
+            display: none !important;
         }
 
         .mobile-view {
-            display: block;
+            display: block !important;
         }
 
-        @media (min-width: 1024px) {
-            .desktop-view {
-                display: block;
+        /* Layout Grid */
+        .mobile-view .space-y-6 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            padding: 1rem;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 1400px) {
+            .mobile-view .space-y-6 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-view .space-y-6 {
+                grid-template-columns: 1fr;
+                padding: 0.5rem;
             }
 
-            .mobile-view {
-                display: none;
+            .student-card {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                margin-bottom: 1rem;
+                padding: 1rem;
+                border: 1px solid #e5e7eb;
             }
+
+            .student-card .flex {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .student-card .flex-shrink-0 {
+                margin-bottom: 0.5rem;
+            }
+
+            .student-card .text-sm {
+                margin-top: 0.5rem;
+                padding-top: 0.5rem;
+                border-top: 1px solid #e5e7eb;
+            }
+
+            .class-card {
+                min-height: auto;
+                max-height: none;
+                box-shadow: none;
+                border: none;
+                background: transparent;
+            }
+
+            .class-card .card-header-3a,
+            .class-card .card-header-3b,
+            .class-card .card-header-3c,
+            .class-card .card-header-3d {
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                border-radius: 12px;
+                margin-bottom: 1rem;
+            }
+
+            .class-card .compact-cards {
+                padding: 0;
+            }
+
+            .search-input {
+                max-width: 100%;
+                margin-top: 0.5rem;
+            }
+        }
+
+        .class-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            min-height: 350px;
+            max-height: 500px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin: 0;
+        }
+
+        .class-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .class-card .compact-cards {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.75rem;
+        }
+
+        .student-card {
+            margin-bottom: 0.5rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            background: #f8fafc;
+            transition: background-color 0.2s ease;
+        }
+
+        .student-card:hover {
+            background: #f1f5f9;
+        }
+
+        /* Ajustes para o cabeçalho dos cards */
+        .card-header-3a,
+        .card-header-3b,
+        .card-header-3c,
+        .card-header-3d {
+            padding: 1rem;
+        }
+
+        .card-header-3a h2,
+        .card-header-3b h2,
+        .card-header-3c h2,
+        .card-header-3d h2 {
+            font-size: 1.1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* Scrollbar personalizada */
@@ -651,7 +779,7 @@ if (!isset($_SESSION['Email'])) {
 
         <!-- Vista Mobile (Cards) -->
         <div class="mobile-view">
-            <div class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                 <!-- 3º Ano A -->
                 <div class="class-card">
                     <div class="card-header-3a p-4">
@@ -670,16 +798,16 @@ if (!isset($_SESSION['Email'])) {
                         <?php if ($count_3a > 0) { ?>
                             <?php foreach ($dados_3a as $index => $dado) { ?>
                                 <div class="student-card compact-card">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-red-100 text-danger text-xs font-medium">
+                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                                        <div class="flex items-center mb-2 md:mb-0">
+                                            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-red-100 text-danger text-sm font-medium">
                                                 <?= $index + 1 ?>
                                             </div>
-                                            <span class="ml-3 font-medium text-gray-900"><?= htmlspecialchars($dado['nome']) ?></span>
+                                            <span class="ml-3 font-medium text-gray-900 text-base"><?= htmlspecialchars($dado['nome']) ?></span>
                                         </div>
-                                        <div class="text-sm text-gray-500">
-                                            <i class="fas fa-clock mr-1"></i>
-                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        <div class="text-sm text-gray-500 flex items-center">
+                                            <i class="fas fa-clock mr-2"></i>
+                                            <span class="font-medium"><?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -715,16 +843,16 @@ if (!isset($_SESSION['Email'])) {
                         <?php if ($count_3b > 0) { ?>
                             <?php foreach ($dados_3b as $index => $dado) { ?>
                                 <div class="student-card compact-card">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-blue-100 text-info text-xs font-medium">
+                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                                        <div class="flex items-center mb-2 md:mb-0">
+                                            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-info text-sm font-medium">
                                                 <?= $index + 1 ?>
                                             </div>
-                                            <span class="ml-3 font-medium text-gray-900"><?= htmlspecialchars($dado['nome']) ?></span>
+                                            <span class="ml-3 font-medium text-gray-900 text-base"><?= htmlspecialchars($dado['nome']) ?></span>
                                         </div>
-                                        <div class="text-sm text-gray-500">
-                                            <i class="fas fa-clock mr-1"></i>
-                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        <div class="text-sm text-gray-500 flex items-center">
+                                            <i class="fas fa-clock mr-2"></i>
+                                            <span class="font-medium"><?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -760,16 +888,16 @@ if (!isset($_SESSION['Email'])) {
                         <?php if ($count_3c > 0) { ?>
                             <?php foreach ($dados_3c as $index => $dado) { ?>
                                 <div class="student-card compact-card">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-cyan-100 text-admin text-xs font-medium">
+                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                                        <div class="flex items-center mb-2 md:mb-0">
+                                            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-cyan-100 text-admin text-sm font-medium">
                                                 <?= $index + 1 ?>
                                             </div>
-                                            <span class="ml-3 font-medium text-gray-900"><?= htmlspecialchars($dado['nome']) ?></span>
+                                            <span class="ml-3 font-medium text-gray-900 text-base"><?= htmlspecialchars($dado['nome']) ?></span>
                                         </div>
-                                        <div class="text-sm text-gray-500">
-                                            <i class="fas fa-clock mr-1"></i>
-                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        <div class="text-sm text-gray-500 flex items-center">
+                                            <i class="fas fa-clock mr-2"></i>
+                                            <span class="font-medium"><?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -805,16 +933,16 @@ if (!isset($_SESSION['Email'])) {
                         <?php if ($count_3d > 0) { ?>
                             <?php foreach ($dados_3d as $index => $dado) { ?>
                                 <div class="student-card compact-card">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-gray-100 text-grey text-xs font-medium">
+                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                                        <div class="flex items-center mb-2 md:mb-0">
+                                            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-grey text-sm font-medium">
                                                 <?= $index + 1 ?>
                                             </div>
-                                            <span class="ml-3 font-medium text-gray-900"><?= htmlspecialchars($dado['nome']) ?></span>
+                                            <span class="ml-3 font-medium text-gray-900 text-base"><?= htmlspecialchars($dado['nome']) ?></span>
                                         </div>
-                                        <div class="text-sm text-gray-500">
-                                            <i class="fas fa-clock mr-1"></i>
-                                            <?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?>
+                                        <div class="text-sm text-gray-500 flex items-center">
+                                            <i class="fas fa-clock mr-2"></i>
+                                            <span class="font-medium"><?= isset($dado['hora_saida']) ? date('H:i', strtotime($dado['hora_saida'])) : '--:--' ?></span>
                                         </div>
                                     </div>
                                 </div>
