@@ -11,7 +11,6 @@ class select_model extends connect
 
     public function select_alunos()
     {
-        
 
         $queryStr = "SELECT * FROM aluno";
         $query = $this->connect->query($queryStr);
@@ -71,7 +70,7 @@ class select_model extends connect
                     ORDER BY s.dae  DESC";
         $query = $this->connect->query($queryStr);
         return $query->fetchAll(PDO::FETCH_ASSOC);
-    }   
+    }
     public function saida_estagio_3A_relatorio()
     {
         $queryStr = "SELECT a.nome, s.dae FROM aluno a 
@@ -111,9 +110,10 @@ class select_model extends connect
                     ORDER BY a.nome ASC";
         $query = $this->connect->query($queryStr);
         return $query->fetchAll(PDO::FETCH_ASSOC);
-    } 
+    }
 
-    public function getSaidasEstagioPorTurma($id_turma, $data) {
+    public function getSaidasEstagioPorTurma($id_turma, $data)
+    {
         try {
             $sql = "SELECT a.nome, se.data_saida, se.hora_saida 
                     FROM saida_estagio se 
@@ -121,12 +121,12 @@ class select_model extends connect
                     WHERE a.id_turma = :id_turma 
                     AND DATE(se.data_saida) = :data 
                     ORDER BY a.nome";
-            
+
             $stmt = $this->connect->prepare($sql);
             $stmt->bindParam(':id_turma', $id_turma);
             $stmt->bindParam(':data', $data);
             $stmt->execute();
-            
+
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log("Erro ao buscar saídas de estágio: " . $e->getMessage());

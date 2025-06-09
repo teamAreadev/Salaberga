@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
 <?php
-require_once('../model/select_model.php');
+require_once('../../model/select_model.php');
 $select = new select_model;
 ?>
+<!DOCTYPE html>
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">

@@ -122,7 +122,7 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <a href="cadastrar.php" class="menu-card p-6 flex items-center gap-4 group">
+        <a href="cadastrar_aluno.php" class="menu-card p-6 flex items-center gap-4 group">
           <div class="menu-icon bg-green-50 text-ceara-green">
             <i class="fas fa-user-plus text-xl"></i>
           </div>
@@ -132,7 +132,7 @@
           </div>
         </a>
 
-        <a href="registro_entrada.php" class="menu-card p-6 flex items-center gap-4 group">
+        <a href="./entradas/registro_entrada.php" class="menu-card p-6 flex items-center gap-4 group">
           <div class="menu-icon bg-blue-50 text-blue-600">
             <i class="fas fa-sign-in-alt text-xl"></i>
           </div>
@@ -142,7 +142,7 @@
           </div>
         </a>
 
-        <a href="./registro_saida.php" class="menu-card p-6 flex items-center gap-4 group">
+        <a href="./saidas/registro_saida.php" class="menu-card p-6 flex items-center gap-4 group">
           <div class="menu-icon bg-red-50 text-red-600">
             <i class="fas fa-sign-out-alt text-xl"></i>
           </div>
@@ -152,7 +152,7 @@
           </div>
         </a>
 
-        <a href="saida_Estagio.php" class="menu-card p-6 flex items-center gap-4 group">
+        <a href="./estagio/saida_Estagio.php" class="menu-card p-6 flex items-center gap-4 group">
           <div class="menu-icon bg-purple-50 text-purple-600">
             <i class="fas fa-briefcase text-xl"></i>
           </div>

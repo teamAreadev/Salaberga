@@ -150,10 +150,6 @@ class MainModel extends connect
     public function registrarSaida($nome_responsavel, $nome_conducente, $id_tipo_conducente, $id_tipo_responsavel, $date_time, $id_motivo, $id_usuario, $id_aluno)
     {
         try {
-
-
-
-
             $registrar = "INSERT INTO registro_saida  VALUES (NULL, :nome_responsavel, :nome_conducente, :id_tipo_conducente, :id_tipo_responsavel, :date_time, :id_motivo, :id_usuario, :id_aluno)";
             $query = $this->connect->prepare($registrar);
 
@@ -167,8 +163,6 @@ class MainModel extends connect
             $query->bindValue(":id_usuario", $id_usuario);
             $query->bindValue(":id_aluno", $id_aluno);
 
-
-
             $query->execute();
         } catch (PDOException $e) {
 
@@ -181,12 +175,8 @@ class MainModel extends connect
     {
         try {
             // Conexão com o banco de dados
-
-
-
             $registrar = "INSERT INTO registro_entrada VALUES (NULL, :nome_responsavel, :nome_conducente, :id_tipo_conducente, :id_tipo_responsavel, :date_time, :id_motivo, :id_usuario, :id_aluno)";
             $query = $this->connect->prepare($registrar);
-
 
             $query->bindValue(":nome_responsavel", $nome_responsavel);
             $query->bindValue(":nome_conducente", $nome_conducente);
@@ -197,7 +187,6 @@ class MainModel extends connect
             $query->bindValue(":id_usuario", $id_usuario);
             $query->bindValue(":id_aluno", $id_aluno);
 
-
             $query->execute();
 
             return true;
@@ -207,13 +196,9 @@ class MainModel extends connect
             return false;
         }
     }
-
     public function registrarSaidaEstagio($aluno, $date_time)
     {
         try {
-            // Conexão com o banco de dados
-
-
             // Verifica se o aluno existe na tabela aluno com base no nome
             $verificarAluno = "SELECT id_aluno FROM aluno WHERE nome = :nome";
             $queryVerificar = $this->connect->prepare($verificarAluno);
@@ -247,119 +232,15 @@ class MainModel extends connect
                 $query->bindValue(":id_aluno", $id_aluno, PDO::PARAM_INT);
                 $query->bindValue(":dae", $date_time, PDO::PARAM_STR);
 
-                // Executa a query
                 $query->execute();
 
-                return 0; // Sucesso
+                return 0; 
             } else {
 
                 return 2;
             }
         } catch (PDOException $e) {
-            // Tratamento de erro
             return 3;
         }
     }
-
-    // Retorna nome e matrícula dos alunos de uma turma, ordenados por nom
 };
-
-class SaidaEstagioModel extends connect
-{
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    public function getSaidasByDateRange($id_aluno, $startDate = null, $endDate = null)
-    {
-        if (empty($id_aluno)) {
-            return [];
-        }
-
-        $sql = "SELECT se.*, a.nome AS nome_aluno 
-                FROM saida_estagio se
-                LEFT JOIN aluno a ON se.id_aluno = a.id_aluno 
-                WHERE se.id_aluno = :id_aluno";
-        if ($startDate && $endDate) {
-            $sql .= " AND se.dae BETWEEN :start AND :end";
-        }
-        $stmt = $this->connect->prepare($sql);
-        $stmt->bindParam(':id_aluno', $id_aluno, PDO::PARAM_INT);
-        if ($startDate && $endDate) {
-            $stmt->bindParam(':start', $startDate);
-            $stmt->bindParam(':end', $endDate);
-        }
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-}
-
-class EntradaPDF extends connect
-{
-
-
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    public function getSaidasByDateRange($id_aluno, $startDate = null, $endDate = null)
-    {
-        if (empty($id_aluno)) {
-            return [];
-        }
-
-        $sql = "SELECT r.*, a.nome AS nome_aluno 
-                FROM registro_entrada r
-                LEFT JOIN aluno a ON r.id_aluno = a.id_aluno 
-                WHERE r.id_aluno = :id_aluno";
-        if ($startDate && $endDate) {
-            $sql .= " AND r.date_time BETWEEN :start AND :end";
-        }
-        $stmt = $this->connect->prepare($sql);
-        $stmt->bindParam(':id_aluno', $id_aluno, PDO::PARAM_INT);
-        if ($startDate && $endDate) {
-            $stmt->bindParam(':start', $startDate);
-            $stmt->bindParam(':end', $endDate);
-        }
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-}
-
-
-class SaidaPDF extends connect
-{
-
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    public function getSaidasByDateRange($id_aluno, $startDate = null, $endDate = null)
-    {
-        if (empty($id_aluno)) {
-            return [];
-        }
-
-        $sql = "SELECT r.*, a.nome AS nome_aluno 
-                FROM registro_saida r
-                LEFT JOIN aluno a ON r.id_aluno = a.id_aluno 
-                WHERE r.id_aluno = :id_aluno";
-        if ($startDate && $endDate) {
-            $sql .= " AND r.date_time BETWEEN :start AND :end";
-        }
-        $stmt = $this->connect->prepare($sql);
-        $stmt->bindParam(':id_aluno', $id_aluno, PDO::PARAM_INT);
-        if ($startDate && $endDate) {
-            $stmt->bindParam(':start', $startDate);
-            $stmt->bindParam(':end', $endDate);
-        }
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-}

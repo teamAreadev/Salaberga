@@ -9,7 +9,6 @@ if (file_exists($caminho)) {
 
 class select_model extends connect
 {
-
     private $catalogo;
 
     function __construct()
@@ -97,7 +96,8 @@ class select_model extends connect
 
         return $array_dados;
     }
-    public function select_nome_autor(){
+    public function select_nome_autor()
+    {
         $sql_nome_autor = $this->connect->query("SELECT * FROM autores");
         $nome_autor = $sql_nome_autor->fetchAll(PDO::FETCH_ASSOC);
 

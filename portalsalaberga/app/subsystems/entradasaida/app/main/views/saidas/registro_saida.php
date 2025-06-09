@@ -1,5 +1,5 @@
 <?php
-require_once('../model/select_model.php');
+require_once('../../model/select_model.php');
 $select = new select_model;
 ?>
 

@@ -2,7 +2,7 @@
 
 require_once '../model/model_indexClass.php';
 
-
+//CADASTRAR ALUNO
 if (isset($_POST['cadastrar'])) {
     $id_turma = $_POST['id_turma'] ?? '';
     $matricula = $_POST['matricula'] ?? '';
@@ -25,7 +25,6 @@ if (isset($_POST['cadastrar'])) {
 
 
 //registro saida-estagio//
-
 if (isset($_POST["Registrar"])) {
     $id_aluno = $_POST['id_aluno'];
     $data = $_POST['data'];
@@ -42,6 +41,7 @@ if (isset($_POST["Registrar"])) {
     exit();
 }
 
+//saida 
 if (isset($_POST['saida'])) {
     $nome_responsavel = $_POST['nome_responsavel'];
     $nome_conducente = $_POST['nome_conducente'] ?? '';
@@ -69,10 +69,7 @@ if (isset($_POST['saida'])) {
     exit();
 }
 
-//print_r($_POST);
-
-
-
+//entradas
 if (isset($_POST['entrada'])) {
     $nome_responsavel = $_POST['nome_responsavel'];
     $nome_conducente = $_POST['nome_conducente'] ?? '';
@@ -100,8 +97,7 @@ if (isset($_POST['entrada'])) {
     exit();
 };
 
-
-
+//relatorios 
 if (isset($_POST['GerarRelatorio']) && isset($_POST['tipo_relatorio'])) {
     $gerar_relatorio = $_POST['GerarRelatorio'];
     $tipoRelatorio = $_POST['tipo_relatorio'];
@@ -187,9 +183,3 @@ if (isset($_POST['GerarRelatorio']) && isset($_POST['tipo_relatorio'])) {
 } else {
     echo "Selecione um tipo de relatório e clique em Gerar!";
 }
-
-if (isset($_POST['ultimas_saidas'])) {
-    header('location:../views/relatorios/ultimo_registro.php');
-    exit();
-}
-
