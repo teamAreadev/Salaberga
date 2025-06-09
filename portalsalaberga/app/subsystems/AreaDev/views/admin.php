@@ -157,7 +157,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             }
 >>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         }
-<<<<<<< HEAD
 
         switch ($_POST['acao']) {
             case 'criar':
@@ -212,25 +211,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
                     }
                 }
                 break;
-=======
-    } elseif ($_POST['acao'] === 'excluir' && isset($_POST['id'])) {
-        $demanda->excluirDemanda($_POST['id']);
-        header("Location: admin.php");
-        exit();
-    } elseif ($_POST['acao'] === 'atualizar_status' && isset($_POST['id'])) {
-        // Verifica se um novo status foi enviado e atualiza
-        if (isset($_POST['novo_status'])) {
-            $novo_status = $_POST['novo_status'];
-            $id_demanda = $_POST['id'];
-            // Adicione lógica para validar o novo status, se necessário
-            
-            if ($novo_status === 'Concluída') {
-                 $demanda->marcarConcluida($id_demanda);
-            } elseif ($novo_status === 'Em Andamento') {
-                 $demanda->marcarEmAndamento($id_demanda);
-            }
-            // Adicione outras transições de status aqui, se houver
->>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
         }
     }
 }
@@ -244,11 +224,11 @@ $demandasEmAndamento = 0;
 $demandasConcluidas = 0;
 $demandasPendentes = 0;
 foreach ($demandas as $d) {
-    if ($d['status'] === 'Em Andamento') {
+    if ($d['status'] === 'em_andamento') {
         $demandasEmAndamento++;
-    } elseif ($d['status'] === 'Concluída') {
+    } elseif ($d['status'] === 'concluida') {
         $demandasConcluidas++;
-    } elseif ($d['status'] === 'Pendente') {
+    } elseif ($d['status'] === 'pendente') {
         $demandasPendentes++;
     }
 }
@@ -901,6 +881,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
     .status-badge {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         padding: 0.5rem 1rem;
         border-radius: 20px;
@@ -910,6 +891,8 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
 >>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
 =======
 >>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+=======
+>>>>>>> parent of c5d2626 (.)
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
@@ -936,6 +919,9 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c5d2626 (.)
     .status-aceito {
         background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
         color: #4ade80;
@@ -947,12 +933,15 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
     }
 
     .status-em_andamento {
+<<<<<<< HEAD
 =======
     .status-em-andamento {
 >>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
 =======
     .status-em_andamento {
 >>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+=======
+>>>>>>> parent of c5d2626 (.)
         background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
         color: #60a5fa;
         border: 1px solid rgba(59, 130, 246, 0.3);
@@ -1012,11 +1001,14 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         font-weight: 600;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         text-transform: uppercase;
 >>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
 =======
 >>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+=======
+>>>>>>> parent of c5d2626 (.)
         letter-spacing: 0.05em;
     }
 
@@ -1469,7 +1461,6 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
                 
-<<<<<<< HEAD
                 <div class="flex flex-wrap gap-4">
                     <div class="select-wrapper">
                         <select class="custom-select" onchange="filterByStatus(this.value)">
@@ -1488,21 +1479,6 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                             <option value="baixa">Baixa</option>
                         </select>
                     </div>
-=======
-                <div class="flex flex-wrap gap-2">
-                    <button class="filter-btn active" onclick="filterByStatus('all')" data-status="all">
-                        <i class="fas fa-list mr-2"></i>Todas
-                    </button>
-                    <button class="filter-btn" onclick="filterByStatus('Pendente')" data-status="Pendente">
-                        <i class="fas fa-clock mr-2"></i>Pendentes
-                    </button>
-                    <button class="filter-btn" onclick="filterByStatus('Em Andamento')" data-status="Em Andamento">
-                        <i class="fas fa-spinner mr-2"></i>Em Andamento
-                    </button>
-                    <button class="filter-btn" onclick="filterByStatus('Concluída')" data-status="Concluída">
-                        <i class="fas fa-check mr-2"></i>Concluídas
-                    </button>
->>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
                 </div>
                 
                 <button onclick="openModal('criarDemandaModal')" class="custom-btn bg-gradient-to-r from-primary-500 to-primary-50 hover:from-primary-400 hover:to-primary-100 text-white font-bold py-3 px-6 rounded-lg flex items-center gap-2">
@@ -1520,6 +1496,9 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c5d2626 (.)
             <!-- Grid de 3 colunas -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Coluna Em Espera -->
@@ -1539,6 +1518,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                             $prioridades = ['alta' => 3, 'media' => 2, 'baixa' => 1];
                             return $prioridades[$b['prioridade']] - $prioridades[$a['prioridade']];
                         });
+<<<<<<< HEAD
 =======
             <div id="demandsContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 <?php foreach ($demandas as $index => $d): ?>
@@ -1747,6 +1727,8 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
 <<<<<<< HEAD
                         </div>
 >>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
+=======
+>>>>>>> parent of c5d2626 (.)
                         
                         foreach ($demandas_espera as $d): 
                         ?>
@@ -2175,6 +2157,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                         <option value="baixa">Baixa</option>
                     </select>
                 </div>
+<<<<<<< HEAD
                 <div>
                     <label for="editar_status" class="block text-sm font-medium text-gray-300 mb-2">Status</label>
                     <select id="editar_status" name="status" required class="custom-select w-full">
@@ -2251,6 +2234,9 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
 >>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
 =======
 >>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+=======
+                <div id="editPrazoCalculadoInfo" class="mt-2"></div>
+>>>>>>> parent of c5d2626 (.)
                 <div class="flex justify-end gap-4 mt-6">
                     <button type="button" onclick="closeModal('editarDemandaModal')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
                         Cancelar
@@ -2263,7 +2249,6 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-<<<<<<< HEAD
     <!-- Delete Demand Modal -->
     <div id="excluirDemandaModal" class="modal fixed inset-0 hidden items-center justify-center p-4 z-50">
 <<<<<<< HEAD
@@ -2293,8 +2278,6 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-=======
->>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
     <script>
         // Modal Functions
         function mostrarDescricao(titulo, descricao, status, dataCriacao, dataConclusao) {
@@ -2357,80 +2340,10 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             }
         }
 
-<<<<<<< HEAD
         // Função para excluir demanda
-=======
-        // Edit Demand Function
-        function editarDemanda(id) {
-            console.log('Iniciando busca da demanda ID:', id);
-            
-            // Limpar dados anteriores
-            document.getElementById('editar_demanda_id').value = '';
-            document.getElementById('editar_titulo').value = '';
-            document.getElementById('editar_descricao').value = '';
-            document.getElementById('editar_prioridade').value = 'media';
-            document.getElementById('editar_status').value = 'Pendente';
-            document.getElementById('editar_usuario_id').value = '';
-
-            fetch(`../controllers/DemandaController.php?action=get_demanda&id=${id}`)
-                .then(response => {
-                    console.log('Response status:', response.status);
-                    console.log('Response headers:', response.headers);
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    
-                    const contentType = response.headers.get('content-type');
-                    if (!contentType || !contentType.includes('application/json')) {
-                        throw new TypeError("Resposta não é JSON! Content-Type: " + contentType);
-                    }
-                    
-                    return response.text().then(text => {
-                        console.log('Response text:', text);
-                        try {
-                            return JSON.parse(text);
-                        } catch (e) {
-                            console.error('Erro ao fazer parse do JSON:', e);
-                            throw new Error('Resposta inválida do servidor');
-                        }
-                    });
-                })
-                .then(data => {
-                    console.log('Dados recebidos:', data);
-                    if (data.error) {
-                        console.error('Erro ao buscar dados da demanda:', data.error);
-                        alert('Erro ao carregar dados da demanda: ' + data.error);
-                        return;
-                    }
-                    
-                    if (!data.id || !data.titulo || !data.descricao) {
-                        console.error('Dados incompletos recebidos:', data);
-                        alert('Dados incompletos recebidos do servidor');
-                        return;
-                    }
-                    
-                    document.getElementById('editar_demanda_id').value = data.id;
-                    document.getElementById('editar_titulo').value = data.titulo;
-                    document.getElementById('editar_descricao').value = data.descricao;
-                    document.getElementById('editar_prioridade').value = data.prioridade || 'media';
-                    document.getElementById('editar_status').value = data.status || 'Pendente';
-                    document.getElementById('editar_usuario_id').value = data.usuario_id || '';
-                    
-                    openModal('editarDemandaModal');
-                })
-                .catch(error => {
-                    console.error('Erro na requisição AJAX:', error);
-                    alert('Erro ao carregar dados da demanda: ' + error.message);
-                });
-        }
-
-        // Delete Demand Function
->>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
         function excluirDemanda(id) {
-            if (confirm('Tem certeza que deseja excluir esta demanda? Esta ação não pode ser desfeita.')) {
-                window.location.href = `../controllers/DemandaController.php?action=excluir&id=${id}`;
-            }
+            document.getElementById('demanda_a_excluir_id').value = id;
+            openModal('excluirDemandaModal');
         }
 
         // Atualizar informação de prazo calculado ao selecionar prioridade
@@ -2888,6 +2801,9 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c5d2626 (.)
         function toggleAreaField() {
             const tipoSelect = document.getElementById('tipo');
             const areaField = document.getElementById('areaField');
@@ -2897,6 +2813,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             } else {
                 if (areaField) areaField.style.display = 'none';
             }
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
@@ -2931,6 +2848,8 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                     }
                 });
 >>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+=======
+>>>>>>> parent of c5d2626 (.)
         }
     </script>
 </body>

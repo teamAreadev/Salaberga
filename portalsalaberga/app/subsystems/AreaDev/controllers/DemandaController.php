@@ -232,10 +232,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
 >>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
             }
 
-<<<<<<< HEAD
             $sucesso = $demanda->atualizarDemanda($id, $titulo, $descricao, $prioridade, null, [], $prazo);
             redirecionar('admin', $sucesso ? 'Demanda atualizada com sucesso!' : 'Erro ao atualizar demanda', $sucesso ? 'success' : 'error');
             break;
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
         $sucesso = false;
@@ -245,6 +245,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             $sucesso = $demanda->marcarConcluida($id_demanda);
         }
 >>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
+=======
+>>>>>>> parent of c5d2626 (.)
 
         case 'aceitar_demanda':
             if (!isset($_POST['id'])) {
