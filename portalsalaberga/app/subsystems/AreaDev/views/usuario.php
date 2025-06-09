@@ -1,18 +1,27 @@
 <?php
+<<<<<<< HEAD
 session_start();
 
 require_once __DIR__ . '/../../../main/config/Database.php';
+=======
+require_once __DIR__ . '/../config/database.php';
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
 require_once __DIR__ . '/../model/Demanda.php';
 require_once __DIR__ . '/../model/Usuario.php';
 
+<<<<<<< HEAD
 // Obter o ID do usuário da sessão
 $usuario_id = $_SESSION['user_id'] ?? null;
+=======
+session_start();
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
 
 // Obter as conexões com o banco de dados
 $database = Database::getInstance();
 $conexao = $database->getAreaDevConnection();
 $pdo_salaberga = $database->getSalabergaConnection();
 
+<<<<<<< HEAD
 // Verificar se o usuário está logado
 if (!$usuario_id) {
     header('Location: ../../../main/views/autenticacao/login.php');
@@ -21,6 +30,15 @@ if (!$usuario_id) {
 
 // Instanciar o modelo de Demanda
 $demandaModel = new Demanda($conexao);
+=======
+// Verificar se está logado
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$demanda = new Demanda($pdo);
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
 
 <<<<<<< HEAD
 // Processar formulários
@@ -90,12 +108,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 =======
 // Processar atualização de status
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['acao'] === 'atualizar_status' && isset($_POST['id'])) {
+<<<<<<< HEAD
     $demanda->marcarConcluida($_POST['id']);
+=======
+    if (isset($_POST['novo_status'])) {
+        $novo_status = $_POST['novo_status'];
+        if ($novo_status === 'em_andamento') {
+            $demanda->marcarEmAndamento($_POST['id']);
+        } elseif ($novo_status === 'concluida') {
+            $demanda->marcarConcluida($_POST['id']);
+        }
+    }
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
     header("Location: usuario.php");
     exit();
 >>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
 }
 
+<<<<<<< HEAD
 // Adicionar no início do arquivo, após os requires
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['acao'] === 'update_status') {
     header('Content-Type: application/json');
@@ -251,6 +281,9 @@ if (isset($_SESSION['user_systems_permissions']) && is_array($_SESSION['user_sys
 }
 error_log("DEBUG ÁREA FINAL DO USUÁRIO: " . $user_area);
 // --- Fim do código para obter a área do usuário --- //
+=======
+$demandas = $demanda->listarDemandasPorUsuario($_SESSION['usuario_id']);
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
 
 // Calcular estatísticas
 $totalDemandas = count($demandas);
@@ -575,16 +608,6 @@ echo '</script>';
         border: 1px solid rgba(234, 179, 8, 0.3);
     }
 
-    .status-aceito { /* Adicionado */
-        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
-        color: #4ade80;
-        border: 1px solid rgba(34, 197, 94, 0.3);
-    }
-
-    .status-aceito i { /* Adicionado */
-        color: #4ade80;
-    }
-
     .status-em_andamento {
         background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
         color: #60a5fa;
@@ -615,21 +638,6 @@ echo '</script>';
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
         color: #f87171;
         border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    .status-cancelada i {
-        color: #f87171;
-    }
-
-    /* Adicionando estilos para status recusado */
-     .status-recusado {
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-     .status-recusado i {
-        color: #f87171;
     }
 
     /* Priority Badges */
@@ -885,6 +893,7 @@ echo '</script>';
         color: #888888;
         pointer-events: none;
     }
+<<<<<<< HEAD
 
     .demand-card h3 { /* Ajustando tamanho da fonte do título */
         font-size: 1.25rem; /* Increased font size */
@@ -913,23 +922,19 @@ echo '</script>';
         border-radius: 4px;
         display: inline-block;
     }
+=======
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
 </style>
 
 <body class="select-none">
     <!-- Header -->
-    <header class="bg-dark-400 shadow-lg border-b border-primary-500/20 sticky top-0 z-50 backdrop-blur-lg">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <!-- Logo e Título -->
-                <div class="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
-                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="w-10 h-10">
-                    <div class="text-center sm:text-left">
-                        <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary-50 to-primary-200 bg-clip-text text-transparent">
-                            Painel do Usuário
-                        </h1>
-                        <p class="text-sm text-gray-400">Sistema de Gestão de Demandas</p>
-                    </div>
+    <header class="bg-dark-200 shadow-lg border-b border-primary/20 sticky top-0 z-40 backdrop-blur-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-50 rounded-xl flex items-center justify-center float">
+                    <i class="fas fa-user text-white text-lg"></i>
                 </div>
+<<<<<<< HEAD
 
                 <!-- Botões e Informações do Usuário -->
                 <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
@@ -954,7 +959,21 @@ echo '</script>';
                             <span>Sair</span>
                         </a>
                     </div>
+=======
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-primary-50 to-primary-200 bg-clip-text text-transparent">
+                    Painel do Usuário
+                </h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-2 text-gray-300">
+                    <i class="fas fa-user-circle text-primary-50"></i>
+                    <span>Bem-vindo, <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></span>
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
                 </div>
+                <a href="logout.php" class="custom-btn bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">
+                    <i class="fas fa-sign-out-alt btn-icon"></i> 
+                    <span class="hidden md:inline">Sair</span>
+                </a>
             </div>
         </div>
     </header>
@@ -1061,6 +1080,7 @@ echo '</script>';
             </h2>
             
 <<<<<<< HEAD
+<<<<<<< HEAD
             <!-- Grid de 3 colunas -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Coluna Em Espera -->
@@ -1084,6 +1104,15 @@ echo '</script>';
                      data-status="<?php echo $d['status']; ?>"
                      data-title="<?php echo strtolower($d['titulo']); ?>"
                      data-description="<?php echo strtolower($d['descricao']); ?>">
+=======
+            <div id="demandsContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                <?php foreach ($demandas as $index => $d): ?>
+                <div class="demand-card bg-dark-100 rounded-xl p-6 shadow-lg border border-gray-800 hover:border-primary/30 transition-all duration-300"
+                    data-title="<?php echo htmlspecialchars($d['titulo']); ?>"
+                    data-description="<?php echo htmlspecialchars($d['descricao']); ?>"
+                    data-status="<?php echo $d['status']; ?>"
+                    data-priority="<?php echo $d['prioridade']; ?>">
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
                     
                     <!-- Card Header -->
                     <div class="flex items-start justify-between mb-4">
@@ -1096,6 +1125,7 @@ echo '</script>';
                                 <span class="status-badge status-<?php echo strtolower(str_replace(' ', '-', $d['status'])); ?>">
                                     <?php
                                     $statusIcons = [
+<<<<<<< HEAD
                                         'Pendente' => 'fas fa-clock',
                                         'Em Andamento' => 'fas fa-spinner fa-spin',
                                         'Concluída' => 'fas fa-check-circle',
@@ -1105,6 +1135,17 @@ echo '</script>';
                                     ?>
                                     <i class="<?php echo $statusIcons[$status] ?? 'fas fa-question'; ?>"></i>
                                     <?php echo $status; ?>
+=======
+                                        'pendente' => 'fas fa-clock',
+                                        'em_andamento' => 'fas fa-spinner fa-spin',
+                                        'concluida' => 'fas fa-check-circle',
+                                        'cancelada' => 'fas fa-ban'
+                                    ];
+                                    $status_display = ucfirst(str_replace('_', ' ', $d['status'])); // Formatar para exibição
+                                    ?>
+                                    <i class="<?php echo $statusIcons[$d['status']] ?? 'fas fa-question'; ?>"></i>
+                                    <?php echo $status_display; ?>
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
                                 </span>
                             </div>
                         </div>
@@ -1152,6 +1193,7 @@ echo '</script>';
                         </form>
                         <?php endif; ?>
 
+<<<<<<< HEAD
                         <?php if (strtolower($d['status']) === 'em_andamento' && $d['usuario_id'] == $_SESSION['usuario_id']): ?>
                         <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarConclusao()">
                             <input type="hidden" name="acao" value="atualizar_status">
@@ -1163,10 +1205,37 @@ echo '</script>';
                             </button>
                         </form>
 >>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
+=======
+                        <?php if ($usuario_logado_atribuido): ?>
+                            <?php if ($status_usuario === 'pendente'): ?>
+                                <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarEmAndamento()">
+                                    <input type="hidden" name="acao" value="atualizar_status">
+                                    <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                    <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['usuario_id']; ?>">
+                                    <input type="hidden" name="novo_status" value="em_andamento">
+                                    <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white p-2 rounded-lg" title="Marcar como Em Andamento">
+                                        <i class="fas fa-spinner"></i>
+                                        Realizar Tarefa
+                                    </button>
+                                </form>
+                            <?php elseif ($status_usuario === 'em_andamento'): ?>
+                                <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarConclusao()">
+                                    <input type="hidden" name="acao" value="atualizar_status">
+                                    <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                    <input type="hidden" name="usuario_id" value="<?php echo $_SESSION['usuario_id']; ?>">
+                                    <input type="hidden" name="novo_status" value="concluida">
+                                    <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg" title="Marcar como Concluída">
+                                        <i class="fas fa-check"></i>
+                                        Concluir Minha Parte
+                                    </button>
+                                </form>
+                            <?php endif; ?>
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
                         <?php endif; ?>
                     </div>
                 </div>
 
+<<<<<<< HEAD
                 <!-- Coluna Em Andamento -->
                 <div class="space-y-4">
                     <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
@@ -1238,6 +1307,41 @@ echo '</script>';
                         <?php endif; ?>
                     </div>
                 </div>
+=======
+                    <!-- Status dos Usuários -->
+                    <?php if (!empty($d['usuarios_atribuidos'])): ?>
+                    <div class="mt-4 pt-4 border-t border-gray-700">
+                        <h4 class="text-sm font-semibold text-gray-400 mb-2">Status dos Participantes:</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <?php foreach ($d['usuarios_atribuidos'] as $u_atrib): ?>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs text-gray-300"><?php echo htmlspecialchars($u_atrib['nome']); ?>:</span>
+                                    <span class="status-badge status-<?php echo $u_atrib['status']; ?>">
+                                        <?php
+                                        $statusIcons = [
+                                            'pendente' => 'fas fa-clock',
+                                            'em_andamento' => 'fas fa-spinner fa-spin',
+                                            'concluido' => 'fas fa-check-circle'
+                                        ];
+                                        ?>
+                                        <i class="<?php echo $statusIcons[$u_atrib['status']] ?? 'fas fa-question'; ?>"></i>
+                                        <?php echo ucfirst($u_atrib['status']); ?>
+                                    </span>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                </div>
+                        <?php endforeach; ?>
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state hidden">
+                <i class="fas fa-search"></i>
+                <h3 class="text-xl font-semibold mb-2">Nenhuma demanda encontrada</h3>
+                <p>Tente ajustar os filtros ou aguarde novas demandas serem atribuídas.</p>
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
             </div>
         </div>
     </main>
@@ -1303,6 +1407,7 @@ echo '</script>';
 
         // Filter Functions
         function filterByStatus(status) {
+<<<<<<< HEAD
             console.log("=== FILTRANDO POR STATUS ===");
             console.log("Status selecionado:", status);
             
@@ -1337,6 +1442,24 @@ echo '</script>';
             
             // Reaplica outros filtros (texto e prioridade)
             filterDemands();
+=======
+            const cards = document.querySelectorAll('.demand-card');
+            const emptyState = document.getElementById('emptyState');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                if (status === 'all' || card.dataset.status === status) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         }
 
         function filterByPriority(priority) {
@@ -1344,6 +1467,7 @@ echo '</script>';
             console.log("Prioridade selecionada:", priority);
             
             const cards = document.querySelectorAll('.demand-card');
+<<<<<<< HEAD
             console.log("Total de cards encontrados:", cards.length);
 
             cards.forEach(card => {
@@ -1358,6 +1482,23 @@ echo '</script>';
             
             // Reaplica o filtro de texto e status
             filterDemands();
+=======
+            const emptyState = document.getElementById('emptyState');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                if (priority === 'all' || card.dataset.priority === priority) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         }
 
         function filterDemands() {
@@ -1367,6 +1508,7 @@ echo '</script>';
             const statusSelect = document.querySelector('select[onchange="filterByStatus(this.value)"]');
             const prioritySelect = document.querySelector('select[onchange="filterByPriority(this.value)"]');
             const cards = document.querySelectorAll('.demand-card');
+<<<<<<< HEAD
             
             const activeStatus = statusSelect ? statusSelect.value : 'all';
             const activePriority = prioritySelect ? prioritySelect.value : 'all';
@@ -1375,17 +1517,28 @@ echo '</script>';
             console.log("Status ativo:", activeStatus);
             console.log("Prioridade ativa:", activePriority);
             console.log("Total de cards:", cards.length);
+=======
+            const emptyState = document.getElementById('emptyState');
+            let visibleCount = 0;
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
 
             cards.forEach(card => {
                 const title = card.dataset.title.toLowerCase();
                 const description = card.dataset.description.toLowerCase();
                 const status = card.dataset.status;
                 const priority = card.dataset.priority;
+<<<<<<< HEAD
+=======
+                const activeStatus = statusSelect.value;
+                const activePriority = prioritySelect.value;
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
 
                 const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+                const matchesStatus = activeStatus === 'all' || status === activeStatus;
                 const matchesPriority = activePriority === 'all' || priority === activePriority;
                 const matchesStatus = activeStatus === 'all' || status === activeStatus;
 
+<<<<<<< HEAD
                 console.log("Card:", {
                     title,
                     status,
@@ -1433,12 +1586,30 @@ echo '</script>';
             console.log("Total de cards visíveis:", visibleCount);
 
             const emptyState = container.querySelector('.empty-state');
+=======
+                if (matchesSearch && matchesStatus && matchesPriority) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
             if (emptyState) {
                 emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
                 console.log("Estado vazio será exibido?", visibleCount === 0);
             } else {
                 console.log("Elemento empty-state não encontrado!");
             }
+        }
+
+        function confirmarConclusao() {
+            return confirm('Tem certeza que deseja marcar esta demanda como concluída?');
+        }
+
+        function confirmarEmAndamento() {
+            return confirm('Tem certeza que deseja marcar esta demanda como Em Andamento?');
         }
 
         // Close modal when clicking outside

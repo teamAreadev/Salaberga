@@ -197,10 +197,24 @@ session_start();
 </style>
 <body class="select-none">
     <!-- Header -->
+<<<<<<< HEAD
     <header class="bg-dark-200 shadow-lg border-b border-primary/20">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold text-primary-50">Sistema de Gestão de Demandas</h1>
             <a href="views/login.php" class="custom-btn bg-primary hover:bg-primary-400 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">
+=======
+    <header class="bg-dark-200/50 backdrop-blur-md shadow-lg border-b border-primary/20 sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex flex-row justify-between items-center gap-3 sm:gap-4">
+            <div class="flex items-center gap-3 sm:gap-4">
+                <div class="hidden sm:flex w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary-500 to-primary-50 rounded-xl items-center justify-center">
+                    <i class="fas fa-tasks text-white text-base sm:text-lg"></i>
+                </div>
+                <h1 class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary-50 to-primary-200 bg-clip-text text-transparent">
+                    Demandas Area Dev
+                </h1>
+            </div>
+            <a href="views/login.php" class="w-auto custom-btn bg-gradient-to-r from-primary-500 to-primary-50 hover:from-primary-400 hover:to-primary-100 text-white font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-xl flex items-center justify-center gap-2">
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
                 <i class="fas fa-sign-in-alt btn-icon"></i> Entrar
             </a>
         </div>

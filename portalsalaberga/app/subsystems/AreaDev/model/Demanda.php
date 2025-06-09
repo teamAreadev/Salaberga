@@ -118,14 +118,18 @@ class Demanda {
                 SELECT u.id, u.nome, du.status, du.data_conclusao 
                 FROM salaberga.usuarios u
                 INNER JOIN demanda_usuarios du ON u.id = du.usuario_id
+<<<<<<< HEAD
                 WHERE du.demanda_id = ? AND du.status IN ('aceito', 'em_andamento', 'concluido')
                 UNION
                 SELECT u.id, u.nome, d.status as status, d.data_conclusao
                 FROM salaberga.usuarios u
                 INNER JOIN demandas d ON u.id = d.admin_id
                 WHERE d.id = ? AND u.id = d.admin_id AND d.status IN ('em_andamento', 'concluida')
+=======
+                WHERE du.demanda_id = ?
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
             ");
-            $stmtUsuarios->execute([$demanda['id'], $demanda['id']]);
+            $stmtUsuarios->execute([$demanda['id']]);
             $demanda['usuarios_atribuidos'] = $stmtUsuarios->fetchAll(PDO::FETCH_ASSOC);
         }
 
@@ -133,8 +137,23 @@ class Demanda {
     }
 
     public function listarDemandasPorUsuario($usuario_id) {
+<<<<<<< HEAD
         error_log("\n\n=== INÍCIO DO DEBUG DE LISTAR DEMANDAS POR USUÁRIO ===");
         error_log("Usuário ID: " . $usuario_id);
+=======
+        $stmt = $this->pdo->prepare("
+            SELECT d.*, u.nome as admin_nome,
+                   du.status as status_usuario,
+                   du.data_conclusao as data_conclusao_usuario
+            FROM demandas d 
+            LEFT JOIN usuarios u ON d.admin_id = u.id 
+            INNER JOIN demanda_usuarios du ON d.id = du.demanda_id
+            WHERE du.usuario_id = ? OR d.admin_id = ?
+            ORDER BY d.data_criacao DESC
+        ");
+        $stmt->execute([$usuario_id, $usuario_id]);
+        $demandas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
 
         // Verificar se o usuário tem permissão para ver demandas e qual sua área
         $sql_perm = "
@@ -268,6 +287,7 @@ class Demanda {
 
     public function buscarDemanda($id) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         $sql = "SELECT d.*, GROUP_CONCAT(du.usuario_id) as usuarios_atribuidos 
                 FROM demandas d 
                 LEFT JOIN demanda_usuarios du ON d.id = du.demanda_id 
@@ -298,13 +318,29 @@ class Demanda {
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         
+=======
+        $stmt = $this->pdo->prepare("
+            SELECT d.*, u.nome as admin_nome 
+            FROM demandas d 
+            LEFT JOIN usuarios u ON d.admin_id = u.id 
+            WHERE d.id = ?
+        ");
+        $stmt->execute([$id]);
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         $demanda = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         if ($demanda) {
-            $demanda['usuarios_atribuidos'] = $demanda['usuarios_atribuidos'] ? 
-                explode(',', $demanda['usuarios_atribuidos']) : [];
+            // Buscar usuários atribuídos
+            $stmtUsuarios = $this->pdo->prepare("
+                SELECT u.id, u.nome 
+                FROM usuarios u
+                INNER JOIN demanda_usuarios du ON u.id = du.usuario_id
+                WHERE du.demanda_id = ?
+            ");
+            $stmtUsuarios->execute([$id]);
+            $demanda['usuarios_atribuidos'] = $stmtUsuarios->fetchAll(PDO::FETCH_ASSOC);
         }
-        
+
         return $demanda;
     }
 
@@ -404,6 +440,7 @@ class Demanda {
                 throw new Exception('Prioridade inválida');
             }
 
+<<<<<<< HEAD
             $dias_para_adicionar = 0;
             switch ($prioridade) {
                 case 'baixa': $dias_para_adicionar = 5; break;
@@ -420,10 +457,18 @@ class Demanda {
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$titulo, $descricao, $prioridade, $admin_id, $prazo_calculado, $area_id]);
+=======
+        $stmt = $this->pdo->prepare("
+                INSERT INTO demandas (titulo, descricao, prioridade, admin_id, status, prazo)
+                VALUES (?, ?, ?, ?, 'pendente', ?)
+            ");
+            $stmt->execute([$titulo, $descricao, $prioridade, $admin_id, $prazo]);
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
 
             $demanda_id = $this->pdo->lastInsertId();
             error_log('DEBUG DEMANDA ID (criarDemanda): ' . $demanda_id);
 
+<<<<<<< HEAD
             // Atribuir usuários individualmente se a lista de IDs for fornecida
             if (!empty($usuarios_ids)) {
                 $stmtAtribuir = $this->pdo->prepare("
@@ -442,6 +487,14 @@ class Demanda {
                     }
                     
                     error_log('DEBUG: Atribuindo usuário individualmente ' . $usuario_id . ' à demanda ' . $demanda_id);
+=======
+            if (!empty($usuarios_ids)) {
+                $stmtAtribuir = $this->pdo->prepare("
+                    INSERT INTO demanda_usuarios (demanda_id, usuario_id)
+                    VALUES (?, ?)
+                ");
+                foreach ($usuarios_ids as $usuario_id) {
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
                     $stmtAtribuir->execute([$demanda_id, $usuario_id]);
                 }
             }
@@ -449,9 +502,15 @@ class Demanda {
             return $demanda_id; // Retorna o ID da nova demanda
 
         } catch (Exception $e) {
+<<<<<<< HEAD
             error_log('ERRO AO CRIAR DEMANDA: ' . $e->getMessage());
             error_log('ERRO COMPLETO: ' . $e->getTraceAsString());
             throw $e; // Propagar o erro para ser tratado no controller
+=======
+            $this->pdo->rollBack();
+            // Log do erro ou tratamento
+            return false;
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         }
     }
 
@@ -459,42 +518,33 @@ class Demanda {
         try {
             $this->pdo->beginTransaction();
 
-            // Primeiro, buscar o status atual da demanda
-            $stmtStatus = $this->pdo->prepare("SELECT status FROM demandas WHERE id = ?");
-            $stmtStatus->execute([$id]);
-            $statusAtual = $stmtStatus->fetchColumn();
+        $stmt = $this->pdo->prepare("
+            UPDATE demandas 
+                SET titulo = ?, descricao = ?, prioridade = ?, status = ?, prazo = ?
+            WHERE id = ?
+        ");
+            $stmt->execute([$titulo, $descricao, $prioridade, $status, $prazo, $id]);
 
-            // Calcular o novo prazo baseado na prioridade atualizada
-            $dias_para_adicionar = 0;
-            switch ($prioridade) {
-                case 'baixa':
-                    $dias_para_adicionar = 5;
-                    break;
-                case 'media':
-                    $dias_para_adicionar = 3;
-                    break;
-                case 'alta':
-                    $dias_para_adicionar = 1;
-                    break;
+            // Remover atribuições existentes e adicionar as novas
+            $stmtRemoverAtribuicao = $this->pdo->prepare("DELETE FROM demanda_usuarios WHERE demanda_id = ?");
+            $stmtRemoverAtribuicao->execute([$id]);
+
+            if (!empty($usuarios_ids)) {
+                $stmtAtribuir = $this->pdo->prepare("
+                    INSERT INTO demanda_usuarios (demanda_id, usuario_id)
+                    VALUES (?, ?)
+                ");
+                foreach ($usuarios_ids as $usuario_id) {
+                    $stmtAtribuir->execute([$id, $usuario_id]);
+                }
             }
-            $novo_prazo = date('Y-m-d', strtotime("+" . $dias_para_adicionar . " days"));
-
-            // Atualizar apenas os campos básicos da demanda
-            $stmt = $this->pdo->prepare("
-                UPDATE demandas 
-                SET titulo = ?, 
-                    descricao = ?, 
-                    prioridade = ?, 
-                    prazo = ?
-                WHERE id = ?
-            ");
-            $stmt->execute([$titulo, $descricao, $prioridade, $novo_prazo, $id]);
 
             $this->pdo->commit();
             return true;
 
         } catch (Exception $e) {
             $this->pdo->rollBack();
+            // Log do erro ou tratamento
             return false;
         }
     }
@@ -784,6 +834,7 @@ class Demanda {
         return $stmt->fetchColumn();
     }
 
+<<<<<<< HEAD
     public function aceitarDemanda($demanda_id, $usuario_id) {
         try {
             $stmt = $this->pdo->prepare("
@@ -812,6 +863,8 @@ class Demanda {
         }
     }
 
+=======
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
     // Este método pode não ser mais necessário ou precisará ser adaptado dependendo do uso
     // public function verificarPermissao($id, $usuario_id, $tipo) {
     //     $stmt = $this->pdo->prepare("
