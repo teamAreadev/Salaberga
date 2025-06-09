@@ -174,6 +174,49 @@ $systemPermissionCardMap = [
         'category' => 'Sistema'
     ],
 
+    'Alimentação_adm(9)' => [
+        'url' => '#',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Alimentação (Admin)',
+        'category' => 'Sistema'
+    ],
+    'Controler_estoque_adm(10)' => [
+        'url' => '#',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Controler de estoque (Admin)',
+        'category' => 'Sistema'
+    ],
+    'Espaços_e_equipamentos_adm(13)' => [
+        'url' => '#',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Espaços e equipamentos (Admin)',
+        'category' => 'Sistema'
+    ],
+    'Banco_questões_adm(14)' => [
+        'url' => '#',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Banco questões (Admin)',
+        'category' => 'Sistema'
+    ],
+    'Registro_pcd_adm(15)' => [
+        'url' => '#',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Registro pcd (Admin)',
+        'category' => 'Sistema'
+    ],
+    'Financeiro_adm(16)' => [
+        'url' => '#',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Financeiro (Admin)',
+        'category' => 'Sistema'
+    ],
+    'Sistema_PDT_adm(17)' => [
+        'url' => '#',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Sistema PDT (Admin)',
+        'category' => 'Sistema'
+    ]
+
     // ... adicione mais mapeamentos baseados nas suas tabelas 'sistemas' e 'permissoes' se necessário
 ];
 // Prepare an array of unique cards to display based on user's systems and permissions
