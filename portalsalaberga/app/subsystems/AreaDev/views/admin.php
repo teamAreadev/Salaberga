@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -21,10 +22,14 @@ set_exception_handler(function($exception) {
 
 // Removido controle de sessão e permissões para acesso livre
 require_once __DIR__ . '/../config/Database.php';
+=======
+require_once __DIR__ . '/../config/database.php';
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
 require_once __DIR__ . '/../model/Demanda.php';
 require_once __DIR__ . '/../model/Usuario.php';
 require_once __DIR__ . '/../model/Area.php';
 
+<<<<<<< HEAD
 // Função para mapear a área a partir da permissão
 function areaFromPermissao($permissao) {
     if (strpos($permissao, 'usuario_area_design') === 0 || strpos($permissao, 'adm_area_design') === 0) return 'Design';
@@ -32,12 +37,16 @@ function areaFromPermissao($permissao) {
     if (strpos($permissao, 'usuario_area_suporte') === 0 || strpos($permissao, 'adm_area_suporte') === 0) return 'Suporte';
     return 'Sem Área';
 }
+=======
+session_start();
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
 
 // Inicializa a conexão com o banco de dados
 $database = Database::getInstance();
 $pdo_salaberga = $database->getSalabergaConnection();
 $pdo_area_dev = $database->getAreaDevConnection();
 
+<<<<<<< HEAD
 // Inicializa os modelos
 $demanda = new Demanda($pdo_area_dev);
 $usuario = new Usuario($pdo_salaberga);
@@ -120,6 +129,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Redirecionar ou mostrar mensagem de erro se necessário
             // header('Location: erro.php?msg=admin_nao_logado');
             // exit;
+=======
+// Verificar se está logado e é admin
+if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'admin') {
+    header("Location: login.php");
+    exit();
+}
+
+$demanda = new Demanda($pdo);
+$usuario = new Usuario($pdo);
+
+// Processar criação de demanda
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
+    if ($_POST['acao'] === 'criar') {
+        $titulo = $_POST['titulo'] ?? '';
+        $descricao = $_POST['descricao'] ?? '';
+        $prioridade = $_POST['prioridade'] ?? 'media';
+        $usuario_id = $_POST['usuario_id'] ?? null;
+
+        if (!empty($titulo) && !empty($descricao)) {
+            $sucesso = $demanda->criarDemanda($titulo, $descricao, $prioridade, $_SESSION['usuario_id'], $usuario_id);
+            if ($sucesso) {
+            header("Location: admin.php");
+            exit();
+            } else {
+                $erro = "Erro ao criar demanda. Por favor, tente novamente.";
+            }
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         }
 
         switch ($_POST['acao']) {
@@ -345,6 +381,12 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         position: relative;
         overflow: hidden;
         cursor: pointer;
+<<<<<<< HEAD
+=======
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
     }
 
     .demand-card::before {
@@ -369,6 +411,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         transform: scaleX(1);
     }
 
+<<<<<<< HEAD
     .stats-card {
         background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
         border-radius: 20px;
@@ -383,6 +426,142 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
     .stats-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 35px rgba(0, 122, 51, 0.1);
+=======
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .card-title {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .card-title h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 0.375rem;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .card-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+        margin-bottom: 0.375rem;
+    }
+
+    .card-id {
+        font-size: 0.7rem;
+        color: #888888;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.2rem 0.4rem;
+        border-radius: 8px;
+    }
+
+    .card-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .card-description {
+        color: #cccccc;
+        font-size: 0.813rem;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .card-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .detail-label {
+        font-size: 0.7rem;
+        color: #888888;
+    }
+
+    .detail-value {
+        font-size: 0.813rem;
+        color: #ffffff;
+        font-weight: 500;
+    }
+
+    .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 0.375rem;
+    }
+
+    .card-participants {
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .participants-title {
+        font-size: 0.813rem;
+        color: #888888;
+        margin-bottom: 0.5rem;
+    }
+
+    .participants-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+    }
+
+    .participant-item {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.2rem 0.5rem;
+        background: rgba(0, 122, 51, 0.1);
+        border-radius: 8px;
+        font-size: 0.7rem;
+    }
+
+    .participant-avatar {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #007A33, #00FF6B);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.6rem;
+        color: white;
+        font-weight: 600;
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
     }
 
     /* Button Styles */
@@ -456,6 +635,224 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         font-weight: 400;
     }
 
+<<<<<<< HEAD
+=======
+    /* Custom Multi-Select Styles */
+    .custom-multi-select {
+        position: relative;
+        width: 100%;
+    }
+
+    .multi-select-container {
+        background: rgba(35, 35, 35, 0.95);
+        border: 2px solid rgba(0, 122, 51, 0.2);
+        border-radius: 12px;
+        min-height: 50px;
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .multi-select-container:hover {
+        border-color: rgba(0, 122, 51, 0.4);
+    }
+
+    .multi-select-container.active {
+        border-color: #00FF6B;
+        box-shadow: 0 0 0 4px rgba(0, 255, 107, 0.1);
+    }
+
+    .multi-select-display {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        min-height: 32px;
+        align-items: center;
+    }
+
+    .multi-select-placeholder {
+        color: #888888;
+        font-weight: 400;
+        font-size: 14px;
+    }
+
+    .selected-user-tag {
+        background: linear-gradient(135deg, rgba(0, 122, 51, 0.3), rgba(0, 122, 51, 0.2));
+        border: 1px solid rgba(0, 122, 51, 0.4);
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        color: #00FF6B;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        animation: slideIn 0.3s ease;
+        transition: all 0.2s ease;
+    }
+
+    .selected-user-tag:hover {
+        background: linear-gradient(135deg, rgba(0, 122, 51, 0.4), rgba(0, 122, 51, 0.3));
+        transform: scale(1.05);
+    }
+
+    .remove-user-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 10px;
+        color: #ffffff;
+    }
+
+    .remove-user-btn:hover {
+        background: rgba(239, 68, 68, 0.8);
+        transform: scale(1.1);
+    }
+
+    .multi-select-arrow {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform 0.3s ease;
+        color: #888888;
+        pointer-events: none;
+    }
+
+    .multi-select-container.active .multi-select-arrow {
+        transform: translateY(-50%) rotate(180deg);
+    }
+
+    .multi-select-dropdown {
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(35, 35, 35, 0.98);
+        border: 2px solid rgba(0, 122, 51, 0.2);
+        border-radius: 12px;
+        margin-bottom: 4px;
+        overflow-y: auto;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .multi-select-dropdown.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .multi-select-search {
+        padding: 12px;
+        border-bottom: 1px solid rgba(0, 122, 51, 0.1);
+    }
+
+    .multi-select-search input {
+        width: 100%;
+        background: rgba(45, 45, 45, 0.8);
+        border: 1px solid rgba(0, 122, 51, 0.2);
+        border-radius: 8px;
+        padding: 8px 12px;
+        color: #ffffff;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .multi-select-search input:focus {
+        border-color: #00FF6B;
+        box-shadow: 0 0 0 2px rgba(0, 255, 107, 0.1);
+    }
+
+    .multi-select-search input::placeholder {
+        color: #888888;
+    }
+
+    .multi-select-option {
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .multi-select-option:last-child {
+        border-bottom: none;
+    }
+
+    .multi-select-option:hover {
+        background: rgba(0, 122, 51, 0.1);
+        color: #00FF6B;
+    }
+
+    .multi-select-option.selected {
+        background: rgba(0, 122, 51, 0.2);
+        color: #00FF6B;
+        font-weight: 500;
+    }
+
+    .multi-select-option.selected::before {
+        content: '✓';
+        font-weight: bold;
+        margin-right: 8px;
+    }
+
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #007A33, #00FF6B);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 12px;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .user-info {
+        flex: 1;
+    }
+
+    .user-name {
+        font-weight: 500;
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .user-email {
+        font-size: 12px;
+        color: #888888;
+    }
+
+    /* Search and Filter Styles */
+    .search-container {
+        background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        border: 1px solid rgba(0, 122, 51, 0.1);
+    }
+
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
     .filter-btn {
         padding: 0.75rem 1.5rem;
         border-radius: 25px;
@@ -482,6 +879,20 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
 
     /* Status Badges */
     .status-badge {
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
+=======
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+=======
+>>>>>>> parent of c5d2626 (.)
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
@@ -506,6 +917,11 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         border: 1px solid rgba(234, 179, 8, 0.3);
     }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c5d2626 (.)
     .status-aceito {
         background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
         color: #4ade80;
@@ -517,6 +933,15 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
     }
 
     .status-em_andamento {
+<<<<<<< HEAD
+=======
+    .status-em-andamento {
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
+=======
+    .status-em_andamento {
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+=======
+>>>>>>> parent of c5d2626 (.)
         background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
         color: #60a5fa;
         border: 1px solid rgba(59, 130, 246, 0.3);
@@ -532,6 +957,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         color: #4ade80;
     }
 
+<<<<<<< HEAD
     .status-concluido {
         background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
         color: #4ade80;
@@ -542,12 +968,15 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         color: #4ade80;
     }
 
+=======
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
     .status-cancelada {
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
         color: #f87171;
         border: 1px solid rgba(239, 68, 68, 0.3);
     }
 
+<<<<<<< HEAD
     .status-cancelada i {
         color: #f87171;
     }
@@ -562,12 +991,24 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         color: #f87171;
     }
 
+=======
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
     /* Priority Badges */
     .priority-badge {
         padding: 0.2rem 0.5rem;
         border-radius: 15px;
         font-size: 0.7rem;
         font-weight: 600;
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        text-transform: uppercase;
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
+=======
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+=======
+>>>>>>> parent of c5d2626 (.)
         letter-spacing: 0.05em;
     }
 
@@ -591,19 +1032,30 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
 
     /* Modal Styles */
     .modal {
+<<<<<<< HEAD
         background: rgba(0, 0, 0, 0.8);
         backdrop-filter: blur(12px);
+=======
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         transition: all 0.3s ease;
     }
 
     .modal-content {
         background: linear-gradient(145deg, rgba(45, 45, 45, 0.98), rgba(35, 35, 35, 0.95));
         border: 1px solid rgba(0, 122, 51, 0.2);
+<<<<<<< HEAD
         box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
         border-radius: 24px;
         backdrop-filter: blur(20px);
         max-height: 90vh;
         overflow-y: auto;
+=======
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        border-radius: 24px;
+        backdrop-filter: blur(20px);
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
     }
 
     /* Animations */
@@ -625,18 +1077,38 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
 
     @keyframes scaleIn {
         from {
+<<<<<<< HEAD
         opacity: 0;
             transform: scale(0.9);
         }
         to {
         opacity: 1;
+=======
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
             transform: scale(1);
         }
     }
 
+<<<<<<< HEAD
     @keyframes float {
         0%, 100% { transform: translateY(0px); }
         50% { transform: translateY(-10px); }
+=======
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
     }
 
     .fade-in {
@@ -651,6 +1123,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         animation: scaleIn 0.3s ease-out forwards;
     }
 
+<<<<<<< HEAD
     .float {
         animation: float 3s ease-in-out infinite;
     }
@@ -672,6 +1145,8 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         transition: width 0.3s ease;
     }
 
+=======
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
         width: 8px;
@@ -679,11 +1154,16 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
     }
 
     ::-webkit-scrollbar-track {
+<<<<<<< HEAD
         background: #1a1a1a;
+=======
+        background: rgba(35, 35, 35, 0.5);
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         border-radius: 4px;
     }
 
     ::-webkit-scrollbar-thumb {
+<<<<<<< HEAD
         background: linear-gradient(135deg, #007A33, #00FF6B);
         border-radius: 4px;
     }
@@ -703,13 +1183,26 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         font-size: 4rem;
         margin-bottom: 1rem;
         opacity: 0.5;
+=======
+        background: rgba(0, 122, 51, 0.5);
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 122, 51, 0.7);
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
     }
 
     /* Responsive */
     @media (max-width: 768px) {
         .demand-card {
+<<<<<<< HEAD
             padding: 1.25rem;
             margin-bottom: 0.75rem;
+=======
+            padding: 1rem;
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         }
         
         .stats-card {
@@ -719,6 +1212,18 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         .search-container {
             padding: 1.5rem;
         }
+<<<<<<< HEAD
+=======
+
+        .multi-select-dropdown {
+            max-height: 150px;
+        }
+
+        .selected-user-tag {
+            font-size: 11px;
+            padding: 3px 8px;
+        }
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
     }
 
     /* Loading Animation */
@@ -762,6 +1267,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         transform: none;
     }
 
+<<<<<<< HEAD
     /* Select Styles */
     .custom-select {
         background: rgba(35, 35, 35, 0.95);
@@ -847,24 +1353,47 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         transform: translateY(-5px);
         box-shadow: 0 15px 35px rgba(0, 122, 51, 0.1);
         border-color: rgba(0, 255, 107, 0.3);
+=======
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #888888;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    /* Hide original select */
+    .hidden-select {
+        display: none;
+    }
+
+    /* Estilização para o status 'concluido' dos participantes */
+    .status-concluido {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-concluido i {
+        color: #4ade80;
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
     }
 </style>
 
 <body class="select-none">
     <!-- Header -->
-    <header class="bg-dark-400 shadow-lg border-b border-primary-500/20 sticky top-0 z-50 backdrop-blur-lg">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <!-- Logo e Título -->
-                <div class="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
-                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="w-10 h-10">
-                    <div class="text-center sm:text-left">
-                        <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary-50 to-primary-200 bg-clip-text text-transparent">
-                            Painel Administrativo
-                        </h1>
-                        <p class="text-sm text-gray-400">Sistema de Gestão de Demandas</p>
-                    </div>
+    <header class="bg-dark-200 shadow-lg border-b border-primary/20 sticky top-0 z-50 backdrop-blur-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-50 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-tasks text-white text-lg"></i>
                 </div>
+<<<<<<< HEAD
 
                 <!-- Botões e Informações do Usuário -->
                 <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
@@ -884,12 +1413,38 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                             <span>Sair</span>
                         </a>
                     </div>
+=======
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-primary-50 to-primary-200 bg-clip-text text-transparent">
+                    Painel Administrativo
+                </h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-2 text-gray-300">
+                    <i class="fas fa-user-shield text-primary-50"></i>
+                    <span>Bem-vindo, <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></span>
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
                 </div>
+                <a href="logout.php" class="custom-btn bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">
+                    <i class="fas fa-sign-out-alt btn-icon"></i> 
+                    <span class="hidden md:inline">Sair</span>
+                </a>
             </div>
         </div>
     </header>
 
     <main class="container mx-auto px-4 py-8">
+<<<<<<< HEAD
+=======
+        <?php if (!empty($erro)): ?>
+        <div class="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg mb-6 fade-in">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-exclamation-circle"></i>
+                <span><?php echo htmlspecialchars($erro); ?></span>
+            </div>
+        </div>
+        <?php endif; ?>
+
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         <!-- Search and Filters -->
         <div class="search-container slide-up" style="animation-delay: 0.6s">
             <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
@@ -939,6 +1494,11 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                 Gerenciar Demandas
             </h2>
             
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c5d2626 (.)
             <!-- Grid de 3 colunas -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Coluna Em Espera -->
@@ -958,6 +1518,217 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                             $prioridades = ['alta' => 3, 'media' => 2, 'baixa' => 1];
                             return $prioridades[$b['prioridade']] - $prioridades[$a['prioridade']];
                         });
+<<<<<<< HEAD
+=======
+            <div id="demandsContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                <?php foreach ($demandas as $index => $d): ?>
+=======
+            <div id="demandsContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                <?php foreach ($demandas as $index => $d): ?>
+                
+                <?php
+                // DEBUG: Verificar os dados de cada demanda (Admin View)
+                // echo '<h3>DEBUG ADMIN: Demanda ID: ' . $d['id'] . '</h3>';
+                // var_dump($d);
+                // echo '<hr>';
+                ?>
+
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+                <div class="demand-card fade-in" 
+                     style="animation-delay: <?php echo ($index * 0.1); ?>s"
+                     data-status="<?php echo $d['status']; ?>"
+                     data-title="<?php echo strtolower($d['titulo']); ?>"
+<<<<<<< HEAD
+                     data-description="<?php echo strtolower($d['descricao']); ?>">
+                    
+                    <!-- Card Header -->
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white mb-2 line-clamp-2">
+                                <?php echo htmlspecialchars($d['titulo']); ?>
+                            </h3>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="status-badge status-<?php echo strtolower(str_replace(' ', '-', $d['status'])); ?>">
+                                    <?php
+                                    $statusIcons = [
+                                        'Pendente' => 'fas fa-clock',
+                                        'Em Andamento' => 'fas fa-spinner fa-spin',
+                                        'Concluída' => 'fas fa-check-circle',
+                                        'Cancelada' => 'fas fa-ban'
+                                    ];
+                                    $status = ucfirst(strtolower($d['status']));
+                                    ?>
+                                    <i class="<?php echo $statusIcons[$status] ?? 'fas fa-question'; ?>"></i>
+                                    <?php echo $status; ?>
+=======
+                     data-description="<?php echo strtolower($d['descricao']); ?>"
+                     data-priority="<?php echo $d['prioridade']; ?>"
+                     data-demanda-id="<?php echo $d['id']; ?>">
+                    
+                    <!-- Card Header -->
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3><?php echo htmlspecialchars($d['titulo']); ?></h3>
+                            <div class="card-meta">
+                                <span class="status-badge status-<?php echo $d['status']; ?>">
+                                    <?php
+                                    $statusIcons = [
+                                        'pendente' => 'fas fa-clock',
+                                        'em_andamento' => 'fas fa-spinner fa-spin',
+                                        'concluida' => 'fas fa-check-circle',
+                                        'cancelada' => 'fas fa-ban'
+                                    ];
+                                    $status_display = ucfirst(str_replace('_', ' ', $d['status']));
+                                    ?>
+                                    <i class="<?php echo $statusIcons[$d['status']] ?? 'fas fa-question'; ?>"></i>
+                                    <?php echo $status_display; ?>
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+                                </span>
+                                <span class="priority-badge priority-<?php echo $d['prioridade']; ?>">
+                                    <?php echo ucfirst($d['prioridade']); ?>
+                                </span>
+                            </div>
+                        </div>
+                        <span class="card-id">#<?php echo $d['id']; ?></span>
+                    </div>
+                    
+                    <!-- Card Content -->
+                    <div class="card-content">
+                        <p class="card-description">
+                            <?php echo htmlspecialchars($d['descricao']); ?>
+                        </p>
+                        
+                        <div class="card-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Criado em</span>
+                                <span class="detail-value">
+                                    <?php echo date('d/m/Y', strtotime($d['data_criacao'])); ?>
+<<<<<<< HEAD
+                                </p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400">
+                                    <?php echo !empty($d['data_conclusao']) ? 'Concluído em:' : 'Prazo:'; ?>
+                                </span>
+                                <p class="text-white font-medium">
+                                    <?php 
+                                    if (!empty($d['data_conclusao'])) {
+                                        echo date('d/m/Y', strtotime($d['data_conclusao']));
+=======
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">
+                                    <?php echo !empty($d['data_conclusao']) ? 'Concluído em' : 'Prazo'; ?>
+                                </span>
+                                <span class="detail-value">
+                                    <?php 
+                                    if (!empty($d['data_conclusao'])) {
+                                        echo date('d/m/Y', strtotime($d['data_conclusao']));
+                                    } else if (!empty($d['prazo'])) {
+                                        echo date('d/m/Y', strtotime($d['prazo']));
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+                                    } else {
+                                        echo 'Não definido';
+                                    }
+                                    ?>
+<<<<<<< HEAD
+                                </p>
+=======
+                                </span>
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+                            </div>
+                        </div>
+                            </div>
+                    
+<<<<<<< HEAD
+                    <!-- Card Actions -->
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                        <div class="flex items-center gap-2">
+=======
+                    <!-- Card Footer -->
+                    <div class="card-footer">
+                        <div class="card-actions">
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+                            <?php if ($d['admin_id'] == $_SESSION['usuario_id']): ?>
+                            <button 
+                                onclick="editarDemanda(<?php echo $d['id']; ?>)" 
+                                class="custom-btn bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg"
+                                title="Editar demanda">
+                                <i class="fas fa-edit"></i>
+                            </button>
+
+                            <button 
+                                onclick="excluirDemanda(<?php echo $d['id']; ?>)" 
+                                class="custom-btn bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg"
+                                title="Excluir demanda">
+                                <i class="fas fa-trash"></i>
+                            </button>
+
+<<<<<<< HEAD
+                            <?php if (strtolower($d['status']) === 'pendente' && (is_null($d['usuario_id']) || $d['usuario_id'] == 0 || $d['usuario_id'] == '')): ?>
+                            <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarEmAndamento()">
+                                <input type="hidden" name="acao" value="atualizar_status">
+                                <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                <input type="hidden" name="novo_status" value="Em Andamento">
+                                <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white p-2 rounded-lg" title="Marcar como Em Andamento">
+                                    <i class="fas fa-spinner"></i>
+                                    Realizar Tarefa
+=======
+                            <?php 
+                            $is_assigned = false;
+                            if (!empty($d['usuarios_atribuidos'])) {
+                                foreach ($d['usuarios_atribuidos'] as $atribuido) {
+                                    if ($atribuido['id'] == $_SESSION['usuario_id']) {
+                                        $is_assigned = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            $can_perform_action = $is_assigned || empty($d['usuarios_atribuidos']);
+
+                            if ($d['status'] === 'pendente' && $can_perform_action): 
+                            ?>
+                            <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarEmAndamento()">
+                                <input type="hidden" name="acao" value="atualizar_status">
+                                <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                <input type="hidden" name="novo_status" value="em_andamento">
+                                <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white p-2 rounded-lg" title="Marcar como Em Andamento">
+                                    <i class="fas fa-spinner"></i>
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+                                </button>
+                            </form>
+                            <?php endif; ?>
+
+<<<<<<< HEAD
+                            <?php if (strtolower($d['status']) === 'em_andamento' && (is_null($d['usuario_id']) || $d['usuario_id'] == 0 || $d['usuario_id'] == '')): ?>
+                            <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarConclusao()">
+                                <input type="hidden" name="acao" value="atualizar_status">
+                                <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                <input type="hidden" name="novo_status" value="Concluída">
+                                <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg" title="Marcar como Concluída">
+                                    <i class="fas fa-check"></i>
+                                    Concluir
+=======
+                            <?php 
+                            if ($d['status'] === 'em_andamento' && $can_perform_action): 
+                            ?>
+                            <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarConclusao()">
+                                <input type="hidden" name="acao" value="atualizar_status">
+                                <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                <input type="hidden" name="novo_status" value="concluida">
+                                <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg" title="Marcar como Concluída">
+                                    <i class="fas fa-check"></i>
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+                                </button>
+                            </form>
+                            <?php endif; ?>
+                            <?php endif; ?>
+<<<<<<< HEAD
+                        </div>
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
+=======
+>>>>>>> parent of c5d2626 (.)
                         
                         foreach ($demandas_espera as $d): 
                         ?>
@@ -1016,10 +1787,37 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                             <i class="fas fa-tasks"></i>
                             <h3 class="text-xl font-semibold mb-2">Nenhuma demanda em andamento</h3>
                             <p>Não há demandas sendo trabalhadas no momento.</p>
+=======
+                        </div>
+                    </div>
+
+                    <!-- Participants Section -->
+                    <?php if (!empty($d['usuarios_atribuidos'])): ?>
+                    <div class="card-participants">
+                        <h4 class="participants-title">Participantes</h4>
+                        <div class="participants-list">
+                            <?php foreach ($d['usuarios_atribuidos'] as $u_atrib): ?>
+                            <div class="participant-item">
+                                <span class="participant-name"><?php echo htmlspecialchars($u_atrib['nome']); ?></span>
+                                <span class="status-badge status-<?php echo $u_atrib['status']; ?>">
+                                    <?php
+                                    $statusIcons = [
+                                        'pendente' => 'fas fa-clock',
+                                        'em_andamento' => 'fas fa-spinner fa-spin',
+                                        'concluido' => 'fas fa-check-circle'
+                                    ];
+                                    ?>
+                                    <i class="<?php echo $statusIcons[$u_atrib['status']] ?? 'fas fa-question'; ?>"></i>
+                                    <?php echo ucfirst($u_atrib['status']); ?>
+                                </span>
+                            </div>
+                            <?php endforeach; ?>
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
                         </div>
                         <?php endif; ?>
                     </div>
                 </div>
+<<<<<<< HEAD
 
                 <!-- Coluna Concluídas -->
                 <div class="space-y-4">
@@ -1060,6 +1858,16 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                         <?php endif; ?>
                     </div>
                 </div>
+=======
+                <?php endforeach; ?>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state hidden">
+                <i class="fas fa-search"></i>
+                <h3 class="text-xl font-semibold mb-2">Nenhuma demanda encontrada</h3>
+                <p>Tente ajustar os filtros ou criar uma nova demanda.</p>
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
             </div>
         </div>
 
@@ -1186,6 +1994,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                 <div>
                     <label for="prioridade" class="block text-sm font-medium text-gray-300 mb-2">Prioridade</label>
                     <select id="prioridade" name="prioridade" required class="custom-select w-full">
+<<<<<<< HEAD
                         <option value="baixa">Baixa</option>
                         <option value="media">Média</option>
                         <option value="alta">Alta</option>
@@ -1206,6 +2015,56 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                 <?php endif; ?>
 
                 <div id="prazoCalculadoInfo" class="mt-2"></div>
+=======
+                        <option value="alta">Alta</option>
+                        <option value="media" selected>Média</option>
+                                    <option value="baixa">Baixa</option>
+                                </select>
+                            </div>
+                            <div>
+                    <label for="prazo" class="block text-sm font-medium text-gray-300 mb-2">Prazo</label>
+                    <input type="date" id="prazo" name="prazo" required class="custom-input w-full" min="<?php echo date('Y-m-d'); ?>">
+                            </div>
+                            <div>
+                    <label for="usuario_id" class="block text-sm font-medium text-gray-300 mb-2">Atribuir a</label>
+                    
+                    <!-- Custom Multi-Select -->
+                    <div class="custom-multi-select">
+                        <div class="multi-select-container" onclick="toggleMultiSelect('usuario_id')">
+                            <div class="multi-select-display" id="usuario_id_display">
+                                <span class="multi-select-placeholder">Selecione os usuários</span>
+                            </div>
+                            <i class="fas fa-chevron-down multi-select-arrow"></i>
+                        </div>
+                        
+                        <div class="multi-select-dropdown" id="usuario_id_dropdown">
+                            <div class="multi-select-search">
+                                <input type="text" placeholder="Buscar usuários..." onkeyup="filterUsers('usuario_id', this.value)">
+                            </div>
+                            <div class="multi-select-options" id="usuario_id_options">
+                                <?php foreach ($usuarios as $u): ?>
+                                <div class="multi-select-option" data-value="<?php echo $u['id']; ?>" onclick="toggleUserSelection('usuario_id', <?php echo $u['id']; ?>, '<?php echo htmlspecialchars($u['nome']); ?>', '<?php echo htmlspecialchars($u['email']); ?>')">
+                                    <div class="user-avatar">
+                                        <?php echo strtoupper(substr($u['nome'], 0, 2)); ?>
+                                    </div>
+                                    <div class="user-info">
+                                        <div class="user-name"><?php echo htmlspecialchars($u['nome']); ?></div>
+                                        <div class="user-email"><?php echo htmlspecialchars($u['email']); ?></div>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden select for form submission -->
+                    <select name="usuarios_ids[]" multiple class="hidden-select" id="usuario_id_hidden">
+                                    <?php foreach ($usuarios as $u): ?>
+                                    <option value="<?php echo $u['id']; ?>"><?php echo htmlspecialchars($u['nome']); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
                 <div class="flex justify-end gap-4 mt-6">
                     <button type="button" onclick="closeModal('criarDemandaModal')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
                         Cancelar
@@ -1281,33 +2140,109 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <form action="../controllers/DemandaController.php" method="POST" class="space-y-4">
                 <input type="hidden" name="acao" value="atualizar_demanda">
-                <input type="hidden" id="editId" name="id">
-                
+                <input type="hidden" name="id" id="editar_demanda_id">
                 <div>
-                    <label for="editTitulo" class="block text-sm font-medium text-gray-300 mb-2">Título</label>
-                    <input type="text" id="editTitulo" name="titulo" required class="custom-input w-full">
+                    <label for="editar_titulo" class="block text-sm font-medium text-gray-300 mb-2">Título</label>
+                    <input type="text" id="editar_titulo" name="titulo" required class="custom-input w-full">
                 </div>
-                
                 <div>
-                    <label for="editDescricao" class="block text-sm font-medium text-gray-300 mb-2">Descrição</label>
-                    <textarea id="editDescricao" name="descricao" rows="4" required class="custom-input w-full"></textarea>
+                    <label for="editar_descricao" class="block text-sm font-medium text-gray-300 mb-2">Descrição</label>
+                    <textarea id="editar_descricao" name="descricao" required class="custom-input w-full" rows="4"></textarea>
                 </div>
-                
                 <div>
-                    <label for="editPrioridade" class="block text-sm font-medium text-gray-300 mb-2">Prioridade</label>
-                    <select id="editPrioridade" name="prioridade" required class="custom-select w-full">
-                        <option value="baixa">Baixa</option>
-                        <option value="media">Média</option>
+                    <label for="editar_prioridade" class="block text-sm font-medium text-gray-300 mb-2">Prioridade</label>
+                    <select id="editar_prioridade" name="prioridade" required class="custom-select w-full">
                         <option value="alta">Alta</option>
+                        <option value="media">Média</option>
+                        <option value="baixa">Baixa</option>
                     </select>
                 </div>
+<<<<<<< HEAD
+                <div>
+                    <label for="editar_status" class="block text-sm font-medium text-gray-300 mb-2">Status</label>
+                    <select id="editar_status" name="status" required class="custom-select w-full">
+                        <option value="pendente">Pendente</option>
+                        <option value="em_andamento">Em Andamento</option>
+                        <option value="concluida">Concluída</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="editar_prazo" class="block text-sm font-medium text-gray-300 mb-2">Prazo</label>
+                    <input type="date" id="editar_prazo" name="prazo" required class="custom-input w-full" min="<?php echo date('Y-m-d'); ?>">
+                </div>
+                <div>
+                    <label for="editar_usuario_id" class="block text-sm font-medium text-gray-300 mb-2">Atribuir a</label>
+                    
+                    <!-- Custom Multi-Select for Edit -->
+                    <div class="custom-multi-select">
+                        <div class="multi-select-container" onclick="toggleMultiSelect('editar_usuario_id')">
+                            <div class="multi-select-display" id="editar_usuario_id_display">
+                                <span class="multi-select-placeholder">Selecione os usuários</span>
+                            </div>
+                            <i class="fas fa-chevron-down multi-select-arrow"></i>
+                        </div>
+                        
+                        <div class="multi-select-dropdown" id="editar_usuario_id_dropdown">
+                            <div class="multi-select-search">
+                                <input type="text" placeholder="Buscar usuários..." onkeyup="filterUsers('editar_usuario_id', this.value)">
+                            </div>
+                            <div class="multi-select-options" id="editar_usuario_id_options">
+                                <?php foreach ($usuarios as $u): ?>
+                                <div class="multi-select-option" data-value="<?php echo $u['id']; ?>" onclick="toggleUserSelection('editar_usuario_id', <?php echo $u['id']; ?>, '<?php echo htmlspecialchars($u['nome']); ?>', '<?php echo htmlspecialchars($u['email']); ?>')">
+                                    <div class="user-avatar">
+                                        <?php echo strtoupper(substr($u['nome'], 0, 2)); ?>
+                                    </div>
+                                    <div class="user-info">
+                                        <div class="user-name"><?php echo htmlspecialchars($u['nome']); ?></div>
+                                        <div class="user-email"><?php echo htmlspecialchars($u['email']); ?></div>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden select for form submission -->
+                    <select name="usuarios_ids[]" multiple class="hidden-select" id="editar_usuario_id_hidden">
+                        <?php foreach ($usuarios as $u): ?>
+                            <option value="<?php echo $u['id']; ?>"><?php echo htmlspecialchars($u['nome']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+<<<<<<< HEAD
+<<<<<<< HEAD
                 <div id="editPrazoCalculadoInfo" class="mt-2"></div>
+=======
+                <div>
+                    <label for="editar_status" class="block text-sm font-medium text-gray-300 mb-2">Status</label>
+                    <select id="editar_status" name="status" required class="custom-select w-full">
+                        <option value="Pendente">Pendente</option>
+                        <option value="Em Andamento">Em Andamento</option>
+                        <option value="Concluída">Concluída</option>
+                        <option value="Cancelada">Cancelada</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="editar_usuario_id" class="block text-sm font-medium text-gray-300 mb-2">Atribuir a</label>
+                    <select id="editar_usuario_id" name="usuario_id" class="custom-select w-full">
+                        <option value="">Não atribuído</option>
+                        <?php foreach ($usuarios as $u): ?>
+                            <option value="<?php echo $u['id']; ?>"><?php echo htmlspecialchars($u['nome']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
+=======
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+=======
+                <div id="editPrazoCalculadoInfo" class="mt-2"></div>
+>>>>>>> parent of c5d2626 (.)
                 <div class="flex justify-end gap-4 mt-6">
                     <button type="button" onclick="closeModal('editarDemandaModal')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
                         Cancelar
                     </button>
-                    <button type="submit" class="custom-btn bg-gradient-to-r from-primary-500 to-primary-50 hover:from-primary-400 hover:to-primary-100 text-white font-bold py-2 px-4 rounded-lg">
-                        Salvar Alterações
+                    <button type="submit" name="atualizar_demanda" class="custom-btn bg-gradient-to-r from-primary-500 to-primary-50 hover:from-primary-400 hover:to-primary-100 text-white font-bold py-2 px-4 rounded-lg">
+                        Atualizar Demanda
                     </button>
                 </div>
             </form>
@@ -1316,36 +2251,29 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Delete Demand Modal -->
     <div id="excluirDemandaModal" class="modal fixed inset-0 hidden items-center justify-center p-4 z-50">
+<<<<<<< HEAD
         <div class="modal-content w-full max-w-md p-8 scale-in">
             <div class="flex flex-col items-center text-center">
                 <div class="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-6">
                     <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
+=======
+        <div class="modal-content w-full max-w-sm p-6 scale-in text-center">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-white">Confirmar Exclusão</h3>
+                <button onclick="closeModal('excluirDemandaModal')" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
             </div>
-
-                <h3 class="text-2xl font-bold text-white mb-4">Confirmar Exclusão</h3>
-                
-                <p class="text-gray-300 mb-8 text-lg">
-                    Tem certeza que deseja excluir esta demanda? Esta ação não pode ser desfeita.
-                </p>
-
-                <form action="../controllers/DemandaController.php" method="POST" id="formExcluirDemanda" class="w-full">
-                <input type="hidden" name="acao" value="excluir">
-                <input type="hidden" name="id" id="demanda_a_excluir_id">
-                    
+            <p class="text-gray-300 mb-6">Tem certeza que deseja excluir esta demanda? Esta ação não pode ser desfeita.</p>
+            <input type="hidden" id="demanda_a_excluir_id">
             <div class="flex justify-center gap-4">
-                        <button type="button" onclick="closeModal('excluirDemandaModal')" 
-                                class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition-all duration-300">
-                            <i class="fas fa-times"></i>
+                <button type="button" onclick="closeModal('excluirDemandaModal')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
                     Cancelar
                 </button>
-                        
-                        <button type="submit" 
-                                class="custom-btn bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition-all duration-300">
-                            <i class="fas fa-trash"></i>
+                <button type="button" onclick="confirmarExclusao()" class="custom-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
                     Excluir
                 </button>
-            </div>
-            </form>
             </div>
         </div>
     </div>
@@ -1383,6 +2311,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             modal.classList.add('hidden');
             modal.classList.remove('flex');
             document.body.style.overflow = 'auto';
+<<<<<<< HEAD
         }
 
         // Função para editar demanda
@@ -1519,6 +2448,32 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             form.submit();
         }
 
+=======
+            
+            // Reset multi-selects when closing modals
+            if (modalId === 'criarDemandaModal') {
+                resetMultiSelect('usuario_id');
+            } else if (modalId === 'editarDemandaModal') {
+                resetMultiSelect('editar_usuario_id');
+            }
+        }
+
+        function resetMultiSelect(selectId) {
+            if (multiSelectData[selectId]) {
+                multiSelectData[selectId].selectedUsers = [];
+                multiSelectData[selectId].isOpen = false;
+                updateMultiSelectDisplay(selectId);
+                updateHiddenSelect(selectId);
+                updateOptionStates(selectId);
+                
+                const container = document.querySelector(`#${selectId}_dropdown`).parentElement.querySelector('.multi-select-container');
+                const dropdown = document.getElementById(`${selectId}_dropdown`);
+                container.classList.remove('active');
+                dropdown.classList.remove('active');
+            }
+        }
+
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         // Filter Functions
         function filterByStatus(status) {
             const containers = [
@@ -1527,6 +2482,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                 'demandasConcluidasContainer'
             ];
 
+<<<<<<< HEAD
             containers.forEach(containerId => {
                 const container = document.getElementById(containerId);
                 if (!container) return;
@@ -1545,6 +2501,20 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             });
 
             filterDemands();
+=======
+            cards.forEach(card => {
+                if (status === 'all' || card.dataset.status === status) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         }
 
         function filterByPriority(priority) {
@@ -1554,6 +2524,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                 'demandasConcluidasContainer'
             ];
 
+<<<<<<< HEAD
             containers.forEach(containerId => {
                 const container = document.getElementById(containerId);
                 if (!container) return;
@@ -1580,6 +2551,20 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
 
                 updateEmptyState(containerId);
             });
+=======
+            cards.forEach(card => {
+                if (priority === 'all' || card.dataset.priority === priority) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         }
 
         function filterDemands() {
@@ -1593,8 +2578,18 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                 'demandasConcluidasContainer'
             ];
 
+<<<<<<< HEAD
             const activeStatus = statusSelect ? statusSelect.value : 'all';
             const activePriority = prioritySelect ? prioritySelect.value : 'all';
+=======
+            cards.forEach(card => {
+                const title = card.dataset.title.toLowerCase();
+                const description = card.dataset.description.toLowerCase();
+                const status = card.dataset.status;
+                const priority = card.dataset.priority;
+                const activeStatus = statusSelect.value;
+                const activePriority = prioritySelect.value;
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
 
             containers.forEach(containerId => {
                 const container = document.getElementById(containerId);
@@ -1631,36 +2626,117 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             });
         }
 
+<<<<<<< HEAD
         function updateEmptyState(containerId) {
             const container = document.getElementById(containerId);
             if (!container) return;
 
             const cards = container.querySelectorAll('.demand-card');
             let visibleCount = 0;
+=======
+        // Edit Demand Function
+        function editarDemanda(id) {
+            // Reset the edit form
+            resetMultiSelect('editar_usuario_id');
+            
+            document.getElementById('editar_demanda_id').value = '';
+            document.getElementById('editar_titulo').value = '';
+            document.getElementById('editar_descricao').value = '';
+            document.getElementById('editar_prioridade').value = 'media';
+            document.getElementById('editar_status').value = 'pendente';
+            document.getElementById('editar_prazo').value = '';
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
 
-            cards.forEach(card => {
-                if (card.style.display !== 'none') {
-                    visibleCount++;
-                }
-            });
+            fetch(`../controllers/DemandaController.php?action=get_demanda&id=${id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) {
+                        throw new TypeError("Resposta não é JSON! Content-Type: " + contentType);
+                    }
+                    
+                    return response.text().then(text => {
+                        try {
+                            return JSON.parse(text);
+                        } catch (e) {
+                            console.error('Erro ao fazer parse do JSON:', e);
+                            throw new Error('Resposta inválida do servidor');
+                        }
+                    });
+                })
+                .then(data => {
+                    if (data.error) {
+                        console.error('Erro ao buscar dados da demanda:', data.error);
+                         if (data.debug_output) {
+                             console.error('Saída inesperada de debug:', data.debug_output);
+                             alert('Erro ao carregar dados da demanda: ' + data.error + '\nSaída de Debug: ' + data.debug_output);
+                         } else {
+                        alert('Erro ao carregar dados da demanda: ' + data.error);
+                         }
+                        return;
+                    }
+                    
+                    if (!data.id || !data.titulo || !data.descricao) {
+                        console.error('Dados incompletos recebidos:', data);
+                        alert('Dados incompletos recebidos do servidor');
+                        return;
+                    }
+                    
+                    document.getElementById('editar_demanda_id').value = data.id;
+                    document.getElementById('editar_titulo').value = data.titulo;
+                    document.getElementById('editar_descricao').value = data.descricao;
+                    document.getElementById('editar_prioridade').value = data.prioridade || 'media';
+                    document.getElementById('editar_status').value = data.status || 'pendente';
+                    document.getElementById('editar_prazo').value = data.prazo || '';
+                    
+                    // Set selected users for edit form
+                    if (data.usuarios_atribuidos && data.usuarios_atribuidos.length > 0) {
+                        initializeMultiSelect('editar_usuario_id');
+                        multiSelectData['editar_usuario_id'].selectedUsers = data.usuarios_atribuidos.map(user => ({
+                            id: user.id,
+                            name: user.nome,
+                            email: user.email
+                        }));
+                        updateMultiSelectDisplay('editar_usuario_id');
+                        updateHiddenSelect('editar_usuario_id');
+                        updateOptionStates('editar_usuario_id');
+                    }
+                    
+                    openModal('editarDemandaModal');
+                })
+                .catch(error => {
+                    console.error('Erro na requisição AJAX:', error);
+                    alert('Erro ao carregar dados da demanda: ' + error.message);
+                });
+        }
 
-            const emptyState = container.querySelector('.empty-state');
-            if (emptyState) {
-                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
-            }
+        // Delete Demand Function
+        function excluirDemanda(id) {
+            document.getElementById('demanda_a_excluir_id').value = id;
+            openModal('excluirDemandaModal');
         }
 
         // Close modal when clicking outside
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
+<<<<<<< HEAD
                 const modalId = event.target.id;
                 closeModal(modalId);
+=======
+                event.target.classList.add('hidden');
+                event.target.classList.remove('flex');
+                document.body.style.overflow = 'auto';
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
             }
         }
 
         // Close modal with Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
+<<<<<<< HEAD
                 const openModal = document.querySelector('.modal.flex');
                 if (openModal) {
                     closeModal(openModal.id);
@@ -1669,6 +2745,18 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         });
 
         // Add loading states to forms
+=======
+                const openModals = document.querySelectorAll('.modal:not(.hidden)');
+                openModals.forEach(modal => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                });
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Add loading states to buttons
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         document.querySelectorAll('form').forEach(form => {
             form.addEventListener('submit', function() {
                 const submitBtn = form.querySelector('button[type="submit"]');
@@ -1679,12 +2767,20 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             });
         });
 
+<<<<<<< HEAD
         // Initialize animations and interactions
+=======
+        // Initialize tooltips and animations
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
         document.addEventListener('DOMContentLoaded', function() {
             // Add hover effects to cards
             document.querySelectorAll('.demand-card').forEach(card => {
                 card.addEventListener('mouseenter', function() {
+<<<<<<< HEAD
                     this.style.transform = 'translateY(-10px) scale(1.02)';
+=======
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
                 });
                 
                 card.addEventListener('mouseleave', function() {
@@ -1703,6 +2799,11 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             });
         });
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c5d2626 (.)
         function toggleAreaField() {
             const tipoSelect = document.getElementById('tipo');
             const areaField = document.getElementById('areaField');
@@ -1712,6 +2813,43 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             } else {
                 if (areaField) areaField.style.display = 'none';
             }
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+        function confirmarEmAndamento() {
+            return confirm('Tem certeza que deseja marcar esta demanda como Em Andamento?');
+        }
+
+        function confirmarConclusao() {
+            return confirm('Tem certeza que deseja marcar esta demanda como Concluída?');
+<<<<<<< HEAD
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
+=======
+        }
+
+        function confirmarExclusao() {
+            const id = document.getElementById('demanda_a_excluir_id').value;
+            window.location.href = `../controllers/DemandaController.php?action=excluir&id=${id}`;
+        }
+
+        // Function to update assigned users display
+        function atualizarUsuariosAtribuidos(demandaId) {
+            fetch(`../controllers/DemandaController.php?action=get_demanda&id=${demandaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const card = document.querySelector(`[data-demanda-id="${demandaId}"]`);
+                    if (card && data.usuarios_atribuidos) {
+                        const usuariosContainer = card.querySelector('.usuarios-atribuidos');
+                        if (usuariosContainer) {
+                            const nomes = data.usuarios_atribuidos.map(u => u.nome).join(', ');
+                            usuariosContainer.textContent = nomes || 'Não atribuído';
+                        }
+                    }
+                });
+>>>>>>> parent of 99d7ac6 (ajustando sistema de chamadas)
+=======
+>>>>>>> parent of c5d2626 (.)
         }
     </script>
 </body>
