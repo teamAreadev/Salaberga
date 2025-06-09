@@ -14,12 +14,11 @@ class PDF extends FPDF
     function __construct($orientation='P', $unit='mm', $size='A4')
     {
         parent::__construct($orientation, $unit, $size);
-        // Define larguras das colunas para a tabela de Sprints (Paisagem)
+        // Define larguras das colunas para a tabela de Sprints (Retrato)
         $this->colwidthsSprint = [
-            'Entrega' => 140, 
-            'Entregue' => 25,  
-            'NoPrazo' => 25,   
-            'Notas' => 80      
+            'Entrega' => 100, 
+            'Entregue' => 40,  
+            'NoPrazo' => 40   
         ];
          // Define larguras das colunas para a lista de Alunos (Paisagem)
         $this->colwidthsAluno = [
@@ -36,7 +35,7 @@ class PDF extends FPDF
     {
         // Caminho para a imagem de background.
         $backgroundPath1 = __DIR__ . '/../../../subsystems/estagio/views/relatorio/img/fundo.jpg';
-        $backgroundPath2 = __DIR__ . '/../../assets/img/pdf/Fundo1.png';
+        $backgroundPath2 = __DIR__ . '/../../assets/img/pdf/fundo.png';
 
         if (file_exists($backgroundPath2)) {
              $this->Image($backgroundPath2, 0, 0, $this->w, $this->h);
@@ -48,10 +47,7 @@ class PDF extends FPDF
              $this->Rect(0, 0, $this->w, $this->h, 'F');
         }
 
-         $this->SetFont('Arial','B',16);
-         $this->SetTextColor(0, 0, 0); // Cor do texto preta
-         $this->Cell(0, 15, utf8_decode('Relatório Combinado de Equipes e Alunos'), 0, 1, 'C');
-         $this->Ln(10);
+        
          
          // Store the Y position after the main header
          $this->headerY = $this->GetY();
@@ -75,8 +71,7 @@ class PDF extends FPDF
         $this->SetTextColor(0, 0, 0);
         $this->Cell($this->colwidthsSprint['Entrega'], 7, utf8_decode('Entrega'), 1, 0, 'C', true); 
         $this->Cell($this->colwidthsSprint['Entregue'], 7, utf8_decode('Entregue'), 1, 0, 'C', true); 
-        $this->Cell($this->colwidthsSprint['NoPrazo'], 7, utf8_decode('No Prazo'), 1, 0, 'C', true); 
-        $this->Cell($this->colwidthsSprint['Notas'], 7, utf8_decode('Notas'), 1, 1, 'C', true); // 1 for newline
+        $this->Cell($this->colwidthsSprint['NoPrazo'], 7, utf8_decode('No Prazo'), 1, 1, 'C', true); // 1 for newline
         $this->SetFont('Arial', '', 8); // Reset font for table data
     }
 
@@ -90,17 +85,13 @@ class PDF extends FPDF
         // Calculate the height of the row based on content in MultiCells
         $nb=0;
         $nb = max($nb, $this->NbLines($this->colwidthsSprint['Entrega'], utf8_decode($data['Entrega'])));
-        if (!empty($data['Notas'])) {
-             $nb = max($nb, $this->NbLines($this->colwidthsSprint['Notas'], utf8_decode($data['Notas'])));
-        }
         $rowHeight = 5 * $nb; // 5 is the line height, calculate total row height
         $rowHeight = max($rowHeight, 6); // Minimum row height
 
         // Draw cells with full height and borders
         $this->Cell($this->colwidthsSprint['Entrega'], $rowHeight, '', 1, 0, 'L', $fill);
         $this->Cell($this->colwidthsSprint['Entregue'], $rowHeight, '', 1, 0, 'C', $fill);
-        $this->Cell($this->colwidthsSprint['NoPrazo'], $rowHeight, '', 1, 0, 'C', $fill);
-        $this->Cell($this->colwidthsSprint['Notas'], $rowHeight, '', 1, 1, 'L', $fill); // 1 for newline
+        $this->Cell($this->colwidthsSprint['NoPrazo'], $rowHeight, '', 1, 1, 'C', $fill); // 1 for newline
 
         // Place content
         $this->SetXY($x, $y);
@@ -114,9 +105,6 @@ class PDF extends FPDF
 
         $this->SetXY($x + $this->colwidthsSprint['Entrega'] + $this->colwidthsSprint['Entregue'], $y + ($rowHeight - 5) / 2); 
         $this->Cell($this->colwidthsSprint['NoPrazo'], 5, utf8_decode($data['No Prazo']), 0, 0, 'C', false);
-
-        $this->SetXY($x + $this->colwidthsSprint['Entrega'] + $this->colwidthsSprint['Entregue'] + $this->colwidthsSprint['NoPrazo'], $y);
-        $this->MultiCell($this->colwidthsSprint['Notas'], 5, utf8_decode($data['Notas']), 0, 'L', false); // 0 border for content
 
         $this->SetY($y + $rowHeight);
     }
@@ -267,17 +255,32 @@ $deliveryColumns = [
 
 $fill = false; // Alternar cor de fundo das linhas da tabela
 
+// Criar um mapa de número da equipe para nome da equipe
+$mapaEquipe = [];
+foreach ($avaliacoes as $avaliacao) {
+    if (!empty($avaliacao['equipe'])) {
+        $mapaEquipe[$avaliacao['equipe']] = $avaliacao['equipe'];
+    }
+}
+
 foreach ($avaliacoes as $avaliacao) {
      // Verificar se a equipe mudou
      if ($avaliacao['equipe'] !== $currentTeam) {
          $currentTeam = $avaliacao['equipe'];
 
          // Adicionar um cabeçalho para a nova equipe
-         $pdf->AddPage('L'); // Start a new page for each team, ensure landscape
-         $pdf->SetFont('Arial', 'B', 14);
-         $pdf->SetTextColor(0, 0, 0);
-         $pdf->Cell(0, 10, utf8_decode('Equipe: ' . $currentTeam), 0, 1, 'L', false);
-         $pdf->Ln(5);
+         $pdf->AddPage('P'); // Sempre retrato
+         $pdf->SetFont('Arial', 'B', 18);
+         $pdf->SetTextColor(34, 34, 34);
+         $pdf->Ln(40);
+         $pdf->Cell(0, 12, utf8_decode('Equipe: ' . $currentTeam), 0, 1, 'L');
+         $pdf->Ln(2);
+
+         // Subtítulo
+         $pdf->SetFont('Arial', 'B', 13);
+         $pdf->SetTextColor(0, 102, 51);
+         $pdf->Cell(0, 8, utf8_decode('Avaliações de Entregas:'), 0, 1, 'L');
+         $pdf->Ln(2);
 
          // Adicionar cabeçalho da tabela de Sprints para a equipe
          $pdf->SetFont('Arial', 'B', 10);
@@ -293,36 +296,43 @@ foreach ($avaliacoes as $avaliacao) {
     foreach ($deliveryColumns as $prefix => $description) {
         $entregue = (isset($avaliacao[$prefix . '_entregue']) && $avaliacao[$prefix . '_entregue'] === 1) ? utf8_decode('Sim') : utf8_decode('Nao');
         $prazo = (isset($avaliacao[$prefix . '_prazo']) && $avaliacao[$prefix . '_prazo'] === 1) ? utf8_decode('Sim') : utf8_decode('Nao');
-        $notas = isset($avaliacao[$prefix . '_notas']) && !empty($avaliacao[$prefix . '_notas']) ? utf8_decode($avaliacao[$prefix . '_notas']) : '';
-
         $sprintRowData = [
             'Entrega' => $description,
             'Entregue' => $entregue,
-            'No Prazo' => $prazo,
-            'Notas' => $notas
+            'No Prazo' => $prazo
         ];
-
-        $pdf->DrawSprintTableRow($sprintRowData, $fillSprint);
+        // Linhas alternadas cinza escuro e branco
+        if ($fillSprint) {
+            $pdf->SetFillColor(200, 200, 200); // Cinza mais escuro
+        } else {
+            $pdf->SetFillColor(255, 255, 255); // Branco
+        }
+        $pdf->DrawSprintTableRow($sprintRowData, true);
         $fillSprint = !$fillSprint; // Alternar cor de fundo
     }
 
     $pdf->Ln(10); // Espaço após a tabela de sprints para a equipe
 
-    // Final Evaluation (below the table)
-    $avaliacaoFinal = isset($avaliacao['avaliacao_final']) && !empty($avaliacao['avaliacao_final']) ? utf8_decode('Avaliação Final do Sistema: ' . $avaliacao['avaliacao_final']) : utf8_decode('Avaliação Final do Sistema: Nao Informada');
-    $pdf->SetFont('Arial', 'B', 10);
+    // Após a tabela de entregas, adicionar linha para nota final
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->SetFillColor(255,255,255);
+    $pdf->SetTextColor(0, 102, 51);
+    $notaFinal = isset($avaliacao['avaliacao_final']) && !empty($avaliacao['avaliacao_final']) ? $avaliacao['avaliacao_final'] : 'N/A';
+    $pdf->Cell(180, 10, utf8_decode('Nota Final do Sistema'), 1, 0, 'C', true);
+    $pdf->SetFont('Arial', 'B', 18);
+    $pdf->SetTextColor(0, 102, 51);
+    $pdf->Cell(0, 10, utf8_decode($notaFinal), 1, 1, 'C', true);
     $pdf->SetTextColor(0, 0, 0);
-    $pdf->MultiCell(0, 6, $avaliacaoFinal, 0, 'L');
-    $pdf->Ln(10); // Espaço após a avaliação final
-
-    // Listar alunos desta equipe (após as avaliações)
-    $pdf->SetFont('Arial', 'B', 10);
-    $pdf->SetTextColor(0, 0, 0);
-    $pdf->Cell(0, 7, utf8_decode('Alunos da Equipe:'), 0, 1, 'L');
-    $pdf->Ln(2);
+    // Linha para observações (texto)
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(180, 10, utf8_decode('Observações'), 1, 1, 'L', true);
+    // Linha em branco para observações
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(180, 10, '', 1, 1, 'L', true);
+    $pdf->Ln(10);
 
     // Draw Student List Header
-    $pdf->DrawStudentListHeader();
+    // $pdf->DrawStudentListHeader();
     $fillAluno = false;
     foreach ($alunos as $aluno) {
         if ($aluno['equipe'] === $currentTeam) {
@@ -330,7 +340,70 @@ foreach ($avaliacoes as $avaliacao) {
             $fillAluno = !$fillAluno;
         }
     }
-    $pdf->Ln(10); // Espaço após a lista de alunos
+    $pdf->Ln(50); // Espaço após a lista de alunos
+}
+
+// Adicionar uma nova página para a lista completa de alunos
+$pdf->AddPage('P'); // Modo retrato
+
+// Margem superior antes do título
+$pdf->Ln(25);
+
+$pdf->SetFont('Arial', 'B', 16);
+$pdf->SetTextColor(0, 0, 0);
+$pdf->Cell(0, 15, utf8_decode('Lista Completa de Alunos'), 0, 1, 'C');
+
+// Margem entre o título e a tabela
+$pdf->Ln(8);
+
+// Depois do título e antes do cabeçalho da tabela ...
+$yTabela = $pdf->GetY();
+$numAlunos = count($alunos);
+$linhasPorPagina = 30; // ajuste conforme necessário
+$totalAlunos = count($alunos);
+$pagina = 0;
+for ($i = 0; $i < $totalAlunos; $i += $linhasPorPagina) {
+    $pagina++;
+    if ($pagina > 1) {
+        $pdf->AddPage('P');
+        $pdf->Ln(25);
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(0, 15, utf8_decode('Lista Completa de Alunos (continuação)'), 0, 1, 'C');
+        $pdf->Ln(8);
+    }
+    $yTabela = $pdf->GetY();
+    $linhasEstaPagina = min($linhasPorPagina, $totalAlunos - $i);
+    $alturaTabela = 7 + ($linhasEstaPagina * 6);
+    $pdf->SetFillColor(255, 255, 255);
+    $pdf->Rect(20, $yTabela, 170, $alturaTabela, 'F');
+    // Cabeçalho
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->SetFillColor(131, 181, 105);
+    $pdf->SetX(20);
+    $pdf->Cell(110, 7, utf8_decode('Nome'), 1, 0, 'C', true);
+    $pdf->Cell(60, 7, utf8_decode('Equipe'), 1, 1, 'C', true);
+    // Linhas
+    $pdf->SetFont('Arial', '', 9);
+    $fill = false;
+    for ($j = 0; $j < $linhasEstaPagina; $j++) {
+        $aluno = $alunos[$i + $j];
+        // Se equipe for 0 ou null, mostrar 'Sem equipe'
+        if (empty($aluno['equipe']) || $aluno['equipe'] == 0) {
+            $nomeEquipe = 'Sem equipe';
+        } else {
+            $nomeEquipe = isset($mapaEquipe[$aluno['equipe']]) ? $mapaEquipe[$aluno['equipe']] : $aluno['equipe'];
+        }
+        // Linhas alternadas cinza escuro e branco
+        if ($fill) {
+            $pdf->SetFillColor(200, 200, 200); // Cinza mais escuro
+        } else {
+            $pdf->SetFillColor(255, 255, 255); // Branco
+        }
+        $pdf->SetX(20);
+        $pdf->Cell(110, 6, utf8_decode($aluno['nome']), 1, 0, 'L', true);
+        $pdf->Cell(60, 6, utf8_decode($nomeEquipe), 1, 1, 'C', true);
+        $fill = !$fill;
+    }
 }
 
 $pdf->Output('relatorio_combinado.pdf', 'I'); // 'I' para exibir no navegador, 'D' para download
