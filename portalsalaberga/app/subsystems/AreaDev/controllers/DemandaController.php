@@ -135,9 +135,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $acao) {
                 redirecionar('admin', 'Por favor, preencha título e descrição');
             }
 
+<<<<<<< HEAD
             $sucesso = $demanda->atualizarDemanda($id, $titulo, $descricao, $prioridade, null, [], $prazo);
             redirecionar('admin', $sucesso ? 'Demanda atualizada com sucesso!' : 'Erro ao atualizar demanda', $sucesso ? 'success' : 'error');
             break;
+=======
+        $sucesso = false;
+        if ($novo_status === 'Em Andamento') {
+            $sucesso = $demanda->marcarEmAndamento($id_demanda);
+        } elseif ($novo_status === 'Concluída') {
+            $sucesso = $demanda->marcarConcluida($id_demanda);
+        }
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
 
         case 'aceitar_demanda':
             if (!isset($_POST['id'])) {

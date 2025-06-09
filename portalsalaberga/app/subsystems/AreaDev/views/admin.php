@@ -121,6 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // header('Location: erro.php?msg=admin_nao_logado');
             // exit;
         }
+<<<<<<< HEAD
 
         switch ($_POST['acao']) {
             case 'criar':
@@ -175,6 +176,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 break;
+=======
+    } elseif ($_POST['acao'] === 'excluir' && isset($_POST['id'])) {
+        $demanda->excluirDemanda($_POST['id']);
+        header("Location: admin.php");
+        exit();
+    } elseif ($_POST['acao'] === 'atualizar_status' && isset($_POST['id'])) {
+        // Verifica se um novo status foi enviado e atualiza
+        if (isset($_POST['novo_status'])) {
+            $novo_status = $_POST['novo_status'];
+            $id_demanda = $_POST['id'];
+            // Adicione lógica para validar o novo status, se necessário
+            
+            if ($novo_status === 'Concluída') {
+                 $demanda->marcarConcluida($id_demanda);
+            } elseif ($novo_status === 'Em Andamento') {
+                 $demanda->marcarEmAndamento($id_demanda);
+            }
+            // Adicione outras transições de status aqui, se houver
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
         }
     }
 }
@@ -188,11 +208,11 @@ $demandasEmAndamento = 0;
 $demandasConcluidas = 0;
 $demandasPendentes = 0;
 foreach ($demandas as $d) {
-    if ($d['status'] === 'em_andamento') {
+    if ($d['status'] === 'Em Andamento') {
         $demandasEmAndamento++;
-    } elseif ($d['status'] === 'concluida') {
+    } elseif ($d['status'] === 'Concluída') {
         $demandasConcluidas++;
-    } elseif ($d['status'] === 'pendente') {
+    } elseif ($d['status'] === 'Pendente') {
         $demandasPendentes++;
     }
 }
@@ -482,6 +502,14 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
 
     /* Status Badges */
     .status-badge {
+<<<<<<< HEAD
+=======
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
@@ -506,6 +534,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         border: 1px solid rgba(234, 179, 8, 0.3);
     }
 
+<<<<<<< HEAD
     .status-aceito {
         background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
         color: #4ade80;
@@ -517,6 +546,9 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
     }
 
     .status-em_andamento {
+=======
+    .status-em-andamento {
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
         background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
         color: #60a5fa;
         border: 1px solid rgba(59, 130, 246, 0.3);
@@ -568,6 +600,10 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         border-radius: 15px;
         font-size: 0.7rem;
         font-weight: 600;
+<<<<<<< HEAD
+=======
+        text-transform: uppercase;
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
         letter-spacing: 0.05em;
     }
 
@@ -906,6 +942,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
                 
+<<<<<<< HEAD
                 <div class="flex flex-wrap gap-4">
                     <div class="select-wrapper">
                         <select class="custom-select" onchange="filterByStatus(this.value)">
@@ -924,6 +961,21 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                             <option value="baixa">Baixa</option>
                         </select>
                     </div>
+=======
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn active" onclick="filterByStatus('all')" data-status="all">
+                        <i class="fas fa-list mr-2"></i>Todas
+                    </button>
+                    <button class="filter-btn" onclick="filterByStatus('Pendente')" data-status="Pendente">
+                        <i class="fas fa-clock mr-2"></i>Pendentes
+                    </button>
+                    <button class="filter-btn" onclick="filterByStatus('Em Andamento')" data-status="Em Andamento">
+                        <i class="fas fa-spinner mr-2"></i>Em Andamento
+                    </button>
+                    <button class="filter-btn" onclick="filterByStatus('Concluída')" data-status="Concluída">
+                        <i class="fas fa-check mr-2"></i>Concluídas
+                    </button>
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
                 </div>
                 
                 <button onclick="openModal('criarDemandaModal')" class="custom-btn bg-gradient-to-r from-primary-500 to-primary-50 hover:from-primary-400 hover:to-primary-100 text-white font-bold py-3 px-6 rounded-lg flex items-center gap-2">
@@ -939,6 +991,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                 Gerenciar Demandas
             </h2>
             
+<<<<<<< HEAD
             <!-- Grid de 3 colunas -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Coluna Em Espera -->
@@ -958,6 +1011,119 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                             $prioridades = ['alta' => 3, 'media' => 2, 'baixa' => 1];
                             return $prioridades[$b['prioridade']] - $prioridades[$a['prioridade']];
                         });
+=======
+            <div id="demandsContainer" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                <?php foreach ($demandas as $index => $d): ?>
+                <div class="demand-card fade-in" 
+                     style="animation-delay: <?php echo ($index * 0.1); ?>s"
+                     data-status="<?php echo $d['status']; ?>"
+                     data-title="<?php echo strtolower($d['titulo']); ?>"
+                     data-description="<?php echo strtolower($d['descricao']); ?>">
+                    
+                    <!-- Card Header -->
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white mb-2 line-clamp-2">
+                                <?php echo htmlspecialchars($d['titulo']); ?>
+                            </h3>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="status-badge status-<?php echo strtolower(str_replace(' ', '-', $d['status'])); ?>">
+                                    <?php
+                                    $statusIcons = [
+                                        'Pendente' => 'fas fa-clock',
+                                        'Em Andamento' => 'fas fa-spinner fa-spin',
+                                        'Concluída' => 'fas fa-check-circle',
+                                        'Cancelada' => 'fas fa-ban'
+                                    ];
+                                    $status = ucfirst(strtolower($d['status']));
+                                    ?>
+                                    <i class="<?php echo $statusIcons[$status] ?? 'fas fa-question'; ?>"></i>
+                                    <?php echo $status; ?>
+                                </span>
+                                <span class="priority-badge priority-<?php echo $d['prioridade']; ?>">
+                                    <?php echo ucfirst($d['prioridade']); ?>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-gray-400">ID: #<?php echo $d['id']; ?></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Card Content -->
+                    <div class="mb-4">
+                        <p class="text-gray-300 text-sm line-clamp-3 mb-3">
+                            <?php echo htmlspecialchars($d['descricao']); ?>
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-4 text-xs">
+                            <div>
+                                <span class="text-gray-400">Criado em:</span>
+                                <p class="text-white font-medium">
+                                    <?php echo date('d/m/Y', strtotime($d['data_criacao'])); ?>
+                                </p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400">
+                                    <?php echo !empty($d['data_conclusao']) ? 'Concluído em:' : 'Prazo:'; ?>
+                                </span>
+                                <p class="text-white font-medium">
+                                    <?php 
+                                    if (!empty($d['data_conclusao'])) {
+                                        echo date('d/m/Y', strtotime($d['data_conclusao']));
+                                    } else {
+                                        echo 'Não definido';
+                                    }
+                                    ?>
+                                </p>
+                            </div>
+                        </div>
+                            </div>
+                    
+                    <!-- Card Actions -->
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                        <div class="flex items-center gap-2">
+                            <?php if ($d['admin_id'] == $_SESSION['usuario_id']): ?>
+                            <button 
+                                onclick="editarDemanda(<?php echo $d['id']; ?>)" 
+                                class="custom-btn bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg"
+                                title="Editar demanda">
+                                <i class="fas fa-edit"></i>
+                            </button>
+
+                            <button 
+                                onclick="excluirDemanda(<?php echo $d['id']; ?>)" 
+                                class="custom-btn bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg"
+                                title="Excluir demanda">
+                                <i class="fas fa-trash"></i>
+                            </button>
+
+                            <?php if (strtolower($d['status']) === 'pendente' && (is_null($d['usuario_id']) || $d['usuario_id'] == 0 || $d['usuario_id'] == '')): ?>
+                            <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarEmAndamento()">
+                                <input type="hidden" name="acao" value="atualizar_status">
+                                <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                <input type="hidden" name="novo_status" value="Em Andamento">
+                                <button type="submit" class="custom-btn bg-yellow-600 hover:bg-yellow-700 text-white p-2 rounded-lg" title="Marcar como Em Andamento">
+                                    <i class="fas fa-spinner"></i>
+                                    Realizar Tarefa
+                                </button>
+                            </form>
+                            <?php endif; ?>
+
+                            <?php if (strtolower($d['status']) === 'em_andamento' && (is_null($d['usuario_id']) || $d['usuario_id'] == 0 || $d['usuario_id'] == '')): ?>
+                            <form method="POST" action="../controllers/DemandaController.php" class="inline" onsubmit="return confirmarConclusao()">
+                                <input type="hidden" name="acao" value="atualizar_status">
+                                <input type="hidden" name="id" value="<?php echo $d['id']; ?>">
+                                <input type="hidden" name="novo_status" value="Concluída">
+                                <button type="submit" class="custom-btn bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg" title="Marcar como Concluída">
+                                    <i class="fas fa-check"></i>
+                                    Concluir
+                                </button>
+                            </form>
+                            <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
                         
                         foreach ($demandas_espera as $d): 
                         ?>
@@ -1301,7 +1467,28 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
                         <option value="alta">Alta</option>
                     </select>
                 </div>
+<<<<<<< HEAD
                 <div id="editPrazoCalculadoInfo" class="mt-2"></div>
+=======
+                <div>
+                    <label for="editar_status" class="block text-sm font-medium text-gray-300 mb-2">Status</label>
+                    <select id="editar_status" name="status" required class="custom-select w-full">
+                        <option value="Pendente">Pendente</option>
+                        <option value="Em Andamento">Em Andamento</option>
+                        <option value="Concluída">Concluída</option>
+                        <option value="Cancelada">Cancelada</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="editar_usuario_id" class="block text-sm font-medium text-gray-300 mb-2">Atribuir a</label>
+                    <select id="editar_usuario_id" name="usuario_id" class="custom-select w-full">
+                        <option value="">Não atribuído</option>
+                        <?php foreach ($usuarios as $u): ?>
+                            <option value="<?php echo $u['id']; ?>"><?php echo htmlspecialchars($u['nome']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
                 <div class="flex justify-end gap-4 mt-6">
                     <button type="button" onclick="closeModal('editarDemandaModal')" class="custom-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
                         Cancelar
@@ -1314,6 +1501,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
+<<<<<<< HEAD
     <!-- Delete Demand Modal -->
     <div id="excluirDemandaModal" class="modal fixed inset-0 hidden items-center justify-center p-4 z-50">
         <div class="modal-content w-full max-w-md p-8 scale-in">
@@ -1350,6 +1538,8 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
+=======
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
     <script>
         // Modal Functions
         function mostrarDescricao(titulo, descricao, status, dataCriacao, dataConclusao) {
@@ -1411,10 +1601,80 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             }
         }
 
+<<<<<<< HEAD
         // Função para excluir demanda
+=======
+        // Edit Demand Function
+        function editarDemanda(id) {
+            console.log('Iniciando busca da demanda ID:', id);
+            
+            // Limpar dados anteriores
+            document.getElementById('editar_demanda_id').value = '';
+            document.getElementById('editar_titulo').value = '';
+            document.getElementById('editar_descricao').value = '';
+            document.getElementById('editar_prioridade').value = 'media';
+            document.getElementById('editar_status').value = 'Pendente';
+            document.getElementById('editar_usuario_id').value = '';
+
+            fetch(`../controllers/DemandaController.php?action=get_demanda&id=${id}`)
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    console.log('Response headers:', response.headers);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) {
+                        throw new TypeError("Resposta não é JSON! Content-Type: " + contentType);
+                    }
+                    
+                    return response.text().then(text => {
+                        console.log('Response text:', text);
+                        try {
+                            return JSON.parse(text);
+                        } catch (e) {
+                            console.error('Erro ao fazer parse do JSON:', e);
+                            throw new Error('Resposta inválida do servidor');
+                        }
+                    });
+                })
+                .then(data => {
+                    console.log('Dados recebidos:', data);
+                    if (data.error) {
+                        console.error('Erro ao buscar dados da demanda:', data.error);
+                        alert('Erro ao carregar dados da demanda: ' + data.error);
+                        return;
+                    }
+                    
+                    if (!data.id || !data.titulo || !data.descricao) {
+                        console.error('Dados incompletos recebidos:', data);
+                        alert('Dados incompletos recebidos do servidor');
+                        return;
+                    }
+                    
+                    document.getElementById('editar_demanda_id').value = data.id;
+                    document.getElementById('editar_titulo').value = data.titulo;
+                    document.getElementById('editar_descricao').value = data.descricao;
+                    document.getElementById('editar_prioridade').value = data.prioridade || 'media';
+                    document.getElementById('editar_status').value = data.status || 'Pendente';
+                    document.getElementById('editar_usuario_id').value = data.usuario_id || '';
+                    
+                    openModal('editarDemandaModal');
+                })
+                .catch(error => {
+                    console.error('Erro na requisição AJAX:', error);
+                    alert('Erro ao carregar dados da demanda: ' + error.message);
+                });
+        }
+
+        // Delete Demand Function
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
         function excluirDemanda(id) {
-            document.getElementById('demanda_a_excluir_id').value = id;
-            openModal('excluirDemandaModal');
+            if (confirm('Tem certeza que deseja excluir esta demanda? Esta ação não pode ser desfeita.')) {
+                window.location.href = `../controllers/DemandaController.php?action=excluir&id=${id}`;
+            }
         }
 
         // Atualizar informação de prazo calculado ao selecionar prioridade
@@ -1703,6 +1963,7 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             });
         });
 
+<<<<<<< HEAD
         function toggleAreaField() {
             const tipoSelect = document.getElementById('tipo');
             const areaField = document.getElementById('areaField');
@@ -1712,6 +1973,14 @@ $permissoes_atribuicao = $stmtPermissoesAtribuicao->fetchAll(PDO::FETCH_ASSOC);
             } else {
                 if (areaField) areaField.style.display = 'none';
             }
+=======
+        function confirmarEmAndamento() {
+            return confirm('Tem certeza que deseja marcar esta demanda como Em Andamento?');
+        }
+
+        function confirmarConclusao() {
+            return confirm('Tem certeza que deseja marcar esta demanda como Concluída?');
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
         }
     </script>
 </body>

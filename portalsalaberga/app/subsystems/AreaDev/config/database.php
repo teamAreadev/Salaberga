@@ -20,9 +20,20 @@ if ($is_local) {
 }
 
 class Database {
+<<<<<<< HEAD
     private $salaberga;
     private $area_dev;
     private static $instance = null;
+=======
+    private $host = "localhost";
+    private $db_name = "area_dev";
+    private $username = "root";
+    private $password = "";
+    private $conn;
+
+    public function getConnection() {
+        $this->conn = null;
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
 
     private function __construct() {
         try {

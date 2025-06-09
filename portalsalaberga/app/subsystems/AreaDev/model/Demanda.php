@@ -267,11 +267,32 @@ class Demanda {
     }
 
     public function buscarDemanda($id) {
+<<<<<<< HEAD
         $sql = "SELECT d.*, GROUP_CONCAT(du.usuario_id) as usuarios_atribuidos 
                 FROM demandas d 
                 LEFT JOIN demanda_usuarios du ON d.id = du.demanda_id 
                 WHERE d.id = :id 
                 GROUP BY d.id";
+=======
+        $stmt = $this->pdo->prepare("
+            SELECT d.*, u.nome as admin_nome, u2.nome as usuario_nome 
+            FROM demandas d 
+            LEFT JOIN usuarios u ON d.admin_id = u.id 
+            LEFT JOIN usuarios u2 ON d.usuario_id = u2.id 
+            WHERE d.id = ?
+        ");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function criarDemanda($titulo, $descricao, $prioridade, $admin_id, $usuario_id = null) {
+        $stmt = $this->pdo->prepare("
+            INSERT INTO demandas (titulo, descricao, prioridade, admin_id, usuario_id)
+            VALUES (?, ?, ?, ?, ?)
+        ");
+        // Converter string vazia para NULL para consistência
+        $usuario_id_salvar = ($usuario_id === '' || $usuario_id === 0) ? null : $usuario_id;
+>>>>>>> parent of 3f481e1 (finalizando sistema de demandas)
         
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
