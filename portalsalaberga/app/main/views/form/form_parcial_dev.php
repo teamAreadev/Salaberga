@@ -680,10 +680,6 @@
                                 <input id="sprint1_doc_prazo" name="sprint1_doc_prazo" type="checkbox">
                                 <label for="sprint1_doc_prazo">No Prazo</label>
                             </div>
-                            <div id="sprint1_doc_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint1_doc_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint1_doc_notas" name="sprint1_doc_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
-                            </div>
                         </div>
                         <div class="delivery-row" data-type="documentation">
                             <div class="delivery-info-compact">
@@ -697,10 +693,6 @@
                             <div class="checkbox-compact">
                                 <input id="sprint1_reqs_prazo" name="sprint1_reqs_prazo" type="checkbox">
                                 <label for="sprint1_reqs_prazo">No Prazo</label>
-                            </div>
-                            <div id="sprint1_reqs_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint1_reqs_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint1_reqs_notas" name="sprint1_reqs_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
                             </div>
                         </div>
                     </div>
@@ -726,10 +718,6 @@
                                 <input id="sprint2_caso_uso_prazo" name="sprint2_caso_uso_prazo" type="checkbox">
                                 <label for="sprint2_caso_uso_prazo">No Prazo</label>
                             </div>
-                            <div id="sprint2_caso_uso_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint2_caso_uso_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint2_caso_uso_notas" name="sprint2_caso_uso_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
-                            </div>
                         </div>
                         <div class="delivery-row" data-type="documentation">
                             <div class="delivery-info-compact">
@@ -743,10 +731,6 @@
                             <div class="checkbox-compact">
                                 <input id="sprint2_atividades_prazo" name="sprint2_atividades_prazo" type="checkbox">
                                 <label for="sprint2_atividades_prazo">No Prazo</label>
-                            </div>
-                            <div id="sprint2_atividades_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint2_atividades_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint2_atividades_notas" name="sprint2_atividades_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
                             </div>
                         </div>
                     </div>
@@ -772,10 +756,6 @@
                                 <input id="sprint3_conceitual_prazo" name="sprint3_conceitual_prazo" type="checkbox">
                                 <label for="sprint3_conceitual_prazo">No Prazo</label>
                             </div>
-                            <div id="sprint3_conceitual_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint3_conceitual_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint3_conceitual_notas" name="sprint3_conceitual_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
-                            </div>
                         </div>
                         <div class="delivery-row" data-type="database">
                             <div class="delivery-info-compact">
@@ -790,10 +770,6 @@
                                 <input id="sprint3_logica_prazo" name="sprint3_logica_prazo" type="checkbox">
                                 <label for="sprint3_logica_prazo">No Prazo</label>
                             </div>
-                            <div id="sprint3_logica_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint3_logica_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint3_logica_notas" name="sprint3_logica_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
-                            </div>
                         </div>
                         <div class="delivery-row" data-type="database">
                             <div class="delivery-info-compact">
@@ -807,10 +783,6 @@
                             <div class="checkbox-compact">
                                 <input id="sprint3_fisica_prazo" name="sprint3_fisica_prazo" type="checkbox">
                                 <label for="sprint3_fisica_prazo">No Prazo</label>
-                            </div>
-                            <div id="sprint3_fisica_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint3_fisica_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint3_fisica_notas" name="sprint3_fisica_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
                             </div>
                         </div>
                     </div>
@@ -836,10 +808,6 @@
                                 <input id="sprint4_prototipo_prazo" name="sprint4_prototipo_prazo" type="checkbox">
                                 <label for="sprint4_prototipo_prazo">No Prazo</label>
                             </div>
-                            <div id="sprint4_prototipo_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint4_prototipo_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint4_prototipo_notas" name="sprint4_prototipo_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
-                            </div>
                         </div>
                         <div class="delivery-row" data-type="design">
                             <div class="delivery-info-compact">
@@ -853,10 +821,6 @@
                             <div class="checkbox-compact">
                                 <input id="sprint4_storyboard_prazo" name="sprint4_storyboard_prazo" type="checkbox">
                                 <label for="sprint4_storyboard_prazo">No Prazo</label>
-                            </div>
-                            <div id="sprint4_storyboard_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint4_storyboard_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint4_storyboard_notas" name="sprint4_storyboard_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
                             </div>
                         </div>
                     </div>
@@ -882,10 +846,6 @@
                                 <input id="sprint5_doc_final_prazo" name="sprint5_doc_final_prazo" type="checkbox">
                                 <label for="sprint5_doc_final_prazo">No Prazo</label>
                             </div>
-                            <div id="sprint5_doc_final_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint5_doc_final_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint5_doc_final_notas" name="sprint5_doc_final_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
-                            </div>
                         </div>
                         <div class="delivery-row" data-type="development">
                             <div class="delivery-info-compact">
@@ -899,10 +859,6 @@
                             <div class="checkbox-compact">
                                 <input id="sprint5_interface_prazo" name="sprint5_interface_prazo" type="checkbox">
                                 <label for="sprint5_interface_prazo">No Prazo</label>
-                            </div>
-                            <div id="sprint5_interface_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint5_interface_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint5_interface_notas" name="sprint5_interface_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
                             </div>
                         </div>
                         <div class="delivery-row" data-type="development">
@@ -918,10 +874,6 @@
                                 <input id="sprint5_relatorio_prazo" name="sprint5_relatorio_prazo" type="checkbox">
                                 <label for="sprint5_relatorio_prazo">No Prazo</label>
                             </div>
-                            <div id="sprint5_relatorio_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint5_relatorio_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint5_relatorio_notas" name="sprint5_relatorio_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
-                            </div>
                         </div>
                         <div class="delivery-row" data-type="development">
                             <div class="delivery-info-compact">
@@ -935,10 +887,6 @@
                             <div class="checkbox-compact">
                                 <input id="sprint5_personalizada1_prazo" name="sprint5_personalizada1_prazo" type="checkbox">
                                 <label for="sprint5_personalizada1_prazo">No Prazo</label>
-                            </div>
-                            <div id="sprint5_personalizada1_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint5_personalizada1_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint5_personalizada1_notas" name="sprint5_personalizada1_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
                             </div>
                         </div>
                         <div class="delivery-row" data-type="development">
@@ -954,10 +902,6 @@
                                 <input id="sprint5_personalizada2_prazo" name="sprint5_personalizada2_prazo" type="checkbox">
                                 <label for="sprint5_personalizada2_prazo">No Prazo</label>
                             </div>
-                            <div id="sprint5_personalizada2_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint5_personalizada2_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint5_personalizada2_notas" name="sprint5_personalizada2_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
-                            </div>
                         </div>
                         <div class="delivery-row" data-type="development">
                             <div class="delivery-info-compact">
@@ -971,10 +915,6 @@
                             <div class="checkbox-compact">
                                 <input id="sprint5_final_prazo" name="sprint5_final_prazo" type="checkbox">
                                 <label for="sprint5_final_prazo">No Prazo</label>
-                            </div>
-                            <div id="sprint5_final_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="sprint5_final_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="sprint5_final_notas" name="sprint5_final_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
                             </div>
                         </div>
                     </div>
@@ -999,10 +939,6 @@
                             <div class="checkbox-compact">
                                 <input id="ajustes_areadev_prazo" name="ajustes_areadev_prazo" type="checkbox">
                                 <label for="ajustes_areadev_prazo">No Prazo</label>
-                            </div>
-                            <div id="ajustes_areadev_notes_container" class="notes-field-container hidden col-span-full mt-2">
-                                <label for="ajustes_areadev_notas" class="block text-sm font-medium text-gray-400 mb-1">Notas:</label>
-                                <textarea id="ajustes_areadev_notas" name="ajustes_areadev_notas" rows="2" class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"></textarea>
                             </div>
                         </div>
                     </div>
@@ -1029,6 +965,15 @@
                                 <input type="radio" id="avaliacao_c" name="avaliacao_final" value="C" class="mr-2 text-ceara-green focus:ring-ceara-green" required>
                                 <label for="avaliacao_c"><strong>Nível C:</strong> Sistema incompleto com inúmeros problemas.</label>
                             </div>
+                        </div>
+                        <!-- Observações finais do sistema -->
+                        <div class="mt-4">
+                            <label for="observacoes_finais" class="block text-sm font-medium text-gray-400 mb-1">
+                                Observações Finais do Sistema:
+                            </label>
+                            <textarea id="observacoes_finais" name="observacoes_finais" rows="3"
+                                class="w-full px-3 py-2 text-sm text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-ceara-green focus:border-ceara-green resize-y"
+                                placeholder="Digite aqui as observações finais sobre o sistema..."></textarea>
                         </div>
                          <p class="mt-4 text-yellow-400"><strong>Importante:</strong> O envio da avaliação final concluirá o processo.</p>
                     </div>

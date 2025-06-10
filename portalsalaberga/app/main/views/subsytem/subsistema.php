@@ -173,6 +173,19 @@ $systemPermissionCardMap = [
         'name' => 'SS (Admin)',
         'category' => 'Sistema'
     ],
+    'Form_Parcial_relatorio(6)' => [
+        'url' => '../relatorio/relatorio_avaliacoes.php',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Relatório Equipes',
+        'category' => 'Relatório'
+    ],
+    'Form_Parcial_form(6)' => [
+        'url' => '../form/form_parcial_dev.php',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Formulário Equipes',
+        'category' => 'Formulário'
+    ],
+    
 
     // ... adicione mais mapeamentos baseados nas suas tabelas 'sistemas' e 'permissoes' se necessário
 ];

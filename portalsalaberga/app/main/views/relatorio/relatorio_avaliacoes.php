@@ -118,7 +118,8 @@ class PDF extends FPDF
         $this->Cell($this->colwidthsAluno['Nome'], 7, utf8_decode('Nome'), 1, 0, 'C', true);
         $this->Cell($this->colwidthsAluno['Entregas Individuais'], 7, utf8_decode('Entregas Individuais'), 1, 0, 'C', true);
         $this->Cell($this->colwidthsAluno['Entregas Grupo'], 7, utf8_decode('Entregas Grupo'), 1, 0, 'C', true);
-        $this->Cell($this->colwidthsAluno['Nota Final'], 7, utf8_decode('Nota Final'), 1, 1, 'C', true);
+        $this->Cell($this->colwidthsAluno['Nota Final'], 7, utf8_decode('Nota Final'), 1, 0, 'C', true);
+        $this->Cell(30, 7, utf8_decode('Nota'), 1, 1, 'C', true);
          $this->SetFont('Arial', '', 8); // Reset font
     }
 
@@ -129,10 +130,13 @@ class PDF extends FPDF
         $this->SetTextColor(0, 0, 0);
         $this->SetFont('Arial', '', 8);
 
+        $nota = !empty($data['nota']) ? $data['nota'] : 'Sem notas';
+
         $this->Cell($this->colwidthsAluno['Nome'], 6, utf8_decode($data['nome']), 1, 0, 'L', $fill);
         $this->Cell($this->colwidthsAluno['Entregas Individuais'], 6, utf8_decode($data['entregas_individuais']), 1, 0, 'C', $fill);
         $this->Cell($this->colwidthsAluno['Entregas Grupo'], 6, utf8_decode($data['entregas_grupo']), 1, 0, 'C', $fill);
-        $this->Cell($this->colwidthsAluno['Nota Final'], 6, utf8_decode($data['nota']), 1, 1, 'C', $fill);
+        $this->Cell($this->colwidthsAluno['Nota Final'], 6, utf8_decode($nota), 1, 0, 'C', $fill);
+        $this->Cell(30, 6, utf8_decode($nota), 1, 1, 'C', $fill);
     }
 
     // Computes the number of lines a MultiCell of width w will take
@@ -318,29 +322,55 @@ foreach ($avaliacoes as $avaliacao) {
     $pdf->SetFillColor(255,255,255);
     $pdf->SetTextColor(0, 102, 51);
     $notaFinal = isset($avaliacao['avaliacao_final']) && !empty($avaliacao['avaliacao_final']) ? $avaliacao['avaliacao_final'] : 'N/A';
-    $pdf->Cell(180, 10, utf8_decode('Nota Final do Sistema'), 1, 0, 'C', true);
+    $pdf->Cell(180, 10, utf8_decode('Nota Final do Sistema '.'- '.$notaFinal), 1, 1, 'C', true);
     $pdf->SetFont('Arial', 'B', 18);
-    $pdf->SetTextColor(0, 102, 51);
-    $pdf->Cell(0, 10, utf8_decode($notaFinal), 1, 1, 'C', true);
+
     $pdf->SetTextColor(0, 0, 0);
     // Linha para observações (texto)
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(180, 10, utf8_decode('Observações'), 1, 1, 'L', true);
     // Linha em branco para observações
     $pdf->SetFont('Arial', '', 12);
-    $pdf->Cell(180, 10, '', 1, 1, 'L', true);
+    $obs = isset($avaliacao['observacoes_finais']) ? $avaliacao['observacoes_finais'] : '';
+    $pdf->Cell(180, 10, utf8_decode($obs), 1, 1, 'L', true);
     $pdf->Ln(10);
 
-    // Draw Student List Header
-    // $pdf->DrawStudentListHeader();
+    // Debug: mostrar valor de $currentTeam
+    $pdf->SetFont('Arial', '', 8);
+    $pdf->SetTextColor(255, 0, 0);
+    $pdf->Cell(0, 5, utf8_decode('DEBUG: currentTeam = [' . $currentTeam . ']'), 0, 1, 'L');
+    $pdf->SetTextColor(0, 0, 0);
+
+    // Tabela de alunos da equipe
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->Cell(0, 10, utf8_decode('Alunos do Projeto ' . $currentTeam), 0, 1, 'L');
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->SetFillColor(131, 181, 105);
+    $pdf->Cell(100, 7, utf8_decode('Nome'), 1, 0, 'C', true);
+    $pdf->Cell(30, 7, utf8_decode('Nota'), 1, 1, 'C', true);
+    $pdf->SetFont('Arial', '', 9);
     $fillAluno = false;
     foreach ($alunos as $aluno) {
-        if ($aluno['equipe'] === $currentTeam) {
-            $pdf->DrawStudentListRow($aluno, $fillAluno);
+        // Debug: mostrar valor de equipe do aluno
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->SetTextColor(0, 0, 255);
+        $pdf->Cell(0, 5, utf8_decode('DEBUG: aluno[' . $aluno['nome'] . '] equipe = [' . $aluno['equipe'] . ']'), 0, 1, 'L');
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->SetFont('Arial', '', 9);
+        if (trim($aluno['equipe']) == trim($currentTeam)) {
+            $notaAluno = !empty($aluno['nota']) ? $aluno['nota'] : 'Sem notas';
+            if ($fillAluno) {
+                $pdf->SetFillColor(200, 200, 200);
+            } else {
+                $pdf->SetFillColor(255, 255, 255);
+            }
+            $pdf->Cell(100, 6, utf8_decode($aluno['nome']), 1, 0, 'L', true);
+            $pdf->Cell(30, 6, utf8_decode($notaAluno), 1, 1, 'C', true);
             $fillAluno = !$fillAluno;
         }
     }
-    $pdf->Ln(50); // Espaço após a lista de alunos
+    $pdf->Ln(10);
 }
 
 // Adicionar uma nova página para a lista completa de alunos
@@ -380,8 +410,9 @@ for ($i = 0; $i < $totalAlunos; $i += $linhasPorPagina) {
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->SetFillColor(131, 181, 105);
     $pdf->SetX(20);
-    $pdf->Cell(110, 7, utf8_decode('Nome'), 1, 0, 'C', true);
-    $pdf->Cell(60, 7, utf8_decode('Equipe'), 1, 1, 'C', true);
+    $pdf->Cell(90, 7, utf8_decode('Nome'), 1, 0, 'C', true);
+    $pdf->Cell(50, 7, utf8_decode('Equipe'), 1, 0, 'C', true);
+    $pdf->Cell(30, 7, utf8_decode('Nota'), 1, 1, 'C', true);
     // Linhas
     $pdf->SetFont('Arial', '', 9);
     $fill = false;
@@ -400,8 +431,10 @@ for ($i = 0; $i < $totalAlunos; $i += $linhasPorPagina) {
             $pdf->SetFillColor(255, 255, 255); // Branco
         }
         $pdf->SetX(20);
-        $pdf->Cell(110, 6, utf8_decode($aluno['nome']), 1, 0, 'L', true);
-        $pdf->Cell(60, 6, utf8_decode($nomeEquipe), 1, 1, 'C', true);
+        $notaAluno = !empty($aluno['nota']) ? $aluno['nota'] : 'Sem notas';
+        $pdf->Cell(90, 6, utf8_decode($aluno['nome']), 1, 0, 'L', true);
+        $pdf->Cell(50, 6, utf8_decode($nomeEquipe), 1, 0, 'C', true);
+        $pdf->Cell(30, 6, utf8_decode($notaAluno), 1, 1, 'C', true);
         $fill = !$fill;
     }
 }
