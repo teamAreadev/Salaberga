@@ -2,7 +2,6 @@
 
 require_once('../../models/sessions.php');
 $session = new sessions();
-$session->tempo_session(600);
 $session->autenticar_session();
 
 if (isset($_GET['sair'])) {
@@ -180,7 +179,7 @@ $systemPermissionCardMap = [
         'name' => 'Alimentação (Admin)',
         'category' => 'Sistema'
     ],
-    'Controler_estoque_adm(10)' => [
+    'Estoque_adm(10)' => [
         'url' => '#',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
         'name' => 'Controler de estoque (Admin)',
@@ -192,7 +191,7 @@ $systemPermissionCardMap = [
         'name' => 'Espaços e equipamentos (Admin)',
         'category' => 'Sistema'
     ],
-    'Banco_questões_adm(14)' => [
+    'Questões_adm(14)' => [
         'url' => '#',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
         'name' => 'Banco questões (Admin)',
