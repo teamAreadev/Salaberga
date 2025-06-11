@@ -186,7 +186,7 @@ $systemPermissionCardMap = [
         'category' => 'Sistema'
     ],
     'EspaçosEquipamentos_adm(13)' => [
-        'url' => '#',
+        'url' => '../../../subsystems/espaco_equipamentos/app/main/index.php',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
         'name' => 'Espaços e equipamentos (Admin)',
         'category' => 'Sistema'
@@ -211,6 +211,12 @@ $systemPermissionCardMap = [
     ],
     'PDT_adm(17)' => [
         'url' => '#',
+        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'name' => 'Sistema PDT (Admin)',
+        'category' => 'Sistema'
+    ],
+    'tombamento_adm(18)' => [
+        'url' => '../../../subsystems/tombamento/default.php',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
         'name' => 'Sistema PDT (Admin)',
         'category' => 'Sistema'

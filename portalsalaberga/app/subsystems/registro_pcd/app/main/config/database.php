@@ -1,16 +1,26 @@
 <?php
-class Database {
-    private $dsn = "mysql:host=localhost;dbname=registro_pcd;charset=utf8mb4";
-    private $username = "root";
-    private $password = "";
+class Database
+{
     protected $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->connect_database();
     }
-    function connect_database(){
+    function connect_database()
+    {
         try {
-            $this->db = new PDO($this->dsn, $this->username, $this->password);
+            $dsn = "mysql:host=localhost;dbname=registro_pcd;charset=utf8mb4";
+            $username = "root";
+            $password = "";
+            $this->db = new PDO($dsn, $username, $password);
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            $dsn = "mysql:host=localhost;dbname=u750204740_registro_pcd;charset=utf8mb4";
+            $username = "u750204740_registro_pcd";
+            $password = "paoComOvo123!@##";
+            $this->db = new PDO($dsn, $username, $password);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -18,4 +28,3 @@ class Database {
         }
     }
 }
-?>
