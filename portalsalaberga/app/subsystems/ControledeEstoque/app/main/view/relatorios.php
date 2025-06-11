@@ -526,16 +526,9 @@
                     <select id="produto" name="produto" class="border border-accent rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-secondary" required>
                         <option value="" disabled selected>SELECIONAR PRODUTO</option>
                         <?php
-                        try {
-                            $pdo = new PDO('mysql:host=localhost;dbname=u750204740_gerenciamentodeestoque;charset=utf8', 'root', '');
-                            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            $stmt = $pdo->query('SELECT id, nome_produto FROM produtos ORDER BY nome_produto');
-                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                echo "<option value='" . htmlspecialchars($row['id']) . "'>" . strtoupper(htmlspecialchars($row['nome_produto'])) . "</option>";
-                            }
-                        } catch (PDOException $e) {
-                            echo "<option value='' disabled>Erro ao carregar produtos: " . htmlspecialchars($e->getMessage()) . "</option>";
-                        }
+                        require_once('../model/functionsViews.php');
+                        $select = new select();
+                        $resultado = $select->modalRelatorio($barcode);
                         ?>
                     </select>
                 </div>

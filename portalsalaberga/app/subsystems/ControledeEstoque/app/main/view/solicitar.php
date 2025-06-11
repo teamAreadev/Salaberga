@@ -303,7 +303,7 @@
                         <select id="produto" name="produto" required class="custom-select" aria-label="Selecionar produto">
                             <option value="" disabled selected>SELECIONAR PRODUTO</option>
                             <?php
-                            require_once('../model/select.php');
+                            require_once('../model/functionsViews.php');
                             $select = new select();
                             $resultado = $select->selectSolicitarProdutos($barcode);
                             ?>
@@ -319,7 +319,7 @@
                         <select id="retirante" name="retirante" required class="custom-select" aria-label="Selecionar retirante">
                             <option value="" disabled selected>SELECIONAR RESPONSÁVEL</option>
                             <?php
-                            require_once('../model/select.php');
+                            require_once('../model/functionsViews.php');
                             $select = new select();
                             $resultado = $select->selectSolicitarResponsaveis($barcode);
                             ?>
