@@ -185,7 +185,7 @@ $systemPermissionCardMap = [
         'name' => 'Controler de estoque (Admin)',
         'category' => 'Sistema'
     ],
-    'Espaços_e_equipamentos_adm(13)' => [
+    'EspaçosEquipamentos_adm(13)' => [
         'url' => '#',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
         'name' => 'Espaços e equipamentos (Admin)',
@@ -197,8 +197,8 @@ $systemPermissionCardMap = [
         'name' => 'Banco questões (Admin)',
         'category' => 'Sistema'
     ],
-    'Registro_pcd_adm(15)' => [
-        'url' => '#',
+    'PCD_adm(15)' => [
+        'url' => '../../../subsystems/registro_pcd/default.php',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
         'name' => 'Registro pcd (Admin)',
         'category' => 'Sistema'
@@ -209,7 +209,7 @@ $systemPermissionCardMap = [
         'name' => 'Financeiro (Admin)',
         'category' => 'Sistema'
     ],
-    'Sistema_PDT_adm(17)' => [
+    'PDT_adm(17)' => [
         'url' => '#',
         'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
         'name' => 'Sistema PDT (Admin)',
