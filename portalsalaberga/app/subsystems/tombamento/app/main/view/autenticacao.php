@@ -1,5 +1,5 @@
 <?php
-require("../../model/modelaluno.php");
+require("../model/modelaluno.php");
 session_start();
 
 ?>

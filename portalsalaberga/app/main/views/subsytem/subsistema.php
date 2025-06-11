@@ -156,7 +156,7 @@ $systemPermissionCardMap = [
     // Entradas para outros sistemas (manter as que parecem corretas)
     'Biblioteca_usuario(4)' => [
         'url' => '../../../subsystems/biblioteca/app/main/index.php',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/biblioteca.png',
         'name' => 'Biblioteca (Usuário)',
         'category' => 'Sistema'
     ],
@@ -175,50 +175,50 @@ $systemPermissionCardMap = [
 
     'Alimentação_adm(9)' => [
         'url' => '#',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/alimentação.png',
         'name' => 'Alimentação (Admin)',
         'category' => 'Sistema'
     ],
     'Estoque_adm(10)' => [
         'url' => '#',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/estoque.png',
         'name' => 'Controler de estoque (Admin)',
         'category' => 'Sistema'
     ],
     'EspaçosEquipamentos_adm(13)' => [
         'url' => '../../../subsystems/espaco_equipamentos/app/main/index.php',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/agendamento.png',
         'name' => 'Espaços e equipamentos (Admin)',
         'category' => 'Sistema'
     ],
     'Questões_adm(14)' => [
         'url' => '#',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/banco de questões.png',
         'name' => 'Banco questões (Admin)',
         'category' => 'Sistema'
     ],
     'PCD_adm(15)' => [
         'url' => '../../../subsystems/registro_pcd/default.php',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/pcd.png',
         'name' => 'Registro pcd (Admin)',
         'category' => 'Sistema'
     ],
     'Financeiro_adm(16)' => [
         'url' => '#',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/financeiro.png',
         'name' => 'Financeiro (Admin)',
         'category' => 'Sistema'
     ],
     'PDT_adm(17)' => [
         'url' => '#',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/pdt.png',
         'name' => 'Sistema PDT (Admin)',
         'category' => 'Sistema'
     ],
     'tombamento_adm(18)' => [
         'url' => '../../../subsystems/tombamento/default.php',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
-        'name' => 'Sistema PDT (Admin)',
+        'image' => '../../assets/img/logos_sistemas/tombamento.png',
+        'name' => 'Sistema de Tombamento (Admin)',
         'category' => 'Sistema'
     ]
 
