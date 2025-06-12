@@ -229,7 +229,7 @@ $systemPermissionCardMap = [
         'category' => 'Sistema'
     ],
     'tombamento_adm(18)' => [
-        'url' => '#',
+        'url' => '../../../subsystems/tombamento/default.php',
         'image' => '../../assets/img/logos_sistemas/tombamento.png',
         'name' => 'Sistema de Tombamento (Admin)',
         'category' => 'Sistema'
