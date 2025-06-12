@@ -469,3 +469,95 @@ function inserirAlunoAreaDev($nome, $funcao)
         return false;
     }
 }
+
+function inserirAvaliacao($formData)
+{
+    // Usar a conexão com o banco de dados 'login_parcial'
+    // Alterado de getAreadevConnection() para getConnection()
+    $conexao = getConnection(); // Assumindo que getConnection() fornece a conexão para o banco login_parcial
+
+    if ($conexao === null) {
+        error_log("Erro: Falha ao obter conexão com o banco de dados login_parcial ao inserir avaliação.");
+        return false; // Indica falha na conexão
+    }
+
+    try {
+        // Preparar a query SQL para inserção
+        // Construir a query dinamicamente com base nos dados do formulário
+        $fields = [];
+        $placeholders = [];
+        $values = [];
+
+        foreach ($formData as $key => $value) {
+            // Ignorar chaves que não correspondem a colunas no banco (ex: campos auxiliares se houverem)
+            // Para booleanos (checkboxes), converter para 0 ou 1
+            if (is_bool($value)) {
+                $value = $value ? 1 : 0;
+            }
+             // Tratar valores nulos para campos de texto vazios (se necessário, mas TEXT geralmente aceita '')
+            if ($value === '') {
+                $value = null;
+            }
+
+            // Validar se a chave existe nas colunas da tabela antes de adicionar (opcional mas mais seguro)
+            // Para simplificar, vamos assumir que todas as chaves em $formData correspondem a colunas válidas
+            // Idealmente, você verificaria a estrutura da tabela ou teria uma lista explícita de colunas permitidas
+
+            $fields[] = $key;
+            $placeholders[] = ':' . $key;
+            $values[':' . $key] = $value;
+        }
+
+        // Adicionar timestamps (assumindo que a tabela tem created_at e updated_at com DEFAULT e ON UPDATE)
+        // A base de dados cuidará dos timestamps automaticamente com a definição da tabela, não precisamos inseri-los explicitamente aqui.
+
+        // Verificar se há campos para inserir
+        if (empty($fields)) {
+            error_log("Erro: Nenhum dado válido do formulário para inserir.");
+            return false; // Nenhum campo para inserir
+        }
+
+        $sql = "INSERT INTO avaliacoes_entregas (" . implode(', ', $fields) . ") VALUES (" . implode(', ', $placeholders) . ")";
+
+        $stmt = $conexao->prepare($sql);
+
+        // Bind dos valores
+        foreach ($values as $placeholder => $value) {
+            // Determinar o tipo PDO::PARAM apropriado
+            if (is_int($value)) {
+                $paramType = PDO::PARAM_INT;
+            } elseif (is_bool($value)) {
+                $paramType = PDO::PARAM_INT; // BOOLEAN no SQL é geralmente TINYINT(1)
+            } elseif (is_string($value)) {
+                $paramType = PDO::PARAM_STR;
+            } elseif (is_null($value)) {
+                $paramType = PDO::PARAM_NULL;
+            } else {
+                $paramType = PDO::PARAM_STR; // Default para outros tipos
+            }
+            $stmt->bindValue($placeholder, $value, $paramType);
+        }
+
+        // Executar a query
+        $stmt->execute();
+
+        // Verificar se a inserção foi bem-sucedida (opcional, rowCount() nem sempre funciona para INSERT)
+        // $rowCount = $stmt->rowCount();
+        // if ($rowCount > 0) {
+        //     return true; // Inserção bem-sucedida
+        // } else {
+        //     error_log("Aviso: Inserção na tabela avaliacoes_entregas pode não ter ocorrido (rowCount = 0).");
+        //     return false; // Pode indicar um problema, dependendo da configuração do DB
+        // }
+
+         return true; // Assumimos sucesso se a execução não lançar exceção
+
+    } catch (PDOException $e) {
+        // Logar o erro detalhado
+        error_log("Erro ao inserir avaliação no banco de dados login_parcial: " . $e->getMessage());
+         // Logar os dados que tentaram ser inseridos (cuidado com dados sensíveis)
+        error_log("Dados do formulário: " . print_r($formData, true));
+
+        return false; // Indica falha na inserção
+    }
+}
