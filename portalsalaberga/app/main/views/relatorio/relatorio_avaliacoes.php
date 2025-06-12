@@ -259,11 +259,35 @@ $deliveryColumns = [
 
 $fill = false; // Alternar cor de fundo das linhas da tabela
 
-// Criar um mapa de número da equipe para nome da equipe
+// Crie um mapa de número da equipe para nome da equipe
 $mapaEquipe = [];
 foreach ($avaliacoes as $avaliacao) {
     if (!empty($avaliacao['equipe'])) {
         $mapaEquipe[$avaliacao['equipe']] = $avaliacao['equipe'];
+    }
+}
+
+// Mapeamento de IDs numéricos de equipe para nomes de equipe (baseado em form_parcial_dev.php)
+$teamIdToNameMap = [
+    1 => 'Entrada e saída de alunos',
+    2 => 'Gestão da alimentação escolar',
+    3 => 'Controle de estoque de materiais',
+    4 => 'Gestão de estágio',
+    5 => 'Chamados de suporte',
+    6 => 'Gerência de espaços e equipamentos',
+    7 => 'Banco de questões',
+    8 => 'Biblioteca',
+    9 => 'Registros PCD',
+    10 => 'Tombamento',
+    11 => 'Financeiro',
+    12 => 'Sistema PDT',
+];
+
+// Criar um mapa de avaliações por nome da equipe para facilitar a busca
+$avaliacoesByTeamName = [];
+foreach ($avaliacoes as $avaliacao) {
+    if (!empty($avaliacao['equipe'])) {
+        $avaliacoesByTeamName[$avaliacao['equipe']] = $avaliacao;
     }
 }
 
@@ -283,13 +307,13 @@ foreach ($avaliacoes as $avaliacao) {
          // Subtítulo
          $pdf->SetFont('Arial', 'B', 13);
          $pdf->SetTextColor(0, 102, 51);
-         $pdf->Cell(0, 8, utf8_decode('Avaliações de Entregas:'), 0, 1, 'L');
+         $pdf->Cell(180, 8, utf8_decode('Avaliações de Entregas:'), 0, 1, 'L');
          $pdf->Ln(2);
 
          // Adicionar cabeçalho da tabela de Sprints para a equipe
          $pdf->SetFont('Arial', 'B', 10);
          $pdf->SetTextColor(0, 0, 0);
-         $pdf->Cell(0, 7, utf8_decode('Avaliações de Entregas:'), 0, 1, 'L');
+         $pdf->Cell(180, 7, utf8_decode('Avaliações de Entregas:'), 0, 1, 'L');
          $pdf->Ln(2);
          $pdf->DrawSprintTableHeader();
          $fill = false; // Reset fill for sprint table
@@ -317,127 +341,105 @@ foreach ($avaliacoes as $avaliacao) {
 
     $pdf->Ln(10); // Espaço após a tabela de sprints para a equipe
 
-    // Após a tabela de entregas, adicionar linha para nota final
-    $pdf->SetFont('Arial', 'B', 12);
-    $pdf->SetFillColor(255,255,255);
-    $pdf->SetTextColor(0, 102, 51);
+    // Novo bloco combinado para Nota Final do Sistema e Observações
+    $pdf->SetFont('Arial', 'B', 10); // Fonte do cabeçalho
+    $pdf->SetFillColor(131, 181, 105); // Cor de fundo verde do cabeçalho
+    $pdf->SetTextColor(0, 0, 0); // Cor do texto preta
+    $pdf->Cell(180, 7, utf8_decode('Nota final do sistema e observações'), 1, 1, 'L', true); // Cabeçalho do novo bloco
+
+    // Conteúdo do bloco: Nota e Observações
+    $pdf->SetFont('Arial', '', 9); // Fonte do conteúdo
+    $pdf->SetFillColor(255, 255, 255); // Fundo branco para o conteúdo
+    $pdf->SetTextColor(0, 0, 0);
+
     $notaFinal = isset($avaliacao['avaliacao_final']) && !empty($avaliacao['avaliacao_final']) ? $avaliacao['avaliacao_final'] : 'N/A';
-    $pdf->Cell(180, 10, utf8_decode('Nota Final do Sistema '.'- '.$notaFinal), 1, 1, 'C', true);
-    $pdf->SetFont('Arial', 'B', 18);
-
-    $pdf->SetTextColor(0, 0, 0);
-    // Linha para observações (texto)
-    $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(180, 10, utf8_decode('Observações'), 1, 1, 'L', true);
-    // Linha em branco para observações
-    $pdf->SetFont('Arial', '', 12);
     $obs = isset($avaliacao['observacoes_finais']) ? $avaliacao['observacoes_finais'] : '';
-    $pdf->Cell(180, 10, utf8_decode($obs), 1, 1, 'L', true);
-    $pdf->Ln(10);
+    $content = utf8_decode($notaFinal . ' - ' . $obs);
 
-    // Debug: mostrar valor de $currentTeam
-    $pdf->SetFont('Arial', '', 8);
-    $pdf->SetTextColor(255, 0, 0);
-    $pdf->Cell(0, 5, utf8_decode('DEBUG: currentTeam = [' . $currentTeam . ']'), 0, 1, 'L');
-    $pdf->SetTextColor(0, 0, 0);
+    // Usar MultiCell para a observação, caso seja longa
+    $pdf->MultiCell(180, 6, $content, 1, 'L', true); // Largura 180, altura de linha 6, com borda, alinhado à esquerda, preenchido
+    $pdf->Ln(10); // Espaço após o bloco
 
     // Tabela de alunos da equipe
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->SetTextColor(0, 0, 0);
-    $pdf->Cell(0, 10, utf8_decode('Alunos do Projeto ' . $currentTeam), 0, 1, 'L');
+    $pdf->Cell(180, 10, utf8_decode('Alunos do Projeto ' . $currentTeam), 0, 1, 'L');
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->SetFillColor(131, 181, 105);
-    $pdf->Cell(100, 7, utf8_decode('Nome'), 1, 0, 'C', true);
-    $pdf->Cell(30, 7, utf8_decode('Nota'), 1, 1, 'C', true);
+    $pdf->Cell(60, 7, utf8_decode('Nome'), 1, 0, 'C', true);
+    $pdf->Cell(30, 7, utf8_decode('Entregas (2,0)'), 1, 0, 'C', true);
+    $pdf->Cell(30, 7, utf8_decode('Sistema (até 4,0)'), 1, 0, 'C', true);
+    $pdf->Cell(30, 7, utf8_decode('Nota Individual'), 1, 0, 'C', true);
+    $pdf->Cell(30, 7, utf8_decode('Nota Final'), 1, 1, 'C', true);
     $pdf->SetFont('Arial', '', 9);
     $fillAluno = false;
     foreach ($alunos as $aluno) {
-        // Debug: mostrar valor de equipe do aluno
-        $pdf->SetFont('Arial', '', 8);
-        $pdf->SetTextColor(0, 0, 255);
-        $pdf->Cell(0, 5, utf8_decode('DEBUG: aluno[' . $aluno['nome'] . '] equipe = [' . $aluno['equipe'] . ']'), 0, 1, 'L');
-        $pdf->SetTextColor(0, 0, 0);
-        $pdf->SetFont('Arial', '', 9);
-        if (trim($aluno['equipe']) == trim($currentTeam)) {
-            $notaAluno = !empty($aluno['nota']) ? $aluno['nota'] : 'Sem notas';
+        $alunoTeamName = '';
+        if (isset($teamIdToNameMap[$aluno['equipe']])) {
+            $alunoTeamName = $teamIdToNameMap[$aluno['equipe']];
+        } elseif (empty($aluno['equipe']) || $aluno['equipe'] == 0) {
+            // Alunos com equipe 0 ou vazia não serão listados por nome de projeto aqui
+            continue;
+        }
+
+        if (trim($alunoTeamName) == trim($currentTeam)) {
+            $sprintPoints = 0;
+            $systemLevelPoints = 0;
+            $originalNota = (float) (empty($aluno['nota']) ? 0 : $aluno['nota']);
+
+            // Obter a avaliação da equipe do aluno
+            $teamEvaluation = isset($avaliacoesByTeamName[$alunoTeamName]) ? $avaliacoesByTeamName[$alunoTeamName] : null;
+
+            if ($teamEvaluation) {
+                // Verificar entregas de sprint
+                $allSprintsDelivered = true;
+                foreach ($deliveryColumns as $prefix => $description) {
+                    if (!isset($teamEvaluation[$prefix . '_entregue']) || $teamEvaluation[$prefix . '_entregue'] !== 1) {
+                        $allSprintsDelivered = false;
+                        break;
+                    }
+                }
+                if ($allSprintsDelivered) {
+                    $sprintPoints = 2;
+                }
+
+                // Verificar nível do sistema
+                if (isset($teamEvaluation['avaliacao_final'])) {
+                    $systemLevel = strtoupper(trim($teamEvaluation['avaliacao_final']));
+                    switch ($systemLevel) {
+                        case 'A':
+                            $systemLevelPoints = 4;
+                            break;
+                        case 'B':
+                            $systemLevelPoints = 3;
+                            break;
+                        case 'C':
+                            $systemLevelPoints = 2;
+                            break;
+                    }
+                }
+            }
+
+            $finalScore = $originalNota + $sprintPoints + $systemLevelPoints;
+            $displayNota = ($finalScore == 0 && (empty($aluno['nota']) || $aluno['nota'] == 0)) ? 'Sem notas' : number_format($finalScore, 1); // Formatar para 1 casa decimal
+
             if ($fillAluno) {
                 $pdf->SetFillColor(200, 200, 200);
             } else {
                 $pdf->SetFillColor(255, 255, 255);
             }
-            $pdf->Cell(100, 6, utf8_decode($aluno['nome']), 1, 0, 'L', true);
-            $pdf->Cell(30, 6, utf8_decode($notaAluno), 1, 1, 'C', true);
+            $pdf->Cell(60, 6, utf8_decode($aluno['nome']), 1, 0, 'L', true);
+            $pdf->Cell(30, 6, utf8_decode(number_format($sprintPoints, 1)), 1, 0, 'C', true);
+            $pdf->Cell(30, 6, utf8_decode(number_format($systemLevelPoints, 1)), 1, 0, 'C', true);
+            $pdf->Cell(30, 6, utf8_decode(empty($aluno['nota']) ? '0,0' : number_format((float)$aluno['nota'], 1)), 1, 0, 'C', true);
+            $pdf->Cell(30, 6, utf8_decode($displayNota), 1, 1, 'C', true);
             $fillAluno = !$fillAluno;
         }
     }
     $pdf->Ln(10);
-}
+} // Fechamento do foreach ($avaliacoes as $avaliacao)
 
-// Adicionar uma nova página para a lista completa de alunos
-$pdf->AddPage('P'); // Modo retrato
-
-// Margem superior antes do título
-$pdf->Ln(25);
-
-$pdf->SetFont('Arial', 'B', 16);
-$pdf->SetTextColor(0, 0, 0);
-$pdf->Cell(0, 15, utf8_decode('Lista Completa de Alunos'), 0, 1, 'C');
-
-// Margem entre o título e a tabela
-$pdf->Ln(8);
-
-// Depois do título e antes do cabeçalho da tabela ...
-$yTabela = $pdf->GetY();
-$numAlunos = count($alunos);
-$linhasPorPagina = 30; // ajuste conforme necessário
-$totalAlunos = count($alunos);
-$pagina = 0;
-for ($i = 0; $i < $totalAlunos; $i += $linhasPorPagina) {
-    $pagina++;
-    if ($pagina > 1) {
-        $pdf->AddPage('P');
-        $pdf->Ln(25);
-        $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(0, 15, utf8_decode('Lista Completa de Alunos (continuação)'), 0, 1, 'C');
-        $pdf->Ln(8);
-    }
-    $yTabela = $pdf->GetY();
-    $linhasEstaPagina = min($linhasPorPagina, $totalAlunos - $i);
-    $alturaTabela = 7 + ($linhasEstaPagina * 6);
-    $pdf->SetFillColor(255, 255, 255);
-    $pdf->Rect(20, $yTabela, 170, $alturaTabela, 'F');
-    // Cabeçalho
-    $pdf->SetFont('Arial', 'B', 10);
-    $pdf->SetFillColor(131, 181, 105);
-    $pdf->SetX(20);
-    $pdf->Cell(90, 7, utf8_decode('Nome'), 1, 0, 'C', true);
-    $pdf->Cell(50, 7, utf8_decode('Equipe'), 1, 0, 'C', true);
-    $pdf->Cell(30, 7, utf8_decode('Nota'), 1, 1, 'C', true);
-    // Linhas
-    $pdf->SetFont('Arial', '', 9);
-    $fill = false;
-    for ($j = 0; $j < $linhasEstaPagina; $j++) {
-        $aluno = $alunos[$i + $j];
-        // Se equipe for 0 ou null, mostrar 'Sem equipe'
-        if (empty($aluno['equipe']) || $aluno['equipe'] == 0) {
-            $nomeEquipe = 'Sem equipe';
-        } else {
-            $nomeEquipe = isset($mapaEquipe[$aluno['equipe']]) ? $mapaEquipe[$aluno['equipe']] : $aluno['equipe'];
-        }
-        // Linhas alternadas cinza escuro e branco
-        if ($fill) {
-            $pdf->SetFillColor(200, 200, 200); // Cinza mais escuro
-        } else {
-            $pdf->SetFillColor(255, 255, 255); // Branco
-        }
-        $pdf->SetX(20);
-        $notaAluno = !empty($aluno['nota']) ? $aluno['nota'] : 'Sem notas';
-        $pdf->Cell(90, 6, utf8_decode($aluno['nome']), 1, 0, 'L', true);
-        $pdf->Cell(50, 6, utf8_decode($nomeEquipe), 1, 0, 'C', true);
-        $pdf->Cell(30, 6, utf8_decode($notaAluno), 1, 1, 'C', true);
-        $fill = !$fill;
-    }
-}
+// Remover a tabela de alunos que aparece no final do relatório
 
 $pdf->Output('relatorio_combinado.pdf', 'I'); // 'I' para exibir no navegador, 'D' para download
 
