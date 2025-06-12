@@ -80,25 +80,25 @@ $systemPermissionCardMap = [
     // Entradas para outros sistemas (manter as que parecem corretas)
     'Entrada/saída_usuario(1)' => [
         'url' => '#',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/entrada e saida.png',
         'name' => 'Entrada/saída',
         'category' => 'Sistema'
     ],
     'Entrada/saída_vigilante(1)' => [
         'url' => '../../../subsystems/entradasaida/app/main/views/inicio.php',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/entrada e saida.png',
         'name' => 'Entrada/saída',
         'category' => 'Sistema'
     ],
     'Estágio_usuario(2)' => [
         'url' => '../../../subsystems/estagio/', // Placeholder URL - replace manually
-        'image' => 'https://i.postimg.cc/CMX7vRKh/aviso-1.png',
+        'image' => '../../assets/img/logos_sistemas/estagio.png',
         'name' => 'Estágio (Usuário)',
         'category' => 'Carreira'
     ],
     'Estágio_adm(2)' => [
         'url' => '../../../subsystems/estagio/default.php',
-        'image' => 'https://i.postimg.cc/CMX7vRKh/aviso-1.png',
+        'image' => '../../assets/img/logos_sistemas/estagio.png',
         'name' => 'Estágio (Admin)',
         'category' => 'Administração'
     ],
@@ -106,49 +106,49 @@ $systemPermissionCardMap = [
     // Mapeamentos LIMPOS para o sistema "Demandas" (ID 3)
     'Demandas_adm_geral(3)' => [
         'url' => '../../../subsystems/areadev/views/admin.php',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Admin Geral)',
         'category' => 'Administração'
     ],
     'Demandas_usuario(3)' => [
         'url' => '../../../subsystems/areadev/views/usuario.php',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Usuário)',
         'category' => 'Sistema'
     ],
     'Demandas_usuario_area_dev(3)' => [
         'url' => '../../../subsystems/areadev/views/usuario.php',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Desenvolvimento)',
         'category' => 'Sistema'
     ],
     'Demandas_usuario_area_design(3)' => [
         'url' => '../../../subsystems/areadev/views/usuario.php',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Design)',
         'category' => 'Sistema'
     ],
     'Demandas_usuario_area_suporte(3)' => [
         'url' => '../../../subsystems/areadev/views/usuario.php',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Suporte)',
         'category' => 'Sistema'
     ],
     'Demandas_adm_area_suporte(3)' => [
         'url' => '../../../subsystems/areadev/views/admin.php',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Admin Suporte)',
         'category' => 'Administração'
     ],
     'Demandas_adm_area_dev(3)' => [
         'url' => '../../../subsystems/areadev/views/admin.php',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Admin Dev)',
         'category' => 'Administração'
     ],
     'Demandas_adm_area_design(3)' => [
         'url' => '../../../subsystems/areadev/views/admin.php',
-        'image' => 'https://i.postimg.cc/8czCMpqx/Design-sem-nome-70-removebg-preview.png',
+        'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Admin Design)',
         'category' => 'Administração'
     ],
@@ -205,7 +205,7 @@ $systemPermissionCardMap = [
         'category' => 'Sistema'
     ],
     'Questões_adm(14)' => [
-        'url' => '#',
+        'url' => '../../../subsystems/banco_questoes/default.php',
         'image' => '../../assets/img/logos_sistemas/banco de questões.png',
         'name' => 'Banco questões (Admin)',
         'category' => 'Sistema'
@@ -229,7 +229,7 @@ $systemPermissionCardMap = [
         'category' => 'Sistema'
     ],
     'tombamento_adm(18)' => [
-        'url' => '../../../subsystems/tombamento/default.php',
+        'url' => '#',
         'image' => '../../assets/img/logos_sistemas/tombamento.png',
         'name' => 'Sistema de Tombamento (Admin)',
         'category' => 'Sistema'
