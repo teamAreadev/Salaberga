@@ -74,7 +74,7 @@
         </div>
         <div class="success-title">Avaliação Enviada com Sucesso!</div>
         <div class="success-message">Obrigado por enviar a avaliação. Os dados foram salvos.</div>
-        <a href="form/form_parcial_dev.php" class="back-button"><i class="fas fa-arrow-left mr-2"></i>Voltar ao Formulário</a>
+        <a href="subsytem/subsistema.php" class="back-button"><i class="fas fa-arrow-left mr-2"></i>Voltar ao Início</a>
     </div>
 </body>
 </html> 
