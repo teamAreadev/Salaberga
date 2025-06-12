@@ -1,6 +1,5 @@
 <?php
 require_once 'config/session.php';
-print_r($_POST);
 // Se o usuário já estiver logado, redireciona para a página apropriada
 if (isLoggedIn()) {
     $userType = getUserType();
