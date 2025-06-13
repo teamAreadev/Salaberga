@@ -1,3 +1,4 @@
 <?php 
-header("location:app/main/index.php");
+header("location:app/main/logout.php");
+exit();
 ?>

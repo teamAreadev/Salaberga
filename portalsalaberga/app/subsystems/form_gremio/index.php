@@ -296,87 +296,7 @@
         <span id="toastMessage"></span>
     </div>
 
-    <!-- Countdown Timer Modal -->
-    <div id="countdownModal" class="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4 border border-green-100 hover:border-green-200 transform transition-all duration-300">
-            <div class="text-center">
-                <div class="flex-shrink-0 bg-green-50 p-3 rounded-lg inline-block mb-4">
-                    <i class="fas fa-clock text-green-600 text-3xl"></i>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-2">Inscrições abertas até 6 de junho!</h3>
-                <p class="text-sm text-gray-600 mb-4">Não perca o prazo para participar da Copa Grêmio 2025.</p>
-                <div class="timer-box flex justify-center space-x-2 mb-4">
-                    <div class="text-center">
-                        <div id="days" class="timer-digit text-2xl md:text-3xl font-bold text-gray-800 px-4 py-2 rounded-lg">00</div>
-                        <span class="text-xs text-gray-500">Dias</span>
-                    </div>
-                    <div class="text-center">
-                        <div id="hours" class="timer-digit text-2xl md:text-3xl font-bold text-gray-800 px-4 py-2 rounded-lg">00</div>
-                        <span class="text-xs text-gray-500">Horas</span>
-                    </div>
-                    <div class="text-center">
-                        <div id="minutes" class="timer-digit text-2xl md:text-3xl font-bold text-gray-800 px-4 py-2 rounded-lg">00</div>
-                        <span class="text-xs text-gray-500">Minutos</span>
-                    </div>
-                    <div class="text-center">
-                        <div id="seconds" class="timer-digit text-2xl md:text-3xl font-bold text-gray-800 px-4 py-2 rounded-lg">00</div>
-                        <span class="text-xs text-gray-500">Segundos</span>
-                    </div>
-                </div>
-                <div class="flex flex-wrap justify-center gap-2">
-                   
-                    <button onclick="fecharModal()" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200">
-                        <i class="fas fa-times mr-2"></i>
-                        Fechar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Inicializar o cronômetro imediatamente
-        let countdownInterval;
-        const countdownDate = new Date('June 6, 2025 23:59:59').getTime();
-        
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = countdownDate - now;
-            
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            // Atualizar apenas se os elementos existirem
-            const daysEl = document.getElementById('days');
-            const hoursEl = document.getElementById('hours');
-            const minutesEl = document.getElementById('minutes');
-            const secondsEl = document.getElementById('seconds');
-            
-            if (daysEl) daysEl.textContent = days.toString().padStart(2, '0');
-            if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
-            if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
-            if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
-            
-            if (distance < 0) {
-                clearInterval(countdownInterval);
-                const modal = document.getElementById('countdownModal');
-                if (modal) {
-                    modal.innerHTML = `
-                        <div class="text-center p-6">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Inscrições Encerradas</h3>
-                            <p class="text-sm text-gray-600">O período de inscrições para a Copa Grêmio 2025 terminou.</p>
-                        </div>
-                    `;
-                }
-            }
-        }
-
-        // Iniciar o cronômetro imediatamente
-        updateCountdown();
-        countdownInterval = setInterval(updateCountdown, 1000);
-
         // Mobile Menu Toggle
         document.getElementById('mobile-menu-btn').addEventListener('click', function() {
             const menu = document.getElementById('mobile-menu');
@@ -596,14 +516,6 @@
                 input.classList.add('animate-fade-in');
             });
         });
-
-        function fecharModal() {
-            const modal = document.getElementById('countdownModal');
-            modal.style.opacity = '0';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
-        }
     </script>
     <footer class="w-full text-center py-4 bg-gray-100 text-gray-600 text-sm mt-8">
         Desenvolvido por Matheus Felix
