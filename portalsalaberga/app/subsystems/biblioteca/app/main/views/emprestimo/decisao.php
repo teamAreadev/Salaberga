@@ -76,8 +76,6 @@
                 <i class="fas fa-chevron-right text-gray-400"></i>
             </a>
         </div>
-
-
         <div class="mt-10 pt-6 border-t border-gray-200 text-center">
             <p class="text-gray-500 text-sm font-medium">Sistema Biblioteca © 2025</p>
         </div>
