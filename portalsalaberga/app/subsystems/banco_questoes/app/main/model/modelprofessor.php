@@ -1,21 +1,18 @@
 <?php
-// require("../fpdf186/fpdf.php");
-class Professor {
+require_once(__DIR__ . '/../config/connect.php');
 
-    public function testar_conexao(){
-        $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-        $conexao -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $conexao -> getAttribute(PDO::ATTR_CONNECTION_STATUS);
+class Professor extends connect {
+    public function __construct() {
+        parent::__construct();
     }
 
-
+    public function testar_conexao(){
+        return $this->conexao->getAttribute(PDO::ATTR_CONNECTION_STATUS);
+    }
 
     public function validar_email_e_senha_prof($email, $senha){
-        $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-        $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         $sql = 'select * from professor WHERE email = :email AND senha = :senha';
-        $prep = $conexao->prepare($sql);
+        $prep = $this->conexao->prepare($sql);
         $prep->bindParam(':email', $email);
         $prep->bindParam(':senha', $senha);
         $prep->execute();
@@ -24,12 +21,9 @@ class Professor {
     }
 
     public function criar_questao($disciplina, $grau_de_dificuldade, $enunciado, $alternativaA, $alternativaB, $alternativaC, $alternativaD, $id_professor, $resposta_correta, $subtopico = null) {
-        $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-        $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         // Inserir questão
         $sql = "INSERT INTO questao (id, disciplina, enunciado, grau_de_dificuldade, id_professor, subtopico) VALUES (null, :disciplina, :enunciado, :grau_de_dificuldade, :id_professor, :subtopico)";
-        $stmt = $conexao->prepare($sql);
+        $stmt = $this->conexao->prepare($sql);
         $stmt->bindParam(':disciplina', $disciplina);
         $stmt->bindParam(':enunciado', $enunciado);
         $stmt->bindParam(':grau_de_dificuldade', $grau_de_dificuldade);
@@ -37,7 +31,7 @@ class Professor {
         $stmt->bindParam(':subtopico', $subtopico);
         $stmt->execute();
 
-        $last_id = $conexao->lastInsertId();
+        $last_id = $this->conexao->lastInsertId();
 
         // Alternativas
         $alternativas = [
@@ -50,7 +44,7 @@ class Professor {
         foreach ($alternativas as $letra => $texto) {
             $resposta = ($resposta_correta === $letra) ? 'sim' : 'nao';
             $sql_alt = "INSERT INTO alternativas (id, id_questao, texto, resposta) VALUES (null, :id_questao, :texto, :resposta)";
-            $stmt = $conexao->prepare($sql_alt);
+            $stmt = $this->conexao->prepare($sql_alt);
             $stmt->bindParam(':id_questao', $last_id);
             $stmt->bindParam(':texto', $texto);
             $stmt->bindParam(':resposta', $resposta);
@@ -62,13 +56,10 @@ class Professor {
   
     public function acessar_banco($enunciado, $disciplina, $grau_de_dificuldade, $id_professor, $subtopico = null) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
             // Função auxiliar para buscar alternativas
-            $buscar_alternativas = function($id_questao) use ($conexao) {
+            $buscar_alternativas = function($id_questao) {
                 $sql_alt = "SELECT * FROM alternativas WHERE id_questao = :id_questao";
-                $stmt_alt = $conexao->prepare($sql_alt);
+                $stmt_alt = $this->conexao->prepare($sql_alt);
                 $stmt_alt->bindValue(":id_questao", $id_questao);
                 $stmt_alt->execute();
                 return $stmt_alt->fetchAll(PDO::FETCH_ASSOC);
@@ -108,7 +99,7 @@ class Professor {
             error_log("SQL Query: " . $sql);
             error_log("Parameters: " . print_r($params, true));
 
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             
             // Vincular os parâmetros
             foreach ($params as $key => $value) {
@@ -137,85 +128,76 @@ class Professor {
     }
 
     public function acessar_banco_geral(){
-        $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-        $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         $sql = "select * from questao";
-        $stmt = $conexao -> prepare($sql);
-        $stmt -> execute();
-        $resultado = $stmt -> fetchall(PDO::FETCH_ASSOC);
+        $stmt = $this->conexao->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchall(PDO::FETCH_ASSOC);
         return $resultado;
     }
     
     
     
     public function criar_prova($id_questao, $nome_prova, $tipo, $dificuldade,$turma) {
-    try {
-        $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-        $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        try {
+            // 1. Inserir a avaliação na tabela 'avaliacao'
+            $sql = "insert INTO avaliacao (tipo, nome, dificuldade,ano) VALUES (:tipo, :nome_prova, :dificuldade, :ano)";
+            $stmt = $this->conexao->prepare($sql);
+            $stmt->bindValue(":tipo", $tipo);
+            $stmt->bindValue(":nome_prova", $nome_prova);
+            $stmt->bindValue(":dificuldade", $dificuldade);
+            $stmt->bindValue(":ano", $turma);
+            $stmt->execute();
 
-        // 1. Inserir a avaliação na tabela 'avaliacao'
-        $sql = "insert INTO avaliacao (tipo, nome, dificuldade,ano) VALUES (:tipo, :nome_prova, :dificuldade, :ano)";
-        $stmt = $conexao->prepare($sql);
-        $stmt->bindValue(":tipo", $tipo);
-        $stmt->bindValue(":nome_prova", $nome_prova);
-        $stmt->bindValue(":dificuldade", $dificuldade);
-        $stmt->bindValue(":ano", $turma);
-        $stmt->execute();
+            // 2. Obter o ID da avaliação recém-inserida
+            $id_avaliacao = $this->conexao->lastInsertId();
 
-        // 2. Obter o ID da avaliação recém-inserida
-        $id_avaliacao = $conexao->lastInsertId();
+            // 3. Inserir os IDs das questões na tabela 'questao_prova'
+            $sql2 = "INSERT INTO questao_prova (id_avaliacao, id_questao) VALUES (:id_avaliacao, :id_questao)";
+            $stmt2 = $this->conexao->prepare($sql2);
 
-        // 3. Inserir os IDs das questões na tabela 'questao_prova'
-        $sql2 = "INSERT INTO questao_prova (id_avaliacao, id_questao) VALUES (:id_avaliacao, :id_questao)";
-        $stmt2 = $conexao->prepare($sql2);
+            // 4. Preparar a atualização do status da questão
+            $sql3 = "UPDATE questao SET status = 1 WHERE id = :id_questao";
+            $stmt3 = $this->conexao->prepare($sql3);
 
-        // 4. Preparar a atualização do status da questão
-        $sql3 = "UPDATE questao SET status = 1 WHERE id = :id_questao";
-        $stmt3 = $conexao->prepare($sql3);
+            // Verifique se $id_questao é um array e percorra cada ID
+            if (is_array($id_questao)) {
+                foreach ($id_questao as $id_q) {
+                    // Inserir na questao_prova
+                    $stmt2->bindValue(":id_avaliacao", $id_avaliacao);
+                    $stmt2->bindValue(":id_questao", $id_q);
+                    $stmt2->execute();
 
-        // Verifique se $id_questao é um array e percorra cada ID
-        if (is_array($id_questao)) {
-            foreach ($id_questao as $id_q) {
-                // Inserir na questao_prova
-                $stmt2->bindValue(":id_avaliacao", $id_avaliacao);
-                $stmt2->bindValue(":id_questao", $id_q);
-                $stmt2->execute();
-
-                // Atualizar status da questão
-                $stmt3->bindValue(":id_questao", $id_q);
-                $stmt3->execute();
+                    // Atualizar status da questão
+                    $stmt3->bindValue(":id_questao", $id_q);
+                    $stmt3->execute();
+                }
             }
+
+            return true;
+
+        } catch (PDOException $e) {
+            echo '<strong>Erro ao criar prova: </strong>' . $e->getMessage();
+            return false;
         }
-
-        return true;
-
-    } catch (PDOException $e) {
-        echo '<strong>Erro ao criar prova: </strong>' . $e->getMessage();
-        return false;
     }
-}
 
 
     public function acessar_questoes_prova($dificuldade, $disciplina) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             if (empty($dificuldade) && empty($disciplina)) {
                 echo "Os dois campos (dificuldade e disciplina) estão vazios";
                 return [];
             } elseif (empty($disciplina)) {
                 $sql = "select * FROM questao WHERE grau_de_dificuldade = :dificuldade";
-                $stmt = $conexao->prepare($sql);
+                $stmt = $this->conexao->prepare($sql);
                 $stmt->bindValue(':dificuldade', $dificuldade);
             } elseif (empty($dificuldade)) {
                 $sql = "select * FROM questao WHERE disciplina = :disciplina";
-                $stmt = $conexao->prepare($sql);
+                $stmt = $this->conexao->prepare($sql);
                 $stmt->bindValue(':disciplina', $disciplina);
             } else {
                 $sql = "select * FROM questao WHERE disciplina = :disciplina AND grau_de_dificuldade = :dificuldade";
-                $stmt = $conexao->prepare($sql);
+                $stmt = $this->conexao->prepare($sql);
                 $stmt->bindValue(':disciplina', $disciplina);
                 $stmt->bindValue(':dificuldade', $dificuldade);
             }
@@ -230,56 +212,42 @@ class Professor {
     }
 
     public function gerar_relatorio_coletivo($querpdf,$turma,$disciplina){
-
-        $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-        $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         if(empty($querpdf)){
-
             $sql = "select * from relatorio_professor where disciplina = :disciplina and turma = :turma";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindvalue(':disciplina',$disciplina);
             $stmt->bindvalue(':turma',$turma);
             $stmt->execute();
             $resultado = $stmt->fetchall(PDO::FETCH_ASSOC);
             return $resultado;
-
-        }else{
-             $sql = "select * from relatorio_professor where disciplina = :disciplina and turma = :turma";
-            $stmt = $conexao->prepare($sql);
+        } else {
+            $sql = "select * from relatorio_professor where disciplina = :disciplina and turma = :turma";
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindvalue(':disciplina',$disciplina);
             $stmt->bindvalue(':turma',$turma);
             $stmt->execute();
             $resultado = $stmt->fetchall(PDO::FETCH_ASSOC);
         
-            
             $pdf = new FPDF();
             $pdf->AddPage();
             $pdf->SetFont('Arial','B',16);
             $pdf->Cell(40,10,$resultado);
             $pdf->Output();
-
         }
     }
 
     public function gerar_relatorio_individual($turma,$disciplina){
-        $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-        $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         $sql = "select * from relatorio_professor_individual where turma = :turma and disciplina = :disciplina";
-        $stmt = $conexao->prepare($sql);
-        $stmt -> bindvalue(":turma",$turma."b");
-        $stmt -> bindvalue(":disciplina",$disciplina);
-        $stmt -> execute();
-        $resultado = $stmt -> fetchall(PDO::FETCH_ASSOC);
+        $stmt = $this->conexao->prepare($sql);
+        $stmt->bindvalue(":turma",$turma."b");
+        $stmt->bindvalue(":disciplina",$disciplina);
+        $stmt->execute();
+        $resultado = $stmt->fetchall(PDO::FETCH_ASSOC);
         return $resultado;
     }
 
     public function visualizar_alunos($nomealuno = '', $anoaluno = '', $id = null) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             $sql = "SELECT * FROM aluno WHERE 1=1";
             $params = array();
 
@@ -304,7 +272,7 @@ class Professor {
             error_log("SQL Query: " . $sql);
             error_log("Params: " . print_r($params, true));
             
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             foreach ($params as $key => $value) {
                 $stmt->bindValue($key, $value);
             }
@@ -322,60 +290,50 @@ class Professor {
     }
 
     public function visualizar_avaliacoes(){
-        $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-        $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // 1. Inserir a avaliação na tabela 'avaliacao'
         $sql = "select * from avaliacao";
-        $stmt = $conexao -> prepare($sql);
-        $stmt -> execute();
-        $resultado = $stmt -> fetchall(PDO::FETCH_ASSOC);
+        $stmt = $this->conexao->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchall(PDO::FETCH_ASSOC);
         return $resultado;
     }
     public function remover_questao($numero_questao){
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
             // Começar uma transação para garantir que todas as operações sejam executadas ou nenhuma
-            $conexao->beginTransaction();
+            $this->conexao->beginTransaction();
             
             // 1. Primeiro, remover referências na tabela questao_prova
             $sql = "delete from questao_prova where id_questao = :numero_questao";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindValue(":numero_questao", $numero_questao);
             $stmt->execute();
 
             // 2. Remover as alternativas
             $sql = "delete from alternativas where id_questao = :numero_questao";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindValue(":numero_questao", $numero_questao);
             $stmt->execute();
 
             // 3. Finalmente, remover a questão
             $sql = "delete from questao where id = :numero_questao";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindValue(":numero_questao", $numero_questao);
             $stmt->execute();
 
             // Se chegou até aqui sem erros, confirma as alterações
-            $conexao->commit();
+            $this->conexao->commit();
             return true;
         } catch (PDOException $e) {
             // Em caso de erro, desfaz todas as alterações
-            $conexao->rollBack();
+            $this->conexao->rollBack();
             return false;
         }
     }
 
     public function corrigir_prova($ano) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             // Fetch students from the specified year
             $sql = "SELECT * FROM aluno WHERE ano = :ano ORDER BY nome ASC";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':ano', $ano);
             $stmt->execute();
 
@@ -387,15 +345,12 @@ class Professor {
 
     public function get_avaliacoes_por_ano($ano) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             // Debug
             error_log("Fetching evaluations for year: " . $ano);
 
             // First try exact match
             $sql = "SELECT * FROM avaliacao WHERE ano = :ano ORDER BY id DESC";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':ano', $ano);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -406,7 +361,7 @@ class Professor {
                 error_log("No results with exact match, trying with year number: " . $yearNumber);
                 
                 $sql = "SELECT * FROM avaliacao WHERE ano LIKE :ano ORDER BY id DESC";
-                $stmt = $conexao->prepare($sql);
+                $stmt = $this->conexao->prepare($sql);
                 $searchPattern = $yearNumber . "%";
                 $stmt->bindParam(':ano', $searchPattern);
                 $stmt->execute();
@@ -427,15 +382,12 @@ class Professor {
 
     public function get_questoes_avaliacao($id_avaliacao) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             $sql = "SELECT q.*, qp.id as questao_prova_id 
                    FROM questao q 
                    INNER JOIN questao_prova qp ON q.id = qp.id_questao 
                    WHERE qp.id_avaliacao = :id_avaliacao";
             
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id_avaliacao', $id_avaliacao);
             $stmt->execute();
             
@@ -444,7 +396,7 @@ class Professor {
             // Get alternatives for each question
             foreach ($questoes as &$questao) {
                 $sql = "SELECT * FROM alternativas WHERE id_questao = :id_questao ORDER BY id";
-                $stmt = $conexao->prepare($sql);
+                $stmt = $this->conexao->prepare($sql);
                 $stmt->bindParam(':id_questao', $questao['id']);
                 $stmt->execute();
                 $questao['alternativas'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -458,21 +410,18 @@ class Professor {
 
     public function salvar_correcao($id_aluno, $id_avaliacao, $respostas) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
             // Calculate total questions, correct and incorrect answers
             $total_questoes = count($respostas);
             $acertos = 0;
             $erros = 0;
             
             // Begin transaction
-            $conexao->beginTransaction();
+            $this->conexao->beginTransaction();
             
             // Prepare statement for inserting individual responses
             $sql_resposta = "INSERT INTO respostas_alunos (id_aluno, id_questao, id_avaliacao, resposta_aluno) 
                             VALUES (:id_aluno, :id_questao, :id_avaliacao, :resposta_aluno)";
-            $stmt_resposta = $conexao->prepare($sql_resposta);
+            $stmt_resposta = $this->conexao->prepare($sql_resposta);
 
             // Get questions and their correct answers
             $questoes = $this->get_questoes_avaliacao($id_avaliacao);
@@ -511,7 +460,7 @@ class Professor {
             $sql = "INSERT INTO relatorio_aluno (nota, acertos, erros, id_aluno, id_prova) 
                    VALUES (:nota, :acertos, :erros, :id_aluno, :id_prova)";
             
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':nota', $nota);
             $stmt->bindParam(':acertos', $acertos);
             $stmt->bindParam(':erros', $erros);
@@ -519,13 +468,13 @@ class Professor {
             $stmt->bindParam(':id_prova', $id_avaliacao);
             $stmt->execute();
             
-            $conexao->commit();
+            $this->conexao->commit();
             return true;
             
         } catch (PDOException $e) {
             error_log("Erro ao salvar correção: " . $e->getMessage());
-            if ($conexao->inTransaction()) {
-                $conexao->rollBack();
+            if ($this->conexao->inTransaction()) {
+                $this->conexao->rollBack();
             }
             return false;
         }
@@ -533,14 +482,11 @@ class Professor {
 
     public function buscar_questoes_avaliacao($id_avaliacao) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             $sql = "SELECT q.* FROM questao q 
                    INNER JOIN questao_prova qp ON q.id = qp.id_questao 
                    WHERE qp.id_avaliacao = :id_avaliacao";
             
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id_avaliacao', $id_avaliacao);
             $stmt->execute();
             
@@ -552,12 +498,9 @@ class Professor {
 
     public function buscar_alternativas_questao($id_questao) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             $sql = "SELECT * FROM alternativas WHERE id_questao = :id_questao ORDER BY id";
             
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id_questao', $id_questao);
             $stmt->execute();
             
@@ -569,11 +512,8 @@ class Professor {
 
     public function adicionar_subtopico($disciplina, $nome) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
             $sql = "INSERT INTO subtopicos (disciplina, nome) VALUES (:disciplina, :nome)";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':disciplina', $disciplina);
             $stmt->bindParam(':nome', $nome);
             return $stmt->execute();
@@ -584,11 +524,8 @@ class Professor {
 
     public function excluir_subtopico($id) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
             $sql = "DELETE FROM subtopicos WHERE id = :id";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id', $id);
             return $stmt->execute();
         } catch(PDOException $e) {
@@ -598,11 +535,8 @@ class Professor {
 
     public function listar_subtopicos() {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
             $sql = "SELECT * FROM subtopicos ORDER BY disciplina, nome";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch(PDOException $e) {
@@ -612,11 +546,8 @@ class Professor {
 
     public function get_subtopicos_por_disciplina($disciplina) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
             $sql = "SELECT * FROM subtopicos WHERE disciplina = :disciplina ORDER BY nome";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':disciplina', $disciplina);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -627,11 +558,8 @@ class Professor {
 
     public function get_subtopico_by_id($id) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
             $sql = "SELECT * FROM subtopicos WHERE id = :id";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id', $id);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -642,11 +570,8 @@ class Professor {
 
     public function atualizar_status_questao($id_questao) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             $sql = "UPDATE questao SET status = 1 WHERE id = :id_questao";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id_questao', $id_questao);
             $stmt->execute();
 
@@ -658,14 +583,11 @@ class Professor {
 
     public function zerar_status_questoes($disciplina = null, $subtopico = null, $questoes = null) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             // Se questões específicas foram fornecidas
             if (is_array($questoes) && !empty($questoes)) {
                 $placeholders = str_repeat('?,', count($questoes) - 1) . '?';
                 $sql = "UPDATE questao SET status = 0 WHERE id IN ($placeholders)";
-                $stmt = $conexao->prepare($sql);
+                $stmt = $this->conexao->prepare($sql);
                 $stmt->execute($questoes);
                 return true;
             }
@@ -684,7 +606,7 @@ class Professor {
                 $params[':subtopico'] = $subtopico;
             }
 
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             foreach ($params as $key => $value) {
                 $stmt->bindValue($key, $value);
             }
@@ -698,9 +620,6 @@ class Professor {
 
     public function acessar_banco_status($disciplina = null, $subtopico = null) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
             // Construir a consulta base para buscar apenas questões com status = 1
             $sql = "SELECT * FROM questao WHERE status = 1";
             $params = array();
@@ -716,7 +635,7 @@ class Professor {
                 $params[':subtopico'] = $subtopico;
             }
 
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             
             // Vincular os parâmetros
             foreach ($params as $key => $value) {
@@ -733,9 +652,6 @@ class Professor {
 
     public function get_questao_by_id($id) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
             // Get the question
             $sql = "SELECT q.*, 
                    (SELECT texto FROM alternativas WHERE id_questao = q.id AND resposta = 'sim' LIMIT 1) as resposta_correta,
@@ -744,7 +660,7 @@ class Professor {
                    (SELECT texto FROM alternativas WHERE id_questao = q.id ORDER BY id ASC LIMIT 1 OFFSET 2) as alternativaC,
                    (SELECT texto FROM alternativas WHERE id_questao = q.id ORDER BY id ASC LIMIT 1 OFFSET 3) as alternativaD
                    FROM questao q WHERE q.id = :id";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id', $id);
             $stmt->execute();
             
@@ -756,11 +672,8 @@ class Professor {
 
     public function atualizar_questao($id, $disciplina, $subtopico, $dificuldade, $enunciado, $alternativaA, $alternativaB, $alternativaC, $alternativaD, $resposta_correta) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
             // Start transaction
-            $conexao->beginTransaction();
+            $this->conexao->beginTransaction();
             
             // Update question
             $sql = "UPDATE questao SET 
@@ -770,7 +683,7 @@ class Professor {
                     enunciado = :enunciado
                     WHERE id = :id";
                     
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':disciplina', $disciplina);
             $stmt->bindParam(':subtopico', $subtopico);
             $stmt->bindParam(':dificuldade', $dificuldade);
@@ -780,7 +693,7 @@ class Professor {
             
             // Delete existing alternatives
             $sql = "DELETE FROM alternativas WHERE id_questao = :id";
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id', $id);
             $stmt->execute();
             
@@ -795,7 +708,7 @@ class Professor {
             foreach ($alternativas as $letra => $texto) {
                 $resposta = ($letra === $resposta_correta) ? 'sim' : 'nao';
                 $sql = "INSERT INTO alternativas (id_questao, texto, resposta) VALUES (:id_questao, :texto, :resposta)";
-                $stmt = $conexao->prepare($sql);
+                $stmt = $this->conexao->prepare($sql);
                 $stmt->bindParam(':id_questao', $id);
                 $stmt->bindParam(':texto', $texto);
                 $stmt->bindParam(':resposta', $resposta);
@@ -803,13 +716,13 @@ class Professor {
             }
             
             // Commit transaction
-            $conexao->commit();
+            $this->conexao->commit();
             return true;
             
         } catch(PDOException $e) {
             // Rollback on error
-            if ($conexao->inTransaction()) {
-                $conexao->rollBack();
+            if ($this->conexao->inTransaction()) {
+                $this->conexao->rollBack();
             }
             return false;
         }
@@ -817,16 +730,13 @@ class Professor {
 
     public function get_relatorios_aluno($id_aluno) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             $sql = "SELECT r.*, a.nome as nome_avaliacao, a.tipo, a.dificuldade 
                    FROM relatorio_aluno r 
                    INNER JOIN avaliacao a ON r.id_prova = a.id 
                    WHERE r.id_aluno = :id_aluno 
                    ORDER BY r.id DESC";
             
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id_aluno', $id_aluno);
             $stmt->execute();
             
@@ -839,9 +749,6 @@ class Professor {
 
     public function get_detalhes_relatorio($id_relatorio) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             // Get report details
             $sql = "SELECT r.*, a.nome as nome_avaliacao, a.tipo, a.dificuldade,
                           al.nome as nome_aluno, al.matricula
@@ -850,7 +757,7 @@ class Professor {
                    INNER JOIN aluno al ON r.id_aluno = al.id 
                    WHERE r.id = :id_relatorio";
             
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id_relatorio', $id_relatorio);
             $stmt->execute();
             
@@ -863,9 +770,6 @@ class Professor {
 
     public function get_all_students() {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             $sql = "SELECT a.*, 
                    COUNT(DISTINCT r.id) as total_avaliacoes,
                    AVG(r.nota) as media_notas
@@ -874,7 +778,7 @@ class Professor {
                    GROUP BY a.id 
                    ORDER BY a.nome";
             
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -885,9 +789,6 @@ class Professor {
 
     public function get_respostas_alunos($id_aluno, $id_avaliacao) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             $sql = "SELECT ra.id_questao, 
                            CASE 
                                WHEN ra.resposta_aluno = a.texto AND a.resposta = 'sim' THEN 1
@@ -899,7 +800,7 @@ class Professor {
                     WHERE ra.id_aluno = :id_aluno 
                     AND qp.id_avaliacao = :id_avaliacao";
 
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id_aluno', $id_aluno);
             $stmt->bindParam(':id_avaliacao', $id_avaliacao);
             $stmt->execute();
@@ -913,9 +814,6 @@ class Professor {
 
     public function get_questao_stats($id_avaliacao) {
         try {
-            $conexao = new PDO('mysql:host=localhost;dbname=banco_de_questoes', 'root', '');
-            $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             $sql = "SELECT 
                     q.id,
                     q.enunciado,
@@ -929,7 +827,7 @@ class Professor {
                 GROUP BY q.id, q.enunciado
                 ORDER BY total_erros DESC";
 
-            $stmt = $conexao->prepare($sql);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id_avaliacao', $id_avaliacao);
             $stmt->execute();
 
