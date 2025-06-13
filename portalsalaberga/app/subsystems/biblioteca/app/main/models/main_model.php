@@ -245,4 +245,81 @@ class main_model extends connect
             return 2;
         }
     }
+    public function registrar_emprestimo($id_aluno, $id_catalogo, $data_emprestimo, $data_devolucao_estipulada)
+    {
+        try {
+            // Verifica se o empréstimo já existe
+            $sql_check = $this->connect->prepare("SELECT * FROM emprestimo WHERE id_aluno = :id_aluno AND id_catalogo = :id_catalogo AND data_emprestimo = :data_emprestimo AND data_devolucao_estipulada = :data_devolucao_estipulada");
+            $sql_check->bindValue(':id_aluno', $id_aluno);
+            $sql_check->bindValue(':id_catalogo', $id_catalogo);
+            $sql_check->bindValue(':data_emprestimo', $data_emprestimo);
+            $sql_check->bindValue(':data_devolucao_estipulada', $data_devolucao_estipulada);
+            $sql_check->execute();
+            $check = $sql_check->fetch(PDO::FETCH_ASSOC);
+
+            if (empty($check)) {
+                // Prepara a query de inserção
+                $registrar_emprestimo = $this->connect->prepare("INSERT INTO emprestimo (id_aluno, id_catalogo, data_emprestimo, data_devolucao_estipulada) VALUES (:id_aluno, :id_catalogo, :data_emprestimo, :data_devolucao_estipulada)");
+                $registrar_emprestimo->bindValue(':id_aluno', $id_aluno);
+                $registrar_emprestimo->bindValue(':id_catalogo', $id_catalogo);
+                $registrar_emprestimo->bindValue(':data_emprestimo', $data_emprestimo);
+                $registrar_emprestimo->bindValue(':data_devolucao_estipulada', $data_devolucao_estipulada);
+
+                // Execute e verifique o resultado
+                if ($registrar_emprestimo->execute()) {
+                    error_log("Empréstimo registrado com sucesso.");
+                    return true;
+                } else {
+                    error_log("Falha ao registrar o empréstimo.");
+                    return false;
+                }
+            } else {
+                error_log("Empréstimo já existe.");
+                return false;
+            }
+        } catch (PDOException $e) {
+            error_log("Erro no banco de dados: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function registrar_devolucao($id_emprestimo, $data_devolucao)
+    {
+        // Verifica se o empréstimo existe
+        $sql_check_devolucao = $this->connect->prepare("SELECT * FROM emprestimo WHERE id = :id_emprestimo");
+        $sql_check_devolucao->bindValue(':id_emprestimo', $id_emprestimo);
+
+        $sql_check_devolucao->execute();
+        $devolucao = $sql_check_devolucao->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($devolucao)) {
+            error_log("Empréstimo não encontrado: $id_emprestimo");
+            return false;
+        } else {
+            // Verifica se a devolução já existe
+            $sql_check = $this->connect->prepare("SELECT * FROM devolucao WHERE id_emprestimo = :id_emprestimo");
+            $sql_check->bindValue(':id_emprestimo', $id_emprestimo);
+            $sql_check->execute();
+            $check = $sql_check->fetch(PDO::FETCH_ASSOC);
+
+            if (empty($check)) {
+                $sql_update_emprestimo = $this->connect->prepare("UPDATE emprestimo SET status = 0 WHERE id = :id_emprestimo");
+                $sql_update_emprestimo->bindValue(':id_emprestimo', $id_emprestimo);
+                $sql_update_emprestimo->execute();
+
+                $registrar_devolucao = $this->connect->prepare("INSERT INTO devolucao VALUES (null, :id_emprestimo, :data_devolucao)");
+                $registrar_devolucao->bindValue(':id_emprestimo', $id_emprestimo);
+                $registrar_devolucao->bindValue(':data_devolucao', $data_devolucao);
+
+                // Execute e verifique o resultado
+                if ($registrar_devolucao->execute()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+    }
 }

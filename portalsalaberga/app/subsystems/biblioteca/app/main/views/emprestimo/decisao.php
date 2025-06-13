@@ -56,7 +56,7 @@
         </div>
 
         <div class="space-y-5">
-            <a href="#"
+            <a href="emprestimo_livro.php?id_livro=<?php echo $_GET['id_livro'] ?? ''?>"
                 class="card-hover block w-full bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-between hover:bg-gray-100">
                 <span class="flex items-center">
                     <i class="fas fa-tags mr-4 text-xl text-ceara-green"></i>
@@ -65,6 +65,18 @@
                 <i class="fas fa-chevron-right text-gray-400"></i>
             </a>
         </div>
+
+        <div class="space-y-5">
+            <a href="devolucao_livro.php"
+                class="card-hover block w-full bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-between hover:bg-gray-100">
+                <span class="flex items-center">
+                    <i class="fas fa-tags mr-4 text-xl text-ceara-green"></i>
+                    <span class="text-lg">Devolução</span>
+                </span>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </a>
+        </div>
+
 
         <div class="mt-10 pt-6 border-t border-gray-200 text-center">
             <p class="text-gray-500 text-sm font-medium">Sistema Biblioteca © 2025</p>
