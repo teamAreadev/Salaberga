@@ -2,9 +2,9 @@
 function getDatabaseConnection() {
     try {
         $host = 'localhost';
-        $dbname = 'sis_aee';
-        $username = 'root';
-        $password = '';
+        $dbname = 'u750204740_equipamentos';
+        $username = 'u750204740_equipamentos';
+        $password = 'paoComOvo123!@##';
         
         $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
         $options = [
