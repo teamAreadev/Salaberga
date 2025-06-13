@@ -1,3 +1,8 @@
+<?php
+// Capturar o barcode da URL
+$barcode = isset($_GET['barcode']) ? $_GET['barcode'] : '';
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
