@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /sistema_aee_completo/
+RewriteBase /portalsalaberga/app/subsystems/espaco_equipamentos/
 
 # Redireciona a raiz para o app/main/index.php
 RewriteRule ^$ app/main/index.php [L]

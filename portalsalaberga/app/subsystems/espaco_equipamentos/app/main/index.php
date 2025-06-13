@@ -5,10 +5,10 @@ if (isLoggedIn()) {
     $userType = getUserType();
     switch ($userType) {
         case 'aluno':
-            header("Location: /sistema_aee_completo/app/main/view/painel_aluno.php");
+            header("Location: view/painel_aluno.php");
             break;
         case 'responsavel':
-            header("Location: /sistema_aee_completo/app/main/view/painel_responsavel.php");
+            header("Location: view/painel_responsavel.php");
             break;
         default:
             redirectToLogin();
@@ -31,9 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         error_log("Redirecionando usuário do tipo: " . $tipo_usuario);
         
         if ($tipo_usuario === 'aluno') {
-            header("Location: /sistema_aee_completo/app/main/view/painel_aluno.php");
+            header("Location: view/painel_aluno.php");
         } else if ($tipo_usuario === 'responsavel') {
-            header("Location: /sistema_aee_completo/app/main/view/painel_responsavel.php");
+            header("Location: view/painel_responsavel.php");
         } else {
             redirectToLogin();
         }
