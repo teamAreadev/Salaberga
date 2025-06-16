@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 require_once(__DIR__ . '/../config/connect.php');
 // Inclui o novo arquivo de configuração do banco 'areadev'
 require_once(__DIR__ . '/../config/database_areadev.php');
+require_once(__DIR__ . '/../config/Database.php');
 
 function pre_cadastro($email, $cpf)
 {
@@ -14,7 +15,7 @@ function pre_cadastro($email, $cpf)
         // NOTE: This function uses 'cpf' which is in the 'usuarios' table according to salaberga(1).sql.
         // Changed table name to 'usuarios'.
         $stmtSelect = "SELECT email, cpf FROM usuarios WHERE email = :email AND cpf = :cpf";
-        $stmt = getConnection()->prepare($stmtSelect);
+        $stmt = DatabaseManager::getSalabergaConnection()->prepare($stmtSelect);
 
         // Bind dos valores
         $stmt->bindParam(':email', $email);
@@ -44,33 +45,28 @@ function pre_cadastro($email, $cpf)
 function cadastrar($nome, $cpf, $email, $senha)
 {
     try {
-        // NOTE: This function uses 'cpf' and 'nome', which are in the 'usuarios' table according to salaberga(1).sql.
-        // Changed table name to 'usuarios'.
+        // Verifica se o usuário já existe usando cpf (em minúsculo)
         $querySelect = "SELECT id FROM usuarios WHERE email = :email AND cpf = :cpf";
-        $stmtSelect = getConnection()->prepare($querySelect);
+        $stmtSelect = DatabaseManager::getSalabergaConnection()->prepare($querySelect);
         $stmtSelect->bindParam(':email', $email);
         $stmtSelect->bindParam(':cpf', $cpf);
         $stmtSelect->execute();
         $result = $stmtSelect->fetchAll(PDO::FETCH_ASSOC);
 
-
         if (!empty($result)) {
             // Usuário já existe, realizar update da senha e nome
-            // Changed table name to 'usuarios' and included 'nome' update.
             $queryUpdate = "
                 UPDATE usuarios SET senha = MD5(:senha), nome = :nome WHERE email = :email AND (senha IS NULL OR senha = '')
             ";
 
-            $stmtUpdate = getConnection()->prepare($queryUpdate);
+            $stmtUpdate = DatabaseManager::getSalabergaConnection()->prepare($queryUpdate);
             $stmtUpdate->bindParam(':email', $email);
             $stmtUpdate->bindParam(':senha', $senha);
-            $stmtUpdate->bindParam(':nome', $nome); // 'nome' is now in 'usuarios'
+            $stmtUpdate->bindParam(':nome', $nome);
             $stmtUpdate->execute();
 
             // Verifica se a senha foi alterada
             if ($stmtUpdate->rowCount() > 0) {
-                // Removed insertion into cliente table as nome is now in usuarios
-
                 header('Location: ../../views/autenticacao/login.php');
                 exit();
             } else {
@@ -79,11 +75,7 @@ function cadastrar($nome, $cpf, $email, $senha)
                 exit();
             }
         } else {
-            // usuário não existe, insert new user
-            // NOTE: Assuming you want to allow insertion if not found by email/cpf,
-            // but the original logic seemed to only update existing entries.
-            // This part might need clarification based on desired user creation flow.
-            // For now, keeping the 'user not found' behavior as per original logic.
+            // usuário não existe
             header('Location: ../../controllers/controller_cadastro/controller_cadastro.php?erro1');
             exit();
         }
