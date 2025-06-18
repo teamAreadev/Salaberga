@@ -37,24 +37,22 @@ class adm_model extends usuario_model
             return 3;
         }
     }
-    public function selecionar_demanda($id_demanda, $id_usuario)
+    public function editar_demanda($titulo, $descricao, $prioridade, $id_admin, $prazo)
     {
-        $stmt_selecionar = $this->connect_demandas->prepare("SELECT * FROM $this->tabela3 WHERE id_usuario = :id_usuario AND id_demanda = :id_demanda");
-        $stmt_selecionar->bindValue(':id_usuario', $id_usuario);
-        $stmt_selecionar->bindValue(':id_demanda', $id_demanda);
-        $stmt_selecionar->execute();
-        $result = $stmt_selecionar->fetchAll(PDO::FETCH_ASSOC);
+        $stmt_cadastrar = $this->connect_demandas->prepare("SELECT * FROM $this->tabela2 WHERE titulo = :titulo");
+        $stmt_cadastrar->bindValue(':titulo', $titulo);
+        $stmt_cadastrar->execute();
+        $result = $stmt_cadastrar->fetchAll(PDO::FETCH_ASSOC);
 
         if (empty($result)) {
-            $stmt_selecionar = $this->connect_demandas->prepare("UPDATE `demandas` SET `status`='em_andamento' WHERE id = :id_demanda");
-            $stmt_selecionar->bindValue(':id_demanda', $id_demanda);
-            $stmt_selecionar->execute();
+            $stmt_cadastrar = $this->connect_demandas->prepare("INSERT INTO $this->tabela2(`titulo`, `descricao`, `prioridade`, `admin_id`, `prazo`) VALUES (:titulo, :descricao, :prioridade, :id_admin, :prazo)");
+            $stmt_cadastrar->bindValue(':titulo', $titulo);
+            $stmt_cadastrar->bindValue(':descricao', $descricao);
+            $stmt_cadastrar->bindValue(':prioridade', $prioridade);
+            $stmt_cadastrar->bindValue(':id_admin', $id_admin);
+            $stmt_cadastrar->bindValue(':prazo', $prazo);
 
-            $stmt_selecionar = $this->connect_demandas->prepare("INSERT INTO $this->tabela3 VALUES (null, :id_demanda, :id_usuario)");
-            $stmt_selecionar->bindValue(':id_demanda', $id_demanda);
-            $stmt_selecionar->bindValue(':id_usuario', $id_usuario);
-
-            if ($stmt_selecionar->execute()) {
+            if ($stmt_cadastrar->execute()) {
                 return 1;
             } else {
                 return 2;
@@ -62,17 +60,5 @@ class adm_model extends usuario_model
         } else {
             return 3;
         }
-    }
-    public function concluir_demanda($id_demanda)
-    {
-            $stmt_concluir = $this->connect_demandas->prepare("UPDATE `demandas` SET `status`='concluida' WHERE id = :id_demanda");
-            $stmt_concluir->bindValue(':id_demanda', $id_demanda);
-            $stmt_concluir->execute();
-
-            if ($stmt_concluir->execute()) {
-                return 1;
-            } else {
-                return 2;
-            }
     }
 }
