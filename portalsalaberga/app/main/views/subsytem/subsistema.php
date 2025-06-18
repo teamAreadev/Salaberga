@@ -105,49 +105,49 @@ $systemPermissionCardMap = [
 
     // Mapeamentos LIMPOS para o sistema "Demandas" (ID 3)
     'Demandas_adm_geral(3)' => [
-        'url' => '../../../subsystems/areadev/views/admin.php',
+        'url' => '../../../subsystems/demandas/default.php',
         'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Admin Geral)',
         'category' => 'Administração'
     ],
     'Demandas_usuario(3)' => [
-        'url' => '../../../subsystems/areadev/views/usuario.php',
+        'url' => '../../../subsystems/demandas/default.php',
         'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Usuário)',
         'category' => 'Sistema'
     ],
     'Demandas_usuario_area_dev(3)' => [
-        'url' => '../../../subsystems/areadev/views/usuario.php',
+        'url' => '../../../subsystems/demandas/default.php',
         'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Desenvolvimento)',
         'category' => 'Sistema'
     ],
     'Demandas_usuario_area_design(3)' => [
-        'url' => '../../../subsystems/areadev/views/usuario.php',
+        'url' => '../../../subsystems/demandas/default.php',
         'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Design)',
         'category' => 'Sistema'
     ],
     'Demandas_usuario_area_suporte(3)' => [
-        'url' => '../../../subsystems/areadev/views/usuario.php',
+        'url' => '../../../subsystems/demandas/default.php',
         'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Suporte)',
         'category' => 'Sistema'
     ],
     'Demandas_adm_area_suporte(3)' => [
-        'url' => '../../../subsystems/areadev/views/admin.php',
+        'url' => '../../../subsystems/demandas/default.php',
         'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Admin Suporte)',
         'category' => 'Administração'
     ],
     'Demandas_adm_area_dev(3)' => [
-        'url' => '../../../subsystems/areadev/views/admin.php',
+        'url' => '../../../subsystems/demandas/default.php',
         'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Admin Dev)',
         'category' => 'Administração'
     ],
     'Demandas_adm_area_design(3)' => [
-        'url' => '../../../subsystems/areadev/views/admin.php',
+        'url' => '../../../subsystems/demandas/default.php',
         'image' => '../../assets/img/logos_sistemas/suporte.png',
         'name' => 'Demandas (Admin Design)',
         'category' => 'Administração'

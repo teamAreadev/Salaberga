@@ -2,6 +2,7 @@
 require_once('../models/adm.model.php');
 $model_adm = new adm_model();
 session_start();
+print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -230,7 +231,7 @@ session_start();
                     </label>
                 </div>
             </div>
-            <input type="hidden" name="id_admin" value="<?=$_SESSION['Nome']?>">
+            <input type="hidden" name="id_admin" value="<?=$_SESSION['user_id']?>">
             <input type="date" name="prazo" required>
 
             <button type="submit">Cadastrar Demanda</button>

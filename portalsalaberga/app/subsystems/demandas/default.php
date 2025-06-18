@@ -14,6 +14,10 @@ if($dado == 'adm'){
 
     header('location:views/usuario.php');
     exit();
+}else{
+
+    header('location:../../main/views/autenticacao/login.php');
+    exit();
 }
 
 ?>

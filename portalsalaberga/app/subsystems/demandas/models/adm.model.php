@@ -57,4 +57,8 @@ class adm_model extends connect
             return 3;
         }
     }
+    public function selecionar_demanda($id_usuario){
+
+
+    }
 }
