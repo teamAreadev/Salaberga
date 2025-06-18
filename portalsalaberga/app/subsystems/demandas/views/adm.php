@@ -2,7 +2,6 @@
 require_once('../models/adm.model.php');
 $model_adm = new adm_model();
 session_start();
-print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -231,11 +230,32 @@ print_r($_SESSION);
                     </label>
                 </div>
             </div>
-            <input type="hidden" name="id_admin" value="<?=$_SESSION['user_id']?>">
+            <input type="hidden" name="id_admin" value="<?= $_SESSION['user_id'] ?>">
             <input type="date" name="prazo" required>
 
             <button type="submit">Cadastrar Demanda</button>
         </form>
+    </div>
+    <h1>Pendente</h1>
+    <div class="demanda-container">
+        <?php
+        $dados = $model_adm->select_demandas_pendentes();
+
+        foreach ($dados as $dado) {
+        ?>
+            <div class="demanda-card">
+                <h2><?= htmlspecialchars($dado['titulo']) ?></h2>
+                <p><?= htmlspecialchars($dado['descricao']) ?></p>
+                <p>Prioridade: <span class="prioridade prioridade-<?= strtolower($dado['prioridade']) ?>"><?= htmlspecialchars($dado['prioridade']) ?></span></p>
+                <p>Status: <span class="status status-pendente"><?= htmlspecialchars($dado['status']) ?></span></p>
+                <p>Prazo: <?= htmlspecialchars($dado['prazo']) ?></p>
+                <form action="../controllers/adm.controller.php" method="post">
+                    <input type="hidden" name="id_usuario" value="<?= $_SESSION['user_id'] ?>">
+                    <input type="hidden" name="id_demanda" value="<?= $dado['id'] ?>">
+                    <button type="submit">fazer demanda</button>
+                </form>
+            </div>
+        <?php } ?>
     </div>
 
     <h1>Em andamento</h1>
@@ -252,23 +272,11 @@ print_r($_SESSION);
                 <p>Prioridade: <span class="prioridade prioridade-<?= strtolower($dado['prioridade']) ?>"><?= htmlspecialchars($dado['prioridade']) ?></span></p>
                 <p>Status: <span class="status status-andamento"><?= htmlspecialchars($dado['status']) ?></span></p>
                 <p>Prazo: <?= htmlspecialchars($dado['prazo']) ?></p>
-            </div>
-        <?php } ?>
-    </div>
-
-    <h1>Pendente</h1>
-    <div class="demanda-container">
-        <?php
-        $dados = $model_adm->select_demandas_pendentes();
-
-        foreach ($dados as $dado) {
-        ?>
-            <div class="demanda-card">
-                <h2><?= htmlspecialchars($dado['titulo']) ?></h2>
-                <p><?= htmlspecialchars($dado['descricao']) ?></p>
-                <p>Prioridade: <span class="prioridade prioridade-<?= strtolower($dado['prioridade']) ?>"><?= htmlspecialchars($dado['prioridade']) ?></span></p>
-                <p>Status: <span class="status status-pendente"><?= htmlspecialchars($dado['status']) ?></span></p>
-                <p>Prazo: <?= htmlspecialchars($dado['prazo']) ?></p>
+                <p>selecionados:<?= htmlspecialchars($dado['nome_usuario']) ?></p>
+                <form action="../controllers/adm.controller.php" method="post">
+                    <input type="hidden" name="id_demanda_concluir" value="<?= $dado['id'] ?>">
+                    <button type="submit">concluir demanda</button>
+                </form>
             </div>
         <?php } ?>
     </div>

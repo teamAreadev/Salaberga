@@ -17,18 +17,57 @@ if (
     $adm_model = new adm_model();
     $result = $adm_model->cadastrar_demanda($titulo, $descricao, $prioridade, $id_adm, $prazo);
 
-    if ($result) {
+    switch ($result) {
+        case 1:
+            header('location: ../views/adm.php?status=cadastrado');
+            exit();
 
-        header('location: ../views/adm.php?status=success');
-        exit();
-    } else {
+        case 2:
+            header('location: ../views/adm.php?status=error');
+            exit();
 
-        header('location: ../views/adm.php?status=error');
-        exit();
+        case 3:
+            header('location: ../views/adm.php?status=ja_cadastrado');
+            exit();
     }
-} else if(isset($_POST['id_usuario']) && !empty($_POST['id_p']) && isset($_POST['prazo']) && !empty($_POST['prazo'])){
+} else if (isset($_POST['id_usuario']) && !empty($_POST['id_usuario']) && isset($_POST['id_demanda']) && !empty($_POST['id_demanda'])) {
 
-}else{
+    $id_usuario = $_POST['id_usuario'];
+    $id_demanda = $_POST['id_demanda'];
+
+    $adm_model = new adm_model();
+    $result = $adm_model->selecionar_demanda($id_demanda, $id_usuario);
+
+    switch ($result) {
+        case 1:
+            header('location: ../views/adm.php?status=selecionado');
+            exit();
+
+        case 2:
+            header('location: ../views/adm.php?status=error');
+            exit();
+
+        case 3:
+            header('location: ../views/adm.php?status=ja_selecionado');
+            exit();
+    }
+} else if(isset($_POST['id_demanda_concluir']) && !empty($_POST['id_demanda_concluir'])){
+
+    $id_demanda = $_POST['id_demanda_concluir'];
+
+    $adm_model = new adm_model();
+    $result = $adm_model->concluir_demanda($id_demanda);
+
+    switch ($result) {
+        case 1:
+            header('location: ../views/adm.php?status=concluido');
+            exit();
+
+        case 2:
+            header('location: ../views/adm.php?status=error');
+            exit();
+    }
+}{
 
     header('location: ../views/adm.php?status=empty');
     exit();
