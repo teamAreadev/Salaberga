@@ -187,7 +187,7 @@ $systemPermissionCardMap = [
     
 
     'Alimentação_adm(9)' => [
-        'url' => '#',
+        'url' => '../../../subsystems/alimentacao/index.php',
         'image' => '../../assets/img/logos_sistemas/alimentação.png',
         'name' => 'Alimentação (Admin)',
         'category' => 'Sistema'
@@ -335,6 +335,55 @@ if (!empty($userSystemsPermissions)) {
             } else if ($item['permissao_descricao'] === 'usuario_area_design(3)') {
                 $_SESSION['demandas_usuario_area_design'] = true;
             }
+        }
+
+        // Alimentação
+        if ($item['sistema_nome'] === 'Alimentação' && $item['permissao_descricao'] === 'adm(9)') {
+            $_SESSION['alimentacao_adm'] = true;
+        }
+
+        // Estoque
+        if ($item['sistema_nome'] === 'Estoque' && $item['permissao_descricao'] === 'adm(10)') {
+            $_SESSION['estoque_adm'] = true;
+        }
+
+        // Espaços e Equipamentos
+        if ($item['sistema_nome'] === 'EspaçosEquipamentos' && $item['permissao_descricao'] === 'adm(13)') {
+            $_SESSION['espacos_equipamentos_adm'] = true;
+        }
+
+        // Banco de Questões
+        if ($item['sistema_nome'] === 'Questões' && $item['permissao_descricao'] === 'adm(14)') {
+            $_SESSION['banco_questoes_adm'] = true;
+        }
+
+        // Registro PCD
+        if ($item['sistema_nome'] === 'PCD' && $item['permissao_descricao'] === 'adm(15)') {
+            $_SESSION['registro_pcd_adm'] = true;
+        }
+
+        // Financeiro
+        if ($item['sistema_nome'] === 'Financeiro' && $item['permissao_descricao'] === 'adm(16)') {
+            $_SESSION['financeiro_adm'] = true;
+        }
+
+        // PDT
+        if ($item['sistema_nome'] === 'PDT' && $item['permissao_descricao'] === 'adm(17)') {
+            $_SESSION['pdt_adm'] = true;
+        }
+
+        // Form Parcial
+        if ($item['sistema_nome'] === 'Form_Parcial') {
+            if ($item['permissao_descricao'] === 'relatorio(18)') {
+                $_SESSION['form_parcial_relatorio'] = true;
+            } else if ($item['permissao_descricao'] === 'form(18)') {
+                $_SESSION['form_parcial_form'] = true;
+            }
+        }
+
+        // Tombamento
+        if ($item['sistema_nome'] === 'tombamento' && $item['permissao_descricao'] === 'adm(19)') {
+            $_SESSION['tombamento_adm'] = true;
         }
     }
 }
