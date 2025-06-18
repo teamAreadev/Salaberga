@@ -1,6 +1,6 @@
 <?php
-require_once('../models/adm.model.php');
-$model_adm = new adm_model();
+require_once('../models/usuario.model.php');
+$model_usuario = new usuario_model();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -111,7 +111,7 @@ $model_adm = new adm_model();
     <h1>Em andamento</h1>
     <div class="demanda-container">
         <?php
-        $dados = $model_adm->select_demandas_andamentos();
+        $dados = $model_usuario->select_demandas_andamentos();
 
         foreach ($dados as $dado) {
             $prioridadeClass = strtolower($dado['prioridade']) . '-prioridade';
@@ -129,7 +129,7 @@ $model_adm = new adm_model();
     <h1>Pendente</h1>
     <div class="demanda-container">
         <?php
-        $dados = $model_adm->select_demandas_pendentes();
+        $dados = $model_usuario->select_demandas_pendentes();
 
         foreach ($dados as $dado) {
         ?>
@@ -146,7 +146,7 @@ $model_adm = new adm_model();
     <h1>Concluída</h1>
     <div class="demanda-container">
         <?php
-        $dados = $model_adm->select_demandas_concluidos();
+        $dados = $model_usuario->select_demandas_concluidos();
 
         foreach ($dados as $dado) {
         ?>
