@@ -10,10 +10,10 @@ class sessions
         // DEBUG: Remova depois de testar!
         // error_log('SESSION: ' . print_r($_SESSION, true));
 
-        if (!isset($_SESSION['login']) && !isset($_SESSION['estagio_adm'])) {
+        if (!isset($_SESSION['login']) && !isset($_SESSION['alimentacao_adm'])) {
             unset($_SESSION['login']);
             unset($_SESSION['status']);
-            header('location:../../../main/views/autenticacao/login.php');
+            header('location:../../../main/views/autenticacao/login.php?');
             exit();
         } 
         

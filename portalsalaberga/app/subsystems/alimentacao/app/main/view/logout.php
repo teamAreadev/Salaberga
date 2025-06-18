@@ -1,11 +1,6 @@
 <?php
-session_start();
-
-// Destrói a sessão
-session_unset();
-session_destroy();
-
-// Redireciona para a página de login
-header("Location: login.php?success=Logout realizado com sucesso");
+require_once('../model/sessions.php');
+$session = new sessions();
+$session->quebra_session();
+header('Location: ../../index.php');
 exit();
-?>

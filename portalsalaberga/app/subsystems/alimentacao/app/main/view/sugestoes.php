@@ -1,4 +1,9 @@
 <?php
+require_once('../model/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
+
 session_start();
 require_once '../model/Opiniao.class.php';
 

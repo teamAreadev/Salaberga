@@ -1,5 +1,8 @@
 <?php
-session_start();
+require_once('../model/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
 
 // Check if user is logged in and is an administrator
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['tipo_usuario'] !== 'administrador') {
