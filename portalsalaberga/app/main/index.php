@@ -1108,13 +1108,13 @@
                             x-transition:leave-start="opacity-100 transform translate-y-0"
                             x-transition:leave-end="opacity-0 transform -translate-y-2"
                             class="mt-2 pl-8 space-y-2">
-                            <a href="/login" 
+                            <a href="../main/views/autenticacao/login.php" 
                                class="block text-ghibli-forest hover:text-ghibli-coral transition-all duration-300 font-ghibli">
-                                <i class="fas fa-sign-in-alt mr-3"></i>Entrar
+                                <i class="fas fa-sign-in-alt mr-3"></i>Login Principal
                             </a>
-                            <a href="/register" 
+                            <a href="../main/views/autenticacao/login_parcial.php" 
                                class="block text-ghibli-forest hover:text-ghibli-coral transition-all duration-300 font-ghibli">
-                                <i class="fas fa-user-plus mr-3"></i>Cadastrar
+                                <i class="fas fa-user-plus mr-3"></i>Login Parcial
                             </a>
                         </div>
                     </div>
