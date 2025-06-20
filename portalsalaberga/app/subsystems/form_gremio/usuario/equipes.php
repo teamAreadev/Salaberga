@@ -164,29 +164,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <p class="text-primary-200 text-xs">Grêmio Estudantil José Ivan Pontes Júnior</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <a href="../assets/img/Copa Grêmio 2025 1.0 - Edital.pdf" download class="flex items-center space-x-2 text-white hover:text-primary-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10 font-semibold">
-                        <i class="fas fa-file-pdf text-red-400 text-lg"></i>
-                        <span>Edital</span>
-                    </a>
-                    <button id="mobile-menu-btn" class="md:hidden focus:outline-none">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                    <ul id="nav-menu" class="hidden md:flex space-x-4">
-                        <li><a href="dashboard.php" class="text-white hover:text-primary-200 px-3 py-2">Início</a></li>
-                        <li><a href="equipes.php" class="text-primary-200 border-b-2 border-primary-400 px-3 py-2">Equipes</a></li>
-                        <li><a href="../assets/img/Copa Grêmio 2025 1.0 - Edital.pdf" download class="flex items-center text-red-200 hover:text-white px-3 py-2 rounded-lg font-semibold transition-colors"><i class="fas fa-file-pdf mr-2"></i> Edital</a></li>
-                        <li><a href="logout.php" class="text-white hover:text-primary-200 px-3 py-2">Sair</a></li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden bg-primary-600">
-                <ul class="flex flex-col space-y-2 px-4 py-3">
-                    <li><a href="dashboard.php" class="text-white hover:text-primary-200 px-3 py-2 block">Início</a></li>
-                    <li><a href="equipes.php" class="text-primary-200 border-l-4 border-primary-400 px-3 py-2 block">Equipes</a></li>
-                    <li><a href="inscricoes.php" class="text-white hover:text-primary-200 px-3 py-2 block">Inscrições</a></li>
-                    <li><a href="logout.php" class="text-white hover:text-primary-200 px-3 py-2 block">Sair</a></li>
+                <ul class="flex items-center space-x-8">
+                    <li>
+                        <a href="../assets/img/Copa Grêmio 2025 1.0 - Edital.pdf" download class="flex items-center space-x-2 text-white hover:text-primary-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10 font-semibold">
+                            <i class="fas fa-file-pdf text-red-400 text-lg"></i>
+                            <span>Edital</span>
+                        </a>
+                    </li>
+                    <li><a href="dashboard.php" class="text-white hover:text-primary-200 px-3 py-2">Início</a></li>
+                    <li><a href="equipes.php" class="text-primary-200 border-b-2 border-primary-400 px-3 py-2">Equipes</a></li>
+                    <li><a href="logout.php" class="text-white hover:text-primary-200 px-3 py-2">Sair</a></li>
                 </ul>
             </div>
         </nav>
@@ -473,15 +460,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <select id="modalidade" name="modalidade" required class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             <option value="futsal">Futsal (Até 9 membros)</option>
-                            <option value="volei">Vôlei (Até 6 membros)</option>
+                            <option value="volei">Vôlei (Até 12 membros)</option>
                             <option value="basquete">Basquete (Até 5 membros)</option>
                             <option value="handebol">Handebol (Até 7 membros)</option>
                             <option value="queimada">Queimada (Até 8 membros)</option>
                             <option value="futmesa">Futmesa (Até 2 membros)</option>
                             <option value="teqball">Teqball (Até 2 membros)</option>
                             <option value="teqvolei">Teqvôlei (Até 2 membros)</option>
-                            <option value="beach_tenis">Beach Tennis (Até 2 membros)</option>
-                            <option value="volei_de_praia">Vôlei de Praia (Até 2 membros)</option>
                             <option value="tenis_de_mesa">Tênis de Mesa (Até 1 membro)</option>
                             <option value="dama">Dama (Até 1 membro)</option>
                             <option value="xadrez">Xadrez (Até 1 membro)</option>

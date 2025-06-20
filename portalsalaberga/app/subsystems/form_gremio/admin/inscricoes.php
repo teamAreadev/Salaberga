@@ -606,8 +606,6 @@ if (!isset($_SESSION['admin_id']) ||
                     'futmesa': 2,
                     'teqball': 2,
                     'teqvolei': 2,
-                    'beach_tenis': 2,
-                    'volei_de_praia': 2,
                     'tenis_de_mesa': 1,
                     'dama': 1,
                     'xadrez': 1,

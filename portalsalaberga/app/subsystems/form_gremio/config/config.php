@@ -64,16 +64,6 @@ $MODALIDADES = [
         'limite_jogadores' => 2,
         'categorias' => ['misto']
     ],
-    'beach_tenis' => [
-        'nome' => 'Beach Tennis',
-        'limite_jogadores' => 2,
-        'categorias' => ['masculino', 'feminino', 'misto']
-    ],
-    'volei_de_praia' => [
-        'nome' => 'Vôlei de Praia',
-        'limite_jogadores' => 2,
-        'categorias' => ['masculino', 'feminino', 'misto']
-    ],
     'tenis_de_mesa' => [
         'nome' => 'Tênis de Mesa',
         'limite_jogadores' => 1,

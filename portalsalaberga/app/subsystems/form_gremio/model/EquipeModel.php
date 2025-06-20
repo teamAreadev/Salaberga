@@ -576,10 +576,6 @@ class EquipeModel {
                 return 2;
             case 'teqvolei':
                 return 2;
-            case 'beach_tenis':
-                return 2;
-            case 'volei_de_praia':
-                return 2;
             case 'tenis_de_mesa':
                 return 1;
             case 'dama':
@@ -636,8 +632,6 @@ class EquipeModel {
                 'futmesa' => 2,
                 'teqball' => 2,
                 'teqvolei' => 2,
-                'beach_tenis' => 2,
-                'volei_de_praia' => 2,
                 'tenis_de_mesa' => 1,
                 'dama' => 1,
                 'xadrez' => 1,
