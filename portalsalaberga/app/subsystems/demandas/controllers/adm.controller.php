@@ -51,7 +51,7 @@ if (
             header('location: ../views/adm.php?status=ja_selecionado');
             exit();
     }
-} else if(isset($_POST['id_demanda_concluir']) && !empty($_POST['id_demanda_concluir'])){
+} else if (isset($_POST['id_demanda_concluir']) && !empty($_POST['id_demanda_concluir'])) {
 
     $id_demanda = $_POST['id_demanda_concluir'];
 
@@ -67,7 +67,53 @@ if (
             header('location: ../views/adm.php?status=error');
             exit();
     }
-}else{
+} else if (isset($_POST['id_demanda_excluir']) && !empty($_POST['id_demanda_excluir'])) {
+
+    $id_demanda = $_POST['id_demanda_excluir'];
+
+    $adm_model = new adm_model();
+    $result = $adm_model->excluir_demanda($id_demanda);
+
+    switch ($result) {
+        case 1:
+            header('location: ../views/adm.php?status=excluido');
+            exit();
+
+        case 2:
+            header('location: ../views/adm.php?status=error');
+            exit();
+    }
+} else if (
+    isset($_POST['id_demanda']) && !empty($_POST['id_demanda']) &&
+    isset($_POST['edit_titulo']) && !empty($_POST['edit_titulo']) &&
+    isset($_POST['edit_descricao']) && !empty($_POST['edit_descricao']) &&
+    isset($_POST['edit_status']) && !empty($_POST['edit_status']) &&
+    isset($_POST['edit_prioridade']) && !empty($_POST['edit_prioridade']) &&
+    isset($_POST['edit_prazo']) && !empty($_POST['edit_prazo'])
+) {
+    $id_demanda = $_POST['id_demanda'];
+    $titulo = $_POST['edit_titulo'];
+    $descricao = $_POST['edit_descricao'];
+    $prioridade = $_POST['edit_prioridade'];
+    $status = $_POST['edit_status'];
+    $prazo = $_POST['edit_prazo'];
+    $adm_model = new adm_model();
+    $result = $adm_model->editar_demanda($id_demanda, $titulo, $descricao, $prioridade, $status, $prazo);
+
+    switch ($result) {
+        case 1:
+            header('location: ../views/adm.php?status=editado');
+            exit();
+
+        case 2:
+            header('location: ../views/adm.php?status=error');
+            exit();
+
+        case 3:
+            header('location: ../views/adm.php?status=ja_existe');
+            exit();
+    }
+} else {
 
     header('location: ../views/adm.php?status=empty');
     exit();

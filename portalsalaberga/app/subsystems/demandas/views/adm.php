@@ -1,7 +1,10 @@
 <?php
 require_once('../models/adm.model.php');
+require_once('../../../main/models/sessions.php');
 $model_adm = new adm_model();
-session_start();
+
+$session = new sessions();
+$session->autenticar_session();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -71,7 +74,7 @@ session_start();
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
+            background:
                 radial-gradient(circle at 20% 80%, rgba(0, 122, 51, 0.03) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(0, 255, 107, 0.02) 0%, transparent 50%);
             pointer-events: none;
@@ -123,7 +126,7 @@ session_start();
         .demanda-card:hover {
             transform: translateY(-4px);
             border-color: rgba(0, 122, 51, 0.3);
-            box-shadow: 
+            box-shadow:
                 0 10px 25px rgba(0, 0, 0, 0.3),
                 0 0 0 1px rgba(0, 122, 51, 0.1),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -138,7 +141,8 @@ session_start();
         }
 
         /* Badge Styling */
-        .priority-badge, .status-badge {
+        .priority-badge,
+        .status-badge {
             display: inline-flex;
             align-items: center;
             padding: 0.4rem 0.8rem;
@@ -151,7 +155,8 @@ session_start();
             transition: all 0.3s ease;
         }
 
-        .priority-badge::before, .status-badge::before {
+        .priority-badge::before,
+        .status-badge::before {
             content: '';
             position: absolute;
             top: 0;
@@ -162,7 +167,8 @@ session_start();
             transition: left 0.5s ease;
         }
 
-        .priority-badge:hover::before, .status-badge:hover::before {
+        .priority-badge:hover::before,
+        .status-badge:hover::before {
             left: 100%;
         }
 
@@ -318,19 +324,19 @@ session_start();
         }
 
         .status-success {
-            background: rgba(16, 185, 129, 0.1); 
+            background: rgba(16, 185, 129, 0.1);
             color: #6ee7b7;
             border-color: rgba(16, 185, 129, 0.3);
         }
 
         .status-error {
-            background: rgba(239, 68, 68, 0.1); 
+            background: rgba(239, 68, 68, 0.1);
             color: #fca5a5;
             border-color: rgba(239, 68, 68, 0.3);
         }
 
         .status-empty {
-            background: rgba(245, 158, 11, 0.1); 
+            background: rgba(245, 158, 11, 0.1);
             color: #fcd34d;
             border-color: rgba(245, 158, 11, 0.3);
         }
@@ -389,18 +395,35 @@ session_start();
 
         /* Animations */
         @keyframes glow {
-            from { box-shadow: 0 0 5px rgba(0, 255, 107, 0.2); }
-            to { box-shadow: 0 0 20px rgba(0, 255, 107, 0.4); }
+            from {
+                box-shadow: 0 0 5px rgba(0, 255, 107, 0.2);
+            }
+
+            to {
+                box-shadow: 0 0 20px rgba(0, 255, 107, 0.4);
+            }
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-3px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-3px);
+            }
         }
 
         @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         /* Card content styling */
@@ -486,14 +509,14 @@ session_start();
                     <div class="hidden sm:flex items-center gap-2 text-gray-300 bg-dark-300/50 px-4 py-2 rounded-lg backdrop-filter backdrop-blur-sm">
                         <i class="fas fa-user-shield text-primary-50"></i>
                         <span class="text-sm truncate max-w-[200px]">
-                            <?php echo isset($_SESSION['usuario_nome']) ? htmlspecialchars($_SESSION['usuario_nome']) : 'Administrador'; ?>
+                            <?php echo isset($_SESSION['Nome']) ? htmlspecialchars($_SESSION['Nome']) : 'Administrador'; ?>
                         </span>
                     </div>
                     <button onclick="openModal('modalCadastrarDemanda')" class="btn btn-primary text-sm flex items-center gap-2 w-full sm:w-auto justify-center px-4 py-2 sm:px-4 sm:py-2 text-base sm:text-sm">
                         <i class="fas fa-plus"></i>
                         <span class="truncate">Nova Demanda</span>
                     </button>
-                    <a href="../../main/views/autenticacao/login.php" class="btn btn-secondary text-sm">
+                    <a href="../../../main/views/subsytem/subsistema.php" class="btn btn-secondary text-sm">
                         <i class="fas fa-sign-out-alt"></i>
                         Sair
                     </a>
@@ -516,6 +539,9 @@ session_start();
                 case 'empty':
                     echo '<div class="status-message status-empty"><i class="fas fa-info-circle"></i>Preencha todos os campos.</div>';
                     break;
+                case 'ja_selecionado':
+                    echo '<div class="status-message status-error"><i class="fas fa-user-check"></i>Você já foi selecionado para esta demanda!</div>';
+                    break;
             }
         }
         ?>
@@ -533,9 +559,9 @@ session_start();
                             <h2 class="text-lg font-semibold text-white">Pendente</h2>
                         </div>
                         <span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full text-sm font-medium">
-                            <?php 
+                            <?php
                             $pendentes = $model_adm->select_demandas_pendentes();
-                            echo count($pendentes); 
+                            echo count($pendentes);
                             ?>
                         </span>
                     </div>
@@ -545,43 +571,64 @@ session_start();
                     if (!empty($pendentes)) {
                         foreach ($pendentes as $dado) {
                     ?>
-                        <div class="demanda-card">
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="card-title">
-                                    <?= htmlspecialchars($dado['titulo']) ?>
-                                </h3>
-                                <button type="button" class="text-gray-400 hover:text-primary-50 p-2 rounded-full transition-colors focus:outline-none" title="Mais informações"
-                                    onclick="openInfoModal('<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['prazo'])) ?>', '<?= isset($dado['nome_usuario']) ? htmlspecialchars(addslashes($dado['nome_usuario'])) : 'Não atribuído' ?>')">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
-                            </div>
-                            
-                            <p class="card-description">
-                                <?= htmlspecialchars($dado['descricao']) ?>
-                            </p>
-                            
-                            <div class="flex items-end justify-between gap-2 mt-auto pt-4">
-                                <div class="flex flex-wrap gap-2">
-                                <span class="priority-badge priority-<?= strtolower($dado['prioridade']) ?>">
-                                        <i class="fas fa-flag"></i>
-                                    <?= htmlspecialchars($dado['prioridade']) ?>
-                                </span>
-                                <span class="status-badge status-pendente">
-                                        <i class="fas fa-clock"></i>
-                                    <?= htmlspecialchars($dado['status']) ?>
-                                </span>
-                            </div>
-                                <form action="../controllers/adm.controller.php" method="post">
-                                    <input type="hidden" name="id_usuario" value="<?= $_SESSION['user_id'] ?>">
-                                    <input type="hidden" name="id_demanda" value="<?= $dado['id'] ?>">
-                                    <button type="submit" class="btn btn-yellow flex items-center gap-2 px-4 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
-                                        <i class="fas fa-play"></i>
-                                        Iniciar
+                            <div class="demanda-card">
+                                <div class="flex justify-between items-start mb-3">
+                                    <h3 class="card-title">
+                                        <?= htmlspecialchars($dado['titulo']) ?>
+                                    </h3>
+                                    <button type="button" class="text-gray-400 hover:text-primary-50 p-2 rounded-full transition-colors focus:outline-none" title="Mais informações"
+                                        onclick="openInfoModal('<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['prazo'])) ?>', '<?= isset($dado['nome_usuario']) ? htmlspecialchars(addslashes($dado['nome_usuario'])) : 'Não atribuído' ?>')">
+                                        <i class="fas fa-ellipsis-v"></i>
                                     </button>
-                                </form>
+                                </div>
+
+                                <p class="card-description">
+                                    <?= htmlspecialchars($dado['descricao']) ?>
+                                </p>
+
+                                <div class="flex items-end justify-between gap-2 mt-auto pt-4">
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="priority-badge priority-<?= strtolower($dado['prioridade']) ?>">
+                                            <i class="fas fa-flag"></i>
+                                            <?= htmlspecialchars($dado['prioridade']) ?>
+                                        </span>
+                                        <span class="status-badge status-pendente">
+                                            <i class="fas fa-clock"></i>
+                                            <?= htmlspecialchars($dado['status']) ?>
+                                        </span>
+                                        <span class="status-badge status-pendente">
+                                            <i class="fas fa-calendar-plus"></i>
+                                            <?= htmlspecialchars($dado['data_criacao']) ?>
+                                        </span>
+                                        <span class="status-badge status-pendente">
+                                            <i class="fas fa-calendar-check"></i>
+                                            <?= htmlspecialchars($dado['prazo']) ?>
+                                        </span>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <form action="../controllers/adm.controller.php" method="post">
+                                            <input type="hidden" name="id_usuario" value="<?= $_SESSION['user_id'] ?>">
+                                            <input type="hidden" name="id_demanda" value="<?= $dado['id'] ?>">
+                                            <button type="submit" class="btn btn-yellow flex items-center gap-2 px-3 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
+                                                <i class="fas fa-play"></i>
+                                                Iniciar
+                                            </button>
+                                        </form>
+                                        <button onclick="openEditarModal(<?= $dado['id'] ?>, '<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['descricao'])) ?>', '<?= htmlspecialchars($dado['prioridade']) ?>', '<?= htmlspecialchars($dado['status']) ?>', '<?= htmlspecialchars($dado['prazo']) ?>')" class="btn btn-primary flex items-center gap-2 px-3 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
+                                            <i class="fas fa-edit"></i>
+                                            Editar
+                                        </button>
+                                        <form action="../controllers/adm.controller.php" method="post" onsubmit="return confirm('Tem certeza que deseja excluir esta demanda?')">
+                                            <input type="hidden" name="id_demanda_excluir" value="<?= $dado['id'] ?>">
+                                            <button type="submit" class="btn btn-secondary flex items-center gap-2 px-3 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
+                                                <i class="fas fa-trash"></i>
+                                                Excluir
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    <?php 
+                    <?php
                         }
                     } else {
                         echo '<div class="text-center text-gray-400 py-8">
@@ -604,9 +651,9 @@ session_start();
                             <h2 class="text-lg font-semibold text-white">Em Andamento</h2>
                         </div>
                         <span class="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm font-medium">
-                            <?php 
+                            <?php
                             $andamentos = $model_adm->select_demandas_andamentos();
-                            echo count($andamentos); 
+                            echo count($andamentos);
                             ?>
                         </span>
                     </div>
@@ -616,42 +663,65 @@ session_start();
                     if (!empty($andamentos)) {
                         foreach ($andamentos as $dado) {
                     ?>
-                        <div class="demanda-card">
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="card-title">
-                                    <?= htmlspecialchars($dado['titulo']) ?>
-                                </h3>
-                                <button type="button" class="text-gray-400 hover:text-primary-50 p-2 rounded-full transition-colors focus:outline-none" title="Mais informações"
-                                    onclick="openInfoModal('<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['prazo'])) ?>', '<?= isset($dado['nome_usuario']) ? htmlspecialchars(addslashes($dado['nome_usuario'])) : 'Não atribuído' ?>')">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
-                            </div>
-                            
-                            <p class="card-description">
-                                <?= htmlspecialchars($dado['descricao']) ?>
-                            </p>
-                            
-                            <div class="flex items-end justify-between gap-2 mt-auto pt-4">
-                                <div class="flex flex-wrap gap-2">
-                                <span class="priority-badge priority-<?= strtolower($dado['prioridade']) ?>">
-                                        <i class="fas fa-flag"></i>
-                                    <?= htmlspecialchars($dado['prioridade']) ?>
-                                </span>
-                                <span class="status-badge status-andamento">
-                                        <i class="fas fa-spinner"></i>
-                                    <?= htmlspecialchars($dado['status']) ?>
-                                </span>
-                            </div>
-                                <form action="../controllers/adm.controller.php" method="post">
-                                    <input type="hidden" name="id_demanda_concluir" value="<?= $dado['id'] ?>">
-                                    <button type="submit" class="btn btn-primary flex items-center gap-2 px-4 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
-                                        <i class="fas fa-check"></i>
-                                        Concluir
+                            <div class="demanda-card">
+                                <div class="flex justify-between items-start mb-3">
+                                    <h3 class="card-title">
+                                        <?= htmlspecialchars($dado['titulo']) ?>
+                                    </h3>
+                                    <button type="button" class="text-gray-400 hover:text-primary-50 p-2 rounded-full transition-colors focus:outline-none" title="Mais informações"
+                                        onclick="openInfoModal('<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['prazo'])) ?>', '<?= isset($dado['nome_usuario']) ? htmlspecialchars(addslashes($dado['nome_usuario'])) : 'Não atribuído' ?>')">
+                                        <i class="fas fa-ellipsis-v"></i>
                                     </button>
-                                </form>
+                                </div>
+
+                                <p class="card-description">
+                                    <?= htmlspecialchars($dado['descricao']) ?>
+                                </p>
+
+                                <div class="flex items-end justify-between gap-2 mt-auto pt-4">
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="priority-badge priority-<?= strtolower($dado['prioridade']) ?>">
+                                            <i class="fas fa-flag"></i>
+                                            <?= htmlspecialchars($dado['prioridade']) ?>
+                                        </span>
+                                        <span class="status-badge status-andamento">
+                                            <i class="fas fa-spinner"></i>
+                                            <?= htmlspecialchars($dado['status']) ?>
+                                        </span>
+                                        <span class="status-badge status-andamento">
+                                            <i class="fas fa-users"></i>
+                                            <?php
+                                            $id_demanda = $dado['id'];
+                                            $nomes = $model_adm->select_nomes($id_demanda);
+                                            foreach ($nomes as $nome) {
+                                                echo htmlspecialchars($nome['nome']);
+                                            }
+                                            ?>
+                                        </span>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <form action="../controllers/adm.controller.php" method="post">
+                                            <input type="hidden" name="id_demanda_concluir" value="<?= $dado['id'] ?>">
+                                            <button type="submit" class="btn btn-green flex items-center gap-2 px-3 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
+                                                <i class="fas fa-check"></i>
+                                                Concluir
+                                            </button>
+                                        </form>
+                                        <button onclick="openEditarModal(<?= $dado['id'] ?>, '<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['descricao'])) ?>', '<?= htmlspecialchars($dado['prioridade']) ?>', '<?= htmlspecialchars($dado['status']) ?>', '<?= htmlspecialchars($dado['prazo']) ?>')" class="btn btn-primary flex items-center gap-2 px-3 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
+                                            <i class="fas fa-edit"></i>
+                                            Editar
+                                        </button>
+                                        <form action="../controllers/adm.controller.php" method="post" onsubmit="return confirm('Tem certeza que deseja excluir esta demanda?')">
+                                            <input type="hidden" name="id_demanda_excluir" value="<?= $dado['id'] ?>">
+                                            <button type="submit" class="btn btn-secondary flex items-center gap-2 px-3 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
+                                                <i class="fas fa-trash"></i>
+                                                Excluir
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    <?php 
+                    <?php
                         }
                     } else {
                         echo '<div class="text-center text-gray-400 py-8">
@@ -674,9 +744,9 @@ session_start();
                             <h2 class="text-lg font-semibold text-white">Concluída</h2>
                         </div>
                         <span class="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm font-medium">
-                            <?php 
+                            <?php
                             $concluidos = $model_adm->select_demandas_concluidos();
-                            echo count($concluidos); 
+                            echo count($concluidos);
                             ?>
                         </span>
                     </div>
@@ -686,33 +756,52 @@ session_start();
                     if (!empty($concluidos)) {
                         foreach ($concluidos as $dado) {
                     ?>
-                        <div class="demanda-card">
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="card-title">
-                                    <?= htmlspecialchars($dado['titulo']) ?>
-                                </h3>
-                                <button type="button" class="text-gray-400 hover:text-primary-50 p-2 rounded-full transition-colors focus:outline-none" title="Mais informações"
-                                    onclick="openInfoModal('<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['prazo'])) ?>', '<?= isset($dado['nome_usuario']) ? htmlspecialchars(addslashes($dado['nome_usuario'])) : 'Não atribuído' ?>')">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
+                            <div class="demanda-card">
+                                <div class="flex justify-between items-start mb-3">
+                                    <h3 class="card-title">
+                                        <?= htmlspecialchars($dado['titulo']) ?>
+                                    </h3>
+                                    <button type="button" class="text-gray-400 hover:text-primary-50 p-2 rounded-full transition-colors focus:outline-none" title="Mais informações"
+                                        onclick="openInfoModal('<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['prazo'])) ?>', '<?= isset($dado['nome_usuario']) ? htmlspecialchars(addslashes($dado['nome_usuario'])) : 'Não atribuído' ?>')">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+
+                                <p class="card-description">
+                                    <?= htmlspecialchars($dado['descricao']) ?>
+                                </p>
+
+                                <div class="flex items-end justify-between gap-2 mt-auto pt-4">
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="priority-badge priority-<?= strtolower($dado['prioridade']) ?>">
+                                            <i class="fas fa-flag"></i>
+                                            <?= htmlspecialchars($dado['prioridade']) ?>
+                                        </span>
+                                        <span class="status-badge status-concluido">
+                                            <i class="fas fa-check-circle"></i>
+                                            <?= htmlspecialchars($dado['status']) ?>
+                                        </span>
+                                        <span class="status-badge status-concluido">
+                                            <i class="fas fa-calendar-check"></i>
+                                            <?= htmlspecialchars($dado['data_conclusao']) ?>
+                                        </span>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button onclick="openEditarModal(<?= $dado['id'] ?>, '<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['descricao'])) ?>', '<?= htmlspecialchars($dado['prioridade']) ?>', '<?= htmlspecialchars($dado['status']) ?>', '<?= htmlspecialchars($dado['prazo']) ?>')" class="btn btn-primary flex items-center gap-2 px-3 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
+                                            <i class="fas fa-edit"></i>
+                                            Editar
+                                        </button>
+                                        <form action="../controllers/adm.controller.php" method="post" onsubmit="return confirm('Tem certeza que deseja excluir esta demanda?')">
+                                            <input type="hidden" name="id_demanda_excluir" value="<?= $dado['id'] ?>">
+                                            <button type="submit" class="btn btn-secondary flex items-center gap-2 px-3 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
+                                                <i class="fas fa-trash"></i>
+                                                Excluir
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <p class="card-description">
-                                <?= htmlspecialchars($dado['descricao']) ?>
-                            </p>
-                            
-                            <div class="flex flex-wrap gap-2 mt-4">
-                                <span class="priority-badge priority-<?= strtolower($dado['prioridade']) ?>">
-                                    <i class="fas fa-flag"></i>
-                                    <?= htmlspecialchars($dado['prioridade']) ?>
-                                </span>
-                                <span class="status-badge status-concluido">
-                                    <i class="fas fa-check-circle"></i>
-                                    <?= htmlspecialchars($dado['status']) ?>
-                                </span>
-                            </div>
-                        </div>
-                    <?php 
+                    <?php
                         }
                     } else {
                         echo '<div class="text-center text-gray-400 py-8">
@@ -736,76 +825,161 @@ session_start();
             <div class="mb-3">
                 <span class="block text-gray-400 text-sm mb-1">Prazo:</span>
                 <span class="block text-lg font-semibold" id="infoModalPrazo"></span>
-                                </div>
+            </div>
             <div>
                 <span class="block text-gray-400 text-sm mb-1">Responsável:</span>
                 <span class="block text-lg font-semibold" id="infoModalResponsavel"></span>
-                            </div>
-                        </div>
-                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal Nova Demanda -->
-    <div id="modalCadastrarDemanda" class="modal fixed inset-0 hidden items-center justify-center p-4 z-50">
-        <div class="modal-content w-full max-w-md p-0 rounded-2xl shadow-2xl border-2 border-primary-500 bg-gradient-to-br from-[#181818] via-[#232323] to-[#1a1a1a] relative overflow-hidden">
-            <div class="flex justify-between items-center px-8 pt-8 pb-4 border-b border-primary-900/20 bg-primary-900/10">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 bg-primary-500/30 rounded-xl flex items-center justify-center shadow-lg">
-                        <i class="fas fa-plus text-primary-400 text-2xl"></i>
+    <div id="modalCadastrarDemanda" class="modal fixed inset-0 hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="modal-content w-full max-w-md max-h-[90vh] overflow-y-auto p-0 rounded-2xl shadow-2xl border-2 border-primary-500 bg-gradient-to-br from-[#181818] via-[#232323] to-[#1a1a1a] relative">
+            <div class="flex justify-between items-center px-4 sm:px-8 pt-6 sm:pt-8 pb-4 border-b border-primary-900/20 bg-primary-900/10 sticky top-0 z-10">
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <div class="w-8 h-8 sm:w-12 sm:h-12 bg-primary-500/30 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-plus text-primary-400 text-lg sm:text-2xl"></i>
                     </div>
-                    <h3 class="text-2xl font-extrabold text-white tracking-tight drop-shadow">Nova Demanda</h3>
+                    <h3 class="text-lg sm:text-2xl font-extrabold text-white tracking-tight drop-shadow">Nova Demanda</h3>
                 </div>
                 <button onclick="closeModal('modalCadastrarDemanda')" class="text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-800 rounded-lg">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="../controllers/adm.controller.php" method="post" class="space-y-6 px-8 py-8">
+            <form action="../controllers/adm.controller.php" method="post" class="space-y-4 sm:space-y-6 px-4 sm:px-8 py-6 sm:py-8">
                 <div>
-                    <label for="titulo" class="block text-gray-300 mb-2 font-semibold">Título</label>
+                    <label for="titulo" class="block text-gray-300 mb-2 font-semibold text-sm sm:text-base">Título</label>
                     <div class="relative">
                         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-primary-400"><i class="fas fa-heading"></i></span>
-                        <input type="text" name="titulo" id="titulo" required class="custom-input pl-10">
+                        <input type="text" name="titulo" id="titulo" required class="custom-input pl-10 text-sm sm:text-base">
                     </div>
                 </div>
                 <div>
-                    <label for="descricao" class="block text-gray-300 mb-2 font-semibold">Descrição</label>
+                    <label for="descricao" class="block text-gray-300 mb-2 font-semibold text-sm sm:text-base">Descrição</label>
                     <div class="relative">
                         <span class="absolute left-3 top-3 text-primary-400"><i class="fas fa-align-left"></i></span>
-                        <textarea name="descricao" id="descricao" required class="custom-input min-h-[100px] resize-none pl-10 pt-7"></textarea>
+                        <textarea name="descricao" id="descricao" required class="custom-input min-h-[80px] sm:min-h-[100px] resize-none pl-10 pt-7 text-sm sm:text-base"></textarea>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-gray-300 mb-3 font-semibold">Prioridade</label>
-                    <div class="flex gap-3">
-                        <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border border-gray-700 hover:border-green-500 transition-colors shadow-sm">
+                    <label class="block text-gray-300 mb-3 font-semibold text-sm sm:text-base">Prioridade</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer p-2 sm:p-3 rounded-lg border border-gray-700 hover:border-green-500 transition-colors shadow-sm">
                             <input type="radio" name="prioridade" value="baixa" required class="accent-green-500">
-                            <span class="text-green-400 font-medium"><i class="fas fa-arrow-down"></i> Baixa</span>
+                            <span class="text-green-400 font-medium text-xs sm:text-sm"><i class="fas fa-arrow-down"></i> Baixa</span>
                         </label>
-                        <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border border-gray-700 hover:border-yellow-500 transition-colors shadow-sm">
+                        <label class="flex items-center gap-2 cursor-pointer p-2 sm:p-3 rounded-lg border border-gray-700 hover:border-yellow-500 transition-colors shadow-sm">
                             <input type="radio" name="prioridade" value="media" required class="accent-yellow-500">
-                            <span class="text-yellow-400 font-medium"><i class="fas fa-arrow-right"></i> Média</span>
+                            <span class="text-yellow-400 font-medium text-xs sm:text-sm"><i class="fas fa-arrow-right"></i> Média</span>
                         </label>
-                        <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border border-gray-700 hover:border-red-500 transition-colors shadow-sm">
+                        <label class="flex items-center gap-2 cursor-pointer p-2 sm:p-3 rounded-lg border border-gray-700 hover:border-red-500 transition-colors shadow-sm">
                             <input type="radio" name="prioridade" value="alta" required class="accent-red-500">
-                            <span class="text-red-400 font-medium"><i class="fas fa-arrow-up"></i> Alta</span>
+                            <span class="text-red-400 font-medium text-xs sm:text-sm"><i class="fas fa-arrow-up"></i> Alta</span>
                         </label>
                     </div>
                 </div>
                 <input type="hidden" name="id_admin" value="<?= $_SESSION['user_id'] ?>">
                 <div>
-                    <label for="prazo" class="block text-gray-300 mb-2 font-semibold">Prazo</label>
+                    <label for="prazo" class="block text-gray-300 mb-2 font-semibold text-sm sm:text-base">Prazo</label>
                     <div class="relative">
                         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-primary-400"><i class="fas fa-calendar-alt"></i></span>
-                        <input type="date" name="prazo" id="prazo" required class="custom-input pl-10">
+                        <input type="date" name="prazo" id="prazo" required class="custom-input pl-10 text-sm sm:text-base">
                     </div>
                 </div>
-                <div class="flex justify-end gap-3 mt-8">
-                    <button type="button" onclick="closeModal('modalCadastrarDemanda')" class="btn bg-gray-700 hover:bg-gray-800 text-white font-semibold shadow-md px-6 py-2">
+                <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 mt-6 sm:mt-8 pt-4 border-t border-gray-700">
+                    <button type="button" onclick="closeModal('modalCadastrarDemanda')" class="btn bg-gray-700 hover:bg-gray-800 text-white font-semibold shadow-md px-4 sm:px-6 py-2 text-sm sm:text-base order-2 sm:order-1">
                         <i class="fas fa-times"></i>
                         Cancelar
                     </button>
-                    <button type="submit" class="btn btn-primary font-bold shadow-md px-6 py-2">
+                    <button type="submit" class="btn btn-primary font-bold shadow-md px-4 sm:px-6 py-2 text-sm sm:text-base order-1 sm:order-2">
                         <i class="fas fa-save"></i>
                         Cadastrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Demanda -->
+    <div id="modalEditarDemanda" class="modal fixed inset-0 hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="modal-content w-full max-w-md max-h-[90vh] overflow-y-auto p-0 rounded-2xl shadow-2xl border-2 border-primary-500 bg-gradient-to-br from-[#181818] via-[#232323] to-[#1a1a1a] relative">
+            <div class="flex justify-between items-center px-4 sm:px-8 pt-6 sm:pt-8 pb-4 border-b border-primary-900/20 bg-primary-900/10 sticky top-0 z-10">
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <div class="w-8 h-8 sm:w-12 sm:h-12 bg-primary-500/30 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-edit text-primary-400 text-lg sm:text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-2xl font-extrabold text-white tracking-tight drop-shadow">Editar Demanda</h3>
+                </div>
+                <button onclick="closeModal('modalEditarDemanda')" class="text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-800 rounded-lg">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form action="../controllers/adm.controller.php" method="post" class="space-y-4 sm:space-y-6 px-4 sm:px-8 py-6 sm:py-8">
+                <input type="hidden" name="id_demanda" id="edit_id_demanda">
+                <div>
+                    <label for="edit_titulo" class="block text-gray-300 mb-2 font-semibold text-sm sm:text-base">Título</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-primary-400"><i class="fas fa-heading"></i></span>
+                        <input type="text" name="edit_titulo" id="edit_titulo" required class="custom-input pl-10 text-sm sm:text-base">
+                    </div>
+                </div>
+                <div>
+                    <label for="edit_descricao" class="block text-gray-300 mb-2 font-semibold text-sm sm:text-base">Descrição</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-3 text-primary-400"><i class="fas fa-align-left"></i></span>
+                        <textarea name="edit_descricao" id="edit_descricao" required class="custom-input min-h-[80px] sm:min-h-[100px] resize-none pl-10 pt-7 text-sm sm:text-base"></textarea>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-300 mb-3 font-semibold text-sm sm:text-base">Prioridade</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer p-2 sm:p-3 rounded-lg border border-gray-700 hover:border-green-500 transition-colors shadow-sm">
+                            <input type="radio" name="edit_prioridade" value="baixa" required class="accent-green-500">
+                            <span class="text-green-400 font-medium text-xs sm:text-sm"><i class="fas fa-arrow-down"></i> Baixa</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-2 sm:p-3 rounded-lg border border-gray-700 hover:border-yellow-500 transition-colors shadow-sm">
+                            <input type="radio" name="edit_prioridade" value="media" required class="accent-yellow-500">
+                            <span class="text-yellow-400 font-medium text-xs sm:text-sm"><i class="fas fa-arrow-right"></i> Média</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-2 sm:p-3 rounded-lg border border-gray-700 hover:border-red-500 transition-colors shadow-sm">
+                            <input type="radio" name="edit_prioridade" value="alta" required class="accent-red-500">
+                            <span class="text-red-400 font-medium text-xs sm:text-sm"><i class="fas fa-arrow-up"></i> Alta</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-300 mb-3 font-semibold text-sm sm:text-base">Status</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer p-2 sm:p-3 rounded-lg border border-gray-700 hover:border-yellow-500 transition-colors shadow-sm">
+                            <input type="radio" name="edit_status" value="pendente" required class="accent-yellow-500">
+                            <span class="text-yellow-400 font-medium text-xs sm:text-sm"><i class="fas fa-clock"></i> Pendente</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-2 sm:p-3 rounded-lg border border-gray-700 hover:border-blue-500 transition-colors shadow-sm">
+                            <input type="radio" name="edit_status" value="em_andamento" required class="accent-blue-500">
+                            <span class="text-blue-400 font-medium text-xs sm:text-sm"><i class="fas fa-spinner"></i> Em Andamento</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-2 sm:p-3 rounded-lg border border-gray-700 hover:border-green-500 transition-colors shadow-sm">
+                            <input type="radio" name="edit_status" value="concluida" required class="accent-green-500">
+                            <span class="text-green-400 font-medium text-xs sm:text-sm"><i class="fas fa-check"></i> Concluída</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label for="edit_prazo" class="block text-gray-300 mb-2 font-semibold text-sm sm:text-base">Prazo</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-primary-400"><i class="fas fa-calendar-alt"></i></span>
+                        <input type="date" name="edit_prazo" id="edit_prazo" required class="custom-input pl-10 text-sm sm:text-base">
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 mt-6 sm:mt-8 pt-4 border-t border-gray-700">
+                    <button type="button" onclick="closeModal('modalEditarDemanda')" class="btn bg-gray-700 hover:bg-gray-800 text-white font-semibold shadow-md px-4 sm:px-6 py-2 text-sm sm:text-base order-2 sm:order-1">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary font-bold shadow-md px-4 sm:px-6 py-2 text-sm sm:text-base order-1 sm:order-2">
+                        <i class="fas fa-save"></i>
+                        Salvar Alterações
                     </button>
                 </div>
             </form>
@@ -817,11 +991,11 @@ session_start();
         function openModal(id) {
             const modal = document.getElementById(id);
             const modalContent = modal.querySelector('.modal-content');
-            
+
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
-            
+
             gsap.fromTo(modal, {
                 opacity: 0
             }, {
@@ -829,7 +1003,7 @@ session_start();
                 duration: 0.3,
                 ease: 'power2.out'
             });
-            
+
             gsap.fromTo(modalContent, {
                 opacity: 0,
                 scale: 0.9,
@@ -846,7 +1020,7 @@ session_start();
         function closeModal(id) {
             const modal = document.getElementById(id);
             const modalContent = modal.querySelector('.modal-content');
-            
+
             gsap.to(modalContent, {
                 opacity: 0,
                 scale: 0.9,
@@ -854,7 +1028,7 @@ session_start();
                 duration: 0.3,
                 ease: 'power2.in'
             });
-            
+
             gsap.to(modal, {
                 opacity: 0,
                 duration: 0.3,
@@ -903,7 +1077,7 @@ session_start();
                     submitBtn.disabled = true;
                     const originalText = submitBtn.innerHTML;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processando...';
-                    
+
                     setTimeout(() => {
                         submitBtn.disabled = false;
                         submitBtn.innerHTML = originalText;
@@ -918,7 +1092,7 @@ session_start();
                 e.preventDefault();
                 openModal('modalCadastrarDemanda');
             }
-            
+
             if (e.key === 'Escape') {
                 const openModal = document.querySelector('.modal:not(.hidden)');
                 if (openModal) {
@@ -937,6 +1111,7 @@ session_start();
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
         }
+
         function closeInfoModal() {
             const modal = document.getElementById('infoModal');
             modal.classList.add('hidden');
@@ -950,6 +1125,29 @@ session_start();
                 closeInfoModal();
             }
         });
+
+        // Modal de edição de demanda
+        function openEditarModal(id, titulo, descricao, prioridade, status, prazo) {
+            // Preencher campos de texto
+            document.getElementById('edit_id_demanda').value = id;
+            document.getElementById('edit_titulo').value = titulo;
+            document.getElementById('edit_descricao').value = descricao;
+            document.getElementById('edit_prazo').value = prazo;
+            
+            // Selecionar radio button de prioridade
+            const prioridadeRadio = document.querySelector(`input[name="edit_prioridade"][value="${prioridade}"]`);
+            if (prioridadeRadio) {
+                prioridadeRadio.checked = true;
+            }
+            
+            // Selecionar radio button de status
+            const statusRadio = document.querySelector(`input[name="edit_status"][value="${status}"]`);
+            if (statusRadio) {
+                statusRadio.checked = true;
+            }
+            
+            openModal('modalEditarDemanda');
+        }
     </script>
 </body>
 

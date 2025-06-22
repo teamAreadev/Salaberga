@@ -92,4 +92,18 @@ class usuario_model extends connect
             return 2;
         }
     }
+
+    public function select_nomes($id_demanda)
+    {
+        $stmt_nomes = $this->connect_demandas->prepare(
+            "SELECT u.nome 
+            FROM $this->tabela3 du 
+            INNER JOIN salaberga.usuarios u ON du.id_usuario = u.id 
+            WHERE du.id_demanda = :id_demanda"
+        );
+        $stmt_nomes->bindValue(':id_demanda', $id_demanda);
+        $stmt_nomes->execute();
+        $result = $stmt_nomes->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }

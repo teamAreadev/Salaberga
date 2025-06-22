@@ -1,7 +1,10 @@
 <?php
 require_once('../models/usuario.model.php');
+require_once('../../../main/models/sessions.php');
 $model_usuario = new usuario_model();
-session_start();
+
+$session = new sessions();
+$session->autenticar_session();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -457,12 +460,12 @@ session_start();
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="flex items-center gap-2 text-gray-300 bg-dark-300/50 px-4 py-2 rounded-lg backdrop-filter backdrop-blur-sm">
-                        <i class="fas fa-user-shield text-primary-50"></i>
+                        <i class="fas fa-user text-primary-50"></i>
                         <span class="text-sm truncate max-w-[200px]">
-                            <?php echo isset($_SESSION['usuario_nome']) ? htmlspecialchars($_SESSION['usuario_nome']) : 'Usuário'; ?>
+                            <?php echo isset($_SESSION['Nome']) ? htmlspecialchars($_SESSION['Nome']) : 'Usuário'; ?>
                         </span>
                     </div>
-                    <a href="../../main/views/autenticacao/login.php" class="btn btn-secondary text-sm">
+                    <a href="../../../main/views/subsytem/subsistema.php" class="btn btn-secondary text-sm">
                         <i class="fas fa-sign-out-alt"></i>
                         Sair
                     </a>
@@ -477,13 +480,16 @@ session_start();
         if (isset($_GET['status'])) {
             switch ($_GET['status']) {
                 case 'success':
-                    echo '<div class="status-message status-success"><i class="fas fa-check-circle"></i>Demanda cadastrada com sucesso!</div>';
+                    echo '<div class="status-message status-success"><i class="fas fa-check-circle"></i>Demanda iniciada com sucesso!</div>';
                     break;
                 case 'error':
-                    echo '<div class="status-message status-error"><i class="fas fa-exclamation-triangle"></i>Erro ao cadastrar demanda.</div>';
+                    echo '<div class="status-message status-error"><i class="fas fa-exclamation-triangle"></i>Erro ao processar demanda.</div>';
                     break;
                 case 'empty':
                     echo '<div class="status-message status-empty"><i class="fas fa-info-circle"></i>Preencha todos os campos.</div>';
+                    break;
+                case 'ja_selecionado':
+                    echo '<div class="status-message status-error"><i class="fas fa-user-check"></i>Você já foi selecionado para esta demanda!</div>';
                     break;
             }
         }
@@ -498,7 +504,7 @@ session_start();
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-yellow-500/20 rounded-lg flex items-center justify-center">
                                 <i class="fas fa-clock text-yellow-400 text-sm"></i>
-        </div>
+                            </div>
                             <h2 class="text-lg font-semibold text-white">Pendente</h2>
                         </div>
                         <span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full text-sm font-medium">
@@ -508,7 +514,7 @@ session_start();
                             ?>
                         </span>
                     </div>
-                    </div>
+                </div>
                 <div class="space-y-6">
                     <?php
                     if (!empty($pendentes)) {
@@ -537,10 +543,19 @@ session_start();
                                         <i class="fas fa-clock"></i>
                                         <?= htmlspecialchars($dado['status']) ?>
                                     </span>
+                                    <span class="status-badge status-pendente">
+                                        <i class="fas fa-calendar-plus"></i>
+                                        <?= htmlspecialchars($dado['data_criacao']) ?>
+                                    </span>
+                                    <span class="status-badge status-pendente">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <?= htmlspecialchars($dado['prazo']) ?>
+                                    </span>
                                 </div>
                                 <form action="../controllers/usuario.controller.php" method="post">
+                                    <input type="hidden" name="id_usuario" value="<?= $_SESSION['user_id'] ?>">
                                     <input type="hidden" name="id_demanda" value="<?= $dado['id'] ?>">
-                                    <button type="submit" class="btn btn-yellow flex items-center gap-2 px-4 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
+                                    <button type="submit" class="btn btn-yellow flex items-center gap-2 px-3 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
                                         <i class="fas fa-play"></i>
                                         Iniciar
                                     </button>
@@ -605,10 +620,20 @@ session_start();
                                         <i class="fas fa-spinner"></i>
                                         <?= htmlspecialchars($dado['status']) ?>
                                     </span>
+                                    <span class="status-badge status-andamento">
+                                        <i class="fas fa-users"></i>
+                                        <?php
+                                        $id_demanda = $dado['id'];
+                                        $nomes = $model_usuario->select_nomes($id_demanda);
+                                        foreach ($nomes as $nome) {
+                                            echo htmlspecialchars($nome['nome']);
+                                        }
+                                        ?>
+                                    </span>
                                 </div>
                                 <form action="../controllers/usuario.controller.php" method="post">
                                     <input type="hidden" name="id_demanda_concluir" value="<?= $dado['id'] ?>">
-                                    <button type="submit" class="btn btn-primary flex items-center gap-2 px-4 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
+                                    <button type="submit" class="btn btn-green flex items-center gap-2 px-3 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
                                         <i class="fas fa-check"></i>
                                         Concluir
                                     </button>
@@ -663,17 +688,22 @@ session_start();
                             <p class="card-description">
                                 <?= htmlspecialchars($dado['descricao']) ?>
                             </p>
-                            <div class="flex flex-wrap gap-2 mt-auto">
-                                <span class="priority-badge priority-<?= strtolower($dado['prioridade']) ?>">
-                                    <i class="fas fa-flag"></i>
-                                    <?= htmlspecialchars($dado['prioridade']) ?>
-                                </span>
-                                <span class="status-badge status-concluido">
-                                    <i class="fas fa-check-circle"></i>
-                                    <?= htmlspecialchars($dado['status']) ?>
-                                </span>
+                            <div class="flex items-end justify-between gap-2 mt-auto pt-4">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="priority-badge priority-<?= strtolower($dado['prioridade']) ?>">
+                                        <i class="fas fa-flag"></i>
+                                        <?= htmlspecialchars($dado['prioridade']) ?>
+                                    </span>
+                                    <span class="status-badge status-concluido">
+                                        <i class="fas fa-check-circle"></i>
+                                        <?= htmlspecialchars($dado['status']) ?>
+                                    </span>
+                                    <span class="status-badge status-concluido">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <?= htmlspecialchars($dado['data_conclusao']) ?>
+                                    </span>
+                                </div>
                             </div>
-                            <div class="flex justify-end mt-6"></div>
                         </div>
                     <?php 
                         }
@@ -690,25 +720,79 @@ session_start();
     </main>
 
     <!-- Modal de Informações do Card -->
-    <div id="infoModal" class="modal fixed inset-0 hidden items-center justify-center p-4 z-50">
-        <div class="modal-content w-full max-w-sm p-6 rounded-xl shadow-2xl border border-gray-800 bg-[#181818] text-white relative">
-            <button onclick="closeInfoModal()" class="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-800 rounded-lg">
+    <div id="infoModal" class="modal fixed inset-0 hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="modal-content w-full max-w-sm p-4 sm:p-6 rounded-xl shadow-2xl border border-gray-800 bg-[#181818] text-white relative">
+            <button onclick="closeInfoModal()" class="absolute top-2 sm:top-3 right-2 sm:right-3 text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-800 rounded-lg">
                 <i class="fas fa-times"></i>
             </button>
-            <h3 class="text-xl font-bold mb-4" id="infoModalTitulo"></h3>
-            <div class="mb-3">
-                <span class="block text-gray-400 text-sm mb-1">Prazo:</span>
-                <span class="block text-lg font-semibold" id="infoModalPrazo"></span>
+            <h3 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4" id="infoModalTitulo"></h3>
+            <div class="mb-2 sm:mb-3">
+                <span class="block text-gray-400 text-xs sm:text-sm mb-1">Prazo:</span>
+                <span class="block text-base sm:text-lg font-semibold" id="infoModalPrazo"></span>
             </div>
             <div>
-                <span class="block text-gray-400 text-sm mb-1">Responsável:</span>
-                <span class="block text-lg font-semibold" id="infoModalResponsavel"></span>
+                <span class="block text-gray-400 text-xs sm:text-sm mb-1">Responsável:</span>
+                <span class="block text-base sm:text-lg font-semibold" id="infoModalResponsavel"></span>
             </div>
         </div>
     </div>
 
     <script>
-        // Apenas hover e glow, sem animação de entrada para evitar cards invisíveis
+        // Modal functions
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            const modalContent = modal.querySelector('.modal-content');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+
+            gsap.fromTo(modal, {
+                opacity: 0
+            }, {
+                opacity: 1,
+                duration: 0.3,
+                ease: 'power2.out'
+            });
+
+            gsap.fromTo(modalContent, {
+                opacity: 0,
+                scale: 0.9,
+                y: 50
+            }, {
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                duration: 0.4,
+                ease: 'back.out(1.7)'
+            });
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            const modalContent = modal.querySelector('.modal-content');
+
+            gsap.to(modalContent, {
+                opacity: 0,
+                scale: 0.9,
+                y: 50,
+                duration: 0.3,
+                ease: 'power2.in'
+            });
+
+            gsap.to(modal, {
+                opacity: 0,
+                duration: 0.3,
+                ease: 'power2.in',
+                onComplete: () => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // Apenas hover e auto-hide, sem animação de entrada para evitar cards invisíveis
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.demanda-card').forEach(card => {
                 card.addEventListener('mouseenter', () => {
@@ -729,6 +813,40 @@ session_start();
             });
         });
 
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                closeModal(e.target.id);
+            }
+        });
+
+        // Enhanced form submission with loading state
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processando...';
+
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    }, 3000);
+                }
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const openModal = document.querySelector('.modal:not(.hidden)');
+                if (openModal) {
+                    closeModal(openModal.id);
+                }
+            }
+        });
+
         // Modal de informações do card
         function openInfoModal(titulo, prazo, responsavel) {
             document.getElementById('infoModalTitulo').textContent = titulo;
@@ -743,6 +861,7 @@ session_start();
                 modalContent.classList.add('show');
             }, 10);
         }
+
         function closeInfoModal() {
             const modal = document.getElementById('infoModal');
             const modalContent = modal.querySelector('.modal-content');
@@ -753,6 +872,7 @@ session_start();
                 document.body.style.overflow = 'auto';
             }, 250);
         }
+
         // Fechar modal ao clicar fora
         document.addEventListener('click', (e) => {
             const modal = document.getElementById('infoModal');
