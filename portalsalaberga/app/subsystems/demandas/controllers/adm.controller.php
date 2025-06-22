@@ -67,7 +67,7 @@ if (
             header('location: ../views/adm.php?status=error');
             exit();
     }
-}{
+}else{
 
     header('location: ../views/adm.php?status=empty');
     exit();
