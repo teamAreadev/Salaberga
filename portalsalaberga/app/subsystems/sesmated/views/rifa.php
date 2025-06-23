@@ -356,8 +356,11 @@ $select = new select_model();
 
 <body class="min-h-screen">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
  
 =======
+=======
+>>>>>>> Stashed changes
 
     <!-- Header -->
 >>>>>>> Stashed changes
