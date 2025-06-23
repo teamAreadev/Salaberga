@@ -1,12 +1,12 @@
 <?php
-// Página de Tarefa 03: Mascote do curso
+// Página de Tarefa 04: Logomarca SESMATED
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarefa 03 - Mascote do Curso</title>
+    <title>Tarefa 04 - Logomarca SESMATED</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -244,13 +244,30 @@
             box-shadow: 0 8px 25px rgba(255, 183, 51, 0.1);
         }
         
+        .course-icon {
+            background: linear-gradient(145deg, rgba(50, 50, 50, 0.8) 0%, rgba(30, 30, 30, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .course-icon:hover {
+            border-color: rgba(255, 183, 51, 0.3);
+            transform: translateY(-1px);
+        }
+        
         /* Melhorias de Responsividade */
         @media (max-width: 640px) {
             .header-bg { padding: 1rem 0; }
             .card-bg { padding: 1.5rem; }
             .user-chip { font-size: 0.75rem; padding: 0.375rem 0.75rem; }
-            .criteria-item { padding: 0.5rem; min-width: 0; }
-            .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .criteria-item { padding: 0.75rem; }
+            .course-icon { padding: 0.5rem; }
             .hidden-mobile { display: none !important; }
             .btn-primary { min-width: 140px !important; width: auto !important; font-size: 1rem; }
         }
@@ -277,17 +294,17 @@
 <body class="min-h-screen">
     <!-- Header -->
     <header class="header-bg sticky top-0 z-50">
-        <div class="container mx-auto px-4 sm:px-6 py-2 sm:py-3">
-            <div class="flex flex-col items-start sm:items-center justify-start sm:justify-center gap-2">
-                <div class="flex items-start sm:items-center justify-start sm:justify-center gap-2">
+        <div class="container mx-auto px-4 sm:px-6 py-2 sm:py-3 relative">
+            <div class="flex flex-col items-start sm:items-center justify-center gap-2">
+                <div class="flex items-start sm:items-center justify-center gap-2">
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
-                        <i class="fas fa-paw text-white text-lg"></i>
+                        <i class="fas fa-palette text-white text-lg"></i>
                     </div>
                     <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent text-left sm:text-center">
-                        TAREFA 3
+                        TAREFA 4
                     </h1>
                 </div>
-                <p class="text-gray-400 text-xs font-medium tracking-wider uppercase text-left sm:text-center">Mascote do Curso</p>
+                <p class="text-gray-400 text-xs font-medium tracking-wider uppercase text-left sm:text-center">Logomarca SESMATED</p>
             </div>
             <!-- Chip do Usuário -->
             <div class="user-chip absolute top-4 right-4">
@@ -302,75 +319,30 @@
     <!-- Main Content -->
     <main class="container mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col items-center justify-center min-h-[70vh]">
-            <div class="card-bg rounded-3xl p-8 sm:p-12 max-w-3xl w-full text-center fade-in">
+            <div class="card-bg rounded-3xl p-8 sm:p-12 max-w-4xl w-full text-center fade-in">
                 
                 <!-- Formulário Principal -->
-                <form id="mascoteForm" class="space-y-8">
+                <form id="logomarcaForm" class="space-y-8">
                     <div class="flex flex-col items-center gap-6">
-                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center">
-                            <i class="fas fa-paw text-white text-3xl"></i>
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                            <i class="fas fa-palette text-white text-3xl"></i>
                         </div>
                         <div>
                             <h2 class="text-3xl sm:text-4xl font-black mb-4 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
-                                Mascote do Curso
+                                Logomarca 
                             </h2>
-                            <p class="text-lg text-gray-300 font-medium">
-                                Selecione o curso, a colocação do mascote e veja a pontuação!
-                            </p>
+                           
                         </div>
                     </div>
 
-                    <!-- Critérios de Avaliação -->
-                    <div class="mb-8 hidden-mobile">
-                        <div class="flex items-center gap-3 justify-center mb-6">
-                            <i class="fas fa-star text-yellow-400 text-xl"></i>
-                            <span class="text-lg font-bold text-gray-200">Critérios de Avaliação</span>
-                        </div>
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="criteria-item">
-                                <div class="flex flex-col items-center gap-3">
-                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center">
-                                        <i class="fas fa-bolt text-white text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-white mb-1 text-base">Animação</h4>
-                                        <p class="text-xs text-gray-400">Energia e carisma</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="criteria-item">
-                                <div class="flex flex-col items-center gap-3">
-                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                                        <i class="fas fa-tshirt text-white text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-white mb-1 text-base">Vestimenta</h4>
-                                        <p class="text-xs text-gray-400">Criatividade visual</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="criteria-item">
-                                <div class="flex flex-col items-center gap-3">
-                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                                        <i class="fas fa-id-badge text-white text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-white mb-1 text-base">Identidade</h4>
-                                        <p class="text-xs text-gray-400">Conexão com curso</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Seletor de Curso -->
+                    <!-- Seletor de Curso Avaliador -->
                     <div class="mb-8">
                         <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-graduation-cap mr-2"></i>Curso
+                            <i class="fas fa-graduation-cap mr-2"></i>Curso Avaliador
                         </label>
                         <div class="select-wrapper">
                             <select id="cursoInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
-                                <option value="" selected disabled>Selecione o curso</option>
+                                <option value="" selected disabled>Selecione o curso </option>
                                 <option value="enfermagem">Enfermagem</option>
                                 <option value="informatica">Informática</option>
                                 <option value="meio-ambiente">Meio Ambiente</option>
@@ -383,7 +355,7 @@
                     <!-- Seletor de Colocação -->
                     <div class="mb-8">
                         <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-trophy mr-2"></i>Colocação
+                            <i class="fas fa-trophy mr-2"></i>Colocação da Logomarca
                         </label>
                         <div class="select-wrapper">
                             <select id="colocacaoInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
@@ -399,14 +371,16 @@
 
                     <!-- Painel de Pontuação -->
                     <div id="pontosPainel" class="mt-8 hidden slide-up">
-                        <div class="stats-card rounded-2xl p-3 text-center max-w-xs mx-auto">
+                        <div class="stats-card rounded-2xl p-4 text-center max-w-sm mx-auto">
                             <h3 class="text-xl sm:text-2xl font-black mb-2 text-white">
                                 <span id="colocacaoTexto">Colocação</span>
                             </h3>
                             <p class="text-base text-gray-300 mb-2">
-                                Curso: <span id="cursoSelecionado" class="font-bold" style="color: var(--accent-color);"></span>
+                                Avaliado por: <span id="cursoSelecionado" class="font-bold" style="color: var(--accent-color);"></span>
                             </p>
-                            <p class="text-xl font-bold text-yellow-400"><span id="pontosMascote">0</span> Pontos</p>
+                            <p class="text-xl font-bold text-yellow-400">
+                                <i class="fas fa-star mr-2"></i><span id="pontosLogomarca">0</span> Pontos
+                            </p>
                         </div>
                     </div>
 
@@ -414,7 +388,7 @@
                     <div class="pt-8 flex justify-center">
                         <button type="submit" class="btn-primary px-6 py-3 rounded-2xl font-bold text-white flex items-center justify-center gap-3 text-lg w-auto min-w-[120px] sm:min-w-[150px]">
                             <i class="fas fa-paper-plane"></i>
-                            Confirmar Resultado
+                            Confirmar Avaliação
                         </button>
                     </div>
                 </form>
@@ -431,15 +405,15 @@
     </main>
 
     <!-- Tela de Sucesso -->
-    <div id="sucessoMascote" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+    <div id="sucessoLogomarca" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
         <div class="card-bg rounded-3xl p-8 max-w-md w-full text-center fade-in">
             <div class="flex flex-col items-center gap-4 mb-6">
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                     <i class="fas fa-check-circle text-white text-4xl"></i>
                 </div>
-                <h2 class="text-2xl font-extrabold text-green-400 mb-2">Resultado Registrado!</h2>
-                <p class="text-lg text-gray-200">A pontuação do mascote foi computada com sucesso.</p>
-            </div>
+                <h2 class="text-2xl font-extrabold text-green-400 mb-2">Avaliação Registrada!</h2>
+                <p class="text-lg text-gray-200">A pontuação da logomarca SESMATED foi computada com sucesso.</p>
+              
             <button onclick="fecharSucesso()" class="btn-primary px-6 py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2 mx-auto mt-4">
                 <i class="fas fa-arrow-left"></i> Nova Avaliação
             </button>
@@ -447,7 +421,7 @@
     </div>
 
     <script>
-        const form = document.getElementById('mascoteForm');
+        const form = document.getElementById('logomarcaForm');
         const pontosPainel = document.getElementById('pontosPainel');
         const voltarButton = document.getElementById('voltarButton');
         
@@ -480,9 +454,7 @@
 
         const colocacaoInput = document.getElementById('colocacaoInput');
         const cursoInput = document.getElementById('cursoInput');
-        const pontosMascote = document.getElementById('pontosMascote');
-        const pontosDisplay = document.getElementById('pontosDisplay');
-        const medalIcon = document.getElementById('medalIcon');
+        const pontosLogomarca = document.getElementById('pontosLogomarca');
         const colocacaoTexto = document.getElementById('colocacaoTexto');
         const cursoSelecionado = document.getElementById('cursoSelecionado');
 
@@ -490,7 +462,7 @@
         colocacaoInput.addEventListener('change', function() {
             const valor = colocacaoInput.value;
             if (pontosPorColocacao[valor]) {
-                pontosMascote.textContent = pontosPorColocacao[valor];
+                pontosLogomarca.textContent = pontosPorColocacao[valor];
                 pontosPainel.classList.remove('hidden');
                 colocacaoTexto.textContent = colocacaoTextos[valor];
                 if (cursoInput.value) {
@@ -513,8 +485,9 @@
             e.preventDefault();
             const cursoValue = cursoInput.value;
             const colocacaoValue = colocacaoInput.value;
+            
             if (!cursoValue) {
-                alert('Por favor, selecione o curso.');
+                alert('Por favor, selecione o curso avaliador.');
                 cursoInput.focus();
                 return;
             }
@@ -523,27 +496,71 @@
                 colocacaoInput.focus();
                 return;
             }
+            
             cursoSelecionado.textContent = cursosNomes[cursoValue];
             colocacaoTexto.textContent = colocacaoTextos[colocacaoValue];
             form.style.display = 'none';
             voltarButton.classList.add('hidden');
-            document.getElementById('sucessoMascote').classList.remove('hidden');
+            document.getElementById('sucessoLogomarca').classList.remove('hidden');
+            
+            // Efeito especial para 1º lugar
+            if (colocacaoValue === '1') {
+                setTimeout(() => {
+                    createConfetti();
+                }, 500);
+            }
         });
 
         function resetForm() {
-            // Mostrar formulário novamente
             form.style.display = 'block';
             voltarButton.classList.add('hidden');
-            
-            // Reset do formulário
             form.reset();
             pontosPainel.classList.add('hidden');
         }
 
         function fecharSucesso() {
-            document.getElementById('sucessoMascote').classList.add('hidden');
+            document.getElementById('sucessoLogomarca').classList.add('hidden');
             resetForm();
         }
+
+        // Efeito de confete para 1º lugar
+        function createConfetti() {
+            const colors = ['#ffd700', '#ffed4e', '#00b348', '#ffb733', '#8b5cf6', '#ec4899'];
+            const confettiCount = 60;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-10px';
+                    confetti.style.width = '12px';
+                    confetti.style.height = '12px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.borderRadius = '50%';
+                    confetti.style.pointerEvents = 'none';
+                    confetti.style.zIndex = '9999';
+                    confetti.style.animation = 'fall 3s linear forwards';
+                    
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 3000);
+                }, i * 30);
+            }
+        }
+
+        // CSS para animação do confete
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(100vh) rotate(360deg);
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>

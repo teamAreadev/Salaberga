@@ -178,24 +178,19 @@
         }
         
         select.input-field option {
-            background-color: #1a1a1a !important;
-            background: #1a1a1a !important;
-            color: var(--text-color) !important;
-            padding: 0.75rem !important;
-            border: none !important;
+            background-color: #232323 !important;
+            color: #fff !important;
         }
         
         select.input-field option:hover,
         select.input-field option:focus {
-            background-color: #2a2a2a !important;
-            background: #2a2a2a !important;
-            color: var(--accent-color) !important;
+            background-color: #444 !important;
+            color: #ffb733 !important;
         }
         
         select.input-field option:checked {
-            background-color: var(--accent-color) !important;
-            background: var(--accent-color) !important;
-            color: #000 !important;
+            background-color: #ffb733 !important;
+            color: #181818 !important;
         }
         
         .fade-in {
@@ -320,31 +315,23 @@
 <body class="min-h-screen">
     <!-- Header -->
     <header class="header-bg sticky top-0 z-50">
-        <div class="container mx-auto px-4 sm:px-6 py-2 sm:py-3">
-            <div class="grid grid-cols-3 items-center">
-                <!-- Espaço vazio para alinhar -->
-                <div></div>
-                <!-- Logo e Título centralizados -->
-                <div class="flex flex-col items-center gap-1">
-                    <div class="flex items-center justify-center gap-2">
-                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
-                            <i class="fas fa-bullhorn text-white text-lg"></i>
-                        </div>
-                        <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent text-center">
-                            TAREFA 2
-                        </h1>
+        <div class="container mx-auto px-4 sm:px-6 py-2 sm:py-3 relative">
+            <div class="flex flex-col items-start sm:items-center justify-start sm:justify-center gap-2">
+                <div class="flex items-start sm:items-center justify-start sm:justify-center gap-2">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
+                        <i class="fas fa-bullhorn text-white text-lg"></i>
                     </div>
-                    <p class="text-gray-400 text-xs font-medium tracking-wider uppercase text-center">GRITO DE GUERRA DO CURSO</p>
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent text-left sm:text-center">
+                        TAREFA 2
+                    </h1>
                 </div>
-                <!-- Chip do Usuário à direita -->
-                <div class="flex justify-end">
-                    <div class="user-chip">
-                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                            <i class="fas fa-user text-green-300 text-xs"></i>
-                        </div>
-                        <span class="text-gray-100">João Silva</span>
-                    </div>
+                <p class="text-gray-400 text-xs font-medium tracking-wider uppercase text-left sm:text-center">GRITO DE GUERRA DO CURSO</p>
+            </div>
+            <div class="user-chip absolute top-4 right-4">
+                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                    <i class="fas fa-user text-green-300 text-xs"></i>
                 </div>
+                <span class="text-gray-100">João Silva</span>
             </div>
         </div>
     </header>
