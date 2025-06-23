@@ -1,17 +1,41 @@
-<?php 
+<?php
 require_once('../config/connect.php');
 
-class main_model extends connect{
+class main_model extends connect
+{
 
-    function __construct(){
+    function __construct()
+    {
         parent::__construct();
     }
 
     //rifas 
-    public function adcionar_turma($turma, $rifas){
+    public function adcionar_turma($id_turma, $rifas)
+    {
+        $valor = $rifas * 2;
+        // Verifica se já existe registro para a turma
+        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_01_venda_rifas WHERE turma_id = :turma_id");
+        $stmt_check->bindValue(':turma_id', $id_turma);
+        $stmt_check->execute();
+        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
-        $stmt_adcionar = $this->connect->prepare("SELECT ")
+        if (empty($result)) {
+
+            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_01_venda_rifas`(`rifa_id`, `turma_id`, `valor_arrecadado`, `quantidade_rifas`) VALUES (NULL, :turma_id, :valor, :quantidades)");
+            $stmt_adcionar->bindValue(':turma_id', $id_turma);
+            $stmt_adcionar->bindValue(':valor', $valor);
+            $stmt_adcionar->bindValue(':quantidades', $rifas);
+
+            if ($stmt_adcionar->execute()) {
+
+                return 1;
+            } else {
+
+                return 2;
+            }
+        } else {
+
+            return 3;
+        }
     }
-    
 }
-?>

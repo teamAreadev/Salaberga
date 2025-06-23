@@ -14,7 +14,7 @@ class connect
             $database = 'sesmated';
             $user = 'root';
             $password = '';
-            $this->connect_demandas = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password);
+            $this->connect = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password);
 
         } catch (PDOException $e) {
             $host = 'localhost';
