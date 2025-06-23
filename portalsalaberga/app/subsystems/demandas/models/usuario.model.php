@@ -19,7 +19,7 @@ class usuario_model extends connect
         $stmt_select = $this->connect_demandas->query(
             "SELECT d.*, u1.nome as nome_usuario FROM demandas d 
             INNER JOIN demanda_usuarios du ON d.id = du.id_demanda 
-            INNER JOIN salaberga.usuarios u1 ON du.id_usuario = u1.id 
+            INNER JOIN $this->connect_salaberga.usuarios u1 ON du.id_usuario = u1.id 
             WHERE d.status = 'em_andamento';
             ORDER BY FIELD(prioridade, 'alta', 'media', 'baixa')
         "
@@ -43,7 +43,7 @@ class usuario_model extends connect
         $stmt_select = $this->connect_demandas->query(
             "SELECT d.*, u1.nome as nome_usuario FROM demandas d 
             INNER JOIN demanda_usuarios du ON d.id = du.id_demanda 
-            INNER JOIN salaberga.usuarios u1 ON du.id_usuario = u1.id 
+            INNER JOIN $this->connect_salaberga.usuarios u1 ON du.id_usuario = u1.id 
             WHERE d.status = 'concluida' 
             ORDER BY FIELD(prioridade, 'alta', 'media', 'baixa');
         "
@@ -98,7 +98,7 @@ class usuario_model extends connect
         $stmt_nomes = $this->connect_demandas->prepare(
             "SELECT u.nome 
             FROM $this->tabela3 du 
-            INNER JOIN salaberga.usuarios u ON du.id_usuario = u.id 
+            INNER JOIN $this->connect_salaberga.usuarios u ON du.id_usuario = u.id 
             WHERE du.id_demanda = :id_demanda"
         );
         $stmt_nomes->bindValue(':id_demanda', $id_demanda);
