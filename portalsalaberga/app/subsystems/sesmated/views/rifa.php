@@ -355,6 +355,8 @@ $select = new select_model();
 </head>
 
 <body class="min-h-screen">
+
+    <!-- Header -->
     <header class="header-bg sticky top-0 z-50">
         <div class="container mx-auto px-4 sm:px-6 py-2 sm:py-3">
             <div class="grid grid-cols-3 items-center">
