@@ -1018,9 +1018,9 @@
                                class="block px-4 py-3 text-ghibli-forest hover:text-ghibli-coral hover:bg-white/20 transition duration-300 rounded-lg mx-2 font-ghibli">
                                 <i class="fas fa-user mr-3"></i> Login Principal
                             </a>
-                            <a href="../main/views/autenticacao/login_parcial.php" 
+                            <a href="../main/views/autenticacao/login_sesmated.php" 
                                class="block px-4 py-3 text-ghibli-forest hover:text-ghibli-coral hover:bg-white/20 transition duration-300 rounded-lg mx-2 font-ghibli">
-                                <i class="fas fa-users mr-3"></i> Login Parcial
+                                <i class="fas fa-users mr-3"></i> Login Sesmated
                             </a>
                         </div>
                     </div>
@@ -1112,9 +1112,9 @@
                                class="block text-ghibli-forest hover:text-ghibli-coral transition-all duration-300 font-ghibli">
                                 <i class="fas fa-sign-in-alt mr-3"></i>Login Principal
                             </a>
-                            <a href="../main/views/autenticacao/login_parcial.php" 
+                            <a href="../main/views/autenticacao/login_sesmated.php" 
                                class="block text-ghibli-forest hover:text-ghibli-coral transition-all duration-300 font-ghibli">
-                                <i class="fas fa-user-plus mr-3"></i>Login Parcial
+                                <i class="fas fa-user-plus mr-3"></i>Login sesmated
                             </a>
                         </div>
                     </div>
