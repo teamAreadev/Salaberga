@@ -14,14 +14,14 @@ class main_model extends connect
     {
         $valor = $rifas * 2;
         // Verifica se já existe registro para a turma
-        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_01_venda_rifas WHERE turma_id = :turma_id");
+        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_01_rifas WHERE turma_id = :turma_id");
         $stmt_check->bindValue(':turma_id', $id_turma);
         $stmt_check->execute();
         $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
         if (empty($result)) {
 
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_01_venda_rifas`(`rifa_id`, `turma_id`, `valor_arrecadado`, `quantidade_rifas`) VALUES (NULL, :turma_id, :valor, :quantidades)");
+            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_01_rifas`(`turma_id`, `valor_arrecadado`, `quantidades_rifas`) VALUES ( :turma_id, :valor, :quantidades)");
             $stmt_adcionar->bindValue(':turma_id', $id_turma);
             $stmt_adcionar->bindValue(':valor', $valor);
             $stmt_adcionar->bindValue(':quantidades', $rifas);
