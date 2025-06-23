@@ -148,24 +148,19 @@
         }
         
         select.input-field option {
-            background-color: #1a1a1a !important;
-            background: #1a1a1a !important;
-            color: var(--text-color) !important;
-            padding: 0.75rem !important;
-            border: none !important;
+            background-color: #232323 !important;
+            color: #fff !important;
         }
         
         select.input-field option:hover,
         select.input-field option:focus {
-            background-color: #2a2a2a !important;
-            background: #2a2a2a !important;
-            color: var(--accent-color) !important;
+            background-color: #444 !important;
+            color: #ffb733 !important;
         }
         
         select.input-field option:checked {
-            background-color: var(--accent-color) !important;
-            background: var(--accent-color) !important;
-            color: #000 !important;
+            background-color: #ffb733 !important;
+            color: #181818 !important;
         }
         
         .fade-in {
@@ -365,11 +360,11 @@
                         <div class="select-wrapper">
                             <select id="colocacaoInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
                                 <option value="" selected disabled>Selecione a colocação</option>
-                                <option value="1">🥇 1º lugar - 500 pontos</option>
-                                <option value="2">🥈 2º lugar - 450 pontos</option>
-                                <option value="3">🥉 3º lugar - 400 pontos</option>
-                                <option value="4">🏅 4º lugar - 350 pontos</option>
-                                <option value="5">🏅 5º lugar - 300 pontos</option>
+                                <option value="1"> 500 pontos</option>
+                                <option value="2"> 450 pontos</option>
+                                <option value="3"> 400 pontos</option>
+                                <option value="4"> 350 pontos</option>
+                                <option value="5"> 300 pontos</option>
                             </select>
                         </div>
                     </div>

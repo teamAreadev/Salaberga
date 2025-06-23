@@ -178,24 +178,19 @@
         }
         
         select.input-field option {
-            background-color: #1a1a1a !important;
-            background: #1a1a1a !important;
-            color: var(--text-color) !important;
-            padding: 0.75rem !important;
-            border: none !important;
+            background-color: #232323 !important;
+            color: #fff !important;
         }
         
         select.input-field option:hover,
         select.input-field option:focus {
-            background-color: #2a2a2a !important;
-            background: #2a2a2a !important;
-            color: var(--accent-color) !important;
+            background-color: #444 !important;
+            color: #ffb733 !important;
         }
         
         select.input-field option:checked {
-            background-color: var(--accent-color) !important;
-            background: var(--accent-color) !important;
-            color: #000 !important;
+            background-color: #ffb733 !important;
+            color: #181818 !important;
         }
         
         .fade-in {
