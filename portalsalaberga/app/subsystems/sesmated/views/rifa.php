@@ -1,5 +1,10 @@
+<?php
+require_once('../models/select.model.php');
+$select_model = new select_model();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,35 +28,35 @@
             --warning-color: #f59e0b;
             --danger-color: #ef4444;
         }
-        
+
         body {
             background: radial-gradient(ellipse at top, #1a1a1a 0%, #0a0a0a 100%);
             color: var(--text-color);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
         }
-        
+
         .header-bg {
             background: linear-gradient(135deg, var(--header-bg) 0%, rgba(0, 0, 0, 0.95) 100%);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
-        
+
         .card-bg {
             background: linear-gradient(145deg, var(--card-bg) 0%, rgba(25, 25, 25, 0.95) 100%);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
-        
+
         .stats-card {
             background: linear-gradient(145deg, rgba(30, 30, 30, 0.98) 0%, rgba(20, 20, 20, 0.98) 100%);
             border: 1px solid rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(20px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        
+
         .input-field {
             background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%) !important;
             color: var(--text-color) !important;
@@ -63,48 +68,48 @@
             padding-right: 3rem;
             cursor: pointer;
         }
-        
+
         .input-field:focus {
             border-color: var(--accent-color);
             box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1);
             background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
         }
-        
+
         .progress-bar {
             background: linear-gradient(90deg, var(--header-color) 0%, var(--accent-color) 100%);
             box-shadow: 0 2px 10px rgba(0, 179, 72, 0.4);
         }
-        
+
         .card-hover:hover {
             border-color: rgba(255, 183, 51, 0.3);
             box-shadow: 0 12px 40px rgba(255, 183, 51, 0.15);
             transform: translateY(-4px);
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, var(--header-color) 0%, #00a040 100%);
             box-shadow: 0 4px 20px rgba(0, 179, 72, 0.3);
             border: none;
             transition: all 0.3s ease;
         }
-        
+
         .btn-primary:hover {
             box-shadow: 0 8px 30px rgba(0, 179, 72, 0.4);
             transform: translateY(-2px);
         }
-        
+
         .btn-secondary {
             background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.3s ease;
         }
-        
+
         .btn-secondary:hover {
             background: linear-gradient(145deg, #353535 0%, #252525 100%);
             border-color: rgba(255, 255, 255, 0.25);
             transform: translateY(-1px);
         }
-        
+
         .status-complete {
             background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
             color: white;
@@ -119,7 +124,7 @@
             gap: 6px;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
-        
+
         .status-pending {
             background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);
             color: white;
@@ -134,7 +139,7 @@
             gap: 6px;
             box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
         }
-        
+
         .icon-button {
             width: 40px;
             height: 40px;
@@ -146,50 +151,69 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
         }
-        
+
         .icon-button:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         }
-        
+
         .modal-bg {
             background: linear-gradient(145deg, rgba(25, 25, 25, 0.98) 0%, rgba(15, 15, 15, 0.98) 100%);
             backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, 0.12);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
-        
+
         .section-divider {
             background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
             height: 1px;
             margin: 2rem 0;
         }
-        
+
         .fade-in {
             animation: fadeIn 0.6s ease-in-out;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .slide-up {
             animation: slideUp 0.4s ease-out;
         }
-        
+
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .pulse-glow {
             animation: pulseGlow 2s ease-in-out infinite alternate;
         }
-        
+
         @keyframes pulseGlow {
-            from { box-shadow: 0 4px 20px rgba(0, 179, 72, 0.3); }
-            to { box-shadow: 0 8px 40px rgba(0, 179, 72, 0.5); }
+            from {
+                box-shadow: 0 4px 20px rgba(0, 179, 72, 0.3);
+            }
+
+            to {
+                box-shadow: 0 8px 40px rgba(0, 179, 72, 0.5);
+            }
         }
 
         /* Estilo customizado para o select */
@@ -237,15 +261,33 @@
 
         /* Melhorias de Responsividade */
         @media (max-width: 640px) {
-            .header-bg { padding: 1rem 0; }
-            .stats-card { padding: 1rem; }
-            .card-bg { padding: 1rem; }
-            .icon-button { width: 36px; height: 36px; }
-            .modal-bg { margin: 0.5rem; padding: 1.5rem; }
+            .header-bg {
+                padding: 1rem 0;
+            }
+
+            .stats-card {
+                padding: 1rem;
+            }
+
+            .card-bg {
+                padding: 1rem;
+            }
+
+            .icon-button {
+                width: 36px;
+                height: 36px;
+            }
+
+            .modal-bg {
+                margin: 0.5rem;
+                padding: 1.5rem;
+            }
         }
 
         @media (max-width: 480px) {
-            .status-complete, .status-pending {
+
+            .status-complete,
+            .status-pending {
                 font-size: 0.65rem;
                 padding: 6px 12px;
             }
@@ -255,21 +297,43 @@
         ::-webkit-scrollbar {
             width: 8px;
         }
-        
+
         ::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.05);
         }
-        
+
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, var(--header-color), var(--accent-color));
             border-radius: 4px;
         }
-        
+
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, #00a040, #ff9500);
         }
+
+        /* Estilo customizado para o select */
+        select.input-field {
+            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%) !important;
+            color: var(--text-color) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: none;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 2.5rem;
+        }
+
+        select.input-field:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1);
+        }
+
+        select.input-field option {
+            color: #222 !important;
+        }
     </style>
 </head>
+
 <body class="min-h-screen">
     <!-- Header -->
     <header class="header-bg sticky top-0 z-50">
@@ -283,9 +347,11 @@
                         <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
                             TAREFA 1
                         </h1>
-                        <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Venda de Rifas</p>
+                        <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Venda de Rifas
+                        </p>
                     </div>
                 </div>
+
             </div>
         </div>
     </header>
@@ -300,17 +366,15 @@
                     <div class="flex flex-col sm:flex-row gap-4">
                         <div class="relative flex-1 max-w-md">
                             <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                            <input 
-                                type="text" 
-                                id="searchInput" 
-                                placeholder="Buscar turma..." 
-                                class="input-field rounded-2xl pl-12 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none w-full"
-                            >
+                            <input
+                                type="text"
+                                id="searchInput"
+                                placeholder="Buscar turma..."
+                                class="input-field rounded-2xl pl-12 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none w-full">
                         </div>
-                        <button 
-                            onclick="openAddModal()" 
-                            class="btn-primary px-6 py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2 whitespace-nowrap"
-                        >
+                        <button
+                            onclick="openAddModal()"
+                            class="btn-primary px-6 py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2 whitespace-nowrap">
                             <i class="fas fa-plus-circle"></i>
                             <span class="hidden sm:inline">Novo Registro</span>
                             <span class="sm:hidden">Adicionar</span>
@@ -339,7 +403,7 @@
                 <i class="fas fa-chart-line text-2xl" style="color: var(--accent-color);"></i>
                 <h2 class="text-2xl font-bold">Relatórios Detalhados</h2>
             </div>
-            
+
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <button onclick="openModalResumo('turma')" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
                     <i class="fas fa-chart-bar"></i>
@@ -366,58 +430,49 @@
                 </div>
                 <h2 class="text-2xl font-bold" id="modalTitle">Adicionar Turma</h2>
             </div>
-            
+
             <form id="representativeForm" class="space-y-6">
                 <div>
                     <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
                         <i class="fas fa-users mr-2"></i>Turma
                     </label>
-                    <div class="select-wrapper">
-                        <select id="turmaInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
-                            <option value="">Selecione a turma</option>
-                            <option value="1A">1A - Enfermagem</option>
-                            <option value="1B">1B - Informática</option>
-                            <option value="1C">1C - Administração</option>
-                            <option value="1D">1D - Edificações</option>
-                            <option value="2A">2A - Enfermagem</option>
-                            <option value="2B">2B - Informática</option>
-                            <option value="2C">2C - Meio Ambiente</option>
-                            <option value="2D">2D - Edificações</option>
-                            <option value="3A">3A - Enfermagem</option>
-                            <option value="3B">3B - Informática</option>
-                            <option value="3C">3C - Administração</option>
-                            <option value="3D">3D - Edificações</option>
-                        </select>
-                    </div>
+                    <select id="turmaInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
+                        <option value="" selected disabled>Selecione a turma</option>
+                        <?php
+                        $dados = $select_model->select_turma();
+
+                        foreach ($dados as $dado) {
+                        ?>
+                            <option value="<?=$dado['turma_id']?>"><?=$dado['nome_turma']?> <?=$dado['nome_curso']?></option>
+
+                        <?php } ?>
+                    </select>
                 </div>
-                
+
                 <div>
                     <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
                         <i class="fas fa-ticket-alt mr-2"></i>Rifas Vendidas
                     </label>
-                    <input 
-                        type="number" 
-                        id="rifasInput" 
+                    <input
+                        type="number"
+                        id="rifasInput"
                         min="0"
                         required
                         class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none"
-                        placeholder="Quantidade de rifas"
-                    >
+                        placeholder="Quantidade de rifas">
                 </div>
-                
+
                 <div class="flex flex-col sm:flex-row gap-4 pt-6">
-                    <button 
-                        type="submit" 
-                        class="btn-primary flex-1 py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2"
-                    >
+                    <button
+                        type="submit"
+                        class="btn-primary flex-1 py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2">
                         <i class="fas fa-save"></i>
                         Salvar
                     </button>
-                    <button 
-                        type="button" 
-                        onclick="closeModal()" 
-                        class="btn-secondary flex-1 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2"
-                    >
+                    <button
+                        type="button"
+                        onclick="closeModal()"
+                        class="btn-secondary flex-1 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
                         <i class="fas fa-times"></i>
                         Cancelar
                     </button>
@@ -474,19 +529,26 @@
 
         // Configurações das turmas e cursos
         const turmaMetas = {
-            '1A': 230, '2A': 245, '3A': 235,
-            '1B': 230, '2B': 230, '3B': 245,
-            '1C': 225, '3C': 240,
+            '1A': 230,
+            '2A': 245,
+            '3A': 235,
+            '1B': 230,
+            '2B': 230,
+            '3B': 245,
+            '1C': 225,
+            '3C': 240,
             '2C': 230,
-            '1D': 230, '2D': 235, '3D': 250
+            '1D': 230,
+            '2D': 235,
+            '3D': 250
         };
 
         const cursos = {
-            'Enfermagem': ['1A','2A','3A'],
-            'Informática': ['1B','2B','3B'],
-            'Administração': ['1C','3C'],
+            'Enfermagem': ['1A', '2A', '3A'],
+            'Informática': ['1B', '2B', '3B'],
+            'Administração': ['1C', '3C'],
             'Meio Ambiente': ['2C'],
-            'Edificações': ['1D','2D','3D']
+            'Edificações': ['1D', '2D', '3D']
         };
 
         const cursoColors = {
@@ -501,7 +563,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             renderRepresentatives();
             updateTotal();
-            
+
             // Search functionality
             document.getElementById('searchInput').addEventListener('input', function(e) {
                 const searchTerm = e.target.value.toLowerCase();
@@ -526,7 +588,7 @@
                 const meta = turmaMetas[turma];
                 const progress = Math.min((rifasSold / meta) * 100, 100);
                 const isComplete = rifasSold >= meta;
-                
+
                 // Determinar curso da turma
                 let curso = '';
                 Object.keys(cursos).forEach(c => {
@@ -535,7 +597,7 @@
 
                 const card = document.createElement('div');
                 card.className = 'card-bg rounded-3xl p-6 card-hover transition-all duration-300 fade-in';
-                
+
                 card.innerHTML = `
                     <div class="flex justify-between items-start mb-6">
                         <div class="flex items-center gap-4 flex-1 min-w-0">
@@ -591,7 +653,7 @@
                         </div>
                     </div>
                 `;
-                
+
                 grid.appendChild(card);
             });
 
@@ -623,7 +685,7 @@
             document.getElementById('rifasInput').value = turmaEdit ? (turmaRifas[turmaEdit] || '') : '';
             document.getElementById('modal').classList.remove('hidden');
             document.getElementById('modal').classList.add('flex');
-            
+
             setTimeout(() => {
                 document.getElementById('turmaInput').focus();
             }, 100);
@@ -691,7 +753,7 @@
                     Object.keys(cursos).forEach(c => {
                         if (cursos[c].includes(turma)) curso = c;
                     });
-                    
+
                     html += `
                         <tr class="border-b border-gray-700/50 hover:bg-gray-800/30">
                             <td class="py-4 font-bold text-white">${turma}</td>
@@ -729,14 +791,15 @@
                             <tbody>
                 `;
                 Object.keys(cursos).forEach(curso => {
-                    let metaTotal = 0, vendidas = 0;
+                    let metaTotal = 0,
+                        vendidas = 0;
                     cursos[curso].forEach(turma => {
                         metaTotal += turmaMetas[turma];
                         vendidas += turmaRifas[turma] || 0;
                     });
                     const progress = Math.min((vendidas / metaTotal) * 100, 100);
                     const valor = vendidas * 2;
-                    
+
                     html += `
                         <tr class="border-b border-gray-700/50 hover:bg-gray-800/30">
                             <td class="py-4">
@@ -800,6 +863,7 @@
             document.getElementById('modalTotalArrecadado').classList.remove('hidden');
             document.getElementById('modalTotalArrecadado').classList.add('flex');
         }
+
         function closeModalTotalArrecadado() {
             document.getElementById('modalTotalArrecadado').classList.add('hidden');
             document.getElementById('modalTotalArrecadado').classList.remove('flex');
@@ -810,4 +874,5 @@
         });
     </script>
 </body>
+
 </html>
