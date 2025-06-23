@@ -18,6 +18,12 @@ class select_model extends connect
 
         return $result;
     }
+    public function select_curso(){
+        $stmt_cursos = $this->connect->query("SELECT * FROM cursos");
+        $result = $stmt_cursos->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
 
     //rifas
     public function controle_turma()

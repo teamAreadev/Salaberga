@@ -1,6 +1,8 @@
 <?php
-// Página de Tarefa 02: Grito de guerra do curso cumprida - 500 pontos
+require_once('../models/select.model.php');
+$select = new select_model();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -342,7 +344,7 @@
             <div class="card-bg rounded-3xl p-8 sm:p-12 max-w-2xl w-full text-center fade-in">
                 
                 <!-- Formulário Principal -->
-                <form id="gritoForm" class="space-y-8">
+                <form action="../controllers/controller_grito.php" method="post" class="space-y-8">
                     <div class="flex flex-col items-center gap-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center">
                             <i class="fas fa-bullhorn text-white text-3xl"></i>
@@ -363,13 +365,14 @@
                             <i class="fas fa-graduation-cap mr-2"></i>Curso
                         </label>
                         <div class="select-wrapper">
-                            <select id="cursoInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
+                            <select name="curso" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
                                 <option value="" selected disabled>Selecione o curso</option>
-                                <option value="enfermagem">Enfermagem</option>
-                                <option value="informatica">Informática</option>
-                                <option value="meio-ambiente">Meio Ambiente</option>
-                                <option value="administracao">Administração</option>
-                                <option value="edificacoes">Edificações</option>
+                                <?php
+                                $dados = $select->select_curso();
+                                foreach ($dados as $dado) {
+                                ?>
+                                    <option value="<?= $dado['curso_id'] ?>"><?= $dado['nome_curso'] ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>

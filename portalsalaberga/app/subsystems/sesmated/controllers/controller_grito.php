@@ -1,0 +1,30 @@
+<?php
+require_once('../models/main.model.php');
+print_r($_POST);
+//confirmar grito
+if (
+    isset($_POST['curso']) && !empty($_POST['curso']) &&
+    isset($_POST['grito']) && !empty($_POST['grito'])
+) {
+    $id_curso = $_POST['curso'];
+    $grito = $_POST['grito'];
+
+    $main_model = new main_model();
+    $result = $main_model->confirmar_grito($id_curso, $grito);
+
+    switch ($result) {
+        case 1:
+            header('location:../views/grito.php?confirmado');
+            exit();
+        case 2:
+            header('location:../views/grito.php?erro');
+            exit();
+        case 3:
+            header('location:../views/grito.php?ja_confimado');
+            exit();
+    }
+}/* else {
+
+    header('location:../views/grito.php?empty');
+    exit();
+}*/

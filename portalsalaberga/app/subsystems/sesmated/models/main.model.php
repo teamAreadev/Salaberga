@@ -38,4 +38,35 @@ class main_model extends connect
             return 3;
         }
     }
+
+    //grito
+    public function confirmar_grito($id_curso, $grito)
+    {
+        $pontuacao = $grito == "sim" ? 500 : 0;
+        $grito = $grito == "sim" ? 1 : 0;
+        // Verifica se já existe registro para a turma
+        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_02_grito_guerra WHERE curso_id = :curso_id");
+        $stmt_check->bindValue(':curso_id', $id_curso);
+        $stmt_check->execute();
+        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($result)) {
+
+            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_02_grito_guerra`(`curso_id`, `cumprida`, `pontuacao`) VALUES (:curso_id, :cumprida, :pontuacao)");
+            $stmt_adcionar->bindValue(':curso_id', $id_curso);
+            $stmt_adcionar->bindValue(':cumprida', $grito);
+            $stmt_adcionar->bindValue(':pontuacao', $pontuacao);
+
+            if ($stmt_adcionar->execute()) {
+
+                return 1;
+            } else {
+
+                return 2;
+            }
+        } else {
+
+            return 3;
+        }
+    }
 }
