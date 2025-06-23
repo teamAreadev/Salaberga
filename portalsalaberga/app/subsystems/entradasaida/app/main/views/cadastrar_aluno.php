@@ -1,3 +1,8 @@
+<?php 
+require_once('../model/select_model.php');
+$select = new select_model();
+
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -270,18 +275,13 @@
                             required
                         >
                             <option value="">Selecione uma turma</option>
-                            <option value="1° ano a">1° ano A</option>
-                            <option value="1° ano b">1° ano B</option>
-                            <option value="1° ano c">1° ano C</option>
-                            <option value="1° ano d">1° ano D</option>
-                            <option value="2° ano a">2° ano A</option>
-                            <option value="2° ano b">2° ano B</option>
-                            <option value="2° ano c">2° ano C</option>
-                            <option value="2° ano d">2° ano D</option>
-                            <option value="3° ano a">3° ano A</option>
-                            <option value="3° ano b">3° ano B</option>
-                            <option value="3° ano c">3° ano C</option>
-                            <option value="3° ano d">3° ano D</option>
+                            <?php 
+                            $dados = $select->select_turmas();
+
+                            foreach($dados as $dado){
+                            ?>
+                            <option value="<?=$dado['id_turma']?>"><?=$dado['ano']?> <?=$dado['turma']?></option>
+                            <?php }?>
                         </select>
                         <div id="turma-error" class="error-message hidden mt-1 text-red-500 text-xs flex items-center">
                             <i class="fas fa-exclamation-circle mr-1"></i>
@@ -302,11 +302,12 @@
                             required
                         >
                             <option value="">Selecione um curso</option>
-                            <option value="enfermagem">Enfermagem</option>
-                            <option value="informática">Informática</option>
-                            <option value="administração">Administração</option>
-                            <option value="edificações">Edificações</option>
-                            <option value="meio ambiente">Meio Ambiente</option>
+                            <?php 
+                            $dados = $select->select_curso();
+                            foreach($dados as $dado){
+                            ?>
+                            <option value="<?=$dado['id_curso']?>"><?=$dado['curso']?></option>
+                            <?php }?>
                         </select>
                         <div id="curso-error" class="error-message hidden mt-1 text-red-500 text-xs flex items-center">
                             <i class="fas fa-exclamation-circle mr-1"></i>
@@ -585,19 +586,6 @@
                     container.classList.remove('pulse-success');
                 }, 5000);
             }
-        }
-
-        // Initialize form validator when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            new FormValidator();
-        });
-
-        // Handle URL parameters for success/error messages
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('success') === 'true') {
-            document.addEventListener('DOMContentLoaded', () => {
-                document.getElementById('successMessage').classList.remove('hidden');
-            });
         }
     </script>
 </body>

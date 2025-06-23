@@ -9,14 +9,22 @@ class select_model extends connect
         parent::__construct();
     }
 
+    public function select_curso(){
+        $queryStr = "SELECT * FROM curso";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function select_turmas(){
+        $queryStr = "SELECT * FROM turma";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function select_alunos()
     {
-
         $queryStr = "SELECT * FROM aluno";
         $query = $this->connect->query($queryStr);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
-
     public function select_alunosE()
     {
         try {

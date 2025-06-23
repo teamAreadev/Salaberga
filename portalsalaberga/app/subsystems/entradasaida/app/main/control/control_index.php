@@ -3,29 +3,39 @@
 require_once '../model/model_indexClass.php';
 
 //CADASTRAR ALUNO
-if (isset($_POST['cadastrar'])) {
-    $id_turma = $_POST['id_turma'] ?? '';
-    $matricula = $_POST['matricula'] ?? '';
-    $nome = $_POST['nome'] ?? '';
-    $id_curso = $_POST['id_curso'] ?? '';
-    $id_usuario = $_SESSION['id_usuario'] ?? null; // Obtém o id_usuario da sessão
+if (
+    isset($_POST['cadastrar']) &&
+    isset($_POST['id_turma']) && !empty($_POST['id_turma']) &&
+    isset($_POST['matricula']) && !empty($_POST['matricula']) &&
+    isset($_POST['nome']) && !empty($_POST['nome']) &&
+    isset($_POST['id_curso']) && !empty($_POST['id_curso'])
+    ) {
+    $id_turma = $_POST['id_turma'];
+    $matricula = $_POST['matricula'];
+    $nome = $_POST['nome'];
+    $id_curso = $_POST['id_curso'];
 
-    echo "Dados recebidos: id_turma=$id_turma, matricula=$matricula, nome=$nome, id_curso=$id_curso, id_usuario=$id_usuario<br>";
-    $obj = new MainModel();
-    echo "Chamando cadastrar...<br>";
-    if ($obj->cadastrar($id_turma, $matricula, $nome, $id_curso, $id_usuario)) {
-        echo "Cadastro bem-sucedido, redirecionando...<br>";
-        header('Location: ../views/cadastrar.php?error=cadastro_concluido');
-    } else {
-        echo "Cadastro falhou, redirecionando...<br>";
-        header('Location: ../views/cadastrar.php?error=cadastro_falhou');
+    $main_model = new MainModel();
+    $result = $main_model->cadastrar($id_turma, $matricula, $nome, $id_curso);
+    
+    switch ($result) {
+        case 1:
+            header('location: ../views/cadastrar_aluno.php?aluno_cadastrado');
+            exit();
+        case 2:
+            header('location: ../views/cadastrar_aluno.php?erro');
+            exit();
+        case 3:
+            header('location: ../views/cadastrar_aluno.php?ja_cadastrado');
+            exit();
+
+        default:
+        header('location: ../views/inicio.php');
+        exit();
     }
-    exit();
 }
-
-
 //registro saida-estagio//
-if (isset($_POST["Registrar"])) {
+else if (isset($_POST["Registrar"])) {
     $id_aluno = $_POST['id_aluno'];
     $data = $_POST['data'];
     $hora = $_POST['hora'];

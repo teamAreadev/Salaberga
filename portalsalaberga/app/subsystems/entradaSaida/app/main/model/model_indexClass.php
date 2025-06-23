@@ -10,108 +10,30 @@ class MainModel extends connect
         parent::__construct();
     }
 
-    public function cadastrar($id_turma, $matricula, $nome, $id_curso, $id_usuario = null)
+    public function cadastrar($id_turma, $matricula, $nome, $id_curso)
     {
         try {
-            echo "Validando campos: id_turma=$id_turma, matricula=$matricula, nome=$nome, id_curso=$id_curso, id_usuario=$id_usuario<br>";
-            if (empty($id_turma) || empty($matricula) || empty($nome) || empty($id_curso)) {
-                error_log("Erro: Todos os campos são obrigatórios (id_turma=$id_turma, matricula=$matricula, nome=$nome, id_curso=$id_curso)");
-                echo "Erro: Campos obrigatórios vazios<br>";
+            $stmt_check = $this->connect->prepare("SELECT matricula FROM aluno WHERE matricula = :matricula");
+            $stmt_check->bindValue(':matricula', $matricula, PDO::PARAM_STR);
+            $stmt_check->execute();
+
+            if ($stmt_check->rowCount() > 0) {
+                // Aluno já cadastrado.
                 return false;
             }
 
-            echo "Validando matrícula: $matricula<br>";
-            if (!preg_match('/^\d{7}$/', $matricula)) {
-                error_log("Erro: Matrícula inválida ($matricula). Deve conter 7 dígitos.");
-                echo "Erro: Matrícula inválida<br>";
-                return false;
-            }
+            $stmt_cadastrar_aluno = $this->connect->prepare(
+                "INSERT INTO `aluno`(`id_turma`, `matricula`, `nome`, `id_curso`) VALUES (:id_turma, :matricula, :nome, :id_curso)"
+            );
 
-            $turma_map = [
-                '1° ano a' => 1,
-                '1° ano b' => 2,
-                '1° ano c' => 3,
-                '1° ano d' => 4,
-                '2° ano a' => 5,
-                '2° ano b' => 6,
-                '2° ano c' => 7,
-                '2° ano d' => 8,
-                '3° ano a' => 9,
-                '3° ano b' => 10,
-                '3° ano c' => 11,
-                '3° ano d' => 12
-            ];
+            $stmt_cadastrar_aluno->bindValue(':id_turma', $id_turma, PDO::PARAM_INT);
+            $stmt_cadastrar_aluno->bindValue(':matricula', $matricula, PDO::PARAM_STR);
+            $stmt_cadastrar_aluno->bindValue(':nome', $nome, PDO::PARAM_STR);
+            $stmt_cadastrar_aluno->bindValue(':id_curso', $id_curso, PDO::PARAM_INT);
 
-            $id_turma = strtolower(trim($id_turma));
-            echo "Validando turma: $id_turma<br>";
-            if (!isset($turma_map[$id_turma])) {
-                error_log("Erro: Turma inválida ($id_turma)");
-                echo "Erro: Turma inválida<br>";
-                return false;
-            }
-            $id_turma_mapped = $turma_map[$id_turma];
-
-            $curso_map = [
-                'enfermagem' => 1,
-                'informática' => 2,
-                'administração' => 3,
-                'edificações' => 4,
-                'meio ambiente' => 5
-            ];
-            $id_curso = strtolower(trim($id_curso));
-            echo "Validando curso: $id_curso<br>";
-            if (!isset($curso_map[$id_curso])) {
-                error_log("Erro: Curso inválido ($id_curso)");
-                echo "Erro: Curso inválido<br>";
-                return false;
-            }
-            $id_curso_mapped = $curso_map[$id_curso];
-
-            echo "Verificando matrícula duplicada: $matricula<br>";
-            $checkMatricula = $this->connect->prepare("SELECT id_aluno FROM aluno WHERE matricula = :matricula");
-            $checkMatricula->bindValue(":matricula", $matricula);
-            $checkMatricula->execute();
-            if ($checkMatricula->rowCount() > 0) {
-                error_log("Erro: Matrícula já cadastrada ($matricula)");
-                echo "Erro: Matrícula já cadastrada<br>";
-                return false;
-            }
-
-            echo "Executando inserção: id_turma=$id_turma_mapped, matricula=$matricula, nome=$nome, id_curso=$id_curso_mapped<br>";
-            $cadastrar = "INSERT INTO aluno (id_turma, matricula, nome, id_curso) VALUES (:id_turma, :matricula, :nome, :id_curso)";
-            $query = $this->connect->prepare($cadastrar);
-            $query->bindValue(":id_turma", $id_turma_mapped, PDO::PARAM_INT);
-            $query->bindValue(":matricula", $matricula, PDO::PARAM_STR);
-            $query->bindValue(":nome", $nome, PDO::PARAM_STR);
-            $query->bindValue(":id_curso", $id_curso_mapped, PDO::PARAM_INT);
-
-            if ($query->execute()) {
-                $id_aluno = $this->connect->lastInsertId();
-                error_log("Aluno cadastrado com sucesso: id_aluno=$id_aluno, id_turma=$id_turma_mapped, matricula=$matricula, nome=$nome, id_curso=$id_curso_mapped");
-
-                // Inserir na tabela `cadastrar` se id_usuario for fornecido
-                if ($id_usuario) {
-                    $cadastrar_usuario = "INSERT INTO cadastrar (id_aluno, id_usuario) VALUES (:id_aluno, :id_usuario)";
-                    $query_usuario = $this->connect->prepare($cadastrar_usuario);
-                    $query_usuario->bindValue(":id_aluno", $id_aluno, PDO::PARAM_INT);
-                    $query_usuario->bindValue(":id_usuario", $id_usuario, PDO::PARAM_INT);
-                    if ($query_usuario->execute()) {
-                        error_log("Registro na tabela cadastrar inserido: id_aluno=$id_aluno, id_usuario=$id_usuario");
-                    } else {
-                        error_log("Erro ao inserir na tabela cadastrar: id_aluno=$id_aluno, id_usuario=$id_usuario");
-                    }
-                }
-
-                echo "Inserção bem-sucedida<br>";
-                return true;
-            } else {
-                error_log("Erro: Falha ao executar a query de cadastro para matricula=$matricula");
-                echo "Erro: Falha na execução da query<br>";
-                return false;
-            }
+            return $stmt_cadastrar_aluno->execute();
         } catch (PDOException $e) {
             error_log("Erro ao cadastrar aluno: " . $e->getMessage());
-            echo "Erro PDO: " . $e->getMessage() . "<br>";
             return false;
         }
     }
