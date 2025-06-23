@@ -182,7 +182,6 @@
                         <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Inovação</p>
                     </div>
                 </div>
-                <p class="text-gray-400 text-sm">Produtos Úteis à Comunidade Maranguapense</p>
             </div>
         </div>
     </header>
@@ -300,63 +299,54 @@
                 
                 <div class="space-y-6">
                     <div>
-                        <label class="block text-sm font-medium mb-3">💡 Originalidade e Inovação (0-20 pontos)</label>
-                        <input type="range" id="originalidade" min="0" max="20" value="0" class="range-slider w-full">
+                        <label class="block text-sm font-medium mb-3">💡 Originalidade e Inovação (0-100 pontos)</label>
+                        <input type="range" id="originalidade" min="0" max="100" value="0" class="range-slider w-full">
                         <div class="flex justify-between text-sm mt-2">
                             <span>0</span>
                             <span id="originalidadeValue" class="text-yellow-400 font-bold">0 pontos</span>
-                            <span>20</span>
+                            <span>100</span>
                         </div>
-                        <p class="text-xs text-gray-400 mt-1">Grau de inovação, inventividade e criatividade na abordagem</p>
                     </div>
-                    
                     <div>
-                        <label class="block text-sm font-medium mb-3">🧩 Relevância e Aplicabilidade para a Comunidade (0-20 pontos)</label>
-                        <input type="range" id="relevancia" min="0" max="20" value="0" class="range-slider w-full">
+                        <label class="block text-sm font-medium mb-3">🧩 Relevância e Aplicabilidade para a Comunidade (0-100 pontos)</label>
+                        <input type="range" id="relevancia" min="0" max="100" value="0" class="range-slider w-full">
                         <div class="flex justify-between text-sm mt-2">
                             <span>0</span>
                             <span id="relevanciaValue" class="text-yellow-400 font-bold">0 pontos</span>
-                            <span>20</span>
+                            <span>100</span>
                         </div>
-                        <p class="text-xs text-gray-400 mt-1">Conexão com necessidades reais, impacto direto ou indireto</p>
                     </div>
-                    
                     <div>
-                        <label class="block text-sm font-medium mb-3">⚙️ Viabilidade Técnica (0-15 pontos)</label>
-                        <input type="range" id="viabilidade" min="0" max="15" value="0" class="range-slider w-full">
+                        <label class="block text-sm font-medium mb-3">⚙️ Viabilidade Técnica (0-100 pontos)</label>
+                        <input type="range" id="viabilidade" min="0" max="100" value="0" class="range-slider w-full">
                         <div class="flex justify-between text-sm mt-2">
                             <span>0</span>
                             <span id="viabilidadeValue" class="text-yellow-400 font-bold">0 pontos</span>
-                            <span>15</span>
+                            <span>100</span>
                         </div>
-                        <p class="text-xs text-gray-400 mt-1">Exequibilidade e nível de prototipagem</p>
                     </div>
-                    
                     <div>
-                        <label class="block text-sm font-medium mb-3">🌱 Sustentabilidade e Responsabilidade Socioambiental (0-15 pontos)</label>
-                        <input type="range" id="sustentabilidade" min="0" max="15" value="0" class="range-slider w-full">
+                        <label class="block text-sm font-medium mb-3">🌱 Sustentabilidade e Responsabilidade Socioambiental (0-100 pontos)</label>
+                        <input type="range" id="sustentabilidade" min="0" max="100" value="0" class="range-slider w-full">
                         <div class="flex justify-between text-sm mt-2">
                             <span>0</span>
                             <span id="sustentabilidadeValue" class="text-yellow-400 font-bold">0 pontos</span>
-                            <span>15</span>
+                            <span>100</span>
                         </div>
-                        <p class="text-xs text-gray-400 mt-1">Compromisso com o meio ambiente e ética social</p>
                     </div>
-                    
                     <div>
-                        <label class="block text-sm font-medium mb-3">📊 Clareza e Organização da Apresentação (0-10 pontos)</label>
-                        <input type="range" id="apresentacao" min="0" max="10" value="0" class="range-slider w-full">
+                        <label class="block text-sm font-medium mb-3">📊 Clareza e Organização da Apresentação (0-100 pontos)</label>
+                        <input type="range" id="clareza" min="0" max="100" value="0" class="range-slider w-full">
                         <div class="flex justify-between text-sm mt-2">
                             <span>0</span>
-                            <span id="apresentacaoValue" class="text-yellow-400 font-bold">0 pontos</span>
-                            <span>10</span>
+                            <span id="clarezaValue" class="text-yellow-400 font-bold">0 pontos</span>
+                            <span>100</span>
                         </div>
-                        <p class="text-xs text-gray-400 mt-1">Comunicação e domínio do conteúdo</p>
                     </div>
                 </div>
                 
                 <div class="mt-8 p-6 bg-gray-800/50 rounded-2xl">
-                    <h4 class="text-lg font-semibold mb-2">Pontuação Total: <span id="totalPontos" class="text-yellow-400 text-2xl font-bold">0</span>/80</h4>
+                    <h4 class="text-lg font-semibold mb-2">Pontuação Total: <span id="totalPontos" class="text-yellow-400 text-2xl font-bold">0</span>/500</h4>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -402,6 +392,10 @@
                 <button onclick="calcularPontuacao()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
                     <i class="fas fa-medal"></i>
                     Pontuação por Posição
+                </button>
+                <button onclick="gerarRelatorioPDF()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
+                    <i class="fas fa-file-pdf"></i>
+                    Relatório PDF
                 </button>
             </div>
         </section>
@@ -552,9 +546,8 @@
             const relevancia = parseInt(document.getElementById('relevancia').value);
             const viabilidade = parseInt(document.getElementById('viabilidade').value);
             const sustentabilidade = parseInt(document.getElementById('sustentabilidade').value);
-            const apresentacao = parseInt(document.getElementById('apresentacao').value);
-            
-            const total = originalidade + relevancia + viabilidade + sustentabilidade + apresentacao;
+            const clareza = parseInt(document.getElementById('clareza').value);
+            const total = originalidade + relevancia + viabilidade + sustentabilidade + clareza;
             document.getElementById('totalPontos').textContent = total;
         }
 
@@ -563,7 +556,6 @@
                 showNotification('Preencha o nome do jurado!', 'error');
                 return;
             }
-            
             const avaliacao = {
                 id: Date.now(),
                 projetoId: projetoAtual.id,
@@ -572,15 +564,13 @@
                 relevancia: parseInt(document.getElementById('relevancia').value),
                 viabilidade: parseInt(document.getElementById('viabilidade').value),
                 sustentabilidade: parseInt(document.getElementById('sustentabilidade').value),
-                apresentacao: parseInt(document.getElementById('apresentacao').value),
+                clareza: parseInt(document.getElementById('clareza').value),
                 total: parseInt(document.getElementById('totalPontos').textContent),
                 observacoes: document.getElementById('observacoes').value,
                 timestamp: new Date().toISOString()
             };
-            
             avaliacoes.push(avaliacao);
             localStorage.setItem('avaliacoes_inovacao', JSON.stringify(avaliacoes));
-            
             showNotification('Avaliação salva com sucesso!', 'success');
             fecharAvaliacao();
             renderProjetos();
@@ -630,19 +620,19 @@
                     relatorio += 'AVALIAÇÕES:\n';
                     avaliacoesProjeto.forEach(av => {
                         relatorio += `  Jurado: ${av.jurado}\n`;
-                        relatorio += `  Originalidade: ${av.originalidade}/20\n`;
-                        relatorio += `  Relevância: ${av.relevancia}/20\n`;
-                        relatorio += `  Viabilidade: ${av.viabilidade}/15\n`;
-                        relatorio += `  Sustentabilidade: ${av.sustentabilidade}/15\n`;
-                        relatorio += `  Apresentação: ${av.apresentacao}/10\n`;
-                        relatorio += `  TOTAL: ${av.total}/80\n`;
+                        relatorio += `  Originalidade: ${av.originalidade}/100\n`;
+                        relatorio += `  Relevância: ${av.relevancia}/100\n`;
+                        relatorio += `  Viabilidade: ${av.viabilidade}/100\n`;
+                        relatorio += `  Sustentabilidade: ${av.sustentabilidade}/100\n`;
+                        relatorio += `  Clareza: ${av.clareza}/100\n`;
+                        relatorio += `  TOTAL: ${av.total}/500\n`;
                         if (av.observacoes) {
                             relatorio += `  Observações: ${av.observacoes}\n`;
                         }
                         relatorio += '\n';
                     });
                     const media = (avaliacoesProjeto.reduce((sum, a) => sum + a.total, 0) / avaliacoesProjeto.length).toFixed(2);
-                    relatorio += `MÉDIA FINAL: ${media}/80\n`;
+                    relatorio += `MÉDIA FINAL: ${media}/500\n`;
                 } else {
                     relatorio += 'Não avaliado\n';
                 }
@@ -690,7 +680,7 @@
                 relatorio += `Projeto: ${projeto.nome}\n`;
                 relatorio += `Curso: ${projeto.curso}\n`;
                 relatorio += `Equipe: ${projeto.equipe}\n`;
-                relatorio += `Média: ${projeto.media.toFixed(2)}/80\n`;
+                relatorio += `Média: ${projeto.media.toFixed(2)}/500\n`;
                 relatorio += `Avaliações: ${projeto.totalAvaliacoes}\n\n`;
             });
             downloadFile(relatorio, 'ranking_projetos_inovacao.txt');
@@ -722,10 +712,29 @@
                 relatorio += `Projeto: ${projeto.nome}\n`;
                 relatorio += `Curso: ${projeto.curso}\n`;
                 relatorio += `Equipe: ${projeto.equipe}\n`;
-                relatorio += `Média de avaliação: ${projeto.media.toFixed(2)}/80\n\n`;
+                relatorio += `Média de avaliação: ${projeto.media.toFixed(2)}/500\n\n`;
             });
             
             downloadFile(relatorio, 'pontuacao_posicao_inovacao.txt');
+        }
+
+        function gerarRelatorioPDF() {
+            const data = {
+                projetos: projetos,
+                avaliacoes: avaliacoes
+            };
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'relatorio_inovacao_pdf.php';
+            form.target = '_blank';
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'json';
+            input.value = JSON.stringify(data);
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
         }
 
         function downloadFile(content, filename) {

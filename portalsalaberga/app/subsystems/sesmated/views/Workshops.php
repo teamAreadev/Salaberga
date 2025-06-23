@@ -241,9 +241,8 @@
                     <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
                         <i class="fas fa-user-plus text-white text-xl"></i>
                     </div>
-                    <h2 class="text-2xl font-bold">Gerenciar Inscrições</h2>
+                    <h2 class="text-2xl font-bold">Registrar Presença</h2>
                 </div>
-                
                 <div class="mb-6">
                     <h3 class="text-xl font-semibold mb-2" id="workshopAtual"></h3>
                     <div class="flex gap-4 text-sm text-gray-400">
@@ -251,56 +250,33 @@
                         <span id="duracaoInfo"></span>
                     </div>
                 </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div>
-                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-user mr-2"></i>Nome do Participante
-                        </label>
-                        <input type="text" id="nomeParticipante" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-graduation-cap mr-2"></i>Curso
-                        </label>
-                        <select id="cursoParticipante" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
-                            <option value="">Selecione o curso</option>
-                            <option value="Informática">Informática</option>
-                            <option value="Enfermagem">Enfermagem</option>
-                            <option value="Administração">Administração</option>
-                            <option value="Agropecuária">Agropecuária</option>
-                        </select>
-                    </div>
+                <div class="mb-8 text-center">
+                    <p class="text-lg text-yellow-400 font-semibold mb-4">Aproxime o crachá do leitor de QR Code para registrar presença</p>
+                    <input id="inputLeitorQR" type="text" autocomplete="off" class="opacity-0 absolute pointer-events-none" style="width:1px;height:1px;" tabindex="0">
                 </div>
-                
-                <div class="flex flex-wrap gap-4 mb-8">
-                    <button onclick="registrarInscricao()" class="btn-primary px-6 py-3 rounded-2xl font-semibold text-white flex items-center gap-2">
-                        <i class="fas fa-user-plus"></i>
-                        Registrar Inscrição
-                    </button>
-                    <button onclick="gerarQRCode()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
-                        <i class="fas fa-qrcode"></i>
-                        Gerar QR Code
-                    </button>
-                </div>
-                
-                <!-- QR Code -->
-                <div id="qrCodeContainer" class="text-center mb-8 hidden">
-                    <div class="card-bg rounded-2xl p-6">
-                        <h4 class="text-lg font-semibold mb-4">QR Code para Inscrição</h4>
-                        <div id="qrcode" class="inline-block p-4 bg-white rounded-lg"></div>
-                        <p class="mt-4 text-sm text-gray-400">Escaneie para se inscrever automaticamente</p>
+                <div class="mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold mb-2 text-gray-300 uppercase tracking-wide">
+                                <i class="fas fa-user mr-2"></i>Nome do Participante
+                            </label>
+                            <div id="nomeParticipanteDisplay" class="input-field w-full rounded-2xl px-4 py-3 text-white"></div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-2 text-gray-300 uppercase tracking-wide">
+                                <i class="fas fa-graduation-cap mr-2"></i>Curso
+                            </label>
+                            <div id="cursoParticipanteDisplay" class="input-field w-full rounded-2xl px-4 py-3 text-white"></div>
+                        </div>
                     </div>
                 </div>
-                
                 <!-- Lista de Inscritos -->
                 <div class="card-bg rounded-2xl p-6 mb-8">
-                    <h4 class="text-lg font-semibold mb-4">Participantes Inscritos</h4>
+                    <h4 class="text-lg font-semibold mb-4">Participantes Presentes</h4>
                     <div id="listaInscritos" class="space-y-2 max-h-60 overflow-y-auto">
                         <!-- Lista será preenchida dinamicamente -->
                     </div>
                 </div>
-                
                 <div class="flex justify-end">
                     <button onclick="fecharInscricoes()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
                         <i class="fas fa-times"></i>
@@ -342,6 +318,8 @@
         let workshops = JSON.parse(localStorage.getItem('workshops') || '[]');
         let presencas = JSON.parse(localStorage.getItem('presencas_workshops') || '[]');
         let workshopAtual = null;
+        let nomeLidoQR = '';
+        let cursoLidoQR = '';
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -460,69 +438,24 @@
         function gerenciarInscricoes(id) {
             workshopAtual = workshops.find(w => w.id === id);
             const presencasWorkshop = presencas.filter(p => p.workshopId === id);
-            const vagasRestantes = workshopAtual.vagas - presencasWorkshop.length;
-            
             document.getElementById('workshopAtual').textContent = 
                 `${workshopAtual.titulo} - ${workshopAtual.instrutor}`;
             document.getElementById('vagasInfo').textContent = 
                 `Vagas: ${presencasWorkshop.length}/${workshopAtual.vagas}`;
             document.getElementById('duracaoInfo').textContent = 
                 `Duração: ${workshopAtual.duracao}h`;
-            
-            document.getElementById('nomeParticipante').value = '';
-            document.getElementById('cursoParticipante').value = '';
-            
+            document.getElementById('nomeParticipanteDisplay').textContent = '';
+            document.getElementById('cursoParticipanteDisplay').textContent = '';
+            nomeLidoQR = '';
+            cursoLidoQR = '';
             document.getElementById('inscricoesModal').classList.remove('hidden');
             document.getElementById('inscricoesModal').classList.add('flex');
-            
             atualizarListaInscritos();
-        }
-
-        function registrarInscricao() {
-            if (!workshopAtual || !document.getElementById('nomeParticipante').value || !document.getElementById('cursoParticipante').value) {
-                showNotification('Preencha todos os campos!', 'error');
-                return;
-            }
-            
-            const nome = document.getElementById('nomeParticipante').value;
-            const curso = document.getElementById('cursoParticipante').value;
-            
-            // Verificar vagas disponíveis
-            const presencasWorkshop = presencas.filter(p => p.workshopId === workshopAtual.id);
-            if (presencasWorkshop.length >= workshopAtual.vagas) {
-                showNotification('Workshop lotado! Não há mais vagas disponíveis.', 'error');
-                return;
-            }
-            
-            // Verificar se já está registrado
-            const jaRegistrado = presencas.some(p => 
-                p.workshopId === workshopAtual.id && 
-                p.nome.toLowerCase() === nome.toLowerCase()
-            );
-            
-            if (jaRegistrado) {
-                showNotification('Participante já inscrito neste workshop!', 'error');
-                return;
-            }
-            
-            const presenca = {
-                id: Date.now(),
-                workshopId: workshopAtual.id,
-                nome: nome,
-                curso: curso,
-                timestamp: new Date().toISOString()
-            };
-            
-            presencas.push(presenca);
-            localStorage.setItem('presencas_workshops', JSON.stringify(presencas));
-            
-            document.getElementById('nomeParticipante').value = '';
-            document.getElementById('cursoParticipante').value = '';
-            
-            atualizarListaInscritos();
-            renderWorkshops();
-            
-            showNotification('Inscrição realizada com sucesso!', 'success');
+            setTimeout(() => {
+                const input = document.getElementById('inputLeitorQR');
+                input.value = '';
+                input.focus();
+            }, 200);
         }
 
         function atualizarListaInscritos() {
@@ -570,35 +503,6 @@
                 renderWorkshops();
                 showNotification('Inscrição removida com sucesso!', 'success');
             }
-        }
-
-        function gerarQRCode() {
-            if (!workshopAtual) return;
-            
-            const qrData = JSON.stringify({
-                type: 'workshop_inscricao',
-                workshopId: workshopAtual.id,
-                titulo: workshopAtual.titulo
-            });
-            
-            const qrContainer = document.getElementById('qrcode');
-            qrContainer.innerHTML = '';
-            
-            QRCode.toCanvas(qrContainer, qrData, {
-                width: 200,
-                height: 200,
-                colorDark: '#000000',
-                colorLight: '#ffffff'
-            });
-            
-            document.getElementById('qrCodeContainer').classList.remove('hidden');
-        }
-
-        function fecharInscricoes() {
-            document.getElementById('inscricoesModal').classList.add('hidden');
-            document.getElementById('inscricoesModal').classList.remove('flex');
-            document.getElementById('qrCodeContainer').classList.add('hidden');
-            workshopAtual = null;
         }
 
         function gerarRelatorioFrequencia() {
@@ -739,6 +643,72 @@
                 if (!document.getElementById('inscricoesModal').classList.contains('hidden')) fecharInscricoes();
             }
         });
+
+        document.getElementById('inputLeitorQR').addEventListener('input', function(e) {
+            const qrCodeMessage = this.value.trim();
+            if (!qrCodeMessage) return;
+            let nome = '', curso = '';
+            try {
+                const obj = JSON.parse(qrCodeMessage);
+                nome = obj.nome || '';
+                curso = obj.curso || '';
+            } catch (e) {
+                const parts = qrCodeMessage.split(',');
+                if (parts.length >= 2) {
+                    nome = parts[0].trim();
+                    curso = parts[1].trim();
+                } else {
+                    nome = qrCodeMessage;
+                }
+            }
+            nomeLidoQR = nome;
+            cursoLidoQR = curso;
+            document.getElementById('nomeParticipanteDisplay').textContent = nome;
+            document.getElementById('cursoParticipanteDisplay').textContent = curso;
+            registrarInscricaoAuto();
+            this.value = '';
+        });
+
+        function registrarInscricaoAuto() {
+            if (!workshopAtual || !nomeLidoQR || !cursoLidoQR) {
+                showNotification('Erro ao ler o QR Code do crachá!', 'error');
+                return;
+            }
+            const presencasWorkshop = presencas.filter(p => p.workshopId === workshopAtual.id);
+            if (presencasWorkshop.length >= workshopAtual.vagas) {
+                showNotification('Workshop lotado! Não há mais vagas disponíveis.', 'error');
+                return;
+            }
+            const jaRegistrado = presencas.some(p => 
+                p.workshopId === workshopAtual.id && 
+                p.nome.toLowerCase() === nomeLidoQR.toLowerCase()
+            );
+            if (jaRegistrado) {
+                showNotification('Participante já registrado neste workshop!', 'error');
+                return;
+            }
+            const presenca = {
+                id: Date.now(),
+                workshopId: workshopAtual.id,
+                nome: nomeLidoQR,
+                curso: cursoLidoQR,
+                timestamp: new Date().toISOString()
+            };
+            presencas.push(presenca);
+            localStorage.setItem('presencas_workshops', JSON.stringify(presencas));
+            nomeLidoQR = '';
+            cursoLidoQR = '';
+            document.getElementById('nomeParticipanteDisplay').textContent = '';
+            document.getElementById('cursoParticipanteDisplay').textContent = '';
+            atualizarListaInscritos();
+            showNotification('Presença registrada com sucesso!', 'success');
+        }
+
+        function fecharInscricoes() {
+            document.getElementById('inscricoesModal').classList.add('hidden');
+            document.getElementById('inscricoesModal').classList.remove('flex');
+            workshopAtual = null;
+        }
     </script>
 </body>
 </html>

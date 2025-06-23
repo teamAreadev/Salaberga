@@ -147,12 +147,11 @@
                     </div>
                     <div>
                         <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
-                            <!-- Título removido -->
+                            TAREFA 12
                         </h1>
-                        <p class="text-gray-400 text-xs font-medium tracking-wider uppercase"></p>
+                        <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Empreendedorismo</p>
                     </div>
                 </div>
-                <p class="text-gray-400 text-sm"></p>
             </div>
         </div>
     </header>
