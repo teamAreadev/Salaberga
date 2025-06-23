@@ -331,27 +331,52 @@ $select_model = new select_model();
         select.input-field option {
             color: #222 !important;
         }
+
+        .user-chip {
+            background: linear-gradient(145deg, #232d25 0%, #181f1a 100%);
+            border: 1px solid #1f3a26;
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #e5e7eb;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
+        }
     </style>
 </head>
 
 <body class="min-h-screen">
-    <!-- Header -->
+ 
     <header class="header-bg sticky top-0 z-50">
         <div class="container mx-auto px-4 sm:px-6 py-2 sm:py-3">
-            <div class="text-center">
-                <div class="flex items-center justify-center gap-2 mb-2">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
-                        <i class="fas fa-graduation-cap text-white text-lg"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
+            <div class="grid grid-cols-3 items-center">
+                <!-- Espaço vazio para alinhar -->
+                <div></div>
+                <!-- Logo e Título centralizados -->
+                <div class="flex flex-col items-center gap-1">
+                    <div class="flex items-center justify-center gap-2">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
+                            <i class="fas fa-graduation-cap text-white text-lg"></i>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent text-center">
                             TAREFA 1
                         </h1>
-                        <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Venda de Rifas
-                        </p>
+                    </div>
+                    <p class="text-gray-400 text-xs font-medium tracking-wider uppercase text-center">VENDA DE RIFAS</p>
+                </div>
+                <!-- Chip do Usuário à direita -->
+                <div class="flex justify-end">
+                    <div class="user-chip">
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                            <i class="fas fa-user text-green-300 text-xs"></i>
+                        </div>
+                        <span class="text-gray-100">João Silva</span>
                     </div>
                 </div>
-
             </div>
         </div>
     </header>
