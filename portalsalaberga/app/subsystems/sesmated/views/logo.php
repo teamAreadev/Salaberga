@@ -1,12 +1,12 @@
 <?php
-// Página de Tarefa 02: Grito de guerra do curso cumprida - 500 pontos
+// Página de Tarefa 04: Logomarca SESMATED
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarefa 02 - Grito de Guerra</title>
+    <title>Tarefa 04 - Logomarca SESMATED</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -89,36 +89,6 @@
             background: linear-gradient(145deg, #353535 0%, #252525 100%);
             border-color: rgba(255, 255, 255, 0.25);
             transform: translateY(-1px);
-        }
-        
-        .status-complete {
-            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-        
-        .status-failed {
-            background: linear-gradient(135deg, var(--danger-color) 0%, #dc2626 100%);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
         }
         
         .user-chip {
@@ -240,62 +210,71 @@
             }
         }
         
-        .zero-points-glow {
-            animation: zeroPointsGlow 2s ease-in-out infinite;
+        /* Estilos para as medalhas de colocação */
+        .medal-1st {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #000;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
         }
         
-        @keyframes zeroPointsGlow {
-            0%, 100% { 
-                box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
-                transform: scale(1);
-            }
-            50% { 
-                box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4);
-                transform: scale(1.02);
-            }
+        .medal-2nd {
+            background: linear-gradient(135deg, #c0c0c0 0%, #e5e5e5 100%);
+            color: #000;
+            box-shadow: 0 4px 20px rgba(192, 192, 192, 0.4);
         }
         
-        /* Radio button customization - PADDING REDUZIDO */
-        .radio-option {
-            background: linear-gradient(145deg, rgba(30, 30, 30, 0.8) 0%, rgba(20, 20, 20, 0.8) 100%);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 1rem; /* Reduzido de 1.5rem para 1rem */
+        .medal-3rd {
+            background: linear-gradient(135deg, #cd7f32 0%, #daa520 100%);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(205, 127, 50, 0.4);
+        }
+        
+        .medal-4th, .medal-5th {
+            background: linear-gradient(135deg, var(--header-color) 0%, #00a040 100%);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 179, 72, 0.3);
+        }
+        
+        .criteria-item {
+            background: linear-gradient(145deg, rgba(40, 40, 40, 0.6) 0%, rgba(30, 30, 30, 0.6) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 1rem;
             transition: all 0.3s ease;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
         }
         
-        .radio-option:hover {
+        .criteria-item:hover {
             border-color: rgba(255, 183, 51, 0.3);
-            box-shadow: 0 8px 25px rgba(255, 183, 51, 0.1);
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 183, 51, 0.1);
         }
         
-        .radio-option.selected {
-            border-color: var(--accent-color);
-            box-shadow: 0 8px 30px rgba(255, 183, 51, 0.2);
+        .course-icon {
+            background: linear-gradient(145deg, rgba(50, 50, 50, 0.8) 0%, rgba(30, 30, 30, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        .radio-option input[type="radio"] {
-            width: 1.5rem;
-            height: 1.5rem;
-            accent-color: var(--accent-color);
+        .course-icon:hover {
+            border-color: rgba(255, 183, 51, 0.3);
+            transform: translateY(-1px);
         }
         
         /* Melhorias de Responsividade */
         @media (max-width: 640px) {
             .header-bg { padding: 1rem 0; }
             .card-bg { padding: 1.5rem; }
-            .radio-option { padding: 0.75rem; } /* Ainda menor em mobile */
             .user-chip { font-size: 0.75rem; padding: 0.375rem 0.75rem; }
-        }
-        
-        @media (max-width: 480px) {
-            .status-complete, .status-failed {
-                font-size: 0.875rem;
-                padding: 10px 20px;
-            }
+            .criteria-item { padding: 0.75rem; }
+            .course-icon { padding: 0.5rem; }
+            .hidden-mobile { display: none !important; }
+            .btn-primary { min-width: 140px !important; width: auto !important; font-size: 1rem; }
         }
         
         /* Scrollbar personalizada */
@@ -321,17 +300,18 @@
     <!-- Header -->
     <header class="header-bg sticky top-0 z-50">
         <div class="container mx-auto px-4 sm:px-6 py-2 sm:py-3 relative">
-            <div class="flex flex-col items-start sm:items-center justify-start sm:justify-center gap-2">
-                <div class="flex items-start sm:items-center justify-start sm:justify-center gap-2">
+            <div class="flex flex-col items-start sm:items-center justify-center gap-2">
+                <div class="flex items-start sm:items-center justify-center gap-2">
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
-                        <i class="fas fa-bullhorn text-white text-lg"></i>
+                        <i class="fas fa-palette text-white text-lg"></i>
                     </div>
                     <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent text-left sm:text-center">
-                        TAREFA 2
+                        TAREFA 4
                     </h1>
                 </div>
-                <p class="text-gray-400 text-xs font-medium tracking-wider uppercase text-left sm:text-center">GRITO DE GUERRA DO CURSO</p>
+                <p class="text-gray-400 text-xs font-medium tracking-wider uppercase text-left sm:text-center">Logomarca SESMATED</p>
             </div>
+            <!-- Chip do Usuário -->
             <div class="user-chip absolute top-4 right-4">
                 <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                     <i class="fas fa-user text-green-300 text-xs"></i>
@@ -344,32 +324,30 @@
     <!-- Main Content -->
     <main class="container mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col items-center justify-center min-h-[70vh]">
-            <div class="card-bg rounded-3xl p-8 sm:p-12 max-w-2xl w-full text-center fade-in">
+            <div class="card-bg rounded-3xl p-8 sm:p-12 max-w-4xl w-full text-center fade-in">
                 
                 <!-- Formulário Principal -->
-                <form id="gritoForm" class="space-y-8">
+                <form id="logomarcaForm" class="space-y-8">
                     <div class="flex flex-col items-center gap-6">
-                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center">
-                            <i class="fas fa-bullhorn text-white text-3xl"></i>
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                            <i class="fas fa-palette text-white text-3xl"></i>
                         </div>
                         <div>
                             <h2 class="text-3xl sm:text-4xl font-black mb-4 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
-                                Grito de Guerra do Curso
+                                Logomarca 
                             </h2>
-                            <p class="text-lg text-gray-300 font-medium">
-                                Selecione o curso e confirme se o grito de guerra foi realizado:
-                            </p>
+                           
                         </div>
                     </div>
 
-                    <!-- Seletor de Curso -->
+                    <!-- Seletor de Curso Avaliador -->
                     <div class="mb-8">
                         <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-graduation-cap mr-2"></i>Curso
+                            <i class="fas fa-graduation-cap mr-2"></i>Curso Avaliador
                         </label>
                         <div class="select-wrapper">
                             <select id="cursoInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
-                                <option value="" selected disabled>Selecione o curso</option>
+                                <option value="" selected disabled>Selecione o curso </option>
                                 <option value="enfermagem">Enfermagem</option>
                                 <option value="informatica">Informática</option>
                                 <option value="meio-ambiente">Meio Ambiente</option>
@@ -379,92 +357,87 @@
                         </div>
                     </div>
 
-                    <!-- Opções de Radio -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12">
-                        <label class="radio-option" onclick="selectOption(this, 'sim')">
-                            <div class="flex flex-row items-center gap-3 justify-center">
-                                <div class="w-7 h-7 rounded-md bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                                    <i class="fas fa-check text-white text-base"></i>
-                                </div>
-                                <span class="text-lg font-bold text-green-400">Sim, foi realizado!</span>
-                            </div>
-                            <input type="radio" name="grito" value="sim" class="sr-only" required>
+                    <!-- Seletor de Colocação -->
+                    <div class="mb-8">
+                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
+                            <i class="fas fa-trophy mr-2"></i>Colocação da Logomarca
                         </label>
+                        <div class="select-wrapper">
+                            <select id="colocacaoInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
+                                <option value="" selected disabled>Selecione a colocação</option>
+                                <option value="1">🥇 1º lugar - 500 pontos</option>
+                                <option value="2">🥈 2º lugar - 450 pontos</option>
+                                <option value="3">🥉 3º lugar - 400 pontos</option>
+                                <option value="4">🏅 4º lugar - 350 pontos</option>
+                                <option value="5">🏅 5º lugar - 300 pontos</option>
+                            </select>
+                        </div>
+                    </div>
 
-                        <label class="radio-option" onclick="selectOption(this, 'nao')">
-                            <div class="flex flex-row items-center gap-3 justify-center">
-                                <div class="w-7 h-7 rounded-md bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
-                                    <i class="fas fa-times text-white text-base"></i>
-                                </div>
-                                <span class="text-lg font-bold text-red-400">Não foi realizado</span>
-                            </div>
-                            <input type="radio" name="grito" value="nao" class="sr-only">
-                        </label>
+                    <!-- Painel de Pontuação -->
+                    <div id="pontosPainel" class="mt-8 hidden slide-up">
+                        <div class="stats-card rounded-2xl p-4 text-center max-w-sm mx-auto">
+                            <h3 class="text-xl sm:text-2xl font-black mb-2 text-white">
+                                <span id="colocacaoTexto">Colocação</span>
+                            </h3>
+                            <p class="text-base text-gray-300 mb-2">
+                                Avaliado por: <span id="cursoSelecionado" class="font-bold" style="color: var(--accent-color);"></span>
+                            </p>
+                            <p class="text-xl font-bold text-yellow-400">
+                                <i class="fas fa-star mr-2"></i><span id="pontosLogomarca">0</span> Pontos
+                            </p>
+                        </div>
                     </div>
 
                     <!-- Botão de Envio -->
-                    <div class="pt-8">
-                        <button type="submit" class="btn-primary px-8 py-4 rounded-2xl font-bold text-white flex items-center justify-center gap-3 text-lg mx-auto">
+                    <div class="pt-8 flex justify-center">
+                        <button type="submit" class="btn-primary px-6 py-3 rounded-2xl font-bold text-white flex items-center justify-center gap-3 text-lg w-auto min-w-[120px] sm:min-w-[150px]">
                             <i class="fas fa-paper-plane"></i>
-                            Confirmar Status
+                            Confirmar Avaliação
                         </button>
                     </div>
                 </form>
-
-                <!-- Painel de Sucesso -->
-                <div id="painelGrito" class="mt-12 hidden slide-up">
-                    <div class="stats-card rounded-3xl p-8 mb-8">
-                        <div class="flex flex-col items-center gap-6">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center pulse-glow">
-                                <i class="fas fa-trophy text-white text-4xl"></i>
-                            </div>
-                            <div class="text-center">
-                                <h3 class="text-3xl sm:text-4xl font-black mb-4 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
-                                    Tarefa Cumprida!
-                                </h3>
-                                <p class="text-lg text-gray-300 mb-4">
-                                    O grito de guerra do curso <span id="cursoSelecionado" class="font-bold" style="color: var(--accent-color);"></span> foi realizado com sucesso.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Painel de Não Realizado -->
-                <div id="painelNaoGrito" class="mt-12 hidden slide-up">
-                    <div class="stats-card rounded-3xl p-8 mb-8">
-                        <div class="flex flex-col items-center gap-6">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
-                                <i class="fas fa-times-circle text-white text-4xl"></i>
-                            </div>
-                            <div class="text-center">
-                                <h3 class="text-3xl sm:text-4xl font-black mb-4 text-red-400">
-                                    Tarefa Não Cumprida
-                                </h3>
-                                <p class="text-lg text-gray-300 mb-6">
-                                    O grito de guerra do curso <span id="cursoSelecionadoPendente" class="font-bold" style="color: var(--accent-color);"></span> não atendeu aos critérios estabelecidos.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Botão para Voltar -->
                 <div id="voltarButton" class="mt-8 hidden">
                     <button onclick="resetForm()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2 mx-auto">
                         <i class="fas fa-arrow-left"></i>
-                        Voltar ao Formulário
+                        Nova Avaliação
                     </button>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- Tela de Sucesso -->
+    <div id="sucessoLogomarca" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+        <div class="card-bg rounded-3xl p-8 max-w-md w-full text-center fade-in">
+            <div class="flex flex-col items-center gap-4 mb-6">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                    <i class="fas fa-check-circle text-white text-4xl"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-green-400 mb-2">Avaliação Registrada!</h2>
+                <p class="text-lg text-gray-200">A pontuação da logomarca SESMATED foi computada com sucesso.</p>
+              
+            <button onclick="fecharSucesso()" class="btn-primary px-6 py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2 mx-auto mt-4">
+                <i class="fas fa-arrow-left"></i> Nova Avaliação
+            </button>
+        </div>
+    </div>
+
     <script>
-        const form = document.getElementById('gritoForm');
-        const painelGrito = document.getElementById('painelGrito');
-        const painelNaoGrito = document.getElementById('painelNaoGrito');
+        const form = document.getElementById('logomarcaForm');
+        const pontosPainel = document.getElementById('pontosPainel');
         const voltarButton = document.getElementById('voltarButton');
+        
+        // Mapeamento de pontos por colocação
+        const pontosPorColocacao = {
+            '1': 500,
+            '2': 450,
+            '3': 400,
+            '4': 350,
+            '5': 300
+        };
 
         // Mapeamento de cursos para exibição
         const cursosNomes = {
@@ -475,76 +448,90 @@
             'edificacoes': 'Edificações'
         };
 
-        function selectOption(element, value) {
-            // Remove seleção anterior
-            document.querySelectorAll('.radio-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            
-            // Adiciona seleção atual
-            element.classList.add('selected');
-            
-            // Marca o radio button
-            element.querySelector('input[type="radio"]').checked = true;
-        }
+        // Mapeamento de colocações
+        const colocacaoTextos = {
+            '1': '🥇 1º Lugar',
+            '2': '🥈 2º Lugar', 
+            '3': '🥉 3º Lugar',
+            '4': '🏅 4º Lugar',
+            '5': '🏅 5º Lugar'
+        };
 
+        const colocacaoInput = document.getElementById('colocacaoInput');
+        const cursoInput = document.getElementById('cursoInput');
+        const pontosLogomarca = document.getElementById('pontosLogomarca');
+        const colocacaoTexto = document.getElementById('colocacaoTexto');
+        const cursoSelecionado = document.getElementById('cursoSelecionado');
+
+        // Atualizar pontuação quando colocação mudar
+        colocacaoInput.addEventListener('change', function() {
+            const valor = colocacaoInput.value;
+            if (pontosPorColocacao[valor]) {
+                pontosLogomarca.textContent = pontosPorColocacao[valor];
+                pontosPainel.classList.remove('hidden');
+                colocacaoTexto.textContent = colocacaoTextos[valor];
+                if (cursoInput.value) {
+                    cursoSelecionado.textContent = cursosNomes[cursoInput.value];
+                }
+            } else {
+                pontosPainel.classList.add('hidden');
+            }
+        });
+
+        // Atualizar curso quando selecionado
+        cursoInput.addEventListener('change', function() {
+            if (cursoInput.value && colocacaoInput.value) {
+                cursoSelecionado.textContent = cursosNomes[cursoInput.value];
+            }
+        });
+
+        // Submissão do formulário
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+            const cursoValue = cursoInput.value;
+            const colocacaoValue = colocacaoInput.value;
             
-            const selectedValue = form.grito.value;
-            const cursoValue = document.getElementById('cursoInput').value;
-            
-            // Validação do curso
             if (!cursoValue) {
-                alert('Por favor, selecione o curso.');
-                document.getElementById('cursoInput').focus();
+                alert('Por favor, selecione o curso avaliador.');
+                cursoInput.focus();
+                return;
+            }
+            if (!colocacaoValue) {
+                alert('Por favor, selecione a colocação.');
+                colocacaoInput.focus();
                 return;
             }
             
-            // Atualiza o nome do curso nos painéis
-            const cursoNome = cursosNomes[cursoValue];
-            document.getElementById('cursoSelecionado').textContent = cursoNome;
-            document.getElementById('cursoSelecionadoPendente').textContent = cursoNome;
-            
-            // Esconde o formulário
+            cursoSelecionado.textContent = cursosNomes[cursoValue];
+            colocacaoTexto.textContent = colocacaoTextos[colocacaoValue];
             form.style.display = 'none';
-            voltarButton.classList.remove('hidden');
+            voltarButton.classList.add('hidden');
+            document.getElementById('sucessoLogomarca').classList.remove('hidden');
             
-            if (selectedValue === 'sim') {
-                painelGrito.classList.remove('hidden');
-                painelNaoGrito.classList.add('hidden');
-                
-                // Adiciona efeito de confete (opcional)
+            // Efeito especial para 1º lugar
+            if (colocacaoValue === '1') {
                 setTimeout(() => {
                     createConfetti();
                 }, 500);
-                
-            } else if (selectedValue === 'nao') {
-                painelGrito.classList.add('hidden');
-                painelNaoGrito.classList.remove('hidden');
             }
         });
 
         function resetForm() {
-            // Mostra o formulário novamente
             form.style.display = 'block';
-            
-            // Esconde os painéis
-            painelGrito.classList.add('hidden');
-            painelNaoGrito.classList.add('hidden');
             voltarButton.classList.add('hidden');
-            
-            // Reset do formulário
             form.reset();
-            document.querySelectorAll('.radio-option').forEach(option => {
-                option.classList.remove('selected');
-            });
+            pontosPainel.classList.add('hidden');
         }
 
-        // Efeito de confete simples (opcional)
+        function fecharSucesso() {
+            document.getElementById('sucessoLogomarca').classList.add('hidden');
+            resetForm();
+        }
+
+        // Efeito de confete para 1º lugar
         function createConfetti() {
-            const colors = ['#00b348', '#ffb733', '#10b981', '#f59e0b'];
-            const confettiCount = 50;
+            const colors = ['#ffd700', '#ffed4e', '#00b348', '#ffb733', '#8b5cf6', '#ec4899'];
+            const confettiCount = 60;
             
             for (let i = 0; i < confettiCount; i++) {
                 setTimeout(() => {
@@ -552,8 +539,8 @@
                     confetti.style.position = 'fixed';
                     confetti.style.left = Math.random() * 100 + 'vw';
                     confetti.style.top = '-10px';
-                    confetti.style.width = '10px';
-                    confetti.style.height = '10px';
+                    confetti.style.width = '12px';
+                    confetti.style.height = '12px';
                     confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                     confetti.style.borderRadius = '50%';
                     confetti.style.pointerEvents = 'none';
@@ -565,7 +552,7 @@
                     setTimeout(() => {
                         confetti.remove();
                     }, 3000);
-                }, i * 50);
+                }, i * 30);
             }
         }
 

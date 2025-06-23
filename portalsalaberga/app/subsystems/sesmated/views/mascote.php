@@ -283,16 +283,16 @@
     <!-- Header -->
     <header class="header-bg sticky top-0 z-50">
         <div class="container mx-auto px-4 sm:px-6 py-2 sm:py-3">
-            <div class="flex flex-col items-center justify-center gap-2">
-                <div class="flex items-center justify-center gap-2">
+            <div class="flex flex-col items-start sm:items-center justify-start sm:justify-center gap-2">
+                <div class="flex items-start sm:items-center justify-start sm:justify-center gap-2">
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
                         <i class="fas fa-paw text-white text-lg"></i>
                     </div>
-                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent text-center">
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent text-left sm:text-center">
                         TAREFA 3
                     </h1>
                 </div>
-                <p class="text-gray-400 text-xs font-medium tracking-wider uppercase text-center">Mascote do Curso</p>
+                <p class="text-gray-400 text-xs font-medium tracking-wider uppercase text-left sm:text-center">Mascote do Curso</p>
             </div>
             <!-- Chip do Usuário -->
             <div class="user-chip absolute top-4 right-4">
