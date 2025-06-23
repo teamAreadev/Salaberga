@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <style>
         :root {
             --background-color: #0a0a0a;
@@ -231,50 +232,34 @@
                     </div>
                     <h2 class="text-2xl font-bold">Registrar Presença</h2>
                 </div>
-                
                 <div class="mb-6">
                     <h3 class="text-xl font-semibold mb-2" id="palestraAtual"></h3>
                 </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div>
-                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-user mr-2"></i>Nome do Participante
-                        </label>
-                        <input type="text" id="nomeParticipante" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-graduation-cap mr-2"></i>Curso
-                        </label>
-                        <select id="cursoParticipante" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
-                            <option value="">Selecione o curso</option>
-                            <option value="Informática">Informática</option>
-                            <option value="Enfermagem">Enfermagem</option>
-                            <option value="Administração">Administração</option>
-                            <option value="Agropecuária">Agropecuária</option>
-                        </select>
+                <div class="mb-8 text-center">
+                    <p class="text-lg text-yellow-400 font-semibold mb-4">Aproxime o crachá do leitor de QR Code para registrar presença</p>
+                    <input id="inputLeitorQR" type="text" autocomplete="off" class="opacity-0 absolute pointer-events-none" style="width:1px;height:1px;" tabindex="0">
+                </div>
+                <div class="mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold mb-2 text-gray-300 uppercase tracking-wide">
+                                <i class="fas fa-user mr-2"></i>Nome do Participante
+                            </label>
+                            <div id="nomeParticipanteDisplay" class="input-field w-full rounded-2xl px-4 py-3 text-white"></div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-2 text-gray-300 uppercase tracking-wide">
+                                <i class="fas fa-graduation-cap mr-2"></i>Curso
+                            </label>
+                            <div id="cursoParticipanteDisplay" class="input-field w-full rounded-2xl px-4 py-3 text-white"></div>
+                        </div>
                     </div>
                 </div>
-                
                 <div class="flex flex-wrap gap-4 mb-8">
-                    <button onclick="registrarPresenca()" class="btn-primary px-6 py-3 rounded-2xl font-semibold text-white flex items-center gap-2">
+                    <button onclick="registrarPresencaAuto()" class="btn-primary px-6 py-3 rounded-2xl font-semibold text-white flex items-center gap-2">
                         <i class="fas fa-check"></i>
                         Registrar Presença
                     </button>
-                    <button onclick="gerarQRCode()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
-                        <i class="fas fa-qrcode"></i>
-                        Gerar QR Code
-                    </button>
-                </div>
-                
-                <!-- QR Code -->
-                <div id="qrCodeContainer" class="text-center mb-8 hidden">
-                    <div class="card-bg rounded-2xl p-6">
-                        <h4 class="text-lg font-semibold mb-4">QR Code para Presença</h4>
-                        <div id="qrcode" class="inline-block p-4 bg-white rounded-lg"></div>
-                        <p class="mt-4 text-sm text-gray-400">Escaneie para registrar presença automaticamente</p>
-                    </div>
                 </div>
                 
                 <!-- Lista de Presentes -->
@@ -322,6 +307,8 @@
         let palestras = JSON.parse(localStorage.getItem('palestras') || '[]');
         let presencas = JSON.parse(localStorage.getItem('presencas_palestras') || '[]');
         let palestraAtual = null;
+        let nomeLidoQR = '';
+        let cursoLidoQR = '';
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -428,53 +415,49 @@
             palestraAtual = palestras.find(p => p.id === id);
             document.getElementById('palestraAtual').textContent = 
                 `${palestraAtual.titulo} - ${palestraAtual.palestrante}`;
-            
-            document.getElementById('nomeParticipante').value = '';
-            document.getElementById('cursoParticipante').value = '';
-            
+            document.getElementById('nomeParticipanteDisplay').textContent = '';
+            document.getElementById('cursoParticipanteDisplay').textContent = '';
+            nomeLidoQR = '';
+            cursoLidoQR = '';
             document.getElementById('presencaModal').classList.remove('hidden');
             document.getElementById('presencaModal').classList.add('flex');
-            
             atualizarListaPresentes();
+            // Foca no input oculto para receber o QR do leitor físico
+            setTimeout(() => {
+                const input = document.getElementById('inputLeitorQR');
+                input.value = '';
+                input.focus();
+            }, 200);
         }
 
-        function registrarPresenca() {
-            if (!palestraAtual || !document.getElementById('nomeParticipante').value || !document.getElementById('cursoParticipante').value) {
-                showNotification('Preencha todos os campos!', 'error');
+        function registrarPresencaAuto() {
+            if (!palestraAtual || !nomeLidoQR || !cursoLidoQR) {
+                showNotification('Erro ao ler o QR Code do crachá!', 'error');
                 return;
             }
-            
-            const nome = document.getElementById('nomeParticipante').value;
-            const curso = document.getElementById('cursoParticipante').value;
-            
             // Verificar se já está registrado
             const jaRegistrado = presencas.some(p => 
                 p.palestraId === palestraAtual.id && 
-                p.nome.toLowerCase() === nome.toLowerCase()
+                p.nome.toLowerCase() === nomeLidoQR.toLowerCase()
             );
-            
             if (jaRegistrado) {
                 showNotification('Participante já registrado nesta palestra!', 'error');
                 return;
             }
-            
             const presenca = {
                 id: Date.now(),
                 palestraId: palestraAtual.id,
-                nome: nome,
-                curso: curso,
+                nome: nomeLidoQR,
+                curso: cursoLidoQR,
                 timestamp: new Date().toISOString()
             };
-            
             presencas.push(presenca);
             localStorage.setItem('presencas_palestras', JSON.stringify(presencas));
-            
-            document.getElementById('nomeParticipante').value = '';
-            document.getElementById('cursoParticipante').value = '';
-            
+            nomeLidoQR = '';
+            cursoLidoQR = '';
+            document.getElementById('nomeParticipanteDisplay').textContent = '';
+            document.getElementById('cursoParticipanteDisplay').textContent = '';
             atualizarListaPresentes();
-            renderPalestras();
-            
             showNotification('Presença registrada com sucesso!', 'success');
         }
 
@@ -505,32 +488,9 @@
             });
         }
 
-        function gerarQRCode() {
-            if (!palestraAtual) return;
-            
-            const qrData = JSON.stringify({
-                type: 'palestra_presenca',
-                palestraId: palestraAtual.id,
-                titulo: palestraAtual.titulo
-            });
-            
-            const qrContainer = document.getElementById('qrcode');
-            qrContainer.innerHTML = '';
-            
-            QRCode.toCanvas(qrContainer, qrData, {
-                width: 200,
-                height: 200,
-                colorDark: '#000000',
-                colorLight: '#ffffff'
-            });
-            
-            document.getElementById('qrCodeContainer').classList.remove('hidden');
-        }
-
         function fecharPresenca() {
             document.getElementById('presencaModal').classList.add('hidden');
             document.getElementById('presencaModal').classList.remove('flex');
-            document.getElementById('qrCodeContainer').classList.add('hidden');
             palestraAtual = null;
         }
 
@@ -664,6 +624,34 @@
             if (e.key === 'Escape') {
                 if (!document.getElementById('presencaModal').classList.contains('hidden')) fecharPresenca();
             }
+        });
+
+        document.getElementById('inputLeitorQR').addEventListener('input', function(e) {
+            const qrCodeMessage = this.value.trim();
+            if (!qrCodeMessage) return;
+            // Tenta ler JSON ou CSV
+            let nome = '', curso = '';
+            try {
+                const obj = JSON.parse(qrCodeMessage);
+                nome = obj.nome || '';
+                curso = obj.curso || '';
+            } catch (e) {
+                // Tenta CSV: nome,curso
+                const parts = qrCodeMessage.split(',');
+                if (parts.length >= 2) {
+                    nome = parts[0].trim();
+                    curso = parts[1].trim();
+                } else {
+                    nome = qrCodeMessage;
+                }
+            }
+            nomeLidoQR = nome;
+            cursoLidoQR = curso;
+            document.getElementById('nomeParticipanteDisplay').textContent = nome;
+            document.getElementById('cursoParticipanteDisplay').textContent = curso;
+            // Registrar presença automaticamente
+            registrarPresencaAuto();
+            this.value = '';
         });
     </script>
 </body>
