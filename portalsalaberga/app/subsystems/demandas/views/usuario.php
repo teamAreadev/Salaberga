@@ -81,12 +81,34 @@ $session->autenticar_session();
             z-index: -1;
         }
 
+        /* Card Animation */
+        .demanda-card {
+            animation: cardSlideIn 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes cardSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stagger animation for multiple cards */
+        .demanda-card:nth-child(1) { animation-delay: 0.1s; }
+        .demanda-card:nth-child(2) { animation-delay: 0.2s; }
+        .demanda-card:nth-child(3) { animation-delay: 0.3s; }
+        .demanda-card:nth-child(4) { animation-delay: 0.4s; }
+        .demanda-card:nth-child(5) { animation-delay: 0.5s; }
+        .demanda-card:nth-child(6) { animation-delay: 0.6s; }
+
         /* Enhanced Card Styling */
         .demanda-card {
             background: rgba(26, 26, 26, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 1.5rem;
+            border-radius: 16px;
+            padding: 1.75rem;
             position: relative;
             overflow: hidden;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -96,6 +118,7 @@ $session->autenticar_session();
             flex-direction: column;
             width: 100%;
             opacity: 1;
+            min-height: 280px;
         }
 
         .demanda-card::before {
@@ -104,7 +127,7 @@ $session->autenticar_session();
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
+            height: 3px;
             background: linear-gradient(90deg, transparent, rgba(0, 255, 107, 0.6), transparent);
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -124,10 +147,10 @@ $session->autenticar_session();
         }
 
         .demanda-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-6px);
             border-color: rgba(0, 122, 51, 0.3);
-            box-shadow: 
-                0 10px 25px rgba(0, 0, 0, 0.3),
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.4),
                 0 0 0 1px rgba(0, 122, 51, 0.1),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
@@ -140,21 +163,132 @@ $session->autenticar_session();
             transform: rotate(45deg) translate(50%, 50%);
         }
 
+        /* Card Header */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.4;
+            transition: color 0.3s ease;
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .card-title:hover {
+            color: #00FF6B;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .card-action-btn {
+            padding: 0.5rem;
+            border-radius: 8px;
+            color: #6b7280;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 36px;
+        }
+
+        .card-action-btn:hover {
+            color: #00FF6B;
+            background: rgba(0, 255, 107, 0.1);
+            border-color: rgba(0, 255, 107, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Card Content */
+        .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .card-description {
+            color: #a1a1aa;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            flex: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Card Metadata */
+        .card-metadata {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metadata-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #71717a;
+            font-size: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .metadata-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .metadata-item i {
+            color: #00FF6B;
+            font-size: 0.875rem;
+        }
+
+        /* Card Badges */
+        .card-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
         /* Badge Styling */
-        .priority-badge, .status-badge {
+        .priority-badge,
+        .status-badge {
             display: inline-flex;
             align-items: center;
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 500;
+            padding: 0.375rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.6875rem;
+            font-weight: 600;
             gap: 0.3rem;
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .priority-badge::before, .status-badge::before {
+        .priority-badge::before,
+        .status-badge::before {
             content: '';
             position: absolute;
             top: 0;
@@ -165,51 +299,65 @@ $session->autenticar_session();
             transition: left 0.5s ease;
         }
 
-        .priority-badge:hover::before, .status-badge:hover::before {
+        .priority-badge:hover::before,
+        .status-badge:hover::before {
             left: 100%;
         }
 
-        .priority-baixa { 
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15));
-            color: #6ee7b7; 
-            border: 1px solid rgba(16, 185, 129, 0.3);
+        .priority-baixa {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.4);
         }
 
-        .priority-media { 
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.15));
-            color: #fcd34d; 
-            border: 1px solid rgba(245, 158, 11, 0.3);
+        .priority-media {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.4);
         }
 
-        .priority-alta { 
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.15));
-            color: #fca5a5; 
-            border: 1px solid rgba(239, 68, 68, 0.3);
+        .priority-alta {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2));
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.4);
         }
 
-        .status-pendente { 
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.15));
-            color: #fcd34d; 
-            border: 1px solid rgba(245, 158, 11, 0.3);
+        .status-pendente {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.4);
         }
 
-        .status-andamento { 
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(29, 78, 216, 0.15));
-            color: #93c5fd; 
-            border: 1px solid rgba(59, 130, 246, 0.3);
+        .status-andamento {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(29, 78, 216, 0.2));
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.4);
         }
 
-        .status-concluido { 
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15));
-            color: #6ee7b7; 
-            border: 1px solid rgba(16, 185, 129, 0.3);
+        .status-concluido {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        /* Card Footer */
+        .card-footer {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .card-actions-footer {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
         /* Button Styling */
         .btn {
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            font-weight: 500;
+            padding: 0.4375rem 0.75rem;
+            border-radius: 10px;
+            font-weight: 600;
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
@@ -219,6 +367,11 @@ $session->autenticar_session();
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%;
+            justify-content: center;
         }
 
         .btn::before {
@@ -244,8 +397,8 @@ $session->autenticar_session();
 
         .btn-primary:hover {
             background: linear-gradient(135deg, #00993F, #00C250);
-            box-shadow: 0 4px 15px rgba(0, 122, 51, 0.3);
-            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0, 122, 51, 0.4);
+            transform: translateY(-2px);
         }
 
         .btn-secondary {
@@ -256,32 +409,32 @@ $session->autenticar_session();
 
         .btn-secondary:hover {
             background: linear-gradient(135deg, #ef4444, #f87171);
-            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
-            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+            transform: translateY(-2px);
         }
 
         .btn-yellow {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
+            background: linear-gradient(135deg, #d97706, #f59e0b);
             color: white;
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            border: 1px solid rgba(217, 119, 6, 0.3);
         }
 
         .btn-yellow:hover {
-            background: linear-gradient(135deg, #d97706, #f59e0b);
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
-            transform: translateY(-1px);
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+            transform: translateY(-2px);
         }
 
         .btn-green {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #059669, #10b981);
             color: white;
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            border: 1px solid rgba(5, 150, 105, 0.3);
         }
 
         .btn-green:hover {
-            background: linear-gradient(135deg, #059669, #10b981);
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-            transform: translateY(-1px);
+            background: linear-gradient(135deg, #10b981, #34d399);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+            transform: translateY(-2px);
         }
 
         /* Column Headers */
@@ -371,27 +524,6 @@ $session->autenticar_session();
         }
 
         /* Card content styling */
-        .card-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 0.75rem;
-            line-height: 1.4;
-            transition: color 0.3s ease;
-        }
-
-        .card-title:hover {
-            color: #00FF6B;
-        }
-
-        .card-description {
-            color: #a1a1aa;
-            font-size: 0.875rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-            flex-grow: 1;
-        }
-
         .card-date {
             color: #71717a;
             font-size: 0.75rem;
@@ -400,10 +532,130 @@ $session->autenticar_session();
             gap: 0.25rem;
         }
 
+        .card-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .demanda-card {
                 padding: 1.25rem;
+                min-height: 260px;
+            }
+
+            .card-header {
+                margin-bottom: 0.75rem;
+                padding-bottom: 0.75rem;
+            }
+
+            .card-title {
+                font-size: 1rem;
+                margin-right: 0.5rem;
+            }
+
+            .card-action-btn {
+                min-width: 32px;
+                height: 32px;
+                padding: 0.375rem;
+            }
+
+            .card-content {
+                gap: 0.75rem;
+            }
+
+            .card-description {
+                font-size: 0.8125rem;
+                line-height: 1.5;
+            }
+
+            .card-metadata {
+                gap: 0.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .metadata-item {
+                padding: 0.375rem 0.625rem;
+                font-size: 0.6875rem;
+            }
+
+            .card-badges {
+                gap: 0.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .priority-badge,
+            .status-badge {
+                padding: 0.25rem 0.625rem;
+                font-size: 0.625rem;
+                gap: 0.25rem;
+            }
+
+            .card-footer {
+                padding-top: 0.75rem;
+            }
+
+            .card-actions-footer {
+                gap: 0.5rem;
+                flex-direction: column;
+            }
+
+            .btn {
+                padding: 0.4375rem 0.75rem;
+                font-size: 0.6875rem;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .column-header {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .demanda-card {
+                padding: 1rem;
+                min-height: 240px;
+            }
+
+            .card-title {
+                font-size: 0.9375rem;
+            }
+
+            .card-description {
+                font-size: 0.75rem;
+            }
+
+            .metadata-item {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.625rem;
+            }
+
+            .priority-badge,
+            .status-badge {
+                padding: 0.25rem 0.625rem;
+                font-size: 0.625rem;
+                gap: 0.25rem;
+            }
+
+            .card-footer {
+                padding-top: 0.75rem;
+            }
+
+            .card-actions-footer {
+                gap: 0.5rem;
+                flex-direction: column;
+            }
+
+            .btn {
+                padding: 0.4375rem 0.75rem;
+                font-size: 0.6875rem;
+                width: 100%;
+                justify-content: center;
             }
         }
 
@@ -446,7 +698,7 @@ $session->autenticar_session();
 
 <body>
     <!-- Enhanced Header -->
-    <header class="bg-black/50 backdrop-blur-lg border-b border-white/10 sticky top-0 z-50">
+    <header class="bg-black/50 backdrop-blur-lg border-b border-white/10 sm:sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
@@ -521,20 +773,52 @@ $session->autenticar_session();
                         foreach ($pendentes as $dado) {
                     ?>
                         <div class="demanda-card">
-                            <div class="flex justify-between items-start mb-3">
+                            <!-- Card Header -->
+                            <div class="card-header">
                                 <h3 class="card-title">
                                     <?= htmlspecialchars($dado['titulo']) ?>
                                 </h3>
-                                <button type="button" class="text-gray-400 hover:text-primary-50 p-2 rounded-full transition-colors focus:outline-none" title="Mais informações"
-                                    onclick="openInfoModal('<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['prazo'])) ?>', '<?= isset($dado['nome_usuario']) ? htmlspecialchars(addslashes($dado['nome_usuario'])) : 'Não atribuído' ?>')">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
+                                <div class="card-actions">
+                                    <button type="button" class="card-action-btn" title="Mais informações"
+                                        onclick="openInfoModal('<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['prazo'])) ?>', '<?= isset($dado['nome_usuario']) ? htmlspecialchars(addslashes($dado['nome_usuario'])) : 'Não atribuído' ?>')">
+                                        <i class="fas fa-info-circle"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <p class="card-description">
-                                <?= htmlspecialchars($dado['descricao']) ?>
-                            </p>
-                            <div class="flex items-end justify-between gap-2 mt-auto pt-4">
-                                <div class="flex flex-wrap gap-2">
+
+                            <!-- Card Content -->
+                            <div class="card-content">
+                                <p class="card-description">
+                                    <?= htmlspecialchars($dado['descricao']) ?>
+                                </p>
+
+                                <!-- Card Metadata -->
+                                <div class="card-metadata">
+                                    <?php
+                                    $id_demanda = $dado['id'];
+                                    $nomes = $model_usuario->select_nomes($id_demanda);
+                                    if (!empty($nomes)) {
+                                        foreach ($nomes as $nome) {
+                                            echo '<div class="metadata-item">';
+                                            echo '<i class="fas fa-user"></i>';
+                                            echo '<span>' . htmlspecialchars($nome['nome']) . '</span>';
+                                            echo '</div>';
+                                        }
+                                    } else {
+                                        echo '<div class="metadata-item">';
+                                        echo '<i class="fas fa-users"></i>';
+                                        echo '<span>Nenhum responsável</span>';
+                                        echo '</div>';
+                                    }
+                                    ?>
+                                    <div class="metadata-item">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <span><?= htmlspecialchars($dado['prazo']) ?></span>
+                                    </div>
+                                </div>
+
+                                <!-- Card Badges -->
+                                <div class="card-badges">
                                     <span class="priority-badge priority-<?= strtolower($dado['prioridade']) ?>">
                                         <i class="fas fa-flag"></i>
                                         <?= htmlspecialchars($dado['prioridade']) ?>
@@ -543,23 +827,21 @@ $session->autenticar_session();
                                         <i class="fas fa-clock"></i>
                                         <?= htmlspecialchars($dado['status']) ?>
                                     </span>
-                                    <span class="status-badge status-pendente">
-                                        <i class="fas fa-calendar-plus"></i>
-                                        <?= htmlspecialchars($dado['data_criacao']) ?>
-                                    </span>
-                                    <span class="status-badge status-pendente">
-                                        <i class="fas fa-calendar-check"></i>
-                                        <?= htmlspecialchars($dado['prazo']) ?>
-                                    </span>
                                 </div>
-                                <form action="../controllers/usuario.controller.php" method="post">
-                                    <input type="hidden" name="id_usuario" value="<?= $_SESSION['user_id'] ?>">
-                                    <input type="hidden" name="id_demanda" value="<?= $dado['id'] ?>">
-                                    <button type="submit" class="btn btn-yellow flex items-center gap-2 px-3 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
-                                        <i class="fas fa-play"></i>
-                                        Iniciar
-                                    </button>
-                                </form>
+                            </div>
+
+                            <!-- Card Footer -->
+                            <div class="card-footer">
+                                <div class="card-actions-footer">
+                                    <form action="../controllers/usuario.controller.php" method="post">
+                                        <input type="hidden" name="id_usuario" value="<?= $_SESSION['user_id'] ?>">
+                                        <input type="hidden" name="id_demanda" value="<?= $dado['id'] ?>">
+                                        <button type="submit" class="btn btn-yellow">
+                                            <i class="fas fa-play"></i>
+                                            Iniciar
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     <?php 
@@ -580,7 +862,7 @@ $session->autenticar_session();
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-spinner text-blue-400 text-sm animate-spin"></i>
+                                <i class="fas fa-spinner text-blue-400 text-sm"></i>
                             </div>
                             <h2 class="text-lg font-semibold text-white">Em Andamento</h2>
                         </div>
@@ -598,20 +880,52 @@ $session->autenticar_session();
                         foreach ($andamentos as $dado) {
                     ?>
                         <div class="demanda-card">
-                            <div class="flex justify-between items-start mb-3">
+                            <!-- Card Header -->
+                            <div class="card-header">
                                 <h3 class="card-title">
                                     <?= htmlspecialchars($dado['titulo']) ?>
                                 </h3>
-                                <button type="button" class="text-gray-400 hover:text-primary-50 p-2 rounded-full transition-colors focus:outline-none" title="Mais informações"
-                                    onclick="openInfoModal('<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['prazo'])) ?>', '<?= isset($dado['nome_usuario']) ? htmlspecialchars(addslashes($dado['nome_usuario'])) : 'Não atribuído' ?>')">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
+                                <div class="card-actions">
+                                    <button type="button" class="card-action-btn" title="Mais informações"
+                                        onclick="openInfoModal('<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['prazo'])) ?>', '<?= isset($dado['nome_usuario']) ? htmlspecialchars(addslashes($dado['nome_usuario'])) : 'Não atribuído' ?>')">
+                                        <i class="fas fa-info-circle"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <p class="card-description">
-                                <?= htmlspecialchars($dado['descricao']) ?>
-                            </p>
-                            <div class="flex items-end justify-between gap-2 mt-auto pt-4">
-                                <div class="flex flex-wrap gap-2">
+
+                            <!-- Card Content -->
+                            <div class="card-content">
+                                <p class="card-description">
+                                    <?= htmlspecialchars($dado['descricao']) ?>
+                                </p>
+
+                                <!-- Card Metadata -->
+                                <div class="card-metadata">
+                                    <?php
+                                    $id_demanda = $dado['id'];
+                                    $nomes = $model_usuario->select_nomes($id_demanda);
+                                    if (!empty($nomes)) {
+                                        foreach ($nomes as $nome) {
+                                            echo '<div class="metadata-item">';
+                                            echo '<i class="fas fa-user"></i>';
+                                            echo '<span>' . htmlspecialchars($nome['nome']) . '</span>';
+                                            echo '</div>';
+                                        }
+                                    } else {
+                                        echo '<div class="metadata-item">';
+                                        echo '<i class="fas fa-users"></i>';
+                                        echo '<span>Nenhum responsável</span>';
+                                        echo '</div>';
+                                    }
+                                    ?>
+                                    <div class="metadata-item">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <span><?= htmlspecialchars($dado['prazo']) ?></span>
+                                    </div>
+                                </div>
+
+                                <!-- Card Badges -->
+                                <div class="card-badges">
                                     <span class="priority-badge priority-<?= strtolower($dado['prioridade']) ?>">
                                         <i class="fas fa-flag"></i>
                                         <?= htmlspecialchars($dado['prioridade']) ?>
@@ -620,24 +934,20 @@ $session->autenticar_session();
                                         <i class="fas fa-spinner"></i>
                                         <?= htmlspecialchars($dado['status']) ?>
                                     </span>
-                                    <span class="status-badge status-andamento">
-                                        <i class="fas fa-users"></i>
-                                        <?php
-                                        $id_demanda = $dado['id'];
-                                        $nomes = $model_usuario->select_nomes($id_demanda);
-                                        foreach ($nomes as $nome) {
-                                            echo htmlspecialchars($nome['nome']);
-                                        }
-                                        ?>
-                                    </span>
                                 </div>
-                                <form action="../controllers/usuario.controller.php" method="post">
-                                    <input type="hidden" name="id_demanda_concluir" value="<?= $dado['id'] ?>">
-                                    <button type="submit" class="btn btn-green flex items-center gap-2 px-3 py-2 text-sm font-semibold shadow hover:shadow-lg transition-all">
-                                        <i class="fas fa-check"></i>
-                                        Concluir
-                                    </button>
-                                </form>
+                            </div>
+
+                            <!-- Card Footer -->
+                            <div class="card-footer">
+                                <div class="card-actions-footer">
+                                    <form action="../controllers/usuario.controller.php" method="post">
+                                        <input type="hidden" name="id_demanda_concluir" value="<?= $dado['id'] ?>">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-check"></i>
+                                            Concluir
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     <?php 
@@ -676,20 +986,56 @@ $session->autenticar_session();
                         foreach ($concluidos as $dado) {
                     ?>
                         <div class="demanda-card">
-                            <div class="flex justify-between items-start mb-3">
+                            <!-- Card Header -->
+                            <div class="card-header">
                                 <h3 class="card-title">
                                     <?= htmlspecialchars($dado['titulo']) ?>
                                 </h3>
-                                <button type="button" class="text-gray-400 hover:text-primary-50 p-2 rounded-full transition-colors focus:outline-none" title="Mais informações"
-                                    onclick="openInfoModal('<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['prazo'])) ?>', '<?= isset($dado['nome_usuario']) ? htmlspecialchars(addslashes($dado['nome_usuario'])) : 'Não atribuído' ?>')">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
+                                <div class="card-actions">
+                                    <button type="button" class="card-action-btn" title="Mais informações"
+                                        onclick="openInfoModal('<?= htmlspecialchars(addslashes($dado['titulo'])) ?>', '<?= htmlspecialchars(addslashes($dado['prazo'])) ?>', '<?= isset($dado['nome_usuario']) ? htmlspecialchars(addslashes($dado['nome_usuario'])) : 'Não atribuído' ?>')">
+                                        <i class="fas fa-info-circle"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <p class="card-description">
-                                <?= htmlspecialchars($dado['descricao']) ?>
-                            </p>
-                            <div class="flex items-end justify-between gap-2 mt-auto pt-4">
-                                <div class="flex flex-wrap gap-2">
+
+                            <!-- Card Content -->
+                            <div class="card-content">
+                                <p class="card-description">
+                                    <?= htmlspecialchars($dado['descricao']) ?>
+                                </p>
+
+                                <!-- Card Metadata -->
+                                <div class="card-metadata">
+                                    <?php
+                                    $id_demanda = $dado['id'];
+                                    $nomes = $model_usuario->select_nomes($id_demanda);
+                                    if (!empty($nomes)) {
+                                        foreach ($nomes as $nome) {
+                                            echo '<div class="metadata-item">';
+                                            echo '<i class="fas fa-user"></i>';
+                                            echo '<span>' . htmlspecialchars($nome['nome']) . '</span>';
+                                            echo '</div>';
+                                        }
+                                    } else {
+                                        echo '<div class="metadata-item">';
+                                        echo '<i class="fas fa-users"></i>';
+                                        echo '<span>Nenhum responsável</span>';
+                                        echo '</div>';
+                                    }
+                                    ?>
+                                    <div class="metadata-item">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <span><?= htmlspecialchars($dado['data_conclusao']) ?></span>
+                                    </div>
+                                    <div class="metadata-item">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span><?= htmlspecialchars($dado['prazo']) ?></span>
+                                    </div>
+                                </div>
+
+                                <!-- Card Badges -->
+                                <div class="card-badges">
                                     <span class="priority-badge priority-<?= strtolower($dado['prioridade']) ?>">
                                         <i class="fas fa-flag"></i>
                                         <?= htmlspecialchars($dado['prioridade']) ?>
@@ -697,10 +1043,6 @@ $session->autenticar_session();
                                     <span class="status-badge status-concluido">
                                         <i class="fas fa-check-circle"></i>
                                         <?= htmlspecialchars($dado['status']) ?>
-                                    </span>
-                                    <span class="status-badge status-concluido">
-                                        <i class="fas fa-calendar-check"></i>
-                                        <?= htmlspecialchars($dado['data_conclusao']) ?>
                                     </span>
                                 </div>
                             </div>
