@@ -53,9 +53,15 @@
         }
         
         .input-field {
-            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%);
+            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%) !important;
+            color: var(--text-color) !important;
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 3rem;
+            cursor: pointer;
         }
         
         .input-field:focus {
@@ -186,6 +192,49 @@
             to { box-shadow: 0 8px 40px rgba(0, 179, 72, 0.5); }
         }
 
+        /* Estilo customizado para o select */
+        .select-wrapper {
+            position: relative;
+        }
+        
+        .select-wrapper::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-color);
+            pointer-events: none;
+            font-size: 0.875rem;
+        }
+        
+        select.input-field {
+            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%) !important;
+            color: var(--text-color) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 3rem;
+            cursor: pointer;
+        }
+        select.input-field option {
+            background-color: #181818 !important;
+            color: #fff !important;
+        }
+        select.input-field:focus,
+        select.input-field:active {
+            background-color: #181818 !important;
+            color: #fff !important;
+        }
+        select.input-field option:checked {
+            background-color: #222 !important;
+            color: #ffb733 !important;
+        }
+
         /* Melhorias de Responsividade */
         @media (max-width: 640px) {
             .header-bg { padding: 1rem 0; }
@@ -219,25 +268,6 @@
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, #00a040, #ff9500);
         }
-
-        /* Estilo customizado para o select */
-        select.input-field {
-            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%) !important;
-            color: var(--text-color) !important;
-            border: 1px solid rgba(255,255,255,0.12);
-            box-shadow: none;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            padding-right: 2.5rem;
-        }
-        select.input-field:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1);
-        }
-        select.input-field option {
-            color: #222 !important;
-        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -253,11 +283,9 @@
                         <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
                             TAREFA 1
                         </h1>
-                        <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Venda de Rifas
-</p>
+                        <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Venda de Rifas</p>
                     </div>
                 </div>
-           
             </div>
         </div>
     </header>
@@ -344,21 +372,23 @@
                     <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
                         <i class="fas fa-users mr-2"></i>Turma
                     </label>
-                    <select id="turmaInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
-                        <option value="">Selecione a turma</option>
-                        <option value="1A">1A - Enfermagem</option>
-                        <option value="1B">1B - Informática</option>
-                        <option value="1C">1C - Administração</option>
-                        <option value="1D">1D - Edificações</option>
-                        <option value="2A">2A - Enfermagem</option>
-                        <option value="2B">2B - Informática</option>
-                        <option value="2C">2C - Meio Ambiente</option>
-                        <option value="2D">2D - Edificações</option>
-                        <option value="3A">3A - Enfermagem</option>
-                        <option value="3B">3B - Informática</option>
-                        <option value="3C">3C - Administração</option>
-                        <option value="3D">3D - Edificações</option>
-                    </select>
+                    <div class="select-wrapper">
+                        <select id="turmaInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
+                            <option value="">Selecione a turma</option>
+                            <option value="1A">1A - Enfermagem</option>
+                            <option value="1B">1B - Informática</option>
+                            <option value="1C">1C - Administração</option>
+                            <option value="1D">1D - Edificações</option>
+                            <option value="2A">2A - Enfermagem</option>
+                            <option value="2B">2B - Informática</option>
+                            <option value="2C">2C - Meio Ambiente</option>
+                            <option value="2D">2D - Edificações</option>
+                            <option value="3A">3A - Enfermagem</option>
+                            <option value="3B">3B - Informática</option>
+                            <option value="3C">3C - Administração</option>
+                            <option value="3D">3D - Edificações</option>
+                        </select>
+                    </div>
                 </div>
                 
                 <div>
@@ -584,8 +614,6 @@
         function updateTotal() {
             const totalRifas = Object.values(turmaRifas).reduce((sum, val) => sum + (val || 0), 0);
             const total = totalRifas * 2;
-            document.getElementById('totalAmount').textContent = `R$ ${total.toFixed(2)}`;
-            document.getElementById('totalRifas').textContent = `${totalRifas} rifas vendidas`;
         }
 
         function openAddModal(turmaEdit = null) {
