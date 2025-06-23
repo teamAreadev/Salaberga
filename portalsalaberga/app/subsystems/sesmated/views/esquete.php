@@ -299,6 +299,44 @@
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, #00a040, #ff9500);
         }
+
+        /* Custom select */
+        .custom-select-wrapper {
+            font-family: inherit;
+            user-select: none;
+        }
+        .custom-select-selected {
+            background: #232323;
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 2px solid #ffb733;
+            cursor: pointer;
+        }
+        .custom-select-items {
+            position: absolute;
+            background: #232323;
+            border: 2px solid #ffb733;
+            border-top: none;
+            width: 100%;
+            z-index: 99;
+            border-radius: 0 0 12px 12px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .custom-select-items div {
+            padding: 12px 16px;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .custom-select-items div:hover, .custom-select-items .same-as-selected {
+            background: #ffb733;
+            color: #181818;
+        }
+        .custom-select-hide {
+            display: none;
+        }
     </style>
 </head>
 
@@ -402,14 +440,16 @@
                             <i class="fas fa-graduation-cap mr-2"></i>Curso
                         </label>
                         <div class="select-wrapper">
-                            <select id="cursoInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
-                                <option value="" selected disabled>Selecione o curso</option>
-                                <option value="enfermagem">Enfermagem</option>
-                                <option value="informatica">Informática</option>
-                                <option value="meio-ambiente">Meio Ambiente</option>
-                                <option value="administracao">Administração</option>
-                                <option value="edificacoes">Edificações</option>
-                            </select>
+                            <div class="custom-select-wrapper" style="position:relative;max-width:400px;">
+                                <div class="custom-select-selected">Selecione o curso</div>
+                                <div class="custom-select-items custom-select-hide">
+                                    <div>Enfermagem</div>
+                                    <div>Informática</div>
+                                    <div>Meio Ambiente</div>
+                                    <div>Administração</div>
+                                    <div>Edificações</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -418,14 +458,16 @@
                             <i class="fas fa-trophy mr-2"></i>Colocação
                         </label>
                         <div class="select-wrapper">
-                            <select id="colocacaoInput" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
-                                <option value="" selected disabled>Selecione a colocação</option>
-                                <option value="1">500 pontos</option>
-                                <option value="2"> 450 pontos</option>
-                                <option value="3"> 400 pontos</option>
-                                <option value="4"> 350 pontos</option>
-                                <option value="5">300 pontos</option>
-                            </select>
+                            <div class="custom-select-wrapper" style="position:relative;max-width:400px;">
+                                <div class="custom-select-selected">Selecione a colocação</div>
+                                <div class="custom-select-items custom-select-hide">
+                                    <div>1º Lugar - 500 pontos</div>
+                                    <div>2º Lugar - 450 pontos</div>
+                                    <div>3º Lugar - 400 pontos</div>
+                                    <div>4º Lugar - 350 pontos</div>
+                                    <div>5º Lugar - 300 pontos</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -674,6 +716,36 @@
             const searchTerm = e.target.value.toLowerCase();
             // Implementar lógica de filtro aqui
         });
+
+        // Custom select JS
+        document.querySelectorAll('.custom-select-wrapper').forEach(function(wrapper) {
+            var selected = wrapper.querySelector('.custom-select-selected');
+            var items = wrapper.querySelector('.custom-select-items');
+            selected.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeAllSelect(this);
+                items.classList.toggle('custom-select-hide');
+                selected.classList.toggle('custom-select-arrow-active');
+            });
+            items.querySelectorAll('div').forEach(function(optionDiv) {
+                optionDiv.addEventListener('click', function(e) {
+                    selected.textContent = this.textContent;
+                    items.querySelectorAll('div').forEach(function(d) {
+                        d.classList.remove('same-as-selected');
+                    });
+                    this.classList.add('same-as-selected');
+                    items.classList.add('custom-select-hide');
+                });
+            });
+        });
+        function closeAllSelect(elmnt) {
+            document.querySelectorAll('.custom-select-items').forEach(function(items) {
+                if (items.previousElementSibling !== elmnt) {
+                    items.classList.add('custom-select-hide');
+                }
+            });
+        }
+        document.addEventListener('click', closeAllSelect);
     </script>
 </body>
 </html>

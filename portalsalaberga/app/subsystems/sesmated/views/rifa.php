@@ -248,93 +248,29 @@ $select = new select_model();
             cursor: pointer;
         }
 
-        select.input-field option {
-            background-color: #181818 !important;
-            color: #fff !important;
-        }
-
-        select.input-field:focus,
-        select.input-field:active {
-            background-color: #181818 !important;
-            color: #fff !important;
-        }
-
-        select.input-field option:checked {
-            background-color: #222 !important;
-            color: #ffb733 !important;
-        }
-
-        /* Melhorias de Responsividade */
-        @media (max-width: 640px) {
-            .header-bg {
-                padding: 1rem 0;
-            }
-
-            .stats-card {
-                padding: 1rem;
-            }
-
-            .card-bg {
-                padding: 1rem;
-            }
-
-            .icon-button {
-                width: 36px;
-                height: 36px;
-            }
-
-            .modal-bg {
-                margin: 0.5rem;
-                padding: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-
-            .status-complete,
-            .status-pending {
-                font-size: 0.65rem;
-                padding: 6px 12px;
-            }
-        }
-
-        /* Scrollbar personalizada */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--header-color), var(--accent-color));
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #00a040, #ff9500);
-        }
-
-        /* Estilo customizado para o select */
-        select.input-field {
-            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%) !important;
-            color: var(--text-color) !important;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: none;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            padding-right: 2.5rem;
-        }
-
         select.input-field:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1);
+            border-color: var(--accent-color) !important;
+            box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1) !important;
+            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%) !important;
+        }
+
+        select.input-field:hover {
+            border-color: rgba(255, 183, 51, 0.3) !important;
+            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%) !important;
         }
 
         select.input-field option {
-            color: #222 !important;
+            background-color: #232323 !important;
+            color: #fff !important;
+        }
+        select.input-field option:hover,
+        select.input-field option:focus {
+            background-color: #444 !important;
+            color: #181818 !important;
+        }
+        select.input-field option:checked {
+            background-color: #ffb733 !important;
+            color: #181818 !important;
         }
 
         .user-chip {
@@ -350,6 +286,54 @@ $select = new select_model();
             font-weight: 600;
             color: #e5e7eb;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
+        }
+
+        /* Card customizado para turma */
+        .card-turma {
+            border-left: 4px solid var(--header-color);
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+        .card-turma:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 32px rgba(255, 183, 51, 0.15);
+        }
+
+        /* Custom select */
+        .custom-select-wrapper {
+            font-family: inherit;
+            user-select: none;
+        }
+        .custom-select-selected {
+            background: #232323;
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 2px solid #ffb733;
+            cursor: pointer;
+        }
+        .custom-select-items {
+            position: absolute;
+            background: #232323;
+            border: 2px solid #ffb733;
+            border-top: none;
+            width: 100%;
+            z-index: 99;
+            border-radius: 0 0 12px 12px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .custom-select-items div {
+            padding: 12px 16px;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .custom-select-items div:hover, .custom-select-items .same-as-selected {
+            background: #ffb733;
+            color: #181818;
+        }
+        .custom-select-hide {
+            display: none;
         }
     </style>
 </head>
@@ -413,16 +397,32 @@ $select = new select_model();
                 <h2 class="text-2xl font-bold">Controle por Turma</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6" id="representativesGrid">
-                <!-- Cards will be generated by JavaScript -->
+                <?php
+                $dados = $select->controle_turma();
+                foreach ($dados as $dado) {
+                ?>
+                    <div class="card-bg card-turma rounded-2xl p-6 flex flex-col gap-3 card-hover transition-all duration-300">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-users text-lg" style="color: var(--header-color);"></i>
+                            <span class="font-bold text-lg"><?= htmlspecialchars($dado['nome_turma']) ?></span>
+                        </div>
+                        <div class="text-sm text-gray-400 mb-1">
+                            <i class="fas fa-graduation-cap mr-1"></i>
+                            <?= htmlspecialchars($dado['nome_curso']) ?>
+                        </div>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-xs text-gray-400">Rifas vendidas:</span>
+                            <span class="font-bold text-lg style="color: var(--accent-color);">
+                                <?= htmlspecialchars($dado['quantidades_rifas']) ?>
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-gray-400">Valor arrecadado:</span>
+                            <span class="font-bold text-lg text-green-400">R$ <?= number_format($dado['valor_arrecadado'], 2, ',', '.') ?></span>
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
-
-            <?php
-            $dados = $select->controle_turma();
-
-            foreach ($dados as $dado) {
-            ?>
-                <p><?php echo $dado['turma_id'] ?> | <?php echo $dado['nome_turma'] ?> | <?php echo $dado['nome_curso'] ?> | <?php echo $dado['valor_arrecadado'] ?> | <?php echo $dado['quantidades_rifas'] ?></p>
-            <?php } ?>
         </section>
 
         <div class="section-divider"></div>
@@ -435,11 +435,11 @@ $select = new select_model();
             </div>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button onclick="openModalResumo('turma')" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
+                <button onclick="openModalResumoTurma()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
                     <i class="fas fa-chart-bar"></i>
                     Resumo por Turma
                 </button>
-                <button onclick="openModalResumo('curso')" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
+                <button onclick="openModalResumoCurso()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
                     <i class="fas fa-graduation-cap"></i>
                     Resumo por Curso
                 </button>
@@ -466,16 +466,17 @@ $select = new select_model();
                     <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
                         <i class="fas fa-users mr-2"></i>Turma
                     </label>
-                    <select name="id_turma" id="turmaInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
-                        <option value="" selected disabled>Selecione a turma</option>
-
-                        <?php
-                        $dados = $select->select_turma();
-                        foreach ($dados as $dado) {
-                        ?>
-                            <option value="<?= $dado['turma_id'] ?>"><?= $dado['nome_turma'] ?> <?= $dado['nome_curso'] ?></option>
-                        <?php } ?>
-                    </select>
+                    <div class="custom-select-wrapper" style="position:relative;max-width:400px;">
+                        <div class="custom-select-selected">Selecione a turma</div>
+                        <div class="custom-select-items custom-select-hide">
+                            <?php
+                            $dados = $select->select_turma();
+                            foreach ($dados as $dado) {
+                            ?>
+                                <div><?= htmlspecialchars($dado['nome_turma'] . ' ' . $dado['nome_curso']) ?></div>
+                            <?php } ?>
+                        </div>
+                    </div>
                 </div>
 
                 <div>
@@ -511,18 +512,36 @@ $select = new select_model();
         </div>
     </div>
 
-    <!-- Modal de Detalhes -->
-    <div id="modalResumo" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <!-- Modal de Detalhes (Resumo por Turma) -->
+    <div id="modalResumoTurma" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
         <div class="modal-bg rounded-3xl p-8 w-full max-w-4xl mx-4 slide-up max-h-[90vh] overflow-y-auto">
             <div class="flex items-center gap-4 mb-8">
                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                    <i class="fas fa-chart-line text-white text-xl"></i>
+                    <i class="fas fa-chart-bar text-white text-xl"></i>
                 </div>
-                <h2 class="text-2xl font-bold" id="modalResumoTitle">Detalhes</h2>
+                <h2 class="text-2xl font-bold">Resumo por Turma</h2>
             </div>
-            <div id="modalResumoContent" class="text-gray-200"></div>
+            <div id="modalResumoTurmaContent" class="text-gray-200"></div>
             <div class="flex justify-end pt-8">
-                <button type="button" onclick="closeModalResumo()" class="btn-secondary px-4 py-2 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
+                <button type="button" onclick="closeModalResumoTurma()" class="btn-secondary px-4 py-2 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
+                    <i class="fas fa-times"></i> Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes (Resumo por Curso) -->
+    <div id="modalResumoCurso" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="modal-bg rounded-3xl p-8 w-full max-w-4xl mx-4 slide-up max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold">Resumo por Curso</h2>
+            </div>
+            <div id="modalResumoCursoContent" class="text-gray-200"></div>
+            <div class="flex justify-end pt-8">
+                <button type="button" onclick="closeModalResumoCurso()" class="btn-secondary px-4 py-2 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
                     <i class="fas fa-times"></i> Fechar
                 </button>
             </div>
@@ -575,6 +594,68 @@ $select = new select_model();
                 if (!document.getElementById('modal').classList.contains('hidden')) closeModal();
             }
         });
+
+        // Funções para abrir/fechar modais de relatório
+        function openModalResumoTurma() {
+            var modal = document.getElementById('modalResumoTurma');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeModalResumoTurma() {
+            var modal = document.getElementById('modalResumoTurma');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+        function openModalResumoCurso() {
+            var modal = document.getElementById('modalResumoCurso');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeModalResumoCurso() {
+            var modal = document.getElementById('modalResumoCurso');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+        function openModalTotalArrecadado() {
+            var modal = document.getElementById('modalTotalArrecadado');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeModalTotalArrecadado() {
+            var modal = document.getElementById('modalTotalArrecadado');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Custom select JS
+        document.querySelectorAll('.custom-select-wrapper').forEach(function(wrapper) {
+            var selected = wrapper.querySelector('.custom-select-selected');
+            var items = wrapper.querySelector('.custom-select-items');
+            selected.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeAllSelect(this);
+                items.classList.toggle('custom-select-hide');
+                selected.classList.toggle('custom-select-arrow-active');
+            });
+            items.querySelectorAll('div').forEach(function(optionDiv) {
+                optionDiv.addEventListener('click', function(e) {
+                    selected.textContent = this.textContent;
+                    items.querySelectorAll('div').forEach(function(d) {
+                        d.classList.remove('same-as-selected');
+                    });
+                    this.classList.add('same-as-selected');
+                    items.classList.add('custom-select-hide');
+                });
+            });
+        });
+        function closeAllSelect(elmnt) {
+            document.querySelectorAll('.custom-select-items').forEach(function(items) {
+                if (items.previousElementSibling !== elmnt) {
+                    items.classList.add('custom-select-hide');
+                }
+            });
+        }
+        document.addEventListener('click', closeAllSelect);
     </script>
 </body>
 
