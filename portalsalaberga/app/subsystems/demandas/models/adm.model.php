@@ -46,7 +46,10 @@ class adm_model extends usuario_model
         $result = $stmt_cadastrar->fetchAll(PDO::FETCH_ASSOC);
 
         if (empty($result)) {
-            if ($status !== 'concluida') {
+            if ($status = 'pendente'){
+
+            }else if($status !== 'concluida') {
+                $stmt_excluir_usuario = $this->connect_demandas->prepare("DELETE $this");
                 $stmt_cadastrar = $this->connect_demandas->prepare("UPDATE `demandas` SET `titulo`= :titulo, `descricao`= :descricao, `prioridade`= :prioridade, `status`= :status, `data_conclusao`= NULL, `prazo`= :prazo WHERE id = :id_demanda");
                 $stmt_cadastrar->bindValue(':titulo', $titulo);
                 $stmt_cadastrar->bindValue(':descricao', $descricao);
