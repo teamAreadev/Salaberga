@@ -1,6 +1,8 @@
 <?php
-// Página de Tarefa 03: Mascote do curso
+require_once('../models/select.model.php');
+$select = new select_model();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -305,7 +307,7 @@
             <div class="card-bg rounded-3xl p-8 sm:p-12 max-w-3xl w-full text-center fade-in">
                 
                 <!-- Formulário Principal -->
-                <form id="mascoteForm" class="space-y-8">
+                <form action="../controllers/controller_mascote.php" method="post" class="space-y-8">
                     <div class="flex flex-col items-center gap-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center">
                             <i class="fas fa-paw text-white text-3xl"></i>
@@ -335,6 +337,7 @@
                                     <div>
                                         <h4 class="font-bold text-white mb-1 text-base">Animação</h4>
                                         <p class="text-xs text-gray-400">Energia e carisma</p>
+                                        <input type="radio" name="criterio" id="">
                                     </div>
                                 </div>
                             </div>
@@ -346,6 +349,7 @@
                                     <div>
                                         <h4 class="font-bold text-white mb-1 text-base">Vestimenta</h4>
                                         <p class="text-xs text-gray-400">Criatividade visual</p>
+                                        <input type="radio" name="criterio" id="">
                                     </div>
                                 </div>
                             </div>
@@ -357,6 +361,7 @@
                                     <div>
                                         <h4 class="font-bold text-white mb-1 text-base">Identidade</h4>
                                         <p class="text-xs text-gray-400">Conexão com curso</p>
+                                        <input type="radio" name="criterio" id="">
                                     </div>
                                 </div>
                             </div>
@@ -371,11 +376,12 @@
                         <div class="select-wrapper">
                             <select id="cursoInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
                                 <option value="" selected disabled>Selecione o curso</option>
-                                <option value="enfermagem">Enfermagem</option>
-                                <option value="informatica">Informática</option>
-                                <option value="meio-ambiente">Meio Ambiente</option>
-                                <option value="administracao">Administração</option>
-                                <option value="edificacoes">Edificações</option>
+                                <?php
+                                $dados = $select->select_curso();
+                                foreach ($dados as $dado) {
+                                ?>
+                                    <option value="<?= $dado['curso_id'] ?>"><?= $dado['nome_curso'] ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -386,14 +392,7 @@
                             <i class="fas fa-trophy mr-2"></i>Colocação
                         </label>
                         <div class="select-wrapper">
-                            <select id="colocacaoInput" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
-                                <option value="" selected disabled>Selecione a colocação</option>
-                                <option value="1"> 500 pontos</option>
-                                <option value="2"> 450 pontos</option>
-                                <option value="3"> 400 pontos</option>
-                                <option value="4"> 350 pontos</option>
-                                <option value="5"> 300 pontos</option>
-                            </select>
+                            <input type="number" name="" id="">
                         </div>
                     </div>
 

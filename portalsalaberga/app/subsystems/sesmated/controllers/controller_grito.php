@@ -1,6 +1,5 @@
 <?php
 require_once('../models/main.model.php');
-print_r($_POST);
 //confirmar grito
 if (
     isset($_POST['curso']) && !empty($_POST['curso']) &&
@@ -20,11 +19,11 @@ if (
             header('location:../views/grito.php?erro');
             exit();
         case 3:
-            header('location:../views/grito.php?ja_confimado');
+            header('location:../views/grito.php?ja_confirmado');
             exit();
     }
-}/* else {
+}else {
 
     header('location:../views/grito.php?empty');
     exit();
-}*/
+}
