@@ -253,7 +253,7 @@
                                 <option value="">Selecione o curso</option>
                                 <option value="Informática">Informática</option>
                                 <option value="Enfermagem">Enfermagem</option>
-                                <option value="Administração">Administração</option>
+                                <option value="Administração">Administração</option> 
                                 <option value="Agropecuária">Agropecuária</option>
                             </select>
                         </div>
