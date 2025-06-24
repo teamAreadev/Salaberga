@@ -17,6 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Email inválido";
     }
     
+    if (empty($_POST['data'])) {
+        $errors[] = "Data de nascimento é obrigatória";
+    }
+    
+    if (empty($_POST['turno'])) {
+        $errors[] = "Turno é obrigatório";
+    }
+    
     if (empty($errors)) {
         $usuarios = json_decode(file_get_contents('usuarios.json') ?? '[]', true);
         
@@ -35,6 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'id' => uniqid(),
                 'nome' => $nome,
                 'email' => $email,
+                'data_nascimento' => $_POST['data'],
+                'turno' => $_POST['turno'],
                 'data_cadastro' => date('Y-m-d H:i:s')
             ];
             
@@ -333,6 +343,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <i class="fas fa-envelope input-icon"></i>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="data" class="block text-sm font-semibold mb-3 text-gray-200">Data de Nascimento</label>
+                        <input type="date" id="data" name="data" value="<?php echo htmlspecialchars($_POST['data'] ?? ''); ?>" class="input-field w-full pr-4 py-4 rounded-xl text-sm font-medium" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="turno" class="block text-sm font-semibold mb-3 text-gray-200">Turno</label>
+                        <select id="turno" name="turno" class="input-field w-full pr-4 py-4 rounded-xl text-sm font-medium" required>
+                            <option value="">Selecione o turno</option>
+                            <option value="Manhã" <?php if ((isset($_POST['turno']) && $_POST['turno'] == 'Manhã')) echo 'selected'; ?>>Manhã</option>
+                            <option value="Tarde" <?php if ((isset($_POST['turno']) && $_POST['turno'] == 'Tarde')) echo 'selected'; ?>>Tarde</option>
+                        </select>
                     </div>
 
                     <button 
