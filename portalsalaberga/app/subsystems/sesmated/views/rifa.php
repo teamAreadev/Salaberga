@@ -263,11 +263,13 @@ $select = new select_model();
             background-color: #232323 !important;
             color: #fff !important;
         }
+
         select.input-field option:hover,
         select.input-field option:focus {
             background-color: #444 !important;
             color: #181818 !important;
         }
+
         select.input-field option:checked {
             background-color: #ffb733 !important;
             color: #181818 !important;
@@ -293,6 +295,7 @@ $select = new select_model();
             border-left: 4px solid var(--header-color);
             transition: box-shadow 0.3s, border-color 0.3s;
         }
+
         .card-turma:hover {
             border-color: var(--accent-color);
             box-shadow: 0 8px 32px rgba(255, 183, 51, 0.15);
@@ -303,6 +306,7 @@ $select = new select_model();
             font-family: inherit;
             user-select: none;
         }
+
         .custom-select-selected {
             background: #232323;
             color: #fff;
@@ -311,6 +315,7 @@ $select = new select_model();
             border: 2px solid #ffb733;
             cursor: pointer;
         }
+
         .custom-select-items {
             position: absolute;
             background: #232323;
@@ -322,16 +327,20 @@ $select = new select_model();
             max-height: 250px;
             overflow-y: auto;
         }
+
         .custom-select-items div {
             padding: 12px 16px;
             color: #fff;
             cursor: pointer;
             transition: background 0.2s, color 0.2s;
         }
-        .custom-select-items div:hover, .custom-select-items .same-as-selected {
+
+        .custom-select-items div:hover,
+        .custom-select-items .same-as-selected {
             background: #ffb733;
             color: #181818;
         }
+
         .custom-select-hide {
             display: none;
         }
@@ -358,7 +367,7 @@ $select = new select_model();
                 <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                     <i class="fas fa-user text-green-300 text-xs"></i>
                 </div>
-                <span class="text-gray-100">João Silva</span>
+                <span class="text-gray-100"><?= $_SESSION['Nome'] ?? 'Nome não encontrado' ?></span>
             </div>
         </div>
     </header>
@@ -412,7 +421,7 @@ $select = new select_model();
                         </div>
                         <div class="flex items-center justify-between mt-2">
                             <span class="text-xs text-gray-400">Rifas vendidas:</span>
-                            <span class="font-bold text-lg style="color: var(--accent-color);">
+                            <span class="font-bold text-lg style=" color: var(--accent-color);">
                                 <?= htmlspecialchars($dado['quantidades_rifas']) ?>
                             </span>
                         </div>
@@ -435,18 +444,18 @@ $select = new select_model();
             </div>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button onclick="openModalResumoTurma()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
+                <a href="./relatorios/rifas/resumo_turma.php" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
                     <i class="fas fa-chart-bar"></i>
                     Resumo por Turma
-                </button>
-                <button onclick="openModalResumoCurso()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
+                </a>
+                <a href="./relatorios/rifas/resumo_curso.php" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
                     <i class="fas fa-graduation-cap"></i>
                     Resumo por Curso
-                </button>
-                <button onclick="openModalTotalArrecadado()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
+                </a>
+                <a href="./relatorios/rifas/total_arrecadado.php" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
                     <i class="fas fa-coins"></i>
                     Total Arrecadado
-                </button>
+                </a>
             </div>
         </section>
     </main>
@@ -462,21 +471,22 @@ $select = new select_model();
             </div>
 
             <form action="../controllers/controller_rifas.php" method="post" class="space-y-6">
+                <input type="hidden" name="id_usuario" value="<?= $_SESSION['id_usuario'] ?? -1?>">
                 <div>
                     <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
                         <i class="fas fa-users mr-2"></i>Turma
                     </label>
-                    <div class="custom-select-wrapper" style="position:relative;max-width:400px;">
-                        <div class="custom-select-selected">Selecione a turma</div>
-                        <div class="custom-select-items custom-select-hide">
-                            <?php
-                            $dados = $select->select_turma();
-                            foreach ($dados as $dado) {
-                            ?>
-                                <div><?= htmlspecialchars($dado['nome_turma'] . ' ' . $dado['nome_curso']) ?></div>
-                            <?php } ?>
-                        </div>
-                    </div>
+                    <select name="turma" id="turma" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
+                        <option value="" selected disabled>Selecione a turma</option>
+                        <?php
+                        $dados = $select->select_turma();
+                        foreach ($dados as $dado) {
+                        ?>
+                            <option value="<?= htmlspecialchars($dado['turma_id']) ?>">
+                                <?= htmlspecialchars($dado['nome_turma'] . ' ' . $dado['nome_curso']) ?>
+                            </option>
+                        <?php } ?>
+                    </select>
                 </div>
 
                 <div>
@@ -512,65 +522,6 @@ $select = new select_model();
         </div>
     </div>
 
-    <!-- Modal de Detalhes (Resumo por Turma) -->
-    <div id="modalResumoTurma" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="modal-bg rounded-3xl p-8 w-full max-w-4xl mx-4 slide-up max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                    <i class="fas fa-chart-bar text-white text-xl"></i>
-                </div>
-                <h2 class="text-2xl font-bold">Resumo por Turma</h2>
-            </div>
-            <div id="modalResumoTurmaContent" class="text-gray-200"></div>
-            <div class="flex justify-end pt-8">
-                <button type="button" onclick="closeModalResumoTurma()" class="btn-secondary px-4 py-2 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
-                    <i class="fas fa-times"></i> Fechar
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Detalhes (Resumo por Curso) -->
-    <div id="modalResumoCurso" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="modal-bg rounded-3xl p-8 w-full max-w-4xl mx-4 slide-up max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
-                    <i class="fas fa-graduation-cap text-white text-xl"></i>
-                </div>
-                <h2 class="text-2xl font-bold">Resumo por Curso</h2>
-            </div>
-            <div id="modalResumoCursoContent" class="text-gray-200"></div>
-            <div class="flex justify-end pt-8">
-                <button type="button" onclick="closeModalResumoCurso()" class="btn-secondary px-4 py-2 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
-                    <i class="fas fa-times"></i> Fechar
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Total Arrecadado -->
-    <div id="modalTotalArrecadado" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="modal-bg rounded-3xl p-8 w-full max-w-md mx-4 slide-up max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
-                    <i class="fas fa-coins text-white text-2xl"></i>
-                </div>
-                <h2 class="text-2xl font-bold">Total Arrecadado</h2>
-            </div>
-            <div class="text-center mb-6">
-                <p class="text-lg text-gray-300 mb-2">Total de Rifas Vendidas</p>
-                <p class="text-4xl font-black mb-4" style="color: var(--accent-color);" id="modalTotalRifas">0</p>
-                <p class="text-lg text-gray-300 mb-2">Valor Total Arrecadado</p>
-                <p class="text-4xl font-black" style="color: var(--accent-color);" id="modalTotalValor">R$ 0,00</p>
-            </div>
-            <div class="flex justify-end pt-4">
-                <button type="button" onclick="closeModalTotalArrecadado()" class="btn-secondary px-4 py-2 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
-                    <i class="fas fa-times"></i> Fechar
-                </button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // Exibir modal de adicionar registro
         function openAddModal() {
@@ -601,26 +552,31 @@ $select = new select_model();
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
+
         function closeModalResumoTurma() {
             var modal = document.getElementById('modalResumoTurma');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
+
         function openModalResumoCurso() {
             var modal = document.getElementById('modalResumoCurso');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
+
         function closeModalResumoCurso() {
             var modal = document.getElementById('modalResumoCurso');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
+
         function openModalTotalArrecadado() {
             var modal = document.getElementById('modalTotalArrecadado');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
+
         function closeModalTotalArrecadado() {
             var modal = document.getElementById('modalTotalArrecadado');
             modal.classList.add('hidden');
@@ -648,6 +604,7 @@ $select = new select_model();
                 });
             });
         });
+
         function closeAllSelect(elmnt) {
             document.querySelectorAll('.custom-select-items').forEach(function(items) {
                 if (items.previousElementSibling !== elmnt) {

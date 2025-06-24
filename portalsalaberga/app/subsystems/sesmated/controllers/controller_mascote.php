@@ -1,18 +1,19 @@
 <?php
 require_once('../models/main.model.php');
-print_r($_POST);
-//confirmar grito
+
 if (
-    isset($_POST['criterio']) && !empty($_POST['criterio']) &&
-    isset($_POST['pontuacao']) && !empty($_POST['pontuacao']) &&
-    isset($_POST['curso']) && !empty($_POST['curso'])
+    isset($_POST['curso']) && !empty($_POST['curso']) &&
+    isset($_POST['nota_animacao']) &&
+    isset($_POST['nota_vestimenta']) &&
+    isset($_POST['nota_identidade'])
 ) {
-    $criterio = $_POST['criterio'];
-    $pontuacao = $_POST['pontuacao'];
     $curso = $_POST['curso'];
+    $nota_animacao = $_POST['nota_animacao'];
+    $nota_vestimenta = $_POST['nota_vestimenta'];
+    $nota_identidade = $_POST['nota_identidade'];
 
     $main_model = new main_model();
-    $result = $main_model->confirmar_mascote($criterio, $pontuacao, $curso);
+    $result = $main_model->confirmar_mascote($curso, $nota_animacao, $nota_vestimenta, $nota_identidade);
 
     switch ($result) {
         case 1:
@@ -25,8 +26,7 @@ if (
             header('location:../views/mascote.php?ja_confirmado');
             exit();
     }
-}else {
-
-    header('location:../views/grito.php?empty');
+} else {
+    header('location:../views/mascote.php?empty');
     exit();
 }

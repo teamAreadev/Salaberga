@@ -139,6 +139,12 @@ $select = new select_model();
             background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.3s ease;
+            font-size: clamp(0.75rem, 2vw, 0.875rem);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            min-height: 2.5rem;
+            display: flex;
+            align-items: center;
         }
         
         .btn-secondary:hover {
@@ -415,7 +421,6 @@ $select = new select_model();
     <header class="header-bg">
         <div class="container-responsive py-4">
             <div class="header-content">
-                <!-- Título e Logo Centralizados -->
                 <div class="header-title-section">
                     <div class="header-title-row">
                         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
@@ -427,13 +432,17 @@ $select = new select_model();
                     </div>
                     <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Logomarca SESMATED</p>
                 </div>
-                
-                <!-- Chip do Usuário - Posicionado à direita no desktop -->
-                <div class="user-chip user-chip-desktop">
-                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                        <i class="fas fa-user text-green-300 text-xs"></i>
+                <div class="flex items-center gap-2 user-chip-desktop">
+                    <a href="abertura.php" class="btn-secondary px-4 py-2 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
+                        <i class="fas fa-arrow-left"></i>
+                        Voltar
+                    </a>
+                    <div class="user-chip">
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                            <i class="fas fa-user text-green-300 text-xs"></i>
+                        </div>
+                        <span class="text-gray-100">João Silva</span>
                     </div>
-                    <span class="text-gray-100">João Silva</span>
                 </div>
             </div>
         </div>
@@ -597,6 +606,8 @@ $select = new select_model();
                         Nova Avaliação
                     </button>
                 </div>
+
+              
             </div>
         </div>
     </main>
