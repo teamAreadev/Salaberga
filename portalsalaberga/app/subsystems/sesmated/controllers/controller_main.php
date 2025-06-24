@@ -1,13 +1,11 @@
 <?php
 require_once('../models/main.model.php');
-print_r($_POST);
 if (
     isset($_POST['nome']) && !empty($_POST['nome']) &&
     isset($_POST['email']) && !empty($_POST['email']) &&
     isset($_POST['data']) && !empty($_POST['data']) &&
     isset($_POST['turno']) && !empty($_POST['turno']) &&
     isset($_POST['senha']) && !empty($_POST['senha'])
-    
 ) {
     $nome = $_POST['nome'];
     $email = $_POST['email'];
@@ -28,7 +26,7 @@ if (
         header('Location: ../views/registro_user.php?error=Erro+ao+cadastrar+usuario.+Tente+novamente.');
         exit();
     }
-} /*else {
+} else {
     header('location:../views/registro_user.php?empty');
     exit();
-} */
+}
