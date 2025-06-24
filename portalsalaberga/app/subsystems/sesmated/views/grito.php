@@ -97,6 +97,12 @@ if (isset($_GET['confirmado'])) {
             background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.3s ease;
+            font-size: clamp(0.75rem, 2vw, 0.875rem);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            min-height: 2.5rem;
+            display: flex;
+            align-items: center;
         }
         
         .btn-secondary:hover {
@@ -144,7 +150,7 @@ if (isset($_GET['confirmado'])) {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 0.875rem;
+            font-size: clamp(0.75rem, 2vw, 0.875rem);
             font-weight: 600;
             color: #e5e7eb;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
@@ -355,28 +361,82 @@ if (isset($_GET['confirmado'])) {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(-360deg); }
         }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+            flex-direction: row;
+        }
+        .header-title-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+        }
+        .header-title-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        .user-chip-desktop {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        @media (max-width: 640px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: center;
+            }
+            .user-chip-desktop {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-top: 1rem;
+            }
+            .header-title-section {
+                align-items: center;
+                text-align: center;
+            }
+        }
+        .main-title {
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            line-height: 1.2;
+        }
     </style>
 </head>
 <body class="min-h-screen">
     <!-- Header -->
-    <header class="header-bg sticky top-0 z-50">
-        <div class="container mx-auto px-4 sm:px-6 py-2 sm:py-3 relative">
-            <div class="flex flex-col items-start sm:items-center justify-start sm:justify-center gap-2">
-                <div class="flex items-start sm:items-center justify-start sm:justify-center gap-2">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
-                        <i class="fas fa-bullhorn text-white text-lg"></i>
+    <header class="header-bg">
+        <div class="container-responsive py-4">
+            <div class="header-content">
+                <div class="header-title-section">
+                    <div class="header-title-row">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
+                            <i class="fas fa-bullhorn text-white text-lg"></i>
+                        </div>
+                        <h1 class="main-title font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
+                            TAREFA 2
+                        </h1>
                     </div>
-                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent text-left sm:text-center">
-                        TAREFA 2
-                    </h1>
+                    <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">GRITO DE GUERRA </p>
                 </div>
-                <p class="text-gray-400 text-xs font-medium tracking-wider uppercase text-left sm:text-center">GRITO DE GUERRA DO CURSO</p>
-            </div>
-            <div class="user-chip absolute top-4 right-4">
-                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                    <i class="fas fa-user text-green-300 text-xs"></i>
+                <div class="flex items-center gap-2 user-chip-desktop">
+                    <a href="abertura.php" class="btn-secondary px-4 py-2 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
+                        <i class="fas fa-arrow-left"></i>
+                        Voltar
+                    </a>
+                    <div class="user-chip">
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                            <i class="fas fa-user text-green-300 text-xs"></i>
+                        </div>
+                        <span class="text-gray-100">João Silva</span>
+                    </div>
                 </div>
-                <span class="text-gray-100">João Silva</span>
             </div>
         </div>
     </header>
