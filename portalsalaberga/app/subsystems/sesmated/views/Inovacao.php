@@ -284,10 +284,11 @@
                             </label>
                             <select id="cursoProjeto" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
                                 <option value="">Selecione o curso</option>
-                                <option value="Informática">Informática</option>
                                 <option value="Enfermagem">Enfermagem</option>
+                                <option value="Informática">Informática</option>
+                                <option value="Meio ambiente">Meio ambiente</option>
                                 <option value="Administração">Administração</option>
-                                <option value="Agropecuária">Agropecuária</option>
+                                <option value="Edificações">Edificações</option>
                             </select>
                         </div>
                     </div>
