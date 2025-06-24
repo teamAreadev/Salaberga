@@ -1110,12 +1110,22 @@
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="../../../subsystems/sesmated/views/Palestras.php" class="app-card-link" data-card-key="Palestras">
+            <a href="../../../subsystems/sesmated/views/frequencia/index.php" class="app-card-link" data-card-key="Palestras">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/qRv9V9gj/palestras-removebg-preview.png" alt="Palestras" class="app-icon">
                     </div>
                     <h3 class="app-name">Palestras</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+
+            <a href="../../../subsystems/sesmated/views/frequencia/index.php" class="app-card-link" data-card-key="Workshop">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/qRv9V9gj/palestras-removebg-preview.png" alt="Workshop" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Workshop</h3>
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
