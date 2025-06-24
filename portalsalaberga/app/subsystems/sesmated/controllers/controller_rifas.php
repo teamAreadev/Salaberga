@@ -3,14 +3,16 @@ require_once('../models/main.model.php');
 
 //adicionar turma
 if (
-    isset($_POST['id_turma']) && !empty($_POST['id_turma']) &&
-    isset($_POST['rifas']) && !empty($_POST['rifas'])
+    isset($_POST['turma']) && !empty($_POST['turma']) &&
+    isset($_POST['rifas']) && !empty($_POST['rifas']) &&
+    isset($_POST['id_usuario']) && !empty($_POST['id_usuario'])
 ) {
-    $id_turma = $_POST['id_turma'];
+    $id_turma = $_POST['turma'];
     $rifas = $_POST['rifas'];
+    $id_usuario = $_POST['id_usuario'];
 
     $main_model = new main_model();
-    $result = $main_model->adcionar_turma($id_turma, $rifas);
+    $result = $main_model->adicionar_turma($id_turma, $rifas, $id_usuario);
 
     switch ($result) {
         case 1:

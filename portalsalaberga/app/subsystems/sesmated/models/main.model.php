@@ -10,7 +10,7 @@ class main_model extends connect
     }
 
     //rifas 
-    public function adcionar_turma($id_turma, $rifas)
+    public function adicionar_turma($id_turma, $rifas, $id_usuario)
     {
         $valor = $rifas * 2;
         // Verifica se já existe registro para a turma
@@ -21,8 +21,9 @@ class main_model extends connect
 
         if (empty($result)) {
 
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_01_rifas`(`turma_id`, `valor_arrecadado`, `quantidades_rifas`) VALUES ( :turma_id, :valor, :quantidades)");
+            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_01_rifas`(`turma_id`, `id_usuario`, `valor_arrecadado`, `quantidades_rifas`) VALUES ( :turma_id, :id_usuario, :valor, :quantidades)");
             $stmt_adcionar->bindValue(':turma_id', $id_turma);
+            $stmt_adcionar->bindValue(':id_usuario', $id_usuario);
             $stmt_adcionar->bindValue(':valor', $valor);
             $stmt_adcionar->bindValue(':quantidades', $rifas);
 
