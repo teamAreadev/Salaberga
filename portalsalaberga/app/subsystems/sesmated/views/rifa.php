@@ -1,7 +1,9 @@
 <?php
 require_once('../models/select.model.php');
 $select = new select_model();
-
+require_once('../../../main/models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
 
 ?>
 
@@ -431,6 +433,10 @@ $select = new select_model();
                             <span class="text-xs text-gray-400">Valor arrecadado:</span>
                             <span class="font-bold text-lg text-green-400">R$ <?= number_format($dado['valor_arrecadado'], 2, ',', '.') ?></span>
                         </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-gray-400">Nome do avaliador:</span>
+                            <span class="font-bold text-lg text-green-400"> <?= $dado['nome']?></span>
+                        </div>
                     </div>
                 <?php } ?>
             </div>
@@ -473,7 +479,7 @@ $select = new select_model();
             </div>
 
             <form action="../controllers/controller_rifas.php" method="post" class="space-y-6">
-                <input type="hidden" name="id_usuario" value="<?= $_SESSION['id_usuario'] ?? -1?>">
+                <input type="hidden" name="id_usuario" value="<?= $_SESSION['user_id']?>">
                 <div>
                     <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
                         <i class="fas fa-users mr-2"></i>Turma

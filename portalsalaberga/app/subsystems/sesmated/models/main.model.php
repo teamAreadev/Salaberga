@@ -94,9 +94,15 @@ class main_model extends connect
 
         if (empty($result)) {
 
+            $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
+            $stmt_id_avaliador->bindValue(':id_usuario', $id_usuario);
+            $stmt_id_avaliador->execute();
+            $result = $stmt_id_avaliador->fetch(PDO::FETCH_ASSOC);
+
+            $id_avaliador = $result['id'];
             $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_01_rifas`(`turma_id`, `id_usuario`, `valor_arrecadado`, `quantidades_rifas`) VALUES ( :turma_id, :id_usuario, :valor, :quantidades)");
             $stmt_adcionar->bindValue(':turma_id', $id_turma);
-            $stmt_adcionar->bindValue(':id_usuario', $id_usuario);
+            $stmt_adcionar->bindValue(':id_usuario', $id_avaliador);
             $stmt_adcionar->bindValue(':valor', $valor);
             $stmt_adcionar->bindValue(':quantidades', $rifas);
 
