@@ -813,15 +813,8 @@ header('Content-Type: text/html; charset=UTF-8');
             <div class="mb-6">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
                     <h3 class="text-base sm:text-lg font-bold text-white">Lista de Alunos</h3>
-                    <div class="control-buttons">
-                        <button onclick="markAllPresent()" class="btn-success btn-fluid text-white font-semibold">
-                            <i class="fas fa-check-double"></i>
-                            <span>Marcar Todos</span>
-                        </button>
-                        <button onclick="markAllAbsent()" class="btn-secondary btn-fluid text-white font-semibold">
-                            <i class="fas fa-times"></i>
-                            <span>Desmarcar Todos</span>
-                        </button>
+                    <div class="w-full sm:w-72">
+                        <input type="text" id="studentFilter" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" placeholder="Filtrar por nome do aluno..." oninput="filterStudentList()">
                     </div>
                 </div>
                 
@@ -1040,8 +1033,10 @@ header('Content-Type: text/html; charset=UTF-8');
 
         // Populate student list
         function populateStudentList(studentData) {
+            students = studentData; // Atualiza a lista global
             const studentList = document.getElementById('studentList');
             studentList.innerHTML = '';
+            document.getElementById('studentFilter').value = '';
             
             if (!studentData || studentData.length === 0) {
                 studentList.innerHTML = '<p class="text-gray-400 text-center py-8">Nenhum aluno encontrado</p>';
@@ -1154,6 +1149,12 @@ header('Content-Type: text/html; charset=UTF-8');
         // Toggle attendance checkbox
         function toggleAttendanceCheckbox(studentId) {
             attendance[studentId] = document.getElementById(`chk-${studentId}`).checked;
+        }
+
+        function filterStudentList() {
+            const filter = document.getElementById('studentFilter').value.toLowerCase();
+            const filtered = students.filter(student => student.nome.toLowerCase().includes(filter));
+            populateStudentList(filtered);
         }
     </script>
 </body>

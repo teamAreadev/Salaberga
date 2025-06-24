@@ -265,13 +265,13 @@
                         </div>
                         <div>
                             <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                                <i class="fas fa-dollar-sign mr-2"></i>Preço (R$)
+                                <i class="fas fa-dollar-sign mr-2"></i>Valor unitario (R$)
                             </label>
                             <input type="number" id="precoProduto" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" step="0.01" min="0" required>
                         </div>
                         <div>
                             <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                                <i class="fas fa-sort-numeric-up mr-2"></i>Quantidade Inicial
+                                <i class="fas fa-sort-numeric-up mr-2"></i>Quantidade
                             </label>
                             <input type="number" id="quantidadeProduto" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" min="0" required>
                         </div>
