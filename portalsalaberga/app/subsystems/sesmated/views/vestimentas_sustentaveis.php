@@ -8,171 +8,73 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --background-color: #0a0a0a;
+            --background-color: #1a1a1a;
             --text-color: #ffffff;
             --header-color: #00b348;
             --icon-bg: #2d2d2d;
             --icon-shadow: rgba(0, 0, 0, 0.3);
             --accent-color: #ffb733;
             --grid-color: #333333;
-            --card-bg: rgba(30, 30, 30, 0.95);
-            --header-bg: rgba(15, 15, 15, 0.98);
-            --search-bar-bg: #1a1a1a;
+            --card-bg: rgba(45, 45, 45, 0.9);
+            --header-bg: rgba(28, 28, 28, 0.95);
+            --mobile-nav-bg: rgba(28, 28, 28, 0.95);
+            --search-bar-bg: #2d2d2d;
             --card-border-hover: var(--accent-color);
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
         }
         
         body {
-            background: radial-gradient(ellipse at top, #1a1a1a 0%, #0a0a0a 100%);
+            background: var(--background-color);
             color: var(--text-color);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
         }
         
         .header-bg {
-            background: linear-gradient(135deg, var(--header-bg) 0%, rgba(0, 0, 0, 0.95) 100%);
+            background: var(--header-bg);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
         
         .card-bg {
-            background: linear-gradient(145deg, var(--card-bg) 0%, rgba(25, 25, 25, 0.95) 100%);
+            background: var(--card-bg);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
         
         .input-field {
-            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%);
+            background: var(--search-bar-bg);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
         
         .input-field:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1);
-            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
-        }
-        
-        .card-hover:hover {
-            border-color: rgba(255, 183, 51, 0.3);
-            box-shadow: 0 12px 40px rgba(255, 183, 51, 0.15);
-            transform: translateY(-4px);
+            border-color: var(--header-color);
+            box-shadow: 0 0 0 2px rgba(0, 179, 72, 0.1);
+            outline: none;
         }
         
         .btn-primary {
             background: linear-gradient(135deg, var(--header-color) 0%, #00a040 100%);
-            box-shadow: 0 4px 20px rgba(0, 179, 72, 0.3);
-            border: none;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
         
         .btn-primary:hover {
-            box-shadow: 0 8px 30px rgba(0, 179, 72, 0.4);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 179, 72, 0.3);
         }
         
         .btn-secondary {
-            background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
+            background: #404040;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
         
         .btn-secondary:hover {
-            background: linear-gradient(145deg, #353535 0%, #252525 100%);
-            border-color: rgba(255, 255, 255, 0.25);
+            background: #4a4a4a;
             transform: translateY(-1px);
         }
-        
-        .modal-bg {
-            background: linear-gradient(145deg, rgba(25, 25, 25, 0.98) 0%, rgba(15, 15, 15, 0.98) 100%);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.6s ease-in-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .slide-up {
-            animation: slideUp 0.4s ease-out;
-        }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .pulse-glow {
-            animation: pulseGlow 2s ease-in-out infinite alternate;
-        }
-        
-        @keyframes pulseGlow {
-            from { box-shadow: 0 4px 20px rgba(0, 179, 72, 0.3); }
-            to { box-shadow: 0 8px 40px rgba(0, 179, 72, 0.5); }
-        }
 
-        .range-slider {
-            -webkit-appearance: none;
-            appearance: none;
-            height: 8px;
-            border-radius: 5px;
-            background: linear-gradient(90deg, #333 0%, #666 100%);
-            outline: none;
-        }
-
-        .range-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--header-color) 0%, var(--accent-color) 100%);
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 179, 72, 0.4);
-        }
-
-        .range-slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--header-color) 0%, var(--accent-color) 100%);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 10px rgba(0, 179, 72, 0.4);
-        }
-
-        select.input-field {
-            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%) !important;
-            color: var(--text-color) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            padding-right: 3rem;
-            cursor: pointer;
-        }
-        select.input-field:focus {
-            border-color: var(--accent-color) !important;
-            box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1) !important;
-            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%) !important;
-        }
-        select.input-field option {
-            background-color: #232323 !important;
-            color: #fff !important;
-        }
-
-        /* ===== HEADER NOVO - INÍCIO ===== */
+        /* Header Styles */
         .container-responsive {
             width: 100%;
             max-width: none;
@@ -230,12 +132,107 @@
                 align-items: center;
             }
         }
-        /* ===== HEADER NOVO - FIM ===== */
-
-        /* Títulos responsivos */
         .main-title {
             font-size: clamp(1.5rem, 6vw, 2.5rem);
             line-height: 1.2;
+        }
+
+        select.input-field {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        
+        select.input-field option {
+            background-color: #2d2d2d;
+            color: white;
+        }
+
+        /* Modal Styles */
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-container {
+            background: #1f2937;
+            border: 1px solid #374151;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-header {
+            background: #111827;
+            border-bottom: 1px solid #374151;
+        }
+
+        .participant-card {
+            background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .evaluation-section {
+            background: #111827;
+            border: 1px solid #374151;
+        }
+
+        .year-card {
+            background: #1f2937;
+            border: 1px solid #374151;
+            transition: all 0.2s ease;
+        }
+
+        .year-card:hover {
+            background: #252f3f;
+            border-color: #4b5563;
+        }
+
+        .score-input {
+            background: #374151 !important;
+            border: 1px solid #4b5563 !important;
+            color: #f9fafb !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .score-input:focus {
+            background: #4b5563 !important;
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+        }
+
+        .total-card {
+            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .warning-alert {
+            background: rgba(217, 119, 6, 0.1);
+            border: 1px solid rgba(217, 119, 6, 0.3);
+            color: #f59e0b;
+        }
+
+        .jurado-input {
+            background: #374151;
+            border: 1px solid #4b5563;
+            color: #f9fafb;
+        }
+
+        .jurado-input:focus {
+            background: #4b5563;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .modal-container {
+                margin: 1rem;
+                max-height: calc(100vh - 2rem);
+                width: calc(100vw - 2rem);
+            }
         }
     </style>
 </head>
@@ -247,11 +244,11 @@
                 <!-- Título e Logo Centralizados -->
                 <div class="header-title-section">
                     <div class="header-title-row">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center">
                             <i class="fas fa-tshirt text-white text-lg"></i>
                         </div>
                         <h1 class="main-title font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
-                            TAREFA 8
+                            TAREFA 08
                         </h1>
                     </div>
                     <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Vestimentas Sustentáveis</p>
@@ -269,56 +266,49 @@
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 sm:px-6 py-8">
+    <main class="container mx-auto px-4 sm:px-6 py-8 max-w-7xl">
         <!-- Cadastro Section -->
         <section class="mb-12">
-            <div class="card-bg rounded-3xl p-8 fade-in">
-                <div class="flex items-center gap-3 mb-8">
-                    <i class="fas fa-user-plus text-2xl" style="color: var(--header-color);"></i>
-                    <h2 class="text-2xl font-bold">Cadastrar Participante</h2>
+            <div class="card-bg rounded-2xl p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                        <i class="fas fa-user-plus text-white text-sm"></i>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-bold">Cadastrar Participante</h2>
                 </div>
                 
                 <form id="participantForm" class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                                <i class="fas fa-user mr-2"></i>Nome do Modelo
+                            <label class="block text-sm font-medium mb-3 text-gray-300">
+                                Nome do Modelo
                             </label>
-                            <input type="text" id="nomeModelo" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
+                            <input type="text" id="nomeModelo" class="input-field w-full rounded-lg px-4 py-3 text-white" required>
                         </div>
                         <div>
-                            <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                                <i class="fas fa-graduation-cap mr-2"></i>Curso
+                            <label class="block text-sm font-medium mb-3 text-gray-300">
+                                Curso
                             </label>
-                            <select id="curso" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
+                            <select id="curso" class="input-field w-full rounded-lg px-4 py-3 text-white" required>
                                 <option value="">Selecione o curso</option>
-                                <option value="Informática">Informática</option>
                                 <option value="Enfermagem">Enfermagem</option>
+                                <option value="Informática">Informática</option>
+                                <option value="Meio Ambiente">Meio Ambiente</option>
                                 <option value="Administração">Administração</option>
-                                <option value="Agropecuária">Agropecuária</option>
+                                <option value="Edificações">Edificações</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                                <i class="fas fa-venus-mars mr-2"></i>Gênero
+                            <label class="block text-sm font-medium mb-3 text-gray-300">
+                                Descrição da Vestimenta
                             </label>
-                            <select id="genero" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
-                                <option value="">Selecione</option>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Feminino">Feminino</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                                <i class="fas fa-palette mr-2"></i>Descrição da Vestimenta
-                            </label>
-                            <textarea id="descricao" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" rows="3"></textarea>
+                            <textarea id="descricao" class="input-field w-full rounded-lg px-4 py-3 text-white" rows="3" placeholder="Descreva a vestimenta..."></textarea>
                         </div>
                     </div>
                     
                     <div class="flex justify-end">
-                        <button type="submit" class="btn-primary px-8 py-3 rounded-2xl font-semibold text-white flex items-center gap-2">
-                            <i class="fas fa-save"></i>
+                        <button type="submit" class="btn-primary px-6 py-3 rounded-lg font-medium text-white flex items-center gap-2">
+                            <i class="fas fa-save text-sm"></i>
                             Cadastrar Participante
                         </button>
                     </div>
@@ -327,137 +317,132 @@
         </section>
 
         <!-- Participantes Grid -->
-        <section class="mb-16">
-            <div class="flex items-center gap-3 mb-8">
-                <i class="fas fa-users text-2xl" style="color: var(--header-color);"></i>
-                <h2 class="text-2xl font-bold">Participantes Cadastrados</h2>
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                    <i class="fas fa-users text-white text-sm"></i>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold">Participantes Cadastrados</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="participantsList">
                 <!-- Cards will be generated by JavaScript -->
             </div>
         </section>
 
-        <!-- Avaliação Modal -->
-        <div id="avaliacaoModal" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-            <div class="modal-bg rounded-3xl p-8 w-full max-w-4xl mx-4 slide-up max-h-[90vh] overflow-y-auto">
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
+        <!-- Relatórios Section -->
+        <section class="text-center">
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center">
+                    <i class="fas fa-chart-line text-white text-sm"></i>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold">Relatórios</h2>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="gerarRelatorioGeral()" class="btn-secondary px-6 py-3 rounded-lg font-medium text-gray-300 flex items-center justify-center gap-2">
+                    <i class="fas fa-file-alt text-sm"></i>
+                    Relatório Geral
+                </button>
+                <button onclick="gerarRanking()" class="btn-secondary px-6 py-3 rounded-lg font-medium text-gray-300 flex items-center justify-center gap-2">
+                    <i class="fas fa-trophy text-sm"></i>
+                    Ranking Final
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Avaliação -->
+    <div id="avaliacaoModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+        <div class="modal-container rounded-2xl w-full max-w-4xl max-h-[95vh] overflow-y-auto">
+            <!-- Header do Modal -->
+            <div class="modal-header p-6 rounded-t-2xl">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                         <i class="fas fa-star text-white text-xl"></i>
                     </div>
-                    <h2 class="text-2xl font-bold" id="avaliacaoTitle">Avaliar Participante</h2>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Avaliar Participante</h2>
+                        <p class="text-sm text-gray-400 mt-1">Sistema de pontuação por turmas</p>
+                    </div>
                 </div>
-                
-                <div class="mb-6">
-                    <h3 class="text-xl font-semibold mb-2" id="participanteAvaliando"></h3>
+            </div>
+
+            <!-- Conteúdo do Modal -->
+            <div class="p-6 space-y-6">
+                <!-- Card do Participante -->
+                <div class="participant-card p-5 rounded-xl">
+                    <h3 class="text-xl font-bold text-white mb-2" id="participanteAvaliando"></h3>
+                    <p class="text-blue-100">Distribua a pontuação total de <span class="text-yellow-300 font-bold">500 pontos</span> entre os modelos das turmas</p>
                 </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-medium mb-3">♻️ Uso de Materiais Sustentáveis (0-20 pontos)</label>
-                            <input type="range" id="materiais" min="0" max="20" value="0" class="range-slider w-full">
-                            <div class="flex justify-between text-sm mt-2">
-                                <span>0</span>
-                                <span id="materiaisValue" class="text-yellow-400 font-bold">0 pontos</span>
-                                <span>20</span>
+
+                <!-- Seção de Avaliação -->
+                <div class="evaluation-section rounded-xl p-6">
+                    <div class="text-center mb-6">
+                        <h4 class="text-xl font-bold text-white mb-2" id="tabelaTitulo">Tabela de Pontuação</h4>
+                        <p class="text-gray-400" id="tabelaSubtitulo">Pontuação máxima: 500 pontos</p>
+                    </div>
+
+                    <!-- Container das Turmas -->
+                    <div class="space-y-4" id="turmasContainer">
+                        <!-- Cards das turmas serão gerados aqui -->
+                    </div>
+
+                    <!-- Card do Total -->
+                    <div class="total-card p-5 rounded-xl mt-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4 class="text-lg font-bold text-green-100">TOTAL</h4>
+                                <p class="text-green-200 text-sm" id="totalModelos">5 MODELOS</p>
                             </div>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium mb-3">🎨 Criatividade e Design (0-20 pontos)</label>
-                            <input type="range" id="criatividade" min="0" max="20" value="0" class="range-slider w-full">
-                            <div class="flex justify-between text-sm mt-2">
-                                <span>0</span>
-                                <span id="criatividadeValue" class="text-yellow-400 font-bold">0 pontos</span>
-                                <span>20</span>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium mb-3">👗 Estética e Harmonia Visual (0-20 pontos)</label>
-                            <input type="range" id="estetica" min="0" max="20" value="0" class="range-slider w-full">
-                            <div class="flex justify-between text-sm mt-2">
-                                <span>0</span>
-                                <span id="esteticaValue" class="text-yellow-400 font-bold">0 pontos</span>
-                                <span>20</span>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-white" id="totalPontuacao">0</div>
+                                <div class="text-green-200 text-sm">/ 500</div>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-medium mb-3">🎓 Identidade com o Curso (0-15 pontos)</label>
-                            <input type="range" id="identidade" min="0" max="15" value="0" class="range-slider w-full">
-                            <div class="flex justify-between text-sm mt-2">
-                                <span>0</span>
-                                <span id="identidadeValue" class="text-yellow-400 font-bold">0 pontos</span>
-                                <span>15</span>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium mb-3">🧍 Desfile e Apresentação (0-15 pontos)</label>
-                            <input type="range" id="desfile" min="0" max="15" value="0" class="range-slider w-full">
-                            <div class="flex justify-between text-sm mt-2">
-                                <span>0</span>
-                                <span id="desfileValue" class="text-yellow-400 font-bold">0 pontos</span>
-                                <span>15</span>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium mb-3">🧵 Acabamento e Estrutura (0-10 pontos)</label>
-                            <input type="range" id="acabamento" min="0" max="10" value="0" class="range-slider w-full">
-                            <div class="flex justify-between text-sm mt-2">
-                                <span>0</span>
-                                <span id="acabamentoValue" class="text-yellow-400 font-bold">0 pontos</span>
-                                <span>10</span>
-                            </div>
+
+                    <!-- Alerta -->
+                    <div class="warning-alert p-4 rounded-xl mt-4">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-exclamation-triangle text-xl"></i>
+                            <p class="font-medium">A pontuação total deve somar exatamente 500 pontos</p>
                         </div>
                     </div>
                 </div>
-                
-                <div class="mt-8 p-6 bg-gray-800/50 rounded-2xl">
-                    <h4 class="text-lg font-semibold mb-2">Pontuação Total: <span id="totalPontos" class="text-yellow-400 text-2xl font-bold">0</span>/100</h4>
+
+                <!-- Seção Inferior -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Input do Jurado -->
+                    <div>
+                        <label class="block text-sm font-medium mb-3 text-gray-300">
+                            <i class="fas fa-user-tie mr-2 text-blue-400"></i>Nome do Jurado
+                        </label>
+                        <input type="text" id="nomeJurado" class="jurado-input w-full rounded-lg px-4 py-3 focus:outline-none" placeholder="Digite o nome do jurado" required>
+                    </div>
+
+                    <!-- Display do Total -->
+                    <div class="flex items-end">
+                        <div class="total-card w-full p-4 rounded-xl text-center">
+                            <p class="text-green-200 text-sm mb-1">Pontuação Total</p>
+                            <p class="text-2xl font-bold text-white" id="totalPontuacaoDisplay">0/500</p>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="mt-6">
-                    <label class="block text-sm font-medium mb-3">Nome do Jurado</label>
-                    <input type="text" id="nomeJurado" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
-                </div>
-                
-                <div class="flex flex-col sm:flex-row gap-4 pt-8">
-                    <button onclick="salvarAvaliacao()" class="btn-primary flex-1 py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2">
+
+                <!-- Botões de Ação -->
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <button onclick="salvarAvaliacao()" class="btn-primary flex-1 py-4 rounded-xl font-semibold text-white flex items-center justify-center gap-3 text-lg">
                         <i class="fas fa-save"></i>
                         Salvar Avaliação
                     </button>
-                    <button onclick="fecharAvaliacao()" class="btn-secondary flex-1 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
+                    <button onclick="fecharAvaliacao()" class="btn-secondary flex-1 py-4 rounded-xl font-semibold text-gray-300 flex items-center justify-center gap-3 text-lg">
                         <i class="fas fa-times"></i>
                         Cancelar
                     </button>
                 </div>
             </div>
         </div>
-
-        <!-- Relatórios Section -->
-        <section class="text-center space-y-6">
-            <div class="flex items-center justify-center gap-3 mb-8">
-                <i class="fas fa-chart-line text-2xl" style="color: var(--accent-color);"></i>
-                <h2 class="text-2xl font-bold">Relatórios Detalhados</h2>
-            </div>
-            
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button onclick="gerarRelatorioGeral()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
-                    <i class="fas fa-file-alt"></i>
-                    Relatório Geral
-                </button>
-                <button onclick="gerarRanking()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
-                    <i class="fas fa-trophy"></i>
-                    Ranking Final
-                </button>
-            </div>
-        </section>
-    </main>
+    </div>
 
     <script>
         let participantes = JSON.parse(localStorage.getItem('vestimentas_participantes') || '[]');
@@ -465,10 +450,36 @@
         let participanteAtual = null;
 
         const cursoColors = {
-            'Informática': 'from-blue-500 to-cyan-600',
             'Enfermagem': 'from-red-500 to-pink-600',
+            'Informática': 'from-blue-500 to-cyan-600', 
+            'Meio Ambiente': 'from-green-500 to-emerald-600',
             'Administração': 'from-purple-500 to-indigo-600',
-            'Agropecuária': 'from-green-500 to-emerald-600'
+            'Edificações': 'from-orange-500 to-yellow-600'
+        };
+
+        const cursoTurmasPontuacao = {
+            'ENFERMAGEM': [
+                { ano: '1º ANO', quantidade: 2, pontosPorModelo: 100 },
+                { ano: '2º ANO', quantidade: 2, pontosPorModelo: 100 },
+                { ano: '3º ANO', quantidade: 1, pontosPorModelo: 100 }
+            ],
+            'INFORMÁTICA': [
+                { ano: '1º ANO', quantidade: 2, pontosPorModelo: 100 },
+                { ano: '2º ANO', quantidade: 2, pontosPorModelo: 100 },
+                { ano: '3º ANO', quantidade: 1, pontosPorModelo: 100 }
+            ],
+            'MEIO AMBIENTE': [
+                { ano: '2º ANO', quantidade: 2, pontosPorModelo: 250 }
+            ],
+            'ADMINISTRAÇÃO': [
+                { ano: '1º ANO', quantidade: 2, pontosPorModelo: 150 },
+                { ano: '3º ANO', quantidade: 1, pontosPorModelo: 200 }
+            ],
+            'EDIFICAÇÕES': [
+                { ano: '1º ANO', quantidade: 2, pontosPorModelo: 100 },
+                { ano: '2º ANO', quantidade: 2, pontosPorModelo: 100 },
+                { ano: '3º ANO', quantidade: 1, pontosPorModelo: 100 }
+            ]
         };
 
         // Initialize
@@ -483,7 +494,6 @@
                     id: Date.now(),
                     nome: document.getElementById('nomeModelo').value,
                     curso: document.getElementById('curso').value,
-                    genero: document.getElementById('genero').value,
                     descricao: document.getElementById('descricao').value,
                     timestamp: new Date().toISOString()
                 };
@@ -494,16 +504,7 @@
                 this.reset();
                 renderParticipantes();
                 
-                // Show success message
                 showNotification('Participante cadastrado com sucesso!', 'success');
-            });
-
-     
-            document.querySelectorAll('input[type="range"]').forEach(slider => {
-                slider.addEventListener('input', function() {
-                    document.getElementById(this.id + 'Value').textContent = this.value + ' pontos';
-                    calcularTotal();
-                });
             });
         });
 
@@ -513,12 +514,12 @@
             
             if (participantes.length === 0) {
                 container.innerHTML = `
-                    <div class="col-span-full text-center py-20">
-                        <div class="w-32 h-32 mx-auto mb-8 rounded-3xl bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center">
-                            <i class="fas fa-tshirt text-4xl text-gray-400"></i>
+                    <div class="col-span-full text-center py-16">
+                        <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gray-700 flex items-center justify-center">
+                            <i class="fas fa-tshirt text-3xl text-gray-400"></i>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-300 mb-4">Nenhum participante cadastrado</h3>
-                        <p class="text-gray-400 mb-8 text-lg">Adicione o primeiro participante para começar</p>
+                        <h3 class="text-xl font-bold text-gray-300 mb-2">Nenhum participante cadastrado</h3>
+                        <p class="text-gray-400">Adicione o primeiro participante para começar</p>
                     </div>
                 `;
                 return;
@@ -531,37 +532,35 @@
                     : 'Não avaliado';
                 
                 const card = document.createElement('div');
-                card.className = 'card-bg rounded-3xl p-6 card-hover transition-all duration-300 fade-in';
+                card.className = 'card-bg rounded-2xl p-6 transition-all duration-200 hover:transform hover:scale-105';
                 
                 card.innerHTML = `
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="flex items-center gap-4 flex-1 min-w-0">
-                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${cursoColors[participante.curso] || 'from-gray-600 to-gray-700'} flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-user text-white text-xl"></i>
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <h3 class="text-xl font-bold text-white mb-1">${participante.nome}</h3>
-                                <p class="text-sm text-gray-400 font-medium">${participante.curso} - ${participante.genero}</p>
-                            </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${cursoColors[participante.curso] || 'from-gray-600 to-gray-700'} flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <h3 class="text-lg font-bold text-white mb-1">${participante.nome}</h3>
+                            <p class="text-sm text-gray-400">${participante.curso}</p>
                         </div>
                     </div>
                     
-                    <div class="space-y-4">
+                    <div class="space-y-3">
                         <div>
-                            <span class="text-gray-300 font-semibold">Descrição:</span>
+                            <span class="text-gray-300 font-medium text-sm">Descrição:</span>
                             <p class="text-gray-400 text-sm mt-1">${participante.descricao || 'Não informado'}</p>
                         </div>
                         
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-300 font-semibold">Média de Avaliação</span>
-                            <span class="text-2xl font-bold" style="color: var(--accent-color);">${mediaNotas}</span>
+                        <div class="flex justify-between items-center py-2 border-t border-gray-600">
+                            <span class="text-gray-300 font-medium">Média</span>
+                            <span class="text-lg font-bold text-yellow-400">${mediaNotas}</span>
                         </div>
                         
                         <div class="text-center">
                             <p class="text-xs text-gray-400 mb-3">Avaliações: ${avaliacoesParticipante.length}</p>
                             <button onclick="avaliarParticipante(${participante.id})" 
-                                    class="btn-primary w-full py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2">
-                                <i class="fas fa-star"></i>
+                                    class="btn-primary w-full py-2.5 rounded-lg font-medium text-white flex items-center justify-center gap-2">
+                                <i class="fas fa-star text-sm"></i>
                                 Avaliar
                             </button>
                         </div>
@@ -574,50 +573,177 @@
 
         function avaliarParticipante(id) {
             participanteAtual = participantes.find(p => p.id === id);
+            if (!participanteAtual) {
+                showNotification('Participante não encontrado!', 'error');
+                return;
+            }
+
             document.getElementById('participanteAvaliando').textContent = 
                 `${participanteAtual.nome} (${participanteAtual.curso})`;
             
-            // Reset form
-            document.querySelectorAll('input[type="range"]').forEach(slider => {
-                slider.value = 0;
-                document.getElementById(slider.id + 'Value').textContent = '0 pontos';
-            });
+            document.getElementById('tabelaTitulo').textContent = `Tabela de Pontuação - ${participanteAtual.curso}`;
+            
             document.getElementById('nomeJurado').value = '';
-            calcularTotal();
+            gerarCardsAvaliacao(participanteAtual.curso);
+            atualizarDetalhesPontuacao();
             
             document.getElementById('avaliacaoModal').classList.remove('hidden');
             document.getElementById('avaliacaoModal').classList.add('flex');
         }
 
-        function calcularTotal() {
-            const materiais = parseInt(document.getElementById('materiais').value);
-            const criatividade = parseInt(document.getElementById('criatividade').value);
-            const estetica = parseInt(document.getElementById('estetica').value);
-            const identidade = parseInt(document.getElementById('identidade').value);
-            const desfile = parseInt(document.getElementById('desfile').value);
-            const acabamento = parseInt(document.getElementById('acabamento').value);
+        function gerarCardsAvaliacao(curso) {
+            const turmas = cursoTurmasPontuacao[curso.toUpperCase()] || [];
+            let totalModelos = turmas.reduce((acc, t) => acc + t.quantidade, 0);
             
-            const total = materiais + criatividade + estetica + identidade + desfile + acabamento;
-            document.getElementById('totalPontos').textContent = total;
+            document.getElementById('tabelaSubtitulo').textContent = `Total de ${totalModelos} modelos • Pontuação máxima: 500 pontos`;
+            document.getElementById('totalModelos').textContent = `${totalModelos} MODELO${totalModelos > 1 ? 'S' : ''}`;
+            
+            const container = document.getElementById('turmasContainer');
+            container.innerHTML = '';
+            
+            turmas.forEach((turma, idx) => {
+                const card = document.createElement('div');
+                card.className = 'year-card p-5 rounded-xl';
+                
+                let inputsHTML = '';
+                if (turma.quantidade === 2) {
+                    inputsHTML = `
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-300">Masculino</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="number" min="0" max="${turma.pontosPorModelo}" 
+                                           class="score-input w-full px-3 py-2 rounded-lg text-center font-medium" 
+                                           id="nota_${idx}_masc" 
+                                           placeholder="${turma.pontosPorModelo}"
+                                           oninput="atualizarDetalhesPontuacao()">
+                                    <span class="text-xs text-gray-400 font-medium">pts</span>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-300">Feminino</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="number" min="0" max="${turma.pontosPorModelo}" 
+                                           class="score-input w-full px-3 py-2 rounded-lg text-center font-medium" 
+                                           id="nota_${idx}_fem" 
+                                           placeholder="${turma.pontosPorModelo}"
+                                           oninput="atualizarDetalhesPontuacao()">
+                                    <span class="text-xs text-gray-400 font-medium">pts</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-gray-600 text-center">
+                            <span class="text-lg font-bold text-yellow-400" id="subtotal_${idx}">0 (0+0)</span>
+                        </div>`;
+                } else {
+                    inputsHTML = `
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-300">Modelo</label>
+                            <div class="flex items-center gap-2">
+                                <input type="number" min="0" max="${turma.pontosPorModelo}" 
+                                       class="score-input w-full px-3 py-2 rounded-lg text-center font-medium" 
+                                       id="nota_${idx}_unico" 
+                                       placeholder="${turma.pontosPorModelo}"
+                                       oninput="atualizarDetalhesPontuacao()">
+                                <span class="text-xs text-gray-400 font-medium">pts</span>
+                            </div>
+                        </div>`;
+                }
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h4 class="text-lg font-bold text-white">${turma.ano}</h4>
+                            <p class="text-sm text-gray-400">${turma.quantidade} modelo${turma.quantidade > 1 ? 's' : ''}</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-400">Máximo</div>
+                            <div class="text-lg font-bold text-blue-400">${turma.quantidade * turma.pontosPorModelo}</div>
+                        </div>
+                    </div>
+                    ${inputsHTML}
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function atualizarDetalhesPontuacao() {
+            if (!participanteAtual) return 0;
+            
+            const curso = participanteAtual.curso.toUpperCase();
+            const turmas = cursoTurmasPontuacao[curso] || [];
+            let total = 0;
+            
+            turmas.forEach((turma, idx) => {
+                let subtotal = 0;
+                let detalhe = '';
+                
+                if (turma.quantidade === 2) {
+                    const masc = parseInt(document.getElementById(`nota_${idx}_masc`)?.value) || 0;
+                    const fem = parseInt(document.getElementById(`nota_${idx}_fem`)?.value) || 0;
+                    subtotal = masc + fem;
+                    detalhe = `${subtotal} (${masc}+${fem})`;
+                } else {
+                    const unico = parseInt(document.getElementById(`nota_${idx}_unico`)?.value) || 0;
+                    subtotal = unico;
+                    detalhe = `${subtotal}`;
+                }
+                
+                const subtotalElement = document.getElementById(`subtotal_${idx}`);
+                if (subtotalElement) {
+                    subtotalElement.textContent = detalhe;
+                }
+                
+                total += subtotal;
+            });
+            
+            document.getElementById('totalPontuacao').textContent = total;
+            document.getElementById('totalPontuacaoDisplay').textContent = `${total}/500`;
+            
+            const totalElement = document.getElementById('totalPontuacao');
+            const displayElement = document.getElementById('totalPontuacaoDisplay');
+            
+            if (total === 500) {
+                totalElement.className = 'text-3xl font-bold text-green-400';
+                displayElement.className = 'text-2xl font-bold text-white';
+            } else if (total > 500) {
+                totalElement.className = 'text-3xl font-bold text-red-400';
+                displayElement.className = 'text-2xl font-bold text-red-400';
+            } else {
+                totalElement.className = 'text-3xl font-bold text-yellow-400';
+                displayElement.className = 'text-2xl font-bold text-yellow-400';
+            }
+            
+            return total;
         }
 
         function salvarAvaliacao() {
-            if (!participanteAtual || !document.getElementById('nomeJurado').value) {
+            if (!participanteAtual || !document.getElementById('nomeJurado').value.trim()) {
                 showNotification('Preencha o nome do jurado!', 'error');
                 return;
             }
             
+            const total = atualizarDetalhesPontuacao();
+            if (total !== 500) {
+                showNotification('A pontuação total deve ser exatamente 500 pontos!', 'error');
+                return;
+            }
+            
+            const notas = {};
+            document.querySelectorAll('.score-input').forEach(input => {
+                if (input.value) {
+                    notas[input.id] = parseInt(input.value);
+                }
+            });
+            
             const avaliacao = {
                 id: Date.now(),
                 participanteId: participanteAtual.id,
-                jurado: document.getElementById('nomeJurado').value,
-                materiais: parseInt(document.getElementById('materiais').value),
-                criatividade: parseInt(document.getElementById('criatividade').value),
-                estetica: parseInt(document.getElementById('estetica').value),
-                identidade: parseInt(document.getElementById('identidade').value),
-                desfile: parseInt(document.getElementById('desfile').value),
-                acabamento: parseInt(document.getElementById('acabamento').value),
-                total: parseInt(document.getElementById('totalPontos').textContent),
+                jurado: document.getElementById('nomeJurado').value.trim(),
+                curso: participanteAtual.curso,
+                notas: notas,
+                total: total,
                 timestamp: new Date().toISOString()
             };
             
@@ -642,24 +768,19 @@
             participantes.forEach(participante => {
                 const avaliacoesParticipante = avaliacoes.filter(a => a.participanteId === participante.id);
                 relatorio += `PARTICIPANTE: ${participante.nome}\n`;
-                relatorio += `Curso: ${participante.curso} | Gênero: ${participante.genero}\n`;
+                relatorio += `Curso: ${participante.curso}\n`;
                 relatorio += `Descrição: ${participante.descricao}\n\n`;
                 
                 if (avaliacoesParticipante.length > 0) {
                     relatorio += 'AVALIAÇÕES:\n';
                     avaliacoesParticipante.forEach(av => {
                         relatorio += `  Jurado: ${av.jurado}\n`;
-                        relatorio += `  Materiais Sustentáveis: ${av.materiais}/20\n`;
-                        relatorio += `  Criatividade: ${av.criatividade}/20\n`;
-                        relatorio += `  Estética: ${av.estetica}/20\n`;
-                        relatorio += `  Identidade: ${av.identidade}/15\n`;
-                        relatorio += `  Desfile: ${av.desfile}/15\n`;
-                        relatorio += `  Acabamento: ${av.acabamento}/10\n`;
-                        relatorio += `  TOTAL: ${av.total}/100\n\n`;
+                        relatorio += `  Pontuação Total: ${av.total}/500\n`;
+                        relatorio += `  Data: ${new Date(av.timestamp).toLocaleString()}\n\n`;
                     });
                     
                     const media = (avaliacoesParticipante.reduce((sum, a) => sum + a.total, 0) / avaliacoesParticipante.length).toFixed(2);
-                    relatorio += `MÉDIA FINAL: ${media}/100\n`;
+                    relatorio += `MÉDIA FINAL: ${media}/500\n`;
                 } else {
                     relatorio += 'Não avaliado\n';
                 }
@@ -691,7 +812,7 @@
                 relatorio += `${index + 1}º LUGAR\n`;
                 relatorio += `Nome: ${participante.nome}\n`;
                 relatorio += `Curso: ${participante.curso}\n`;
-                relatorio += `Média: ${participante.media.toFixed(2)}/100\n`;
+                relatorio += `Média: ${participante.media.toFixed(2)}/500\n`;
                 relatorio += `Avaliações: ${participante.totalAvaliacoes}\n\n`;
             });
             
@@ -709,11 +830,10 @@
         }
 
         function showNotification(message, type) {
-            // Simple notification system
             const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-2xl text-white font-semibold ${
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg text-white font-medium ${
                 type === 'success' ? 'bg-green-600' : 'bg-red-600'
-            } slide-up`;
+            } shadow-lg`;
             notification.textContent = message;
             document.body.appendChild(notification);
             
@@ -722,7 +842,6 @@
             }, 3000);
         }
 
-        // Event listeners
         document.getElementById('avaliacaoModal').addEventListener('click', function(e) {
             if (e.target === this) fecharAvaliacao();
         });
