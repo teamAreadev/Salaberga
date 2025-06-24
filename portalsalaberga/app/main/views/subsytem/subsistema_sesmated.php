@@ -614,12 +614,10 @@
                 <i class="fa-solid fa-home text-xl"></i>
                 <span class="text-xs">Início</span>
             </a>
-            <form action="" method="post">
-                <button type="submit" name="logout"></button>
+            <a href="./subsistema.php?sair" class="nav-link">
                 <i class="fa-solid fa-sign-out-alt text-xl"></i>
                 <span class="text-xs">Sair</span>
-            </form>
-
+            </a>
             <div class="relative">
                 <button id="accessibilityBtnMobile" class="nav-link flex flex-col items-center">
                     <i class="fa-solid fa-universal-access text-xl"></i>
