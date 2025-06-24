@@ -468,7 +468,7 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
 
                 <!-- Enhanced Form com traços Ghibli -->
                 <form id="loginForm" 
-                      action="../../controllers/controller_login/controller_login.php" 
+                      action="../../controllers/controller_login/controller_login_sesmated.php" 
                       method="POST" 
                       class="space-y-4 sm:space-y-6">
                     

@@ -284,7 +284,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="data" class="block text-sm font-semibold mb-3 text-gray-200">Data de Nascimento</label>
+                        <label for="data" class="block text-sm font-semibold mb-3 text-gray-200">Data de avaliação</label>
                         <input type="date" id="data" name="data" value="<?php echo htmlspecialchars($_POST['data'] ?? ''); ?>" class="input-field w-full pr-4 py-4 rounded-xl text-sm font-medium" required>
                     </div>
 
@@ -295,6 +295,22 @@
                             <option value="Manhã" <?php if ((isset($_POST['turno']) && $_POST['turno'] == 'Manhã')) echo 'selected'; ?>>Manhã</option>
                             <option value="Tarde" <?php if ((isset($_POST['turno']) && $_POST['turno'] == 'Tarde')) echo 'selected'; ?>>Tarde</option>
                         </select>
+                    </div>
+                    <div class="input-group">
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                id="senha" 
+                                name="senha" 
+                                value="<?php echo htmlspecialchars($_POST['senha'] ?? ''); ?>"
+                                class="input-field w-full pl-12 pr-4 py-4 rounded-xl text-sm font-medium"
+                                placeholder="Digite sua senha"
+                                required
+                            >
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fas fa-lock input-icon"></i>
+                            </div>
+                        </div>
                     </div>
 
                     <button 

@@ -10,7 +10,7 @@ class main_model extends connect
     }
 
     //funções a parte
-    public function adicionar_avaliador($nome, $email, $turno, $data)
+    public function adicionar_avaliador($nome, $email, $turno, $data, $senha)
     {
         $stmt_check = $this->connect_salaberga->prepare("SELECT * FROM usuarios WHERE email = :email");
         $stmt_check->bindValue(':email', $email);
@@ -19,13 +19,11 @@ class main_model extends connect
 
         if (empty($result)) {
             // Gerar senha automática numérica de 6 dígitos
-            $senha_gerada = str_pad(strval(random_int(0, 999999)), 6, '0', STR_PAD_LEFT);
-            $senha_hash = md5($senha_gerada);
 
-            $stmt_usuario = $this->connect_salaberga->prepare("INSERT INTO usuarios(id, nome, senha, email) VALUES (null, :nome, :senha, :email)");
+            $stmt_usuario = $this->connect_salaberga->prepare("INSERT INTO usuarios(id, nome, senha, email) VALUES (null, :nome, md5(:senha), :email)");
             $stmt_usuario->bindValue(':nome', $nome);
             $stmt_usuario->bindValue(':email', $email);
-            $stmt_usuario->bindValue(':senha', $senha_hash);
+            $stmt_usuario->bindValue(':senha', $senha);
 
             if ($stmt_usuario->execute()) {
                 // Retornar a senha numérica gerada para possível envio ao usuário
@@ -41,12 +39,11 @@ class main_model extends connect
                 $stmt_usu_sist->bindValue(':id_sist_perm', $sist_perm);
                 $stmt_usu_sist->execute();
 
-                $stmt_avaliadores = $this->connect->prepare("INSERT INTO `avaliadores`(`nome`, `data`, `turno`, `id_usuario`, `senha`) VALUES (:nome, :data, :turno, :id_usuario, :senha)");
+                $stmt_avaliadores = $this->connect->prepare("INSERT INTO `avaliadores`(`nome`, `data`, `turno`, `id_usuario`) VALUES (:nome, :data, :turno, :id_usuario)");
                 $stmt_avaliadores->bindValue(':nome', $nome);
                 $stmt_avaliadores->bindValue(':data', $data);
                 $stmt_avaliadores->bindValue(':turno', $turno);
                 $stmt_avaliadores->bindValue(':id_usuario', $id_usuario);
-                $stmt_avaliadores->bindValue(':senha', $senha_gerada);
 
                 if ($stmt_avaliadores->execute()) {
                     // Retornar a senha numérica gerada para possível envio ao usuário

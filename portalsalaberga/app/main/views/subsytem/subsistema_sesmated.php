@@ -1,203 +1,3 @@
-<?php
-
-require_once('../../models/sessions.php');
-$session = new sessions();
-$session->autenticar_session();
-
-if (isset($_GET['sair'])) {
-    $session->quebra_session();
-}
-
-// Get user's systems and permissions from session
-// This will be an array like:
-// [
-//   {'sistema_id': 1, 'sistema_nome': 'Estagio', 'permissao_id': 1, 'permissao_descricao': 'usuario'},
-//   {'sistema_id': 1, 'sistema_nome': 'Estagio', 'permissao_id': 2, 'permissao_descricao': 'adm'}, // If user has multiple permissions for a system
-//   {'sistema_id': 2, 'sistema_nome': 'Portal STGM', 'permissao_id': 1, 'permissao_descricao': 'usuario'},
-//   ...
-// ]
-$userSystemsPermissions = $_SESSION['user_systems_permissions'] ?? [];
-
-// Debug output usando uma abordagem mais segura
-$debugData = [
-    'userSystemsPermissions' => $userSystemsPermissions,
-    'adminPermissions' => $_SESSION['user_systems_permissions'] ?? []
-];
-
-echo '<script>';
-echo 'const debugData = ' . json_encode($debugData, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS) . ';';
-echo 'console.log("Debug $userSystemsPermissions:", debugData.userSystemsPermissions);';
-echo 'console.log("Debug $userSystemsPermissions (Admin Geral):", debugData.adminPermissions);';
-echo '</script>';
-
-// Define cards that should always be visible regardless of permissions
-$alwaysVisibleCards = [
-    'Entrada/saída_usuario(1)' => [
-        'url' => '#',
-        'image' => '../../assets/img/logos_sistemas/entrada e saida.png',
-        'name' => 'Entrada/saída',
-        'category' => 'Sistema'
-    ]
-];
-
-// Define a mapping of system name AND permission description to card data
-// The keys are formatted as "sistema_nome_permissao_descricao(sistema_id)"
-// IMPORTANT: Ensure "sistema_nome" matches exactly what comes from the database table `sistemas`.sistema
-// IMPORTANT: Ensure "permissao_descricao" matches exactly what comes from the database table `permissoes`.descricao
-$systemPermissionCardMap = [];
-// Prepare an array of unique cards to display based on user's systems and permissions
-$cardsToDisplay = [];
-// First, add the always visible cards
-$cardsToDisplay = $alwaysVisibleCards;
-
-// Then add cards based on user's permissions
-if (!empty($userSystemsPermissions)) {
-    // Coletar todas as informações de debug primeiro
-    $allDebugInfo = [];
-
-    foreach ($userSystemsPermissions as $item) {
-        // Extrair o ID do sistema da descrição da permissão se existir
-        $permissaoBase = preg_replace('/\(\d+\)$/', '', $item['permissao_descricao']);
-        $key = $item['sistema_nome'] . '_' . $permissaoBase . '(' . $item['sistema_id'] . ')';
-
-        $allDebugInfo[] = [
-            'sistema' => $item['sistema_nome'],
-            'permissao' => $item['permissao_descricao'],
-            'chave' => $key,
-            'encontrada' => isset($systemPermissionCardMap[$key]) ? 'Sim' : 'Não'
-        ];
-
-        if (isset($systemPermissionCardMap[$key])) {
-            $cardsToDisplay[$key] = $systemPermissionCardMap[$key];
-        }
-    }
-
-    // Gerar um único script com todas as informações de debug
-    echo '<script>';
-    echo 'const allDebugInfo = ' . json_encode($allDebugInfo, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS) . ';';
-    echo 'allDebugInfo.forEach(info => console.log("DEBUG KEY CHECK:", info));';
-    echo '</script>';
-}
-
-// TEMPORARY DEBUG OUTPUT: Check what cards are prepared for display
-// echo '<pre style="color: black;">Debug $cardsToDisplay: ';
-// print_r($cardsToDisplay);
-// echo '</pre>';
-
-// Atribuir sessões baseadas nas permissões do usuário
-if (!empty($userSystemsPermissions)) {
-    foreach ($userSystemsPermissions as $item) {
-        // Estágio
-        if ($item['sistema_nome'] === 'Estágio') {
-            if ($item['permissao_descricao'] === 'adm(2)') {
-                $_SESSION['estagio_adm'] = true;
-            } else if ($item['permissao_descricao'] === 'usuario(2)') {
-                $_SESSION['estagio_usuario'] = true;
-            }
-        }
-
-        // Entrada/Saída
-        if ($item['sistema_nome'] === 'Entrada/saída') {
-            if ($item['permissao_descricao'] === 'vigilante(1)') {
-                $_SESSION['entrada_saida_vigilante'] = true;
-            } else if ($item['permissao_descricao'] === 'usuario(1)') {
-                $_SESSION['entrada_saida_usuario'] = true;
-            }
-        }
-
-        // Demandas
-        if ($item['sistema_nome'] === 'Demandas') {
-            if ($item['permissao_descricao'] === 'adm_geral(3)') {
-                $_SESSION['demandas_adm_geral'] = true;
-            } else if ($item['permissao_descricao'] === 'adm_area_suporte(3)') {
-                $_SESSION['demandas_adm_suporte'] = true;
-            } else if ($item['permissao_descricao'] === 'adm_area_dev(3)') {
-                $_SESSION['demandas_adm_dev'] = true;
-            } else if ($item['permissao_descricao'] === 'adm_area_design(3)') {
-                $_SESSION['demandas_adm_design'] = true;
-            } else if ($item['permissao_descricao'] === 'usuario(3)') {
-                $_SESSION['demandas_usuario'] = true;
-            }
-        }
-
-        // Biblioteca
-        if ($item['sistema_nome'] === 'Biblioteca' && $item['permissao_descricao'] === 'usuario(4)') {
-            $_SESSION['biblioteca_usuario'] = true;
-        }
-
-        // SS (Sistema de Suporte)
-        if ($item['sistema_nome'] === 'SS') {
-            if ($item['permissao_descricao'] === 'adm(5)') {
-                $_SESSION['ss_adm'] = true;
-            } else if ($item['permissao_descricao'] === 'usuario(5)') {
-                $_SESSION['ss_usuario'] = true;
-            }
-        }
-
-        // Demandas - Usuários de Área
-        if ($item['sistema_nome'] === 'Demandas') {
-            if ($item['permissao_descricao'] === 'usuario_area_dev(3)') {
-                $_SESSION['demandas_usuario_area_desenvolvimento'] = true;
-            } else if ($item['permissao_descricao'] === 'usuario_area_suporte(3)') {
-                $_SESSION['demandas_usuario_area_suporte'] = true;
-            } else if ($item['permissao_descricao'] === 'usuario_area_design(3)') {
-                $_SESSION['demandas_usuario_area_design'] = true;
-            }
-        }
-
-        // Alimentação
-        if ($item['sistema_nome'] === 'Alimentação' && $item['permissao_descricao'] === 'adm(9)') {
-            $_SESSION['alimentacao_adm'] = true;
-        }
-
-        // Estoque
-        if ($item['sistema_nome'] === 'Estoque' && $item['permissao_descricao'] === 'adm(10)') {
-            $_SESSION['estoque_adm'] = true;
-        }
-
-        // Espaços e Equipamentos
-        if ($item['sistema_nome'] === 'EspaçosEquipamentos' && $item['permissao_descricao'] === 'adm(13)') {
-            $_SESSION['espacos_equipamentos_adm'] = true;
-        }
-
-        // Banco de Questões
-        if ($item['sistema_nome'] === 'Questões' && $item['permissao_descricao'] === 'adm(14)') {
-            $_SESSION['banco_questoes_adm'] = true;
-        }
-
-        // Registro PCD
-        if ($item['sistema_nome'] === 'PCD' && $item['permissao_descricao'] === 'adm(15)') {
-            $_SESSION['registro_pcd_adm'] = true;
-        }
-
-        // Financeiro
-        if ($item['sistema_nome'] === 'Financeiro' && $item['permissao_descricao'] === 'adm(16)') {
-            $_SESSION['financeiro_adm'] = true;
-        }
-
-        // PDT
-        if ($item['sistema_nome'] === 'PDT' && $item['permissao_descricao'] === 'adm(17)') {
-            $_SESSION['pdt_adm'] = true;
-        }
-
-        // Form Parcial
-        if ($item['sistema_nome'] === 'Form_Parcial') {
-            if ($item['permissao_descricao'] === 'relatorio(18)') {
-                $_SESSION['form_parcial_relatorio'] = true;
-            } else if ($item['permissao_descricao'] === 'form(18)') {
-                $_SESSION['form_parcial_form'] = true;
-            }
-        }
-
-        // Tombamento
-        if ($item['sistema_nome'] === 'tombamento' && $item['permissao_descricao'] === 'adm(19)') {
-            $_SESSION['tombamento_adm'] = true;
-        }
-    }
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -814,12 +614,10 @@ if (!empty($userSystemsPermissions)) {
                 <i class="fa-solid fa-home text-xl"></i>
                 <span class="text-xs">Início</span>
             </a>
-            <form action="" method="post">
-                <button type="submit" name="logout"></button>
+            <a href="./subsistema.php?sair" class="nav-link">
                 <i class="fa-solid fa-sign-out-alt text-xl"></i>
                 <span class="text-xs">Sair</span>
-            </form>
-
+            </a>
             <div class="relative">
                 <button id="accessibilityBtnMobile" class="nav-link flex flex-col items-center">
                     <i class="fa-solid fa-universal-access text-xl"></i>
@@ -1249,34 +1047,173 @@ if (!empty($userSystemsPermissions)) {
     <main class="container mx-auto px-4">
         <div class="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 md:gap-8 p-4 md:p-8 max-w-[1400px] mx-auto transition-all duration-300 grid-container">
 
-            <?php
-            // Use the prepared cardsToDisplay array
-            if (!empty($cardsToDisplay)) {
-                foreach ($cardsToDisplay as $key => $cardData) {
-            ?>
-                    <a href="<?php echo htmlspecialchars($cardData['url']); ?>"
-                        class="app-card-link"
-                        <?php if (strpos($cardData['url'], 'http') === 0): ?>target="_blank" <?php endif; ?>
-                        data-card-key="<?php echo htmlspecialchars($key); ?>"> <!-- Added data-card-key for reference -->
-                        <div class="app-card w-{100px} h-full">
-                            <div class="icon-wrapper">
-                                <img src="<?php echo htmlspecialchars($cardData['image']); ?>"
-                                    alt="<?php echo htmlspecialchars($cardData['name']); ?>"
-                                    class="app-icon">
-                            </div>
-                            <h3 class="app-name"><?php echo htmlspecialchars($cardData['name']); ?></h3>
-                            <span class="category-tag"><?php echo htmlspecialchars($cardData['category']); ?></span>
-                        </div>
-                    </a>
-            <?php
-                }
-            } else {
-                // Handle case where user has no systems/permissions matching the map
-                echo "<p>Nenhum sistema ou permissão atribuída que corresponda aos cards disponíveis.</p>";
-            }
-            ?>
+            <a href="#" class="app-card-link" data-card-key="Dashboard_abertura">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Dashboard abertura" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Dashboard abertura</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+            <a href="#" class="app-card-link" data-card-key="Cordel">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Cordel" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Cordel</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+            <a href="#" class="app-card-link" data-card-key="Empreendedorismo">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Empreendedorismo" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Empreendedorismo</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+            <a href="#" class="app-card-link" data-card-key="Esquete">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="../../assets/img/logos_sistemas/esquete.png" alt="Esquete" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Esquete</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+            <a href="#" class="app-card-link" data-card-key="Logo">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Logo" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Logo</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+            <a href="#" class="app-card-link" data-card-key="Mascote">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Mascote" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Mascote</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+            <a href="#" class="app-card-link" data-card-key="Painel">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Painel" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Painel</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+            <a href="#" class="app-card-link" data-card-key="Palestras">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Palestras" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Palestras</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+            <a href="#" class="app-card-link" data-card-key="Paródia">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Paródia" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Paródia</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+            <a href="#" class="app-card-link" data-card-key="Rifa">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Rifa" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Rifa</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+            <a href="#" class="app-card-link" data-card-key="Sala_temática">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Sala temática" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Sala temática</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+            <a href="#" class="app-card-link" data-card-key="Vestimentas">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Vestimentas" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Vestimentas</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+
         </div>
     </main>
+
+    <script>
+    // Função para formatar datas e horários
+    function mostrarCardsPorDataEHora() {
+        const agora = new Date();
+        const dia = agora.getDate();
+        const mes = agora.getMonth() + 1; // Janeiro = 0
+        const hora = agora.getHours();
+        const minuto = agora.getMinutes();
+
+        // Esconde todos os cards primeiro
+        document.querySelectorAll('.app-card-link').forEach(card => {
+            card.style.display = 'none';
+        });
+
+        // Função auxiliar para mostrar cards por chave
+        function mostrarPorChaves(chaves) {
+            chaves.forEach(key => {
+                const card = document.querySelector('.app-card-link[data-card-key="' + key + '"]');
+                if (card) card.style.display = 'block';
+            });
+        }
+
+        // 24/06
+        if (dia === 24 && mes === 6) {
+            mostrarPorChaves(['Palestras', 'Rifa', 'Empreendedorismo']);
+        }
+        // 25/06
+        else if (dia === 25 && mes === 6) {
+            // Das 8h às 12h
+            if (hora >= 8 && hora < 12) {
+                mostrarPorChaves(['Workshop']);
+            }
+            // Das 13:30 às 17h
+            else if ((hora === 13 && minuto >= 30) || (hora > 13 && hora < 17)) {
+                mostrarPorChaves(['Dashboard_abertura', 'Rifa']);
+            }
+        }
+        // 26/06
+        else if (dia === 26 && mes === 6) {
+            // Das 8h às 12h
+            if (hora >= 8 && hora < 12) {
+                mostrarPorChaves(['Empreendedorismo', 'Sala_temática']);
+            }
+        }
+        // 27/06
+        else if (dia === 27 && mes === 6) {
+            mostrarPorChaves(['Sala_temática']);
+        }
+    }
+
+    // Executa ao carregar a página
+    mostrarCardsPorDataEHora();
+    // Atualiza a cada minuto
+    setInterval(mostrarCardsPorDataEHora, 60000);
+    </script>
 </body>
 
 </html>
