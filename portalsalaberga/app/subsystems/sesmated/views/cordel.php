@@ -8,7 +8,7 @@ $select = new select_model();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarefa 03 - Mascote do Curso</title>
+    <title>Tarefa 06 - Cordel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -301,7 +301,7 @@ $select = new select_model();
             width: 100%;
         }
         
-        /* Header responsivo - CORRIGIDO */
+        /* Header responsivo */
         .header-content {
             display: flex;
             align-items: center;
@@ -419,13 +419,13 @@ $select = new select_model();
                 <div class="header-title-section">
                     <div class="header-title-row">
                         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
-                            <i class="fas fa-paw text-white text-lg"></i>
+                            <i class="fas fa-scroll text-white text-lg"></i>
                         </div>
                         <h1 class="main-title font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
-                            TAREFA 3
+                            TAREFA 6
                         </h1>
                     </div>
-                    <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Avaliação do Mascote</p>
+                    <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Avaliação do Cordel</p>
                 </div>
                 
                 <!-- Chip do Usuário - Posicionado à direita no desktop -->
@@ -442,17 +442,17 @@ $select = new select_model();
     <!-- Main Content -->
     <main class="container-responsive py-8">
         <div class="flex flex-col items-center justify-center min-h-[70vh]">
-            <div class="card-bg rounded-3xl w-full max-w-5xl text-center fade-in">
+            <div class="card-bg rounded-3xl w-full max-w-6xl text-center fade-in">
                 
                 <!-- Formulário Principal -->
-                <form id="mascoteForm" action="../controllers/controller_mascote.php" method="post" class="space-y-8">
+                <form id="cordelForm" action="../controllers/controller_cordel.php" method="post" class="space-y-8">
                     <div class="flex flex-col items-center gap-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center">
-                            <i class="fas fa-paw text-white text-3xl"></i>
+                            <i class="fas fa-scroll text-white text-3xl"></i>
                         </div>
                         <div>
                             <h2 class="main-title font-black mb-4 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
-                                Avaliação do Mascote
+                                Avaliação do Cordel
                             </h2>
                             <p class="text-lg text-gray-300 font-medium">
                                 Avalie cada critério com notas de 0 a 100 pontos
@@ -486,18 +486,18 @@ $select = new select_model();
                         </div>
                         
                         <div class="criteria-grid">
-                            <!-- Animação -->
+                            <!-- Adequação ao Tema -->
                             <div class="criteria-item">
-                                <div class="criteria-icon bg-gradient-to-br from-yellow-500 to-orange-600">
-                                    <i class="fas fa-bolt"></i>
+                                <div class="criteria-icon bg-gradient-to-br from-blue-500 to-cyan-600">
+                                    <i class="fas fa-bullseye"></i>
                                 </div>
-                                <h4 class="criteria-title">Animação</h4>
-                                <p class="criteria-subtitle">Energia e carisma</p>
+                                <h4 class="criteria-title">Adequação ao Tema</h4>
+                                <p class="criteria-subtitle">Relevância e foco</p>
                                 <div class="score-input-wrapper">
                                     <input 
                                         type="number" 
-                                        id="notaAnimacao" 
-                                        name="nota_animacao" 
+                                        id="notaTema" 
+                                        name="nota_tema" 
                                         min="0" 
                                         max="100" 
                                         placeholder="0-100"
@@ -505,23 +505,23 @@ $select = new select_model();
                                         value=""
                                     >
                                 </div>
-                                <div id="displayAnimacao" class="score-display hidden">
-                                    <span id="valorAnimacao">0</span> pontos
+                                <div id="displayTema" class="score-display hidden">
+                                    <span id="valorTema">0</span> pontos
                                 </div>
                             </div>
 
-                            <!-- Vestimenta -->
+                            <!-- Estrutura do Cordel -->
                             <div class="criteria-item">
                                 <div class="criteria-icon bg-gradient-to-br from-green-500 to-emerald-600">
-                                    <i class="fas fa-tshirt"></i>
+                                    <i class="fas fa-list-ol"></i>
                                 </div>
-                                <h4 class="criteria-title">Vestimenta</h4>
-                                <p class="criteria-subtitle">Criatividade visual</p>
+                                <h4 class="criteria-title">Estrutura do Cordel</h4>
+                                <p class="criteria-subtitle">Métrica e rimas</p>
                                 <div class="score-input-wrapper">
                                     <input 
                                         type="number" 
-                                        id="notaVestimenta" 
-                                        name="nota_vestimenta" 
+                                        id="notaEstrutura" 
+                                        name="nota_estrutura" 
                                         min="0" 
                                         max="100" 
                                         placeholder="0-100"
@@ -529,23 +529,23 @@ $select = new select_model();
                                         value=""
                                     >
                                 </div>
-                                <div id="displayVestimenta" class="score-display hidden">
-                                    <span id="valorVestimenta">0</span> pontos
+                                <div id="displayEstrutura" class="score-display hidden">
+                                    <span id="valorEstrutura">0</span> pontos
                                 </div>
                             </div>
 
-                            <!-- Identidade -->
+                            <!-- Declamação -->
                             <div class="criteria-item">
-                                <div class="criteria-icon bg-gradient-to-br from-blue-500 to-purple-600">
-                                    <i class="fas fa-id-badge"></i>
+                                <div class="criteria-icon bg-gradient-to-br from-red-500 to-pink-600">
+                                    <i class="fas fa-microphone"></i>
                                 </div>
-                                <h4 class="criteria-title">Identidade</h4>
-                                <p class="criteria-subtitle">Conexão com curso</p>
+                                <h4 class="criteria-title">Declamação</h4>
+                                <p class="criteria-subtitle">Performance oral</p>
                                 <div class="score-input-wrapper">
                                     <input 
                                         type="number" 
-                                        id="notaIdentidade" 
-                                        name="nota_identidade" 
+                                        id="notaDeclamacao" 
+                                        name="nota_declamacao" 
                                         min="0" 
                                         max="100" 
                                         placeholder="0-100"
@@ -553,14 +553,62 @@ $select = new select_model();
                                         value=""
                                     >
                                 </div>
-                                <div id="displayIdentidade" class="score-display hidden">
-                                    <span id="valorIdentidade">0</span> pontos
+                                <div id="displayDeclamacao" class="score-display hidden">
+                                    <span id="valorDeclamacao">0</span> pontos
+                                </div>
+                            </div>
+
+                            <!-- Criatividade e Originalidade -->
+                            <div class="criteria-item">
+                                <div class="criteria-icon bg-gradient-to-br from-yellow-500 to-orange-600">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <h4 class="criteria-title">Criatividade</h4>
+                                <p class="criteria-subtitle">Originalidade</p>
+                                <div class="score-input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="notaCriatividade" 
+                                        name="nota_criatividade" 
+                                        min="0" 
+                                        max="100" 
+                                        placeholder="0-100"
+                                        class="score-input"
+                                        value=""
+                                    >
+                                </div>
+                                <div id="displayCriatividade" class="score-display hidden">
+                                    <span id="valorCriatividade">0</span> pontos
+                                </div>
+                            </div>
+
+                            <!-- Apresentação Impressa -->
+                            <div class="criteria-item">
+                                <div class="criteria-icon bg-gradient-to-br from-purple-500 to-violet-600">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <h4 class="criteria-title">Apresentação Impressa</h4>
+                                <p class="criteria-subtitle">Qualidade visual</p>
+                                <div class="score-input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="notaApresentacao" 
+                                        name="nota_apresentacao" 
+                                        min="0" 
+                                        max="100" 
+                                        placeholder="0-100"
+                                        class="score-input"
+                                        value=""
+                                    >
+                                </div>
+                                <div id="displayApresentacao" class="score-display hidden">
+                                    <span id="valorApresentacao">0</span> pontos
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Painel de Pontuação Total - Simplificado -->
+                    <!-- Painel de Pontuação Total -->
                     <div id="pontosPainel" class="mt-8 hidden slide-up">
                         <div class="stats-card rounded-xl p-4 text-center max-w-sm mx-auto">
                             <div class="flex items-center justify-center gap-2 mb-3">
@@ -572,7 +620,7 @@ $select = new select_model();
                             </p>
                             <div class="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg p-3">
                                 <p class="text-2xl font-black text-black">
-                                    <span id="pontosTotais">0</span> / 300
+                                    <span id="pontosTotais">0</span> / 500
                                 </p>
                                 <p class="text-xs font-medium text-black opacity-75">
                                     Média: <span id="mediaPontos">0.0</span>
@@ -602,17 +650,17 @@ $select = new select_model();
     </main>
 
     <!-- Tela de Sucesso -->
-    <div id="sucessoMascote" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm p-4">
+    <div id="sucessoCordel" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm p-4">
         <div class="card-bg rounded-3xl p-8 w-full max-w-md text-center fade-in">
             <div class="flex flex-col items-center gap-4 mb-6">
                 <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center pulse-glow">
                     <i class="fas fa-check-circle text-white text-4xl"></i>
                 </div>
                 <h2 class="text-2xl font-extrabold text-green-400 mb-2">Avaliação Registrada!</h2>
-                <p class="text-lg text-gray-200">As notas do mascote foram computadas com sucesso.</p>
+                <p class="text-lg text-gray-200">As notas do cordel foram computadas com sucesso.</p>
                 <div class="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl p-3 mt-2">
                     <p class="text-xl font-black text-black">
-                        Total: <span id="pontosFinal">0</span> / 300 pontos
+                        Total: <span id="pontosFinal">0</span> / 500 pontos
                     </p>
                 </div>
             </div>
@@ -625,31 +673,39 @@ $select = new select_model();
     <script>
         // Aguardar o DOM carregar completamente
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('mascoteForm');
+            const form = document.getElementById('cordelForm');
             const pontosPainel = document.getElementById('pontosPainel');
             const voltarButton = document.getElementById('voltarButton');
             
             // Elementos dos inputs
-            const notaAnimacao = document.getElementById('notaAnimacao');
-            const notaVestimenta = document.getElementById('notaVestimenta');
-            const notaIdentidade = document.getElementById('notaIdentidade');
+            const notaTema = document.getElementById('notaTema');
+            const notaEstrutura = document.getElementById('notaEstrutura');
+            const notaDeclamacao = document.getElementById('notaDeclamacao');
+            const notaCriatividade = document.getElementById('notaCriatividade');
+            const notaApresentacao = document.getElementById('notaApresentacao');
             const cursoInput = document.getElementById('cursoInput');
             
             // Elementos de display
-            const displayAnimacao = document.getElementById('displayAnimacao');
-            const displayVestimenta = document.getElementById('displayVestimenta');
-            const displayIdentidade = document.getElementById('displayIdentidade');
-            const valorAnimacao = document.getElementById('valorAnimacao');
-            const valorVestimenta = document.getElementById('valorVestimenta');
-            const valorIdentidade = document.getElementById('valorIdentidade');
+            const displayTema = document.getElementById('displayTema');
+            const displayEstrutura = document.getElementById('displayEstrutura');
+            const displayDeclamacao = document.getElementById('displayDeclamacao');
+            const displayCriatividade = document.getElementById('displayCriatividade');
+            const displayApresentacao = document.getElementById('displayApresentacao');
+            const valorTema = document.getElementById('valorTema');
+            const valorEstrutura = document.getElementById('valorEstrutura');
+            const valorDeclamacao = document.getElementById('valorDeclamacao');
+            const valorCriatividade = document.getElementById('valorCriatividade');
+            const valorApresentacao = document.getElementById('valorApresentacao');
             const pontosTotais = document.getElementById('pontosTotais');
             const mediaPontos = document.getElementById('mediaPontos');
             const cursoSelecionado = document.getElementById('cursoSelecionado');
 
             // Garantir que os inputs começem vazios
-            notaAnimacao.value = '';
-            notaVestimenta.value = '';
-            notaIdentidade.value = '';
+            notaTema.value = '';
+            notaEstrutura.value = '';
+            notaDeclamacao.value = '';
+            notaCriatividade.value = '';
+            notaApresentacao.value = '';
 
             // Função para validar nota
             function validarNota(input, valor) {
@@ -680,18 +736,20 @@ $select = new select_model();
 
             // Função para calcular e atualizar pontuação total
             function atualizarPontuacaoTotal() {
-                const animacao = notaAnimacao.value !== '' ? parseInt(notaAnimacao.value) || 0 : 0;
-                const vestimenta = notaVestimenta.value !== '' ? parseInt(notaVestimenta.value) || 0 : 0;
-                const identidade = notaIdentidade.value !== '' ? parseInt(notaIdentidade.value) || 0 : 0;
+                const tema = notaTema.value !== '' ? parseInt(notaTema.value) || 0 : 0;
+                const estrutura = notaEstrutura.value !== '' ? parseInt(notaEstrutura.value) || 0 : 0;
+                const declamacao = notaDeclamacao.value !== '' ? parseInt(notaDeclamacao.value) || 0 : 0;
+                const criatividade = notaCriatividade.value !== '' ? parseInt(notaCriatividade.value) || 0 : 0;
+                const apresentacao = notaApresentacao.value !== '' ? parseInt(notaApresentacao.value) || 0 : 0;
                 
-                const total = animacao + vestimenta + identidade;
-                const media = total > 0 ? total / 3 : 0;
+                const total = tema + estrutura + declamacao + criatividade + apresentacao;
+                const media = total > 0 ? total / 5 : 0;
                 
                 pontosTotais.textContent = total;
                 mediaPontos.textContent = media.toFixed(1);
                 
                 // Mostrar painel se houver pelo menos uma nota e curso selecionado
-                if ((animacao > 0 || vestimenta > 0 || identidade > 0) && cursoInput.value) {
+                if ((tema > 0 || estrutura > 0 || declamacao > 0 || criatividade > 0 || apresentacao > 0) && cursoInput.value) {
                     pontosPainel.classList.remove('hidden');
                     const cursoTexto = cursoInput.options[cursoInput.selectedIndex].text;
                     cursoSelecionado.textContent = cursoTexto;
@@ -701,16 +759,24 @@ $select = new select_model();
             }
 
             // Event listeners para os inputs de nota
-            notaAnimacao.addEventListener('input', function() {
-                atualizarDisplayNota(this, displayAnimacao, valorAnimacao);
+            notaTema.addEventListener('input', function() {
+                atualizarDisplayNota(this, displayTema, valorTema);
             });
 
-            notaVestimenta.addEventListener('input', function() {
-                atualizarDisplayNota(this, displayVestimenta, valorVestimenta);
+            notaEstrutura.addEventListener('input', function() {
+                atualizarDisplayNota(this, displayEstrutura, valorEstrutura);
             });
 
-            notaIdentidade.addEventListener('input', function() {
-                atualizarDisplayNota(this, displayIdentidade, valorIdentidade);
+            notaDeclamacao.addEventListener('input', function() {
+                atualizarDisplayNota(this, displayDeclamacao, valorDeclamacao);
+            });
+
+            notaCriatividade.addEventListener('input', function() {
+                atualizarDisplayNota(this, displayCriatividade, valorCriatividade);
+            });
+
+            notaApresentacao.addEventListener('input', function() {
+                atualizarDisplayNota(this, displayApresentacao, valorApresentacao);
             });
 
             // Event listener para o curso
@@ -719,7 +785,7 @@ $select = new select_model();
             });
 
             // Validação em tempo real para limitar valores
-            [notaAnimacao, notaVestimenta, notaIdentidade].forEach(input => {
+            [notaTema, notaEstrutura, notaDeclamacao, notaCriatividade, notaApresentacao].forEach(input => {
                 input.addEventListener('keypress', function(e) {
                     // Permitir apenas números
                     if (!/[0-9]/.test(String.fromCharCode(e.which))) {
@@ -744,9 +810,11 @@ $select = new select_model();
                 e.preventDefault();
                 
                 const cursoValue = cursoInput.value;
-                const animacao = notaAnimacao.value !== '' ? parseInt(notaAnimacao.value) || 0 : 0;
-                const vestimenta = notaVestimenta.value !== '' ? parseInt(notaVestimenta.value) || 0 : 0;
-                const identidade = notaIdentidade.value !== '' ? parseInt(notaIdentidade.value) || 0 : 0;
+                const tema = notaTema.value !== '' ? parseInt(notaTema.value) || 0 : 0;
+                const estrutura = notaEstrutura.value !== '' ? parseInt(notaEstrutura.value) || 0 : 0;
+                const declamacao = notaDeclamacao.value !== '' ? parseInt(notaDeclamacao.value) || 0 : 0;
+                const criatividade = notaCriatividade.value !== '' ? parseInt(notaCriatividade.value) || 0 : 0;
+                const apresentacao = notaApresentacao.value !== '' ? parseInt(notaApresentacao.value) || 0 : 0;
                 
                 if (!cursoValue) {
                     alert('Por favor, selecione o curso.');
@@ -754,14 +822,14 @@ $select = new select_model();
                     return;
                 }
                 
-                if (animacao === 0 && vestimenta === 0 && identidade === 0) {
+                if (tema === 0 && estrutura === 0 && declamacao === 0 && criatividade === 0 && apresentacao === 0) {
                     alert('Por favor, preencha pelo menos uma nota.');
-                    notaAnimacao.focus();
+                    notaTema.focus();
                     return;
                 }
                 
                 // Validar se todas as notas preenchidas estão no range correto
-                const inputs = [notaAnimacao, notaVestimenta, notaIdentidade];
+                const inputs = [notaTema, notaEstrutura, notaDeclamacao, notaCriatividade, notaApresentacao];
                 for (let input of inputs) {
                     if (input.value !== '' && !validarNota(input, parseInt(input.value))) {
                         alert('Por favor, digite notas válidas entre 0 e 100.');
@@ -771,13 +839,13 @@ $select = new select_model();
                 }
                 
                 // Atualizar pontuação final
-                const total = animacao + vestimenta + identidade;
+                const total = tema + estrutura + declamacao + criatividade + apresentacao;
                 document.getElementById('pontosFinal').textContent = total;
                 
                 // Mostrar tela de sucesso
                 form.style.display = 'none';
                 voltarButton.classList.add('hidden');
-                document.getElementById('sucessoMascote').classList.remove('hidden');
+                document.getElementById('sucessoCordel').classList.remove('hidden');
             });
 
             // Função global para reset
@@ -791,24 +859,28 @@ $select = new select_model();
                 pontosPainel.classList.add('hidden');
                 
                 // Limpar valores dos inputs explicitamente
-                notaAnimacao.value = '';
-                notaVestimenta.value = '';
-                notaIdentidade.value = '';
+                notaTema.value = '';
+                notaEstrutura.value = '';
+                notaDeclamacao.value = '';
+                notaCriatividade.value = '';
+                notaApresentacao.value = '';
                 
                 // Esconder displays de nota
-                displayAnimacao.classList.add('hidden');
-                displayVestimenta.classList.add('hidden');
-                displayIdentidade.classList.add('hidden');
+                displayTema.classList.add('hidden');
+                displayEstrutura.classList.add('hidden');
+                displayDeclamacao.classList.add('hidden');
+                displayCriatividade.classList.add('hidden');
+                displayApresentacao.classList.add('hidden');
                 
                 // Remover classes de validação
-                [notaAnimacao, notaVestimenta, notaIdentidade].forEach(input => {
+                [notaTema, notaEstrutura, notaDeclamacao, notaCriatividade, notaApresentacao].forEach(input => {
                     input.classList.remove('valid', 'invalid');
                 });
             };
 
             // Função global para fechar sucesso
             window.fecharSucesso = function() {
-                document.getElementById('sucessoMascote').classList.add('hidden');
+                document.getElementById('sucessoCordel').classList.add('hidden');
                 resetForm();
             };
         });
