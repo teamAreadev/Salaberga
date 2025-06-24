@@ -27,4 +27,9 @@ class connect
             die('Erro! O sistema não possui conexão com o banco de dados.');
         }
     }
+
+    public function getConnection()
+    {
+        return $this->connect;
+    }
 }
