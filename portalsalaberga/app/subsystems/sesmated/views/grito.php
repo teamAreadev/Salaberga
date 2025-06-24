@@ -550,13 +550,7 @@ if (isset($_GET['confirmado'])) {
                     </div>
                 </div>
 
-                <!-- Botão para Voltar -->
-                <div id="voltarButton" class="mt-8 hidden">
-                    <button onclick="resetForm()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2 mx-auto">
-                        <i class="fas fa-arrow-left"></i>
-                        Voltar ao Formulário
-                    </button>
-                </div>
+          
             </div>
         </div>
     </main>

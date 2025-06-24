@@ -607,13 +607,7 @@ $select = new select_model();
                     </button>
                 </div>
 
-                <!-- Botão Voltar para Dashboard -->
-                <div class="mt-8">
-                    <a href="abertura.php" class="btn-secondary btn-responsive font-semibold text-gray-300 flex items-center justify-center gap-2 mx-auto hover:scale-105 transition-transform">
-                        <i class="fas fa-arrow-left"></i>
-                        Voltar para o Dashboard
-                    </a>
-                </div>
+              
             </div>
         </div>
     </main>
