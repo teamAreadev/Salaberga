@@ -1,41 +1,86 @@
 <?php
-require_once '../../../entradasaida/app/main/config/Database.php';
-$database = new connect();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Conexão direta PDO (sem require externo)
+function getPDOConnection() {
+    try {
+        $HOST = 'localhost';
+        $DATABASE = 'entradasaida';
+        $USER = 'root';
+        $PASSWORD = '';
+        return new PDO('mysql:host=' . $HOST . ';dbname=' . $DATABASE, $USER, $PASSWORD);
+    } catch (PDOException $e) {
+        $HOST = 'localhost';
+        $DATABASE = 'u750204740_entradasaida';
+        $USER = 'u750204740_entradasaida';
+        $PASSWORD = 'paoComOvo123!@##';
+        try {
+            return new PDO('mysql:host=' . $HOST . ';dbname=' . $DATABASE, $USER, $PASSWORD);
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+}
+
+$pdo = getPDOConnection();
+if (!$pdo) {
+    if (isset($_GET['action'])) {
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'Erro de conexão com o banco de dados']);
+        exit;
+    } else {
+        die('Erro de conexão com o banco de dados');
+    }
+}
 
 if (isset($_GET['action']) && $_GET['action'] === 'get_courses') {
     header('Content-Type: application/json');
-    $stmt = $database->getConnection()->prepare("SELECT id_curso, curso FROM curso WHERE curso <> ''");
-    $stmt->execute();
-    $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    echo json_encode($cursos);
+    try {
+        $stmt = $pdo->prepare("SELECT id_curso, curso FROM curso WHERE curso <> ''");
+        $stmt->execute();
+        $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($cursos);
+    } catch (Exception $e) {
+        echo json_encode([]);
+    }
     exit;
 }
 
 if (isset($_GET['action']) && $_GET['action'] === 'get_students') {
     header('Content-Type: application/json');
     $curso_id = intval($_GET['curso_id'] ?? 0);
-    $stmt = $database->getConnection()->prepare("SELECT id_aluno, nome, matricula FROM aluno WHERE id_curso = ?");
-    $stmt->execute([$curso_id]);
-    $alunos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    echo json_encode($alunos);
+    try {
+        $stmt = $pdo->prepare("SELECT id_aluno, nome, matricula FROM aluno WHERE id_curso = ?");
+        $stmt->execute([$curso_id]);
+        $alunos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($alunos);
+    } catch (Exception $e) {
+        echo json_encode([]);
+    }
     exit;
 }
 
 if (isset($_GET['action']) && $_GET['action'] === 'get_events') {
     header('Content-Type: application/json');
-    $stmt = $database->getConnection()->prepare("SELECT id_evento AS id, nome, tipo, data_evento, horario_inicio, horario_fim, local FROM evento");
-    $stmt->execute();
-    $eventos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $eventos_formatados = array_map(function($evento) {
-        return [
-            'id' => $evento['id'],
-            'nome' => $evento['nome'],
-            'tipo' => $evento['tipo'],
-            'horario' => date('d/m/Y', strtotime($evento['data_evento'])) . ', ' . substr($evento['horario_inicio'], 0, 5) . ' às ' . substr($evento['horario_fim'], 0, 5),
-            'local' => $evento['local']
-        ];
-    }, $eventos);
-    echo json_encode($eventos_formatados);
+    try {
+        $stmt = $pdo->prepare("SELECT id_evento AS id, nome, tipo, data_evento, horario_inicio, horario_fim, local FROM evento");
+        $stmt->execute();
+        $eventos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $eventos_formatados = array_map(function($evento) {
+            return [
+                'id' => $evento['id'],
+                'nome' => $evento['nome'],
+                'tipo' => $evento['tipo'],
+                'horario' => date('d/m/Y', strtotime($evento['data_evento'])) . ', ' . substr($evento['horario_inicio'], 0, 5) . ' às ' . substr($evento['horario_fim'], 0, 5),
+                'local' => $evento['local']
+            ];
+        }, $eventos);
+        echo json_encode($eventos_formatados);
+    } catch (Exception $e) {
+        echo json_encode([]);
+    }
     exit;
 }
 
@@ -48,11 +93,15 @@ if (isset($_GET['action']) && $_GET['action'] === 'save_attendance') {
     }
     $evento_id = intval($data['evento_id']);
     $presencas = $data['presencas'];
-    foreach ($presencas as $id_aluno => $presente) {
-        $stmt = $database->getConnection()->prepare("INSERT INTO frequencia_sesmated (id_aluno, presente, id_evento) VALUES (?, ?, ?)");
-        $stmt->execute([intval($id_aluno), $presente ? 1 : 0, $evento_id]);
+    try {
+        foreach ($presencas as $id_aluno => $presente) {
+            $stmt = $pdo->prepare("INSERT INTO frequencia_sesmated (id_aluno, presente, id_evento) VALUES (?, ?, ?)");
+            $stmt->execute([intval($id_aluno), $presente ? 1 : 0, $evento_id]);
+        }
+        echo json_encode(['success' => true]);
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => 'Erro ao salvar frequência']);
     }
-    echo json_encode(['success' => true]);
     exit;
 }
 
@@ -856,7 +905,15 @@ header('Content-Type: text/html; charset=UTF-8');
         // Load courses from PHP
         function loadCourses() {
             fetch('index.php?action=get_courses')
-                .then(response => response.json())
+                .then(response => response.text())
+                .then(text => {
+                    if (!text) throw new Error('Resposta vazia do servidor');
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('JSON inválido');
+                    }
+                })
                 .then(data => {
                     courses = data;
                     populateCourseSelect();
@@ -870,7 +927,15 @@ header('Content-Type: text/html; charset=UTF-8');
         // Load events from PHP
         function loadEvents() {
             fetch('index.php?action=get_events')
-                .then(response => response.json())
+                .then(response => response.text())
+                .then(text => {
+                    if (!text) throw new Error('Resposta vazia do servidor');
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('JSON inválido');
+                    }
+                })
                 .then(data => {
                     events = data;
                     populateEvents();
@@ -980,7 +1045,15 @@ header('Content-Type: text/html; charset=UTF-8');
         // Load students for selected course
         function loadStudentsForCourse(cursoId) {
             fetch('index.php?action=get_students&curso_id=' + cursoId)
-                .then(response => response.json())
+                .then(response => response.text())
+                .then(text => {
+                    if (!text) throw new Error('Resposta vazia do servidor');
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('JSON inválido');
+                    }
+                })
                 .then(data => {
                     allStudents = data;
                     students = data;
@@ -1007,7 +1080,15 @@ header('Content-Type: text/html; charset=UTF-8');
         // Load students for selected event
         function loadStudentsForEvent() {
             fetch('index.php?action=get_students&curso_id=' + selectedCourse)
-                .then(response => response.json())
+                .then(response => response.text())
+                .then(text => {
+                    if (!text) throw new Error('Resposta vazia do servidor');
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('JSON inválido');
+                    }
+                })
                 .then(data => {
                     allStudents = data;
                     students = data;
@@ -1111,7 +1192,15 @@ header('Content-Type: text/html; charset=UTF-8');
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(attendanceData)
             })
-            .then(response => response.json())
+            .then(response => response.text())
+            .then(text => {
+                if (!text) throw new Error('Resposta vazia do servidor');
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    throw new Error('JSON inválido');
+                }
+            })
             .then(data => {
                 if (data.success) {
                     document.getElementById('successMessage').style.display = 'flex';
