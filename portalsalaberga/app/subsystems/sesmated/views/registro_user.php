@@ -1,63 +1,3 @@
-<?php
-session_start();
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome = trim($_POST['nome'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    
-    $errors = [];
-    
-    if (empty($nome)) {
-        $errors[] = "Nome é obrigatório";
-    }
-    
-    if (empty($email)) {
-        $errors[] = "Email é obrigatório";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Email inválido";
-    }
-    
-    if (empty($_POST['data'])) {
-        $errors[] = "Data de nascimento é obrigatória";
-    }
-    
-    if (empty($_POST['turno'])) {
-        $errors[] = "Turno é obrigatório";
-    }
-    
-    if (empty($errors)) {
-        $usuarios = json_decode(file_get_contents('usuarios.json') ?? '[]', true);
-        
-        $emailExiste = false;
-        foreach ($usuarios as $usuario) {
-            if ($usuario['email'] === $email) {
-                $emailExiste = true;
-                break;
-            }
-        }
-        
-        if ($emailExiste) {
-            $errors[] = "Este email já está cadastrado";
-        } else {
-            $novoUsuario = [
-                'id' => uniqid(),
-                'nome' => $nome,
-                'email' => $email,
-                'data_nascimento' => $_POST['data'],
-                'turno' => $_POST['turno'],
-                'data_cadastro' => date('Y-m-d H:i:s')
-            ];
-            
-            $usuarios[] = $novoUsuario;
-            file_put_contents('usuarios.json', json_encode($usuarios, JSON_PRETTY_PRINT));
-            
-            $_SESSION['success'] = "Usuário cadastrado com sucesso!";
-            $_SESSION['usuario'] = $novoUsuario;
-        }
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -272,7 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="form-section form-container px-8 py-8">
-                <?php if (!empty($errors)): ?>
+                <?php if (isset($_GET['error'])): ?>
                     <div class="alert-error px-5 py-4 rounded-xl mb-6">
                         <div class="flex items-start">
                             <div class="flex-shrink-0">
@@ -281,16 +221,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="ml-3">
                                 <h3 class="text-sm font-medium mb-1">Erro no cadastro</h3>
                                 <div class="text-sm opacity-90">
-                                    <?php foreach ($errors as $error): ?>
-                                        <p class="mb-1"><?php echo htmlspecialchars($error); ?></p>
-                                    <?php endforeach; ?>
+                                    <p class="mb-1"><?php echo htmlspecialchars($_GET['error']); ?></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 <?php endif; ?>
 
-                <?php if (isset($_SESSION['success'])): ?>
+                <?php if (isset($_GET['success'])): ?>
                     <div class="alert-success px-5 py-4 rounded-xl mb-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
@@ -298,13 +236,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             <div class="ml-3">
                                 <h3 class="text-sm font-medium mb-1">Sucesso!</h3>
-                                <p class="text-sm opacity-90"><?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?></p>
+                                <p class="text-sm opacity-90"><?php echo htmlspecialchars($_GET['success']); ?></p>
                             </div>
                         </div>
                     </div>
                 <?php endif; ?>
 
-                <form method="POST" id="registerForm" class="space-y-6">
+                <form action="../controllers/controller_main.php" method="POST" id="registerForm" class="space-y-6">
                     <div class="input-group">
                         <label for="nome" class="block text-sm font-semibold mb-3 text-gray-200">
                             Nome Completo
@@ -370,6 +308,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </button>
                 </form>
 
+                <a href="./relatorios/avaliadores/avaliadores.php"
+                   class="block w-full text-center mt-6 py-3 px-6 rounded-xl font-semibold text-sm transition-all duration-200
+                          bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white shadow-md
+                          hover:from-green-500 hover:to-green-700 hover:text-white hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400">
+                   <i class="fas fa-sign-in-alt mr-2"></i>
+                    Gerar relatório
+                </a>
                 <div class="my-8">
                     <div class="divider"></div>
                 </div>
