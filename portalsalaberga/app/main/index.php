@@ -1112,7 +1112,7 @@
                                class="block text-ghibli-forest hover:text-ghibli-coral transition-all duration-300 font-ghibli">
                                 <i class="fas fa-sign-in-alt mr-3"></i>Login Principal
                             </a>
-                            <a href="../main/views/autenticacao/login_sesmated.php" 
+                            <a href="" 
                                class="block text-ghibli-forest hover:text-ghibli-coral transition-all duration-300 font-ghibli">
                                 <i class="fas fa-user-plus mr-3"></i>Login sesmated
                             </a>
