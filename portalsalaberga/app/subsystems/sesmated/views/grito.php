@@ -1,6 +1,18 @@
 <?php
 require_once('../models/select.model.php');
 $select = new select_model();
+
+// Mensagem de status
+$status = '';
+if (isset($_GET['confirmado'])) {
+    $status = 'sucesso';
+} elseif (isset($_GET['erro'])) {
+    $status = 'erro';
+} elseif (isset($_GET['ja_confirmado'])) {
+    $status = 'ja_confirmado';
+} elseif (isset($_GET['empty'])) {
+    $status = 'empty';
+}
 ?>
 
 <!DOCTYPE html>
@@ -312,6 +324,37 @@ $select = new select_model();
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, #00a040, #ff9500);
         }
+        
+        .nova-votacao-btn {
+            background: linear-gradient(90deg, #ffe29f 0%, #00b348 100%);
+            color: #181818;
+            font-weight: 700;
+            font-size: 1.08rem;
+            border: none;
+            border-radius: 1.1rem;
+            padding: 0.65rem 1.7rem;
+            box-shadow: 0 3px 14px rgba(0,179,72,0.13), 0 1px 4px rgba(255,183,51,0.10);
+            transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+            cursor: pointer;
+            outline: none;
+        }
+        .nova-votacao-btn:hover, .nova-votacao-btn:focus {
+            background: linear-gradient(90deg, #00b348 0%, #ffe29f 100%);
+            color: #fff;
+            transform: scale(1.04) translateY(-1px);
+            box-shadow: 0 6px 18px rgba(0,179,72,0.16), 0 1.5px 6px rgba(255,183,51,0.12);
+        }
+        .nova-votacao-btn .icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15em;
+            animation: rotateIcon 1.2s linear infinite;
+        }
+        @keyframes rotateIcon {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -344,7 +387,7 @@ $select = new select_model();
             <div class="card-bg rounded-3xl p-8 sm:p-12 max-w-2xl w-full text-center fade-in">
                 
                 <!-- Formulário Principal -->
-                <form action="../controllers/controller_grito.php" method="post" class="space-y-8">
+                <form id="gritoForm" action="../controllers/controller_grito.php" method="post" class="space-y-8">
                     <div class="flex flex-col items-center gap-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center">
                             <i class="fas fa-bullhorn text-white text-3xl"></i>
@@ -365,7 +408,7 @@ $select = new select_model();
                             <i class="fas fa-graduation-cap mr-2"></i>Curso
                         </label>
                         <div class="select-wrapper">
-                            <select name="curso" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
+                            <select id="cursoInput" name="curso" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
                                 <option value="" selected disabled>Selecione o curso</option>
                                 <?php
                                 $dados = $select->select_curso();
@@ -458,6 +501,40 @@ $select = new select_model();
         </div>
     </main>
 
+    <!-- Tela de Sucesso -->
+    <div id="sucessoGrito" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm p-4">
+        <div class="card-bg rounded-3xl p-8 w-full max-w-md text-center fade-in">
+            <div class="flex flex-col items-center gap-4 mb-6">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center pulse-glow">
+                    <i class="fas fa-check-circle text-white text-4xl"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-green-400 mb-2">Voto Registrado!</h2>
+                <p class="text-lg text-gray-200">O status do grito de guerra foi computado com sucesso.</p>
+            </div>
+            <button onclick="fecharSucesso()" class="nova-votacao-btn flex items-center justify-center gap-3 mx-auto mt-6">
+                <span class="icon-wrapper"><i class="fas fa-arrow-rotate-left"></i></span>
+                <span class="font-extrabold text-lg tracking-wide">Nova Votação</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Tela de Já Confirmado -->
+    <div id="jaConfirmadoGrito" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm p-4">
+        <div class="card-bg rounded-3xl p-8 w-full max-w-md text-center fade-in">
+            <div class="flex flex-col items-center gap-4 mb-6">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center pulse-glow">
+                    <i class="fas fa-exclamation-triangle text-white text-4xl"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-yellow-400 mb-2">Já Confirmado!</h2>
+                <p class="text-lg text-gray-200">O grito de guerra deste curso já foi registrado anteriormente.</p>
+            </div>
+            <button onclick="fecharJaConfirmado()" class="nova-votacao-btn flex items-center justify-center gap-3 mx-auto mt-6">
+                <span class="icon-wrapper"><i class="fas fa-arrow-rotate-left"></i></span>
+                <span class="font-extrabold text-lg tracking-wide">Nova Votação</span>
+            </button>
+        </div>
+    </div>
+
     <script>
         const form = document.getElementById('gritoForm');
         const painelGrito = document.getElementById('painelGrito');
@@ -486,43 +563,6 @@ $select = new select_model();
             element.querySelector('input[type="radio"]').checked = true;
         }
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const selectedValue = form.grito.value;
-            const cursoValue = document.getElementById('cursoInput').value;
-            
-            // Validação do curso
-            if (!cursoValue) {
-                alert('Por favor, selecione o curso.');
-                document.getElementById('cursoInput').focus();
-                return;
-            }
-            
-            // Atualiza o nome do curso nos painéis
-            const cursoNome = cursosNomes[cursoValue];
-            document.getElementById('cursoSelecionado').textContent = cursoNome;
-            document.getElementById('cursoSelecionadoPendente').textContent = cursoNome;
-            
-            // Esconde o formulário
-            form.style.display = 'none';
-            voltarButton.classList.remove('hidden');
-            
-            if (selectedValue === 'sim') {
-                painelGrito.classList.remove('hidden');
-                painelNaoGrito.classList.add('hidden');
-                
-                // Adiciona efeito de confete (opcional)
-                setTimeout(() => {
-                    createConfetti();
-                }, 500);
-                
-            } else if (selectedValue === 'nao') {
-                painelGrito.classList.add('hidden');
-                painelNaoGrito.classList.remove('hidden');
-            }
-        });
-
         function resetForm() {
             // Mostra o formulário novamente
             form.style.display = 'block';
@@ -539,44 +579,36 @@ $select = new select_model();
             });
         }
 
-        // Efeito de confete simples (opcional)
-        function createConfetti() {
-            const colors = ['#00b348', '#ffb733', '#10b981', '#f59e0b'];
-            const confettiCount = 50;
-            
-            for (let i = 0; i < confettiCount; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.style.position = 'fixed';
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.top = '-10px';
-                    confetti.style.width = '10px';
-                    confetti.style.height = '10px';
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.borderRadius = '50%';
-                    confetti.style.pointerEvents = 'none';
-                    confetti.style.zIndex = '9999';
-                    confetti.style.animation = 'fall 3s linear forwards';
-                    
-                    document.body.appendChild(confetti);
-                    
-                    setTimeout(() => {
-                        confetti.remove();
-                    }, 3000);
-                }, i * 50);
-            }
-        }
+        // Função global para fechar sucesso
+        window.fecharSucesso = function() {
+            document.getElementById('sucessoGrito').classList.add('hidden');
+            resetForm();
+        };
 
-        // CSS para animação do confete
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fall {
-                to {
-                    transform: translateY(100vh) rotate(360deg);
-                }
+        // Função global para fechar já confirmado
+        window.fecharJaConfirmado = function() {
+            document.getElementById('jaConfirmadoGrito').classList.add('hidden');
+            resetForm();
+        };
+
+        // Exibir mensagem de acordo com o status da URL
+        document.addEventListener('DOMContentLoaded', function() {
+            var status = '<?php echo $status; ?>';
+            if (status === 'sucesso') {
+                document.getElementById('sucessoGrito').classList.remove('hidden');
+                form.style.display = 'none';
+                voltarButton.classList.add('hidden');
+                setTimeout(() => { createConfetti(); }, 500);
+            } else if (status === 'erro') {
+                showNotification('Ocorreu um erro ao registrar o voto. Tente novamente.', 'error');
+            } else if (status === 'ja_confirmado') {
+                document.getElementById('jaConfirmadoGrito').classList.remove('hidden');
+                form.style.display = 'none';
+                voltarButton.classList.add('hidden');
+            } else if (status === 'empty') {
+                showNotification('Preencha todos os campos obrigatórios.', 'error');
             }
-        `;
-        document.head.appendChild(style);
+        });
     </script>
 </body>
 </html>

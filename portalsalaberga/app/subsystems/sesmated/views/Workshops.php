@@ -135,23 +135,97 @@
         select.input-field option {
             color: #222 !important;
         }
+
+        /* ===== HEADER NOVO - INÍCIO ===== */
+        .container-responsive {
+            width: 100%;
+            max-width: none;
+            padding: 0 clamp(1rem, 4vw, 2rem);
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+        }
+        .header-title-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .header-title-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        .user-chip {
+            background: linear-gradient(145deg, #232d25 0%, #181f1a 100%);
+            border: 1px solid #1f3a26;
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: clamp(0.75rem, 2vw, 0.875rem);
+            font-weight: 600;
+            color: #e5e7eb;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
+        }
+        .user-chip-desktop {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        @media (max-width: 640px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .user-chip-desktop {
+                position: relative;
+                top: auto;
+                right: auto;
+            }
+            .header-title-section {
+                align-items: center;
+            }
+        }
+        /* Títulos responsivos */
+        .main-title {
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            line-height: 1.2;
+        }
+        /* ===== HEADER NOVO - FIM ===== */
     </style>
 </head>
 <body class="min-h-screen">
     <!-- Header -->
-    <header class="header-bg sticky top-0 z-50">
-        <div class="container mx-auto px-4 sm:px-6 py-2 sm:py-3">
-            <div class="text-center">
-                <div class="flex items-center justify-center gap-2 mb-2">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
-                        <i class="fas fa-tools text-white text-lg"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
+    <header class="header-bg">
+        <div class="container-responsive py-4">
+            <div class="header-content">
+                <!-- Título e Logo Centralizados -->
+                <div class="header-title-section">
+                    <div class="header-title-row">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
+                            <i class="fas fa-tools text-white text-lg"></i>
+                        </div>
+                        <h1 class="main-title font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
                             TAREFA 10
                         </h1>
-                        <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Workshops</p>
                     </div>
+                    <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Workshops</p>
+                </div>
+                
+                <!-- Chip do Usuário - Posicionado à direita no desktop -->
+                <div class="user-chip user-chip-desktop">
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                        <i class="fas fa-user text-green-300 text-xs"></i>
+                    </div>
+                    <span class="text-gray-100">João Silva</span>
                 </div>
             </div>
         </div>

@@ -1,6 +1,8 @@
 <?php
-// Página de Tarefa 04: Logomarca SESMATED
+require_once('../models/select.model.php');
+$select = new select_model();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -14,16 +16,11 @@
             --background-color: #0a0a0a;
             --text-color: #ffffff;
             --header-color: #00b348;
-            --icon-bg: #2d2d2d;
-            --icon-shadow: rgba(0, 0, 0, 0.3);
             --accent-color: #ffb733;
-            --grid-color: #333333;
             --card-bg: rgba(30, 30, 30, 0.95);
             --header-bg: rgba(15, 15, 15, 0.98);
             --search-bar-bg: #1a1a1a;
-            --card-border-hover: var(--accent-color);
             --success-color: #10b981;
-            --warning-color: #f59e0b;
             --danger-color: #ef4444;
         }
         
@@ -49,10 +46,10 @@
         }
         
         .stats-card {
-            background: linear-gradient(145deg, rgba(30, 30, 30, 0.98) 0%, rgba(20, 20, 20, 0.98) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.8) 0%, rgba(20, 20, 20, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         
         .input-field {
@@ -65,6 +62,65 @@
             border-color: var(--accent-color);
             box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1);
             background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
+        }
+        
+        /* Estilo para inputs de nota - Responsivo */
+        .score-input-wrapper {
+            position: relative;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .score-input {
+            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            border-radius: 0.75rem;
+            padding: 0.875rem 1rem;
+            font-size: clamp(0.875rem, 2.5vw, 1rem);
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .score-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1);
+            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
+            outline: none;
+        }
+        
+        .score-input:hover {
+            border-color: rgba(255, 183, 51, 0.3);
+            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
+        }
+        
+        .score-input::placeholder {
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        /* Remove spinner arrows */
+        .score-input::-webkit-outer-spin-button,
+        .score-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        .score-input[type=number] {
+            -moz-appearance: textfield;
+        }
+        
+        /* Score validation colors */
+        .score-input.valid {
+            border-color: var(--success-color);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
+        }
+        
+        .score-input.invalid {
+            border-color: var(--danger-color);
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
         }
         
         .btn-primary {
@@ -100,13 +156,13 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 0.875rem;
+            font-size: clamp(0.75rem, 2vw, 0.875rem);
             font-weight: 600;
             color: #e5e7eb;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
         }
         
-        /* Estilo customizado para o select */
+        /* Select customizado */
         .select-wrapper {
             position: relative;
         }
@@ -142,27 +198,12 @@
             background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%) !important;
         }
         
-        select.input-field:hover {
-            border-color: rgba(255, 183, 51, 0.3) !important;
-            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%) !important;
-        }
-        
         select.input-field option {
             background-color: #232323 !important;
             color: #fff !important;
         }
         
-        select.input-field option:hover,
-        select.input-field option:focus {
-            background-color: #444 !important;
-            color: #ffb733 !important;
-        }
-        
-        select.input-field option:checked {
-            background-color: #ffb733 !important;
-            color: #181818 !important;
-        }
-        
+        /* Animações */
         .fade-in {
             animation: fadeIn 0.6s ease-in-out;
         }
@@ -190,52 +231,18 @@
             to { box-shadow: 0 8px 40px rgba(0, 179, 72, 0.5); }
         }
         
-        .points-glow {
-            animation: pointsGlow 3s ease-in-out infinite;
-        }
-        
-        @keyframes pointsGlow {
-            0%, 100% { 
-                box-shadow: 0 4px 20px rgba(255, 183, 51, 0.4);
-                transform: scale(1);
-            }
-            50% { 
-                box-shadow: 0 8px 40px rgba(255, 183, 51, 0.6);
-                transform: scale(1.05);
-            }
-        }
-        
-        /* Estilos para as medalhas de colocação */
-        .medal-1st {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #000;
-            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
-        }
-        
-        .medal-2nd {
-            background: linear-gradient(135deg, #c0c0c0 0%, #e5e5e5 100%);
-            color: #000;
-            box-shadow: 0 4px 20px rgba(192, 192, 192, 0.4);
-        }
-        
-        .medal-3rd {
-            background: linear-gradient(135deg, #cd7f32 0%, #daa520 100%);
-            color: #fff;
-            box-shadow: 0 4px 20px rgba(205, 127, 50, 0.4);
-        }
-        
-        .medal-4th, .medal-5th {
-            background: linear-gradient(135deg, var(--header-color) 0%, #00a040 100%);
-            color: #fff;
-            box-shadow: 0 4px 20px rgba(0, 179, 72, 0.3);
-        }
-        
+        /* Critérios - Layout Flexível */
         .criteria-item {
             background: linear-gradient(145deg, rgba(40, 40, 40, 0.6) 0%, rgba(30, 30, 30, 0.6) 100%);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 15px;
-            padding: 1rem;
+            border-radius: 1rem;
+            padding: clamp(1rem, 3vw, 1.5rem);
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-height: auto;
         }
         
         .criteria-item:hover {
@@ -244,32 +251,148 @@
             box-shadow: 0 8px 25px rgba(255, 183, 51, 0.1);
         }
         
-        .course-icon {
-            background: linear-gradient(145deg, rgba(50, 50, 50, 0.8) 0%, rgba(30, 30, 30, 0.8) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 0.75rem;
-            transition: all 0.3s ease;
+        .criteria-icon {
+            width: clamp(2.5rem, 8vw, 3rem);
+            height: clamp(2.5rem, 8vw, 3rem);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .criteria-icon i {
+            font-size: clamp(1rem, 4vw, 1.25rem);
+            color: white;
+        }
+        
+        .criteria-title {
+            font-size: clamp(0.875rem, 3.5vw, 1rem);
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+        
+        .criteria-subtitle {
+            font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+            color: #9ca3af;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        /* Score display */
+        .score-display {
+            background: linear-gradient(135deg, rgba(255, 183, 51, 0.15) 0%, rgba(255, 183, 51, 0.05) 100%);
+            border: 1px solid rgba(255, 183, 51, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.75rem 0.5rem;
+            margin-top: 0.75rem;
+            font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+            font-weight: 700;
+            color: var(--accent-color);
+            text-align: center;
+            width: 100%;
+        }
+        
+        /* Grid responsivo para critérios */
+        .criteria-grid {
+            display: grid;
+            gap: clamp(1rem, 3vw, 1.5rem);
+            width: 100%;
+        }
+        
+        /* Header responsivo */
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+        }
+        
+        .header-title-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
+            text-align: center;
         }
         
-        .course-icon:hover {
-            border-color: rgba(255, 183, 51, 0.3);
-            transform: translateY(-1px);
+        .header-title-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
         }
         
-        /* Melhorias de Responsividade */
+        .user-chip-desktop {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        
+        /* Responsividade aprimorada */
         @media (max-width: 640px) {
-            .header-bg { padding: 1rem 0; }
-            .card-bg { padding: 1.5rem; }
-            .user-chip { font-size: 0.75rem; padding: 0.375rem 0.75rem; }
-            .criteria-item { padding: 0.75rem; }
-            .course-icon { padding: 0.5rem; }
-            .hidden-mobile { display: none !important; }
-            .btn-primary { min-width: 140px !important; width: auto !important; font-size: 1rem; }
+            .criteria-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-bg {
+                padding: clamp(1rem, 4vw, 1.5rem);
+                margin: 0.5rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .user-chip-desktop {
+                position: relative;
+                top: auto;
+                right: auto;
+            }
+            
+            .header-title-section {
+                align-items: center;
+            }
+        }
+        
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .criteria-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1025px) {
+            .criteria-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Container responsivo */
+        .container-responsive {
+            width: 100%;
+            max-width: none;
+            padding: 0 clamp(1rem, 4vw, 2rem);
+        }
+        
+        /* Títulos responsivos */
+        .main-title {
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            line-height: 1.2;
+        }
+        
+        .section-title {
+            font-size: clamp(1rem, 4vw, 1.25rem);
+        }
+        
+        /* Botões responsivos */
+        .btn-responsive {
+            padding: clamp(0.75rem, 3vw, 1rem) clamp(1.5rem, 6vw, 2rem);
+            font-size: clamp(0.875rem, 3vw, 1rem);
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 20rem;
         }
         
         /* Scrollbar personalizada */
@@ -285,146 +408,182 @@
             background: linear-gradient(135deg, var(--header-color), var(--accent-color));
             border-radius: 4px;
         }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #00a040, #ff9500);
-        }
-
-        /* Custom select */
-        .custom-select-wrapper {
-            font-family: inherit;
-            user-select: none;
-        }
-        .custom-select-selected {
-            background: #232323;
-            color: #fff;
-            padding: 12px 16px;
-            border-radius: 12px;
-            border: 2px solid #ffb733;
-            cursor: pointer;
-        }
-        .custom-select-items {
-            position: absolute;
-            background: #232323;
-            border: 2px solid #ffb733;
-            border-top: none;
-            width: 100%;
-            z-index: 99;
-            border-radius: 0 0 12px 12px;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-        .custom-select-items div {
-            padding: 12px 16px;
-            color: #fff;
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s;
-        }
-        .custom-select-items div:hover, .custom-select-items .same-as-selected {
-            background: #ffb733;
-            color: #181818;
-        }
-        .custom-select-hide {
-            display: none;
-        }
     </style>
 </head>
 <body class="min-h-screen">
     <!-- Header -->
     <header class="header-bg sticky top-0 z-50">
-        <div class="container mx-auto px-4 sm:px-6 py-2 sm:py-3 relative">
-            <div class="flex flex-col items-start sm:items-center justify-center gap-2">
-                <div class="flex items-start sm:items-center justify-center gap-2">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
-                        <i class="fas fa-palette text-white text-lg"></i>
+        <div class="container-responsive py-4">
+            <div class="header-content">
+                <!-- Título e Logo Centralizados -->
+                <div class="header-title-section">
+                    <div class="header-title-row">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
+                            <i class="fas fa-palette text-white text-lg"></i>
+                        </div>
+                        <h1 class="main-title font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
+                            TAREFA 4
+                        </h1>
                     </div>
-                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent text-left sm:text-center">
-                        TAREFA 4
-                    </h1>
+                    <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Logomarca SESMATED</p>
                 </div>
-                <p class="text-gray-400 text-xs font-medium tracking-wider uppercase text-left sm:text-center">Logomarca SESMATED</p>
-            </div>
-            <!-- Chip do Usuário -->
-            <div class="user-chip absolute top-4 right-4">
-                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                    <i class="fas fa-user text-green-300 text-xs"></i>
+                
+                <!-- Chip do Usuário - Posicionado à direita no desktop -->
+                <div class="user-chip user-chip-desktop">
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                        <i class="fas fa-user text-green-300 text-xs"></i>
+                    </div>
+                    <span class="text-gray-100">João Silva</span>
                 </div>
-                <span class="text-gray-100">João Silva</span>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 sm:px-6 py-8">
+    <main class="container-responsive py-8">
         <div class="flex flex-col items-center justify-center min-h-[70vh]">
-            <div class="card-bg rounded-3xl p-8 sm:p-12 max-w-4xl w-full text-center fade-in">
+            <div class="card-bg rounded-3xl w-full max-w-6xl text-center fade-in">
                 
                 <!-- Formulário Principal -->
-                <form id="logomarcaForm" class="space-y-8">
+                <form id="logomarcaForm" action="../controllers/controller_logomarca.php" method="post" class="space-y-8">
                     <div class="flex flex-col items-center gap-6">
-                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center">
                             <i class="fas fa-palette text-white text-3xl"></i>
                         </div>
                         <div>
-                            <h2 class="text-3xl sm:text-4xl font-black mb-4 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
-                                Logomarca 
+                            <h2 class="main-title font-black mb-4 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
+                                Logomarca SESMATED
                             </h2>
-                           
+                            <p class="text-lg text-gray-300 font-medium">
+                                Avalie cada critério com notas de 0 a 100 pontos
+                            </p>
                         </div>
                     </div>
 
-                    <!-- Seletor de Curso Avaliador -->
+                    <!-- Seletor de Curso -->
                     <div class="mb-8">
                         <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-graduation-cap mr-2"></i>Curso Avaliador
+                            <i class="fas fa-graduation-cap mr-2"></i>Curso
                         </label>
-                        <div class="custom-select-wrapper" style="position:relative;max-width:400px;">
-                            <div class="custom-select-selected">Selecione o curso</div>
-                            <div class="custom-select-items custom-select-hide">
-                                <div>Enfermagem</div>
-                                <div>Informática</div>
-                                <div>Meio Ambiente</div>
-                                <div>Administração</div>
-                                <div>Edificações</div>
+                        <div class="select-wrapper">
+                            <select id="cursoInput" name="curso" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
+                                <option value="" selected disabled>Selecione o curso</option>
+                                <?php
+                                $dados = $select->select_curso();
+                                foreach ($dados as $dado) {
+                                ?>
+                                    <option value="<?= $dado['curso_id'] ?>"><?= $dado['nome_curso'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Critérios de Avaliação -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 justify-center mb-6">
+                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                            <span class="section-title font-bold text-gray-200">Critérios de Avaliação</span>
+                        </div>
+                        
+                        <div class="criteria-grid">
+                            <!-- Elementos dos 5 Cursos -->
+                            <div class="criteria-item">
+                                <div class="criteria-icon bg-gradient-to-br from-blue-500 to-cyan-600">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h4 class="criteria-title">Elementos dos 5 Cursos</h4>
+                                <p class="criteria-subtitle">Representação visual</p>
+                                <div class="score-input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="notaElementos" 
+                                        name="nota_elementos" 
+                                        min="0" 
+                                        max="100" 
+                                        placeholder="0-100"
+                                        class="score-input"
+                                        value=""
+                                    >
+                                </div>
+                                <div id="displayElementos" class="score-display hidden">
+                                    <span id="valorElementos">0</span> pontos
+                                </div>
+                            </div>
+
+                            <!-- Versão Impressa A3 -->
+                            <div class="criteria-item">
+                                <div class="criteria-icon bg-gradient-to-br from-green-500 to-emerald-600">
+                                    <i class="fas fa-print"></i>
+                                </div>
+                                <h4 class="criteria-title">Versão Impressa A3</h4>
+                                <p class="criteria-subtitle">Qualidade física</p>
+                                <div class="score-input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="notaImpressa" 
+                                        name="nota_impressa" 
+                                        min="0" 
+                                        max="100" 
+                                        placeholder="0-100"
+                                        class="score-input"
+                                        value=""
+                                    >
+                                </div>
+                                <div id="displayImpressa" class="score-display hidden">
+                                    <span id="valorImpressa">0</span> pontos
+                                </div>
+                            </div>
+
+                            <!-- Versão Digital -->
+                            <div class="criteria-item">
+                                <div class="criteria-icon bg-gradient-to-br from-purple-500 to-violet-600">
+                                    <i class="fas fa-file-image"></i>
+                                </div>
+                                <h4 class="criteria-title">Versão Digital</h4>
+                                <p class="criteria-subtitle">Arquivo eletrônico</p>
+                                <div class="score-input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="notaDigital" 
+                                        name="nota_digital" 
+                                        min="0" 
+                                        max="100" 
+                                        placeholder="0-100"
+                                        class="score-input"
+                                        value=""
+                                    >
+                                </div>
+                                <div id="displayDigital" class="score-display hidden">
+                                    <span id="valorDigital">0</span> pontos
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Seletor de Colocação -->
-                    <div class="mb-8">
-                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-trophy mr-2"></i>Colocação da Logomarca
-                        </label>
-                        <div class="custom-select-wrapper" style="position:relative;max-width:400px;">
-                            <div class="custom-select-selected">Selecione a colocação</div>
-                            <div class="custom-select-items custom-select-hide">
-                                <div>1º Lugar - 500 pontos</div>
-                                <div>2º Lugar - 450 pontos</div>
-                                <div>3º Lugar - 400 pontos</div>
-                                <div>4º Lugar - 350 pontos</div>
-                                <div>5º Lugar - 300 pontos</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Painel de Pontuação -->
+                    <!-- Painel de Pontuação Total -->
                     <div id="pontosPainel" class="mt-8 hidden slide-up">
-                        <div class="stats-card rounded-2xl p-4 text-center max-w-sm mx-auto">
-                            <h3 class="text-xl sm:text-2xl font-black mb-2 text-white">
-                                <span id="colocacaoTexto">Colocação</span>
-                            </h3>
-                            <p class="text-base text-gray-300 mb-2">
-                                Avaliado por: <span id="cursoSelecionado" class="font-bold" style="color: var(--accent-color);"></span>
+                        <div class="stats-card rounded-xl p-4 text-center max-w-sm mx-auto">
+                            <div class="flex items-center justify-center gap-2 mb-3">
+                                <i class="fas fa-calculator text-yellow-400"></i>
+                                <h3 class="text-lg font-bold text-white">Pontuação Total</h3>
+                            </div>
+                            <p class="text-sm text-gray-300 mb-3">
+                                <span id="cursoSelecionado" class="font-semibold text-yellow-400"></span>
                             </p>
-                            <p class="text-xl font-bold text-yellow-400">
-                                <i class="fas fa-star mr-2"></i><span id="pontosLogomarca">0</span> Pontos
-                            </p>
+                            <div class="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg p-3">
+                                <p class="text-2xl font-black text-black">
+                                    <span id="pontosTotais">0</span> / 300
+                                </p>
+                                <p class="text-xs font-medium text-black opacity-75">
+                                    Média: <span id="mediaPontos">0.0</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Botão de Envio -->
                     <div class="pt-8 flex justify-center">
-                        <button type="submit" class="btn-primary px-6 py-3 rounded-2xl font-bold text-white flex items-center justify-center gap-3 text-lg w-auto min-w-[120px] sm:min-w-[150px]">
+                        <button type="submit" class="btn-primary btn-responsive font-bold text-white flex items-center justify-center gap-3 hover:scale-105 transition-transform">
                             <i class="fas fa-paper-plane"></i>
                             Confirmar Avaliação
                         </button>
@@ -433,7 +592,7 @@
 
                 <!-- Botão para Voltar -->
                 <div id="voltarButton" class="mt-8 hidden">
-                    <button onclick="resetForm()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2 mx-auto">
+                    <button onclick="resetForm()" class="btn-secondary btn-responsive font-semibold text-gray-300 flex items-center justify-center gap-2 mx-auto hover:scale-105 transition-transform">
                         <i class="fas fa-arrow-left"></i>
                         Nova Avaliação
                     </button>
@@ -443,192 +602,216 @@
     </main>
 
     <!-- Tela de Sucesso -->
-    <div id="sucessoLogomarca" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-        <div class="card-bg rounded-3xl p-8 max-w-md w-full text-center fade-in">
+    <div id="sucessoLogomarca" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm p-4">
+        <div class="card-bg rounded-3xl p-8 w-full max-w-md text-center fade-in">
             <div class="flex flex-col items-center gap-4 mb-6">
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center pulse-glow">
                     <i class="fas fa-check-circle text-white text-4xl"></i>
                 </div>
                 <h2 class="text-2xl font-extrabold text-green-400 mb-2">Avaliação Registrada!</h2>
-                <p class="text-lg text-gray-200">A pontuação da logomarca SESMATED foi computada com sucesso.</p>
-              
-            <button onclick="fecharSucesso()" class="btn-primary px-6 py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2 mx-auto mt-4">
+                <p class="text-lg text-gray-200">As notas da logomarca foram computadas com sucesso.</p>
+                <div class="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl p-3 mt-2">
+                    <p class="text-xl font-black text-black">
+                        Total: <span id="pontosFinal">0</span> / 300 pontos
+                    </p>
+                </div>
+            </div>
+            <button onclick="fecharSucesso()" class="btn-primary btn-responsive font-semibold text-white flex items-center justify-center gap-2 mx-auto mt-4 hover:scale-105 transition-transform">
                 <i class="fas fa-arrow-left"></i> Nova Avaliação
             </button>
         </div>
     </div>
 
     <script>
-        const form = document.getElementById('logomarcaForm');
-        const pontosPainel = document.getElementById('pontosPainel');
-        const voltarButton = document.getElementById('voltarButton');
-        
-        // Mapeamento de pontos por colocação
-        const pontosPorColocacao = {
-            '1': 500,
-            '2': 450,
-            '3': 400,
-            '4': 350,
-            '5': 300
-        };
-
-        // Mapeamento de cursos para exibição
-        const cursosNomes = {
-            'enfermagem': 'Enfermagem',
-            'informatica': 'Informática',
-            'meio-ambiente': 'Meio Ambiente',
-            'administracao': 'Administração',
-            'edificacoes': 'Edificações'
-        };
-
-        // Mapeamento de colocações
-        const colocacaoTextos = {
-            '1': '🥇 1º Lugar',
-            '2': '🥈 2º Lugar', 
-            '3': '🥉 3º Lugar',
-            '4': '🏅 4º Lugar',
-            '5': '🏅 5º Lugar'
-        };
-
-        const colocacaoInput = document.getElementById('colocacaoInput');
-        const cursoInput = document.getElementById('cursoInput');
-        const pontosLogomarca = document.getElementById('pontosLogomarca');
-        const colocacaoTexto = document.getElementById('colocacaoTexto');
-        const cursoSelecionado = document.getElementById('cursoSelecionado');
-
-        // Atualizar pontuação quando colocação mudar
-        colocacaoInput.addEventListener('change', function() {
-            const valor = colocacaoInput.value;
-            if (pontosPorColocacao[valor]) {
-                pontosLogomarca.textContent = pontosPorColocacao[valor];
-                pontosPainel.classList.remove('hidden');
-                colocacaoTexto.textContent = colocacaoTextos[valor];
-                if (cursoInput.value) {
-                    cursoSelecionado.textContent = cursosNomes[cursoInput.value];
-                }
-            } else {
-                pontosPainel.classList.add('hidden');
-            }
-        });
-
-        // Atualizar curso quando selecionado
-        cursoInput.addEventListener('change', function() {
-            if (cursoInput.value && colocacaoInput.value) {
-                cursoSelecionado.textContent = cursosNomes[cursoInput.value];
-            }
-        });
-
-        // Submissão do formulário
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const cursoValue = cursoInput.value;
-            const colocacaoValue = colocacaoInput.value;
+        // Aguardar o DOM carregar completamente
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('logomarcaForm');
+            const pontosPainel = document.getElementById('pontosPainel');
+            const voltarButton = document.getElementById('voltarButton');
             
-            if (!cursoValue) {
-                alert('Por favor, selecione o curso avaliador.');
-                cursoInput.focus();
-                return;
-            }
-            if (!colocacaoValue) {
-                alert('Por favor, selecione a colocação.');
-                colocacaoInput.focus();
-                return;
-            }
+            // Elementos dos inputs
+            const notaElementos = document.getElementById('notaElementos');
+            const notaImpressa = document.getElementById('notaImpressa');
+            const notaDigital = document.getElementById('notaDigital');
+            const cursoInput = document.getElementById('cursoInput');
             
-            cursoSelecionado.textContent = cursosNomes[cursoValue];
-            colocacaoTexto.textContent = colocacaoTextos[colocacaoValue];
-            form.style.display = 'none';
-            voltarButton.classList.add('hidden');
-            document.getElementById('sucessoLogomarca').classList.remove('hidden');
-            
-            // Efeito especial para 1º lugar
-            if (colocacaoValue === '1') {
-                setTimeout(() => {
-                    createConfetti();
-                }, 500);
-            }
-        });
+            // Elementos de display
+            const displayElementos = document.getElementById('displayElementos');
+            const displayImpressa = document.getElementById('displayImpressa');
+            const displayDigital = document.getElementById('displayDigital');
+            const valorElementos = document.getElementById('valorElementos');
+            const valorImpressa = document.getElementById('valorImpressa');
+            const valorDigital = document.getElementById('valorDigital');
+            const pontosTotais = document.getElementById('pontosTotais');
+            const mediaPontos = document.getElementById('mediaPontos');
+            const cursoSelecionado = document.getElementById('cursoSelecionado');
 
-        function resetForm() {
-            form.style.display = 'block';
-            voltarButton.classList.add('hidden');
-            form.reset();
-            pontosPainel.classList.add('hidden');
-        }
+            // Garantir que os inputs começem vazios
+            notaElementos.value = '';
+            notaImpressa.value = '';
+            notaDigital.value = '';
 
-        function fecharSucesso() {
-            document.getElementById('sucessoLogomarca').classList.add('hidden');
-            resetForm();
-        }
-
-        // Efeito de confete para 1º lugar
-        function createConfetti() {
-            const colors = ['#ffd700', '#ffed4e', '#00b348', '#ffb733', '#8b5cf6', '#ec4899'];
-            const confettiCount = 60;
-            
-            for (let i = 0; i < confettiCount; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.style.position = 'fixed';
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.top = '-10px';
-                    confetti.style.width = '12px';
-                    confetti.style.height = '12px';
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.borderRadius = '50%';
-                    confetti.style.pointerEvents = 'none';
-                    confetti.style.zIndex = '9999';
-                    confetti.style.animation = 'fall 3s linear forwards';
-                    
-                    document.body.appendChild(confetti);
-                    
-                    setTimeout(() => {
-                        confetti.remove();
-                    }, 3000);
-                }, i * 30);
-            }
-        }
-
-        // CSS para animação do confete
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fall {
-                to {
-                    transform: translateY(100vh) rotate(360deg);
+            // Função para validar nota
+            function validarNota(input, valor) {
+                if (valor < 0 || valor > 100 || isNaN(valor)) {
+                    input.classList.add('invalid');
+                    input.classList.remove('valid');
+                    return false;
+                } else {
+                    input.classList.add('valid');
+                    input.classList.remove('invalid');
+                    return true;
                 }
             }
-        `;
-        document.head.appendChild(style);
 
-        // Custom select JS
-        document.querySelectorAll('.custom-select-wrapper').forEach(function(wrapper) {
-            var selected = wrapper.querySelector('.custom-select-selected');
-            var items = wrapper.querySelector('.custom-select-items');
-            selected.addEventListener('click', function(e) {
-                e.stopPropagation();
-                closeAllSelect(this);
-                items.classList.toggle('custom-select-hide');
-                selected.classList.toggle('custom-select-arrow-active');
+            // Função para atualizar display de nota individual
+            function atualizarDisplayNota(input, display, valorSpan) {
+                const valor = parseInt(input.value);
+                
+                if (input.value !== '' && !isNaN(valor) && validarNota(input, valor)) {
+                    valorSpan.textContent = valor;
+                    display.classList.remove('hidden');
+                } else {
+                    display.classList.add('hidden');
+                }
+                
+                atualizarPontuacaoTotal();
+            }
+
+            // Função para calcular e atualizar pontuação total
+            function atualizarPontuacaoTotal() {
+                const elementos = notaElementos.value !== '' ? parseInt(notaElementos.value) || 0 : 0;
+                const impressa = notaImpressa.value !== '' ? parseInt(notaImpressa.value) || 0 : 0;
+                const digital = notaDigital.value !== '' ? parseInt(notaDigital.value) || 0 : 0;
+                
+                const total = elementos + impressa + digital;
+                const media = total > 0 ? total / 3 : 0;
+                
+                pontosTotais.textContent = total;
+                mediaPontos.textContent = media.toFixed(1);
+                
+                // Mostrar painel se houver pelo menos uma nota e curso selecionado
+                if ((elementos > 0 || impressa > 0 || digital > 0) && cursoInput.value) {
+                    pontosPainel.classList.remove('hidden');
+                    const cursoTexto = cursoInput.options[cursoInput.selectedIndex].text;
+                    cursoSelecionado.textContent = cursoTexto;
+                } else {
+                    pontosPainel.classList.add('hidden');
+                }
+            }
+
+            // Event listeners para os inputs de nota
+            notaElementos.addEventListener('input', function() {
+                atualizarDisplayNota(this, displayElementos, valorElementos);
             });
-            items.querySelectorAll('div').forEach(function(optionDiv) {
-                optionDiv.addEventListener('click', function(e) {
-                    selected.textContent = this.textContent;
-                    items.querySelectorAll('div').forEach(function(d) {
-                        d.classList.remove('same-as-selected');
-                    });
-                    this.classList.add('same-as-selected');
-                    items.classList.add('custom-select-hide');
+
+            notaImpressa.addEventListener('input', function() {
+                atualizarDisplayNota(this, displayImpressa, valorImpressa);
+            });
+
+            notaDigital.addEventListener('input', function() {
+                atualizarDisplayNota(this, displayDigital, valorDigital);
+            });
+
+            // Event listener para o curso
+            cursoInput.addEventListener('change', function() {
+                atualizarPontuacaoTotal();
+            });
+
+            // Validação em tempo real para limitar valores
+            [notaElementos, notaImpressa, notaDigital].forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    // Permitir apenas números
+                    if (!/[0-9]/.test(String.fromCharCode(e.which))) {
+                        e.preventDefault();
+                    }
+                });
+
+                input.addEventListener('input', function(e) {
+                    if (e.target.value !== '') {
+                        let valor = parseInt(e.target.value);
+                        if (valor > 100) {
+                            e.target.value = 100;
+                        } else if (valor < 0) {
+                            e.target.value = 0;
+                        }
+                    }
                 });
             });
-        });
-        function closeAllSelect(elmnt) {
-            document.querySelectorAll('.custom-select-items').forEach(function(items) {
-                if (items.previousElementSibling !== elmnt) {
-                    items.classList.add('custom-select-hide');
+
+            // Submissão do formulário
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const cursoValue = cursoInput.value;
+                const elementos = notaElementos.value !== '' ? parseInt(notaElementos.value) || 0 : 0;
+                const impressa = notaImpressa.value !== '' ? parseInt(notaImpressa.value) || 0 : 0;
+                const digital = notaDigital.value !== '' ? parseInt(notaDigital.value) || 0 : 0;
+                
+                if (!cursoValue) {
+                    alert('Por favor, selecione o curso.');
+                    cursoInput.focus();
+                    return;
                 }
+                
+                if (elementos === 0 && impressa === 0 && digital === 0) {
+                    alert('Por favor, preencha pelo menos uma nota.');
+                    notaElementos.focus();
+                    return;
+                }
+                
+                // Validar se todas as notas preenchidas estão no range correto
+                const inputs = [notaElementos, notaImpressa, notaDigital];
+                for (let input of inputs) {
+                    if (input.value !== '' && !validarNota(input, parseInt(input.value))) {
+                        alert('Por favor, digite notas válidas entre 0 e 100.');
+                        input.focus();
+                        return;
+                    }
+                }
+                
+                // Atualizar pontuação final
+                const total = elementos + impressa + digital;
+                document.getElementById('pontosFinal').textContent = total;
+                
+                // Mostrar tela de sucesso
+                form.style.display = 'none';
+                voltarButton.classList.add('hidden');
+                document.getElementById('sucessoLogomarca').classList.remove('hidden');
             });
-        }
-        document.addEventListener('click', closeAllSelect);
+
+            // Função global para reset
+            window.resetForm = function() {
+                // Mostrar formulário novamente
+                form.style.display = 'block';
+                voltarButton.classList.add('hidden');
+                
+                // Reset do formulário
+                form.reset();
+                pontosPainel.classList.add('hidden');
+                
+                // Limpar valores dos inputs explicitamente
+                notaElementos.value = '';
+                notaImpressa.value = '';
+                notaDigital.value = '';
+                
+                // Esconder displays de nota
+                displayElementos.classList.add('hidden');
+                displayImpressa.classList.add('hidden');
+                displayDigital.classList.add('hidden');
+                
+                // Remover classes de validação
+                [notaElementos, notaImpressa, notaDigital].forEach(input => {
+                    input.classList.remove('valid', 'invalid');
+                });
+            };
+
+            // Função global para fechar sucesso
+            window.fecharSucesso = function() {
+                document.getElementById('sucessoLogomarca').classList.add('hidden');
+                resetForm();
+            };
+        });
     </script>
 </body>
 </html>
