@@ -12,50 +12,40 @@ class main_model extends connect
     //funções a parte
     public function adicionar_avaliador($nome, $email, $turno, $data, $senha)
     {
-        $stmt_check = $this->connect_salaberga->prepare("SELECT * FROM usuarios WHERE email = :email");
-        $stmt_check->bindValue(':email', $email);
-        $stmt_check->execute();
-        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
-        if (empty($result)) {
-            // Gerar senha automática numérica de 6 dígitos
+        $stmt_usuario = $this->connect_salaberga->prepare("INSERT INTO usuarios(id, nome, senha, email) VALUES (null, :nome, md5(:senha), :email)");
+        $stmt_usuario->bindValue(':nome', $nome);
+        $stmt_usuario->bindValue(':email', $email);
+        $stmt_usuario->bindValue(':senha', $senha);
 
-            $stmt_usuario = $this->connect_salaberga->prepare("INSERT INTO usuarios(id, nome, senha, email) VALUES (null, :nome, md5(:senha), :email)");
-            $stmt_usuario->bindValue(':nome', $nome);
-            $stmt_usuario->bindValue(':email', $email);
-            $stmt_usuario->bindValue(':senha', $senha);
+        if ($stmt_usuario->execute()) {
+            // Retornar a senha numérica gerada para possível envio ao usuário
+            $stmt_id_usuario = $this->connect_salaberga->prepare("SELECT id FROM usuarios WHERE email = :email");
+            $stmt_id_usuario->bindValue(':email', $email);
+            $stmt_id_usuario->execute();
+            $id_usuario_array = $stmt_id_usuario->fetch(PDO::FETCH_ASSOC);
+            $id_usuario = $id_usuario_array['id'];
 
-            if ($stmt_usuario->execute()) {
+            $sist_perm = 23;
+            $stmt_usu_sist = $this->connect_salaberga->prepare("INSERT INTO `usu_sist`(`usuario_id`, `sist_perm_id`) VALUES ( :id_usuario, :id_sist_perm)");
+            $stmt_usu_sist->bindValue(':id_usuario', $id_usuario);
+            $stmt_usu_sist->bindValue(':id_sist_perm', $sist_perm);
+            $stmt_usu_sist->execute();
+
+            $stmt_avaliadores = $this->connect->prepare("INSERT INTO `avaliadores`(`nome`, `data`, `turno`, `id_usuario`) VALUES (:nome, :data, :turno, :id_usuario)");
+            $stmt_avaliadores->bindValue(':nome', $nome);
+            $stmt_avaliadores->bindValue(':data', $data);
+            $stmt_avaliadores->bindValue(':turno', $turno);
+            $stmt_avaliadores->bindValue(':id_usuario', $id_usuario);
+
+            if ($stmt_avaliadores->execute()) {
                 // Retornar a senha numérica gerada para possível envio ao usuário
-                $stmt_id_usuario = $this->connect_salaberga->prepare("SELECT id FROM usuarios WHERE email = :email");
-                $stmt_id_usuario->bindValue(':email', $email);
-                $stmt_id_usuario->execute();
-                $id_usuario_array = $stmt_id_usuario->fetch(PDO::FETCH_ASSOC);
-                $id_usuario = $id_usuario_array['id'];
-
-                $sist_perm = 23;
-                $stmt_usu_sist = $this->connect_salaberga->prepare("INSERT INTO `usu_sist`(`usuario_id`, `sist_perm_id`) VALUES ( :id_usuario, :id_sist_perm)");
-                $stmt_usu_sist->bindValue(':id_usuario', $id_usuario);
-                $stmt_usu_sist->bindValue(':id_sist_perm', $sist_perm);
-                $stmt_usu_sist->execute();
-
-                $stmt_avaliadores = $this->connect->prepare("INSERT INTO `avaliadores`(`nome`, `data`, `turno`, `id_usuario`) VALUES (:nome, :data, :turno, :id_usuario)");
-                $stmt_avaliadores->bindValue(':nome', $nome);
-                $stmt_avaliadores->bindValue(':data', $data);
-                $stmt_avaliadores->bindValue(':turno', $turno);
-                $stmt_avaliadores->bindValue(':id_usuario', $id_usuario);
-
-                if ($stmt_avaliadores->execute()) {
-                    // Retornar a senha numérica gerada para possível envio ao usuário
-                    return 1;
-                } else {
-                    return 2;
-                }
+                return 1;
             } else {
                 return 2;
             }
         } else {
-            return 3;
+            return 2;
         }
     }
     //rifas 
