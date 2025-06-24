@@ -43,17 +43,13 @@ class PDF extends connect
 
         foreach ($dados as $dado) {
             $fpdf->SetX(90);
-            if ($fill) {
-                $fpdf->SetFillColor(0, 0, 0); // Preto para fundo
-                $fpdf->SetTextColor(255, 255, 255); // Branco para texto em fundo preto
-            } else {
-                $fpdf->SetFillColor(255, 255, 255); // Branco para fundo
-                $fpdf->SetTextColor(0, 0, 0); // Preto para texto em fundo branco
-            }
+
+            $fpdf->SetFillColor(255, 255, 255); // Branco para fundo
+            $fpdf->SetTextColor(0, 0, 0); // Preto para texto em fundo branco
+
             $fpdf->Cell(250, 18, utf8_decode($dado['nome']), 1, 0, 'C', true);
             $fpdf->Cell(100, 18, utf8_decode($dado['data']), 1, 0, 'C', true);
             $fpdf->Cell(100, 18, utf8_decode($dado['turno']), 1, 0, 'C', true);
-            $fill = !$fill;
         }
         $fpdf->Output('relatorio_acervo.pdf', 'I');
     }

@@ -1,6 +1,8 @@
 <?php
 require_once('../models/select.model.php');
 $select = new select_model();
+
+
 ?>
 
 </html>
@@ -452,7 +454,7 @@ $select = new select_model();
                     <i class="fas fa-graduation-cap"></i>
                     Resumo por Curso
                 </a>
-                <a href="./relatorios/rifas/total_arrecadado.php" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
+                <a href="./relatorios/rifas/resumo_total.php" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
                     <i class="fas fa-coins"></i>
                     Total Arrecadado
                 </a>

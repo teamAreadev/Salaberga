@@ -16,6 +16,7 @@ class connect
             $user = 'root';
             $password = '';
             $this->connect = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password);
+            
             $host = 'localhost';
             $database = 'salaberga';
             $user = 'root';
@@ -30,7 +31,7 @@ class connect
             $this->connect = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password);
 
             $host = 'localhost';
-            $database = 'u750204740_salaberga';
+            $database = 'u750204740_portalsaberga';
             $user = 'u750204740_salaberga';
             $password = 'paoComOvo123!@##';
             $this->connect_salaberga = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password);
