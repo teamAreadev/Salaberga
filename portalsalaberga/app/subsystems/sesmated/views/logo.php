@@ -412,7 +412,7 @@ $select = new select_model();
 </head>
 <body class="min-h-screen">
     <!-- Header -->
-    <header class="header-bg sticky top-0 z-50">
+    <header class="header-bg">
         <div class="container-responsive py-4">
             <div class="header-content">
                 <!-- Título e Logo Centralizados -->
