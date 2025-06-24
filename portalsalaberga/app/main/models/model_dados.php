@@ -210,51 +210,24 @@ function login_sesmated($email, $senha)
 
     $conexao = DatabaseManager::getSalabergaConnection();
 
-    $querySelectUser = "SELECT id, email, nome FROM usuarios WHERE email = :email AND senha = MD5(:senha)";
+    $querySelectUser = "SELECT * FROM usuarios WHERE email = :email AND senha = MD5(:senha)";
     $stmtSelectUser = $conexao->prepare($querySelectUser);
     $stmtSelectUser->bindParam(':email', $email);
     $stmtSelectUser->bindParam(':senha', $senha);
     $stmtSelectUser->execute();
-    $user = $stmtSelectUser->fetch(PDO::FETCH_ASSOC);
+    $user = $stmtSelectUser->fetchAll(PDO::FETCH_ASSOC);
 
     if (!empty($user)) {
 
-        // Busca sistemas e permissões para este usuário
-        $queryUserSystemsPermissions = "
-                SELECT
-                    s.id AS sistema_id,
-                    s.sistema AS sistema_nome,
-                    p.id AS permissao_id,
-                    p.descricao AS permissao_descricao
-                FROM
-                    usuarios u
-                INNER JOIN
-                    usu_sist us ON u.id = us.usuario_id
-                INNER JOIN
-                    sist_perm sp ON us.sist_perm_id = sp.id -- Join usu_sist to sist_perm
-                INNER JOIN
-                    sistemas s ON sp.sistema_id = s.id     -- Join sist_perm to sistemas
-                INNER JOIN
-                    permissoes p ON sp.permissao_id = p.id -- Join sist_perm to permissoes
-                WHERE
-                    u.id = :userId
-            ";
-
-        $stmtUserSystemsPermissions = $conexao->prepare($queryUserSystemsPermissions);
-        $stmtUserSystemsPermissions->bindParam(':userId', $user['id']);
-        $stmtUserSystemsPermissions->execute();
-        $userSystemsPermissions = $stmtUserSystemsPermissions->fetchAll(PDO::FETCH_ASSOC);
-
         $_SESSION['login'] = true;
-        $_SESSION['user_id'] = $user['id']; // Armazena o ID do usuário na sessão
-        $_SESSION['Email'] = $user['email'];
-        $_SESSION['Senha'] = str_repeat('•', strlen($senha)); // Evitar armazenar senha real
-        $_SESSION['Nome'] = $user['nome'];
-        $_SESSION['user_systems_permissions'] = $userSystemsPermissions; // Armazena as permissões buscadas
-
-        return 1;
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['Email'] = $user['email'];
+                $_SESSION['Senha'] = str_repeat('•', strlen($senha));
+                $_SESSION['equipe'] = $user['equipe'];
+                $_SESSION['voto'] = $user['voto'];
+        return true;
     } else {
-        return 2; // Indicate login failure
+        return false;
     }
 }
 
