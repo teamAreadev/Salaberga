@@ -1047,173 +1047,34 @@
     <main class="container mx-auto px-4">
         <div class="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 md:gap-8 p-4 md:p-8 max-w-[1400px] mx-auto transition-all duration-300 grid-container">
 
-            <a href="#" class="app-card-link" data-card-key="Dashboard_abertura">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Dashboard abertura" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Dashboard abertura</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="#" class="app-card-link" data-card-key="Cordel">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Cordel" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Cordel</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="#" class="app-card-link" data-card-key="Empreendedorismo">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Empreendedorismo" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Empreendedorismo</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="#" class="app-card-link" data-card-key="Esquete">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/esquete.png" alt="Esquete" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Esquete</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="#" class="app-card-link" data-card-key="Logo">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Logo" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Logo</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="#" class="app-card-link" data-card-key="Mascote">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Mascote" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Mascote</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="#" class="app-card-link" data-card-key="Painel">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Painel" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Painel</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="#" class="app-card-link" data-card-key="Palestras">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Palestras" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Palestras</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="#" class="app-card-link" data-card-key="Paródia">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Paródia" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Paródia</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="#" class="app-card-link" data-card-key="Rifa">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Rifa" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Rifa</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="#" class="app-card-link" data-card-key="Sala_temática">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Sala temática" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Sala temática</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="#" class="app-card-link" data-card-key="Vestimentas">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Vestimentas" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Vestimentas</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-
+            <?php
+            // Use the prepared cardsToDisplay array
+            if (!empty($cardsToDisplay)) {
+                foreach ($cardsToDisplay as $key => $cardData) {
+            ?>
+                    <a href="<?php echo htmlspecialchars($cardData['url']); ?>"
+                        class="app-card-link"
+                        <?php if (strpos($cardData['url'], 'http') === 0): ?>target="_blank" <?php endif; ?>
+                        data-card-key="<?php echo htmlspecialchars($key); ?>"> <!-- Added data-card-key for reference -->
+                        <div class="app-card w-{100px} h-full">
+                            <div class="icon-wrapper">
+                                <img src="<?php echo htmlspecialchars($cardData['image']); ?>"
+                                    alt="<?php echo htmlspecialchars($cardData['name']); ?>"
+                                    class="app-icon">
+                            </div>
+                            <h3 class="app-name"><?php echo htmlspecialchars($cardData['name']); ?></h3>
+                            <span class="category-tag"><?php echo htmlspecialchars($cardData['category']); ?></span>
+                        </div>
+                    </a>
+            <?php
+                }
+            } else {
+                // Handle case where user has no systems/permissions matching the map
+                echo "<p>Nenhum sistema ou permissão atribuída que corresponda aos cards disponíveis.</p>";
+            }
+            ?>
         </div>
     </main>
-
-    <script>
-    // Função para formatar datas e horários
-    function mostrarCardsPorDataEHora() {
-        const agora = new Date();
-        const dia = agora.getDate();
-        const mes = agora.getMonth() + 1; // Janeiro = 0
-        const hora = agora.getHours();
-        const minuto = agora.getMinutes();
-
-        // Esconde todos os cards primeiro
-        document.querySelectorAll('.app-card-link').forEach(card => {
-            card.style.display = 'none';
-        });
-
-        // Função auxiliar para mostrar cards por chave
-        function mostrarPorChaves(chaves) {
-            chaves.forEach(key => {
-                const card = document.querySelector('.app-card-link[data-card-key="' + key + '"]');
-                if (card) card.style.display = 'block';
-            });
-        }
-
-        // 24/06
-        if (dia === 24 && mes === 6) {
-            mostrarPorChaves(['Palestras', 'Rifa', 'Empreendedorismo']);
-        }
-        // 25/06
-        else if (dia === 25 && mes === 6) {
-            // Das 8h às 12h
-            if (hora >= 8 && hora < 12) {
-                mostrarPorChaves(['Workshop']);
-            }
-            // Das 13:30 às 17h
-            else if ((hora === 13 && minuto >= 30) || (hora > 13 && hora < 17)) {
-                mostrarPorChaves(['Dashboard_abertura', 'Rifa']);
-            }
-        }
-        // 26/06
-        else if (dia === 26 && mes === 6) {
-            // Das 8h às 12h
-            if (hora >= 8 && hora < 12) {
-                mostrarPorChaves(['Empreendedorismo', 'Sala_temática']);
-            }
-        }
-        // 27/06
-        else if (dia === 27 && mes === 6) {
-            mostrarPorChaves(['Sala_temática']);
-        }
-    }
-
-    // Executa ao carregar a página
-    mostrarCardsPorDataEHora();
-    // Atualiza a cada minuto
-    setInterval(mostrarCardsPorDataEHora, 60000);
-    </script>
 </body>
 
 </html>
