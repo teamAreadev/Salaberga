@@ -99,8 +99,6 @@ header('Content-Type: text/html; charset=UTF-8');
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            position: sticky;
-            top: 0;
             z-index: 40;
         }
         
@@ -513,8 +511,8 @@ header('Content-Type: text/html; charset=UTF-8');
         }
         
         .student-list {
-            max-height: 70vh;
-            overflow-y: auto;
+            /* max-height: 70vh; */
+            /* overflow-y: auto; */
             padding-right: 0.5rem;
         }
         
@@ -564,144 +562,69 @@ header('Content-Type: text/html; charset=UTF-8');
             min-height: 44px;
         }
         
+        .container-responsive {
+            width: 100%;
+            max-width: none;
+            padding: 0 clamp(1rem, 4vw, 2rem);
+        }
+        
         .header-content {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            width: 100%;
         }
         
         .header-title-section {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: clamp(0.75rem, 2vw, 1rem);
-            flex: 1;
-            min-width: 0;
+            text-align: center;
         }
         
-        .user-info {
-            flex-shrink: 0;
-            white-space: nowrap;
-        }
-        
-        .control-buttons {
+        .header-title-row {
             display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-        
-        .control-buttons > * {
-            flex: 1;
-            min-width: 120px;
-        }
-        
-        .custom-checkbox {
-            position: relative;
-            display: inline-flex;
             align-items: center;
             gap: 0.75rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-            min-height: 44px;
+            margin-bottom: 0.5rem;
         }
         
-        .custom-checkbox:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .custom-checkbox input[type="checkbox"] {
-            width: 1.25rem;
-            height: 1.25rem;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 0.25rem;
-            background: transparent;
-            cursor: pointer;
-            position: relative;
-            appearance: none;
-            -webkit-appearance: none;
-            transition: all 0.3s ease;
-        }
-        
-        .custom-checkbox input[type="checkbox"]:checked {
-            background: var(--success-color);
-            border-color: var(--success-color);
-        }
-        
-        .custom-checkbox input[type="checkbox"]:checked::after {
-            content: '\f00c';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
+        .user-chip-desktop {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 0.75rem;
+            top: 0;
+            right: 0;
         }
         
-        .custom-checkbox label {
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            user-select: none;
-        }
-        
-        .loading {
+        .user-chip {
+            background: linear-gradient(145deg, #232d25 0%, #181f1a 100%);
+            border: 1px solid #1f3a26;
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 2rem;
-            min-height: 100px;
+            gap: 0.5rem;
+            font-size: clamp(0.75rem, 2vw, 0.875rem);
+            font-weight: 600;
+            color: #e5e7eb;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
         }
         
-        .spinner {
-            width: 2rem;
-            height: 2rem;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top: 3px solid var(--header-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--header-color), var(--accent-color));
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #00a040, #e6a429);
-        }
-        
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
+        @media (max-width: 640px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
             }
-        }
-        
-        button:focus,
-        select:focus,
-        input:focus {
-            outline: 2px solid var(--accent-color);
-            outline-offset: 2px;
+            .user-chip-desktop {
+                position: relative;
+                top: auto;
+                right: auto;
+            }
+            .header-title-section {
+                align-items: center;
+            }
+            .btn-save-frequencia-mobile-hide { display: none !important; }
         }
         
         @media print {
@@ -714,30 +637,85 @@ header('Content-Type: text/html; charset=UTF-8');
                 box-shadow: none !important;
             }
         }
+        
+        @media (min-width: 641px) {
+            #floatingConfirmBtn { display: none !important; }
+        }
+        
+        .custom-checkbox input[type="checkbox"] {
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 2px solid #6ee7b7;
+            border-radius: 0.5rem;
+            background: #181f1a;
+            transition: border-color 0.2s, background 0.2s;
+            position: relative;
+            appearance: none;
+            -webkit-appearance: none;
+            outline: none;
+            cursor: pointer;
+            margin-right: 0.75rem;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        .custom-checkbox input[type="checkbox"]:checked {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: #10b981;
+        }
+        
+        .custom-checkbox input[type="checkbox"]:checked::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: #fff;
+            font-size: 1rem;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+        
+        .custom-checkbox label {
+            font-weight: 600;
+            color: #10b981;
+            cursor: pointer;
+            user-select: none;
+            font-size: 1rem;
+            margin-left: 0.25rem;
+            transition: color 0.2s;
+        }
+        
+        .custom-checkbox input[type="checkbox"]:not(:checked) + label {
+            color: #fff;
+        }
     </style>
 </head>
 <body class="min-h-screen">
     <!-- Header -->
     <header class="header-bg">
-        <div class="container-fluid py-4">
+        <div class="container-responsive py-4">
             <div class="header-content">
                 <div class="header-title-section">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow flex-shrink-0">
-                        <i class="fas fa-clipboard-check text-white text-lg sm:text-xl"></i>
-                    </div>
-                    <div>
+                    <div class="header-title-row">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 flex items-center justify-center pulse-glow">
+                            <i class="fas fa-clipboard-check text-white text-lg"></i>
+                        </div>
                         <h1 class="main-title font-black bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
                             FREQUÊNCIA DE ALUNOS
                         </h1>
-                        <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Palestras & Workshops</p>
                     </div>
+                    <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Palestras & Workshops</p>
                 </div>
-                
-                <div class="user-info flex items-center gap-2 bg-gradient-to-r from-gray-800/60 to-gray-700/60 backdrop-blur-sm rounded-full px-3 py-2 border border-gray-600/30">
-                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                        <i class="fas fa-user text-white text-xs"></i>
+                <div class="flex items-center gap-2 user-chip-desktop">
+                    <div class="user-chip">
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                            <i class="fas fa-user text-green-300 text-xs"></i>
+                        </div>
+                        <span class="text-gray-100">Professor</span>
                     </div>
-                    <span class="text-gray-200 text-sm font-semibold">Professor</span>
                 </div>
             </div>
         </div>
@@ -826,7 +804,7 @@ header('Content-Type: text/html; charset=UTF-8');
             </div>
             
             <div class="flex justify-center">
-                <button onclick="saveAttendance()" class="btn-primary btn-fluid sm:w-auto sm:px-8 py-3 rounded-xl text-white font-bold text-base sm:text-lg">
+                <button onclick="saveAttendance()" class="btn-primary btn-fluid sm:w-auto sm:px-8 py-3 rounded-xl text-white font-bold text-base sm:text-lg btn-save-frequencia-mobile-hide">
                     <i class="fas fa-save"></i>
                     <span>Salvar Frequência</span>
                 </button>
@@ -851,10 +829,19 @@ header('Content-Type: text/html; charset=UTF-8');
         </div>
     </main>
 
+    <!-- Botão flutuante de confirmação (mobile) -->
+    <button id="floatingConfirmBtn" onclick="saveAttendance()" type="button"
+        class="fixed z-50 bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg flex items-center justify-center"
+        style="width:60px;height:60px;display:none;"
+        aria-label="Confirmar presença">
+        <i class="fas fa-check text-2xl"></i>
+    </button>
+
     <script>
         let selectedCourse = '';
         let selectedEvent = '';
         let selectedEventType = '';
+        let allStudents = [];
         let students = [];
         let attendance = {};
         let courses = [];
@@ -942,7 +929,7 @@ header('Content-Type: text/html; charset=UTF-8');
                         <div class="event-time">
                             <i class="fas fa-clock" style="font-size: 0.75em; color: #60a5fa;"></i>
                             <span>${event.horario}</span>
-                        </div>
+                    </div>
                         ${event.local ? `
                             <div class="event-location">
                                 <i class="fas fa-map-marker-alt" style="font-size: 0.7em; color: #f87171;"></i>
@@ -978,7 +965,8 @@ header('Content-Type: text/html; charset=UTF-8');
         }
 
         // Course selection handler
-        document.getElementById('cursoSelect').addEventListener('change', function() {
+        const cursoSelect = document.getElementById('cursoSelect');
+        cursoSelect.addEventListener('change', function() {
             selectedCourse = this.value;
             if (selectedCourse) {
                 document.getElementById('eventSection').style.display = 'block';
@@ -994,6 +982,7 @@ header('Content-Type: text/html; charset=UTF-8');
             fetch('index.php?action=get_students&curso_id=' + cursoId)
                 .then(response => response.json())
                 .then(data => {
+                    allStudents = data;
                     students = data;
                 })
                 .catch(error => {
@@ -1006,15 +995,12 @@ header('Content-Type: text/html; charset=UTF-8');
         function selectEvent(eventId, eventName, eventTime, eventType) {
             selectedEvent = eventId;
             selectedEventType = eventType;
-            
             document.getElementById('eventTitle').textContent = eventName;
             document.getElementById('eventDetails').textContent = eventTime;
-            
-            // Show attendance section
             document.getElementById('eventSection').style.display = 'none';
             document.getElementById('attendanceSection').style.display = 'block';
-            
-            // Load students for this event
+            // Desabilitar select de curso
+            cursoSelect.disabled = true;
             loadStudentsForEvent();
         }
 
@@ -1023,7 +1009,9 @@ header('Content-Type: text/html; charset=UTF-8');
             fetch('index.php?action=get_students&curso_id=' + selectedCourse)
                 .then(response => response.json())
                 .then(data => {
-                    populateStudentList(data);
+                    allStudents = data;
+                    students = data;
+                    populateStudentList(students);
                 })
                 .catch(error => {
                     console.error('Erro ao carregar alunos do evento:', error);
@@ -1036,7 +1024,6 @@ header('Content-Type: text/html; charset=UTF-8');
             students = studentData; // Atualiza a lista global
             const studentList = document.getElementById('studentList');
             studentList.innerHTML = '';
-            document.getElementById('studentFilter').value = '';
             
             if (!studentData || studentData.length === 0) {
                 studentList.innerHTML = '<p class="text-gray-400 text-center py-8">Nenhum aluno encontrado</p>';
@@ -1066,6 +1053,7 @@ header('Content-Type: text/html; charset=UTF-8');
                 studentList.appendChild(studentItem);
                 attendance[student.id_aluno] = false;
             });
+            updateFloatingConfirmBtn();
         }
 
         // Get initials from name
@@ -1099,6 +1087,9 @@ header('Content-Type: text/html; charset=UTF-8');
         function backToEvents() {
             document.getElementById('attendanceSection').style.display = 'none';
             document.getElementById('eventSection').style.display = 'block';
+            // Habilitar select de curso
+            cursoSelect.disabled = false;
+            document.getElementById('floatingConfirmBtn').style.display = 'none';
         }
 
         // Save attendance
@@ -1114,7 +1105,7 @@ header('Content-Type: text/html; charset=UTF-8');
                 evento_id: selectedEvent,
                 presencas: presencasMarcadas
             };
-
+            
             fetch('index.php?action=save_attendance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1149,12 +1140,30 @@ header('Content-Type: text/html; charset=UTF-8');
         // Toggle attendance checkbox
         function toggleAttendanceCheckbox(studentId) {
             attendance[studentId] = document.getElementById(`chk-${studentId}`).checked;
+            updateFloatingConfirmBtn();
         }
 
         function filterStudentList() {
             const filter = document.getElementById('studentFilter').value.toLowerCase();
-            const filtered = students.filter(student => student.nome.toLowerCase().includes(filter));
-            populateStudentList(filtered);
+            if (!filter) {
+                students = allStudents;
+                populateStudentList(students);
+                return;
+            }
+            students = allStudents.filter(student => student.nome.toLowerCase().includes(filter));
+            populateStudentList(students);
+        }
+
+        function updateFloatingConfirmBtn() {
+            // Verifica se algum aluno está marcado
+            const algumMarcado = Object.values(attendance).some(v => v);
+            const btn = document.getElementById('floatingConfirmBtn');
+            // Só mostra no mobile
+            if (window.innerWidth <= 640 && algumMarcado) {
+                btn.style.display = 'flex';
+            } else {
+                btn.style.display = 'none';
+            }
         }
     </script>
 </body>
