@@ -1065,7 +1065,7 @@
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="#" class="app-card-link" data-card-key="Empreendedorismo">
+            <a href="../../../subsystems/sesmated/views/Empreendedorismo.php" class="app-card-link" data-card-key="Empreendedorismo">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
                         <img src="../../assets/img/logos_sistemas/suporte.png" alt="Empreendedorismo" class="app-icon">
@@ -1110,7 +1110,7 @@
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="#" class="app-card-link" data-card-key="Palestras">
+            <a href="../../../subsystems/sesmated/views/Palestras.php" class="app-card-link" data-card-key="Palestras">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
                         <img src="../../assets/img/logos_sistemas/suporte.png" alt="Palestras" class="app-icon">
@@ -1128,7 +1128,7 @@
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="#" class="app-card-link" data-card-key="Rifa">
+            <a href="../../../subsystems/sesmated/views/rifa.php" class="app-card-link" data-card-key="Rifa">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
                         <img src="../../assets/img/logos_sistemas/suporte.png" alt="Rifa" class="app-icon">
