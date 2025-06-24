@@ -1,20 +1,3 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Verifica se o parâmetro 'sair' está presente na URL para realizar o logout
-if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
-    // Destroi todas as variáveis de sessão
-    session_unset();
-    // Destroi a sessão
-    session_destroy();
-    // Redireciona para a página de login (sem o parâmetro sair) para evitar logout automático em refresh
-    header('Location: login.php');
-    exit();
-}
-
-?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -45,7 +28,6 @@ if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-    <?php require_once('autenticar.php'); ?>
 
     <script>
         tailwind.config = {
