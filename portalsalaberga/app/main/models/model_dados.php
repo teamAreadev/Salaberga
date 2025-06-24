@@ -99,7 +99,7 @@ function login($email, $senha)
     require_once('../../config/Database.php');
     try {
         $conexao = DatabaseManager::getSalabergaConnection();
-        
+
         // Prepara e executa a consulta para verificar o usuário na tabela 'usuarios'
         // Included 'nome' in select as it's in the new schema
         $querySelectUser = "SELECT id, email, nome FROM usuarios WHERE email = :email AND senha = MD5(:senha)";
@@ -154,11 +154,9 @@ function login($email, $senha)
             $_SESSION['user_systems_permissions'] = $userSystemsPermissions; // Armazena as permissões buscadas
 
             return true;
-
         } else {
             return false; // Indicate login failure
         }
-
     } catch (PDOException $e) {
         error_log("Erro no banco de dados: " . $e->getMessage());
         echo "Erro no banco de dados: " . $e->getMessage();
@@ -185,7 +183,7 @@ function login_parcial($email, $senha)
 
         if (!empty($user)) {
             error_log("Debug: User found in login_parcial. User ID: " . $user['id'] . ", Equipe: " . $user['equipe']);
-            
+
             // Comparação direta da senha, já que está em texto puro no banco login_parcial
             if ($senha === $user['senha']) {
                 $_SESSION['login'] = true;
@@ -197,12 +195,66 @@ function login_parcial($email, $senha)
                 return true;
             }
         }
-        
+
         error_log("Debug: Login failed in login_parcial for email: " . $email);
         return false;
     } catch (PDOException $e) {
         error_log("Erro no banco de dados durante login_parcial: " . $e->getMessage());
         return false;
+    }
+}
+
+function login_sesmated($email, $senha)
+{
+    require_once('../../config/Database.php');
+
+    $conexao = DatabaseManager::getSalabergaConnection();
+
+    $querySelectUser = "SELECT id, email, nome FROM usuarios WHERE email = :email AND senha = MD5(:senha)";
+    $stmtSelectUser = $conexao->prepare($querySelectUser);
+    $stmtSelectUser->bindParam(':email', $email);
+    $stmtSelectUser->bindParam(':senha', $senha);
+    $stmtSelectUser->execute();
+    $user = $stmtSelectUser->fetch(PDO::FETCH_ASSOC);
+
+    if (!empty($user)) {
+
+        // Busca sistemas e permissões para este usuário
+        $queryUserSystemsPermissions = "
+                SELECT
+                    s.id AS sistema_id,
+                    s.sistema AS sistema_nome,
+                    p.id AS permissao_id,
+                    p.descricao AS permissao_descricao
+                FROM
+                    usuarios u
+                INNER JOIN
+                    usu_sist us ON u.id = us.usuario_id
+                INNER JOIN
+                    sist_perm sp ON us.sist_perm_id = sp.id -- Join usu_sist to sist_perm
+                INNER JOIN
+                    sistemas s ON sp.sistema_id = s.id     -- Join sist_perm to sistemas
+                INNER JOIN
+                    permissoes p ON sp.permissao_id = p.id -- Join sist_perm to permissoes
+                WHERE
+                    u.id = :userId
+            ";
+
+        $stmtUserSystemsPermissions = $conexao->prepare($queryUserSystemsPermissions);
+        $stmtUserSystemsPermissions->bindParam(':userId', $user['id']);
+        $stmtUserSystemsPermissions->execute();
+        $userSystemsPermissions = $stmtUserSystemsPermissions->fetchAll(PDO::FETCH_ASSOC);
+
+        $_SESSION['login'] = true;
+        $_SESSION['user_id'] = $user['id']; // Armazena o ID do usuário na sessão
+        $_SESSION['Email'] = $user['email'];
+        $_SESSION['Senha'] = str_repeat('•', strlen($senha)); // Evitar armazenar senha real
+        $_SESSION['Nome'] = $user['nome'];
+        $_SESSION['user_systems_permissions'] = $userSystemsPermissions; // Armazena as permissões buscadas
+
+        return 1;
+    } else {
+        return 2; // Indicate login failure
     }
 }
 
@@ -245,10 +297,10 @@ function recSenha($email)
                     header('location:../controller_recsenha/controller_recSenha.php?certo');
                     exit(); // Added exit after header
                 } else {
-                     // Handle mail sending failure
-                     error_log("Erro ao enviar email de recuperação para: " . $email);
-                     header('location:../controller_recsenha/controller_recSenha.php?erro_envio');
-                     exit(); // Added exit after header
+                    // Handle mail sending failure
+                    error_log("Erro ao enviar email de recuperação para: " . $email);
+                    header('location:../controller_recsenha/controller_recSenha.php?erro_envio');
+                    exit(); // Added exit after header
                 }
             } else {
                 //usuario recuperou a senha recentemente
@@ -287,9 +339,9 @@ function alterarTelefone($telefone)
             header('Location: ../controller_perfil/controller_telefone.php?alt');
             exit(); // Added exit after header
         } else {
-             // User not found or not logged in properly
-             header('Location: ../controller_perfil/controller_telefone.php?erro_user');
-             exit();
+            // User not found or not logged in properly
+            header('Location: ../controller_perfil/controller_telefone.php?erro_user');
+            exit();
         }
     } catch (PDOException $e) {
         error_log("Erro no banco de dados: " . $e->getMessage());
@@ -297,7 +349,8 @@ function alterarTelefone($telefone)
     }
 }
 
-function alterarSenha($novaSenha, $confSenha, $senhaAntiga) {
+function alterarSenha($novaSenha, $confSenha, $senhaAntiga)
+{
     try {
         $conexao = getConnection();
 
@@ -308,9 +361,9 @@ function alterarSenha($novaSenha, $confSenha, $senhaAntiga) {
         $stmtSelect->execute();
         $resultSelect = $stmtSelect->fetch(PDO::FETCH_ASSOC);
 
-         if (empty($resultSelect)) {
+        if (empty($resultSelect)) {
             return 'erro=user_not_found'; // User not found
-         }
+        }
 
         // Verifica se as novas senhas coincidem
         if ($confSenha != $novaSenha) {
@@ -330,7 +383,6 @@ function alterarSenha($novaSenha, $confSenha, $senhaAntiga) {
         $stmtUpdate->execute();
 
         return 'sucesso=1';
-
     } catch (PDOException $e) {
         error_log("Erro no banco de dados: " . $e->getMessage());
         // Changed redirect location to profile page with error
@@ -339,7 +391,7 @@ function alterarSenha($novaSenha, $confSenha, $senhaAntiga) {
     }
 }
 
-function alterarEmail($email,$senha)
+function alterarEmail($email, $senha)
 {
     try {
         $conexao = getConnection();
@@ -354,7 +406,7 @@ function alterarEmail($email,$senha)
 
         // Verify if the user is found and password matches
         if (empty($resultSelect)) {
-             return 'erro=2'; // Incorrect password or user not found with current email and password
+            return 'erro=2'; // Incorrect password or user not found with current email and password
         }
 
         // Password is correct and matches the session user, update with the new email.
@@ -396,7 +448,6 @@ function getAlunosByEquipe($id_equipe)
         error_log("Debug: getAlunosByEquipe results: " . print_r($alunos, true));
 
         return $alunos;
-
     } catch (PDOException $e) {
         error_log("Erro no banco de dados ao buscar alunos por equipe (getAlunosByEquipe): " . $e->getMessage());
         return []; // Retorna um array vazio em caso de erro
@@ -419,7 +470,6 @@ function getEquipeNome($id_equipe)
         $equipe = $stmtSelectEquipe->fetch(PDO::FETCH_ASSOC);
 
         return $equipe ? $equipe['nome'] : 'Nome da Equipe não encontrado';
-
     } catch (PDOException $e) {
         error_log("Erro no banco de dados ao buscar nome da equipe (getEquipeNome): " . $e->getMessage());
         return 'Erro ao carregar nome da Equipe'; // Retorna mensagem de erro em caso de falha
@@ -463,7 +513,6 @@ function inserirAlunoAreaDev($nome, $funcao)
             error_log("Erro PDO: " . print_r($stmtInsert->errorInfo(), true));
             return false;
         }
-
     } catch (PDOException $e) {
         error_log("Erro no banco de dados durante inserirAlunoAreaDev: " . $e->getMessage());
         return false;
@@ -494,7 +543,7 @@ function inserirAvaliacao($formData)
             if (is_bool($value)) {
                 $value = $value ? 1 : 0;
             }
-             // Tratar valores nulos para campos de texto vazios (se necessário, mas TEXT geralmente aceita '')
+            // Tratar valores nulos para campos de texto vazios (se necessário, mas TEXT geralmente aceita '')
             if ($value === '') {
                 $value = null;
             }
@@ -550,12 +599,12 @@ function inserirAvaliacao($formData)
         //     return false; // Pode indicar um problema, dependendo da configuração do DB
         // }
 
-         return true; // Assumimos sucesso se a execução não lançar exceção
+        return true; // Assumimos sucesso se a execução não lançar exceção
 
     } catch (PDOException $e) {
         // Logar o erro detalhado
         error_log("Erro ao inserir avaliação no banco de dados login_parcial: " . $e->getMessage());
-         // Logar os dados que tentaram ser inseridos (cuidado com dados sensíveis)
+        // Logar os dados que tentaram ser inseridos (cuidado com dados sensíveis)
         error_log("Dados do formulário: " . print_r($formData, true));
 
         return false; // Indica falha na inserção
