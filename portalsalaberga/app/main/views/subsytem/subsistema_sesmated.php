@@ -1047,19 +1047,19 @@
     <main class="container mx-auto px-4">
         <div class="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 md:gap-8 p-4 md:p-8 max-w-[1400px] mx-auto transition-all duration-300 grid-container">
 
-            <a href="#" class="app-card-link" data-card-key="Dashboard_abertura">
+            <a href="../../../subsystems/sesmated/views/" class="app-card-link" data-card-key="Dashboard_abertura">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Dashboard abertura" class="app-icon">
+                        <img src="https://i.postimg.cc/sDLfn46k/dashboard-removebg-preview.png" alt="Dashboard abertura" class="app-icon">
                     </div>
                     <h3 class="app-name">Dashboard abertura</h3>
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="#" class="app-card-link" data-card-key="Cordel">
+            <a href="../../../subsystems/sesmated/views/cordel.php" class="app-card-link" data-card-key="Cordel">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Cordel" class="app-icon">
+                        <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Cordel" class="app-icon">
                     </div>
                     <h3 class="app-name">Cordel</h3>
                     <span class="category-tag">Evento</span>
@@ -1068,43 +1068,43 @@
             <a href="../../../subsystems/sesmated/views/Empreendedorismo.php" class="app-card-link" data-card-key="Empreendedorismo">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Empreendedorismo" class="app-icon">
+                        <img src="https://i.postimg.cc/j2sCbqPB/emopreendedorismo-removebg-preview.png" alt="Empreendedorismo" class="app-icon">
                     </div>
                     <h3 class="app-name">Empreendedorismo</h3>
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="#" class="app-card-link" data-card-key="Esquete">
+            <a href="../../../subsystems/sesmated/views/esquete.php" class="app-card-link" data-card-key="Esquete">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/esquete.png" alt="Esquete" class="app-icon">
+                        <img src="https://i.postimg.cc/ZqxSh8HK/esquete-removebg-preview.png" alt="Esquete" class="app-icon">
                     </div>
                     <h3 class="app-name">Esquete</h3>
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="#" class="app-card-link" data-card-key="Logo">
+            <a href="../../../subsystems/sesmated/views/logo.php" class="app-card-link" data-card-key="Logo">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Logo" class="app-icon">
+                        <img src="https://i.postimg.cc/Y92w2vDN/logo-removebg-preview-1.png" alt="Logo" class="app-icon">
                     </div>
                     <h3 class="app-name">Logo</h3>
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="#" class="app-card-link" data-card-key="Mascote">
+            <a href="../../../subsystems/sesmated/views/mascote.php" class="app-card-link" data-card-key="Mascote">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Mascote" class="app-icon">
+                        <img src="https://i.postimg.cc/SRJF8whJ/mawcote-removebg-preview.png" alt="Mascote" class="app-icon">
                     </div>
                     <h3 class="app-name">Mascote</h3>
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="#" class="app-card-link" data-card-key="Painel">
+            <a href="../../../subsystems/sesmated/views/Painel.php" class="app-card-link" data-card-key="Painel">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Painel" class="app-icon">
+                        <img src="https://i.postimg.cc/ZqZGj9mk/painel-removebg-preview.png" alt="Painel" class="app-icon">
                     </div>
                     <h3 class="app-name">Painel</h3>
                     <span class="category-tag">Evento</span>
@@ -1113,16 +1113,16 @@
             <a href="../../../subsystems/sesmated/views/Palestras.php" class="app-card-link" data-card-key="Palestras">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Palestras" class="app-icon">
+                        <img src="https://i.postimg.cc/qRv9V9gj/palestras-removebg-preview.png" alt="Palestras" class="app-icon">
                     </div>
                     <h3 class="app-name">Palestras</h3>
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="#" class="app-card-link" data-card-key="Paródia">
+            <a href="../../../subsystems/sesmated/views/parodia.php" class="app-card-link" data-card-key="Paródia">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Paródia" class="app-icon">
+                        <img src="https://i.postimg.cc/NMyv23YL/parodia-removebg-preview.png" alt="Paródia" class="app-icon">
                     </div>
                     <h3 class="app-name">Paródia</h3>
                     <span class="category-tag">Evento</span>
@@ -1131,25 +1131,25 @@
             <a href="../../../subsystems/sesmated/views/rifa.php" class="app-card-link" data-card-key="Rifa">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Rifa" class="app-icon">
+                        <img src=" https://i.postimg.cc/MprBmBVH/rifa-removebg-preview.png " alt="Rifa" class="app-icon">
                     </div>
                     <h3 class="app-name">Rifa</h3>
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="#" class="app-card-link" data-card-key="Sala_temática">
+            <a href="../../../subsystems/sesmated/views/Sala_Tematica.php" class="app-card-link" data-card-key="Sala_temática">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Sala temática" class="app-icon">
+                        <img src="https://i.postimg.cc/sgKk6jgv/sala-tematica-removebg-preview.png" alt="Sala temática" class="app-icon">
                     </div>
                     <h3 class="app-name">Sala temática</h3>
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="#" class="app-card-link" data-card-key="Vestimentas">
+            <a href="../../../subsystems/sesmated/views/" class="app-card-link" data-card-key="Vestimentas">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
-                        <img src="../../assets/img/logos_sistemas/suporte.png" alt="Vestimentas" class="app-icon">
+                        <img src="https://i.postimg.cc/LscNvwLJ/vestimenstas-removebg-preview.png" alt="Vestimentas" class="app-icon">
                     </div>
                     <h3 class="app-name">Vestimentas</h3>
                     <span class="category-tag">Evento</span>
