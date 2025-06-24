@@ -1,14 +1,12 @@
 <?php
 session_start();
 
-// Processar registro se formulário foi enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = trim($_POST['nome'] ?? '');
     $email = trim($_POST['email'] ?? '');
     
     $errors = [];
     
-    // Validações
     if (empty($nome)) {
         $errors[] = "Nome é obrigatório";
     }
@@ -20,10 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     if (empty($errors)) {
-        // Salvar usuário (aqui você salvaria no banco de dados)
         $usuarios = json_decode(file_get_contents('usuarios.json') ?? '[]', true);
         
-        // Verificar se email já existe
         $emailExiste = false;
         foreach ($usuarios as $usuario) {
             if ($usuario['email'] === $email) {
