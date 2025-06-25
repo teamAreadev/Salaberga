@@ -19,6 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pontuacao_total']) &&
     $total_php = intval($_POST['pontuacao_total']);
     $curso_post = $_POST['curso'];
 }
+require_once('../../../main/models/sessions.php');
+$session = new sessions;
+$session->autenticar_session();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
