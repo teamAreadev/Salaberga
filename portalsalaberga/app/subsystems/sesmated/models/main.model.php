@@ -120,7 +120,7 @@ class main_model extends connect
     }
 
     //grito
-    public function confirmar_grito($id_curso, $grito)
+    public function confirmar_grito($id_curso, $grito, $id_avaliador)
     {
         $pontuacao = $grito == "sim" ? 500 : 0;
         $grito = $grito == "sim" ? 1 : 0;
@@ -132,10 +132,17 @@ class main_model extends connect
 
         if (empty($result)) {
 
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_02_grito_guerra`(`curso_id`, `cumprida`, `pontuacao`) VALUES (:curso_id, :cumprida, :pontuacao)");
+            $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
+            $stmt_id_avaliador->bindValue(':id_usuario', $id_avaliador);
+            $stmt_id_avaliador->execute();
+            $result = $stmt_id_avaliador->fetch(PDO::FETCH_ASSOC);
+
+            $id_avaliador = $result['id'];
+            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_02_grito_guerra`(`curso_id`, `cumprida`, `pontuacao`, `id_avaliador`) VALUES (:curso_id, :cumprida, :pontuacao, :id)");
             $stmt_adcionar->bindValue(':curso_id', $id_curso);
             $stmt_adcionar->bindValue(':cumprida', $grito);
             $stmt_adcionar->bindValue(':pontuacao', $pontuacao);
+            $stmt_adcionar->bindValue(':id', $id_avaliador);
 
             if ($stmt_adcionar->execute()) {
 
