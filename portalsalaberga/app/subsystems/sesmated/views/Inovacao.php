@@ -1,3 +1,14 @@
+<?php 
+function redirect_to_login()
+{
+    header('Location: ../../main/views/autenticacao/login_sesmated.php');
+    exit();
+}
+if (!isset($_SESSION['Email'])) {
+    session_destroy();
+    redirect_to_login();
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

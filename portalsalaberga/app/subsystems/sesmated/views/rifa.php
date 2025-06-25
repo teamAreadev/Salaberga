@@ -1,10 +1,9 @@
 <?php
 require_once('../models/select.model.php');
 $select = new select_model();
-session_start();
 function redirect_to_login()
 {
-    header('Location: ../../main/views/autenticacao/login.php');
+    header('Location: ../../main/views/autenticacao/login_sesmated.php');
     exit();
 }
 if (!isset($_SESSION['Email'])) {
