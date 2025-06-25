@@ -157,7 +157,7 @@ class main_model extends connect
         }
     }
     //mascote
-    public function confirmar_mascote($curso_id, $nota_animacao, $nota_vestimenta, $nota_identidade)
+    public function confirmar_mascote($curso_id, $nota_animacao, $nota_vestimenta, $nota_identidade, $id_avaliador)
     {
         // Verifica se já existe registro para o curso
         $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_03_mascote WHERE curso_id = :curso_id");
@@ -166,12 +166,18 @@ class main_model extends connect
         $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
         if (empty($result)) {
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO tarefa_03_mascote (curso_id, animacao, vestimenta, identidade_curso) VALUES (:curso_id, :animacao, :vestimenta, :identidade)");
+            $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
+            $stmt_id_avaliador->bindValue(':id_usuario', $id_avaliador);
+            $stmt_id_avaliador->execute();
+            $result = $stmt_id_avaliador->fetch(PDO::FETCH_ASSOC);
+
+            $id_avaliador = $result['id'];
+            $stmt_adcionar = $this->connect->prepare("INSERT INTO tarefa_03_mascote (curso_id, animacao, vestimenta, identidade_curso, id_avaliador) VALUES (:curso_id, :animacao, :vestimenta, :identidade, :id)");
             $stmt_adcionar->bindValue(':curso_id', $curso_id);
             $stmt_adcionar->bindValue(':animacao', $nota_animacao);
             $stmt_adcionar->bindValue(':vestimenta', $nota_vestimenta);
             $stmt_adcionar->bindValue(':identidade', $nota_identidade);
-
+            $stmt_adcionar->bindValue(':id', $id_avaliador);
             if ($stmt_adcionar->execute()) {
                 return 1;
             } else {
