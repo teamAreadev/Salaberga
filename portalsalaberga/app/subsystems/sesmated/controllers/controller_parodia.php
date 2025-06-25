@@ -1,17 +1,27 @@
 <?php
 require_once('../models/main.model.php');
-
+print_r($_POST);
 if (
-    isset($_POST['criterio']) && !empty($_POST['criterio']) &&
-    isset($_POST['pontuacao']) && !empty($_POST['pontuacao']) &&
-    isset($_POST['curso']) && !empty($_POST['curso'])
+    isset($_POST['curso']) && !empty($_POST['curso']) &&
+    isset($_POST['nota_tema']) && !empty($_POST['nota_tema']) &&
+    isset($_POST['nota_letra']) && !empty($_POST['nota_letra']) &&
+    isset($_POST['nota_diccao']) && !empty($_POST['nota_diccao']) &&
+    isset($_POST['nota_desempenho']) && !empty($_POST['nota_desempenho']) &&
+    isset($_POST['nota_trilha']) && !empty($_POST['nota_trilha']) &&
+    isset($_POST['nota_criatividade']) && !empty($_POST['nota_criatividade']) &&
+    isset($_POST['id_avaliador']) && !empty($_POST['id_avaliador'])
 ) {
-    $criterio = $_POST['criterio'];
-    $pontuacao = $_POST['pontuacao'];
     $curso = $_POST['curso'];
-
+    $nota_tema = $_POST['nota_tema'];
+    $nota_letra = $_POST['nota_letra'];
+    $nota_diccao = $_POST['nota_diccao'];
+    $nota_desempenho = $_POST['nota_desempenho'];
+    $nota_trilha = $_POST['nota_trilha'];
+    $nota_criatividade = $_POST['nota_criatividade'];
+    $id_avaliador = $_POST['id_avaliador'];
+    
     $main_model = new main_model();
-    $result = $main_model->confirmar_parodia($criterio, $pontuacao, $curso);
+    $result = $main_model->confirmar_parodia($nota_tema, $nota_letra, $nota_diccao, $nota_desempenho, $nota_trilha, $nota_criatividade, $curso, $id_avaliador);
 
     switch ($result) {
         case 1:
@@ -27,4 +37,4 @@ if (
 } else {
     header('location:../views/parodia.php?empty');
     exit();
-} 
+}

@@ -444,7 +444,7 @@ $session->autenticar_session();
                         <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                             <i class="fas fa-user text-green-300 text-xs"></i>
                         </div>
-                        <span class="text-gray-100">João Silva</span>
+                        <span class="text-gray-100"><?=$_SESSION['Nome']?></span>
                     </div>
                 </div>
             </div>
@@ -457,7 +457,8 @@ $session->autenticar_session();
             <div class="card-bg rounded-3xl w-full max-w-6xl text-center fade-in">
                 
                 <!-- Formulário Principal -->
-                <form id="parodiaForm" action="../controllers/controller_parodia.php" method="post" class="space-y-8">
+                <form action="../controllers/controller_parodia.php" method="post" class="space-y-8">
+                    <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
                     <div class="flex flex-col items-center gap-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center">
                             <i class="fas fa-music text-white text-3xl"></i>

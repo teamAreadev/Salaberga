@@ -1,17 +1,25 @@
 <?php
 require_once('../models/main.model.php');
-
+print_r($_POST);
 if (
-    isset($_POST['criterio']) && !empty($_POST['criterio']) &&
-    isset($_POST['pontuacao']) && !empty($_POST['pontuacao']) &&
-    isset($_POST['curso']) && !empty($_POST['curso'])
+    isset($_POST['curso']) && !empty($_POST['curso']) &&
+    isset($_POST['nota_tema']) && !empty($_POST['nota_tema']) &&
+    isset($_POST['nota_estrutura']) && !empty($_POST['nota_estrutura']) &&
+    isset($_POST['nota_declamacao']) && !empty($_POST['nota_declamacao']) &&
+    isset($_POST['nota_criatividade']) && !empty($_POST['nota_criatividade']) &&
+    isset($_POST['nota_apresentacao']) && !empty($_POST['nota_apresentacao']) &&
+    isset($_POST['id_avaliador']) && !empty($_POST['id_avaliador'])
 ) {
-    $criterio = $_POST['criterio'];
-    $pontuacao = $_POST['pontuacao'];
     $curso = $_POST['curso'];
-
+    $nota_tema = $_POST['nota_tema'];
+    $nota_estrutura = $_POST['nota_estrutura'];
+    $nota_declamacao = $_POST['nota_declamacao'];
+    $nota_criatividade = $_POST['nota_criatividade'];
+    $nota_apresentacao = $_POST['nota_apresentacao'];
+    $id_avaliador = $_POST['id_avaliador'];
+    
     $main_model = new main_model();
-    $result = $main_model->confirmar_cordel($criterio, $pontuacao, $curso);
+    $result = $main_model->confirmar_cordel($nota_tema, $nota_estrutura, $nota_declamacao, $nota_criatividade, $nota_apresentacao, $curso, $id_avaliador);
 
     switch ($result) {
         case 1:
@@ -27,4 +35,4 @@ if (
 } else {
     header('location:../views/cordel.php?empty');
     exit();
-} 
+}

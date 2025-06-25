@@ -253,19 +253,28 @@ class main_model extends connect
     }
 
     //cordel
-    public function confirmar_cordel($criterios, $pontuacao, $id_curso)
+    public function confirmar_cordel($nota_tema, $nota_estrutura, $nota_declamacao, $nota_criatividade, $nota_apresentacao, $curso_id, $id_usuario)
     {
         $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_06_cordel WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $id_curso);
+        $stmt_check->bindValue(':curso_id', $curso_id);
         $stmt_check->execute();
         $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
         if (empty($result)) {
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_06_cordel`(`curso_id`, `criterios`, `pontuacao`) VALUES (:curso_id, :criterios, :pontuacao)");
-            $stmt_adcionar->bindValue(':curso_id', $id_curso);
-            $stmt_adcionar->bindValue(':criterios', json_encode($criterios));
-            $stmt_adcionar->bindValue(':pontuacao', $pontuacao);
+            $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
+            $stmt_id_avaliador->bindValue(':id_usuario', $id_usuario);
+            $stmt_id_avaliador->execute();
+            $result = $stmt_id_avaliador->fetch(PDO::FETCH_ASSOC);
 
+            $id_avaliador = $result['id'];
+            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_06_cordel`(`curso_id`, `id_avaliador`, `adequacao_tema`, `estrutura_cordel`, `declamacao`, `criatividade`, `apresentacao_impressa`) VALUES (:curso_id, :id_avaliador, :adequacao_tema, :estrutura_cordel, :declamacao, :criatividade, :apresentacao_impressa)");
+            $stmt_adcionar->bindValue(':curso_id', $curso_id);
+            $stmt_adcionar->bindValue(':id_avaliador', $id_avaliador);
+            $stmt_adcionar->bindValue(':adequacao_tema', $nota_tema);
+            $stmt_adcionar->bindValue(':estrutura_cordel', $nota_estrutura);
+            $stmt_adcionar->bindValue(':declamacao', $nota_declamacao);
+            $stmt_adcionar->bindValue(':criatividade', $nota_criatividade);
+            $stmt_adcionar->bindValue(':apresentacao_impressa', $nota_apresentacao);
             if ($stmt_adcionar->execute()) {
                 return 1;
             } else {
@@ -276,20 +285,31 @@ class main_model extends connect
         }
     }
 
+
     //parodia
-    public function confirmar_parodia($criterios, $pontuacao, $id_curso)
+    public function confirmar_parodia($nota_tema, $nota_letra, $nota_diccao, $nota_desempenho, $nota_trilha, $nota_criatividade, $curso_id, $id_usuario)
     {
         $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_07_parodia WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $id_curso);
+        $stmt_check->bindValue(':curso_id', $curso_id);
         $stmt_check->execute();
         $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
         if (empty($result)) {
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_07_parodia`(`curso_id`, `criterios`, `pontuacao`) VALUES (:curso_id, :criterios, :pontuacao)");
-            $stmt_adcionar->bindValue(':curso_id', $id_curso);
-            $stmt_adcionar->bindValue(':criterios', json_encode($criterios));
-            $stmt_adcionar->bindValue(':pontuacao', $pontuacao);
+            $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
+            $stmt_id_avaliador->bindValue(':id_usuario', $id_usuario);
+            $stmt_id_avaliador->execute();
+            $result = $stmt_id_avaliador->fetch(PDO::FETCH_ASSOC);
 
+            $id_avaliador = $result['id'];
+            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_07_parodia`(`avaliacao_id`, `curso_id`, `id_avaliador`, `adequacao_tema`, `letra_adaptada`, `diccao_clareza_entonacao`, `desempenho_artistico`, `trilha_sonora_sincronia`, `criatividade_originalidade`) VALUES ('[value-1]', :curso_id, :id_avaliador, :adequacao_tema, :letra_adaptada, :diccao_clareza_entonacao, :desempenho_artistico, :trilha_sonora_sincronia, :criatividade_originalidade)");
+            $stmt_adcionar->bindValue(':curso_id', $curso_id);
+            $stmt_adcionar->bindValue(':id_avaliador', $id_avaliador);
+            $stmt_adcionar->bindValue(':adequacao_tema', $nota_tema);
+            $stmt_adcionar->bindValue(':letra_adaptada', $nota_letra);
+            $stmt_adcionar->bindValue(':diccao_clareza_entonacao', $nota_diccao);
+            $stmt_adcionar->bindValue(':desempenho_artistico', $nota_desempenho);
+            $stmt_adcionar->bindValue(':trilha_sonora_sincronia', $nota_trilha);
+            $stmt_adcionar->bindValue(':criatividade_originalidade', $nota_criatividade);
             if ($stmt_adcionar->execute()) {
                 return 1;
             } else {
