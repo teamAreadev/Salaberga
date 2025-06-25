@@ -159,13 +159,6 @@ class main_model extends connect
     //mascote
     public function confirmar_mascote($curso_id, $nota_animacao, $nota_vestimenta, $nota_identidade, $id_avaliador)
     {
-        // Verifica se já existe registro para o curso
-        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_03_mascote WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $curso_id);
-        $stmt_check->execute();
-        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
-
-        if (empty($result)) {
             $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
             $stmt_id_avaliador->bindValue(':id_usuario', $id_avaliador);
             $stmt_id_avaliador->execute();
@@ -183,21 +176,14 @@ class main_model extends connect
             } else {
                 return 2;
             }
-        } else {
-            return 3;
-        }
+      
     }
 
     //logo
     public function confirmar_logo($cursoSelecionado, $notaElementos, $notaImpressa, $notaDigital, $avaliadorId)
     {
         // Verifica se já existe registro para o curso
-        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_04_logomarca WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $cursoSelecionado);
-        $stmt_check->execute();
-        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
-        if (empty($result)) {
             $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
             $stmt_id_avaliador->bindValue(':id_usuario', $avaliadorId);
             $stmt_id_avaliador->execute();
@@ -215,20 +201,13 @@ class main_model extends connect
             } else {
                 return 2;
             }
-        } else {
-            return 3;
-        }
+  
     }
 
     //esquete
     public function confirmar_esquete($cursoSelecionado, $notaTempo, $notaTema, $notaFigurino, $notaCriatividade, $avaliadorId)
     {
-        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_05_esquete WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $cursoSelecionado);
-        $stmt_check->execute();
-        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
-        if (empty($result)) {
             $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
             $stmt_id_avaliador->bindValue(':id_usuario', $avaliadorId);
             $stmt_id_avaliador->execute();
@@ -247,20 +226,13 @@ class main_model extends connect
             } else {
                 return 2;
             }
-        } else {
-            return 3;
-        }
+  
     }
 
     //cordel
     public function confirmar_cordel($nota_tema, $nota_estrutura, $nota_declamacao, $nota_criatividade, $nota_apresentacao, $curso_id, $id_usuario)
     {
-        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_06_cordel WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $curso_id);
-        $stmt_check->execute();
-        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
-        if (empty($result)) {
             $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
             $stmt_id_avaliador->bindValue(':id_usuario', $id_usuario);
             $stmt_id_avaliador->execute();
@@ -280,21 +252,14 @@ class main_model extends connect
             } else {
                 return 2;
             }
-        } else {
-            return 3;
-        }
+  
     }
 
 
     //parodia
     public function confirmar_parodia($nota_tema, $nota_letra, $nota_diccao, $nota_desempenho, $nota_trilha, $nota_criatividade, $curso_id, $id_usuario)
     {
-        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_07_parodia WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $curso_id);
-        $stmt_check->execute();
-        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
-
-        if (empty($result)) {
+   
             $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
             $stmt_id_avaliador->bindValue(':id_usuario', $id_usuario);
             $stmt_id_avaliador->execute();
@@ -315,20 +280,12 @@ class main_model extends connect
             } else {
                 return 2;
             }
-        } else {
-            return 3;
-        }
+  
     }
 
     //vestimentas sustentaveis
-    public function confirmar_vestimentas($curso, $nota_materiais, $nota_criatividade, $nota_estetica, $nota_identidade, $nota_desfile, $nota_acabamento, $id_avaliador)
+    public function confirmar_vestimentas($curso, $id_avaliador, $pontuacao)
     {
-        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_08_vestimentas WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $curso);
-        $stmt_check->execute();
-        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
-
-        if (empty($result)) {
             $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
             $stmt_id_avaliador->bindValue(':id_usuario', $id_avaliador);
             $stmt_id_avaliador->execute();
@@ -336,23 +293,17 @@ class main_model extends connect
 
             $id_avaliador = $result['id'];
 
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_08_vestimentas`(`avaliacao_id`, `curso_id`, `id_avaliador`, `materiais_sustentaveis`, `criatividade_design`, `estetica_harmonia`, `identidade_curso_evento`, `desfile_apresentacao`, `acabamento_estrutura`) VALUES (null, :curso_id, :id_avaliador, :materiais_sustentaveis, :criatividade_design, :estetica_harmonia, :identidade_curso_evento, :desfile_apresentacao, :acabamento_estrutura)");
+            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_08_vestimentas`(`avaliacao_id`, `curso_id`, `id_avaliador`, `pontuação`) VALUES (null, :id_curso, :id_avaliador, :pontuacao)");
             $stmt_adcionar->bindValue(':curso_id', $curso);
             $stmt_adcionar->bindValue(':id_avaliador', $id_avaliador);
-            $stmt_adcionar->bindValue(':materiais_sustentaveis', $nota_materiais);
-            $stmt_adcionar->bindValue(':criatividade_design', $nota_criatividade);
-            $stmt_adcionar->bindValue(':estetica_harmonia', $nota_estetica);
-            $stmt_adcionar->bindValue(':identidade_curso_evento', $nota_identidade);
-            $stmt_adcionar->bindValue(':desfile_apresentacao', $nota_desfile);
-            $stmt_adcionar->bindValue(':acabamento_estrutura', $nota_acabamento);
+            $stmt_adcionar->bindValue(':pontuacao', $id_avaliador);
+     
             if ($stmt_adcionar->execute()) {
                 return 1;
             } else {
                 return 2;
             }
-        } else {
-            return 3;
-        }
+  
     }
 
     //sala temática

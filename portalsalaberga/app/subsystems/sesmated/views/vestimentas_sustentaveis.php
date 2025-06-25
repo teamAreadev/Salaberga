@@ -581,7 +581,7 @@ $session->autenticar_session();
                     <!-- ENFERMAGEM -->
                     <form id="painel-Enfermagem" class="course-panel" method="post" action="../controllers/controller_vestimentas_sustentaveis.php">
                         <h3 class="course-title">Enfermagem</h3>
-                        <input type="hidden" name="curso" value="Enfermagem">
+                        <input type="hidden" name="curso" value="1">
                         <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
                         
                         <div class="year-section">
@@ -621,7 +621,7 @@ $session->autenticar_session();
                     <!-- INFORMÁTICA -->
                     <form id="painel-Informática" class="course-panel" method="post" action="../controllers/controller_vestimentas_sustentaveis.php">
                         <h3 class="course-title">Informática</h3>
-                        <input type="hidden" name="curso" value="Informática">
+                        <input type="hidden" name="curso" value="2">
                         <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
                         
                         <div class="year-section">
@@ -661,7 +661,7 @@ $session->autenticar_session();
                     <!-- EDIFICAÇÕES -->
                     <form id="painel-Edificações" class="course-panel" method="post" action="../controllers/controller_vestimentas_sustentaveis.php">
                         <h3 class="course-title">Edificações</h3>
-                        <input type="hidden" name="curso" value="Edificações">
+                        <input type="hidden" name="curso" value="5">
                         <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
                         
                         <div class="year-section">
@@ -701,7 +701,7 @@ $session->autenticar_session();
                     <!-- ADMINISTRAÇÃO -->
                     <form id="painel-Administração" class="course-panel" method="post" action="../controllers/controller_vestimentas_sustentaveis.php">
                         <h3 class="course-title">Administração</h3>
-                        <input type="hidden" name="curso" value="Administração">
+                        <input type="hidden" name="curso" value="4">
                         <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
                         
                         <div class="year-section">
@@ -733,7 +733,7 @@ $session->autenticar_session();
                     <!-- MEIO AMBIENTE -->
                     <form id="painel-Meio ambiente" class="course-panel" method="post" action="../controllers/controller_vestimentas_sustentaveis.php">
                         <h3 class="course-title">Meio Ambiente</h3>
-                        <input type="hidden" name="curso" value="Meio ambiente">
+                        <input type="hidden" name="curso" value="3">
                         <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
                         
                         <div class="year-section">

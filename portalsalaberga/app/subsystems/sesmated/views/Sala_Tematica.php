@@ -234,279 +234,6 @@ $session->autenticar_session();
             line-height: 1.2;
         }
         /* ===== HEADER NOVO - FIM ===== */
-
-        .stats-card {
-            background: linear-gradient(145deg, rgba(30, 30, 30, 0.8) 0%, rgba(20, 20, 20, 0.8) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-        .input-field {
-            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        .input-field:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1);
-            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
-        }
-        .score-input-wrapper {
-            position: relative;
-            width: 100%;
-            margin-top: 1rem;
-        }
-        .score-input {
-            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-color);
-            border-radius: 0.75rem;
-            padding: 0.875rem 1rem;
-            font-size: clamp(0.875rem, 2.5vw, 1rem);
-            font-weight: 600;
-            width: 100%;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-        .score-input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1);
-            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
-            outline: none;
-        }
-        .score-input:hover {
-            border-color: rgba(255, 183, 51, 0.3);
-            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
-        }
-        .score-input::placeholder {
-            color: #6b7280;
-            font-weight: 500;
-        }
-        .score-input::-webkit-outer-spin-button,
-        .score-input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        .score-input[type=number] {
-            -moz-appearance: textfield;
-        }
-        .score-input.valid {
-            border-color: var(--success-color);
-            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
-        }
-        .score-input.invalid {
-            border-color: var(--danger-color);
-            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--header-color) 0%, #00a040 100%);
-            box-shadow: 0 4px 20px rgba(0, 179, 72, 0.3);
-            border: none;
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            box-shadow: 0 8px 30px rgba(0, 179, 72, 0.4);
-            transform: translateY(-2px);
-        }
-        .btn-secondary {
-            background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.3s ease;
-        }
-        .btn-secondary:hover {
-            background: linear-gradient(145deg, #353535 0%, #252525 100%);
-            border-color: rgba(255, 255, 255, 0.25);
-            transform: translateY(-1px);
-        }
-        .user-chip {
-            background: linear-gradient(145deg, #232d25 0%, #181f1a 100%);
-            border: 1px solid #1f3a26;
-            backdrop-filter: blur(10px);
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: clamp(0.75rem, 2vw, 0.875rem);
-            font-weight: 600;
-            color: #e5e7eb;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
-        }
-        .select-wrapper {
-            position: relative;
-        }
-        .select-wrapper::after {
-            content: '\f078';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--accent-color);
-            pointer-events: none;
-            font-size: 0.875rem;
-        }
-        select.input-field {
-            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%) !important;
-            color: var(--text-color) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            padding-right: 3rem;
-            cursor: pointer;
-        }
-        select.input-field:focus {
-            border-color: var(--accent-color) !important;
-            box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1) !important;
-            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%) !important;
-        }
-        select.input-field option {
-            background-color: #232323 !important;
-            color: #fff !important;
-        }
-        .fade-in {
-            animation: fadeIn 0.6s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .slide-up {
-            animation: slideUp 0.4s ease-out;
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .pulse-glow {
-            animation: pulseGlow 2s ease-in-out infinite alternate;
-        }
-        @keyframes pulseGlow {
-            from { box-shadow: 0 4px 20px rgba(0, 179, 72, 0.3); }
-            to { box-shadow: 0 8px 40px rgba(0, 179, 72, 0.5); }
-        }
-        .criteria-item {
-            background: linear-gradient(145deg, rgba(40, 40, 40, 0.6) 0%, rgba(30, 30, 30, 0.6) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 1rem;
-            padding: clamp(1rem, 3vw, 1.5rem);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            min-height: auto;
-        }
-        .criteria-item:hover {
-            border-color: rgba(255, 183, 51, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 183, 51, 0.1);
-        }
-        .criteria-icon {
-            width: clamp(2.5rem, 8vw, 3rem);
-            height: clamp(2.5rem, 8vw, 3rem);
-            border-radius: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-        .criteria-icon i {
-            font-size: clamp(1rem, 4vw, 1.25rem);
-            color: white;
-        }
-        .criteria-title {
-            font-size: clamp(0.875rem, 3.5vw, 1rem);
-            font-weight: 700;
-            color: white;
-            margin-bottom: 0.25rem;
-        }
-        .criteria-subtitle {
-            font-size: clamp(0.75rem, 2.5vw, 0.875rem);
-            color: #9ca3af;
-            margin-bottom: 1rem;
-            line-height: 1.3;
-        }
-        .score-display {
-            background: linear-gradient(135deg, rgba(255, 183, 51, 0.15) 0%, rgba(255, 183, 51, 0.05) 100%);
-            border: 1px solid rgba(255, 183, 51, 0.3);
-            border-radius: 0.5rem;
-            padding: 0.75rem 0.5rem;
-            margin-top: 0.75rem;
-            font-size: clamp(0.75rem, 2.5vw, 0.875rem);
-            font-weight: 700;
-            color: var(--accent-color);
-            text-align: center;
-            width: 100%;
-        }
-        .criteria-grid {
-            display: grid;
-            gap: clamp(1rem, 3vw, 1.5rem);
-            width: 100%;
-        }
-        @media (max-width: 640px) {
-            .criteria-grid {
-                grid-template-columns: 1fr;
-            }
-            .card-bg {
-                padding: clamp(1rem, 4vw, 1.5rem);
-                margin: 0.5rem;
-            }
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            .user-chip-desktop {
-                position: relative;
-                top: auto;
-                right: auto;
-            }
-            .header-title-section {
-                align-items: center;
-            }
-        }
-        @media (min-width: 641px) and (max-width: 1024px) {
-            .criteria-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (min-width: 1025px) {
-            .criteria-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        .container-responsive {
-            width: 100%;
-            max-width: none;
-            padding: 0 clamp(1rem, 4vw, 2rem);
-        }
-        .main-title {
-            font-size: clamp(1.5rem, 6vw, 2.5rem);
-            line-height: 1.2;
-        }
-        .section-title {
-            font-size: clamp(1rem, 4vw, 1.25rem);
-        }
-        .btn-responsive {
-            padding: clamp(0.75rem, 3vw, 1rem) clamp(1.5rem, 6vw, 2rem);
-            font-size: clamp(0.875rem, 3vw, 1rem);
-            border-radius: 1rem;
-            width: 100%;
-            max-width: 20rem;
-        }
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--header-color), var(--accent-color));
-            border-radius: 4px;
-        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -539,42 +266,29 @@ $session->autenticar_session();
     </header>
 
     <!-- Main Content -->
-    <main class="container-responsive py-8">
-        <div class="flex flex-col items-center justify-center min-h-[70vh]">
-            <div class="card-bg rounded-3xl w-full max-w-6xl text-center fade-in">
-                <!-- Formulário Principal -->
-                <form id="salaTematicaForm" class="space-y-8">
-                    <div class="flex flex-col items-center gap-6">
-                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center">
-                            <i class="fas fa-door-open text-white text-3xl"></i>
+    <main class="container mx-auto px-4 sm:px-6 py-8">
+        <!-- Cadastro Section -->
+        <section class="mb-12">
+            <div class="card-bg rounded-3xl p-8 fade-in">
+                <div class="flex items-center gap-3 mb-8">
+                    <i class="fas fa-plus-circle text-2xl" style="color: var(--header-color);"></i>
+                    <h2 class="text-2xl font-bold">Cadastrar Sala Temática</h2>
+                </div>
+                
+                <form id="salaForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
+                                <i class="fas fa-heading mr-2"></i>Nome da Sala
+                            </label>
+                            <input type="text" id="nomeSala" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
                         </div>
                         <div>
-                            <h2 class="main-title font-black mb-4 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
-                                Sala Temática
-                            </h2>
-                            <p class="text-lg text-gray-300 font-medium mb-4">
-                                "Construindo Comunidades Sustentáveis: Saúde, Gestão e Inovação"
-                            </p>
-                            <p class="text-sm text-gray-400 font-medium">
-                                Avalie cada critério com notas de 0 a 100 pontos
-                            </p>
-                        </div>
-                    </div>
-                    <!-- Botão Discreto para Regras -->
-                    <div class="flex justify-center mb-6">
-                        <button type="button" id="regrasButton" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 rounded-full text-sm font-medium text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 hover:border-gray-500">
-                            <i class="fas fa-info-circle text-xs"></i>
-                            <span>Ver Regras</span>
-                        </button>
-                    </div>
-                    <!-- Seletor de Curso -->
-                    <div class="mb-8">
-                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-graduation-cap mr-2"></i>Curso
-                        </label>
-                        <div class="select-wrapper">
-                            <select id="cursoInput" name="curso" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
-                                <option value="" selected disabled>Selecione o curso</option>
+                            <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
+                                <i class="fas fa-graduation-cap mr-2"></i>Curso Responsável
+                            </label>
+                            <select id="cursoSala" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
+                                <option value="">Selecione o curso</option>
                                 <option value="Enfermagem">Enfermagem</option>
                                 <option value="Informática">Informática</option>
                                 <option value="Meio ambiente">Meio ambiente</option>
@@ -583,369 +297,522 @@ $session->autenticar_session();
                             </select>
                         </div>
                     </div>
-                    <!-- Critérios de Avaliação -->
-                    <div class="mb-8">
-                        <div class="flex items-center gap-3 justify-center mb-6">
-                            <i class="fas fa-star text-yellow-400 text-xl"></i>
-                            <span class="section-title font-bold text-gray-200">Critérios de Avaliação</span>
+                    
+                    <div>
+                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
+                            <i class="fas fa-users mr-2"></i>Equipe Responsável (separar nomes por vírgula)
+                        </label>
+                        <textarea id="equipeSala" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" rows="2"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
+                            <i class="fas fa-tags mr-2"></i>Tema da Sala
+                        </label>
+                        <input type="text" id="temaSala" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
+                            <i class="fas fa-align-left mr-2"></i>Descrição da Sala
+                        </label>
+                        <textarea id="descricaoSala" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
+                                <i class="fas fa-tools mr-2"></i>Recursos Utilizados
+                            </label>
+                            <textarea id="recursosSala" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" rows="3"></textarea>
                         </div>
-                        <div class="criteria-grid">
-                            <!-- Adequação ao Tema Proposto -->
-                            <div class="criteria-item">
-                                <div class="criteria-icon bg-gradient-to-br from-blue-500 to-cyan-600">
-                                    <i class="fas fa-bullseye"></i>
-                                </div>
-                                <h4 class="criteria-title">Adequação ao Tema</h4>
-                                <p class="criteria-subtitle">Foco, pertinência e coerência com o tema</p>
-                                <div class="score-input-wrapper">
-                                    <input type="number" id="notaAdequacao" name="nota_adequacao" min="0" max="100" placeholder="0-100" class="score-input" value="">
-                                </div>
-                                <div id="displayAdequacao" class="score-display hidden">
-                                    <span id="valorAdequacao">0</span> pontos
-                                </div>
-                            </div>
-                            <!-- Qualidade do Conteúdo Apresentado -->
-                            <div class="criteria-item">
-                                <div class="criteria-icon bg-gradient-to-br from-green-500 to-emerald-600">
-                                    <i class="fas fa-book-open"></i>
-                                </div>
-                                <h4 class="criteria-title">Qualidade do Conteúdo</h4>
-                                <p class="criteria-subtitle">Rigor informativo, valor educativo e conexão crítica</p>
-                                <div class="score-input-wrapper">
-                                    <input type="number" id="notaConteudo" name="nota_conteudo" min="0" max="100" placeholder="0-100" class="score-input" value="">
-                                </div>
-                                <div id="displayConteudo" class="score-display hidden">
-                                    <span id="valorConteudo">0</span> pontos
-                                </div>
-                            </div>
-                            <!-- Ambientação e Criatividade -->
-                            <div class="criteria-item">
-                                <div class="criteria-icon bg-gradient-to-br from-purple-500 to-violet-600">
-                                    <i class="fas fa-paint-brush"></i>
-                                </div>
-                                <h4 class="criteria-title">Ambientação e Criatividade</h4>
-                                <p class="criteria-subtitle">Estética, criatividade e esforço no ambiente</p>
-                                <div class="score-input-wrapper">
-                                    <input type="number" id="notaAmbientacao" name="nota_ambientacao" min="0" max="100" placeholder="0-100" class="score-input" value="">
-                                </div>
-                                <div id="displayAmbientacao" class="score-display hidden">
-                                    <span id="valorAmbientacao">0</span> pontos
-                                </div>
-                            </div>
-                            <!-- Didática e Clareza na Apresentação Oral -->
-                            <div class="criteria-item">
-                                <div class="criteria-icon bg-gradient-to-br from-yellow-500 to-orange-600">
-                                    <i class="fas fa-microphone"></i>
-                                </div>
-                                <h4 class="criteria-title">Didática e Clareza</h4>
-                                <p class="criteria-subtitle">Comunicação, domínio do tema e interação</p>
-                                <div class="score-input-wrapper">
-                                    <input type="number" id="notaDidatica" name="nota_didatica" min="0" max="100" placeholder="0-100" class="score-input" value="">
-                                </div>
-                                <div id="displayDidatica" class="score-display hidden">
-                                    <span id="valorDidatica">0</span> pontos
-                                </div>
-                            </div>
-                            <!-- Trabalho em Equipe e Organização -->
-                            <div class="criteria-item">
-                                <div class="criteria-icon bg-gradient-to-br from-pink-500 to-red-600">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <h4 class="criteria-title">Trabalho em Equipe</h4>
-                                <p class="criteria-subtitle">Organização e cooperação entre os alunos</p>
-                                <div class="score-input-wrapper">
-                                    <input type="number" id="notaEquipe" name="nota_equipe" min="0" max="100" placeholder="0-100" class="score-input" value="">
-                                </div>
-                                <div id="displayEquipe" class="score-display hidden">
-                                    <span id="valorEquipe">0</span> pontos
-                                </div>
-                            </div>
-                            <!-- Sustentabilidade na Execução -->
-                            <div class="criteria-item">
-                                <div class="criteria-icon bg-gradient-to-br from-lime-500 to-green-700">
-                                    <i class="fas fa-leaf"></i>
-                                </div>
-                                <h4 class="criteria-title">Sustentabilidade</h4>
-                                <p class="criteria-subtitle">Coerência entre discurso e prática sustentável</p>
-                                <div class="score-input-wrapper">
-                                    <input type="number" id="notaSustentabilidade" name="nota_sustentabilidade" min="0" max="100" placeholder="0-100" class="score-input" value="">
-                                </div>
-                                <div id="displaySustentabilidade" class="score-display hidden">
-                                    <span id="valorSustentabilidade">0</span> pontos
-                                </div>
-                            </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
+                                <i class="fas fa-bullseye mr-2"></i>Objetivos
+                            </label>
+                            <textarea id="objetivosSala" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" rows="3"></textarea>
                         </div>
                     </div>
-                    <!-- Painel de Pontuação Total -->
-                    <div id="pontosPainel" class="mt-8 hidden slide-up">
-                        <div class="stats-card rounded-xl p-4 text-center max-w-sm mx-auto">
-                            <div class="flex items-center justify-center gap-2 mb-3">
-                                <i class="fas fa-calculator text-yellow-400"></i>
-                                <h3 class="text-lg font-bold text-white">Pontuação Total</h3>
-                            </div>
-                            <div class="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg p-3">
-                                <p class="text-2xl font-black text-black">
-                                    <span id="pontosTotais">0</span> / 600
-                                </p>
-                                <p class="text-xs font-medium text-black opacity-75">
-                                    Média: <span id="mediaPontos">0.0</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-4 pt-8">
-                        <button type="submit" class="btn-primary flex-1 py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2">
-                            <i class="fas fa-vote-yea"></i>
-                            Registrar Avaliação
+                    
+                    <div class="flex justify-end">
+                        <button type="submit" class="btn-primary px-8 py-3 rounded-2xl font-semibold text-white flex items-center gap-2">
+                            <i class="fas fa-save"></i>
+                            Cadastrar Sala
                         </button>
                     </div>
                 </form>
-                <!-- Tela de Sucesso -->
-                <div id="sucessoVotacao" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm p-4">
-                    <div class="card-bg rounded-3xl p-8 w-full max-w-md text-center fade-in">
-                        <div class="flex flex-col items-center gap-4 mb-6">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center pulse-glow">
-                                <i class="fas fa-check-circle text-white text-4xl"></i>
-                            </div>
-                            <h2 class="text-2xl font-extrabold text-green-400 mb-2">Avaliação Registrada!</h2>
-                            <p class="text-lg text-gray-200">A avaliação da sala foi computada com sucesso.</p>
-                            <div class="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl p-3 mt-2">
-                                <p class="text-xl font-black text-black">
-                                    Total: <span id="pontosFinal">0</span> / 600 pontos
-                                </p>
-                            </div>
-                        </div>
-                        <button onclick="fecharSucessoVotacao()" class="btn-primary btn-responsive font-semibold text-white flex items-center justify-center gap-2 mx-auto mt-4 hover:scale-105 transition-transform">
-                            <i class="fas fa-arrow-left"></i> Nova Avaliação
-                        </button>
+            </div>
+        </section>
+
+        <!-- Salas Grid -->
+        <section class="mb-16">
+            <div class="flex items-center gap-3 mb-8">
+                <i class="fas fa-list text-2xl" style="color: var(--header-color);"></i>
+                <h2 class="text-2xl font-bold">Salas Cadastradas</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="salasList">
+                <!-- Cards will be generated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Votação Modal -->
+        <div id="votacaoModal" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+            <div class="modal-bg rounded-3xl p-8 w-full max-w-4xl mx-4 slide-up max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
+                        <i class="fas fa-vote-yea text-white text-xl"></i>
                     </div>
+                    <h2 class="text-2xl font-bold">Votar na Sala</h2>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-2" id="salaVotando"></h3>
+                    <p class="text-sm text-gray-400" id="descricaoVotando"></p>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-3">🎯 Adequação ao Tema Proposto (0-20 pontos)</label>
+                        <input type="range" id="adequacao" min="0" max="20" value="0" class="range-slider w-full">
+                        <div class="flex justify-between text-sm mt-2">
+                            <span>0</span>
+                            <span id="adequacaoValue" class="text-yellow-400 font-bold">0 pontos</span>
+                            <span>20</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Foco temático, pertinência e coerência com a proposta geral do evento</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-3">🧠 Qualidade do Conteúdo Apresentado (0-20 pontos)</label>
+                        <input type="range" id="conteudo" min="0" max="20" value="0" class="range-slider w-full">
+                        <div class="flex justify-between text-sm mt-2">
+                            <span>0</span>
+                            <span id="conteudoValue" class="text-yellow-400 font-bold">0 pontos</span>
+                            <span>20</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Rigor informativo, valor educativo e conexão crítica</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-3">🖼 Ambientação e Criatividade (0-15 pontos)</label>
+                        <input type="range" id="ambientacao" min="0" max="15" value="0" class="range-slider w-full">
+                        <div class="flex justify-between text-sm mt-2">
+                            <span>0</span>
+                            <span id="ambientacaoValue" class="text-yellow-400 font-bold">0 pontos</span>
+                            <span>15</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Estética, criatividade e esforço na construção do ambiente</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-3">󰠅 Didática e Clareza na Apresentação Oral (0-15 pontos)</label>
+                        <input type="range" id="didatica" min="0" max="15" value="0" class="range-slider w-full">
+                        <div class="flex justify-between text-sm mt-2">
+                            <span>0</span>
+                            <span id="didaticaValue" class="text-yellow-400 font-bold">0 pontos</span>
+                            <span>15</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Comunicação, domínio do tema e interação com os visitantes</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-3">🤝 Trabalho em Equipe e Organização (0-15 pontos)</label>
+                        <input type="range" id="equipe" min="0" max="15" value="0" class="range-slider w-full">
+                        <div class="flex justify-between text-sm mt-2">
+                            <span>0</span>
+                            <span id="equipeValue" class="text-yellow-400 font-bold">0 pontos</span>
+                            <span>15</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Organização e cooperação entre os alunos</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-3">♻️ Sustentabilidade na Execução (0-15 pontos)</label>
+                        <input type="range" id="sustentabilidade" min="0" max="15" value="0" class="range-slider w-full">
+                        <div class="flex justify-between text-sm mt-2">
+                            <span>0</span>
+                            <span id="sustentabilidadeValue" class="text-yellow-400 font-bold">0 pontos</span>
+                            <span>15</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Coerência entre discurso e prática sustentável</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 p-6 bg-gray-800/50 rounded-2xl">
+                    <h4 class="text-lg font-semibold mb-2">Pontuação Total: <span id="totalPontos" class="text-yellow-400 text-2xl font-bold">0</span>/100</h4>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-3">Nome do Avaliador</label>
+                        <input type="text" id="nomeAvaliador" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-3">Observações</label>
+                        <textarea id="observacoes" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" rows="3"></textarea>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4 pt-8">
+                    <button onclick="salvarVoto()" class="btn-primary flex-1 py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2">
+                        <i class="fas fa-vote-yea"></i>
+                        Registrar Voto
+                    </button>
+                    <button onclick="fecharVotacao()" class="btn-secondary flex-1 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
                 </div>
             </div>
         </div>
+
+        <!-- Relatórios Section -->
+        <section class="text-center space-y-6">
+            <div class="flex items-center justify-center gap-3 mb-8">
+                <i class="fas fa-chart-line text-2xl" style="color: var(--accent-color);"></i>
+                <h2 class="text-2xl font-bold">Relatórios Detalhados</h2>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="gerarRelatorioGeral()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
+                    <i class="fas fa-file-alt"></i>
+                    Relatório Geral
+                </button>
+                <button onclick="gerarRanking()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
+                    <i class="fas fa-trophy"></i>
+                    Ranking Final
+                </button>
+                <button onclick="calcularPontuacao()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
+                    <i class="fas fa-medal"></i>
+                    Pontuação por Posição
+                </button>
+            </div>
+        </section>
     </main>
 
-    <!-- Modal de Regras -->
-    <div id="regrasModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm p-4">
-        <div class="card-bg rounded-3xl p-8 w-full max-w-md text-center fade-in">
-            <div class="flex flex-col items-center gap-4 mb-6">
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                    <i class="fas fa-door-open text-white text-2xl"></i>
-                </div>
-                <h2 class="text-2xl font-extrabold text-green-400 mb-2">Regras da Sala Temática</h2>
-            </div>
-            <div class="text-left space-y-4">
-                <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl border border-blue-500/20">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-bullseye text-white text-sm"></i>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-white text-sm">Tema</p>
-                        <p class="text-gray-300 text-xs">"Construindo Comunidades Sustentáveis: Saúde, Gestão e Inovação"</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-xl border border-green-500/20">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-star text-white text-sm"></i>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-white text-sm">Critérios</p>
-                        <ul class="text-gray-300 text-xs list-disc ml-4">
-                            <li>Adequação ao Tema Proposto</li>
-                            <li>Qualidade do Conteúdo Apresentado</li>
-                            <li>Ambientação e Criatividade</li>
-                            <li>Didática e Clareza na Apresentação Oral</li>
-                            <li>Trabalho em Equipe e Organização</li>
-                            <li>Sustentabilidade na Execução</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-xl border border-yellow-500/20">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-calculator text-white text-sm"></i>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-white text-sm">Pontuação</p>
-                        <p class="text-gray-300 text-xs">Cada critério vale de 0 a 100 pontos. Total máximo: 600 pontos.</p>
-                    </div>
-                </div>
-            </div>
-            <button onclick="fecharRegras()" class="btn-primary btn-responsive font-semibold text-white flex items-center justify-center gap-2 mx-auto mt-6 hover:scale-105 transition-transform">
-                <i class="fas fa-check"></i> Entendi
-            </button>
-        </div>
-    </div>
-
     <script>
+        let salas = JSON.parse(localStorage.getItem('salas_tematicas') || '[]');
+        let votos = JSON.parse(localStorage.getItem('votos_salas') || '[]');
+        let salaAtual = null;
+
+        const cursoColors = {
+            'Informática': 'from-blue-500 to-cyan-600',
+            'Enfermagem': 'from-red-500 to-pink-600',
+            'Administração': 'from-purple-500 to-indigo-600',
+            'Agropecuária': 'from-green-500 to-emerald-600'
+        };
+
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // Inputs dos critérios
-            const notaAdequacao = document.getElementById('notaAdequacao');
-            const notaConteudo = document.getElementById('notaConteudo');
-            const notaAmbientacao = document.getElementById('notaAmbientacao');
-            const notaDidatica = document.getElementById('notaDidatica');
-            const notaEquipe = document.getElementById('notaEquipe');
-            const notaSustentabilidade = document.getElementById('notaSustentabilidade');
-            const cursoInput = document.getElementById('cursoInput');
-
-            // Displays individuais
-            const displayAdequacao = document.getElementById('displayAdequacao');
-            const displayConteudo = document.getElementById('displayConteudo');
-            const displayAmbientacao = document.getElementById('displayAmbientacao');
-            const displayDidatica = document.getElementById('displayDidatica');
-            const displayEquipe = document.getElementById('displayEquipe');
-            const displaySustentabilidade = document.getElementById('displaySustentabilidade');
-            const valorAdequacao = document.getElementById('valorAdequacao');
-            const valorConteudo = document.getElementById('valorConteudo');
-            const valorAmbientacao = document.getElementById('valorAmbientacao');
-            const valorDidatica = document.getElementById('valorDidatica');
-            const valorEquipe = document.getElementById('valorEquipe');
-            const valorSustentabilidade = document.getElementById('valorSustentabilidade');
-            const pontosTotais = document.getElementById('pontosTotais');
-            const mediaPontos = document.getElementById('mediaPontos');
-            const pontosPainel = document.getElementById('pontosPainel');
-            const pontosFinal = document.getElementById('pontosFinal');
-            const sucessoVotacao = document.getElementById('sucessoVotacao');
-            const votacaoForm = document.getElementById('salaTematicaForm');
-
-            // Garantir que os inputs começem vazios
-            [notaAdequacao, notaConteudo, notaAmbientacao, notaDidatica, notaEquipe, notaSustentabilidade].forEach(input => input.value = '');
-
-            // Função para validar nota
-            function validarNota(input, valor) {
-                if (valor < 0 || valor > 100 || isNaN(valor)) {
-                    input.classList.add('invalid');
-                    input.classList.remove('valid');
-                    return false;
-                } else {
-                    input.classList.add('valid');
-                    input.classList.remove('invalid');
-                    return true;
-                }
-            }
-
-            // Função para atualizar display de nota individual
-            function atualizarDisplayNota(input, display, valorSpan) {
-                const valor = parseInt(input.value);
-                if (input.value !== '' && !isNaN(valor) && validarNota(input, valor)) {
-                    valorSpan.textContent = valor;
-                    display.classList.remove('hidden');
-                } else {
-                    display.classList.add('hidden');
-                }
-                atualizarPontuacaoTotal();
-            }
-
-            // Função para calcular e atualizar pontuação total
-            function atualizarPontuacaoTotal() {
-                const v1 = notaAdequacao.value !== '' ? parseInt(notaAdequacao.value) || 0 : 0;
-                const v2 = notaConteudo.value !== '' ? parseInt(notaConteudo.value) || 0 : 0;
-                const v3 = notaAmbientacao.value !== '' ? parseInt(notaAmbientacao.value) || 0 : 0;
-                const v4 = notaDidatica.value !== '' ? parseInt(notaDidatica.value) || 0 : 0;
-                const v5 = notaEquipe.value !== '' ? parseInt(notaEquipe.value) || 0 : 0;
-                const v6 = notaSustentabilidade.value !== '' ? parseInt(notaSustentabilidade.value) || 0 : 0;
-                const total = v1 + v2 + v3 + v4 + v5 + v6;
-                const media = total > 0 ? total / 6 : 0;
-                pontosTotais.textContent = total;
-                mediaPontos.textContent = media.toFixed(1);
-                // Mostrar painel se houver pelo menos uma nota e curso selecionado
-                if ((v1 > 0 || v2 > 0 || v3 > 0 || v4 > 0 || v5 > 0 || v6 > 0) && cursoInput.value) {
-                    pontosPainel.classList.remove('hidden');
-                } else {
-                    pontosPainel.classList.add('hidden');
-                }
-            }
-
-            // Event listeners para os inputs de nota
-            notaAdequacao.addEventListener('input', function() { atualizarDisplayNota(this, displayAdequacao, valorAdequacao); });
-            notaConteudo.addEventListener('input', function() { atualizarDisplayNota(this, displayConteudo, valorConteudo); });
-            notaAmbientacao.addEventListener('input', function() { atualizarDisplayNota(this, displayAmbientacao, valorAmbientacao); });
-            notaDidatica.addEventListener('input', function() { atualizarDisplayNota(this, displayDidatica, valorDidatica); });
-            notaEquipe.addEventListener('input', function() { atualizarDisplayNota(this, displayEquipe, valorEquipe); });
-            notaSustentabilidade.addEventListener('input', function() { atualizarDisplayNota(this, displaySustentabilidade, valorSustentabilidade); });
-            cursoInput.addEventListener('change', function() { atualizarPontuacaoTotal(); });
-
-            // Validação em tempo real para limitar valores
-            [notaAdequacao, notaConteudo, notaAmbientacao, notaDidatica, notaEquipe, notaSustentabilidade].forEach(input => {
-                input.addEventListener('keypress', function(e) {
-                    if (!/[0-9]/.test(String.fromCharCode(e.which))) {
-                        e.preventDefault();
-                    }
-                });
-                input.addEventListener('input', function(e) {
-                    if (e.target.value !== '') {
-                        let valor = parseInt(e.target.value);
-                        if (valor > 100) {
-                            e.target.value = 100;
-                        } else if (valor < 0) {
-                            e.target.value = 0;
-                        }
-                    }
-                });
-            });
-
-            // Submissão do formulário de votação
-            votacaoForm.addEventListener('submit', function(e) {
+            renderSalas();
+            
+            // Form submission
+            document.getElementById('salaForm').addEventListener('submit', function(e) {
                 e.preventDefault();
-                const v1 = notaAdequacao.value !== '' ? parseInt(notaAdequacao.value) || 0 : 0;
-                const v2 = notaConteudo.value !== '' ? parseInt(notaConteudo.value) || 0 : 0;
-                const v3 = notaAmbientacao.value !== '' ? parseInt(notaAmbientacao.value) || 0 : 0;
-                const v4 = notaDidatica.value !== '' ? parseInt(notaDidatica.value) || 0 : 0;
-                const v5 = notaEquipe.value !== '' ? parseInt(notaEquipe.value) || 0 : 0;
-                const v6 = notaSustentabilidade.value !== '' ? parseInt(notaSustentabilidade.value) || 0 : 0;
-                if (!cursoInput.value) {
-                    alert('Por favor, selecione o curso.');
-                    cursoInput.focus();
-                    return;
-                }
-                if (v1 === 0 && v2 === 0 && v3 === 0 && v4 === 0 && v5 === 0 && v6 === 0) {
-                    alert('Por favor, preencha pelo menos uma nota.');
-                    notaAdequacao.focus();
-                    return;
-                }
-                // Validar se todas as notas preenchidas estão no range correto
-                const inputs = [notaAdequacao, notaConteudo, notaAmbientacao, notaDidatica, notaEquipe, notaSustentabilidade];
-                for (let input of inputs) {
-                    if (input.value !== '' && !validarNota(input, parseInt(input.value))) {
-                        alert('Por favor, digite notas válidas entre 0 e 100.');
-                        input.focus();
-                        return;
-                    }
-                }
-                // Atualizar pontuação final
-                const total = v1 + v2 + v3 + v4 + v5 + v6;
-                pontosFinal.textContent = total;
-                // Mostrar tela de sucesso
-                sucessoVotacao.classList.remove('hidden');
-                votacaoForm.style.display = 'none';
+                
+                const sala = {
+                    id: Date.now(),
+                    nome: document.getElementById('nomeSala').value,
+                    curso: document.getElementById('cursoSala').value,
+                    equipe: document.getElementById('equipeSala').value,
+                    tema: document.getElementById('temaSala').value,
+                    descricao: document.getElementById('descricaoSala').value,
+                    recursos: document.getElementById('recursosSala').value,
+                    objetivos: document.getElementById('objetivosSala').value,
+                    timestamp: new Date().toISOString()
+                };
+                
+                salas.push(sala);
+                localStorage.setItem('salas_tematicas', JSON.stringify(salas));
+                
+                this.reset();
+                renderSalas();
+                
+                showNotification('Sala cadastrada com sucesso!', 'success');
             });
 
-            // Função para resetar o formulário de votação
-            window.fecharSucessoVotacao = function() {
-                sucessoVotacao.classList.add('hidden');
-                votacaoForm.style.display = 'block';
-                votacaoForm.reset();
-                pontosPainel.classList.add('hidden');
-                [notaAdequacao, notaConteudo, notaAmbientacao, notaDidatica, notaEquipe, notaSustentabilidade].forEach(input => {
-                    input.value = '';
-                    input.classList.remove('valid', 'invalid');
+            // Atualizar valores dos sliders
+            document.querySelectorAll('input[type="range"]').forEach(slider => {
+                slider.addEventListener('input', function() {
+                    document.getElementById(this.id + 'Value').textContent = this.value + ' pontos';
+                    calcularTotal();
                 });
-                [displayAdequacao, displayConteudo, displayAmbientacao, displayDidatica, displayEquipe, displaySustentabilidade].forEach(display => display.classList.add('hidden'));
-            };
+            });
+        });
 
-            // Modal de regras
-            const regrasButton = document.getElementById('regrasButton');
-            const regrasModal = document.getElementById('regrasModal');
-            if (regrasButton && regrasModal) {
-                regrasButton.addEventListener('click', function() {
-                    regrasModal.classList.remove('hidden');
-                });
-                window.fecharRegras = function() {
-                    regrasModal.classList.add('hidden');
+        function renderSalas() {
+            const container = document.getElementById('salasList');
+            container.innerHTML = '';
+            
+            if (salas.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-20">
+                        <div class="w-32 h-32 mx-auto mb-8 rounded-3xl bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center">
+                            <i class="fas fa-door-open text-4xl text-gray-400"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-300 mb-4">Nenhuma sala cadastrada</h3>
+                        <p class="text-gray-400 mb-8 text-lg">Adicione a primeira sala para começar</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            salas.forEach(sala => {
+                const votosSala = votos.filter(v => v.salaId === sala.id);
+                const mediaNotas = votosSala.length > 0 
+                    ? (votosSala.reduce((sum, v) => sum + v.total, 0) / votosSala.length).toFixed(1)
+                    : 'Não avaliado';
+                
+                const card = document.createElement('div');
+                card.className = 'card-bg rounded-3xl p-6 card-hover transition-all duration-300 fade-in';
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${cursoColors[sala.curso] || 'from-gray-600 to-gray-700'} flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-door-open text-white text-xl"></i>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <h3 class="text-xl font-bold text-white mb-1">${sala.nome}</h3>
+                                <p class="text-sm text-gray-400 font-medium">${sala.curso}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-gray-400 text-sm">Tema:</span>
+                            <p class="text-gray-300 text-sm mt-1 font-semibold">${sala.tema}</p>
+                        </div>
+                        
+                        <div>
+                            <span class="text-gray-400 text-sm">Equipe:</span>
+                            <p class="text-gray-300 text-sm mt-1">${sala.equipe || 'Não informado'}</p>
+                        </div>
+                        
+                        <div>
+                            <span class="text-gray-400 text-sm">Descrição:</span>
+                            <p class="text-gray-300 text-sm mt-1">${sala.descricao.substring(0, 100)}${sala.descricao.length > 100 ? '...' : ''}</p>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300 font-semibold">Média de Votos</span>
+                            <span class="text-2xl font-bold" style="color: var(--accent-color);">${mediaNotas}</span>
+                        </div>
+                        
+                        <div class="text-center">
+                            <p class="text-xs text-gray-400 mb-3">Votos: ${votosSala.length}</p>
+                            <button onclick="votarSala(${sala.id})" 
+                                    class="btn-primary w-full py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2">
+                                <i class="fas fa-vote-yea"></i>
+                                Votar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function votarSala(id) {
+            salaAtual = salas.find(s => s.id === id);
+            document.getElementById('salaVotando').textContent = 
+                `${salaAtual.nome} (${salaAtual.curso})`;
+            document.getElementById('descricaoVotando').textContent = salaAtual.descricao;
+            
+            // Reset form
+            document.querySelectorAll('input[type="range"]').forEach(slider => {
+                slider.value = 0;
+                document.getElementById(slider.id + 'Value').textContent = '0 pontos';
+            });
+            document.getElementById('nomeAvaliador').value = '';
+            document.getElementById('observacoes').value = '';
+            calcularTotal();
+            
+            document.getElementById('votacaoModal').classList.remove('hidden');
+            document.getElementById('votacaoModal').classList.add('flex');
+        }
+
+        function calcularTotal() {
+            const criatividade = parseInt(document.getElementById('adequacao').value);
+            const conteudo = parseInt(document.getElementById('conteudo').value);
+            const organizacao = parseInt(document.getElementById('ambientacao').value);
+            const interatividade = parseInt(document.getElementById('didatica').value);
+            const impactoVisual = parseInt(document.getElementById('equipe').value);
+            const sustentabilidade = parseInt(document.getElementById('sustentabilidade').value);
+            
+            const total = criatividade + conteudo + organizacao + interatividade + impactoVisual + sustentabilidade;
+            document.getElementById('totalPontos').textContent = total;
+        }
+
+        function salvarVoto() {
+            if (!salaAtual || !document.getElementById('nomeAvaliador').value) {
+                showNotification('Preencha o nome do avaliador!', 'error');
+                return;
+            }
+            
+            const voto = {
+                id: Date.now(),
+                salaId: salaAtual.id,
+                avaliador: document.getElementById('nomeAvaliador').value,
+                criatividade: parseInt(document.getElementById('adequacao').value),
+                conteudo: parseInt(document.getElementById('conteudo').value),
+                organizacao: parseInt(document.getElementById('ambientacao').value),
+                interatividade: parseInt(document.getElementById('didatica').value),
+                impactoVisual: parseInt(document.getElementById('equipe').value),
+                sustentabilidade: parseInt(document.getElementById('sustentabilidade').value),
+                total: parseInt(document.getElementById('totalPontos').textContent),
+                observacoes: document.getElementById('observacoes').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            votos.push(voto);
+            localStorage.setItem('votos_salas', JSON.stringify(votos));
+            
+            showNotification('Voto registrado com sucesso!', 'success');
+            fecharVotacao();
+            renderSalas();
+        }
+
+        function fecharVotacao() {
+            document.getElementById('votacaoModal').classList.add('hidden');
+            document.getElementById('votacaoModal').classList.remove('flex');
+            salaAtual = null;
+        }
+
+        function gerarRelatorioGeral() {
+            let relatorio = 'RELATÓRIO GERAL - SALAS TEMÁTICAS\n';
+            relatorio += '='.repeat(50) + '\n\n';
+            
+            salas.forEach(sala => {
+                const votosSala = votos.filter(v => v.salaId === sala.id);
+                relatorio += `SALA: ${sala.nome}\n`;
+                relatorio += `Curso: ${sala.curso}\n`;
+                relatorio += `Tema: ${sala.tema}\n`;
+                relatorio += `Equipe: ${sala.equipe}\n`;
+                relatorio += `Descrição: ${sala.descricao}\n`;
+                relatorio += `Recursos: ${sala.recursos}\n`;
+                relatorio += `Objetivos: ${sala.objetivos}\n\n`;
+                
+                if (votosSala.length > 0) {
+                    relatorio += 'VOTOS RECEBIDOS:\n';
+                    votosSala.forEach(voto => {
+                        relatorio += `  Avaliador: ${voto.avaliador}\n`;
+                        relatorio += `  Criatividade: ${voto.criatividade}/20\n`;
+                        relatorio += `  Conteúdo: ${voto.conteudo}/20\n`;
+                        relatorio += `  Organização: ${voto.organizacao}/15\n`;
+                        relatorio += `  Interatividade: ${voto.interatividade}/15\n`;
+                        relatorio += `  Impacto Visual: ${voto.impactoVisual}/15\n`;
+                        relatorio += `  Sustentabilidade: ${voto.sustentabilidade}/15\n`;
+                        relatorio += `  TOTAL: ${voto.total}/100\n`;
+                        if (voto.observacoes) {
+                            relatorio += `  Observações: ${voto.observacoes}\n`;
+                        }
+                        relatorio += '\n';
+                    });
+                    
+                    const media = (votosSala.reduce((sum, v) => sum + v.total, 0) / votosSala.length).toFixed(2);
+                    relatorio += `MÉDIA FINAL: ${media}/100\n`;
+                } else {
+                    relatorio += 'Não avaliado\n';
+                }
+                
+                relatorio += '-'.repeat(40) + '\n\n';
+            });
+            
+            downloadFile(relatorio, 'relatorio_salas_tematicas.txt');
+        }
+
+        function gerarRanking() {
+            const ranking = salas.map(sala => {
+                const votosSala = votos.filter(v => v.salaId === sala.id);
+                const media = votosSala.length > 0 
+                    ? votosSala.reduce((sum, v) => sum + v.total, 0) / votosSala.length
+                    : 0;
+                
+                return {
+                    ...sala,
+                    media: media,
+                    totalVotos: votosSala.length
                 };
-                regrasModal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        window.fecharRegras();
-                    }
-                });
+            }).sort((a, b) => b.media - a.media);
+            
+            let relatorio = 'RANKING FINAL - SALAS TEMÁTICAS\n';
+            relatorio += '='.repeat(50) + '\n\n';
+            
+            ranking.forEach((sala, index) => {
+                relatorio += `${index + 1}º LUGAR\n`;
+                relatorio += `Sala: ${sala.nome}\n`;
+                relatorio += `Curso: ${sala.curso}\n`;
+                relatorio += `Tema: ${sala.tema}\n`;
+                relatorio += `Equipe: ${sala.equipe}\n`;
+                relatorio += `Média: ${sala.media.toFixed(2)}/100\n`;
+                relatorio += `Votos: ${sala.totalVotos}\n\n`;
+            });
+            
+            downloadFile(relatorio, 'ranking_salas_tematicas.txt');
+        }
+
+        function calcularPontuacao() {
+            const ranking = salas.map(sala => {
+                const votosSala = votos.filter(v => v.salaId === sala.id);
+                const media = votosSala.length > 0 
+                    ? votosSala.reduce((sum, v) => sum + v.total, 0) / votosSala.length
+                    : 0;
+                
+                return {
+                    ...sala,
+                    media: media
+                };
+            }).sort((a, b) => b.media - a.media);
+            
+            let relatorio = 'PONTUAÇÃO POR POSIÇÃO - SALAS TEMÁTICAS\n';
+            relatorio += '='.repeat(50) + '\n\n';
+            
+            const pontuacoes = [1000, 850, 700, 600, 500];
+            
+            ranking.forEach((sala, index) => {
+                const posicao = index + 1;
+                const pontos = index < pontuacoes.length ? pontuacoes[index] : 0;
+                
+                relatorio += `${posicao}º LUGAR - ${pontos} PONTOS\n`;
+                relatorio += `Sala: ${sala.nome}\n`;
+                relatorio += `Curso: ${sala.curso}\n`;
+                relatorio += `Tema: ${sala.tema}\n`;
+                relatorio += `Equipe: ${sala.equipe}\n`;
+                relatorio += `Média de avaliação: ${sala.media.toFixed(2)}/100\n\n`;
+            });
+            
+            downloadFile(relatorio, 'pontuacao_posicao_salas.txt');
+        }
+
+        function downloadFile(content, filename) {
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-2xl text-white font-semibold ${
+                type === 'success' ? 'bg-green-600' : 'bg-red-600'
+            } slide-up`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Event listeners
+        document.getElementById('votacaoModal').addEventListener('click', function(e) {
+            if (e.target === this) fecharVotacao();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (!document.getElementById('votacaoModal').classList.contains('hidden')) fecharVotacao();
             }
         });
     </script>

@@ -165,7 +165,7 @@ $session->autenticar_session();
                     <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                         <i class="fas fa-user text-green-300 text-xs"></i>
                     </div>
-                    <span class="text-gray-100">João Silva</span>
+                    <span class="text-gray-100"><?=$_SESSION['Nome']?></span>
                 </div>
             </div>
         </div>
@@ -219,14 +219,14 @@ $session->autenticar_session();
                 <a href="parodia.php" class="btn-acessar">Acessar</a>
             </div>
             <!-- Card Vestimentas Sustentáveis -->
-            <div class="card-bg rounded-3xl p-8 text-center">
+           <!-- <div class="card-bg rounded-3xl p-8 text-center">
                 <div class="dashboard-card-icon bg-gradient-to-br from-green-500 to-emerald-600">
                     <i class="fas fa-tshirt text-white"></i>
                 </div>
                 <h2 class="text-xl font-bold mb-2">Vestimentas </h2>
                 <p class="text-gray-300 mb-6">Cadastro e avaliação das vestimentas sustentáveis.</p>
                 <a href="vestimentas_sustentaveis.php" class="btn-acessar">Acessar</a>
-            </div>
+            </div>-->
         </div>
     </main>
 </body>
