@@ -15,7 +15,7 @@ $session->autenticar_session();
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../../assets/js/service-worker.js"></script>
     <script src="../../assets/js/acessibilidades.js"></script>
-    <link rel=" icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
+    <link rel="icon" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" type="image/x-icon">
 
     <link rel="manifest" href="../../assets/js/manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -24,7 +24,7 @@ $session->autenticar_session();
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Portal Professores">
 
-    <title>Subsistema Alunos STGM</title>
+    <title>Subsistema ADMINSESMATED </title>
 </head>
 <script>
     tailwind.config = {
@@ -94,7 +94,15 @@ $session->autenticar_session();
         }
     }
 
-
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        transition: all 0.3s ease-out;
+    }
 
     .grid-container.transitioning {
         transition: all 0.3s ease-out;
@@ -103,6 +111,9 @@ $session->autenticar_session();
     .app-card-link {
         transition: all 0.3s ease-out;
         width: 100%;
+        display: block;
+        text-decoration: none;
+        color: inherit;
     }
 
     @media (max-width: 768px) {
@@ -118,14 +129,12 @@ $session->autenticar_session();
         }
     }
 
-    .grid-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 2rem;
-        padding: 2rem;
-        max-width: 1400px;
-        margin: 0 auto;
-        transition: all 0.3s ease-out;
+    @media (max-width: 480px) {
+        .grid-container {
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.8rem;
+            padding: 0.8rem;
+        }
     }
 
     .app-card {
@@ -147,31 +156,23 @@ $session->autenticar_session();
     }
 
     .clear-search {
-
         position: absolute;
         right: 30px;
         top: 50%;
         transform: translateY(-50%);
-
-
         background: none;
         border: none;
         border-radius: 50%;
         padding: 8px;
         margin: 0;
-
         color: #666;
         transition: all 0.2s ease;
         opacity: 0.7;
-
-
         cursor: pointer;
         user-select: none;
         -webkit-user-select: none;
-
         min-width: 32px;
         min-height: 32px;
-
         display: flex;
         align-items: center;
         justify-content: center;
@@ -187,7 +188,6 @@ $session->autenticar_session();
     .clear-search:hover {
         color: #333;
         opacity: 1;
-
     }
 
     .clear-search:focus {
@@ -195,15 +195,10 @@ $session->autenticar_session();
         box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
     }
 
-
     .search-container {
         position: relative;
         max-width: 500px;
         margin: 0 auto;
-    }
-
-    .app-card-link {
-        transition: all 0.3s ease-out;
     }
 
     .transitioning {
@@ -291,6 +286,7 @@ $session->autenticar_session();
         color: var(--text-color);
         font-weight: 500;
         transition: all 0.3s ease;
+        text-decoration: none;
     }
 
     .nav-link::after {
@@ -314,7 +310,7 @@ $session->autenticar_session();
         border-radius: 12px;
         background: rgba(0, 122, 51, 0.1);
         color: var(--header-color);
-        margin-top: 0.5rem;
+        margin: 0.25rem;
         display: inline-block;
     }
 
@@ -415,6 +411,7 @@ $session->autenticar_session();
         gap: 0.5rem;
         color: var(--text-color);
         transition: all 0.3s ease;
+        text-decoration: none;
     }
 
     .mobile-nav a:active {
@@ -484,40 +481,67 @@ $session->autenticar_session();
             font-size: 15px;
         }
     }
+
+    .mobile-nav {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    #accessibilityMenuMobile,
+    #themeMenuMobile {
+        transition: all 0.3s ease-in-out;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .menu-base {
+        position: fixed;
+        left: 1rem;
+        right: 1rem;
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 50;
+    }
+
+    .menu-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+        pointer-events: none;
+        z-index: 40;
+    }
+
+    .menu-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
 </style>
-</head>
 
 <body class="select-none">
     <noscript>
         <div class="fixed inset-0 bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center z-50">
-            <div
-                class="bg-white p-6 rounded-lg shadow-2xl border border-red-300 max-w-md w-full mx-4 text-center animate-pulse">
+            <div class="bg-white p-6 rounded-lg shadow-2xl border border-red-300 max-w-md w-full mx-4 text-center animate-pulse">
                 <h1 class="text-2xl font-bold text-red-600 mb-4">Atenção!</h1>
                 <p class="text-lg text-gray-800 mb-4">Este site requer JavaScript para funcionar corretamente.</p>
-                <p class="text-md text-gray-600 mb-6">Por favor, ative o JavaScript no seu navegador para acessar todas
-                    as funcionalidades do Portal do Aluno, como navegação interativa, modo escuro e acessibilidade.</p>
+                <p class="text-md text-gray-600 mb-6">Por favor, ative o JavaScript no seu navegador para acessar todas as funcionalidades do Portal do Aluno, como navegação interativa, modo escuro e acessibilidade.</p>
                 <div class="flex justify-center gap-4">
-                    <a href="https://www.enable-javascript.com/pt/" target="_blank"
-                        class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">Como
-                        Ativar JavaScript</a>
-                    <button onclick="window.location.reload()"
-                        class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">Recarregar
-                        Página</button>
+                    <a href="https://www.enable-javascript.com/pt/" target="_blank" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">Como Ativar JavaScript</a>
+                    <button onclick="window.location.reload()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">Recarregar Página</button>
                 </div>
                 <p class="text-sm text-gray-500 mt-4">Se o problema persistir, entre em contato com o suporte.</p>
             </div>
         </div>
     </noscript>
+
     <header class="main-header">
         <div class="container mx-auto px-4 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo"
-                        class="h-12 w-auto object-contain">
+                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="h-12 w-auto object-contain">
                     <div>
-                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Subsistema Alunos <span
-                                class="text-secondary">STGM</span>
-                        </h1>
+                        <h1 class="md:text-xl lg:text-lg font-bold text-primary">Subsistema Alunos <span class="text-secondary">STGM</span></h1>
                         <div class="h-0.5 bg-primary/20 rounded-full mt-1"></div>
                     </div>
                 </div>
@@ -525,55 +549,37 @@ $session->autenticar_session();
                 <nav class="hidden md:flex items-center gap-5">
                     <a href="../../" class="nav-link">Início</a>
                     <a href="./subsistema.php?sair" class="nav-link">Sair</a>
-                    <button id="darkModeToggle"
-                        class="inline-flex items-center justify-center p-2 rounded-lg transition-colors" role="switch"
-                        aria-label="Alternar modo escuro">
-                        <svg class="w-5 h-5 sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    <button id="darkModeToggle" class="inline-flex items-center justify-center p-2 rounded-lg transition-colors" role="switch" aria-label="Alternar modo escuro">
+                        <svg class="w-5 h-5 sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
-                        <svg class="w-5 h-5 moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        <svg class="w-5 h-5 moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                         </svg>
                         <span class="sr-only">Alternar modo escuro</span>
                     </button>
 
                     <div class="relative">
-                        <button id="accessibilityBtnDesktop"
-                            class="flex items-center gap-2 p-2 rounded-lg transition-colors duration-300"
-                            aria-expanded="false" aria-haspopup="true">
+                        <button id="accessibilityBtnDesktop" class="flex items-center gap-2 p-2 rounded-lg transition-colors duration-300" aria-expanded="false" aria-haspopup="true">
                             <i class="fa-solid fa-universal-access text-xl"></i>
                         </button>
 
-                        <div id="accessibilityMenuDesktop"
-                            class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 hidden z-50"
-                            role="menu">
+                        <div id="accessibilityMenuDesktop" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 hidden z-50" role="menu">
                             <div class="px-4 py-2 border-b" style="color: #1a1a1a;">
                                 <span class="block text-sm font-semibold mb-2">Tamanho do Texto</span>
                                 <div class="flex gap-2">
-                                    <button class="p-2 hover:bg-gray-100 rounded"
-                                        aria-label="Diminuir tamanho do texto"><i
-                                            class="fa-solid fa-a"></i><b>-</b></button>
-                                    <button class="p-2 hover:bg-gray-100 rounded"
-                                        aria-label="Tamanho padrão do texto"><i class="fa-solid fa-a"></i></button>
-                                    <button class="p-2 hover:bg-gray-100 rounded"
-                                        aria-label="Aumentar tamanho do texto"><i
-                                            class="fa-solid fa-a"></i><b>+</b></button>
+                                    <button class="p-2 hover:bg-gray-100 rounded" aria-label="Diminuir tamanho do texto"><i class="fa-solid fa-a"></i><b>-</b></button>
+                                    <button class="p-2 hover:bg-gray-100 rounded" aria-label="Tamanho padrão do texto"><i class="fa-solid fa-a"></i></button>
+                                    <button class="p-2 hover:bg-gray-100 rounded" aria-label="Aumentar tamanho do texto"><i class="fa-solid fa-a"></i><b>+</b></button>
                                 </div>
                             </div>
 
-                            <button class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
-                                style="color: #1a1a1a;">
+                            <button class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2" style="color: #1a1a1a;">
                                 <i class="fa-solid fa-ear-listen"></i>
                                 <span>Leitor de Tela</span>
                             </button>
 
-                            <button id="themeBtnDesktop"
-                                class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center justify-between"
-                                style="color: #1a1a1a;">
+                            <button id="themeBtnDesktop" class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center justify-between" style="color: #1a1a1a;">
                                 <div class="flex items-center gap-2">
                                     <i class="fa-solid fa-circle-half-stroke"></i>
                                     <span>Temas de Contraste</span>
@@ -582,8 +588,7 @@ $session->autenticar_session();
                             </button>
                         </div>
 
-                        <div id="themeMenuDesktop"
-                            class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 hidden z-50">
+                        <div id="themeMenuDesktop" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 hidden z-50">
                             <div class="flex items-center px-4 py-2 border-b">
                                 <button id="backToMainMenuDesktop" class="mr-2" style="color: #1a1a1a;">
                                     <i class="fa-solid fa-arrow-left"></i>
@@ -592,18 +597,13 @@ $session->autenticar_session();
                             </div>
 
                             <div class="py-2" style="color: #1a1a1a;">
-                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100"
-                                    data-theme="monochrome">Monocromático</button>
-                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100"
-                                    data-theme="inverted-grayscale">Escala de cinza invertida</button>
-                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100"
-                                    data-theme="inverted-color">Cor invertida</button>
-                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100" data-theme="original">Cores
-                                    originais</button>
+                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100" data-theme="monochrome">Monocromático</button>
+                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100" data-theme="inverted-grayscale">Escala de cinza invertida</button>
+                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100" data-theme="inverted-color">Cor invertida</button>
+                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100" data-theme="original">Cores originais</button>
                             </div>
                         </div>
                     </div>
-                    <!-- Profile dropdown placeholder -->
                 </nav>
 
                 <div class="md:hidden">
@@ -630,15 +630,12 @@ $session->autenticar_session();
                 </button>
 
                 <div id="accessibilityMenuMobile" class="menu-base bottom-24 hidden">
-                    <button class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
-                        style="color: #1a1a1a;">
+                    <button class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2" style="color: #1a1a1a;">
                         <i class="fa-solid fa-ear-listen"></i>
                         <span>Leitor de Tela</span>
                     </button>
                     <div class="relative">
-                        <button id="themeBtnMobile"
-                            class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center justify-between"
-                            style="color: #1a1a1a;">
+                        <button id="themeBtnMobile" class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center justify-between" style="color: #1a1a1a;">
                             <div class="flex items-center gap-2">
                                 <i class="fa-solid fa-circle-half-stroke"></i>
                                 <span>Temas de Contraste</span>
@@ -656,27 +653,19 @@ $session->autenticar_session();
                         <span class="font-semibold">Temas de Contraste</span>
                     </div>
                     <div class="py-2" style="color: #1a1a1a;">
-                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100"
-                            data-theme="monochrome">Monocromático</button>
-                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100"
-                            data-theme="inverted-grayscale">Escala de cinza invertida</button>
-                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100" data-theme="inverted-color">Cor
-                            invertida</button>
-                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100" data-theme="original">Cores
-                            originais</button>
+                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100" data-theme="monochrome">Monocromático</button>
+                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100" data-theme="inverted-grayscale">Escala de cinza invertida</button>
+                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100" data-theme="inverted-color">Cor invertida</button>
+                        <button class="w-full px-4 py-3 text-left hover:bg-gray-100" data-theme="original">Cores originais</button>
                     </div>
                 </div>
             </div>
             <button id="darkModeToggleMobile" class="nav-link flex flex-col items-center">
-                <svg class="w-6 h-6 sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                <svg class="w-6 h-6 sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
-                <svg class="w-6 h-6 moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                <svg class="w-6 h-6 moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                 </svg>
                 <span class="text-xs sr-only">Alternar modo escuro</span>
                 <span class="text-xs">Tema</span>
@@ -685,43 +674,167 @@ $session->autenticar_session();
         <div id="menuOverlay" class="menu-overlay"></div>
     </nav>
 
-    <style>
-        .mobile-nav {
-            transition: transform 0.3s ease-in-out;
-        }
+    <div class="search-container">
+        <input type="text" class="search-bar" placeholder="Buscar aplicativos..." id="search-input">
+    </div>
 
-        #accessibilityMenuMobile,
-        #themeMenuMobile {
-            transition: all 0.3s ease-in-out;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
+    <main class="container mx-auto px-4">
+        <div class="grid-container">
+            <a href="../../../subsystems/sesmated/views/abertura.php" class="app-card-link" data-card-key="Dashboard_abertura">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/sDLfn46k/dashboard-removebg-preview.png" alt="Dashboard abertura" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Abertura</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                </div>
+            </a>
 
-        .menu-base {
-            position: fixed;
-            left: 1rem;
-            right: 1rem;
-            background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 50;
-        }
+            <a href="../../../subsystems/sesmated/views/cordel.php" class="app-card-link" data-card-key="Cordel">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Cordel" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Cordel</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                </div>
+            </a>
 
-        .menu-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            transition: opacity 0.2s ease-in-out;
-            pointer-events: none;
-            z-index: 40;
-        }
+            <a href="../../../subsystems/sesmated/views/empreendedorismo.php" class="app-card-link" data-card-key="Empreendedorismo">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/j2sCbqPB/emopreendedorismo-removebg-preview.png" alt="Empreendedorismo" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Empreendedorismo</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                </div>
+            </a>
 
-        .menu-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-    </style>
+            <a href="../../../subsystems/sesmated/views/esquete.php" class="app-card-link" data-card-key="Esquete">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/ZqxSh8HK/esquete-removebg-preview.png" alt="Esquete" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Esquete</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                </div>
+            </a>
+
+            <a href="../../../subsystems/sesmated/views/logo.php" class="app-card-link" data-card-key="Logo">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/Y92w2vDN/logo-removebg-preview-1.png" alt="Logo" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Logo</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                </div>
+            </a>
+
+            <a href="../../../subsystems/sesmated/views/mascote.php" class="app-card-link" data-card-key="Mascote">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/SRJF8whJ/mawcote-removebg-preview.png" alt="Mascote" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Mascote</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                </div>
+            </a>
+
+            <a href="../../../subsystems/sesmated/views/painel.php" class="app-card-link" data-card-key="Painel">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/ZqZGj9mk/painel-removebg-preview.png" alt="Painel" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Painel</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                </div>
+            </a>
+
+            <a href="../../../subsystems/sesmated/views/frequencia/index.php" class="app-card-link" data-card-key="Eventos">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/qRv9V9gj/palestras-removebg-preview.png" alt="Eventos" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Eventos</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='../../../subsystems/sesmated/views/relatorios/rifas/frequenciaEventos.php'">Relatório Frequência</button>
+                </div>
+            </a>
+
+            <a href="../../../subsystems/sesmated/views/parodia.php" class="app-card-link" data-card-key="Paródia">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/NMyv23YL/parodia-removebg-preview.png" alt="Paródia" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Paródia</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                </div>
+            </a>
+
+            <a href="../../../subsystems/sesmated/views/rifa.php" class="app-card-link" data-card-key="Rifa">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/MprBmBVH/rifa-removebg-preview.png" alt="Rifa" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Rifa</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                </div>
+            </a>
+
+            <a href="../../../subsystems/sesmated/views/sala-tematica.php" class="app-card-link" data-card-key="Sala_tematica">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/sgKk6jgv/sala-tematica-removebg-preview.png" alt="Sala temática" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Sala temática</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                </div>
+            </a>
+
+            <a href="../../../subsystems/sesmated/views/vestimentas.php" class="app-card-link" data-card-key="Vestimentas">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/LscNvwLJ/vestimenstas-removebg-preview.png" alt="Vestimentas" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Vestimentas</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                </div>
+            </a>
+
+            <a href="../../../subsystems/sesmated/views/relatorio.php" class="app-card-link" data-card-key="Relatório">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/LscNvwLJ/vestimenstas-removebg-preview.png" alt="Relatório" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Relatório</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                </div>
+            </a>
+        </div>
+    </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -897,8 +1010,9 @@ $session->autenticar_session();
 
                 lastScroll = currentScroll;
             });
+
             const searchInput = document.getElementById('search-input');
-            const appCardLinks = document.querySelectorAll('.grid-container a'); // Select the anchor tags
+            const appCardLinks = document.querySelectorAll('.grid-container a');
             const gridContainer = document.querySelector('.grid-container');
 
             searchInput.addEventListener('input', function(e) {
@@ -911,11 +1025,15 @@ $session->autenticar_session();
                     return;
                 }
 
-                appCardLinks.forEach(cardLink => { // Iterate through anchor tags
+                appCardLinks.forEach(cardLink => {
                     const appName = cardLink.querySelector('.app-name').textContent.toLowerCase();
-                    const category = cardLink.querySelector('.category-tag').textContent.toLowerCase();
+                    const categoryTags = cardLink.querySelectorAll('.category-tag');
+                    let categoryText = '';
+                    categoryTags.forEach(tag => {
+                        categoryText += tag.textContent.toLowerCase() + ' ';
+                    });
 
-                    if (appName.includes(searchTerm) || category.includes(searchTerm)) {
+                    if (appName.includes(searchTerm) || categoryText.includes(searchTerm)) {
                         visibleCards.push(cardLink);
                         cardLink.style.display = 'block';
                         setTimeout(() => {
@@ -934,13 +1052,12 @@ $session->autenticar_session();
             });
 
             function showAllCards() {
-                // This function needs to operate on the existing rendered cards
                 appCardLinks.forEach((cardLink, index) => {
                     cardLink.style.display = 'block';
                     setTimeout(() => {
                         cardLink.style.opacity = '1';
                         cardLink.style.transform = 'scale(1)';
-                    }, index * 50); // Animate back in
+                    }, index * 50);
                 });
             }
 
@@ -970,9 +1087,6 @@ $session->autenticar_session();
             const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
             mobileNavLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
-                    // Prevent default only if you are handling navigation via JS or forms
-                    // e.preventDefault(); // Uncomment if needed
-
                     mobileNavLinks.forEach(l => l.classList.remove('text-primary'));
                     this.classList.add('text-primary');
 
@@ -983,10 +1097,9 @@ $session->autenticar_session();
                 });
             });
 
-            // Card animation only on initial load
             const animateCards = () => {
-                const initialAppCardLinks = document.querySelectorAll('.grid-container a'); // Select the links
-                initialAppCardLinks.forEach((cardLink, index) => { // Iterate through links
+                const initialAppCardLinks = document.querySelectorAll('.grid-container a');
+                initialAppCardLinks.forEach((cardLink, index) => {
                     cardLink.style.opacity = '0';
                     cardLink.style.transform = 'translateY(20px)';
 
@@ -998,9 +1111,8 @@ $session->autenticar_session();
                 });
             };
 
-            animateCards(); // Run animation on page load
+            animateCards();
 
-            // Add event listeners to the .app-card element inside the link
             document.querySelectorAll('.app-card').forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     const icon = this.querySelector('.icon-wrapper');
@@ -1012,7 +1124,6 @@ $session->autenticar_session();
                     icon.style.transform = 'scale(1) rotate(0)';
                 });
             });
-
 
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
@@ -1029,166 +1140,18 @@ $session->autenticar_session();
 
             const showLoading = () => {
                 const loading = document.createElement('div');
-                loading.className = 'loading-indicator'; // You'd need CSS for this class
+                loading.className = 'loading-indicator';
                 document.body.appendChild(loading);
 
-                // Example: remove loading indicator after a delay (or on page load complete)
-                // This might need to be tied to actual page load for dynamic content
                 setTimeout(() => {
                     loading.remove();
-                }, 1000); // Adjust as needed
+                }, 1000);
             };
 
-            // Add click listener to the anchor tags for loading indicator
             document.querySelectorAll('.grid-container a').forEach(link => {
                 link.addEventListener('click', showLoading);
             });
-
         });
-    </script>
-    <div class="search-container">
-        <input type="text" class="search-bar" placeholder="Buscar aplicativos..." id="search-input">
-    </div>
-    <main class="container mx-auto px-4">
-        <div class="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 md:gap-8 p-4 md:p-8 max-w-[1400px] mx-auto transition-all duration-300 grid-container">
-
-            <a href="../../../subsystems/sesmated/views/abertura.php" class="app-card-link" data-card-key="Dashboard_abertura">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/sDLfn46k/dashboard-removebg-preview.png" alt="Dashboard abertura" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Abertura</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="../../../subsystems/sesmated/views/cordel.php" class="app-card-link" data-card-key="Cordel">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Cordel" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Cordel</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="../../../subsystems/sesmated/views/Empreendedorismo.php" class="app-card-link" data-card-key="Empreendedorismo">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/j2sCbqPB/emopreendedorismo-removebg-preview.png" alt="Empreendedorismo" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Empreendedorismo</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="../../../subsystems/sesmated/views/esquete.php" class="app-card-link" data-card-key="Esquete">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/ZqxSh8HK/esquete-removebg-preview.png" alt="Esquete" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Esquete</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="../../../subsystems/sesmated/views/logo.php" class="app-card-link" data-card-key="Logo">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/Y92w2vDN/logo-removebg-preview-1.png" alt="Logo" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Logo</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="../../../subsystems/sesmated/views/mascote.php" class="app-card-link" data-card-key="Mascote">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/SRJF8whJ/mawcote-removebg-preview.png" alt="Mascote" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Mascote</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="../../../subsystems/sesmated/views/Painel.php" class="app-card-link" data-card-key="Painel">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/ZqZGj9mk/painel-removebg-preview.png" alt="Painel" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Painel</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="../../../subsystems/sesmated/views/frequencia/index.php" class="app-card-link" data-card-key="Palestras">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/qRv9V9gj/palestras-removebg-preview.png" alt="Palestras" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Palestras</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-
-            <a href="../../../subsystems/sesmated/views/frequencia/index.php" class="app-card-link" data-card-key="Workshop">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/qRv9V9gj/palestras-removebg-preview.png" alt="Workshop" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Workshop</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="../../../subsystems/sesmated/views/parodia.php" class="app-card-link" data-card-key="Paródia">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/NMyv23YL/parodia-removebg-preview.png" alt="Paródia" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Paródia</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="../../../subsystems/sesmated/views/rifa.php" class="app-card-link" data-card-key="Rifa">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src=" https://i.postimg.cc/MprBmBVH/rifa-removebg-preview.png " alt="Rifa" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Rifa</h3>
-                    <span class="category-tag"><a href="">Relatório por turma</a></span>
-                    <span class="category-tag"><a href="">Relatório po</a>r</span>
-                    <span class="category-tag"><a href="">Relatório total arrecado</a></span>
-                </div>
-            </a>
-            <a href="../../../subsystems/sesmated/views/Sala_Tematica.php" class="app-card-link" data-card-key="Sala_temática">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/sgKk6jgv/sala-tematica-removebg-preview.png" alt="Sala temática" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Sala temática</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="../../../subsystems/sesmated/views/vestimentas_sustentaveis.php" class="app-card-link" data-card-key="Vestimentas">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/LscNvwLJ/vestimenstas-removebg-preview.png" alt="Vestimentas" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Vestimentas</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-            <a href="../../../subsystems/sesmated/views/relatorios/relatorios_gerais.php" class="app-card-link" data-card-key="Vestimentas">
-                <div class="app-card w-{100px} h-full">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/LscNvwLJ/vestimenstas-removebg-preview.png" alt="Vestimentas" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Relatório</h3>
-                    <span class="category-tag">Evento</span>
-                </div>
-            </a>
-
-        </div>
-    </main>
-
-    <script>
-    // Função para formatar datas e horários
-    // Removido: mostrarCardsPorDataEHora e setInterval
-    // Todos os cards ficarão sempre visíveis
     </script>
 </body>
 
