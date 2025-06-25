@@ -1,20 +1,22 @@
 <?php
 require_once('../models/main.model.php');
-
+print_r($_POST);
 if (
-    isset($_POST['criterio']) && !empty($_POST['criterio']) &&
-    isset($_POST['pontuacao']) && !empty($_POST['pontuacao']) &&
-    isset($_POST['curso']) && !empty($_POST['curso'])
+    isset($_POST['curso']) && !empty($_POST['curso']) &&
+    isset($_POST['nota_elementos']) && !empty($_POST['nota_elementos']) &&
+    isset($_POST['nota_impressa']) && !empty($_POST['nota_impressa']) &&
+    isset($_POST['nota_digital']) && !empty($_POST['nota_digital']) &&
+    isset($_POST['id_avaliador']) && !empty($_POST['id_avaliador'])
 ) {
-    $criterio = $_POST['criterio'];
-    $pontuacao = $_POST['pontuacao'];
-    $curso = $_POST['curso'];
+    $cursoSelecionado = $_POST['curso'];
+    $notaElementos = $_POST['nota_elementos'];
+    $notaImpressa = $_POST['nota_impressa'];
+    $notaDigital = $_POST['nota_digital'];
+    $avaliadorId = $_POST['id_avaliador'];
+    $modeloPrincipal = new main_model();
+    $resultado = $modeloPrincipal->confirmar_logo($cursoSelecionado, $notaElementos, $notaImpressa, $notaDigital, $avaliadorId);
 
-    $main_model = new main_model();
-    // Método a ser implementado no model
-    $result = $main_model->confirmar_logo($criterio, $pontuacao, $curso);
-
-    switch ($result) {
+    switch ($resultado) {
         case 1:
             header('location:../views/logo.php?confirmado');
             exit();
@@ -28,4 +30,4 @@ if (
 } else {
     header('location:../views/logo.php?empty');
     exit();
-} 
+}

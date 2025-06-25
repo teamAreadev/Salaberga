@@ -189,20 +189,27 @@ class main_model extends connect
     }
 
     //logo
-    public function confirmar_logo($criterios, $pontuacao, $id_curso)
+    public function confirmar_logo($cursoSelecionado, $notaElementos, $notaImpressa, $notaDigital, $avaliadorId)
     {
-        // Verifica se já existe registro para a turma
-        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_04_logo WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $id_curso);
+        // Verifica se já existe registro para o curso
+        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_04_logomarca WHERE curso_id = :curso_id");
+        $stmt_check->bindValue(':curso_id', $cursoSelecionado);
         $stmt_check->execute();
         $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
         if (empty($result)) {
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_04_logo`(`curso_id`, `criterios`, `pontuacao`) VALUES (:curso_id, :criterios, :pontuacao)");
-            $stmt_adcionar->bindValue(':curso_id', $id_curso);
-            $stmt_adcionar->bindValue(':criterios', json_encode($criterios));
-            $stmt_adcionar->bindValue(':pontuacao', $pontuacao);
+            $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
+            $stmt_id_avaliador->bindValue(':id_usuario', $avaliadorId);
+            $stmt_id_avaliador->execute();
+            $result = $stmt_id_avaliador->fetch(PDO::FETCH_ASSOC);
 
+            $id_avaliador = $result['id'];
+            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_04_logomarca` VALUES (null, :curso_id, :id_avaliador, :elementos_cursos, :entrega_a3, :entrega_digital)");
+            $stmt_adcionar->bindValue(':curso_id', $cursoSelecionado);
+            $stmt_adcionar->bindValue(':id_avaliador', $id_avaliador);
+            $stmt_adcionar->bindValue(':elementos_cursos', $notaElementos);
+            $stmt_adcionar->bindValue(':entrega_a3', $notaImpressa);
+            $stmt_adcionar->bindValue(':entrega_digital', $notaDigital);
             if ($stmt_adcionar->execute()) {
                 return 1;
             } else {

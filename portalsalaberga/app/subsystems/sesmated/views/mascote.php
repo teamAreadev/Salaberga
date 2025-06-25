@@ -444,7 +444,7 @@ $session->autenticar_session();
                         <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                             <i class="fas fa-user text-green-300 text-xs"></i>
                         </div>
-                        <span class="text-gray-100"><?$_SESSION['Nome']?></span>
+                        <span class="text-gray-100"><?=$_SESSION['Nome']?></span>
                     </div>
                 </div>
             </div>
