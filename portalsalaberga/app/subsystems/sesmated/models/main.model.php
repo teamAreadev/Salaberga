@@ -321,43 +321,30 @@ class main_model extends connect
     }
 
     //vestimentas sustentaveis
-    public function confirmar_vestimentas($criterios, $pontuacao, $id_curso)
+    public function confirmar_vestimentas($curso, $nota_materiais, $nota_criatividade, $nota_estetica, $nota_identidade, $nota_desfile, $nota_acabamento, $id_avaliador)
     {
         $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_08_vestimentas WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $id_curso);
+        $stmt_check->bindValue(':curso_id', $curso);
         $stmt_check->execute();
         $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
         if (empty($result)) {
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_08_vestimentas`(`curso_id`, `criterios`, `pontuacao`) VALUES (:curso_id, :criterios, :pontuacao)");
-            $stmt_adcionar->bindValue(':curso_id', $id_curso);
-            $stmt_adcionar->bindValue(':criterios', json_encode($criterios));
-            $stmt_adcionar->bindValue(':pontuacao', $pontuacao);
+            $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
+            $stmt_id_avaliador->bindValue(':id_usuario', $id_avaliador);
+            $stmt_id_avaliador->execute();
+            $result = $stmt_id_avaliador->fetch(PDO::FETCH_ASSOC);
 
-            if ($stmt_adcionar->execute()) {
-                return 1;
-            } else {
-                return 2;
-            }
-        } else {
-            return 3;
-        }
-    }
+            $id_avaliador = $result['id'];
 
-    //workshops
-    public function confirmar_workshops($criterios, $pontuacao, $id_curso)
-    {
-        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_09_workshops WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $id_curso);
-        $stmt_check->execute();
-        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
-
-        if (empty($result)) {
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_09_workshops`(`curso_id`, `criterios`, `pontuacao`) VALUES (:curso_id, :criterios, :pontuacao)");
-            $stmt_adcionar->bindValue(':curso_id', $id_curso);
-            $stmt_adcionar->bindValue(':criterios', json_encode($criterios));
-            $stmt_adcionar->bindValue(':pontuacao', $pontuacao);
-
+            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_08_vestimentas`(`avaliacao_id`, `curso_id`, `id_avaliador`, `materiais_sustentaveis`, `criatividade_design`, `estetica_harmonia`, `identidade_curso_evento`, `desfile_apresentacao`, `acabamento_estrutura`) VALUES (null, :curso_id, :id_avaliador, :materiais_sustentaveis, :criatividade_design, :estetica_harmonia, :identidade_curso_evento, :desfile_apresentacao, :acabamento_estrutura)");
+            $stmt_adcionar->bindValue(':curso_id', $curso);
+            $stmt_adcionar->bindValue(':id_avaliador', $id_avaliador);
+            $stmt_adcionar->bindValue(':materiais_sustentaveis', $nota_materiais);
+            $stmt_adcionar->bindValue(':criatividade_design', $nota_criatividade);
+            $stmt_adcionar->bindValue(':estetica_harmonia', $nota_estetica);
+            $stmt_adcionar->bindValue(':identidade_curso_evento', $nota_identidade);
+            $stmt_adcionar->bindValue(':desfile_apresentacao', $nota_desfile);
+            $stmt_adcionar->bindValue(':acabamento_estrutura', $nota_acabamento);
             if ($stmt_adcionar->execute()) {
                 return 1;
             } else {
@@ -378,30 +365,6 @@ class main_model extends connect
 
         if (empty($result)) {
             $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_10_sala_tematica`(`curso_id`, `criterios`, `pontuacao`) VALUES (:curso_id, :criterios, :pontuacao)");
-            $stmt_adcionar->bindValue(':curso_id', $id_curso);
-            $stmt_adcionar->bindValue(':criterios', json_encode($criterios));
-            $stmt_adcionar->bindValue(':pontuacao', $pontuacao);
-
-            if ($stmt_adcionar->execute()) {
-                return 1;
-            } else {
-                return 2;
-            }
-        } else {
-            return 3;
-        }
-    }
-
-    //palestras
-    public function confirmar_palestras($criterios, $pontuacao, $id_curso)
-    {
-        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_11_palestras WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $id_curso);
-        $stmt_check->execute();
-        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
-
-        if (empty($result)) {
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_11_palestras`(`curso_id`, `criterios`, `pontuacao`) VALUES (:curso_id, :criterios, :pontuacao)");
             $stmt_adcionar->bindValue(':curso_id', $id_curso);
             $stmt_adcionar->bindValue(':criterios', json_encode($criterios));
             $stmt_adcionar->bindValue(':pontuacao', $pontuacao);
@@ -473,6 +436,9 @@ class main_model extends connect
         $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
         if (empty($result)) {
+           
+           
+           
             $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_14_inovacao`(`curso_id`, `criterios`, `pontuacao`) VALUES (:curso_id, :criterios, :pontuacao)");
             $stmt_adcionar->bindValue(':curso_id', $id_curso);
             $stmt_adcionar->bindValue(':criterios', json_encode($criterios));

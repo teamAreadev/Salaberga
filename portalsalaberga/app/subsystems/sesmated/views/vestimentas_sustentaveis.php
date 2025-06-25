@@ -469,7 +469,7 @@ if (isset($_GET['confirmado'])) {
         <div class="flex flex-col items-center justify-center min-h-[70vh]">
             <div class="card-bg rounded-3xl w-full max-w-6xl text-center fade-in">
                 <!-- Formulário Principal -->
-                <form id="vestimentasForm" action="../controllers/controller_vestimentas.php" method="post" class="space-y-8">
+                <form  action="../controllers/controller_vestimentas_sustentaveis.php" method="post" class="space-y-8">
                     <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
                     <div class="flex flex-col items-center gap-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">

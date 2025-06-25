@@ -29,7 +29,7 @@ if (
             header('location:../views/esquete.php?ja_confirmado');
             exit();
     }
-} /*else {
+} else {
     header('location:../views/esquete.php?empty');
     exit();
-}*/
+}
