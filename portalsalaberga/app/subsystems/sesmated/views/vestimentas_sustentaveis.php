@@ -15,14 +15,9 @@ if (isset($_GET['confirmado'])) {
 
 $total_php = null;
 $curso_post = null;
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notas']) && isset($_POST['curso'])) {
-    $total_php = 0;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pontuacao_total']) && isset($_POST['curso'])) {
+    $total_php = intval($_POST['pontuacao_total']);
     $curso_post = $_POST['curso'];
-    foreach ($_POST['notas'] as $ano) {
-        foreach ($ano as $nota) {
-            $total_php += intval($nota);
-        }
-    }
 }
 ?>
 <!DOCTYPE html>
@@ -546,215 +541,217 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notas']) && isset($_P
     <main class="container-responsive py-8">
         <div class="flex flex-col items-center justify-center min-h-[70vh]">
             <div class="card-bg rounded-3xl w-full max-w-6xl text-center fade-in" style="padding: clamp(1.5rem, 4vw, 2rem);">
-                <!-- Formulário Principal -->
-                <form id="vestimentasForm" action="../controllers/controller_vestimentas_sustentaveis.php" method="post" class="space-y-8">
-                    <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
-                    <div class="flex flex-col items-center gap-6">
-                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                            <i class="fas fa-tshirt text-white text-3xl"></i>
-                        </div>
-                        <div>
-                            <h2 class="main-title font-black mb-4 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
-                                Avaliação das Vestimentas Sustentáveis
-                            </h2>
-                            <p class="text-lg text-gray-300 font-medium">
-                                Avalie cada critério com notas de 0 a 100 pontos
-                            </p>
-                        </div>
+                
+                <div class="flex flex-col items-center gap-6 mb-8">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                        <i class="fas fa-tshirt text-white text-3xl"></i>
                     </div>
-
-                    <!-- Seletor de Curso -->
-                    <div class="mb-8">
-                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-graduation-cap mr-2"></i>Curso
-                        </label>
-                        <div class="select-wrapper">
-                            <select id="cursoSelect" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
-                                <option value="" selected disabled>Selecione o curso</option>
-                                <option value="Enfermagem">Enfermagem</option>
-                                <option value="Informática">Informática</option>
-                                <option value="Edificações">Edificações</option>
-                                <option value="Administração">Administração</option>
-                                <option value="Meio ambiente">Meio ambiente</option>
-                            </select>
-                        </div>
+                    <div>
+                        <h2 class="main-title font-black mb-4 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
+                            Avaliação das Vestimentas Sustentáveis
+                        </h2>
+                        <p class="text-lg text-gray-300 font-medium">
+                            Avalie cada critério com notas de 0 a 100 pontos
+                        </p>
                     </div>
+                </div>
 
-                    <!-- Painéis dos Cursos -->
-                    <div id="paineis-cursos">
-                        <!-- ENFERMAGEM -->
-                        <div id="painel-Enfermagem" class="course-panel">
-                            <h3 class="course-title">Enfermagem</h3>
-                            <input type="hidden" name="curso" value="Enfermagem">
-                            
-                            <div class="year-section">
-                                <div class="year-title">1º Ano</div>
-                                <div class="input-row">
-                                    <input type="number" name="notas[1ano][0]" class="score-input" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
-                                    <input type="number" name="notas[1ano][1]" class="score-input" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
-                                </div>
-                            </div>
-                            
-                            <div class="year-section">
-                                <div class="year-title">2º Ano</div>
-                                <div class="input-row">
-                                    <input type="number" name="notas[2ano][0]" class="score-input" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
-                                    <input type="number" name="notas[2ano][1]" class="score-input" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
-                                </div>
-                            </div>
-                            
-                            <div class="year-section">
-                                <div class="year-title">3º Ano</div>
-                                <div class="input-row">
-                                    <input type="number" name="notas[3ano][0]" class="score-input" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
-                                </div>
-                            </div>
-                            
-                            <div class="total-display">
-                                Total: <span class="total-pontos">0</span> / 500 pontos
-                            </div>
-                            
-                            <input type="hidden" name="pontuacao_total" class="pontuacao_total" value="0">
-                            <button type="submit" class="btn-primary btn-responsive">
-                                <i class="fas fa-paper-plane"></i>
-                                Confirmar Avaliação
-                            </button>
-                        </div>
-
-                        <!-- INFORMÁTICA -->
-                        <div id="painel-Informática" class="course-panel">
-                            <h3 class="course-title">Informática</h3>
-                            <input type="hidden" name="curso" value="Informática">
-                            
-                            <div class="year-section">
-                                <div class="year-title">1º Ano</div>
-                                <div class="input-row">
-                                    <input type="number" name="notas[1ano][0]" class="score-input" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
-                                    <input type="number" name="notas[1ano][1]" class="score-input" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
-                                </div>
-                            </div>
-                            
-                            <div class="year-section">
-                                <div class="year-title">2º Ano</div>
-                                <div class="input-row">
-                                    <input type="number" name="notas[2ano][0]" class="score-input" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
-                                    <input type="number" name="notas[2ano][1]" class="score-input" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
-                                </div>
-                            </div>
-                            
-                            <div class="year-section">
-                                <div class="year-title">3º Ano</div>
-                                <div class="input-row">
-                                    <input type="number" name="notas[3ano][0]" class="score-input" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
-                                </div>
-                            </div>
-                            
-                            <div class="total-display">
-                                Total: <span class="total-pontos">0</span> / 500 pontos
-                            </div>
-                            
-                            <input type="hidden" name="pontuacao_total" class="pontuacao_total" value="0">
-                            <button type="submit" class="btn-primary btn-responsive">
-                                <i class="fas fa-paper-plane"></i>
-                                Confirmar Avaliação
-                            </button>
-                        </div>
-
-                        <!-- EDIFICAÇÕES -->
-                        <div id="painel-Edificações" class="course-panel">
-                            <h3 class="course-title">Edificações</h3>
-                            <input type="hidden" name="curso" value="Edificações">
-                            
-                            <div class="year-section">
-                                <div class="year-title">1º Ano</div>
-                                <div class="input-row">
-                                    <input type="number" name="notas[1ano][0]" class="score-input" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
-                                    <input type="number" name="notas[1ano][1]" class="score-input" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
-                                </div>
-                            </div>
-                            
-                            <div class="year-section">
-                                <div class="year-title">2º Ano</div>
-                                <div class="input-row">
-                                    <input type="number" name="notas[2ano][0]" class="score-input" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
-                                    <input type="number" name="notas[2ano][1]" class="score-input" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
-                                </div>
-                            </div>
-                            
-                            <div class="year-section">
-                                <div class="year-title">3º Ano</div>
-                                <div class="input-row">
-                                    <input type="number" name="notas[3ano][0]" class="score-input" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
-                                </div>
-                            </div>
-                            
-                            <div class="total-display">
-                                Total: <span class="total-pontos">0</span> / 500 pontos
-                            </div>
-                            
-                            <input type="hidden" name="pontuacao_total" class="pontuacao_total" value="0">
-                            <button type="submit" class="btn-primary btn-responsive">
-                                <i class="fas fa-paper-plane"></i>
-                                Confirmar Avaliação
-                            </button>
-                        </div>
-
-                        <!-- ADMINISTRAÇÃO -->
-                        <div id="painel-Administração" class="course-panel">
-                            <h3 class="course-title">Administração</h3>
-                            <input type="hidden" name="curso" value="Administração">
-                            
-                            <div class="year-section">
-                                <div class="year-title">1º Ano</div>
-                                <div class="input-row">
-                                    <input type="number" name="notas[1ano][0]" class="score-input" min="0" max="150" placeholder="Modelo 1 (máx: 150)" required>
-                                    <input type="number" name="notas[1ano][1]" class="score-input" min="0" max="150" placeholder="Modelo 2 (máx: 150)" required>
-                                </div>
-                            </div>
-                            
-                            <div class="year-section">
-                                <div class="year-title">3º Ano</div>
-                                <div class="input-row">
-                                    <input type="number" name="notas[3ano][0]" class="score-input" min="0" max="200" placeholder="Modelo 1 (máx: 200)" required>
-                                </div>
-                            </div>
-                            
-                            <div class="total-display">
-                                Total: <span class="total-pontos">0</span> / 500 pontos
-                            </div>
-                            
-                            <input type="hidden" name="pontuacao_total" class="pontuacao_total" value="0">
-                            <button type="submit" class="btn-primary btn-responsive">
-                                <i class="fas fa-paper-plane"></i>
-                                Confirmar Avaliação
-                            </button>
-                        </div>
-
-                        <!-- MEIO AMBIENTE -->
-                        <div id="painel-Meio ambiente" class="course-panel">
-                            <h3 class="course-title">Meio Ambiente</h3>
-                            <input type="hidden" name="curso" value="Meio ambiente">
-                            
-                            <div class="year-section">
-                                <div class="year-title">2º Ano</div>
-                                <div class="input-row">
-                                    <input type="number" name="notas[2ano][0]" class="score-input" min="0" max="250" placeholder="Modelo 1 (máx: 250)" required>
-                                    <input type="number" name="notas[2ano][1]" class="score-input" min="0" max="250" placeholder="Modelo 2 (máx: 250)" required>
-                                </div>
-                            </div>
-                            
-                            <div class="total-display">
-                                Total: <span class="total-pontos">0</span> / 500 pontos
-                            </div>
-                            
-                            <input type="hidden" name="pontuacao_total" class="pontuacao_total" value="0">
-                            <button type="submit" class="btn-primary btn-responsive">
-                                <i class="fas fa-paper-plane"></i>
-                                Confirmar Avaliação
-                            </button>
-                        </div>
+                <!-- Seletor de Curso -->
+                <div class="mb-8">
+                    <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
+                        <i class="fas fa-graduation-cap mr-2"></i>Curso
+                    </label>
+                    <div class="select-wrapper">
+                        <select id="cursoSelect" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
+                            <option value="" selected disabled>Selecione o curso</option>
+                            <option value="Enfermagem">Enfermagem</option>
+                            <option value="Informática">Informática</option>
+                            <option value="Edificações">Edificações</option>
+                            <option value="Administração">Administração</option>
+                            <option value="Meio ambiente">Meio ambiente</option>
+                        </select>
                     </div>
-                </form>
+                </div>
+
+                <!-- Painéis dos Cursos -->
+                <div id="paineis-cursos">
+                    <!-- ENFERMAGEM -->
+                    <form id="painel-Enfermagem" class="course-panel" method="post" action="../controllers/controller_vestimentas_sustentaveis.php">
+                        <h3 class="course-title">Enfermagem</h3>
+                        <input type="hidden" name="curso" value="Enfermagem">
+                        <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
+                        
+                        <div class="year-section">
+                            <div class="year-title">1º Ano</div>
+                            <div class="input-row">
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
+                            </div>
+                        </div>
+                        
+                        <div class="year-section">
+                            <div class="year-title">2º Ano</div>
+                            <div class="input-row">
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
+                            </div>
+                        </div>
+                        
+                        <div class="year-section">
+                            <div class="year-title">3º Ano</div>
+                            <div class="input-row">
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
+                            </div>
+                        </div>
+                        
+                        <div class="total-display">
+                            Total: <span class="total-pontos">0</span> / 500 pontos
+                        </div>
+                        
+                        <input type="hidden" name="pontuacao_total" class="pontuacao_total" value="0">
+                        <button type="submit" class="btn-primary btn-responsive">
+                            <i class="fas fa-paper-plane"></i>
+                            Confirmar Avaliação
+                        </button>
+                    </form>
+
+                    <!-- INFORMÁTICA -->
+                    <form id="painel-Informática" class="course-panel" method="post" action="../controllers/controller_vestimentas_sustentaveis.php">
+                        <h3 class="course-title">Informática</h3>
+                        <input type="hidden" name="curso" value="Informática">
+                        <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
+                        
+                        <div class="year-section">
+                            <div class="year-title">1º Ano</div>
+                            <div class="input-row">
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
+                            </div>
+                        </div>
+                        
+                        <div class="year-section">
+                            <div class="year-title">2º Ano</div>
+                            <div class="input-row">
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
+                            </div>
+                        </div>
+                        
+                        <div class="year-section">
+                            <div class="year-title">3º Ano</div>
+                            <div class="input-row">
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
+                            </div>
+                        </div>
+                        
+                        <div class="total-display">
+                            Total: <span class="total-pontos">0</span> / 500 pontos
+                        </div>
+                        
+                        <input type="hidden" name="pontuacao_total" class="pontuacao_total" value="0">
+                        <button type="submit" class="btn-primary btn-responsive">
+                            <i class="fas fa-paper-plane"></i>
+                            Confirmar Avaliação
+                        </button>
+                    </form>
+
+                    <!-- EDIFICAÇÕES -->
+                    <form id="painel-Edificações" class="course-panel" method="post" action="../controllers/controller_vestimentas_sustentaveis.php">
+                        <h3 class="course-title">Edificações</h3>
+                        <input type="hidden" name="curso" value="Edificações">
+                        <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
+                        
+                        <div class="year-section">
+                            <div class="year-title">1º Ano</div>
+                            <div class="input-row">
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
+                            </div>
+                        </div>
+                        
+                        <div class="year-section">
+                            <div class="year-title">2º Ano</div>
+                            <div class="input-row">
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
+                            </div>
+                        </div>
+                        
+                        <div class="year-section">
+                            <div class="year-title">3º Ano</div>
+                            <div class="input-row">
+                                <input type="number" class="score-input" data-weight="1" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
+                            </div>
+                        </div>
+                        
+                        <div class="total-display">
+                            Total: <span class="total-pontos">0</span> / 500 pontos
+                        </div>
+                        
+                        <input type="hidden" name="pontuacao_total" class="pontuacao_total" value="0">
+                        <button type="submit" class="btn-primary btn-responsive">
+                            <i class="fas fa-paper-plane"></i>
+                            Confirmar Avaliação
+                        </button>
+                    </form>
+
+                    <!-- ADMINISTRAÇÃO -->
+                    <form id="painel-Administração" class="course-panel" method="post" action="../controllers/controller_vestimentas_sustentaveis.php">
+                        <h3 class="course-title">Administração</h3>
+                        <input type="hidden" name="curso" value="Administração">
+                        <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
+                        
+                        <div class="year-section">
+                            <div class="year-title">1º Ano</div>
+                            <div class="input-row">
+                                <input type="number" class="score-input" data-weight="1.5" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
+                                <input type="number" class="score-input" data-weight="1.5" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
+                            </div>
+                        </div>
+                        
+                        <div class="year-section">
+                            <div class="year-title">3º Ano</div>
+                            <div class="input-row">
+                                <input type="number" class="score-input" data-weight="2" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
+                            </div>
+                        </div>
+                        
+                        <div class="total-display">
+                            Total: <span class="total-pontos">0</span> / 500 pontos
+                        </div>
+                        
+                        <input type="hidden" name="pontuacao_total" class="pontuacao_total" value="0">
+                        <button type="submit" class="btn-primary btn-responsive">
+                            <i class="fas fa-paper-plane"></i>
+                            Confirmar Avaliação
+                        </button>
+                    </form>
+
+                    <!-- MEIO AMBIENTE -->
+                    <form id="painel-Meio ambiente" class="course-panel" method="post" action="../controllers/controller_vestimentas_sustentaveis.php">
+                        <h3 class="course-title">Meio Ambiente</h3>
+                        <input type="hidden" name="curso" value="Meio ambiente">
+                        <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
+                        
+                        <div class="year-section">
+                            <div class="year-title">2º Ano</div>
+                            <div class="input-row">
+                                <input type="number" class="score-input" data-weight="2.5" min="0" max="100" placeholder="Modelo 1 (máx: 100)" required>
+                                <input type="number" class="score-input" data-weight="2.5" min="0" max="100" placeholder="Modelo 2 (máx: 100)" required>
+                            </div>
+                        </div>
+                        
+                        <div class="total-display">
+                            Total: <span class="total-pontos">0</span> / 500 pontos
+                        </div>
+                        
+                        <input type="hidden" name="pontuacao_total" class="pontuacao_total" value="0">
+                        <button type="submit" class="btn-primary btn-responsive">
+                            <i class="fas fa-paper-plane"></i>
+                            Confirmar Avaliação
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </main>
@@ -921,11 +918,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notas']) && isset($_P
                 function calcularTotal() {
                     let total = 0;
                     inputs.forEach(input => {
-                        total += parseInt(input.value) || 0;
+                        const valor = parseInt(input.value) || 0;
+                        const peso = parseFloat(input.getAttribute('data-weight')) || 1;
+                        total += valor * peso;
                     });
                     
-                    if (totalSpan) totalSpan.textContent = total;
-                    if (totalInput) totalInput.value = total;
+                    if (totalSpan) totalSpan.textContent = Math.round(total);
+                    if (totalInput) totalInput.value = Math.round(total);
                 }
             }
             
