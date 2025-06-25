@@ -4,6 +4,18 @@ $select = new select_model();
 require_once('../../../main/models/sessions.php');
 $session = new sessions;
 $session->autenticar_session();
+
+// Mensagem de status
+$status = '';
+if (isset($_GET['confirmado'])) {
+    $status = 'sucesso';
+} elseif (isset($_GET['erro'])) {
+    $status = 'erro';
+} elseif (isset($_GET['ja_confirmado'])) {
+    $status = 'ja_confirmado';
+} elseif (isset($_GET['empty'])) {
+    $status = 'empty';
+}
 ?>
 
 <!DOCTYPE html>
@@ -417,6 +429,37 @@ $session->autenticar_session();
             background: linear-gradient(135deg, var(--header-color), var(--accent-color));
             border-radius: 4px;
         }
+        
+        .nova-votacao-btn {
+            background: linear-gradient(90deg, #ffe29f 0%, #00b348 100%);
+            color: #181818;
+            font-weight: 700;
+            font-size: 1.08rem;
+            border: none;
+            border-radius: 1.1rem;
+            padding: 0.65rem 1.7rem;
+            box-shadow: 0 3px 14px rgba(0,179,72,0.13), 0 1px 4px rgba(255,183,51,0.10);
+            transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+            cursor: pointer;
+            outline: none;
+        }
+        .nova-votacao-btn:hover, .nova-votacao-btn:focus {
+            background: linear-gradient(90deg, #00b348 0%, #ffe29f 100%);
+            color: #fff;
+            transform: scale(1.04) translateY(-1px);
+            box-shadow: 0 6px 18px rgba(0,179,72,0.16), 0 1.5px 6px rgba(255,183,51,0.12);
+        }
+        .nova-votacao-btn .icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15em;
+            animation: rotateIcon 1.2s linear infinite;
+        }
+        @keyframes rotateIcon {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -457,7 +500,7 @@ $session->autenticar_session();
             <div class="card-bg rounded-3xl w-full max-w-5xl text-center fade-in">
                 
                 <!-- Formulário Principal -->
-                <form action="../controllers/controller_mascote.php" method="post" class="space-y-8">
+                <form id="mascoteForm" action="../controllers/controller_mascote.php" method="post" class="space-y-8">
                 <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
                 <div class="flex flex-col items-center gap-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center">
@@ -629,8 +672,57 @@ $session->autenticar_session();
                     </p>
                 </div>
             </div>
-            <button onclick="fecharSucesso()" class="btn-primary btn-responsive font-semibold text-white flex items-center justify-center gap-2 mx-auto mt-4 hover:scale-105 transition-transform">
-                <i class="fas fa-arrow-left"></i> Nova Avaliação
+            <button onclick="fecharSucesso()" class="nova-votacao-btn flex items-center justify-center gap-3 mx-auto mt-6">
+                <span class="icon-wrapper"><i class="fas fa-arrow-rotate-left"></i></span>
+                <span class="font-extrabold text-lg tracking-wide">Nova Avaliação</span>
+            </button>
+        </div>
+    </div>
+    <!-- Tela de Erro -->
+    <div id="erroMascote" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm p-4">
+        <div class="card-bg rounded-3xl p-8 w-full max-w-md text-center fade-in">
+            <div class="flex flex-col items-center gap-4 mb-6">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
+                    <i class="fas fa-times-circle text-white text-4xl"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-red-400 mb-2">Erro ao Registrar!</h2>
+                <p class="text-lg text-gray-200">Ocorreu um erro ao registrar a avaliação. Tente novamente.</p>
+            </div>
+            <button onclick="fecharErro()" class="nova-votacao-btn flex items-center justify-center gap-3 mx-auto mt-6">
+                <span class="icon-wrapper"><i class="fas fa-arrow-rotate-left"></i></span>
+                <span class="font-extrabold text-lg tracking-wide">Nova Avaliação</span>
+            </button>
+        </div>
+    </div>
+    <!-- Tela de Já Confirmado -->
+    <div id="jaConfirmadoMascote" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm p-4">
+        <div class="card-bg rounded-3xl p-8 w-full max-w-md text-center fade-in">
+            <div class="flex flex-col items-center gap-4 mb-6">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center pulse-glow">
+                    <i class="fas fa-exclamation-triangle text-white text-4xl"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-yellow-400 mb-2">Já Confirmado!</h2>
+                <p class="text-lg text-gray-200">A avaliação deste mascote já foi registrada anteriormente.</p>
+            </div>
+            <button onclick="fecharJaConfirmado()" class="nova-votacao-btn flex items-center justify-center gap-3 mx-auto mt-6">
+                <span class="icon-wrapper"><i class="fas fa-arrow-rotate-left"></i></span>
+                <span class="font-extrabold text-lg tracking-wide">Nova Avaliação</span>
+            </button>
+        </div>
+    </div>
+    <!-- Tela de Campos Obrigatórios -->
+    <div id="emptyMascote" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm p-4">
+        <div class="card-bg rounded-3xl p-8 w-full max-w-md text-center fade-in">
+            <div class="flex flex-col items-center gap-4 mb-6">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
+                    <i class="fas fa-exclamation-circle text-white text-4xl"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-red-400 mb-2">Campos Obrigatórios!</h2>
+                <p class="text-lg text-gray-200">Preencha todos os campos obrigatórios para registrar a avaliação.</p>
+            </div>
+            <button onclick="fecharEmpty()" class="nova-votacao-btn flex items-center justify-center gap-3 mx-auto mt-6">
+                <span class="icon-wrapper"><i class="fas fa-arrow-rotate-left"></i></span>
+                <span class="font-extrabold text-lg tracking-wide">Nova Avaliação</span>
             </button>
         </div>
     </div>
@@ -787,7 +879,7 @@ $session->autenticar_session();
                 const total = animacao + vestimenta + identidade;
                 document.getElementById('pontosFinal').textContent = total;
                 
-                // Mostrar tela de sucesso
+                // Mostrar tela de sucesso (modal)
                 form.style.display = 'none';
                 voltarButton.classList.add('hidden');
                 document.getElementById('sucessoMascote').classList.remove('hidden');
@@ -824,7 +916,41 @@ $session->autenticar_session();
                 document.getElementById('sucessoMascote').classList.add('hidden');
                 resetForm();
             };
+
+            // Exibir modal conforme status da URL
+            var status = '<?php echo $status; ?>';
+            if (status === 'sucesso') {
+                document.getElementById('sucessoMascote').classList.remove('hidden');
+                form.style.display = 'none';
+                voltarButton.classList.add('hidden');
+            } else if (status === 'erro') {
+                document.getElementById('erroMascote').classList.remove('hidden');
+                form.style.display = 'none';
+                voltarButton.classList.add('hidden');
+            } else if (status === 'ja_confirmado') {
+                document.getElementById('jaConfirmadoMascote').classList.remove('hidden');
+                form.style.display = 'none';
+                voltarButton.classList.add('hidden');
+            } else if (status === 'empty') {
+                document.getElementById('emptyMascote').classList.remove('hidden');
+                form.style.display = 'none';
+                voltarButton.classList.add('hidden');
+            }
         });
+
+        // Funções para fechar modais e resetar formulário
+        function fecharErro() {
+            document.getElementById('erroMascote').classList.add('hidden');
+            resetForm();
+        }
+        function fecharJaConfirmado() {
+            document.getElementById('jaConfirmadoMascote').classList.add('hidden');
+            resetForm();
+        }
+        function fecharEmpty() {
+            document.getElementById('emptyMascote').classList.add('hidden');
+            resetForm();
+        }
     </script>
 </body>
 </html>
