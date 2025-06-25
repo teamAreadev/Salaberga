@@ -10,7 +10,7 @@ define('TOTAL_RIFAS', [
     'Enfermagem' => 710,
     'Informática' => 705,
     'Meio Ambiente' => 230,
-    'Administração' => 470,
+    'Administração' => 465,
     'Edificações' => 715
 ]);
 
@@ -18,7 +18,7 @@ define('TOTAL_DINHEIRO', [
     'Enfermagem' => 710 * 2,
     'Informática' => 705 * 2,
     'Meio Ambiente' => 230 * 2,
-    'Administração' => 470 * 2,
+    'Administração' => 465 * 2,
     'Edificações' => 715 * 2
 ]);
 
