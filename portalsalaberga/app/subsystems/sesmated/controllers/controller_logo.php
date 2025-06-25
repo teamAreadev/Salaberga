@@ -3,9 +3,9 @@ require_once('../models/main.model.php');
 print_r($_POST);
 if (
     isset($_POST['curso']) && !empty($_POST['curso']) &&
-    isset($_POST['nota_elementos']) && !empty($_POST['nota_elementos']) &&
-    isset($_POST['nota_impressa']) && !empty($_POST['nota_impressa']) &&
-    isset($_POST['nota_digital']) && !empty($_POST['nota_digital']) &&
+    isset($_POST['nota_elementos'])  &&
+    isset($_POST['nota_impressa'])  &&
+    isset($_POST['nota_digital']) &&
     isset($_POST['id_avaliador']) && !empty($_POST['id_avaliador'])
 ) {
     $cursoSelecionado = $_POST['curso'];

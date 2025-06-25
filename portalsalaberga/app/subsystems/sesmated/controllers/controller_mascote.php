@@ -3,9 +3,9 @@ require_once('../models/main.model.php');
 
 if (
     isset($_POST['curso']) && !empty($_POST['curso']) &&
-    isset($_POST['nota_animacao']) && !empty($_POST['nota_animacao']) &&
-    isset($_POST['nota_vestimenta']) && !empty($_POST['nota_vestimenta']) &&
-    isset($_POST['nota_identidade']) && !empty($_POST['nota_identidade']) &&
+    isset($_POST['nota_animacao']) &&
+    isset($_POST['nota_vestimenta']) && 
+    isset($_POST['nota_identidade']) && 
     isset($_POST['id_avaliador']) && !empty($_POST['id_avaliador'])
 ) {
     $curso = $_POST['curso'];

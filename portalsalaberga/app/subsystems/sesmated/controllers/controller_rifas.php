@@ -4,7 +4,7 @@ require_once('../models/main.model.php');
 //adicionar turma
 if (
     isset($_POST['turma']) && !empty($_POST['turma']) &&
-    isset($_POST['rifas']) && !empty($_POST['rifas']) &&
+    isset($_POST['rifas']) &&
     isset($_POST['id_usuario']) && !empty($_POST['id_usuario'])
 ) {
     $id_turma = $_POST['turma'];

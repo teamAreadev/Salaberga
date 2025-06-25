@@ -3,10 +3,10 @@ require_once('../models/main.model.php');
 print_r($_POST);
 if (
     isset($_POST['curso']) && !empty($_POST['curso']) &&
-    isset($_POST['nota_tempo']) && !empty($_POST['nota_tempo']) &&
-    isset($_POST['nota_tema']) && !empty($_POST['nota_tema']) &&
-    isset($_POST['nota_figurino']) && !empty($_POST['nota_figurino']) &&
-    isset($_POST['nota_criatividade']) && !empty($_POST['nota_criatividade']) &&
+    isset($_POST['nota_tempo']) && 
+    isset($_POST['nota_tema']) &&
+    isset($_POST['nota_figurino']) && 
+    isset($_POST['nota_criatividade']) && 
     isset($_POST['id_avaliador']) && !empty($_POST['id_avaliador'])
 ) {
     $cursoSelecionado = $_POST['curso'];
