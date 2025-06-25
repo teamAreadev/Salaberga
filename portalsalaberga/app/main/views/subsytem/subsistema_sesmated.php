@@ -1056,12 +1056,12 @@ if (isset($_GET['sair'])) {
     <main class="container mx-auto px-4">
         <div class="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 md:gap-8 p-4 md:p-8 max-w-[1400px] mx-auto transition-all duration-300 grid-container">
 
-            <a href="../../../subsystems/sesmated/views/" class="app-card-link" data-card-key="Dashboard_abertura">
+            <a href="../../../subsystems/sesmated/views/abertura.php" class="app-card-link" data-card-key="Dashboard_abertura">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/sDLfn46k/dashboard-removebg-preview.png" alt="Dashboard abertura" class="app-icon">
                     </div>
-                    <h3 class="app-name">Dashboard abertura</h3>
+                    <h3 class="app-name">Abertura</h3>
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
