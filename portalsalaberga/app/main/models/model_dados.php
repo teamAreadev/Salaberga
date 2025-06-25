@@ -219,6 +219,7 @@ function login_sesmated($email, $senha)
 
     if (!empty($user)) {
 
+        session_destroy();
         $_SESSION['login'] = true;
         $_SESSION['user_id'] = $user['id']; // Armazena o ID do usuário na sessão
         $_SESSION['Nome'] = $user['nome'];
