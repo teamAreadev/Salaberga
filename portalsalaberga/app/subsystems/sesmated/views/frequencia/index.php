@@ -106,6 +106,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'save_attendance') {
 }
 
 header('Content-Type: text/html; charset=UTF-8');
+require_once('../../../../main/models/sessions.php');
+$session = new sessions;
+$session->autenticar_session();
 ?>
 
 <!DOCTYPE html>

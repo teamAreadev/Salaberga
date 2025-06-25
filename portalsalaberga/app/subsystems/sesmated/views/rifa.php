@@ -2,7 +2,7 @@
 require_once('../models/select.model.php');
 $select = new select_model();
 require_once('../../../main/models/sessions.php');
-$session = new sessions();
+$session = new sessions;
 $session->autenticar_session();
 
 ?>

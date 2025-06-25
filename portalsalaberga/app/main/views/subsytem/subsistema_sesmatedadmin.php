@@ -1165,7 +1165,7 @@ if (isset($_GET['sair'])) {
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="../../../subsystems/sesmated/views/" class="app-card-link" data-card-key="Vestimentas">
+            <a href="../../../subsystems/sesmated/views/vestimentas_sustentaveis.php" class="app-card-link" data-card-key="Vestimentas">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/LscNvwLJ/vestimenstas-removebg-preview.png" alt="Vestimentas" class="app-icon">
@@ -1180,58 +1180,8 @@ if (isset($_GET['sair'])) {
 
     <script>
     // Função para formatar datas e horários
-    function mostrarCardsPorDataEHora() {
-        const agora = new Date();
-        const dia = agora.getDate();
-        const mes = agora.getMonth() + 1; // Janeiro = 0
-        const hora = agora.getHours();
-        const minuto = agora.getMinutes();
-
-        // Esconde todos os cards primeiro
-        document.querySelectorAll('.app-card-link').forEach(card => {
-            card.style.display = 'none';
-        });
-
-        // Função auxiliar para mostrar cards por chave
-        function mostrarPorChaves(chaves) {
-            chaves.forEach(key => {
-                const card = document.querySelector('.app-card-link[data-card-key="' + key + '"]');
-                if (card) card.style.display = 'block';
-            });
-        }
-
-        // 24/06
-        if (dia === 24 && mes === 6) {
-            mostrarPorChaves(['Palestras', 'Rifa', 'Empreendedorismo']);
-        }
-        // 25/06
-        else if (dia === 25 && mes === 6) {
-            // Das 8h às 12h
-            if (hora >= 8 && hora < 12) {
-                mostrarPorChaves(['Workshop']);
-            }
-            // Das 13:30 às 17h
-            else if ((hora === 13 && minuto >= 30) || (hora > 13 && hora < 17)) {
-                mostrarPorChaves(['Dashboard_abertura', 'Rifa']);
-            }
-        }
-        // 26/06
-        else if (dia === 26 && mes === 6) {
-            // Das 8h às 12h
-            if (hora >= 8 && hora < 12) {
-                mostrarPorChaves(['Empreendedorismo', 'Sala_temática']);
-            }
-        }
-        // 27/06
-        else if (dia === 27 && mes === 6) {
-            mostrarPorChaves(['Sala_temática']);
-        }
-    }
-
-    // Executa ao carregar a página
-    mostrarCardsPorDataEHora();
-    // Atualiza a cada minuto
-    setInterval(mostrarCardsPorDataEHora, 60000);
+    // Removido: mostrarCardsPorDataEHora e setInterval
+    // Todos os cards ficarão sempre visíveis
     </script>
 </body>
 

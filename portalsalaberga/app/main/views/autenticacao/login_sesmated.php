@@ -444,7 +444,7 @@
                         Bem-vindo
                     </h2>
                     <p class="text-ghibli-forest/70 text-base sm:text-lg font-ghibli-text">
-                        Acesse sua conta parcial
+                        Acesse sua conta SESMATED
                     </p>
                 </div>
 

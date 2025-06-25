@@ -1,19 +1,24 @@
 <?php
 require_once('../models/main.model.php');
-
+print_r($_POST);
 if (
-    isset($_POST['criterio']) && !empty($_POST['criterio']) &&
-    isset($_POST['pontuacao']) && !empty($_POST['pontuacao']) &&
-    isset($_POST['curso']) && !empty($_POST['curso'])
+    isset($_POST['curso']) && !empty($_POST['curso']) &&
+    isset($_POST['nota_tempo']) && !empty($_POST['nota_tempo']) &&
+    isset($_POST['nota_tema']) && !empty($_POST['nota_tema']) &&
+    isset($_POST['nota_figurino']) && !empty($_POST['nota_figurino']) &&
+    isset($_POST['nota_criatividade']) && !empty($_POST['nota_criatividade']) &&
+    isset($_POST['id_avaliador']) && !empty($_POST['id_avaliador'])
 ) {
-    $criterio = $_POST['criterio'];
-    $pontuacao = $_POST['pontuacao'];
-    $curso = $_POST['curso'];
+    $cursoSelecionado = $_POST['curso'];
+    $notaTempo = $_POST['nota_tempo'];
+    $notaTema = $_POST['nota_tema'];
+    $notaFigurino = $_POST['nota_figurino'];
+    $notaCriatividade = $_POST['nota_criatividade'];
+    $avaliadorId = $_POST['id_avaliador'];
+    $modeloPrincipal = new main_model();
+    $resultado = $modeloPrincipal->confirmar_esquete($cursoSelecionado, $notaTempo, $notaTema, $notaFigurino, $notaCriatividade, $avaliadorId);
 
-    $main_model = new main_model();
-    $result = $main_model->confirmar_esquete($criterio, $pontuacao, $curso);
-
-    switch ($result) {
+    switch ($resultado) {
         case 1:
             header('location:../views/esquete.php?confirmado');
             exit();
@@ -24,7 +29,7 @@ if (
             header('location:../views/esquete.php?ja_confirmado');
             exit();
     }
-} else {
+} /*else {
     header('location:../views/esquete.php?empty');
     exit();
-} 
+}*/

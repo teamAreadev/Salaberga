@@ -1,6 +1,9 @@
 <?php
 require_once('../models/select.model.php');
 $select = new select_model();
+require_once('../../../main/models/sessions.php');
+$session = new sessions;
+$session->autenticar_session();
 
 // Mensagem de status
 $status = '';
@@ -434,7 +437,7 @@ if (isset($_GET['confirmado'])) {
                         <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                             <i class="fas fa-user text-green-300 text-xs"></i>
                         </div>
-                        <span class="text-gray-100">João Silva</span>
+                        <span class="text-gray-100"><?php echo $_SESSION['Nome']?></span>
                     </div>
                 </div>
             </div>
@@ -448,7 +451,8 @@ if (isset($_GET['confirmado'])) {
                 
                 <!-- Formulário Principal -->
                 <form id="gritoForm" action="../controllers/controller_grito.php" method="post" class="space-y-8">
-                    <div class="flex flex-col items-center gap-6">
+                    <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
+                <div class="flex flex-col items-center gap-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center">
                             <i class="fas fa-bullhorn text-white text-3xl"></i>
                         </div>

@@ -6,8 +6,6 @@ if (isset($_POST['email']) && isset($_POST['senha']) && !empty($_POST['email']) 
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
-
-
     $login_successful = login_sesmated($email, $senha);
 
     if ($login_successful) {
