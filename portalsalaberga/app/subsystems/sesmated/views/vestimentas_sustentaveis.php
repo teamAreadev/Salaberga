@@ -250,6 +250,175 @@ $session->autenticar_session();
             font-size: clamp(1.5rem, 6vw, 2.5rem);
             line-height: 1.2;
         }
+
+        /* ====== INÍCIO: CSS alinhado com esquete.php ====== */
+        .score-input-wrapper {
+            position: relative;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .score-input {
+            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            border-radius: 0.75rem;
+            padding: 0.875rem 1rem;
+            font-size: clamp(0.875rem, 2.5vw, 1rem);
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .score-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1);
+            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
+            outline: none;
+        }
+
+        .score-input:hover {
+            border-color: rgba(255, 183, 51, 0.3);
+            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
+        }
+
+        .score-input::placeholder {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .score-input::-webkit-outer-spin-button,
+        .score-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .score-input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .score-input.valid {
+            border-color: var(--success-color);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
+        }
+
+        .score-input.invalid {
+            border-color: var(--danger-color);
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+        }
+
+        .criteria-item {
+            background: linear-gradient(145deg, rgba(40, 40, 40, 0.6) 0%, rgba(30, 30, 30, 0.6) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: clamp(1rem, 3vw, 1.5rem);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-height: auto;
+        }
+
+        .criteria-item:hover {
+            border-color: rgba(255, 183, 51, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 183, 51, 0.1);
+        }
+
+        .criteria-icon {
+            width: clamp(2.5rem, 8vw, 3rem);
+            height: clamp(2.5rem, 8vw, 3rem);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .criteria-icon i {
+            font-size: clamp(1rem, 4vw, 1.25rem);
+            color: white;
+        }
+
+        .criteria-title {
+            font-size: clamp(0.875rem, 3.5vw, 1rem);
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .criteria-subtitle {
+            font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+            color: #9ca3af;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, rgba(255, 183, 51, 0.15) 0%, rgba(255, 183, 51, 0.05) 100%);
+            border: 1px solid rgba(255, 183, 51, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.75rem 0.5rem;
+            margin-top: 0.75rem;
+            font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+            font-weight: 700;
+            color: var(--accent-color);
+            text-align: center;
+            width: 100%;
+        }
+
+        .criteria-grid {
+            display: grid;
+            gap: clamp(1rem, 3vw, 1.5rem);
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: clamp(1rem, 4vw, 1.25rem);
+        }
+
+        .btn-responsive {
+            padding: clamp(0.75rem, 3vw, 1rem) clamp(1.5rem, 6vw, 2rem);
+            font-size: clamp(0.875rem, 3vw, 1rem);
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 20rem;
+        }
+
+        @media (max-width: 640px) {
+            .criteria-grid {
+                grid-template-columns: 1fr;
+            }
+            .card-bg {
+                padding: clamp(1rem, 4vw, 1.5rem);
+                margin: 0.5rem;
+            }
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .user-chip-desktop {
+                position: relative;
+                top: auto;
+                right: auto;
+            }
+            .header-title-section {
+                align-items: center;
+            }
+        }
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .criteria-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1025px) {
+            .criteria-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        /* ====== FIM: CSS alinhado com esquete.php ====== */
     </style>
 </head>
 <body class="min-h-screen">
