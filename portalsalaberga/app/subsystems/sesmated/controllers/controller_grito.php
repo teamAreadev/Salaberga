@@ -3,7 +3,7 @@ require_once('../models/main.model.php');
 //confirmar grito
 if (
     isset($_POST['curso']) && !empty($_POST['curso']) &&
-    isset($_POST['grito']) && !empty($_POST['grito']) &&
+    isset($_POST['grito']) && 
     isset($_POST['id_avaliador']) && !empty($_POST['id_avaliador'])
 ) {
     $id_curso = $_POST['curso'];

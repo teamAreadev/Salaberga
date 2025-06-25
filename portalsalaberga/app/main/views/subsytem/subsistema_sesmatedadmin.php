@@ -2,10 +2,6 @@
 require_once('../../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
-
-if (isset($_GET['sair'])) {
-    $session->quebra_session();
-}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

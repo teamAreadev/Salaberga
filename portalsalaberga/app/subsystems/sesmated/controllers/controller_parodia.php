@@ -3,12 +3,12 @@ require_once('../models/main.model.php');
 print_r($_POST);
 if (
     isset($_POST['curso']) && !empty($_POST['curso']) &&
-    isset($_POST['nota_tema']) && !empty($_POST['nota_tema']) &&
-    isset($_POST['nota_letra']) && !empty($_POST['nota_letra']) &&
-    isset($_POST['nota_diccao']) && !empty($_POST['nota_diccao']) &&
-    isset($_POST['nota_desempenho']) && !empty($_POST['nota_desempenho']) &&
-    isset($_POST['nota_trilha']) && !empty($_POST['nota_trilha']) &&
-    isset($_POST['nota_criatividade']) && !empty($_POST['nota_criatividade']) &&
+    isset($_POST['nota_tema']) &&
+    isset($_POST['nota_letra']) && 
+    isset($_POST['nota_diccao']) &&
+    isset($_POST['nota_desempenho']) && 
+    isset($_POST['nota_trilha']) && 
+    isset($_POST['nota_criatividade']) &&
     isset($_POST['id_avaliador']) && !empty($_POST['id_avaliador'])
 ) {
     $curso = $_POST['curso'];

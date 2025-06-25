@@ -3,7 +3,7 @@ require_once('../models/main.model.php');
 
 if (
     isset($_POST['criterio']) && !empty($_POST['criterio']) &&
-    isset($_POST['pontuacao']) && !empty($_POST['pontuacao']) &&
+    isset($_POST['pontuacao']) && 
     isset($_POST['curso']) && !empty($_POST['curso'])
 ) {
     $criterio = $_POST['criterio'];
