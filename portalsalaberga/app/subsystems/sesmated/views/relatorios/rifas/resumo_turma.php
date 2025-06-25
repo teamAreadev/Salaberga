@@ -1,12 +1,9 @@
 <?php
 require_once('../../../assets/fpdf/fpdf.php');
 require_once('../../../config/connect.php');
-session_start();
-function redirect_to_login()
-{
-    header('Location: ../../../../../main/views/autenticacao/login.php');
-    exit();
-}
+require_once('../../../../../main/models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
 
 // Definindo constantes
 define('TURMAS', [
