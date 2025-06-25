@@ -1,3 +1,8 @@
+<?php 
+require_once('../../../../main/models/sessions.php');
+$session = new sessions;
+$session->autenticar_session();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

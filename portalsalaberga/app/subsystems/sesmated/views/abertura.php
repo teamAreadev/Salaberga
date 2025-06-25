@@ -1,13 +1,7 @@
 <?php
-function redirect_to_login()
-{
-    header('Location: ../../main/views/autenticacao/login_sesmated.php');
-    exit();
-}
-if (!isset($_SESSION['Email'])) {
-    session_destroy();
-    redirect_to_login();
-}
+require_once('../../../../main/models/sessions.php');
+$session = new sessions;
+$session->autenticar_session();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
