@@ -1,9 +1,16 @@
 <?php
 require_once('../models/select.model.php');
 $select = new select_model();
-require_once('../../../main/models/sessions.php');
-$session = new sessions();
-$session->autenticar_session();
+session_start();
+function redirect_to_login()
+{
+    header('Location: ../../main/views/autenticacao/login.php');
+    exit();
+}
+if (!isset($_SESSION['Email'])) {
+    session_destroy();
+    redirect_to_login();
+}
 
 ?>
 

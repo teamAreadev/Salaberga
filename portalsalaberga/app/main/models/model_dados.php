@@ -220,11 +220,9 @@ function login_sesmated($email, $senha)
     if (!empty($user)) {
 
         $_SESSION['login'] = true;
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['Email'] = $user['email'];
-                $_SESSION['Senha'] = str_repeat('•', strlen($senha));
-                $_SESSION['equipe'] = $user['equipe'];
-                $_SESSION['voto'] = $user['voto'];
+        $_SESSION['user_id'] = $user['id']; // Armazena o ID do usuário na sessão
+        $_SESSION['Nome'] = $user['nome'];
+
         return true;
     } else {
         return false;
