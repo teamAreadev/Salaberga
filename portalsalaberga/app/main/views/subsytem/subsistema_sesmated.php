@@ -1,12 +1,10 @@
 <?php 
-function redirect_to_login()
-{
-    header('Location: ../../views/autenticacao/login_sesmated.php');
-    exit();
-}
-if (isset($_SESSION['login'])) {
-    session_destroy();
-    redirect_to_login();
+require_once('../../models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+
+if (isset($_GET['sair'])) {
+    $session->quebra_session();
 }
 ?>
 <!DOCTYPE html>

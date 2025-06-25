@@ -215,13 +215,12 @@ function login_sesmated($email, $senha)
     $stmtSelectUser->bindParam(':email', $email);
     $stmtSelectUser->bindParam(':senha', $senha);
     $stmtSelectUser->execute();
-    $user = $stmtSelectUser->fetchAll(PDO::FETCH_ASSOC);
-
+    $user = $stmtSelectUser->fetch(PDO::FETCH_ASSOC);
+    
     if (!empty($user)) {
-
-        session_destroy();
+        session_start();
         $_SESSION['login'] = true;
-        $_SESSION['user_id'] = $user['id']; // Armazena o ID do usuário na sessão
+        $_SESSION['user_id'] = $user['id'];
         $_SESSION['Nome'] = $user['nome'];
 
         return true;

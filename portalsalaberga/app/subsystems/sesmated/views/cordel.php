@@ -1,15 +1,9 @@
 <?php
 require_once('../models/select.model.php');
 $select = new select_model();
-function redirect_to_login()
-{
-    header('Location: ../../main/views/autenticacao/login_sesmated.php');
-    exit();
-}
-if (!isset($_SESSION['Email'])) {
-    session_destroy();
-    redirect_to_login();
-}
+require_once('../../../main/models/sessions.php');
+$session = new sessions;
+$session->autenticar_session();
 ?>
 
 <!DOCTYPE html>
@@ -450,7 +444,7 @@ if (!isset($_SESSION['Email'])) {
                         <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                             <i class="fas fa-user text-green-300 text-xs"></i>
                         </div>
-                        <span class="text-gray-100">João Silva</span>
+                        <span class="text-gray-100"><?=$_SESSION['Nome'] ?? 0?></span>
                     </div>
                 </div>
             </div>
@@ -463,7 +457,8 @@ if (!isset($_SESSION['Email'])) {
             <div class="card-bg rounded-3xl w-full max-w-6xl text-center fade-in">
                 
                 <!-- Formulário Principal -->
-                <form id="cordelForm" action="../controllers/controller_cordel.php" method="post" class="space-y-8">
+                <form action="../controllers/controller_cordel.php" method="post" class="space-y-8">
+                    <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
                     <div class="flex flex-col items-center gap-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center">
                             <i class="fas fa-scroll text-white text-3xl"></i>
