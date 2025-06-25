@@ -1,5 +1,5 @@
 <?php 
-require_once('../../../../main/models/sessions.php');
+require_once('../../../main/models/sessions.php');
 $session = new sessions;
 $session->autenticar_session();
 ?>
