@@ -221,19 +221,27 @@ class main_model extends connect
     }
 
     //esquete
-    public function confirmar_esquete($criterios, $pontuacao, $id_curso)
+    public function confirmar_esquete($cursoSelecionado, $notaTempo, $notaTema, $notaFigurino, $notaCriatividade, $avaliadorId)
     {
         $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_05_esquete WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $id_curso);
+        $stmt_check->bindValue(':curso_id', $cursoSelecionado);
         $stmt_check->execute();
         $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
         if (empty($result)) {
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_05_esquete`(`curso_id`, `criterios`, `pontuacao`) VALUES (:curso_id, :criterios, :pontuacao)");
-            $stmt_adcionar->bindValue(':curso_id', $id_curso);
-            $stmt_adcionar->bindValue(':criterios', json_encode($criterios));
-            $stmt_adcionar->bindValue(':pontuacao', $pontuacao);
+            $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
+            $stmt_id_avaliador->bindValue(':id_usuario', $avaliadorId);
+            $stmt_id_avaliador->execute();
+            $result = $stmt_id_avaliador->fetch(PDO::FETCH_ASSOC);
 
+            $id_avaliador = $result['id'];
+            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_05_esquete`(`curso_id`, `id_avaliador`, `tempo`, `tema`, `figurino`, `criatividade`) VALUES (:curso_id, :id_avaliador, :tempo, :tema, :figurino, :criatividade)");
+            $stmt_adcionar->bindValue(':curso_id', $cursoSelecionado);
+            $stmt_adcionar->bindValue(':id_avaliador', $id_avaliador);
+            $stmt_adcionar->bindValue(':tempo', $notaTempo);
+            $stmt_adcionar->bindValue(':tema', $notaTema);
+            $stmt_adcionar->bindValue(':figurino', $notaFigurino);
+            $stmt_adcionar->bindValue(':criatividade', $notaCriatividade);
             if ($stmt_adcionar->execute()) {
                 return 1;
             } else {
