@@ -1149,7 +1149,9 @@ $session->autenticar_session();
                         <img src=" https://i.postimg.cc/MprBmBVH/rifa-removebg-preview.png " alt="Rifa" class="app-icon">
                     </div>
                     <h3 class="app-name">Rifa</h3>
-                    <span class="category-tag">Evento</span>
+                    <span class="category-tag"><a href="">Relatório por turma</a></span>
+                    <span class="category-tag"><a href="">Relatório po</a>r</span>
+                    <span class="category-tag"><a href="">Relatório total arrecado</a></span>
                 </div>
             </a>
             <a href="../../../subsystems/sesmated/views/Sala_Tematica.php" class="app-card-link" data-card-key="Sala_temática">
@@ -1167,6 +1169,15 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/LscNvwLJ/vestimenstas-removebg-preview.png" alt="Vestimentas" class="app-icon">
                     </div>
                     <h3 class="app-name">Vestimentas</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
+            <a href="../../../subsystems/sesmated/views/relatorios/relatorios_gerais.php" class="app-card-link" data-card-key="Vestimentas">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/LscNvwLJ/vestimenstas-removebg-preview.png" alt="Vestimentas" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Relatório</h3>
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
