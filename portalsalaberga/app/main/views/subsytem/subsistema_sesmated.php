@@ -1108,7 +1108,7 @@ if (isset($_GET['sair'])) {
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="../../../subsystems/sesmated/views/painel.php" class="app-card-link" data-card-key="Painel_26">
+            <a href="../../../subsystems/sesmated/views/Painel.php" class="app-card-link" data-card-key="Painel_26">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/ZqZGj9mk/painel-removebg-preview.png" alt="Painel" class="app-icon">
