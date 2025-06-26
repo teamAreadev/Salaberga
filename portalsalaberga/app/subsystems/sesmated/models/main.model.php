@@ -331,26 +331,28 @@ class main_model extends connect
     }
 
     //painel
-    public function confirmar_painel($criterios, $pontuacao, $id_curso)
+    public function confirmar_painel($nota_tema, $nota_conteudo, $nota_layout, $nota_estetica, $nota_sustentabilidade, $curso, $id_avaliador)
     {
-        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_12_painel WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $id_curso);
-        $stmt_check->execute();
-        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
+        $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
+        $stmt_id_avaliador->bindValue(':id_usuario', $id_avaliador);
+        $stmt_id_avaliador->execute();
+        $result = $stmt_id_avaliador->fetch(PDO::FETCH_ASSOC);
 
-        if (empty($result)) {
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_12_painel`(`curso_id`, `criterios`, `pontuacao`) VALUES (:curso_id, :criterios, :pontuacao)");
-            $stmt_adcionar->bindValue(':curso_id', $id_curso);
-            $stmt_adcionar->bindValue(':criterios', json_encode($criterios));
-            $stmt_adcionar->bindValue(':pontuacao', $pontuacao);
+        $id_avaliador = $result['id'];
+        
+        $stmt_adcionar = $this->connect->prepare("INSERT INTO tarefa_14_painel (curso_id, id_avaliador, adequacao_tema, qualidade_conteudo, organizacao_layout, estetica_criatividade, sustentabilidade_construcao) VALUES (:curso_id, :id_avaliador, :adequacao_tema, :qualidade_conteudo, :organizacao_layout, :estetica_criatividade, :sustentabilidade_construcao)");
+        $stmt_adcionar->bindValue(':curso_id', $curso);
+        $stmt_adcionar->bindValue(':id_avaliador', $id_avaliador);
+        $stmt_adcionar->bindValue(':adequacao_tema', $nota_tema);
+        $stmt_adcionar->bindValue(':qualidade_conteudo', $nota_conteudo);
+        $stmt_adcionar->bindValue(':organizacao_layout', $nota_layout);
+        $stmt_adcionar->bindValue(':estetica_criatividade', $nota_estetica);
+        $stmt_adcionar->bindValue(':sustentabilidade_construcao', $nota_sustentabilidade);
 
-            if ($stmt_adcionar->execute()) {
-                return 1;
-            } else {
-                return 2;
-            }
+        if ($stmt_adcionar->execute()) {
+            return 1;
         } else {
-            return 3;
+            return 2;
         }
     }
 

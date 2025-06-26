@@ -47,15 +47,47 @@ $session->autenticar_session();
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
-        .input-field {
-            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+        .input-field, select.input-field {
+            background: #fff !important;
+            color: #222 !important;
+            border: 2px solid #ffb733;
+            font-weight: 600;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .input-field:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1);
-            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
+        .input-field:focus, select.input-field:focus {
+            border-color: #00b348;
+            box-shadow: 0 0 0 2px #00b34833;
+            outline: none;
+        }
+        select.input-field option {
+            color: #222 !important;
+            background: #fff !important;
+        }
+        select.input-field::-ms-expand {
+            display: none;
+        }
+        select.input-field {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+        /* Custom arrow for select */
+        .select-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 20rem;
+        }
+        .select-wrapper:after {
+            content: '\25BC';
+            position: absolute;
+            top: 50%;
+            right: 1.2rem;
+            transform: translateY(-50%);
+            color: #ffb733;
+            pointer-events: none;
+            font-size: 1rem;
         }
         .score-input-wrapper {
             position: relative;
@@ -305,7 +337,8 @@ $session->autenticar_session();
         <div class="flex flex-col items-center justify-center min-h-[70vh]">
             <div class="card-bg rounded-3xl w-full max-w-6xl text-center fade-in">
                 <!-- Formulário Principal -->
-                <form id="painelForm" class="space-y-8">
+                <form action="../controllers/controller_painel.php" method="post" class="space-y-8">
+                    <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
                     <div class="flex flex-col items-center gap-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center">
                             <i class="fas fa-chalkboard text-white text-3xl"></i>
@@ -321,6 +354,22 @@ $session->autenticar_session();
                                 Avalie cada critério com notas de 0 a 100 pontos
                             </p>
                             <p class="text-xs text-gray-400 mt-2">Tamanho do painel: 2m x 1,8m</p>
+                        </div>
+                    </div>
+                    <!-- Dropdown de Curso -->
+                    <div class="mb-8 flex flex-col items-center">
+                        <label for="curso" class="block text-sm font-bold mb-2 text-gray-300 uppercase tracking-wide">
+                            <i class="fas fa-graduation-cap mr-2"></i>Curso
+                        </label>
+                        <div class="select-wrapper">
+                            <select id="curso" name="curso" class="input-field w-full max-w-xs rounded-2xl px-3 py-2.5 focus:outline-none" required>
+                                <option value="" selected disabled>Selecione o curso</option>
+                                <option value="1">Enfermagem</option>
+                                <option value="2">Informática</option>
+                                <option value="3">Meio Ambiente</option>
+                                <option value="4">Administração</option>
+                                <option value="5">Edificações</option>
+                            </select>
                         </div>
                     </div>
                     <!-- Critérios de Avaliação -->
