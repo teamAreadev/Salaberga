@@ -786,7 +786,7 @@ $session->autenticar_session();
                 </div>
             </a>
 
-            <a href="../../../subsystems/sesmated/views/sala-tematica.php" class="app-card-link" data-card-key="Sala_tematica">
+            <a href="../../../subsystems/sesmated/views/Sala_Tematica.php" class="app-card-link" data-card-key="Sala_tematica">
                 <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/sgKk6jgv/sala-tematica-removebg-preview.png" alt="Sala temática" class="app-icon">

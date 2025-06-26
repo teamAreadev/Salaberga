@@ -363,11 +363,11 @@ $session->autenticar_session();
                             </label>
                             <select id="cursoProduto" name="cursoProduto" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none" required>
                                 <option value="">Selecione o curso</option>
-                                <option value="Enfermagem">Enfermagem</option>
-                                <option value="Informática">Informática</option>
-                                <option value="Meio ambiente">Meio ambiente</option>
-                                <option value="Administração">Administração</option>
-                                <option value="Edificações">Edificações</option>
+                                <option value="1">Enfermagem</option>
+                                <option value="2">Informática</option>
+                                <option value="3">Meio ambiente</option>
+                                <option value="4">Administração</option>
+                                <option value="5">Edificações</option>
                             </select>
                         </div>
                         <div class="flex flex-col gap-2">
