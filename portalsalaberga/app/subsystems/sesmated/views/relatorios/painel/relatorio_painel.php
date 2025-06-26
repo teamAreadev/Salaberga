@@ -1,0 +1,73 @@
+<?php
+require_once('../../../config/connect.php');
+require_once('../../../assets/fpdf/fpdf.php');
+
+class PDF extends connect
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->main();
+    }
+
+    public function main()
+    {
+        $fpdf = new FPDF('P', 'pt', 'A4');
+        $fpdf->AliasNbPages();
+
+        // Adiciona uma página
+        $fpdf->AddPage();
+
+        // Adiciona o fundo, ajustando as dimensões
+        $fpdf->Image('../../../assets/fundo.jpg', 0, 0, $fpdf->GetPageWidth(), $fpdf->GetPageHeight());
+
+        // Consulta SQL
+        $query = "
+            SELECT c.nome_curso, a.nome, p.adequacao_tema, p.qualidade_conteudo, p.organizacao_layout, 
+                   p.estetica_criatividade, p.sustentabilidade_construcao
+            FROM cursos c 
+            INNER JOIN tarefa_14_painel p ON p.curso_id = c.curso_id 
+            INNER JOIN avaliadores a ON a.id = p.id_avaliador;
+        ";
+        $stmt = $this->connect->query($query);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Configurações da tabela
+        $fpdf->SetFont('Arial', 'B', 10); // Tamanho da fonte para o cabeçalho
+        $fpdf->SetFillColor(255, 255, 255); // Fundo branco para o cabeçalho
+        $fpdf->SetTextColor(0, 0, 0); // Texto preto
+
+        // Cabeçalho da tabela com larguras ajustadas
+        $fpdf->SetY(150);
+        $fpdf->SetX(15);
+        $fpdf->Cell(80, 20, utf8_decode('Curso'), 1, 0, 'C', true);
+        $fpdf->Cell(140, 20, utf8_decode('Avaliador'), 1, 0, 'C', true);
+        $fpdf->Cell(70, 20, utf8_decode('Adequação'), 1, 0, 'C', true);
+        $fpdf->Cell(70, 20, utf8_decode('Qualidade'), 1, 0, 'C', true);
+        $fpdf->Cell(60, 20, utf8_decode('Layout'), 1, 0, 'C', true);
+        $fpdf->Cell(60, 20, utf8_decode('Criatividade'), 1, 0, 'C', true);
+        $fpdf->Cell(85, 20, utf8_decode('Sustentabilidade'), 1, 1, 'C', true);
+
+        // Dados da tabela
+        $fpdf->SetFont('Arial', '', 8); // Fonte menor para os dados
+        $fpdf->SetFillColor(240, 240, 240); // Fundo cinza claro para linhas
+        $fill = false;
+        foreach ($results as $row) {
+            $fpdf->SetX(15);
+            $fpdf->Cell(80, 20, utf8_decode($row['nome_curso']), 1, 0, 'C', $fill);
+            $fpdf->Cell(140, 20, utf8_decode($row['nome']), 1, 0, 'C', $fill);
+            $fpdf->Cell(70, 20, utf8_decode($row['adequacao_tema']), 1, 0, 'C', $fill);
+            $fpdf->Cell(70, 20, utf8_decode($row['qualidade_conteudo']), 1, 0, 'C', $fill);
+            $fpdf->Cell(60, 20, utf8_decode($row['organizacao_layout']), 1, 0, 'C', $fill);
+            $fpdf->Cell(60, 20, utf8_decode($row['estetica_criatividade']), 1, 0, 'C', $fill);
+            $fpdf->Cell(85, 20, utf8_decode($row['sustentabilidade_construcao']), 1, 1, 'C', $fill);
+            $fill = !$fill; // Alterna a cor de fundo
+        }
+
+        // Gera o PDF
+        $fpdf->Output('relatorio_painel.pdf', 'I');
+    }
+}
+
+$relatorio = new PDF();
+?>

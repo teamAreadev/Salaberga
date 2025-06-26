@@ -271,6 +271,25 @@ $session->autenticar_session();
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+        .input-field, select.input-field {
+            background: #fff !important;
+            color: #222 !important;
+            border: 2px solid #ffb733;
+            font-weight: 600;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-field:focus, select.input-field:focus {
+            border-color: #00b348;
+            box-shadow: 0 0 0 2px #00b34833;
+            outline: none;
+        }
+        select.input-field option {
+            color: #222 !important;
+            background: #fff !important;
+        }
+        select.input-field::-ms-expand {
+            display: none;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -305,7 +324,8 @@ $session->autenticar_session();
         <div class="flex flex-col items-center justify-center min-h-[70vh]">
             <div class="card-bg rounded-3xl w-full max-w-6xl text-center fade-in">
                 <!-- Formulário Principal -->
-                <form id="inovacaoForm" class="space-y-8">
+                <form action="../controllers/controller_inovacao.php" method="post" class="space-y-8">
+                    <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
                     <div class="flex flex-col items-center gap-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center">
                             <i class="fas fa-lightbulb text-white text-3xl"></i>
@@ -321,6 +341,18 @@ $session->autenticar_session();
                                 Avalie cada critério com notas de 0 a 100 pontos
                             </p>
                         </div>
+                    </div>
+                    <!-- Dropdown de Cursos -->
+                    <div class="mb-6 flex flex-col items-center">
+                        <label for="curso" class="block text-base font-semibold text-gray-200 mb-2">Selecione o Curso</label>
+                        <select id="curso" name="curso" required class="input-field w-full max-w-xs rounded-xl px-3 py-2.5 text-black bg-white border-2 border-yellow-400 focus:border-green-500 focus:ring-2 focus:ring-green-200 font-semibold">
+                            <option value="">Selecione o curso</option>
+                            <option value="1">Enfermagem</option>
+                            <option value="2">Informática</option>
+                            <option value="3">Meio Ambiente</option>
+                            <option value="4">Administração</option>
+                            <option value="5">Edificações</option>
+                        </select>
                     </div>
                     <!-- Critérios de Avaliação -->
                     <div class="mb-8">

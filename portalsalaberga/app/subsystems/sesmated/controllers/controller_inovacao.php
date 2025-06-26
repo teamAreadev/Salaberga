@@ -1,19 +1,26 @@
 <?php
 require_once('../models/main.model.php');
-
+print_r($_POST);
 if (
-    isset($_POST['criterio']) && !empty($_POST['criterio']) &&
-    isset($_POST['pontuacao']) && !empty($_POST['pontuacao']) &&
-    isset($_POST['curso']) && !empty($_POST['curso'])
+    isset($_POST['curso']) && !empty($_POST['curso']) &&
+    isset($_POST['nota_originalidade']) &&
+    isset($_POST['nota_relevancia']) &&
+    isset($_POST['nota_viabilidade']) &&
+    isset($_POST['nota_sustentabilidade']) &&
+    isset($_POST['nota_clareza']) &&
+    isset($_POST['id_avaliador']) && !empty($_POST['id_avaliador'])
 ) {
-    $criterio = $_POST['criterio'];
-    $pontuacao = $_POST['pontuacao'];
     $curso = $_POST['curso'];
-
+    $nota_originalidade = $_POST['nota_originalidade'];
+    $nota_relevancia = $_POST['nota_relevancia'];
+    $nota_viabilidade = $_POST['nota_viabilidade'];
+    $nota_sustentabilidade = $_POST['nota_sustentabilidade'];
+    $nota_clareza = $_POST['nota_clareza'];
+    $id_avaliador = $_POST['id_avaliador'];
     $main_model = new main_model();
-    $result = $main_model->confirmar_inovacao($criterio, $pontuacao, $curso);
+    $resultado = $main_model->confirmar_inovacao($nota_originalidade, $nota_relevancia, $nota_viabilidade, $nota_sustentabilidade, $nota_clareza, $curso, $id_avaliador);
 
-    switch ($result) {
+    switch ($resultado) {
         case 1:
             header('location:../views/Inovacao.php?confirmado');
             exit();
@@ -24,7 +31,7 @@ if (
             header('location:../views/Inovacao.php?ja_confirmado');
             exit();
     }
-} else {
+}/* else {
     header('location:../views/Inovacao.php?empty');
     exit();
-} 
+}*/
