@@ -354,19 +354,18 @@ $session->autenticar_session();
                     <h2 class="text-xl font-bold">Cadastrar Produto</h2>
                 </div>
                 
-                <form id="produtoForm" class="space-y-5">
+                <form action="../controllers/controller_empreendedorismo.php" method="post" id="produtoForm" class="space-y-5">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-xs font-bold mb-3 text-gray-300 uppercase tracking-wide">
-                                <i class="fas fa-graduation-cap mr-2"></i>Curso
-                            </label>
+                               
                             <select id="cursoProduto" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none" required>
                                 <option value="">Selecione o curso</option>
-                                <option value="Enfermagem">Enfermagem</option>
-                                <option value="Informática">Informática</option>
-                                <option value="Meio ambiente">Meio ambiente</option>
-                                <option value="Administração">Administração</option>
-                                <option value="Edificações">Edificações</option>
+                                <option value="11>Enfermagem</option>
+                                <option value="22>Informática</option>
+                                <option value="33>Meio ambiente</option>
+                                <option value="44>Administração</option>
+                                <option value="55>Edificações</option>
                             </select>
                         </div>
                         <div>
@@ -398,7 +397,7 @@ $session->autenticar_session();
                             Editar Produto
                         </button>
                     </div>
-                </form>
+                </fformacid=
             </div>
         </section>
 
