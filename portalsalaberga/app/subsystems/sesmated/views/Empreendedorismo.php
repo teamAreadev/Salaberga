@@ -2,6 +2,7 @@
 require_once('../../../main/models/sessions.php');
 $session = new sessions;
 $session->autenticar_session();
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -335,10 +336,10 @@ $session->autenticar_session();
                 
                 <!-- Chip do Usuário - Posicionado à direita no desktop -->
                 <div class="user-chip user-chip-desktop">
-                    <div class="w-5 h-5 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                         <i class="fas fa-user text-green-300 text-xs"></i>
                     </div>
-                    <span class="text-gray-100">Otavio filho</span>
+                    <span class="text-gray-100"><?=$_SESSION['Nome']?></span>
                 </div>
             </div>
         </div>
@@ -355,36 +356,37 @@ $session->autenticar_session();
                 </div>
                 
                 <form action="../controllers/controller_empreendedorismo.php" method="post" id="produtoForm" class="space-y-5">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div>
-                            <label class="block text-xs font-bold mb-3 text-gray-300 uppercase tracking-wide">
-                               
-                            <select id="cursoProduto" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none" required>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="flex flex-col gap-2">
+                            <label for="cursoProduto" class="block text-xs font-bold mb-1 text-gray-300 uppercase tracking-wide">
+                                <i class="fas fa-graduation-cap mr-2"></i>Curso do Produto
+                            </label>
+                            <select id="cursoProduto" name="cursoProduto" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none" required>
                                 <option value="">Selecione o curso</option>
-                                <option value="11>Enfermagem</option>
-                                <option value="22>Informática</option>
-                                <option value="33>Meio ambiente</option>
-                                <option value="44>Administração</option>
-                                <option value="55>Edificações</option>
+                                <option value="Enfermagem">Enfermagem</option>
+                                <option value="Informática">Informática</option>
+                                <option value="Meio ambiente">Meio ambiente</option>
+                                <option value="Administração">Administração</option>
+                                <option value="Edificações">Edificações</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold mb-3 text-gray-300 uppercase tracking-wide">
+                        <div class="flex flex-col gap-2">
+                            <label for="nomeProduto" class="block text-xs font-bold mb-1 text-gray-300 uppercase tracking-wide">
                                 <i class="fas fa-box mr-2"></i>Nome do Produto
                             </label>
-                            <input type="text" id="nomeProduto" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none" required>
+                            <input type="text" id="nomeProduto" name="nomeProduto" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none" required>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold mb-3 text-gray-300 uppercase tracking-wide">
-                                <i class="fas fa-dollar-sign mr-2"></i>Valor unitario (R$)
+                        <div class="flex flex-col gap-2">
+                            <label for="precoProduto" class="block text-xs font-bold mb-1 text-gray-300 uppercase tracking-wide">
+                                <i class="fas fa-dollar-sign mr-2"></i>Valor unitário (R$)
                             </label>
-                            <input type="number" id="precoProduto" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none" step="0.01" min="0" required>
+                            <input type="number" id="precoProduto" name="precoProduto" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none" step="0.01" min="0" required>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold mb-3 text-gray-300 uppercase tracking-wide">
+                        <div class="flex flex-col gap-2">
+                            <label for="quantidadeProduto" class="block text-xs font-bold mb-1 text-gray-300 uppercase tracking-wide">
                                 <i class="fas fa-sort-numeric-up mr-2"></i>Quantidade
                             </label>
-                            <input type="number" id="quantidadeProduto" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none" min="0" required>
+                            <input type="number" id="quantidadeProduto" name="quantidadeProduto" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none" min="0" required>
                         </div>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-3 justify-end mt-4">
@@ -392,23 +394,8 @@ $session->autenticar_session();
                             <i class="fas fa-save"></i>
                             Cadastrar Produto
                         </button>
-                        <button type="button" id="btnEditarProduto" class="px-6 py-2.5 rounded-2xl font-semibold text-white flex items-center gap-2" style="background: #ffb733; color: #222; font-size: 13px;">
-                            <i class="fas fa-edit"></i>
-                            Editar Produto
-                        </button>
                     </div>
-                </fformacid=
-            </div>
-        </section>
-
-        <!-- Barracas Grid -->
-        <section class="mb-12">
-            <div class="flex items-center gap-3 mb-6">
-                <i class="fas fa-list text-xl" style="color: var(--header-color);"></i>
-                <h2 class="text-xl font-bold">Barracas Cadastradas</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5" id="barracasList">
-                <!-- Cards will be generated by JavaScript -->
+                </form>
             </div>
         </section>
 
@@ -477,37 +464,6 @@ $session->autenticar_session();
                 </div>
             </div>
         </div>
-
-        <!-- Relatórios Section -->
-        <section class="text-center space-y-5">
-            <div class="flex items-center justify-center gap-3 mb-6">
-                <i class="fas fa-chart-line text-xl" style="color: var(--accent-color);"></i>
-                <h2 class="text-xl font-bold">Relatórios Detalhados</h2>
-            </div>
-            
-            <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <button onclick="gerarRelatorioVendas()" class="btn-secondary px-5 py-2.5 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
-                    <i class="fas fa-file-alt"></i>
-                    Relatório de Vendas
-                </button>
-                <button onclick="gerarRanking()" class="btn-secondary px-5 py-2.5 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
-                    <i class="fas fa-trophy"></i>
-                    Ranking de Arrecadação
-                </button>
-                <button onclick="relatorioPrestacaoContas()" class="btn-secondary px-5 py-2.5 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                    Prestação de Contas
-                </button>
-                <button onclick="pontuacaoPorPosicao()" class="btn-secondary px-5 py-2.5 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2 shadow-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-yellow-400 hover:to-green-500 hover:text-black focus:ring-4 focus:ring-yellow-400 focus:outline-none group" aria-label="Pontuação por Posição" title="Baixar pontuação por posição no ranking">
-                    <i class="fas fa-medal text-lg group-hover:scale-125 transition-transform"></i>
-                    Pontuação por Posição
-                </button>
-                <button onclick="gerarRelatorioPDF()" class="btn-secondary px-5 py-2.5 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2 shadow-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-yellow-400 hover:to-green-500 hover:text-black focus:ring-4 focus:ring-yellow-400 focus:outline-none group" aria-label="Relatório PDF" title="Baixar relatório de prestação de contas em PDF">
-                    <i class="fas fa-file-pdf text-lg group-hover:scale-125 transition-transform"></i>
-                    Relatório PDF
-                </button>
-            </div>
-        </section>
     </main>
 
     <!-- Modal Fullscreen de Edição -->
