@@ -1215,7 +1215,7 @@ if (isset($_GET['sair'])) {
             }
             // 26/06
             else if (dia === 26 && mes === 6) {
-                mostrarPorChaves(['Esquete', 'Painel_26', 'Sala_temática']);
+                mostrarPorChaves(['Esquete', 'Painel_26', 'Sala_temática', 'Logo']);
             }
             // 27/06
             else if (dia === 27 && mes === 6) {
