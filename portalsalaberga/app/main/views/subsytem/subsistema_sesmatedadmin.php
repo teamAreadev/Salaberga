@@ -686,9 +686,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/sDLfn46k/dashboard-removebg-preview.png" alt="Dashboard abertura" class="app-icon">
                     </div>
                     <h3 class="app-name">Abertura</h3>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
-                    <button class="category-tag">Relatório total arrecadado</button>
+
                 </div>
             </a>
 
@@ -698,17 +696,18 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Cordel" class="app-icon">
                     </div>
                     <h3 class="app-name">Cordel</h3>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='../../../subsystems/sesmated/views/relatorios/cordel/relatorios_cordel.php'">Relatório por turma</button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/cordel/relatorio_cordel.php">Relatório</a></button>
                 </div>
             </a>
 
-            <a href="../../../subsystems/sesmated/views/empreendedorismo.php" class="app-card-link" data-card-key="Empreendedorismo">
+            <a href="../../../subsystems/sesmated/views/Empreendedorismo.php" class="app-card-link" data-card-key="Empreendedorismo">
                 <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/j2sCbqPB/emopreendedorismo-removebg-preview.png" alt="Empreendedorismo" class="app-icon">
                     </div>
                     <h3 class="app-name">Empreendedorismo</h3>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/empreendedorismo/relatorio_empreendedorismo.php">Relatório empreendedorismo</a></button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/empreendedorismo/relatorio_produtos.php">Relatório produtos</a></button>
                 </div>
             </a>
 
@@ -718,7 +717,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/ZqxSh8HK/esquete-removebg-preview.png" alt="Esquete" class="app-icon">
                     </div>
                     <h3 class="app-name">Esquete</h3>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='../../../subsystems/sesmated/views/relatorios/esquete/relatorio_esquete.php'">Relatório por turma</button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/esquete/relatorio_esquete.php">Relatório</a></button>
                 </div>
             </a>
 
@@ -728,7 +727,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/Y92w2vDN/logo-removebg-preview-1.png" alt="Logo" class="app-icon">
                     </div>
                     <h3 class="app-name">Logo</h3>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='../../../subsystems/sesmated/views/relatorios/logo/relatorio_logo.php'">Relatório por turma</button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/logo/relatorio_logo.php">Relatório</a></button>
                 </div>
             </a>
 
@@ -738,7 +737,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/SRJF8whJ/mawcote-removebg-preview.png" alt="Mascote" class="app-icon">
                     </div>
                     <h3 class="app-name">Mascote</h3>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='../../../subsystems/sesmated/views/relatorios/mascote/relatorio_mascote.php'">Relatório por turma</button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/mascote/relatorio_mascote.php">Relatório</a></button>
                 </div>
             </a>
 
