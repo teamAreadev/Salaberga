@@ -305,26 +305,28 @@ class main_model extends connect
 
 
     //sala temática
-    public function confirmar_sala_tematica($criterios, $pontuacao, $id_curso)
+    public function confirmar_sala_tematica($nota_adequacao, $nota_conteudo, $nota_ambientacao, $nota_didatica, $nota_equipe, $nota_sustentabilidade, $curso, $id_avaliador)
     {
-        $stmt_check = $this->connect->prepare("SELECT * FROM tarefa_10_sala_tematica WHERE curso_id = :curso_id");
-        $stmt_check->bindValue(':curso_id', $id_curso);
-        $stmt_check->execute();
-        $result = $stmt_check->fetch(PDO::FETCH_ASSOC);
+        $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
+        $stmt_id_avaliador->bindValue(':id_usuario', $id_avaliador);
+        $stmt_id_avaliador->execute();
+        $result = $stmt_id_avaliador->fetch(PDO::FETCH_ASSOC);
 
-        if (empty($result)) {
-            $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_10_sala_tematica`(`curso_id`, `criterios`, `pontuacao`) VALUES (:curso_id, :criterios, :pontuacao)");
-            $stmt_adcionar->bindValue(':curso_id', $id_curso);
-            $stmt_adcionar->bindValue(':criterios', json_encode($criterios));
-            $stmt_adcionar->bindValue(':pontuacao', $pontuacao);
+        $id_avaliador = $result['id'];
+        $stmt_adcionar = $this->connect->prepare("INSERT INTO tarefa_13_sala_tematica (curso_id, id_avaliador, adequacao_tema, qualidade_conteudo, ambientacao_criatividade, didatica_clareza, trabalho_equipe, sustentabilidade_execucao) VALUES (:curso_id, :id_avaliador, :adequacao_tema, :qualidade_conteudo, :ambientacao_criatividade, :didatica_clareza, :trabalho_equipe, :sustentabilidade_execucao)");
+        $stmt_adcionar->bindValue(':curso_id', $curso);
+        $stmt_adcionar->bindValue(':id_avaliador', $id_avaliador);
+        $stmt_adcionar->bindValue(':adequacao_tema', $nota_adequacao);
+        $stmt_adcionar->bindValue(':qualidade_conteudo', $nota_conteudo);
+        $stmt_adcionar->bindValue(':ambientacao_criatividade', $nota_ambientacao);
+        $stmt_adcionar->bindValue(':didatica_clareza', $nota_didatica);
+        $stmt_adcionar->bindValue(':trabalho_equipe', $nota_equipe);
+        $stmt_adcionar->bindValue(':sustentabilidade_execucao', $nota_sustentabilidade);
 
-            if ($stmt_adcionar->execute()) {
-                return 1;
-            } else {
-                return 2;
-            }
+        if ($stmt_adcionar->execute()) {
+            return 1;
         } else {
-            return 3;
+            return 2;
         }
     }
 
@@ -400,6 +402,28 @@ class main_model extends connect
             }
         } else {
             return 3;
+        }
+    }
+
+    // Cadastrar produto na tabela produtos_barraca
+    public function cadastrar_produto($arrecadacao_id, $nome_produto, $preco_unitario, $quantidade_vendida)
+    {
+        $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
+        $stmt_id_avaliador->bindValue(':id_usuario', $id_avaliador);
+        $stmt_id_avaliador->execute();
+        $result = $stmt_id_avaliador->fetch(PDO::FETCH_ASSOC);
+
+        $id_avaliador = $result['id'];
+
+        $stmt_adcionar = $this->connect->prepare("INSERT INTO produtos (arrecadacao_id, nome_produto, preco_unitario, quantidade_vendida) VALUES (:arrecadacao_id, :nome_produto, :preco_unitario, :quantidade_vendida)");
+        $stmt_adcionar->bindValue(':arrecadacao_id', $arrecadacao_id);
+        $stmt_adcionar->bindValue(':nome_produto', $nome_produto);
+        $stmt_adcionar->bindValue(':preco_unitario', $preco_unitario);
+        $stmt_adcionar->bindValue(':quantidade_vendida', $quantidade_vendida);
+        if ($stmt_adcionar->execute()) {
+            return 1;
+        } else {
+            return 2;
         }
     }
 }
