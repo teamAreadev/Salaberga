@@ -1,6 +1,6 @@
 <?php
 require_once('../models/main.model.php');
-print_r($_POST);
+
 if (
     isset($_POST['curso']) && !empty($_POST['curso']) &&
     isset($_POST['pontuacao_total']) &&
@@ -22,6 +22,6 @@ if (
             exit();
     }
 } else {
-    header('location:../views/vestimentas_sustentaveis.php?empty');
+    header('location:../views/esquete.php?empty');
     exit();
 }

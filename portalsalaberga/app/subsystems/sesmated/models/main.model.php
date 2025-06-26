@@ -300,6 +300,10 @@ class main_model extends connect
         }
     }
 
+
+
+
+
     //sala temática
     public function confirmar_sala_tematica($criterios, $pontuacao, $id_curso)
     {
