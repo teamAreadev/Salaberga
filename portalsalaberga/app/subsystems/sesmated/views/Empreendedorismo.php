@@ -4,6 +4,7 @@ $session = new sessions;
 $session->autenticar_session();
 
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -35,7 +36,7 @@ $session->autenticar_session();
             color: var(--text-color);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
-            font-size: 14px; /* Fonte base menor */
+            font-size: 14px;
         }
         
         .header-bg {
@@ -56,7 +57,7 @@ $session->autenticar_session();
             background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
-            font-size: 14px; /* Fonte menor nos inputs */
+            font-size: 14px;
         }
         
         .input-field:focus {
@@ -76,8 +77,8 @@ $session->autenticar_session();
             box-shadow: 0 4px 20px rgba(0, 179, 72, 0.3);
             border: none;
             transition: all 0.3s ease;
-            font-size: 13px; /* Botões menores */
-            padding: 0.5rem 1rem; /* Padding menor */
+            font-size: 13px;
+            padding: 0.5rem 1rem;
         }
         
         .btn-primary:hover {
@@ -89,8 +90,8 @@ $session->autenticar_session();
             background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.3s ease;
-            font-size: 13px; /* Botões menores */
-            padding: 0.5rem 1rem; /* Padding menor */
+            font-size: 13px;
+            padding: 0.5rem 1rem;
         }
         
         .btn-secondary:hover {
@@ -106,7 +107,6 @@ $session->autenticar_session();
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
         
-        /* Modal Fullscreen */
         .modal-fullscreen {
             background: radial-gradient(ellipse at top, #1a1a1a 0%, #0a0a0a 100%);
             position: fixed;
@@ -130,7 +130,7 @@ $session->autenticar_session();
         
         .modal-fullscreen-content {
             min-height: calc(100vh - 80px);
-            padding: 1.5rem; /* Padding menor */
+            padding: 1.5rem;
         }
         
         .step-indicator {
@@ -262,7 +262,7 @@ $session->autenticar_session();
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: clamp(0.7rem, 2vw, 0.8rem); /* Fonte menor */
+            font-size: clamp(0.7rem, 2vw, 0.8rem);
             font-weight: 600;
             color: #e5e7eb;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
@@ -290,18 +290,15 @@ $session->autenticar_session();
                 padding: 1rem;
             }
         }
-        /* Títulos responsivos menores */
         .main-title {
             font-size: clamp(1.3rem, 5vw, 2rem);
             line-height: 1.2;
         }
         
-        /* Textos menores */
         h2 { font-size: 1.4rem; }
         h3 { font-size: 1.2rem; }
         h4 { font-size: 1.1rem; }
         
-        /* Botões de navegação no modal */
         .nav-button {
             background: linear-gradient(145deg, #3a3a3a 0%, #2a2a2a 100%);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -313,6 +310,35 @@ $session->autenticar_session();
         .nav-button:hover {
             background: linear-gradient(145deg, #4a4a4a 0%, #3a3a3a 100%);
             border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Estilos para os formulários dos cursos */
+        .form-curso {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .form-curso.active {
+            display: block;
+        }
+        
+        .form-section {
+            background: linear-gradient(145deg, rgba(40, 40, 40, 0.8) 0%, rgba(30, 30, 30, 0.9) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-section h3 {
+            color: var(--header-color);
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
     </style>
 </head>
@@ -333,7 +359,11 @@ $session->autenticar_session();
                     </div>
                     <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Empreendedorismo</p>
                 </div>
-                
+                <!-- Botão para abrir o modal de lucro do dia -->
+                <button onclick="abrirModalLucroDia()" class="btn-primary ml-4 px-4 py-2 rounded-2xl font-semibold text-white flex items-center gap-2">
+                    <i class="fas fa-coins"></i>
+                    Lucro do Dia
+                </button>
                 <!-- Chip do Usuário - Posicionado à direita no desktop -->
                 <div class="user-chip user-chip-desktop">
                     <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
@@ -393,6 +423,10 @@ $session->autenticar_session();
                         <button type="submit" class="btn-primary px-6 py-2.5 rounded-2xl font-semibold text-white flex items-center gap-2">
                             <i class="fas fa-save"></i>
                             Cadastrar Produto
+                        </button>
+                        <button type="button" onclick="abrirModalLucroDia()" class="px-6 py-2.5 rounded-2xl font-semibold text-white flex items-center gap-2 bg-gradient-to-br from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 transition-all">
+                            <i class="fas fa-coins"></i>
+                            Lucro do Dia
                         </button>
                     </div>
                 </form>
@@ -466,184 +500,77 @@ $session->autenticar_session();
         </div>
     </main>
 
-    <!-- Modal Fullscreen de Edição -->
-    <div id="modalAtualizarProduto" class="modal-fullscreen hidden">
-        <!-- Header do Modal Fullscreen -->
+    <!-- Modal Fullscreen Lucro do Dia -->
+    <div id="modalLucroDia" class="modal-fullscreen hidden">
         <div class="modal-fullscreen-header">
             <div class="container-responsive py-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center">
-                            <i class="fas fa-edit text-white text-lg"></i>
+                            <i class="fas fa-coins text-white text-lg"></i>
                         </div>
                         <div>
-                            <h1 class="text-xl md:text-2xl font-bold text-white">Editor de Produtos</h1>
-                            <p class="text-gray-400 text-xs">Gerencie e edite seus produtos cadastrados</p>
+                            <h1 class="text-xl md:text-2xl font-bold text-white">Lucro do Dia</h1>
+                            <p class="text-gray-400 text-xs">Selecione um curso e digite o valor final do lucro</p>
                         </div>
                     </div>
-                    <button onclick="fecharModalAtualizarProduto()" class="w-10 h-10 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white hover:from-red-600 hover:to-red-700 transition-all duration-200 hover:scale-105">
+                    <button onclick="fecharModalLucroDia()" class="w-10 h-10 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white hover:from-red-600 hover:to-red-700 transition-all duration-200 hover:scale-105">
                         <i class="fas fa-times text-sm"></i>
                     </button>
                 </div>
-                
-                <!-- Indicador de Passos -->
-                <div class="flex items-center justify-center mt-4 space-x-3" id="stepIndicator">
-                    <div class="flex items-center">
-                        <div class="step-indicator rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold" id="step1">1</div>
-                        <span class="ml-2 text-xs text-gray-400">Selecionar</span>
-                    </div>
-                    <div class="w-6 h-0.5 bg-gray-600"></div>
-                    <div class="flex items-center">
-                        <div class="step-indicator rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold" id="step2">2</div>
-                        <span class="ml-2 text-xs text-gray-400">Editar</span>
-                    </div>
-                    <div class="w-6 h-0.5 bg-gray-600"></div>
-                    <div class="flex items-center">
-                        <div class="step-indicator rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold" id="step3">3</div>
-                        <span class="ml-2 text-xs text-gray-400">Confirmar</span>
-                    </div>
-                </div>
             </div>
         </div>
-        
-        <!-- Conteúdo do Modal Fullscreen -->
-        <div class="modal-fullscreen-content">
-            <!-- Passo 1: Seleção de Curso -->
-            <div id="etapa1" class="fade-in">
-                <div class="max-w-5xl mx-auto">
-                    <div class="text-center mb-8">
-                        <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Selecione o Curso</h2>
-                        <p class="text-gray-400 text-sm">Escolha o curso do produto que deseja editar</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4" id="cursosGrid">
-                        <!-- Cards de cursos serão inseridos aqui -->
-                    </div>
-                    
-                    <!-- Botão de navegação -->
-                    <div class="flex justify-center mt-8">
-                        <button onclick="fecharModalAtualizarProduto()" class="nav-button px-6 py-2 rounded-xl font-medium text-gray-300 flex items-center gap-2">
-                            <i class="fas fa-times"></i>
-                            Cancelar
-                        </button>
-                    </div>
+        <div class="modal-fullscreen-content flex flex-col items-center justify-center">
+            <div class="card-bg rounded-3xl p-8 max-w-md w-full">
+                <div class="mb-6">
+                    <label for="selectCursoLucro" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">
+                        <i class="fas fa-graduation-cap mr-2"></i>Selecione o Curso
+                    </label>
+                    <select id="selectCursoLucro" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none">
+                        <option value="">Selecione o curso</option>
+                        <option value="Enfermagem">Enfermagem</option>
+                        <option value="Informática">Informática</option>
+                        <option value="Meio ambiente">Meio ambiente</option>
+                        <option value="Administração">Administração</option>
+                        <option value="Edificações">Edificações</option>
+                    </select>
                 </div>
-            </div>
-            
-            <!-- Passo 2: Seleção de Produto -->
-            <div id="etapa2" class="hidden">
-                <div class="max-w-5xl mx-auto">
-                    <div class="text-center mb-8">
-                        <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Selecione o Produto</h2>
-                        <p class="text-gray-400 text-sm">Escolha qual produto você deseja editar</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="produtosGrid">
-                        <!-- Cards de produtos serão inseridos aqui -->
-                    </div>
-                    
-                    <!-- Botões de navegação -->
-                    <div class="flex justify-center gap-4 mt-8">
-                        <button onclick="voltarParaCursos()" class="nav-button px-6 py-2 rounded-xl font-medium text-gray-300 flex items-center gap-2">
-                            <i class="fas fa-arrow-left"></i>
-                            Voltar aos Cursos
-                        </button>
-                        <button onclick="fecharModalAtualizarProduto()" class="nav-button px-6 py-2 rounded-xl font-medium text-gray-300 flex items-center gap-2">
-                            <i class="fas fa-times"></i>
-                            Cancelar
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Passo 3: Edição do Produto -->
-            <div id="etapa3" class="hidden">
-                <div class="max-w-4xl mx-auto">
-                    <div class="text-center mb-8">
-                        <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Editar Produto</h2>
-                        <p class="text-gray-400 text-sm">Faça as alterações necessárias no produto selecionado</p>
-                    </div>
-                    
-                    <!-- Informações do Produto Atual -->
-                    <div class="card-bg rounded-3xl p-6 mb-6">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                                <i class="fas fa-box text-white text-lg"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-white" id="produtoAtualNome">Nome do Produto</h3>
-                                <p class="text-gray-400 text-sm" id="produtoAtualCurso">Curso</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Estatísticas do Produto -->
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6" id="estatisticasProduto">
-                            <!-- Estatísticas serão inseridas aqui -->
-                        </div>
-                    </div>
-                    
-                    <!-- Formulário de Edição -->
-                    <div class="card-bg rounded-3xl p-6">
-                        <form id="formEdicaoProduto" class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-sm font-bold mb-3 text-gray-300 uppercase tracking-wide">
-                                        <i class="fas fa-graduation-cap mr-2 text-green-400"></i>Curso
-                                    </label>
-                                    <select id="editarCurso" class="input-field w-full rounded-2xl px-4 py-3 text-white text-sm focus:outline-none" required>
-                                        <option value="">Selecione o curso</option>
-                                        <option value="Enfermagem">Enfermagem</option>
-                                        <option value="Informática">Informática</option>
-                                        <option value="Meio ambiente">Meio ambiente</option>
-                                        <option value="Administração">Administração</option>
-                                        <option value="Edificações">Edificações</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-bold mb-3 text-gray-300 uppercase tracking-wide">
-                                        <i class="fas fa-box mr-2 text-blue-400"></i>Nome do Produto
-                                    </label>
-                                    <input type="text" id="editarNome" class="input-field w-full rounded-2xl px-4 py-3 text-white text-sm focus:outline-none" required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-bold mb-3 text-gray-300 uppercase tracking-wide">
-                                        <i class="fas fa-dollar-sign mr-2 text-yellow-400"></i>Valor unitário (R$)
-                                    </label>
-                                    <input type="number" id="editarPreco" class="input-field w-full rounded-2xl px-4 py-3 text-white text-sm focus:outline-none bg-gray-700 cursor-not-allowed" required readonly>
-                                    <p class="text-xs text-gray-400 mt-1 flex items-center gap-1">
-                                        <i class="fas fa-info-circle"></i>
-                                        O preço não pode ser alterado após vendas realizadas
-                                    </p>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-bold mb-3 text-gray-300 uppercase tracking-wide">
-                                        <i class="fas fa-sort-numeric-up mr-2 text-purple-400"></i>Quantidade
-                                    </label>
-                                    <input type="number" id="editarQuantidade" class="input-field w-full rounded-2xl px-4 py-3 text-white text-sm focus:outline-none" min="0" required>
-                                    <p class="text-xs text-gray-400 mt-1" id="quantidadeHelp">
-                                        <!-- Ajuda sobre quantidade será inserida aqui -->
-                                    </p>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    
-                    <!-- Botões de Ação -->
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-                        <button onclick="voltarParaProdutos()" class="nav-button px-8 py-2.5 rounded-xl font-medium text-gray-300 flex items-center justify-center gap-2">
-                            <i class="fas fa-arrow-left"></i>
-                            Voltar aos Produtos
-                        </button>
-                        <button onclick="salvarEdicaoProduto()" class="btn-primary px-8 py-2.5 rounded-xl font-semibold text-white flex items-center justify-center gap-2">
-                            <i class="fas fa-save"></i>
-                            Salvar Alterações
-                        </button>
-                        <button onclick="fecharModalAtualizarProduto()" class="nav-button px-8 py-2.5 rounded-xl font-medium text-gray-300 flex items-center justify-center gap-2">
-                            <i class="fas fa-times"></i>
-                            Cancelar
-                        </button>
-                    </div>
-                </div>
+                <!-- Forms para cada curso -->
+                <form id="formEnfermagem" class="form-curso hidden" autocomplete="off" action="../controllers/lucro_enfermagem.php" method="post">
+                    <label for="lucroEnfermagem" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">Valor Final do Lucro do Dia - Enfermagem</label>
+                    <input type="number" id="lucroEnfermagem" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor final do lucro">
+                    <button type="submit" class="btn-primary w-full rounded-2xl font-semibold text-white flex items-center justify-center gap-2 bg-gradient-to-br from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 transition-all">
+                        <i class="fas fa-save"></i> Salvar Lucro Enfermagem
+                    </button>
+                </form>
+                <form id="formInformatica" class="form-curso hidden" autocomplete="off" action="../controllers/lucro_informatica.php" method="post">
+                    <label for="lucroInformatica" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">Valor Final do Lucro do Dia - Informática</label>
+                    <input type="number" id="lucroInformatica" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor final do lucro">
+                    <button type="submit" class="btn-primary w-full rounded-2xl font-semibold text-white flex items-center justify-center gap-2 bg-gradient-to-br from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 transition-all">
+                        <i class="fas fa-save"></i> Salvar Lucro Informática
+                    </button>
+                </form>
+                <form id="formMeioAmbiente" class="form-curso hidden" autocomplete="off" action="../controllers/lucro_meioambiente.php" method="post">
+                    <label for="lucroMeioAmbiente" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">Valor Final do Lucro do Dia - Meio ambiente</label>
+                    <input type="number" id="lucroMeioAmbiente" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor final do lucro">
+                    <button type="submit" class="btn-primary w-full rounded-2xl font-semibold text-white flex items-center justify-center gap-2 bg-gradient-to-br from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 transition-all">
+                        <i class="fas fa-save"></i> Salvar Lucro Meio ambiente
+                    </button>
+                </form>
+                <form id="formAdministracao" class="form-curso hidden" autocomplete="off" action="../controllers/lucro_administracao.php" method="post">
+                    <label for="lucroAdministracao" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">Valor Final do Lucro do Dia - Administração</label>
+                    <input type="number" id="lucroAdministracao" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor final do lucro">
+                    <button type="submit" class="btn-primary w-full rounded-2xl font-semibold text-white flex items-center justify-center gap-2 bg-gradient-to-br from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 transition-all">
+                        <i class="fas fa-save"></i> Salvar Lucro Administração
+                    </button>
+                </form>
+                <form id="formEdificacoes" class="form-curso hidden" autocomplete="off" action="../controllers/lucro_edificacoes.php" method="post">
+                    <label for="lucroEdificacoes" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">Valor Final do Lucro do Dia - Edificações</label>
+                    <input type="number" id="lucroEdificacoes" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor final do lucro">
+                    <button type="submit" class="btn-primary w-full rounded-2xl font-semibold text-white flex items-center justify-center gap-2 bg-gradient-to-br from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 transition-all">
+                        <i class="fas fa-save"></i> Salvar Lucro Edificações
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -950,313 +877,50 @@ $session->autenticar_session();
             barracaAtual = null;
         }
 
-        // Funções do Modal Fullscreen
-        function abrirModalEdicaoFullscreen() {
-            document.getElementById('modalAtualizarProduto').classList.remove('hidden');
-            etapaAtual = 1;
-            atualizarIndicadorEtapas();
-            renderCursosGrid();
-            mostrarEtapa(1);
+        // Modal Lucro do Dia
+        function abrirModalLucroDia() {
+            document.getElementById('modalLucroDia').classList.remove('hidden');
+            document.getElementById('selectCursoLucro').value = '';
+            document.querySelectorAll('.form-curso').forEach(f => f.classList.add('hidden'));
         }
 
-        function abrirModalAtualizarProduto(produtoId) {
-            const produto = produtos.find(p => p.id === produtoId);
-            if (!produto) return;
-            
-            const barraca = barracas.find(b => b.id === produto.barracaId);
-            
-            document.getElementById('modalAtualizarProduto').classList.remove('hidden');
-            produtoAtualizarId = produtoId;
-            cursoSelecionado = barraca.curso;
-            etapaAtual = 3;
-            
-            atualizarIndicadorEtapas();
-            preencherFormularioEdicao(produto, barraca);
-            mostrarEtapa(3);
+        function fecharModalLucroDia() {
+            document.getElementById('modalLucroDia').classList.add('hidden');
+            document.getElementById('selectCursoLucro').value = '';
+            document.querySelectorAll('.form-curso').forEach(f => f.classList.add('hidden'));
         }
 
-        function renderCursosGrid() {
-            const container = document.getElementById('cursosGrid');
-            const cursosUnicos = [...new Set(barracas.map(b => b.curso))];
-            
-            // Filtrar apenas cursos que têm produtos
-            const cursosComProdutos = cursosUnicos.filter(curso => {
-                const produtosCurso = produtos.filter(p => {
-                    const barraca = barracas.find(b => b.id === p.barracaId);
-                    return barraca && barraca.curso === curso;
-                });
-                return produtosCurso.length > 0;
-            });
-            
-            container.innerHTML = '';
-            
-            if (cursosComProdutos.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full text-center py-16">
-                        <div class="w-24 h-24 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center">
-                            <i class="fas fa-graduation-cap text-3xl text-gray-400"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-300 mb-3">Nenhum curso com produtos encontrado</h3>
-                        <p class="text-gray-400 mb-6 text-sm">Cadastre produtos primeiro para poder editá-los</p>
-                    </div>
-                `;
-                return;
+        document.getElementById('selectCursoLucro').addEventListener('change', function() {
+            const curso = this.value;
+            // Esconde todos os forms
+            document.querySelectorAll('.form-curso').forEach(f => f.classList.add('hidden'));
+            if (!curso) return;
+            // Mostra o form correspondente
+            switch (curso) {
+                case 'Enfermagem':
+                    document.getElementById('formEnfermagem').classList.remove('hidden');
+                    break;
+                case 'Informática':
+                    document.getElementById('formInformatica').classList.remove('hidden');
+                    break;
+                case 'Meio ambiente':
+                    document.getElementById('formMeioAmbiente').classList.remove('hidden');
+                    break;
+                case 'Administração':
+                    document.getElementById('formAdministracao').classList.remove('hidden');
+                    break;
+                case 'Edificações':
+                    document.getElementById('formEdificacoes').classList.remove('hidden');
+                    break;
             }
-            
-            cursosComProdutos.forEach(curso => {
-                const produtosCurso = produtos.filter(p => {
-                    const barraca = barracas.find(b => b.id === p.barracaId);
-                    return barraca && barraca.curso === curso;
-                });
-                
-                const card = document.createElement('div');
-                card.className = 'selection-card rounded-3xl p-6 cursor-pointer transition-all duration-300 hover:scale-105';
-                card.onclick = () => selecionarCurso(curso);
-                
-                card.innerHTML = `
-                    <div class="text-center">
-                        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${cursoColors[curso]} flex items-center justify-center">
-                            <i class="${cursoIcons[curso]} text-white text-2xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-white mb-2">${curso}</h3>
-                        <p class="text-gray-400 mb-3 text-sm">${produtosCurso.length} produto${produtosCurso.length !== 1 ? 's' : ''}</p>
-                        <div class="flex items-center justify-center gap-2 text-xs text-gray-500">
-                            <i class="fas fa-arrow-right"></i>
-                            <span>Clique para selecionar</span>
-                        </div>
-                    </div>
-                `;
-                
-                container.appendChild(card);
-            });
-        }
+        });
 
-        function selecionarCurso(curso) {
-            cursoSelecionado = curso;
-            etapaAtual = 2;
-            atualizarIndicadorEtapas();
-            renderProdutosGrid(curso);
-            mostrarEtapa(2);
-        }
-
-        function renderProdutosGrid(curso) {
-            const container = document.getElementById('produtosGrid');
-            const barraca = barracas.find(b => b.curso === curso);
-            const produtosCurso = produtos.filter(p => p.barracaId === barraca.id);
-            
-            container.innerHTML = '';
-            
-            produtosCurso.forEach(produto => {
-                const estoque = produto.quantidadeInicial - produto.quantidadeVendida;
-                const totalVendido = produto.quantidadeVendida * produto.preco;
-                
-                const card = document.createElement('div');
-                card.className = 'selection-card rounded-3xl p-5 cursor-pointer transition-all duration-300 hover:scale-105';
-                card.onclick = () => selecionarProduto(produto.id);
-                
-                card.innerHTML = `
-                    <div class="flex items-start gap-3 mb-3">
-                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-box text-white text-lg"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-lg font-bold text-white mb-1">${produto.nome}</h3>
-                            <p class="text-gray-400 text-xs">R$ ${produto.preco.toFixed(2)}</p>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-3 gap-2 mb-3">
-                        <div class="stats-card rounded-xl p-2 text-center">
-                            <div class="text-sm font-bold text-blue-400">${produto.quantidadeInicial}</div>
-                            <div class="text-xs text-gray-400">Inicial</div>
-                        </div>
-                        <div class="stats-card rounded-xl p-2 text-center">
-                            <div class="text-sm font-bold text-red-400">${produto.quantidadeVendida}</div>
-                            <div class="text-xs text-gray-400">Vendida</div>
-                        </div>
-                        <div class="stats-card rounded-xl p-2 text-center">
-                            <div class="text-sm font-bold text-green-400">${estoque}</div>
-                            <div class="text-xs text-gray-400">Estoque</div>
-                        </div>
-                    </div>
-                    
-                    <div class="text-center">
-                        <div class="text-lg font-bold text-yellow-400 mb-1">R$ ${totalVendido.toFixed(2)}</div>
-                        <div class="text-xs text-gray-400">Total Arrecadado</div>
-                    </div>
-                    
-                    <div class="flex items-center justify-center gap-2 text-xs text-gray-500 mt-3">
-                        <i class="fas fa-edit"></i>
-                        <span>Clique para editar</span>
-                    </div>
-                `;
-                
-                container.appendChild(card);
-            });
-        }
-
-        function selecionarProduto(produtoId) {
-            produtoAtualizarId = produtoId;
-            const produto = produtos.find(p => p.id === produtoId);
-            const barraca = barracas.find(b => b.id === produto.barracaId);
-            
-            etapaAtual = 3;
-            atualizarIndicadorEtapas();
-            preencherFormularioEdicao(produto, barraca);
-            mostrarEtapa(3);
-        }
-
-        function preencherFormularioEdicao(produto, barraca) {
-            document.getElementById('produtoAtualNome').textContent = produto.nome;
-            document.getElementById('produtoAtualCurso').textContent = barraca.curso;
-            
-            document.getElementById('editarCurso').value = barraca.curso;
-            document.getElementById('editarNome').value = produto.nome;
-            document.getElementById('editarPreco').value = produto.preco;
-            document.getElementById('editarQuantidade').value = produto.quantidadeInicial;
-            
-            const estoque = produto.quantidadeInicial - produto.quantidadeVendida;
-            const totalVendido = produto.quantidadeVendida * produto.preco;
-            
-            document.getElementById('quantidadeHelp').innerHTML = `
-                <i class="fas fa-info-circle mr-1"></i>
-                Quantidade mínima: ${produto.quantidadeVendida} (já vendidas)
-            `;
-            
-            document.getElementById('editarQuantidade').min = produto.quantidadeVendida;
-            
-            // Atualizar estatísticas
-            document.getElementById('estatisticasProduto').innerHTML = `
-                <div class="stats-card rounded-2xl p-3 text-center">
-                    <div class="text-xl font-bold text-yellow-400 mb-1">R$ ${produto.preco.toFixed(2)}</div>
-                    <div class="text-xs text-gray-400">Valor Unitário</div>
-                </div>
-                <div class="stats-card rounded-2xl p-3 text-center">
-                    <div class="text-xl font-bold text-blue-400 mb-1">${produto.quantidadeInicial}</div>
-                    <div class="text-xs text-gray-400">Qtd. Inicial</div>
-                </div>
-                <div class="stats-card rounded-2xl p-3 text-center">
-                    <div class="text-xl font-bold text-red-400 mb-1">${produto.quantidadeVendida}</div>
-                    <div class="text-xs text-gray-400">Qtd. Vendida</div>
-                </div>
-                <div class="stats-card rounded-2xl p-3 text-center">
-                    <div class="text-xl font-bold text-green-400 mb-1">${estoque}</div>
-                    <div class="text-xs text-gray-400">Estoque Atual</div>
-                </div>
-            `;
-        }
-
-        function mostrarEtapa(etapa) {
-            // Esconder todas as etapas
-            document.getElementById('etapa1').classList.add('hidden');
-            document.getElementById('etapa2').classList.add('hidden');
-            document.getElementById('etapa3').classList.add('hidden');
-            
-            // Mostrar etapa atual
-            document.getElementById(`etapa${etapa}`).classList.remove('hidden');
-            document.getElementById(`etapa${etapa}`).classList.add('slide-in-right');
-        }
-
-        function atualizarIndicadorEtapas() {
-            // Reset todos os steps
-            for (let i = 1; i <= 3; i++) {
-                const step = document.getElementById(`step${i}`);
-                step.className = 'step-indicator rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold';
-            }
-            
-            // Marcar steps completados
-            for (let i = 1; i < etapaAtual; i++) {
-                document.getElementById(`step${i}`).classList.add('step-completed');
-            }
-            
-            document.getElementById(`step${etapaAtual}`).classList.add('step-active');
-        }
-
-        function voltarParaCursos() {
-            etapaAtual = 1;
-            atualizarIndicadorEtapas();
-            renderCursosGrid();
-            mostrarEtapa(1);
-        }
-
-        function voltarParaProdutos() {
-            if (cursoSelecionado) {
-                etapaAtual = 2;
-                atualizarIndicadorEtapas();
-                renderProdutosGrid(cursoSelecionado);
-                mostrarEtapa(2);
-            }
-        }
-
-        function voltarEtapa() {
-            if (etapaAtual > 1) {
-                etapaAtual--;
-                atualizarIndicadorEtapas();
-                
-                if (etapaAtual === 1) {
-                    renderCursosGrid();
-                } else if (etapaAtual === 2) {
-                    renderProdutosGrid(cursoSelecionado);
-                }
-                
-                mostrarEtapa(etapaAtual);
-            }
-        }
-
-        function salvarEdicaoProduto() {
-            if (produtoAtualizarId === null) return;
-            
-            const produto = produtos.find(p => p.id === produtoAtualizarId);
-            if (!produto) return;
-            
-            const novaQuantidade = parseInt(document.getElementById('editarQuantidade').value);
-            const novoCurso = document.getElementById('editarCurso').value;
-            const novoNome = document.getElementById('editarNome').value;
-            
-            if (isNaN(novaQuantidade) || novaQuantidade < produto.quantidadeVendida) {
-                showNotification('A quantidade não pode ser menor que a quantidade já vendida!', 'error');
-                return;
-            }
-            
-            // Se mudou o curso, mova o produto para a barraca correspondente
-            if (novoCurso !== cursoSelecionado) {
-                let novaBarraca = barracas.find(b => b.curso === novoCurso);
-                if (!novaBarraca) {
-                    novaBarraca = {
-                        id: Date.now(),
-                        nome: 'Barraca de ' + novoCurso,
-                        curso: novoCurso,
-                        responsaveis: '',
-                        timestamp: new Date().toISOString()
-                    };
-                    barracas.push(novaBarraca);
-                    localStorage.setItem('barracas', JSON.stringify(barracas));
-                }
-                produto.barracaId = novaBarraca.id;
-            }
-            
-            // Atualiza produto
-            produto.nome = novoNome;
-            produto.quantidadeInicial = novaQuantidade;
-            
-            localStorage.setItem('produtos_barracas', JSON.stringify(produtos));
-            
-            renderProdutos();
-            atualizarSelectProdutos();
-            renderBarracas();
-            fecharModalAtualizarProduto();
-            
-            showNotification('Produto atualizado com sucesso!', 'success');
-        }
-
-        function fecharModalAtualizarProduto() {
-            document.getElementById('modalAtualizarProduto').classList.add('hidden');
-            
-            // Reset
-            produtoAtualizarId = null;
-            cursoSelecionado = null;
-            etapaAtual = 1;
-        }
+        // Submits dos forms só mostram alerta (remova se backend for tratar)
+        document.getElementById('formEnfermagem').addEventListener('submit', function(e) { e.preventDefault(); showNotification('Lucro de Enfermagem salvo!', 'success'); });
+        document.getElementById('formInformatica').addEventListener('submit', function(e) { e.preventDefault(); showNotification('Lucro de Informática salvo!', 'success'); });
+        document.getElementById('formMeioAmbiente').addEventListener('submit', function(e) { e.preventDefault(); showNotification('Lucro de Meio ambiente salvo!', 'success'); });
+        document.getElementById('formAdministracao').addEventListener('submit', function(e) { e.preventDefault(); showNotification('Lucro de Administração salvo!', 'success'); });
+        document.getElementById('formEdificacoes').addEventListener('submit', function(e) { e.preventDefault(); showNotification('Lucro de Edificações salvo!', 'success'); });
 
         // Resto das funções permanecem iguais...
         function gerarRelatorioVendas() {
@@ -1294,122 +958,6 @@ $session->autenticar_session();
             downloadFile(relatorio, 'relatorio_vendas_empreendedorismo.txt');
         }
 
-        function gerarRanking() {
-            const ranking = barracas.map(barraca => {
-                const vendasBarraca = vendas.filter(v => v.barracaId === barraca.id);
-                const totalArrecadado = vendasBarraca.reduce((sum, v) => sum + v.valorTotal, 0);
-                
-                return {
-                    ...barraca,
-                    totalArrecadado: totalArrecadado
-                };
-            }).sort((a, b) => b.totalArrecadado - a.totalArrecadado);
-            
-            let relatorio = 'RANKING DE ARRECADAÇÃO - EMPREENDEDORISMO\n';
-            relatorio += '='.repeat(50) + '\n\n';
-            
-            ranking.forEach((barraca, index) => {
-                relatorio += `${index + 1}º LUGAR\n`;
-                relatorio += `Barraca: ${barraca.nome}\n`;
-                relatorio += `Curso: ${barraca.curso}\n`;
-                relatorio += `Total Arrecadado: R$ ${barraca.totalArrecadado.toFixed(2)}\n\n`;
-            });
-            
-            downloadFile(relatorio, 'ranking_arrecadacao_empreendedorismo.pdf');
-        }
-
-        function relatorioPrestacaoContas() {
-            let relatorio = 'RELATÓRIO DE PRESTAÇÃO DE CONTAS - EMPREENDEDORISMO\n';
-            relatorio += '='.repeat(60) + '\n\n';
-            
-            barracas.forEach(barraca => {
-                const vendasBarraca = vendas.filter(v => v.barracaId === barraca.id);
-                const produtosBarraca = produtos.filter(p => p.barracaId === barraca.id);
-                const totalArrecadado = vendasBarraca.reduce((sum, v) => sum + v.valorTotal, 0);
-                
-                relatorio += `BARRACA: ${barraca.nome} (${barraca.curso})\n`;
-                relatorio += `Responsáveis: ${barraca.responsaveis}\n`;
-                relatorio += `Data do relatório: ${new Date().toLocaleString('pt-BR')}\n\n`;
-                
-                relatorio += 'PRODUTOS DECLARADOS:\n';
-                produtosBarraca.forEach(produto => {
-                    const totalVendido = produto.quantidadeVendida * produto.preco;
-                    const estoque = produto.quantidadeInicial - produto.quantidadeVendida;
-                    
-                    relatorio += `  Produto: ${produto.nome}\n`;
-                    relatorio += `  Preço unitário: R$ ${produto.preco.toFixed(2)}\n`;
-                    relatorio += `  Quantidade inicial: ${produto.quantidadeInicial}\n`;
-                    relatorio += `  Quantidade vendida: ${produto.quantidadeVendida}\n`;
-                    relatorio += `  Estoque restante: ${estoque}\n`;
-                    relatorio += `  Total arrecadado: R$ ${totalVendido.toFixed(2)}\n\n`;
-                });
-                
-                relatorio += `TOTAL GERAL ARRECADADO: R$ ${totalArrecadado.toFixed(2)}\n`;
-                relatorio += `TOTAL DE VENDAS REALIZADAS: ${vendasBarraca.length}\n\n`;
-                
-                relatorio += 'COMPROVANTES DE VENDAS:\n';
-                vendasBarraca.forEach((venda, index) => {
-                    relatorio += `  Venda ${index + 1}:\n`;
-                    relatorio += `    Data/Hora: ${new Date(venda.timestamp).toLocaleString('pt-BR')}\n`;
-                    relatorio += `    Produto: ${venda.nomeProduto}\n`;
-                    relatorio += `    Quantidade: ${venda.quantidade}\n`;
-                    relatorio += `    Preço unitário: R$ ${venda.precoUnitario.toFixed(2)}\n`;
-                    relatorio += `    Valor total: R$ ${venda.valorTotal.toFixed(2)}\n`;
-                    relatorio += `    ID da venda: ${venda.id}\n\n`;
-                });
-                
-                relatorio += '='.repeat(60) + '\n\n';
-            });
-            
-            downloadFile(relatorio, 'prestacao_contas_empreendedorismo.txt');
-        }
-
-        function pontuacaoPorPosicao() {
-            const ranking = barracas.map(barraca => {
-                const vendasBarraca = vendas.filter(v => v.barracaId === barraca.id);
-                const totalArrecadado = vendasBarraca.reduce((sum, v) => sum + v.valorTotal, 0);
-                return {
-                    ...barraca,
-                    totalArrecadado: totalArrecadado
-                };
-            }).sort((a, b) => b.totalArrecadado - a.totalArrecadado);
-            
-            let relatorio = 'PONTUAÇÃO POR POSIÇÃO - EMPREENDEDORISMO\n';
-            relatorio += '='.repeat(50) + '\n\n';
-            
-            const pontuacoes = [500, 450, 400, 350, 300];
-            ranking.forEach((barraca, index) => {
-                const posicao = index + 1;
-                const pontos = index < pontuacoes.length ? pontuacoes[index] : 0;
-                relatorio += `${posicao}º LUGAR - ${pontos} PONTOS\n`;
-                relatorio += `Barraca: ${barraca.nome}\n`;
-                relatorio += `Curso: ${barraca.curso}\n`;
-                relatorio += `Total Arrecadado: R$ ${barraca.totalArrecadado.toFixed(2)}\n\n`;
-            });
-            
-            downloadFile(relatorio, 'pontuacao_posicao_empreendedorismo.txt');
-        }
-
-        function gerarRelatorioPDF() {
-            const data = {
-                barracas: barracas,
-                produtos: produtos,
-                vendas: vendas
-            };
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'relatorio_empreendedorismo_pdf.php';
-            form.target = '_blank';
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'json';
-            input.value = JSON.stringify(data);
-            form.appendChild(input);
-            document.body.appendChild(form);
-            form.submit();
-            document.body.removeChild(form);
-        }
-
         function downloadFile(content, filename) {
             const blob = new Blob([content], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
@@ -1439,8 +987,8 @@ $session->autenticar_session();
             if (e.target === this) fecharProdutos();
         });
 
-        document.getElementById('modalAtualizarProduto').addEventListener('click', function(e) {
-            if (e.target === this) fecharModalAtualizarProduto();
+        document.getElementById('modalLucroDia').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalLucroDia();
         });
 
         document.addEventListener('keydown', function(e) {
@@ -1448,8 +996,8 @@ $session->autenticar_session();
                 if (!document.getElementById('produtosModal').classList.contains('hidden')) {
                     fecharProdutos();
                 }
-                if (!document.getElementById('modalAtualizarProduto').classList.contains('hidden')) {
-                    fecharModalAtualizarProduto();
+                if (!document.getElementById('modalLucroDia').classList.contains('hidden')) {
+                    fecharModalLucroDia();
                 }
             }
         });
