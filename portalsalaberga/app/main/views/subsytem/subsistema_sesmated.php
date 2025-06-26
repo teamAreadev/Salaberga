@@ -1108,7 +1108,7 @@ if (isset($_GET['sair'])) {
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
-            <a href="../../../subsystems/sesmated/views/Painel.php" class="app-card-link" data-card-key="Painel">
+            <a href="../../../subsystems/sesmated/views/painel.php" class="app-card-link" data-card-key="Painel_26">
                 <div class="app-card w-{100px} h-full">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/ZqZGj9mk/painel-removebg-preview.png" alt="Painel" class="app-icon">
@@ -1217,7 +1217,7 @@ if (isset($_GET['sair'])) {
             else if (dia === 26 && mes === 6) {
                 // Das 8h às 12h
                 if (hora >= 8 && hora < 12) {
-                    mostrarPorChaves(['Empreendedorismo', 'Sala_temática']);
+                    mostrarPorChaves(['Empreendedorismo', 'Sala_temática', 'Painel_26']);
                 }
             }
             // 27/06
