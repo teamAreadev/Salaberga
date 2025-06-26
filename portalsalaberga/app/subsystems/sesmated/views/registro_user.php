@@ -258,11 +258,14 @@
                                 id="senha" 
                                 name="senha" 
                                 value="<?php echo htmlspecialchars($_POST['senha'] ?? ''); ?>"
-                                class="input-field w-full pr-4 py-4 rounded-xl text-sm font-medium"
+                                class="input-field w-full pr-12 py-4 rounded-xl text-sm font-medium"
                                 placeholder="Digite sua senha"
                                 required
                             >
                             <span class="input-icon"><i class="fas fa-lock"></i></span>
+                            <button type="button" id="toggleSenha" tabindex="-1" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-green-500 focus:outline-none z-20" style="background: none; border: none; padding: 0;">
+                                <i id="eyeIcon" class="fas fa-eye"></i>
+                            </button>
                         </div>
                     </div>
                     <button 
@@ -357,6 +360,24 @@
                 }
             });
         });
+
+        // Olho para mostrar/ocultar senha
+        const senhaInput = document.getElementById('senha');
+        const toggleSenha = document.getElementById('toggleSenha');
+        const eyeIcon = document.getElementById('eyeIcon');
+        if (toggleSenha && senhaInput && eyeIcon) {
+            toggleSenha.addEventListener('click', function() {
+                if (senhaInput.type === 'password') {
+                    senhaInput.type = 'text';
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    senhaInput.type = 'password';
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        }
     </script>
 </body>
 </html>
