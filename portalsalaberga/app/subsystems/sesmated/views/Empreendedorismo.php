@@ -4,7 +4,6 @@ $session = new sessions;
 $session->autenticar_session();
 
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -522,54 +521,29 @@ $session->autenticar_session();
         </div>
         <div class="modal-fullscreen-content flex flex-col items-center justify-center">
             <div class="card-bg rounded-3xl p-8 max-w-md w-full">
-                <div class="mb-6">
-                    <label for="selectCursoLucro" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">
-                        <i class="fas fa-graduation-cap mr-2"></i>Selecione o Curso
-                    </label>
-                    <select id="selectCursoLucro" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none">
-                        <option value="">Selecione o curso</option>
-                        <option value="Enfermagem">Enfermagem</option>
-                        <option value="Informática">Informática</option>
-                        <option value="Meio ambiente">Meio ambiente</option>
-                        <option value="Administração">Administração</option>
-                        <option value="Edificações">Edificações</option>
-                    </select>
-                </div>
-                <!-- Forms para cada curso -->
-                <form id="formEnfermagem" class="form-curso hidden" autocomplete="off" action="../controllers/lucro_enfermagem.php" method="post">
-                    <label for="lucroEnfermagem" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">Valor Final do Lucro do Dia - Enfermagem</label>
-                    <input type="number" id="lucroEnfermagem" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor final do lucro">
-                    <button type="submit" class="btn-primary w-full rounded-2xl font-semibold text-white flex items-center justify-center gap-2 bg-gradient-to-br from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 transition-all">
-                        <i class="fas fa-save"></i> Salvar Lucro Enfermagem
-                    </button>
-                </form>
-                <form id="formInformatica" class="form-curso hidden" autocomplete="off" action="../controllers/lucro_informatica.php" method="post">
-                    <label for="lucroInformatica" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">Valor Final do Lucro do Dia - Informática</label>
-                    <input type="number" id="lucroInformatica" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor final do lucro">
-                    <button type="submit" class="btn-primary w-full rounded-2xl font-semibold text-white flex items-center justify-center gap-2 bg-gradient-to-br from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 transition-all">
-                        <i class="fas fa-save"></i> Salvar Lucro Informática
-                    </button>
-                </form>
-                <form id="formMeioAmbiente" class="form-curso hidden" autocomplete="off" action="../controllers/lucro_meioambiente.php" method="post">
-                    <label for="lucroMeioAmbiente" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">Valor Final do Lucro do Dia - Meio ambiente</label>
-                    <input type="number" id="lucroMeioAmbiente" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor final do lucro">
-                    <button type="submit" class="btn-primary w-full rounded-2xl font-semibold text-white flex items-center justify-center gap-2 bg-gradient-to-br from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 transition-all">
-                        <i class="fas fa-save"></i> Salvar Lucro Meio ambiente
-                    </button>
-                </form>
-                <form id="formAdministracao" class="form-curso hidden" autocomplete="off" action="../controllers/lucro_administracao.php" method="post">
-                    <label for="lucroAdministracao" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">Valor Final do Lucro do Dia - Administração</label>
-                    <input type="number" id="lucroAdministracao" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor final do lucro">
-                    <button type="submit" class="btn-primary w-full rounded-2xl font-semibold text-white flex items-center justify-center gap-2 bg-gradient-to-br from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 transition-all">
-                        <i class="fas fa-save"></i> Salvar Lucro Administração
-                    </button>
-                </form>
-                <form id="formEdificacoes" class="form-curso hidden" autocomplete="off" action="../controllers/lucro_edificacoes.php" method="post">
-                    <label for="lucroEdificacoes" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">Valor Final do Lucro do Dia - Edificações</label>
-                    <input type="number" id="lucroEdificacoes" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor final do lucro">
-                    <button type="submit" class="btn-primary w-full rounded-2xl font-semibold text-white flex items-center justify-center gap-2 bg-gradient-to-br from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 transition-all">
-                        <i class="fas fa-save"></i> Salvar Lucro Edificações
-                    </button>
+                <form id="formLucroDia" action="../controllers/lucro_geral.php" method="post" autocomplete="off">
+                    <div class="mb-6">
+                        <label for="selectCursoLucro" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">
+                            <i class="fas fa-graduation-cap mr-2"></i>Selecione o Curso
+                        </label>
+                        <select id="selectCursoLucro" name="curso" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none">
+                            <option value="">Selecione o curso</option>
+                            <option value="Enfermagem">Enfermagem</option>
+                            <option value="Informática">Informática</option>
+                            <option value="Meio ambiente">Meio ambiente</option>
+                            <option value="Administração">Administração</option>
+                            <option value="Edificações">Edificações</option>
+                        </select>
+                    </div>
+                    <div id="inputLucroDiaContainer" class="mt-4 hidden">
+                        <label for="inputLucroDia" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">
+                            Valor Final do Lucro do Dia
+                        </label>
+                        <input type="number" id="inputLucroDia" name="valor_lucro" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor final do lucro">
+                        <button type="submit" class="btn-primary w-full rounded-2xl font-semibold text-white flex items-center justify-center gap-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 transition-all">
+                            <i class="fas fa-save"></i> Salvar Lucro do Dia
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -881,48 +855,28 @@ $session->autenticar_session();
         function abrirModalLucroDia() {
             document.getElementById('modalLucroDia').classList.remove('hidden');
             document.getElementById('selectCursoLucro').value = '';
-            document.querySelectorAll('.form-curso').forEach(f => f.classList.add('hidden'));
+            document.getElementById('inputLucroDiaContainer').classList.add('hidden');
+            document.getElementById('inputLucroDia').value = '';
         }
 
         function fecharModalLucroDia() {
             document.getElementById('modalLucroDia').classList.add('hidden');
             document.getElementById('selectCursoLucro').value = '';
-            document.querySelectorAll('.form-curso').forEach(f => f.classList.add('hidden'));
+            document.getElementById('inputLucroDiaContainer').classList.add('hidden');
+            document.getElementById('inputLucroDia').value = '';
         }
 
         document.getElementById('selectCursoLucro').addEventListener('change', function() {
             const curso = this.value;
-            // Esconde todos os forms
-            document.querySelectorAll('.form-curso').forEach(f => f.classList.add('hidden'));
-            if (!curso) return;
-            // Mostra o form correspondente
-            switch (curso) {
-                case 'Enfermagem':
-                    document.getElementById('formEnfermagem').classList.remove('hidden');
-                    break;
-                case 'Informática':
-                    document.getElementById('formInformatica').classList.remove('hidden');
-                    break;
-                case 'Meio ambiente':
-                    document.getElementById('formMeioAmbiente').classList.remove('hidden');
-                    break;
-                case 'Administração':
-                    document.getElementById('formAdministracao').classList.remove('hidden');
-                    break;
-                case 'Edificações':
-                    document.getElementById('formEdificacoes').classList.remove('hidden');
-                    break;
+            const inputContainer = document.getElementById('inputLucroDiaContainer');
+            if (!curso) {
+                inputContainer.classList.add('hidden');
+                document.getElementById('inputLucroDia').value = '';
+            } else {
+                inputContainer.classList.remove('hidden');
             }
         });
 
-        // Submits dos forms só mostram alerta (remova se backend for tratar)
-        document.getElementById('formEnfermagem').addEventListener('submit', function(e) { e.preventDefault(); showNotification('Lucro de Enfermagem salvo!', 'success'); });
-        document.getElementById('formInformatica').addEventListener('submit', function(e) { e.preventDefault(); showNotification('Lucro de Informática salvo!', 'success'); });
-        document.getElementById('formMeioAmbiente').addEventListener('submit', function(e) { e.preventDefault(); showNotification('Lucro de Meio ambiente salvo!', 'success'); });
-        document.getElementById('formAdministracao').addEventListener('submit', function(e) { e.preventDefault(); showNotification('Lucro de Administração salvo!', 'success'); });
-        document.getElementById('formEdificacoes').addEventListener('submit', function(e) { e.preventDefault(); showNotification('Lucro de Edificações salvo!', 'success'); });
-
-        // Resto das funções permanecem iguais...
         function gerarRelatorioVendas() {
             let relatorio = 'RELATÓRIO DE VENDAS - EMPREENDEDORISMO\n';
             relatorio += '='.repeat(50) + '\n\n';
