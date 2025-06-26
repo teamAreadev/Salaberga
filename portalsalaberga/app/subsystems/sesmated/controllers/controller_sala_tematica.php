@@ -1,6 +1,6 @@
 <?php
 require_once('../models/main.model.php');
-print_r($_POST);
+
 if (
     isset($_POST['id_avaliador']) && !empty($_POST['id_avaliador']) &&
     isset($_POST['curso']) && !empty($_POST['curso']) &&
@@ -28,7 +28,7 @@ if (
             header('location:../views/Sala_Tematica.php?ja_confirmado');
             exit();
     }
-} /*else {
+} else {
     header('location:../views/Sala_Tematica.php?empty');
     exit();
-}*/
+}

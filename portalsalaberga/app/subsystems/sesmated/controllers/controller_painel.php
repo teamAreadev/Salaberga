@@ -1,6 +1,6 @@
 <?php
 require_once('../models/main.model.php');
-print_r($_POST);
+
 if (
     isset($_POST['curso']) && !empty($_POST['curso']) &&
     isset($_POST['nota_tema']) && isset($_POST['nota_conteudo']) && isset($_POST['nota_layout']) && isset($_POST['nota_estetica']) && isset($_POST['nota_sustentabilidade']) &&
@@ -28,7 +28,7 @@ if (
             header('location:../views/Painel.php?ja_confirmado');
             exit();
     }
-} /*else {
+} else {
     header('location:../views/Painel.php?empty');
     exit();
-} */
+} 

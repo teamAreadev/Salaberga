@@ -1,7 +1,9 @@
 <?php
 require_once('../../../config/connect.php');
 require_once('../../../assets/fpdf/fpdf.php');
-
+require_once('../../../../../main/models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
 class PDF extends connect
 {
     public function __construct()

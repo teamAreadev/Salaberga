@@ -493,12 +493,12 @@ if (isset($_GET['confirmado'])) {
                         <div class="select-wrapper">
                             <select id="cursoInput" name="curso" required class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none">
                                 <option value="" selected disabled>Selecione o curso</option>
-                                <?php
-                                $dados = $select->select_curso();
-                                foreach ($dados as $dado) {
-                                ?>
-                                    <option value="<?= $dado['curso_id'] ?>"><?= $dado['nome_curso'] ?></option>
-                                <?php } ?>
+                                
+                                    <option value="1">logo 1</option>
+                                    <option value="2">logo 2</option>
+                                    <option value="3">logo 3</option>
+                                    <option value="4">logo 4</option>
+                                    <option value="5">logo 5</option>
                             </select>
                         </div>
                     </div>

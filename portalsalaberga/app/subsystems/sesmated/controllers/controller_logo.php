@@ -1,6 +1,6 @@
 <?php
 require_once('../models/main.model.php');
-print_r($_POST);
+
 if (
     isset($_POST['curso']) && !empty($_POST['curso']) &&
     isset($_POST['nota_elementos'])  &&

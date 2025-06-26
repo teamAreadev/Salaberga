@@ -1,6 +1,6 @@
 <?php
 require_once('../models/main.model.php');
-print_r($_POST);
+
 if (
     isset($_POST['curso']) && !empty($_POST['curso']) &&
     isset($_POST['nota_originalidade']) &&
@@ -31,7 +31,7 @@ if (
             header('location:../views/Inovacao.php?ja_confirmado');
             exit();
     }
-}/* else {
+} else {
     header('location:../views/Inovacao.php?empty');
     exit();
-}*/
+}

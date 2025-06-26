@@ -688,7 +688,7 @@ $session->autenticar_session();
                     <h3 class="app-name">Abertura</h3>
                     <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
                     <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                    <button class="category-tag">Relatório total arrecadado</button>
                 </div>
             </a>
 
@@ -748,9 +748,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/ZqZGj9mk/painel-removebg-preview.png" alt="Painel" class="app-icon">
                     </div>
                     <h3 class="app-name">Painel</h3>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/painel/relatorio_painel.php">Relatório</a></button>
                 </div>
             </a>
 
@@ -760,7 +758,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/qRv9V9gj/palestras-removebg-preview.png" alt="Eventos" class="app-icon">
                     </div>
                     <h3 class="app-name">Eventos</h3>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='../../../subsystems/sesmated/views/relatorios/rifas/frequenciaEventos.php'">Relatório Frequência</button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/frequenciaEventos.php">Relatório</a></button>
                 </div>
             </a>
 
@@ -770,7 +768,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/NMyv23YL/parodia-removebg-preview.png" alt="Paródia" class="app-icon">
                     </div>
                     <h3 class="app-name">Paródia</h3>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='../../../subsystems/sesmated/views/relatorios/parodia/relatorio_parodia.php'">Relatório por turma</button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/parodia/relatorios_parodia.php">Relatório</a></button>
                 </div>
             </a>
 
@@ -780,9 +778,9 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/MprBmBVH/rifa-removebg-preview.png" alt="Rifa" class="app-icon">
                     </div>
                     <h3 class="app-name">Rifa</h3>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='../../../subsystems/sesmated/views/relatorios/rifa/resumo_curso.php'">Relatório por turma</button>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='../../../subsystems/sesmated/views/relatorios/rifa/resumo_turma.php'">Relatório por</button>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='../../../subsystems/sesmated/views/relatorios/rifa/resumo_total.php'">Relatório total arrecadado</button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/resumo_curso.php">Resumo Curso</a></button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/resumo_turma.php">Resumo Turma</a></button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/resumo_total.php">Resumo Total</a></button>
                 </div>
             </a>
 
@@ -792,19 +790,17 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/sgKk6jgv/sala-tematica-removebg-preview.png" alt="Sala temática" class="app-icon">
                     </div>
                     <h3 class="app-name">Sala temática</h3>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-turma'">Relatório por turma</button>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-por'">Relatório por</button>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='#relatorio-total'">Relatório total arrecadado</button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/sala_tematica/sala_tematica.php">Relatório</a></button>
                 </div>
             </a>
 
-            <a href="../../../subsystems/sesmated/views/vestimentas.php" class="app-card-link" data-card-key="Vestimentas">
+            <a href="../../../subsystems/sesmated/views/vestimentas_sustentaveis.php" class="app-card-link" data-card-key="Vestimentas">
                 <div class="app-card">
                     <div class="icon-wrapper">
                         <img src="https://i.postimg.cc/LscNvwLJ/vestimenstas-removebg-preview.png" alt="Vestimentas" class="app-icon">
                     </div>
                     <h3 class="app-name">Vestimentas</h3>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='../../../subsystems/sesmated/views/relatorios/vestimenta/relatorio_vestimenta.php'">Relatório por turma</button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/vestimenta/relatorio_vestimenta.php">Relatório</a></button>
                 </div>
             </a>
 
@@ -814,7 +810,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Inovação" class="app-icon">
                     </div>
                     <h3 class="app-name">Inovação</h3>
-                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='../../../subsystems/sesmated/views/relatorios/inovacao/relatorio_inovacao.php'">Relatório por turma</button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/invocao/relatorio_inovacao.php">Relatório</a></button>
                 </div>
             </a>
 
