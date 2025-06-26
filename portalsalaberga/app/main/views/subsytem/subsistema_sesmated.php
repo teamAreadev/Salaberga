@@ -1215,10 +1215,7 @@ if (isset($_GET['sair'])) {
             }
             // 26/06
             else if (dia === 26 && mes === 6) {
-                // Das 8h às 12h
-                if (hora >= 8 && hora < 12) {
-                    mostrarPorChaves(['Empreendedorismo', 'Sala_temática', 'Painel_26', 'Esquete']);
-                }
+                mostrarPorChaves(['Esquete', 'Painel_26', 'Sala_temática']);
             }
             // 27/06
             else if (dia === 27 && mes === 6) {
