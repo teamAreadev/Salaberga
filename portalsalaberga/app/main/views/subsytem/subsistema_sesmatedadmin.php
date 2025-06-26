@@ -3,6 +3,7 @@ require_once('../../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -94,16 +95,6 @@ $session->autenticar_session();
         }
     }
 
-    .grid-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 2rem;
-        padding: 2rem;
-        max-width: 1400px;
-        margin: 0 auto;
-        transition: all 0.3s ease-out;
-    }
-
     .grid-container.transitioning {
         transition: all 0.3s ease-out;
     }
@@ -111,9 +102,6 @@ $session->autenticar_session();
     .app-card-link {
         transition: all 0.3s ease-out;
         width: 100%;
-        display: block;
-        text-decoration: none;
-        color: inherit;
     }
 
     @media (max-width: 768px) {
@@ -129,12 +117,14 @@ $session->autenticar_session();
         }
     }
 
-    @media (max-width: 480px) {
-        .grid-container {
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 0.8rem;
-            padding: 0.8rem;
-        }
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        transition: all 0.3s ease-out;
     }
 
     .app-card {
@@ -199,6 +189,10 @@ $session->autenticar_session();
         position: relative;
         max-width: 500px;
         margin: 0 auto;
+    }
+
+    .app-card-link {
+        transition: all 0.3s ease-out;
     }
 
     .transitioning {
@@ -541,7 +535,7 @@ $session->autenticar_session();
                 <div class="flex items-center gap-3">
                     <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="h-12 w-auto object-contain">
                     <div>
-                        <h1 class="md:text-xl lg:text-lg font-bold text-primary">Subsistema Alunos <span class="text-secondary">STGM</span></h1>
+                        <h1 class="md:text-xl lg:text-lg font-bold text-primary">Subsistema sesmated <span class="text-secondary">STGM</span></h1>
                         <div class="h-0.5 bg-primary/20 rounded-full mt-1"></div>
                     </div>
                 </div>
@@ -686,7 +680,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/sDLfn46k/dashboard-removebg-preview.png" alt="Dashboard abertura" class="app-icon">
                     </div>
                     <h3 class="app-name">Abertura</h3>
-
+                    <span class="category-tag">Evento</span>
                 </div>
             </a>
 
@@ -696,7 +690,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Cordel" class="app-icon">
                     </div>
                     <h3 class="app-name">Cordel</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/cordel/relatorio_cordel.php">Relatório</a></button>
+                    <span class="category-tag">Evento</span>
                 </div>
             </a>
 
@@ -706,8 +700,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/j2sCbqPB/emopreendedorismo-removebg-preview.png" alt="Empreendedorismo" class="app-icon">
                     </div>
                     <h3 class="app-name">Empreendedorismo</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/empreendedorismo/relatorio_empreendedorismo.php">Relatório empreendedorismo</a></button>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/empreendedorismo/relatorio_produtos.php">Relatório produtos</a></button>
+                    <span class="category-tag">Evento</span>
                 </div>
             </a>
 
@@ -717,7 +710,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/ZqxSh8HK/esquete-removebg-preview.png" alt="Esquete" class="app-icon">
                     </div>
                     <h3 class="app-name">Esquete</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/esquete/relatorio_esquete.php">Relatório</a></button>
+                    <span class="category-tag">Evento</span>
                 </div>
             </a>
 
@@ -727,7 +720,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/Y92w2vDN/logo-removebg-preview-1.png" alt="Logo" class="app-icon">
                     </div>
                     <h3 class="app-name">Logo</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/logo/relatorio_logo.php">Relatório</a></button>
+                    <span class="category-tag">Evento</span>
                 </div>
             </a>
 
@@ -737,7 +730,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/SRJF8whJ/mawcote-removebg-preview.png" alt="Mascote" class="app-icon">
                     </div>
                     <h3 class="app-name">Mascote</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/mascote/relatorio_mascote.php">Relatório</a></button>
+                    <span class="category-tag">Evento</span>
                 </div>
             </a>
 
@@ -747,7 +740,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/ZqZGj9mk/painel-removebg-preview.png" alt="Painel" class="app-icon">
                     </div>
                     <h3 class="app-name">Painel</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/painel/relatorio_painel.php">Relatório</a></button>
+                    <span class="category-tag">Evento</span>
                 </div>
             </a>
 
@@ -757,7 +750,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/qRv9V9gj/palestras-removebg-preview.png" alt="Eventos" class="app-icon">
                     </div>
                     <h3 class="app-name">Eventos</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/frequenciaEventos.php">Relatório</a></button>
+                    <span class="category-tag">Evento</span>
                 </div>
             </a>
 
@@ -767,7 +760,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/NMyv23YL/parodia-removebg-preview.png" alt="Paródia" class="app-icon">
                     </div>
                     <h3 class="app-name">Paródia</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/parodia/relatorios_parodia.php">Relatório</a></button>
+                    <span class="category-tag">Evento</span>
                 </div>
             </a>
 
@@ -777,9 +770,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/MprBmBVH/rifa-removebg-preview.png" alt="Rifa" class="app-icon">
                     </div>
                     <h3 class="app-name">Rifa</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/resumo_curso.php">Resumo Curso</a></button>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/resumo_turma.php">Resumo Turma</a></button>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/resumo_total.php">Resumo Total</a></button>
+                    <span class="category-tag">Evento</span>
                 </div>
             </a>
 
@@ -789,7 +780,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/sgKk6jgv/sala-tematica-removebg-preview.png" alt="Sala temática" class="app-icon">
                     </div>
                     <h3 class="app-name">Sala temática</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/sala_tematica/sala_tematica.php">Relatório</a></button>
+                    <span class="category-tag">Evento</span>
                 </div>
             </a>
 
@@ -799,7 +790,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/LscNvwLJ/vestimenstas-removebg-preview.png" alt="Vestimentas" class="app-icon">
                     </div>
                     <h3 class="app-name">Vestimentas</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/vestimenta/relatorio_vestimenta.php">Relatório</a></button>
+                    <span class="category-tag">Evento</span>
                 </div>
             </a>
 
@@ -809,10 +800,9 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Inovação" class="app-icon">
                     </div>
                     <h3 class="app-name">Inovação</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/invocao/relatorio_inovacao.php">Relatório</a></button>
+                    <span class="category-tag">Evento</span>
                 </div>
             </a>
-
         </div>
     </main>
 
@@ -1136,3 +1126,4 @@ $session->autenticar_session();
 </body>
 
 </html>
+
