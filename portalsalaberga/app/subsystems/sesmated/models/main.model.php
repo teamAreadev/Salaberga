@@ -339,7 +339,7 @@ class main_model extends connect
         $result = $stmt_id_avaliador->fetch(PDO::FETCH_ASSOC);
 
         $id_avaliador = $result['id'];
-        
+
         $stmt_adcionar = $this->connect->prepare("INSERT INTO tarefa_14_painel (curso_id, id_avaliador, adequacao_tema, qualidade_conteudo, organizacao_layout, estetica_criatividade, sustentabilidade_construcao) VALUES (:curso_id, :id_avaliador, :adequacao_tema, :qualidade_conteudo, :organizacao_layout, :estetica_criatividade, :sustentabilidade_construcao)");
         $stmt_adcionar->bindValue(':curso_id', $curso);
         $stmt_adcionar->bindValue(':id_avaliador', $id_avaliador);
@@ -408,19 +408,12 @@ class main_model extends connect
     }
 
     // Cadastrar produto na tabela produtos_barraca
-    public function cadastrar_produto($arrecadacao_id, $nome_produto, $preco_unitario, $quantidade_vendida)
+    public function cadastrar_produto($curso_id, $nome_produto, $preco_unitario, $quantidade_vendida)
     {
-        $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
-        $stmt_id_avaliador->bindValue(':id_usuario', $id_avaliador);
-        $stmt_id_avaliador->execute();
-        $result = $stmt_id_avaliador->fetch(PDO::FETCH_ASSOC);
-
-        $id_avaliador = $result['id'];
-
-        $stmt_adcionar = $this->connect->prepare("INSERT INTO produtos (arrecadacao_id, nome_produto, preco_unitario, quantidade_vendida) VALUES (:arrecadacao_id, :nome_produto, :preco_unitario, :quantidade_vendida)");
-        $stmt_adcionar->bindValue(':arrecadacao_id', $arrecadacao_id);
+        $stmt_adcionar = $this->connect->prepare("INSERT INTO produtos (curso_id, nome_produto, valor_unitario, quantidade) VALUES (:curso_id, :nome_produto, :valor_unitario, :quantidade_vendida)");
+        $stmt_adcionar->bindValue(':curso_id', $curso_id);
         $stmt_adcionar->bindValue(':nome_produto', $nome_produto);
-        $stmt_adcionar->bindValue(':preco_unitario', $preco_unitario);
+        $stmt_adcionar->bindValue(':valor_unitario', $preco_unitario);
         $stmt_adcionar->bindValue(':quantidade_vendida', $quantidade_vendida);
         if ($stmt_adcionar->execute()) {
             return 1;

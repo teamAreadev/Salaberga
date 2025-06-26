@@ -7,13 +7,14 @@ if (
     isset($_POST['precoProduto']) && !empty($_POST['precoProduto']) &&
     isset($_POST['quantidadeProduto']) && !empty($_POST['quantidadeProduto'])
 ) {
-    $arrecadacao_id = null; // Defina corretamente conforme sua lógica de negócio
+
+    $curso_id = $_POST['cursoProduto'];
     $nome_produto = $_POST['nomeProduto'];
     $preco_unitario = $_POST['precoProduto'];
     $quantidade_vendida = $_POST['quantidadeProduto'];
 
     $main_model = new main_model();
-    $result = $main_model->cadastrar_produto($arrecadacao_id, $nome_produto, $preco_unitario, $quantidade_vendida);
+    $result = $main_model->cadastrar_produto($curso_id, $nome_produto, $preco_unitario, $quantidade_vendida);
 
     switch ($result) {
         case 1:
