@@ -808,6 +808,16 @@ $session->autenticar_session();
                 </div>
             </a>
 
+            <a href="../../../subsystems/sesmated/views/inovacao.php" class="app-card-link" data-card-key="Inovacao">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Inovação" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Inovação</h3>
+                    <button class="category-tag" onclick="event.stopPropagation(); window.location.href='../../../subsystems/sesmated/views/relatorios/inovacao/relatorio_inovacao.php'">Relatório por turma</button>
+                </div>
+            </a>
+
         </div>
     </main>
 

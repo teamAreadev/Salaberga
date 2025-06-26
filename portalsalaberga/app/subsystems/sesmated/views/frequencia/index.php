@@ -111,6 +111,8 @@ $session = new sessions;
 $session->autenticar_session();
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -762,12 +764,12 @@ $session->autenticar_session();
                     <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Palestras & Workshops</p>
                 </div>
                 <div class="flex items-center gap-2 user-chip-desktop">
-                    <div class="user-chip">
-                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                            <i class="fas fa-user text-green-300 text-xs"></i>
-                        </div>
-                        <span class="text-gray-100">Professor</span>
+                <div class="user-chip user-chip-desktop">
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                        <i class="fas fa-user text-green-300 text-xs"></i>
                     </div>
+                    <span class="text-gray-100"><?=$_SESSION['Nome']?></span>
+                </div>
                 </div>
             </div>
         </div>

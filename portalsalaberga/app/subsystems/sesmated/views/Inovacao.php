@@ -16,165 +16,186 @@ $session->autenticar_session();
             --background-color: #0a0a0a;
             --text-color: #ffffff;
             --header-color: #00b348;
-            --icon-bg: #2d2d2d;
-            --icon-shadow: rgba(0, 0, 0, 0.3);
             --accent-color: #ffb733;
-            --grid-color: #333333;
             --card-bg: rgba(30, 30, 30, 0.95);
             --header-bg: rgba(15, 15, 15, 0.98);
             --search-bar-bg: #1a1a1a;
-            --card-border-hover: var(--accent-color);
             --success-color: #10b981;
-            --warning-color: #f59e0b;
             --danger-color: #ef4444;
         }
-        
         body {
             background: radial-gradient(ellipse at top, #1a1a1a 0%, #0a0a0a 100%);
             color: var(--text-color);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
         }
-        
         .header-bg {
             background: linear-gradient(135deg, var(--header-bg) 0%, rgba(0, 0, 0, 0.95) 100%);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
-        
         .card-bg {
             background: linear-gradient(145deg, var(--card-bg) 0%, rgba(25, 25, 25, 0.95) 100%);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
-        
+        .stats-card {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.8) 0%, rgba(20, 20, 20, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
         .input-field {
             background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
-        
         .input-field:focus {
             border-color: var(--accent-color);
             box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1);
             background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
         }
-        
-        .card-hover:hover {
-            border-color: rgba(255, 183, 51, 0.3);
-            box-shadow: 0 12px 40px rgba(255, 183, 51, 0.15);
-            transform: translateY(-4px);
+        .score-input-wrapper {
+            position: relative;
+            width: 100%;
+            margin-top: 1rem;
         }
-        
+        .score-input {
+            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            border-radius: 0.75rem;
+            padding: 0.875rem 1rem;
+            font-size: clamp(0.875rem, 2.5vw, 1rem);
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .score-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(255, 183, 51, 0.1);
+            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
+            outline: none;
+        }
+        .score-input:hover {
+            border-color: rgba(255, 183, 51, 0.3);
+            background: linear-gradient(145deg, #202020 0%, #1a1a1a 100%);
+        }
+        .score-input::placeholder {
+            color: #6b7280;
+            font-weight: 500;
+        }
+        .score-input::-webkit-outer-spin-button,
+        .score-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .score-input[type=number] {
+            -moz-appearance: textfield;
+        }
+        .score-input.valid {
+            border-color: var(--success-color);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
+        }
+        .score-input.invalid {
+            border-color: var(--danger-color);
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+        }
         .btn-primary {
             background: linear-gradient(135deg, var(--header-color) 0%, #00a040 100%);
             box-shadow: 0 4px 20px rgba(0, 179, 72, 0.3);
             border: none;
             transition: all 0.3s ease;
         }
-        
         .btn-primary:hover {
             box-shadow: 0 8px 30px rgba(0, 179, 72, 0.4);
             transform: translateY(-2px);
         }
-        
         .btn-secondary {
             background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.3s ease;
         }
-        
         .btn-secondary:hover {
             background: linear-gradient(145deg, #353535 0%, #252525 100%);
             border-color: rgba(255, 255, 255, 0.25);
             transform: translateY(-1px);
         }
-        
-        .modal-bg {
-            background: linear-gradient(145deg, rgba(25, 25, 25, 0.98) 0%, rgba(15, 15, 15, 0.98) 100%);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        .user-chip {
+            background: linear-gradient(145deg, #232d25 0%, #181f1a 100%);
+            border: 1px solid #1f3a26;
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: clamp(0.75rem, 2vw, 0.875rem);
+            font-weight: 600;
+            color: #e5e7eb;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
         }
-        
-        .fade-in {
-            animation: fadeIn 0.6s ease-in-out;
+        .criteria-item {
+            background: linear-gradient(145deg, rgba(40, 40, 40, 0.6) 0%, rgba(30, 30, 30, 0.6) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: clamp(1rem, 3vw, 1.5rem);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-height: auto;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        .criteria-item:hover {
+            border-color: rgba(255, 183, 51, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 183, 51, 0.1);
         }
-        
-        .slide-up {
-            animation: slideUp 0.4s ease-out;
+        .criteria-icon {
+            width: clamp(2.5rem, 8vw, 3rem);
+            height: clamp(2.5rem, 8vw, 3rem);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
         }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+        .criteria-icon i {
+            font-size: clamp(1rem, 4vw, 1.25rem);
+            color: white;
         }
-        
-        .pulse-glow {
-            animation: pulseGlow 2s ease-in-out infinite alternate;
+        .criteria-title {
+            font-size: clamp(0.875rem, 3.5vw, 1rem);
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.25rem;
         }
-        
-        @keyframes pulseGlow {
-            from { box-shadow: 0 4px 20px rgba(0, 179, 72, 0.3); }
-            to { box-shadow: 0 8px 40px rgba(0, 179, 72, 0.5); }
+        .criteria-subtitle {
+            font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+            color: #9ca3af;
+            margin-bottom: 1rem;
+            line-height: 1.3;
         }
-
-        .range-slider {
-            -webkit-appearance: none;
-            appearance: none;
-            height: 8px;
-            border-radius: 5px;
-            background: linear-gradient(90deg, #333 0%, #666 100%);
-            outline: none;
-        }
-
-        .range-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--header-color) 0%, var(--accent-color) 100%);
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 179, 72, 0.4);
-        }
-
-        .range-slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--header-color) 0%, var(--accent-color) 100%);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 10px rgba(0, 179, 72, 0.4);
-        }
-
-        select.input-field {
-            background: linear-gradient(145deg, var(--search-bar-bg) 0%, #151515 100%) !important;
-            color: var(--text-color) !important;
-            border: 1px solid rgba(255,255,255,0.12);
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            padding-right: 2.5rem;
-        }
-        
-        select.input-field option {
-            color: #222 !important;
-        }
-
-        /* ===== HEADER NOVO - INÍCIO ===== */
-        .container-responsive {
+        .score-display {
+            background: linear-gradient(135deg, rgba(255, 183, 51, 0.15) 0%, rgba(255, 183, 51, 0.05) 100%);
+            border: 1px solid rgba(255, 183, 51, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.75rem 0.5rem;
+            margin-top: 0.75rem;
+            font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+            font-weight: 700;
+            color: var(--accent-color);
+            text-align: center;
             width: 100%;
-            max-width: none;
-            padding: 0 clamp(1rem, 4vw, 2rem);
+        }
+        .criteria-grid {
+            display: grid;
+            gap: clamp(1rem, 3vw, 1.5rem);
+            width: 100%;
         }
         .header-content {
             display: flex;
@@ -195,26 +216,38 @@ $session->autenticar_session();
             gap: 0.75rem;
             margin-bottom: 0.5rem;
         }
-        .user-chip {
-            background: linear-gradient(145deg, #232d25 0%, #181f1a 100%);
-            border: 1px solid #1f3a26;
-            backdrop-filter: blur(10px);
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: clamp(0.75rem, 2vw, 0.875rem);
-            font-weight: 600;
-            color: #e5e7eb;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
-        }
         .user-chip-desktop {
             position: absolute;
             top: 0;
             right: 0;
         }
+        .container-responsive {
+            width: 100%;
+            max-width: none;
+            padding: 0 clamp(1rem, 4vw, 2rem);
+        }
+        .main-title {
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            line-height: 1.2;
+        }
+        .section-title {
+            font-size: clamp(1rem, 4vw, 1.25rem);
+        }
+        .btn-responsive {
+            padding: clamp(0.75rem, 3vw, 1rem) clamp(1.5rem, 6vw, 2rem);
+            font-size: clamp(0.875rem, 3vw, 1rem);
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 20rem;
+        }
         @media (max-width: 640px) {
+            .criteria-grid {
+                grid-template-columns: 1fr;
+            }
+            .card-bg {
+                padding: clamp(1rem, 4vw, 1.5rem);
+                margin: 0.5rem;
+            }
             .header-content {
                 flex-direction: column;
                 gap: 1rem;
@@ -228,12 +261,16 @@ $session->autenticar_session();
                 align-items: center;
             }
         }
-        /* Títulos responsivos */
-        .main-title {
-            font-size: clamp(1.5rem, 6vw, 2.5rem);
-            line-height: 1.2;
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .criteria-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
-        /* ===== HEADER NOVO - FIM ===== */
+        @media (min-width: 1025px) {
+            .criteria-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -253,602 +290,374 @@ $session->autenticar_session();
                     </div>
                     <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Inovação</p>
                 </div>
-                
                 <!-- Chip do Usuário - Posicionado à direita no desktop -->
                 <div class="user-chip user-chip-desktop">
                     <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                         <i class="fas fa-user text-green-300 text-xs"></i>
                     </div>
-                    <span class="text-gray-100">João Silva</span>
+                    <span class="text-gray-100"><?=$_SESSION['Nome']?></span>
                 </div>
             </div>
         </div>
     </header>
-
     <!-- Main Content -->
-    <main class="container mx-auto px-4 sm:px-6 py-8">
-        <!-- Cadastro Section -->
-        <section class="mb-12">
-            <div class="card-bg rounded-3xl p-8 fade-in">
-                <div class="flex items-center gap-3 mb-8">
-                    <i class="fas fa-plus-circle text-2xl" style="color: var(--header-color);"></i>
-                    <h2 class="text-2xl font-bold">Cadastrar Projeto de Inovação</h2>
-                </div>
-                
-                <form id="projetoForm" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                                <i class="fas fa-project-diagram mr-2"></i>Nome do Projeto
-                            </label>
-                            <input type="text" id="nomeProjeto" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
+    <main class="container-responsive py-8">
+        <div class="flex flex-col items-center justify-center min-h-[70vh]">
+            <div class="card-bg rounded-3xl w-full max-w-6xl text-center fade-in">
+                <!-- Formulário Principal -->
+                <form id="inovacaoForm" class="space-y-8">
+                    <div class="flex flex-col items-center gap-6">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center">
+                            <i class="fas fa-lightbulb text-white text-3xl"></i>
                         </div>
                         <div>
-                            <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                                <i class="fas fa-graduation-cap mr-2"></i>Curso
-                            </label>
-                            <select id="cursoProjeto" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
-                                <option value="">Selecione o curso</option>
-                                <option value="Enfermagem">Enfermagem</option>
-                                <option value="Informática">Informática</option>
-                                <option value="Meio ambiente">Meio ambiente</option>
-                                <option value="Administração">Administração</option>
-                                <option value="Edificações">Edificações</option>
-                            </select>
+                            <h2 class="main-title font-black mb-4 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent">
+                                Avaliação de Inovação
+                            </h2>
+                            <p class="text-lg text-gray-300 font-medium mb-4">
+                                Desenvolver e apresentar um produto útil à comunidade maranguapense
+                            </p>
+                            <p class="text-sm text-gray-400 font-medium">
+                                Avalie cada critério com notas de 0 a 100 pontos
+                            </p>
                         </div>
                     </div>
-                    
-                    <div>
-                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-users mr-2"></i>Equipe (separar nomes por vírgula)
-                        </label>
-                        <textarea id="equipeProjeto" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" rows="2" placeholder="João Silva, Maria Santos, Pedro Oliveira"></textarea>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-align-left mr-2"></i>Descrição do Projeto
-                        </label>
-                        <textarea id="descricaoProjeto" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" rows="4" required></textarea>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-exclamation-triangle mr-2"></i>Problema que Resolve
-                        </label>
-                        <textarea id="problemaProjeto" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" rows="3" required></textarea>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                            <i class="fas fa-heart mr-2"></i>Benefícios para a Comunidade
-                        </label>
-                        <textarea id="beneficiosProjeto" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" rows="3" required></textarea>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                                <i class="fas fa-tools mr-2"></i>Recursos Necessários
-                            </label>
-                            <textarea id="recursosProjeto" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" rows="3"></textarea>
+                    <!-- Critérios de Avaliação -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 justify-center mb-6">
+                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                            <span class="section-title font-bold text-gray-200">Critérios de Avaliação</span>
                         </div>
-                        <div>
-                            <label class="block text-sm font-bold mb-4 text-gray-300 uppercase tracking-wide">
-                                <i class="fas fa-microchip mr-2"></i>Tecnologias Utilizadas
-                            </label>
-                            <textarea id="tecnologiasProjeto" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" rows="3"></textarea>
+                        <div class="criteria-grid">
+                            <!-- Originalidade e Inovação -->
+                            <div class="criteria-item">
+                                <div class="criteria-icon bg-gradient-to-br from-blue-500 to-cyan-600">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <h4 class="criteria-title">Originalidade e Inovação</h4>
+                                <p class="criteria-subtitle">Ideia criativa, diferente e inovadora</p>
+                                <div class="score-input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="notaOriginalidade" 
+                                        name="nota_originalidade" 
+                                        min="0" 
+                                        max="100" 
+                                        placeholder="0-100"
+                                        class="score-input"
+                                        value=""
+                                    >
+                                </div>
+                                <div id="displayOriginalidade" class="score-display hidden">
+                                    <span id="valorOriginalidade">0</span> pontos
+                                </div>
+                            </div>
+                            <!-- Relevância e Aplicabilidade para a Comunidade -->
+                            <div class="criteria-item">
+                                <div class="criteria-icon bg-gradient-to-br from-green-500 to-emerald-600">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h4 class="criteria-title">Relevância e Aplicabilidade para a Comunidade</h4>
+                                <p class="criteria-subtitle">Impacto e utilidade para a comunidade maranguapense</p>
+                                <div class="score-input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="notaRelevancia" 
+                                        name="nota_relevancia" 
+                                        min="0" 
+                                        max="100" 
+                                        placeholder="0-100"
+                                        class="score-input"
+                                        value=""
+                                    >
+                                </div>
+                                <div id="displayRelevancia" class="score-display hidden">
+                                    <span id="valorRelevancia">0</span> pontos
+                                </div>
+                            </div>
+                            <!-- Viabilidade Técnica -->
+                            <div class="criteria-item">
+                                <div class="criteria-icon bg-gradient-to-br from-purple-500 to-violet-600">
+                                    <i class="fas fa-cogs"></i>
+                                </div>
+                                <h4 class="criteria-title">Viabilidade Técnica</h4>
+                                <p class="criteria-subtitle">Possibilidade de execução e implementação</p>
+                                <div class="score-input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="notaViabilidade" 
+                                        name="nota_viabilidade" 
+                                        min="0" 
+                                        max="100" 
+                                        placeholder="0-100"
+                                        class="score-input"
+                                        value=""
+                                    >
+                                </div>
+                                <div id="displayViabilidade" class="score-display hidden">
+                                    <span id="valorViabilidade">0</span> pontos
+                                </div>
+                            </div>
+                            <!-- Sustentabilidade e Responsabilidade Socioambiental -->
+                            <div class="criteria-item">
+                                <div class="criteria-icon bg-gradient-to-br from-green-700 to-lime-500">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <h4 class="criteria-title">Sustentabilidade e Responsabilidade Socioambiental</h4>
+                                <p class="criteria-subtitle">Preocupação ambiental e social na proposta</p>
+                                <div class="score-input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="notaSustentabilidade" 
+                                        name="nota_sustentabilidade" 
+                                        min="0" 
+                                        max="100" 
+                                        placeholder="0-100"
+                                        class="score-input"
+                                        value=""
+                                    >
+                                </div>
+                                <div id="displaySustentabilidade" class="score-display hidden">
+                                    <span id="valorSustentabilidade">0</span> pontos
+                                </div>
+                            </div>
+                            <!-- Clareza e Organização da Apresentação -->
+                            <div class="criteria-item">
+                                <div class="criteria-icon bg-gradient-to-br from-yellow-500 to-orange-600">
+                                    <i class="fas fa-chalkboard"></i>
+                                </div>
+                                <h4 class="criteria-title">Clareza e Organização da Apresentação</h4>
+                                <p class="criteria-subtitle">Apresentação clara, objetiva e bem estruturada</p>
+                                <div class="score-input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="notaClareza" 
+                                        name="nota_clareza" 
+                                        min="0" 
+                                        max="100" 
+                                        placeholder="0-100"
+                                        class="score-input"
+                                        value=""
+                                    >
+                                </div>
+                                <div id="displayClareza" class="score-display hidden">
+                                    <span id="valorClareza">0</span> pontos
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="flex justify-end">
-                        <button type="submit" class="btn-primary px-8 py-3 rounded-2xl font-semibold text-white flex items-center gap-2">
-                            <i class="fas fa-save"></i>
-                            Cadastrar Projeto
+                    <!-- Painel de Pontuação Total -->
+                    <div id="pontosInovacao" class="mt-8 hidden slide-up">
+                        <div class="stats-card rounded-xl p-4 text-center max-w-sm mx-auto">
+                            <div class="flex items-center justify-center gap-2 mb-3">
+                                <i class="fas fa-calculator text-yellow-400"></i>
+                                <h3 class="text-lg font-bold text-white">Pontuação Total</h3>
+                            </div>
+                            <div class="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg p-3">
+                                <p class="text-2xl font-black text-black">
+                                    <span id="pontosTotais">0</span> / 500
+                                </p>
+                                <p class="text-xs font-medium text-black opacity-75">
+                                    Média: <span id="mediaPontos">0.0</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Botão de Envio -->
+                    <div class="pt-8 flex justify-center">
+                        <button type="submit" class="btn-primary btn-responsive font-bold text-white flex items-center justify-center gap-3 hover:scale-105 transition-transform">
+                            <i class="fas fa-paper-plane"></i>
+                            Confirmar Avaliação
                         </button>
                     </div>
                 </form>
-            </div>
-        </section>
-
-        <!-- Projetos Grid -->
-        <section class="mb-16">
-            <div class="flex items-center gap-3 mb-8">
-                <i class="fas fa-list text-2xl" style="color: var(--header-color);"></i>
-                <h2 class="text-2xl font-bold">Projetos Cadastrados</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="projetosList">
-                <!-- Cards will be generated by JavaScript -->
-            </div>
-        </section>
-
-        <!-- Avaliação Modal -->
-        <div id="avaliacaoModal" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-            <div class="modal-bg rounded-3xl p-8 w-full max-w-4xl mx-4 slide-up max-h-[90vh] overflow-y-auto">
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center">
-                        <i class="fas fa-star text-white text-xl"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold">Avaliar Projeto</h2>
-                </div>
-                
-                <div class="mb-6">
-                    <h3 class="text-xl font-semibold mb-2" id="projetoAvaliando"></h3>
-                    <p class="text-sm text-gray-400" id="descricaoAvaliando"></p>
-                </div>
-                
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-medium mb-3">💡 Originalidade e Inovação (0-100 pontos)</label>
-                        <input type="range" id="originalidade" min="0" max="100" value="0" class="range-slider w-full">
-                        <div class="flex justify-between text-sm mt-2">
-                            <span>0</span>
-                            <span id="originalidadeValue" class="text-yellow-400 font-bold">0 pontos</span>
-                            <span>100</span>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-3">🧩 Relevância e Aplicabilidade para a Comunidade (0-100 pontos)</label>
-                        <input type="range" id="relevancia" min="0" max="100" value="0" class="range-slider w-full">
-                        <div class="flex justify-between text-sm mt-2">
-                            <span>0</span>
-                            <span id="relevanciaValue" class="text-yellow-400 font-bold">0 pontos</span>
-                            <span>100</span>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-3">⚙️ Viabilidade Técnica (0-100 pontos)</label>
-                        <input type="range" id="viabilidade" min="0" max="100" value="0" class="range-slider w-full">
-                        <div class="flex justify-between text-sm mt-2">
-                            <span>0</span>
-                            <span id="viabilidadeValue" class="text-yellow-400 font-bold">0 pontos</span>
-                            <span>100</span>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-3">🌱 Sustentabilidade e Responsabilidade Socioambiental (0-100 pontos)</label>
-                        <input type="range" id="sustentabilidade" min="0" max="100" value="0" class="range-slider w-full">
-                        <div class="flex justify-between text-sm mt-2">
-                            <span>0</span>
-                            <span id="sustentabilidadeValue" class="text-yellow-400 font-bold">0 pontos</span>
-                            <span>100</span>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-3">📊 Clareza e Organização da Apresentação (0-100 pontos)</label>
-                        <input type="range" id="clareza" min="0" max="100" value="0" class="range-slider w-full">
-                        <div class="flex justify-between text-sm mt-2">
-                            <span>0</span>
-                            <span id="clarezaValue" class="text-yellow-400 font-bold">0 pontos</span>
-                            <span>100</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-8 p-6 bg-gray-800/50 rounded-2xl">
-                    <h4 class="text-lg font-semibold mb-2">Pontuação Total: <span id="totalPontos" class="text-yellow-400 text-2xl font-bold">0</span>/500</h4>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                    <div>
-                        <label class="block text-sm font-medium mb-3">Nome do Jurado</label>
-                        <input type="text" id="nomeJurado" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-3">Observações</label>
-                        <textarea id="observacoes" class="input-field w-full rounded-2xl px-4 py-3 text-white focus:outline-none" rows="3"></textarea>
-                    </div>
-                </div>
-                
-                <div class="flex flex-col sm:flex-row gap-4 pt-8">
-                    <button onclick="salvarAvaliacao()" class="btn-primary flex-1 py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2">
-                        <i class="fas fa-save"></i>
-                        Salvar Avaliação
-                    </button>
-                    <button onclick="fecharAvaliacao()" class="btn-secondary flex-1 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
-                        <i class="fas fa-times"></i>
-                        Cancelar
+                <!-- Botão para Voltar -->
+                <div id="voltarButton" class="mt-8 hidden">
+                    <button onclick="resetForm()" class="btn-secondary btn-responsive font-semibold text-gray-300 flex items-center justify-center gap-2 mx-auto hover:scale-105 transition-transform">
+                        <i class="fas fa-arrow-left"></i>
+                        Nova Avaliação
                     </button>
                 </div>
             </div>
         </div>
-
-        <!-- Relatórios Section -->
-        <section class="text-center space-y-6">
-            <div class="flex items-center justify-center gap-3 mb-8">
-                <i class="fas fa-chart-line text-2xl" style="color: var(--accent-color);"></i>
-                <h2 class="text-2xl font-bold">Relatórios Detalhados</h2>
-            </div>
-            
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button onclick="gerarRelatorioGeral()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
-                    <i class="fas fa-file-alt"></i>
-                    Relatório Geral
-                </button>
-                <button onclick="gerarRanking()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
-                    <i class="fas fa-trophy"></i>
-                    Ranking Final
-                </button>
-                <button onclick="calcularPontuacao()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
-                    <i class="fas fa-medal"></i>
-                    Pontuação por Posição
-                </button>
-                <button onclick="gerarRelatorioPDF()" class="btn-secondary px-6 py-3 rounded-2xl font-semibold text-gray-300 flex items-center justify-center gap-2">
-                    <i class="fas fa-file-pdf"></i>
-                    Relatório PDF
-                </button>
-            </div>
-        </section>
     </main>
-
+    <!-- Tela de Sucesso -->
+    <div id="sucessoInovacao" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm p-4">
+        <div class="card-bg rounded-3xl p-8 w-full max-w-md text-center fade-in">
+            <div class="flex flex-col items-center gap-4 mb-6">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center pulse-glow">
+                    <i class="fas fa-check-circle text-white text-4xl"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-green-400 mb-2">Avaliação Registrada!</h2>
+                <p class="text-lg text-gray-200">As notas de inovação foram computadas com sucesso.</p>
+                <div class="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl p-3 mt-2">
+                    <p class="text-xl font-black text-black">
+                        Total: <span id="pontosFinal">0</span> / 500 pontos
+                    </p>
+                </div>
+            </div>
+            <button onclick="fecharSucesso()" class="btn-primary btn-responsive font-semibold text-white flex items-center justify-center gap-2 mx-auto mt-4 hover:scale-105 transition-transform">
+                <i class="fas fa-arrow-left"></i> Nova Avaliação
+            </button>
+        </div>
+    </div>
     <script>
-        let projetos = JSON.parse(localStorage.getItem('projetos_inovacao') || '[]');
-        let avaliacoes = JSON.parse(localStorage.getItem('avaliacoes_inovacao') || '[]');
-        let projetoAtual = null;
-
-        const cursoColors = {
-            'Informática': 'from-blue-500 to-cyan-600',
-            'Enfermagem': 'from-red-500 to-pink-600',
-            'Administração': 'from-purple-500 to-indigo-600',
-            'Agropecuária': 'from-green-500 to-emerald-600'
-        };
-
-        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            renderProjetos();
-            
-            // Form submission
-            document.getElementById('projetoForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const projeto = {
-                    id: Date.now(),
-                    nome: document.getElementById('nomeProjeto').value,
-                    curso: document.getElementById('cursoProjeto').value,
-                    equipe: document.getElementById('equipeProjeto').value,
-                    descricao: document.getElementById('descricaoProjeto').value,
-                    problema: document.getElementById('problemaProjeto').value,
-                    beneficios: document.getElementById('beneficiosProjeto').value,
-                    recursos: document.getElementById('recursosProjeto').value,
-                    tecnologias: document.getElementById('tecnologiasProjeto').value,
-                    timestamp: new Date().toISOString()
-                };
-                
-                projetos.push(projeto);
-                localStorage.setItem('projetos_inovacao', JSON.stringify(projetos));
-                
-                this.reset();
-                renderProjetos();
-                
-                showNotification('Projeto cadastrado com sucesso!', 'success');
+            const form = document.getElementById('inovacaoForm');
+            const pontosInovacao = document.getElementById('pontosInovacao');
+            const voltarButton = document.getElementById('voltarButton');
+            // Inputs
+            const notaOriginalidade = document.getElementById('notaOriginalidade');
+            const notaRelevancia = document.getElementById('notaRelevancia');
+            const notaViabilidade = document.getElementById('notaViabilidade');
+            const notaSustentabilidade = document.getElementById('notaSustentabilidade');
+            const notaClareza = document.getElementById('notaClareza');
+            // Displays
+            const displayOriginalidade = document.getElementById('displayOriginalidade');
+            const displayRelevancia = document.getElementById('displayRelevancia');
+            const displayViabilidade = document.getElementById('displayViabilidade');
+            const displaySustentabilidade = document.getElementById('displaySustentabilidade');
+            const displayClareza = document.getElementById('displayClareza');
+            const valorOriginalidade = document.getElementById('valorOriginalidade');
+            const valorRelevancia = document.getElementById('valorRelevancia');
+            const valorViabilidade = document.getElementById('valorViabilidade');
+            const valorSustentabilidade = document.getElementById('valorSustentabilidade');
+            const valorClareza = document.getElementById('valorClareza');
+            const pontosTotais = document.getElementById('pontosTotais');
+            const mediaPontos = document.getElementById('mediaPontos');
+            // Garantir que os inputs começem vazios
+            notaOriginalidade.value = '';
+            notaRelevancia.value = '';
+            notaViabilidade.value = '';
+            notaSustentabilidade.value = '';
+            notaClareza.value = '';
+            // Função para validar nota
+            function validarNota(input, valor) {
+                if (valor < 0 || valor > 100 || isNaN(valor)) {
+                    input.classList.add('invalid');
+                    input.classList.remove('valid');
+                    return false;
+                } else {
+                    input.classList.add('valid');
+                    input.classList.remove('invalid');
+                    return true;
+                }
+            }
+            // Função para atualizar display de nota individual
+            function atualizarDisplayNota(input, display, valorSpan) {
+                const valor = parseInt(input.value);
+                if (input.value !== '' && !isNaN(valor) && validarNota(input, valor)) {
+                    valorSpan.textContent = valor;
+                    display.classList.remove('hidden');
+                } else {
+                    display.classList.add('hidden');
+                }
+                atualizarPontuacaoTotal();
+            }
+            // Função para calcular e atualizar pontuação total
+            function atualizarPontuacaoTotal() {
+                const originalidade = notaOriginalidade.value !== '' ? parseInt(notaOriginalidade.value) || 0 : 0;
+                const relevancia = notaRelevancia.value !== '' ? parseInt(notaRelevancia.value) || 0 : 0;
+                const viabilidade = notaViabilidade.value !== '' ? parseInt(notaViabilidade.value) || 0 : 0;
+                const sustentabilidade = notaSustentabilidade.value !== '' ? parseInt(notaSustentabilidade.value) || 0 : 0;
+                const clareza = notaClareza.value !== '' ? parseInt(notaClareza.value) || 0 : 0;
+                const total = originalidade + relevancia + viabilidade + sustentabilidade + clareza;
+                const media = total > 0 ? total / 5 : 0;
+                pontosTotais.textContent = total;
+                mediaPontos.textContent = media.toFixed(1);
+                // Mostrar painel se houver pelo menos uma nota
+                if ((originalidade > 0 || relevancia > 0 || viabilidade > 0 || sustentabilidade > 0 || clareza > 0)) {
+                    pontosInovacao.classList.remove('hidden');
+                } else {
+                    pontosInovacao.classList.add('hidden');
+                }
+            }
+            // Event listeners para os inputs de nota
+            notaOriginalidade.addEventListener('input', function() {
+                atualizarDisplayNota(this, displayOriginalidade, valorOriginalidade);
             });
-
-            // Atualizar valores dos sliders
-            document.querySelectorAll('input[type="range"]').forEach(slider => {
-                slider.addEventListener('input', function() {
-                    document.getElementById(this.id + 'Value').textContent = this.value + ' pontos';
-                    calcularTotal();
+            notaRelevancia.addEventListener('input', function() {
+                atualizarDisplayNota(this, displayRelevancia, valorRelevancia);
+            });
+            notaViabilidade.addEventListener('input', function() {
+                atualizarDisplayNota(this, displayViabilidade, valorViabilidade);
+            });
+            notaSustentabilidade.addEventListener('input', function() {
+                atualizarDisplayNota(this, displaySustentabilidade, valorSustentabilidade);
+            });
+            notaClareza.addEventListener('input', function() {
+                atualizarDisplayNota(this, displayClareza, valorClareza);
+            });
+            // Validação em tempo real para limitar valores
+            [notaOriginalidade, notaRelevancia, notaViabilidade, notaSustentabilidade, notaClareza].forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (!/[0-9]/.test(String.fromCharCode(e.which))) {
+                        e.preventDefault();
+                    }
+                });
+                input.addEventListener('input', function(e) {
+                    if (e.target.value !== '') {
+                        let valor = parseInt(e.target.value);
+                        if (valor > 100) {
+                            e.target.value = 100;
+                        } else if (valor < 0) {
+                            e.target.value = 0;
+                        }
+                    }
                 });
             });
-        });
-
-        function renderProjetos() {
-            const container = document.getElementById('projetosList');
-            container.innerHTML = '';
-            
-            if (projetos.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full text-center py-20">
-                        <div class="w-32 h-32 mx-auto mb-8 rounded-3xl bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center">
-                            <i class="fas fa-lightbulb text-4xl text-gray-400"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-300 mb-4">Nenhum projeto cadastrado</h3>
-                        <p class="text-gray-400 mb-8 text-lg">Adicione o primeiro projeto para começar</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            projetos.forEach(projeto => {
-                const avaliacoesProjeto = avaliacoes.filter(a => a.projetoId === projeto.id);
-                const mediaNotas = avaliacoesProjeto.length > 0 
-                    ? (avaliacoesProjeto.reduce((sum, a) => sum + a.total, 0) / avaliacoesProjeto.length).toFixed(1)
-                    : 'Não avaliado';
-                
-                const card = document.createElement('div');
-                card.className = 'card-bg rounded-3xl p-6 card-hover transition-all duration-300 fade-in';
-                
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="flex items-center gap-4 flex-1 min-w-0">
-                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${cursoColors[projeto.curso] || 'from-gray-600 to-gray-700'} flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-lightbulb text-white text-xl"></i>
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <h3 class="text-xl font-bold text-white mb-1">${projeto.nome}</h3>
-                                <p class="text-sm text-gray-400 font-medium">${projeto.curso}</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <div>
-                            <span class="text-gray-400 text-sm">Equipe:</span>
-                            <p class="text-gray-300 text-sm mt-1">${projeto.equipe || 'Não informado'}</p>
-                        </div>
-                        
-                        <div>
-                            <span class="text-gray-400 text-sm">Descrição:</span>
-                            <p class="text-gray-300 text-sm mt-1">${projeto.descricao.substring(0, 100)}${projeto.descricao.length > 100 ? '...' : ''}</p>
-                        </div>
-                        
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-300 font-semibold">Média de Avaliação</span>
-                            <span class="text-2xl font-bold" style="color: var(--accent-color);">${mediaNotas}</span>
-                        </div>
-                        
-                        <div class="text-center">
-                            <p class="text-xs text-gray-400 mb-3">Avaliações: ${avaliacoesProjeto.length}</p>
-                            <button onclick="avaliarProjeto(${projeto.id})" 
-                                    class="btn-primary w-full py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2">
-                                <i class="fas fa-star"></i>
-                                Avaliar
-                            </button>
-                        </div>
-                    </div>
-                `;
-                
-                container.appendChild(card);
+            // Submissão do formulário
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const originalidade = notaOriginalidade.value !== '' ? parseInt(notaOriginalidade.value) || 0 : 0;
+                const relevancia = notaRelevancia.value !== '' ? parseInt(notaRelevancia.value) || 0 : 0;
+                const viabilidade = notaViabilidade.value !== '' ? parseInt(notaViabilidade.value) || 0 : 0;
+                const sustentabilidade = notaSustentabilidade.value !== '' ? parseInt(notaSustentabilidade.value) || 0 : 0;
+                const clareza = notaClareza.value !== '' ? parseInt(notaClareza.value) || 0 : 0;
+                if (originalidade === 0 && relevancia === 0 && viabilidade === 0 && sustentabilidade === 0 && clareza === 0) {
+                    alert('Por favor, preencha pelo menos uma nota.');
+                    notaOriginalidade.focus();
+                    return;
+                }
+                const inputs = [notaOriginalidade, notaRelevancia, notaViabilidade, notaSustentabilidade, notaClareza];
+                for (let input of inputs) {
+                    if (input.value !== '' && !validarNota(input, parseInt(input.value))) {
+                        alert('Por favor, digite notas válidas entre 0 e 100.');
+                        input.focus();
+                        return;
+                    }
+                }
+                const total = originalidade + relevancia + viabilidade + sustentabilidade + clareza;
+                document.getElementById('pontosFinal').textContent = total;
+                form.style.display = 'none';
+                voltarButton.classList.add('hidden');
+                document.getElementById('sucessoInovacao').classList.remove('hidden');
             });
-        }
-
-        function avaliarProjeto(id) {
-            projetoAtual = projetos.find(p => p.id === id);
-            document.getElementById('projetoAvaliando').textContent = 
-                `${projetoAtual.nome} (${projetoAtual.curso})`;
-            document.getElementById('descricaoAvaliando').textContent = projetoAtual.descricao;
-            
-            // Reset form
-            document.querySelectorAll('input[type="range"]').forEach(slider => {
-                slider.value = 0;
-                document.getElementById(slider.id + 'Value').textContent = '0 pontos';
-            });
-            document.getElementById('nomeJurado').value = '';
-            document.getElementById('observacoes').value = '';
-            calcularTotal();
-            
-            document.getElementById('avaliacaoModal').classList.remove('hidden');
-            document.getElementById('avaliacaoModal').classList.add('flex');
-        }
-
-        function calcularTotal() {
-            const originalidade = parseInt(document.getElementById('originalidade').value);
-            const relevancia = parseInt(document.getElementById('relevancia').value);
-            const viabilidade = parseInt(document.getElementById('viabilidade').value);
-            const sustentabilidade = parseInt(document.getElementById('sustentabilidade').value);
-            const clareza = parseInt(document.getElementById('clareza').value);
-            const total = originalidade + relevancia + viabilidade + sustentabilidade + clareza;
-            document.getElementById('totalPontos').textContent = total;
-        }
-
-        function salvarAvaliacao() {
-            if (!projetoAtual || !document.getElementById('nomeJurado').value) {
-                showNotification('Preencha o nome do jurado!', 'error');
-                return;
-            }
-            const avaliacao = {
-                id: Date.now(),
-                projetoId: projetoAtual.id,
-                jurado: document.getElementById('nomeJurado').value,
-                originalidade: parseInt(document.getElementById('originalidade').value),
-                relevancia: parseInt(document.getElementById('relevancia').value),
-                viabilidade: parseInt(document.getElementById('viabilidade').value),
-                sustentabilidade: parseInt(document.getElementById('sustentabilidade').value),
-                clareza: parseInt(document.getElementById('clareza').value),
-                total: parseInt(document.getElementById('totalPontos').textContent),
-                observacoes: document.getElementById('observacoes').value,
-                timestamp: new Date().toISOString()
+            // Função global para reset
+            window.resetForm = function() {
+                form.style.display = 'block';
+                voltarButton.classList.add('hidden');
+                form.reset();
+                pontosInovacao.classList.add('hidden');
+                notaOriginalidade.value = '';
+                notaRelevancia.value = '';
+                notaViabilidade.value = '';
+                notaSustentabilidade.value = '';
+                notaClareza.value = '';
+                displayOriginalidade.classList.add('hidden');
+                displayRelevancia.classList.add('hidden');
+                displayViabilidade.classList.add('hidden');
+                displaySustentabilidade.classList.add('hidden');
+                displayClareza.classList.add('hidden');
+                [notaOriginalidade, notaRelevancia, notaViabilidade, notaSustentabilidade, notaClareza].forEach(input => {
+                    input.classList.remove('valid', 'invalid');
+                });
             };
-            avaliacoes.push(avaliacao);
-            localStorage.setItem('avaliacoes_inovacao', JSON.stringify(avaliacoes));
-            showNotification('Avaliação salva com sucesso!', 'success');
-            fecharAvaliacao();
-            renderProjetos();
-        }
-
-        function fecharAvaliacao() {
-            document.getElementById('avaliacaoModal').classList.add('hidden');
-            document.getElementById('avaliacaoModal').classList.remove('flex');
-            projetoAtual = null;
-        }
-
-        function gerarRelatorioGeral() {
-            let relatorio = 'RELATÓRIO GERAL - PROJETOS DE INOVAÇÃO\n';
-            relatorio += '='.repeat(60) + '\n\n';
-            // Identificar sugestões para Mostracitec
-            const projetosMostracitec = projetos.map(projeto => {
-                const avaliacoesProjeto = avaliacoes.filter(a => a.projetoId === projeto.id);
-                let mediaViabilidade = 0;
-                let mediaSustentabilidade = 0;
-                if (avaliacoesProjeto.length > 0) {
-                    mediaViabilidade = avaliacoesProjeto.reduce((sum, a) => sum + a.viabilidade, 0) / avaliacoesProjeto.length;
-                    mediaSustentabilidade = avaliacoesProjeto.reduce((sum, a) => sum + a.sustentabilidade, 0) / avaliacoesProjeto.length;
-                }
-                return {
-                    id: projeto.id,
-                    mediaViabilidade,
-                    mediaSustentabilidade
-                };
-            });
-            // Ordenar por soma das médias e pegar os 3 primeiros
-            const sugestoesMostracitec = projetosMostracitec
-                .sort((a, b) => (b.mediaViabilidade + b.mediaSustentabilidade) - (a.mediaViabilidade + a.mediaSustentabilidade))
-                .slice(0, 3)
-                .map(p => p.id);
-            projetos.forEach(projeto => {
-                const avaliacoesProjeto = avaliacoes.filter(a => a.projetoId === projeto.id);
-                const destaqueMostracitec = sugestoesMostracitec.includes(projeto.id) ? ' *** SUGESTÃO MOSTRACITEC ***' : '';
-                relatorio += `PROJETO: ${projeto.nome}${destaqueMostracitec}\n`;
-                relatorio += `Curso: ${projeto.curso}\n`;
-                relatorio += `Equipe: ${projeto.equipe}\n`;
-                relatorio += `Descrição: ${projeto.descricao}\n`;
-                relatorio += `Problema: ${projeto.problema}\n`;
-                relatorio += `Benefícios: ${projeto.beneficios}\n`;
-                relatorio += `Recursos: ${projeto.recursos}\n`;
-                relatorio += `Tecnologias: ${projeto.tecnologias}\n\n`;
-                if (avaliacoesProjeto.length > 0) {
-                    relatorio += 'AVALIAÇÕES:\n';
-                    avaliacoesProjeto.forEach(av => {
-                        relatorio += `  Jurado: ${av.jurado}\n`;
-                        relatorio += `  Originalidade: ${av.originalidade}/100\n`;
-                        relatorio += `  Relevância: ${av.relevancia}/100\n`;
-                        relatorio += `  Viabilidade: ${av.viabilidade}/100\n`;
-                        relatorio += `  Sustentabilidade: ${av.sustentabilidade}/100\n`;
-                        relatorio += `  Clareza: ${av.clareza}/100\n`;
-                        relatorio += `  TOTAL: ${av.total}/500\n`;
-                        if (av.observacoes) {
-                            relatorio += `  Observações: ${av.observacoes}\n`;
-                        }
-                        relatorio += '\n';
-                    });
-                    const media = (avaliacoesProjeto.reduce((sum, a) => sum + a.total, 0) / avaliacoesProjeto.length).toFixed(2);
-                    relatorio += `MÉDIA FINAL: ${media}/500\n`;
-                } else {
-                    relatorio += 'Não avaliado\n';
-                }
-                relatorio += '-'.repeat(40) + '\n\n';
-            });
-            downloadFile(relatorio, 'relatorio_projetos_inovacao.txt');
-        }
-
-        function gerarRanking() {
-            // Identificar sugestões para Mostracitec
-            const projetosMostracitec = projetos.map(projeto => {
-                const avaliacoesProjeto = avaliacoes.filter(a => a.projetoId === projeto.id);
-                let mediaViabilidade = 0;
-                let mediaSustentabilidade = 0;
-                if (avaliacoesProjeto.length > 0) {
-                    mediaViabilidade = avaliacoesProjeto.reduce((sum, a) => sum + a.viabilidade, 0) / avaliacoesProjeto.length;
-                    mediaSustentabilidade = avaliacoesProjeto.reduce((sum, a) => sum + a.sustentabilidade, 0) / avaliacoesProjeto.length;
-                }
-                return {
-                    id: projeto.id,
-                    mediaViabilidade,
-                    mediaSustentabilidade
-                };
-            });
-            const sugestoesMostracitec = projetosMostracitec
-                .sort((a, b) => (b.mediaViabilidade + b.mediaSustentabilidade) - (a.mediaViabilidade + a.mediaSustentabilidade))
-                .slice(0, 3)
-                .map(p => p.id);
-            const ranking = projetos.map(projeto => {
-                const avaliacoesProjeto = avaliacoes.filter(a => a.projetoId === projeto.id);
-                const media = avaliacoesProjeto.length > 0 
-                    ? avaliacoesProjeto.reduce((sum, a) => sum + a.total, 0) / avaliacoesProjeto.length
-                    : 0;
-                return {
-                    ...projeto,
-                    media: media,
-                    totalAvaliacoes: avaliacoesProjeto.length
-                };
-            }).sort((a, b) => b.media - a.media);
-            let relatorio = 'RANKING FINAL - PROJETOS DE INOVAÇÃO\n';
-            relatorio += '='.repeat(50) + '\n\n';
-            ranking.forEach((projeto, index) => {
-                const destaqueMostracitec = sugestoesMostracitec.includes(projeto.id) ? ' *** SUGESTÃO MOSTRACITEC ***' : '';
-                relatorio += `${index + 1}º LUGAR${destaqueMostracitec}\n`;
-                relatorio += `Projeto: ${projeto.nome}\n`;
-                relatorio += `Curso: ${projeto.curso}\n`;
-                relatorio += `Equipe: ${projeto.equipe}\n`;
-                relatorio += `Média: ${projeto.media.toFixed(2)}/500\n`;
-                relatorio += `Avaliações: ${projeto.totalAvaliacoes}\n\n`;
-            });
-            downloadFile(relatorio, 'ranking_projetos_inovacao.txt');
-        }
-
-        function calcularPontuacao() {
-            const ranking = projetos.map(projeto => {
-                const avaliacoesProjeto = avaliacoes.filter(a => a.projetoId === projeto.id);
-                const media = avaliacoesProjeto.length > 0 
-                    ? avaliacoesProjeto.reduce((sum, a) => sum + a.total, 0) / avaliacoesProjeto.length
-                    : 0;
-                
-                return {
-                    ...projeto,
-                    media: media
-                };
-            }).sort((a, b) => b.media - a.media);
-            
-            let relatorio = 'PONTUAÇÃO POR POSIÇÃO - PROJETOS DE INOVAÇÃO\n';
-            relatorio += '='.repeat(50) + '\n\n';
-            
-            const pontuacoes = [1000, 850, 700, 600, 500];
-            
-            ranking.forEach((projeto, index) => {
-                const posicao = index + 1;
-                const pontos = index < pontuacoes.length ? pontuacoes[index] : 0;
-                
-                relatorio += `${posicao}º LUGAR - ${pontos} PONTOS\n`;
-                relatorio += `Projeto: ${projeto.nome}\n`;
-                relatorio += `Curso: ${projeto.curso}\n`;
-                relatorio += `Equipe: ${projeto.equipe}\n`;
-                relatorio += `Média de avaliação: ${projeto.media.toFixed(2)}/500\n\n`;
-            });
-            
-            downloadFile(relatorio, 'pontuacao_posicao_inovacao.txt');
-        }
-
-        function gerarRelatorioPDF() {
-            const data = {
-                projetos: projetos,
-                avaliacoes: avaliacoes
+            // Função global para fechar sucesso
+            window.fecharSucesso = function() {
+                document.getElementById('sucessoInovacao').classList.add('hidden');
+                resetForm();
             };
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'relatorio_inovacao_pdf.php';
-            form.target = '_blank';
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'json';
-            input.value = JSON.stringify(data);
-            form.appendChild(input);
-            document.body.appendChild(form);
-            form.submit();
-            document.body.removeChild(form);
-        }
-
-        function downloadFile(content, filename) {
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-2xl text-white font-semibold ${
-                type === 'success' ? 'bg-green-600' : 'bg-red-600'
-            } slide-up`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-
-        // Event listeners
-        document.getElementById('avaliacaoModal').addEventListener('click', function(e) {
-            if (e.target === this) fecharAvaliacao();
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                if (!document.getElementById('avaliacaoModal').classList.contains('hidden')) fecharAvaliacao();
-            }
         });
     </script>
 </body>

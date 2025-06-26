@@ -1,6 +1,6 @@
 <?php
 require_once('../models/main.model.php');
-
+print_r($_SESSION);
 if (
     isset($_POST['criterio']) && !empty($_POST['criterio']) &&
     isset($_POST['pontuacao']) && !empty($_POST['pontuacao']) &&
@@ -24,7 +24,7 @@ if (
             header('location:../views/Empreendedorismo.php?ja_confirmado');
             exit();
     }
-} else {
+} /*else {
     header('location:../views/Empreendedorismo.php?empty');
     exit();
-} 
+} */
