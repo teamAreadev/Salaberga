@@ -676,7 +676,7 @@ $session->autenticar_session();
                 <div class="flex items-center gap-3">
                     <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo" class="h-12 w-auto object-contain">
                     <div>
-                        <h1 class="md:text-xl lg:text-lg font-bold text-primary">Subsistema Alunos <span class="text-secondary">STGM</span></h1>
+                        <h1 class="md:text-xl lg:text-lg font-bold text-primary">Subsistema Sesmated <span class="text-secondary">STGM</span></h1>
                         <div class="h-0.5 bg-primary/20 rounded-full mt-1"></div>
                     </div>
                 </div>
