@@ -35,10 +35,23 @@
             background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
             color: var(--text-color);
             min-height: 100vh;
+            padding: 2rem 0;
+        }
+        .page-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 2rem 1rem;
+        }
+        .content-wrapper {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0;
+            width: 100%;
+            max-width: 28rem;
         }
         .main-container {
             background: var(--card-bg);
@@ -46,7 +59,7 @@
             border-radius: 2rem;
             border: 1.5px solid rgba(255,255,255,0.08);
             box-shadow: 0 8px 32px 0 rgba(0,0,0,0.25);
-            margin: 32px 0;
+            width: 100%;
         }
         .header-section {
             background: linear-gradient(135deg, var(--header-color) 0%, #009639 100%);
@@ -102,6 +115,19 @@
             pointer-events: none;
             transition: color 0.3s;
         }
+        .password-toggle {
+            color: #bdbdbd;
+            right: 0.8rem;
+            font-size: 1.1rem;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .password-toggle:hover {
+            color: var(--header-color);
+        }
         .input-field:focus + .input-icon,
         .input-group:hover .input-icon {
             color: var(--header-color);
@@ -146,146 +172,170 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            padding: 1rem;
+        }
         @media (max-width: 600px) {
+            .page-container {
+                padding: 1rem 0.5rem;
+            }
             .main-container {
                 border-radius: 1rem;
-                margin: 0;
             }
             .form-section, .header-section {
-                padding: 1.2rem 0.7rem;
+                padding: 1.5rem 1rem;
             }
             .header-section h1 {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
+            }
+            body {
+                padding: 1rem 0;
+            }
+        }
+        @media (max-height: 700px) {
+            .content-wrapper {
+                align-items: flex-start;
+            }
+            .page-container {
+                justify-content: flex-start;
+                padding-top: 1rem;
             }
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f] p-0">
-    <div class="w-full max-w-md flex flex-col justify-center min-h-screen">
-        <div class="main-container rounded-2xl overflow-hidden shadow-xl">
-            <div class="header-section px-6 py-8 text-center relative rounded-b-3xl shadow-lg">
-                <div class="icon-container rounded-2xl flex items-center justify-center mx-auto mb-4 relative z-10">
-                    <i class="fas fa-user-plus text-3xl" style="color:rgba(255,255,255,0.92);"></i>
+<body class="bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f]">
+    <div class="page-container">
+        <div class="content-wrapper">
+            <div class="main-container rounded-2xl overflow-hidden shadow-xl">
+                <div class="header-section px-6 py-8 text-center relative rounded-b-3xl shadow-lg">
+                    <div class="icon-container rounded-2xl flex items-center justify-center mx-auto mb-4 relative z-10">
+                        <i class="fas fa-user-plus text-3xl" style="color:rgba(255,255,255,0.92);"></i>
+                    </div>
+                    <h1 class="font-extrabold mb-1 relative z-10 text-white drop-shadow-lg tracking-wide">
+                        Fazer Registro
+                    </h1>
+                    <p class="relative z-10 font-medium tracking-wide drop-shadow" style="color: #fff; text-shadow: 0 2px 8px #00000022;">
+                        Junte-se ao <span style="color: #ffb733; font-weight: bold;">Sistema SESMATED</span> 
+                    </p>
                 </div>
-                <h1 class="font-extrabold mb-1 relative z-10 text-white drop-shadow-lg tracking-wide">
-                    Fazer Registro
-                </h1>
-                <p class="relative z-10 font-medium tracking-wide drop-shadow" style="color: #fff; text-shadow: 0 2px 8px #00000022;">
-                    Junte-se ao <span style="color: #ffb733; font-weight: bold;">Sistema SESMATED</span> 
-                </p>
-            </div>
-            <div class="form-section form-container px-6 py-8">
-                <?php if (isset($_GET['error'])): ?>
-                    <div class="alert-error px-5 py-4 rounded-xl mb-6">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-exclamation-triangle text-lg"></i>
-                            </div>
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium mb-1">Erro no cadastro</h3>
-                                <div class="text-sm opacity-90">
-                                    <p class="mb-1"><?php echo htmlspecialchars($_GET['error']); ?></p>
+                <div class="form-section form-container px-6 py-8">
+                    <?php if (isset($_GET['error'])): ?>
+                        <div class="alert-error px-5 py-4 rounded-xl mb-6">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-triangle text-lg"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-medium mb-1">Erro no cadastro</h3>
+                                    <div class="text-sm opacity-90">
+                                        <p class="mb-1"><?php echo htmlspecialchars($_GET['error']); ?></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                <?php endif; ?>
-                <?php if (isset($_GET['success'])): ?>
-                    <div class="alert-success px-5 py-4 rounded-xl mb-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-check-circle text-lg"></i>
+                    <?php endif; ?>
+                    <?php if (isset($_GET['success'])): ?>
+                        <div class="alert-success px-5 py-4 rounded-xl mb-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-check-circle text-lg"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-medium mb-1">Sucesso!</h3>
+                                    <p class="text-sm opacity-90"><?php echo htmlspecialchars($_GET['success']); ?></p>
+                                </div>
                             </div>
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium mb-1">Sucesso!</h3>
-                                <p class="text-sm opacity-90"><?php echo htmlspecialchars($_GET['success']); ?></p>
+                        </div>
+                    <?php endif; ?>
+                    <form action="../controllers/controller_main.php" method="POST" id="registerForm" class="space-y-6">
+                        <div class="input-group">
+                            <label for="nome" class="block text-sm font-semibold mb-2 text-gray-200">
+                                Nome Completo
+                            </label>
+                            <div class="relative">
+                                <input 
+                                    type="text" 
+                                    id="nome" 
+                                    name="nome" 
+                                    value="<?php echo htmlspecialchars($_POST['nome'] ?? ''); ?>"
+                                    class="input-field w-full pr-4 py-4 rounded-xl text-sm font-medium"
+                                    placeholder="Digite seu nome completo"
+                                    required
+                                >
+                                <span class="input-icon"><i class="fas fa-user"></i></span>
                             </div>
                         </div>
-                    </div>
-                <?php endif; ?>
-                <form action="../controllers/controller_main.php" method="POST" id="registerForm" class="space-y-6">
-                    <div class="input-group">
-                        <label for="nome" class="block text-sm font-semibold mb-2 text-gray-200">
-                            Nome Completo
-                        </label>
-                        <div class="relative">
-                            <input 
-                                type="text" 
-                                id="nome" 
-                                name="nome" 
-                                value="<?php echo htmlspecialchars($_POST['nome'] ?? ''); ?>"
-                                class="input-field w-full pr-4 py-4 rounded-xl text-sm font-medium"
-                                placeholder="Digite seu nome completo"
-                                required
-                            >
-                            <span class="input-icon"><i class="fas fa-user"></i></span>
+                        <div class="input-group">
+                            <label for="email" class="block text-sm font-semibold mb-2 text-gray-200">
+                                Endereço de Email
+                            </label>
+                            <div class="relative">
+                                <input 
+                                    type="email" 
+                                    id="email" 
+                                    name="email" 
+                                    value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>"
+                                    class="input-field w-full pr-4 py-4 rounded-xl text-sm font-medium"
+                                    placeholder="Digite seu email"
+                                    required
+                                >
+                                <span class="input-icon"><i class="fas fa-envelope"></i></span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="email" class="block text-sm font-semibold mb-2 text-gray-200">
-                            Endereço de Email
-                        </label>
-                        <div class="relative">
-                            <input 
-                                type="email" 
-                                id="email" 
-                                name="email" 
-                                value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>"
-                                class="input-field w-full pr-4 py-4 rounded-xl text-sm font-medium"
-                                placeholder="Digite seu email"
-                                required
-                            >
-                            <span class="input-icon"><i class="fas fa-envelope"></i></span>
+                        <div class="input-group">
+                            <label for="data" class="block text-sm font-semibold mb-2 text-gray-200">Data de avaliação</label>
+                            <input type="date" id="data" name="data" value="<?php echo htmlspecialchars($_POST['data'] ?? ''); ?>" class="input-field w-full pr-4 py-4 rounded-xl text-sm font-medium" required>
                         </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="data" class="block text-sm font-semibold mb-2 text-gray-200">Data de avaliação</label>
-                        <input type="date" id="data" name="data" value="<?php echo htmlspecialchars($_POST['data'] ?? ''); ?>" class="input-field w-full pr-4 py-4 rounded-xl text-sm font-medium" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="turno" class="block text-sm font-semibold mb-2 text-gray-200">Turno</label>
-                        <select id="turno" name="turno" class="input-field w-full pr-4 py-4 rounded-xl text-sm font-medium" required>
-                            <option value="">Selecione o turno</option>
-                            <option value="Manhã" <?php if ((isset($_POST['turno']) && $_POST['turno'] == 'Manhã')) echo 'selected'; ?>>Manhã</option>
-                            <option value="Tarde" <?php if ((isset($_POST['turno']) && $_POST['turno'] == 'Tarde')) echo 'selected'; ?>>Tarde</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label for="senha" class="block text-sm font-semibold mb-2 text-gray-200">Senha</label>
-                        <div class="relative">
-                            <input 
-                                type="password" 
-                                id="senha" 
-                                name="senha" 
-                                value="<?php echo htmlspecialchars($_POST['senha'] ?? ''); ?>"
-                                class="input-field w-full pr-4 py-4 rounded-xl text-sm font-medium"
-                                placeholder="Digite sua senha"
-                                required
-                            >
-                            <span class="input-icon"><i class="fas fa-lock"></i></span>
+                        <div class="input-group">
+                            <label for="turno" class="block text-sm font-semibold mb-2 text-gray-200">Turno</label>
+                            <select id="turno" name="turno" class="input-field w-full pr-4 py-4 rounded-xl text-sm font-medium" required>
+                                <option value="">Selecione o turno</option>
+                                <option value="Manhã" <?php if ((isset($_POST['turno']) && $_POST['turno'] == 'Manhã')) echo 'selected'; ?>>Manhã</option>
+                                <option value="Tarde" <?php if ((isset($_POST['turno']) && $_POST['turno'] == 'Tarde')) echo 'selected'; ?>>Tarde</option>
+                            </select>
                         </div>
-                    </div>
-                    <button 
-                        type="submit" 
-                        class="btn-primary w-full focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 relative overflow-hidden"
-                    >
-                        <span class="relative z-10">
-                            <i class="fas fa-user-plus mr-2"></i>
-                            Criar Minha Conta
-                        </span>
-                    </button>
-                </form>
-                <div class="divider"></div>
-                <a href="./relatorios/avaliadores/avaliadores.php"
-                   class="block w-full text-center py-3 px-6 rounded-xl font-semibold text-sm transition-all duration-200
-                          bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white shadow-md
-                          hover:from-green-500 hover:to-green-700 hover:text-white hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400">
-                   <i class="fas fa-sign-in-alt mr-2"></i>
-                    Gerar relatório
-                </a>
+                        <div class="input-group">
+                            <label for="senha" class="block text-sm font-semibold mb-2 text-gray-200">Senha</label>
+                            <div class="relative">
+                                <input 
+                                    type="password" 
+                                    id="senha" 
+                                    name="senha" 
+                                    value="<?php echo htmlspecialchars($_POST['senha'] ?? ''); ?>"
+                                    class="input-field w-full pr-12 py-4 rounded-xl text-sm font-medium"
+                                    placeholder="Digite sua senha"
+                                    required
+                                >
+                                <span class="input-icon"><i class="fas fa-lock"></i></span>
+                                <span class="password-toggle" onclick="togglePassword()">
+                                    <i class="fas fa-eye" id="toggleIcon"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <button 
+                            type="submit" 
+                            class="btn-primary w-full focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 relative overflow-hidden"
+                        >
+                            <span class="relative z-10">
+                                <i class="fas fa-user-plus mr-2"></i>
+                                Criar Minha Conta
+                            </span>
+                        </button>
+                    </form>
+                    <div class="divider"></div>
+                    <a href="./relatorios/avaliadores/avaliadores.php"
+                       class="block w-full text-center py-3 px-6 rounded-xl font-semibold text-sm transition-all duration-200
+                              bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white shadow-md
+                              hover:from-green-500 hover:to-green-700 hover:text-white hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400">
+                       <i class="fas fa-sign-in-alt mr-2"></i>
+                        Gerar relatório
+                    </a>
+                </div>
             </div>
         </div>
-        <div class="text-center mt-8">
+        <div class="footer">
             <p class="text-gray-500 text-xs">
                 © 2025 <span class="logo-text font-semibold">SESMATED</span> - Salaberga
             </p>
@@ -293,6 +343,21 @@
     </div>
 
     <script>
+        function togglePassword() {
+            const passwordField = document.getElementById('senha');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             const nome = document.getElementById('nome').value.trim();
             const email = document.getElementById('email').value.trim();
