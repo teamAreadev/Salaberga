@@ -537,10 +537,21 @@ $session->autenticar_session();
                         </select>
                     </div>
                     <div id="inputLucroDiaContainer" class="mt-4 hidden">
-                        <label for="inputLucroDia" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">
-                            Valor Final do Lucro do Dia
+                        <label for="valorDeclarado" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">
+                            Valor Declarado
                         </label>
-                        <input type="number" id="inputLucroDia" name="valor_lucro" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor final do lucro">
+                        <input type="number" id="valorDeclarado" name="valor_declarado" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor declarado" required>
+
+                        <label for="valorEspecie" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">
+                            Valor em Espécie
+                        </label>
+                        <input type="number" id="valorEspecie" name="em_especie" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor em espécie" required>
+
+                        <label for="valorConta" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">
+                            Valor em Conta
+                        </label>
+                        <input type="number" id="valorConta" name="em_conta" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none text-center text-xl font-bold mb-4" step="0.01" min="0" placeholder="Digite o valor em conta" required>
+
                         <button type="submit" class="btn-primary w-full rounded-2xl font-semibold text-white flex items-center justify-center gap-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 transition-all">
                             <i class="fas fa-save"></i> Salvar Lucro do Dia
                         </button>

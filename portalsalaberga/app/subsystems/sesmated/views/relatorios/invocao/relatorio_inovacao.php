@@ -107,19 +107,19 @@ class PDF extends connect
             $bonus = 0;
             switch ($rank) {
                 case 1:
-                    $bonus = 500;
+                    $bonus = 1000;
                     break;
                 case 2:
-                    $bonus = 450;
+                    $bonus = 850;
                     break;
                 case 3:
-                    $bonus = 400;
+                    $bonus = 700;
                     break;
                 case 4:
-                    $bonus = 350;
+                    $bonus = 600;
                     break;
                 case 5:
-                    $bonus = 300;
+                    $bonus = 500;
                     break;
                 default:
                     $bonus = 0;

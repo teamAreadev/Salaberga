@@ -1,6 +1,44 @@
 <?php
 
-require_once('../../../../entradaSaida/app/main/config/Database.php');
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Classe de conexão ao banco de dados (direto no arquivo)
+class connect
+{
+    protected $connect;
+
+    function __construct()
+    {
+        $this->connect_database();
+    }
+
+    function connect_database()
+    {
+        try {
+            $HOST = 'localhost';
+            $DATABASE = 'entradasaida';
+            $USER = 'root';
+            $PASSWORD = '';
+            $this->connect = new PDO('mysql:host=' . $HOST . ';dbname=' . $DATABASE, $USER, $PASSWORD);
+        } catch (PDOException $e) {
+            $HOST = 'localhost';
+            $DATABASE = 'u750204740_entradasaida';
+            $USER = 'u750204740_entradasaida';
+            $PASSWORD = 'paoComOvo123!@##';
+            $this->connect = new PDO('mysql:host=' . $HOST . ';dbname=' . $DATABASE, $USER, $PASSWORD);
+        } catch (PDOException $e) {
+            die('Erro! O sistema não possui conexão com o banco de dados.');
+        }
+    }
+
+    public function getConnection()
+    {
+        return $this->connect;
+    }
+}
+
 require_once('../../../assets/fpdf/fpdf.php');
 
 try {
@@ -54,6 +92,9 @@ $stmt = $conn->prepare($query);
 $stmt->execute();
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Debug: loga os resultados do banco
+error_log('Resultados do banco: ' . print_r($results, true));
+
 $turmasMapping = [
     9 => '3º Ano',
     10 => '3º Ano',
@@ -67,6 +108,9 @@ foreach ($results as $row) {
     $frequenciaPorEvento[$row['nome_evento']]['data'] = $row['data_evento'];
     $frequenciaPorEvento[$row['nome_evento']]['alunos'][] = $row;
 }
+
+// Debug: loga o array de frequência por evento
+error_log('Frequencia por evento: ' . print_r($frequenciaPorEvento, true));
 
 class PDF extends FPDF
 {
@@ -96,14 +140,22 @@ class PDF extends FPDF
 }
 
 $pdf = new PDF();
+// Debug: verifica se o PDF foi instanciado
+if (!$pdf) {
+    error_log('Erro ao instanciar o FPDF');
+} else {
+    error_log('FPDF instanciado com sucesso');
+}
 $pdf->AliasNbPages();
 $pdf->SetMargins(5, 10, 5); // Diminui as margens para alargar a tabela
 
 if (empty($frequenciaPorEvento)) {
+    error_log('Nenhum dado de frequência encontrado');
     $pdf->AddPage('P', 'A4');
     $pdf->SetFont('Arial', 'B', 16);
     $pdf->Cell(0, 10, 'Nenhum dado de frequencia encontrado.', 0, 1, 'C');
 } else {
+    error_log('Dados de frequência encontrados');
     $pdf->AddPage('P', 'A4');
     foreach ($frequenciaPorEvento as $nomeEvento => $dadosEvento) {
         $dataEvento = date('d/m/Y', strtotime($dadosEvento['data']));
@@ -156,5 +208,140 @@ if (empty($frequenciaPorEvento)) {
     }
 }
 
+// ===================== RESUMO DE PONTUAÇÃO POR CURSO =====================
+
+// 1. Buscar todos os cursos e suas turmas
+$cursos = [];
+$turmasPorCurso = [];
+$sqlCursos = $conn->query("SELECT id_curso, curso FROM curso");
+while ($row = $sqlCursos->fetch(PDO::FETCH_ASSOC)) {
+    $cursos[$row['id_curso']] = $row['curso'];
+    $turmasPorCurso[$row['id_curso']] = [];
+}
+$sqlTurmas = $conn->query("SELECT id_turma, id_curso FROM aluno GROUP BY id_turma, id_curso");
+while ($row = $sqlTurmas->fetch(PDO::FETCH_ASSOC)) {
+    $turmasPorCurso[$row['id_curso']][] = $row['id_turma'];
+}
+
+// 2. Definir regras de proporcionalidade
+function getProporcao($numTurmas, $tipo) {
+    if ($tipo === 'palestra') {
+        if ($numTurmas >= 3) return 9 * $numTurmas;
+        if ($numTurmas == 2) return 6 * $numTurmas;
+        if ($numTurmas == 1) return 3;
+    } else if ($tipo === 'workshop') {
+        if ($numTurmas >= 3) return 3 * $numTurmas;
+        if ($numTurmas == 2) return 2 * $numTurmas;
+        if ($numTurmas == 1) return 1;
+    }
+    return 0;
+}
+
+// 3. Buscar todos os eventos do tipo palestra e workshop
+$eventos = [];
+$sqlEventos = $conn->query("SELECT id_evento, nome, tipo FROM evento");
+while ($row = $sqlEventos->fetch(PDO::FETCH_ASSOC)) {
+    $eventos[$row['id_evento']] = [
+        'nome' => $row['nome'],
+        'tipo' => $row['tipo']
+    ];
+}
+
+// 4. Contar presenças por curso em cada evento
+$presencasPorCursoEvento = [];
+$sqlPresencas = $conn->query("SELECT f.id_evento, a.id_curso, COUNT(DISTINCT f.id_aluno) as total FROM frequencia_sesmated f JOIN aluno a ON f.id_aluno = a.id_aluno WHERE f.presente = 1 GROUP BY f.id_evento, a.id_curso");
+while ($row = $sqlPresencas->fetch(PDO::FETCH_ASSOC)) {
+    $presencasPorCursoEvento[$row['id_evento']][$row['id_curso']] = $row['total'];
+}
+
+// 5. Calcular pontuação por curso para palestras e workshops
+$resumoPontuacao = [];
+foreach ($cursos as $id_curso => $nome_curso) {
+    $numTurmas = count($turmasPorCurso[$id_curso]);
+    // Palestras
+    $totalEsperadoPalestra = 0;
+    $totalPresentePalestra = 0;
+    $numPalestras = 0;
+    foreach ($eventos as $id_evento => $ev) {
+        if ($ev['tipo'] === 'palestra') {
+            $numPalestras++;
+            $totalEsperadoPalestra += getProporcao($numTurmas, 'palestra') / ($numPalestras > 0 ? $numPalestras : 1);
+            $totalPresentePalestra += $presencasPorCursoEvento[$id_evento][$id_curso] ?? 0;
+        }
+    }
+    $porcentagemPalestra = $totalEsperadoPalestra > 0 ? ($totalPresentePalestra / $totalEsperadoPalestra) * 100 : 0;
+    if ($porcentagemPalestra >= 100) {
+        $pontosPalestra = 500;
+    } elseif ($porcentagemPalestra >= 80) {
+        $pontosPalestra = 400;
+    } elseif ($porcentagemPalestra >= 50) {
+        $pontosPalestra = 300;
+    } else {
+        $pontosPalestra = 0;
+    }
+    // Workshops
+    $totalEsperadoWorkshop = 0;
+    $totalPresenteWorkshop = 0;
+    $numWorkshops = 0;
+    foreach ($eventos as $id_evento => $ev) {
+        if ($ev['tipo'] === 'workshop') {
+            $numWorkshops++;
+            $totalEsperadoWorkshop += getProporcao($numTurmas, 'workshop') / ($numWorkshops > 0 ? $numWorkshops : 1);
+            $totalPresenteWorkshop += $presencasPorCursoEvento[$id_evento][$id_curso] ?? 0;
+        }
+    }
+    $porcentagemWorkshop = $totalEsperadoWorkshop > 0 ? ($totalPresenteWorkshop / $totalEsperadoWorkshop) * 100 : 0;
+    if ($porcentagemWorkshop >= 100) {
+        $pontosWorkshop = 500;
+    } elseif ($porcentagemWorkshop >= 80) {
+        $pontosWorkshop = 400;
+    } elseif ($porcentagemWorkshop >= 50) {
+        $pontosWorkshop = 300;
+    } else {
+        $pontosWorkshop = 0;
+    }
+    $resumoPontuacao[$nome_curso] = [
+        'palestra' => [
+            'presenca' => $totalPresentePalestra,
+            'esperado' => $totalEsperadoPalestra,
+            'porcentagem' => $porcentagemPalestra,
+            'pontos' => $pontosPalestra
+        ],
+        'workshop' => [
+            'presenca' => $totalPresenteWorkshop,
+            'esperado' => $totalEsperadoWorkshop,
+            'porcentagem' => $porcentagemWorkshop,
+            'pontos' => $pontosWorkshop
+        ]
+    ];
+}
+
+// 6. Adicionar ao PDF o quadro-resumo
+$pdf->AddPage('P', 'A4');
+$pdf->SetFont('Arial', 'B', 14);
+$pdf->Cell(0, 10, utf8_decode('Resumo de Pontuação por Curso'), 0, 1, 'C');
+$pdf->Ln(4);
+$pdf->SetFont('Arial', 'B', 11);
+$pdf->Cell(50, 8, utf8_decode('Curso'), 1, 0, 'C', true);
+$pdf->Cell(40, 8, utf8_decode('Palestras'), 1, 0, 'C', true);
+$pdf->Cell(30, 8, utf8_decode('%'), 1, 0, 'C', true);
+$pdf->Cell(30, 8, utf8_decode('Pontos'), 1, 0, 'C', true);
+$pdf->Cell(40, 8, utf8_decode('Workshops'), 1, 0, 'C', true);
+$pdf->Cell(30, 8, utf8_decode('%'), 1, 0, 'C', true);
+$pdf->Cell(30, 8, utf8_decode('Pontos'), 1, 1, 'C', true);
+$pdf->SetFont('Arial', '', 10);
+foreach ($resumoPontuacao as $curso => $dados) {
+    $pdf->Cell(50, 8, utf8_decode(ucfirst($curso)), 1, 0, 'C');
+    $pdf->Cell(40, 8, $dados['palestra']['presenca'] . '/' . $dados['palestra']['esperado'], 1, 0, 'C');
+    $pdf->Cell(30, 8, number_format($dados['palestra']['porcentagem'], 1, ',', '.') . '%', 1, 0, 'C');
+    $pdf->Cell(30, 8, $dados['palestra']['pontos'], 1, 0, 'C');
+    $pdf->Cell(40, 8, $dados['workshop']['presenca'] . '/' . $dados['workshop']['esperado'], 1, 0, 'C');
+    $pdf->Cell(30, 8, number_format($dados['workshop']['porcentagem'], 1, ',', '.') . '%', 1, 0, 'C');
+    $pdf->Cell(30, 8, $dados['workshop']['pontos'], 1, 1, 'C');
+}
+
+// Debug: verifica o tamanho do PDF gerado
+$pdfContent = $pdf->Output('S');
+error_log('Tamanho do PDF gerado: ' . strlen($pdfContent));
 $pdf->Output('I', 'Relatorio_Frequencia.pdf');
 ?>

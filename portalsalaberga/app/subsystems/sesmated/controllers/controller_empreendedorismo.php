@@ -30,14 +30,16 @@ if (
 } else if (
     isset($_POST['curso']) && !empty($_POST['curso']) &&
     isset($_POST['id_avaliador']) && !empty($_POST['id_avaliador']) &&
-    isset($_POST['valor_lucro']) && !empty($_POST['valor_lucro'])
+    isset($_POST['valor_declarado']) && isset($_POST['em_especie']) && isset($_POST['em_conta'])
 ) {
     $id_curso = $_POST['curso'];
     $id_avaliador = $_POST['id_avaliador'];
-    $lucro = $_POST['valor_lucro'];
+    $valor_declarado = $_POST['valor_declarado'];
+    $em_especie = $_POST['em_especie'];
+    $em_conta = $_POST['em_conta'];
 
     $main_model = new main_model();
-    $result = $main_model->confirmar_empreendedorismo($id_curso, $id_avaliador, $lucro);
+    $result = $main_model->confirmar_empreendedorismo($id_curso, $id_avaliador, $valor_declarado, $em_especie, $em_conta);
 
     switch ($result) {
         case 1:

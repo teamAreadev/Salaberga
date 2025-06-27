@@ -357,7 +357,7 @@ class main_model extends connect
     }
 
     //empreendedorismo
-    public function confirmar_empreendedorismo($id_curso, $id_avaliador, $lucro)
+    public function confirmar_empreendedorismo($id_curso, $id_avaliador, $valor_declarado, $em_especie, $em_conta)
     {
         $stmt_id_avaliador = $this->connect->prepare("SELECT id FROM avaliadores WHERE id_usuario = :id_usuario");
         $stmt_id_avaliador->bindValue(':id_usuario', $id_avaliador);
@@ -366,10 +366,12 @@ class main_model extends connect
 
         $id_avaliador = $result['id'];
 
-        $stmt_adcionar = $this->connect->prepare("INSERT INTO `tarefa_12_empreendedorismo`( `curso_id`, `id_avaliador`, `valor_arrecadado`) VALUES (:curso_id, :id_avaliador, :lucro)");
+        $stmt_adcionar = $this->connect->prepare("INSERT INTO tarefa_12_empreendedorismo (curso_id, id_avaliador, valor_declarado, em_especie, em_conta) VALUES (:curso_id, :id_avaliador, :valor_declarado, :em_especie, :em_conta)");
         $stmt_adcionar->bindValue(':curso_id', $id_curso);
         $stmt_adcionar->bindValue(':id_avaliador', $id_avaliador);
-        $stmt_adcionar->bindValue(':lucro', $lucro);
+        $stmt_adcionar->bindValue(':valor_declarado', $valor_declarado);
+        $stmt_adcionar->bindValue(':em_especie', $em_especie);
+        $stmt_adcionar->bindValue(':em_conta', $em_conta);
 
         if ($stmt_adcionar->execute()) {
             return 1;

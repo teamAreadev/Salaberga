@@ -936,7 +936,8 @@ $session->autenticar_session();
                                 <h3 class="app-name">Eventos</h3>
                             </div>
                             <div class="card-footer">
-                                <a href="../../../subsystems/sesmated/views/relatorios/rifas/frequenciaEventos.php" class="category-tag">Relatório</a>
+                                <a href="../../../subsystems/sesmated/views/relatorios/rifas/frequenciaEventos.php" class="category-tag">Relatório geral</a>
+                                <a href="../../../subsystems/sesmated/views/relatorios/rifas/resultado_pontuacao.php" class="category-tag">Resultado</a>
                             </div>
                         </div>
                     </a>
