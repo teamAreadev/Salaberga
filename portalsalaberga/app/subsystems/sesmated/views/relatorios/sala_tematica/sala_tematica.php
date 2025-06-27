@@ -97,9 +97,8 @@ class PDF extends connect
         $fpdf->SetTextColor(0, 0, 0);
 
         // Cabeçalho da segunda tabela
-        $fpdf->SetX(120);
+        $fpdf->SetX(170);
         $fpdf->Cell(120, 20, utf8_decode('Curso'), 1, 0, 'C', true);
-        $fpdf->Cell(100, 20, utf8_decode('Soma Total'), 1, 0, 'C', true);
         $fpdf->Cell(100, 20, utf8_decode('Pontuação'), 1, 1, 'C', true);
 
         // Dados da segunda tabela
@@ -108,8 +107,6 @@ class PDF extends connect
         $fill = false;
         $rank = 1;
         foreach ($results_sum as $row) {
-            $total = $row['total_adequacao'] + $row['total_qualidade'] + $row['total_criatividade'] + 
-                     $row['total_didatica'] + $row['total_equipe'] + $row['total_sustentabilidade'];
             $bonus = 0;
             switch ($rank) {
                 case 1:
@@ -131,9 +128,8 @@ class PDF extends connect
                     $bonus = 0;
                     break;
             }
-            $fpdf->SetX(120);
+            $fpdf->SetX(170);
             $fpdf->Cell(120, 20, utf8_decode($row['nome_curso']), 1, 0, 'C', $fill);
-            $fpdf->Cell(100, 20, utf8_decode($total), 1, 0, 'C', $fill);
             $fpdf->Cell(100, 20, utf8_decode($bonus), 1, 1, 'C', $fill);
             $fill = !$fill;
             $rank++;
