@@ -448,7 +448,7 @@ if (isset($_GET['confirmado'])) {
                     <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Avaliação da Paródia</p>
                 </div>
                 <div class="flex items-center gap-2 user-chip-desktop">
-                    <a href="abertura.php" class="btn-secondary px-4 py-2 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
+                    <a href="../../../main/views/subsytem/subsistema_sesmated.php" class="btn-secondary px-4 py-2 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
                         <i class="fas fa-arrow-left"></i>
                         Voltar
                     </a>
