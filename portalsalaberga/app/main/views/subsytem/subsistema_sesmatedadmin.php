@@ -777,9 +777,7 @@ $session->autenticar_session();
                         <img src="https://i.postimg.cc/MprBmBVH/rifa-removebg-preview.png" alt="Rifa" class="app-icon">
                     </div>
                     <h3 class="app-name">Rifa</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/resumo_curso.php">Resumo Curso</a></button>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/resumo_turma.php">Resumo Turma</a></button>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/resumo_total.php">Resumo Total</a></button>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/resumo_turma.php">Relatório</a></button>
                 </div>
             </a>
 
@@ -810,6 +808,15 @@ $session->autenticar_session();
                     </div>
                     <h3 class="app-name">Inovação</h3>
                     <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/invocao/relatorio_inovacao.php">Relatório</a></button>
+                </div>
+            </a>
+            <a href="../../../subsystems/sesmated/views/grito.php" class="app-card-link" data-card-key="Inovacao">
+                <div class="app-card">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Inovação" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Grito</h3>
+                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/grito/grito_relatorio.php">Relatório</a></button>
                 </div>
             </a>
 

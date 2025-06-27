@@ -29,12 +29,12 @@ if (
     }
 } else if (
     isset($_POST['curso']) && !empty($_POST['curso']) &&
-    isset($_POST['avaliador']) && !empty($_POST['avaliador']) &&
-    isset($_POST['lucro']) && !empty($_POST['lucro'])
+    isset($_POST['id_avaliador']) && !empty($_POST['id_avaliador']) &&
+    isset($_POST['valor_lucro']) && !empty($_POST['valor_lucro'])
 ) {
     $id_curso = $_POST['curso'];
-    $id_avaliador = $_POST['avaliador'];
-    $lucro = $_POST['lucro'];
+    $id_avaliador = $_POST['id_avaliador'];
+    $lucro = $_POST['valor_lucro'];
 
     $main_model = new main_model();
     $result = $main_model->confirmar_empreendedorismo($id_curso, $id_avaliador, $lucro);

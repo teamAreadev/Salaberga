@@ -17,48 +17,81 @@ class PDF extends connect
         $fpdf = new FPDF('P', 'pt', 'A4');
         $fpdf->AliasNbPages();
 
-        // Adiciona uma página
+        // Primeira página: Tabelas com somatório e bônus
         $fpdf->AddPage();
-
-        // Adiciona o fundo, ajustando as dimensões
         $fpdf->Image('../../../assets/fundo.jpg', 0, 0, $fpdf->GetPageWidth(), $fpdf->GetPageHeight());
 
-        // Consulta SQL
+        // Consulta SQL para a primeira página
         $query = "
-            SELECT c.nome_curso, a.nome, g.pontuacao 
+            SELECT 
+                c.nome_curso,
+                SUM(g.pontuacao) as total_pontuacao
             FROM cursos c 
             INNER JOIN tarefa_02_grito_guerra g ON g.curso_id = c.curso_id 
-            INNER JOIN avaliadores a ON a.id = g.id_avaliador;
+            GROUP BY c.nome_curso
+            ORDER BY SUM(g.pontuacao) DESC;
         ";
         $stmt = $this->connect->query($query);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Configurações da tabela
+        // Título principal
+        $fpdf->SetFont('Arial', 'B', 24);
+        $fpdf->SetY(140);
+        $fpdf->SetX(0);
+        $fpdf->Cell(595, 20, utf8_decode('Tarefa 02: Grito de Guerra'), 0, 1, 'C');
+
+        // Título da segunda tabela
+        $fpdf->SetFont('Arial', 'B', 14);
+        $fpdf->Ln(20);
+        $fpdf->SetX(0);
+        $fpdf->Cell(595, 20, utf8_decode('Soma Total dos Critérios por Curso'), 0, 1, 'C');
+        $fpdf->Ln(20);
+        // Configurações da segunda tabela
         $fpdf->SetFont('Arial', 'B', 12);
-        $fpdf->SetFillColor(255, 255, 255); // Fundo branco para o cabeçalho
-        $fpdf->SetTextColor(0, 0, 0); // Texto preto
+        $fpdf->SetFillColor(255, 255, 255);
+        $fpdf->SetTextColor(0, 0, 0);
 
-        // Cabeçalho da tabela com larguras fixas
-        $fpdf->SetY(200);
-        $fpdf->SetX(50);
-        $fpdf->Cell(170, 20, utf8_decode('Curso'), 1, 0, 'C', true);
-        $fpdf->Cell(200, 20, utf8_decode('Avaliador'), 1, 0, 'C', true);
-        $fpdf->Cell(120, 20, utf8_decode('Pontuação'), 1, 1, 'C', true);
+        // Cabeçalho da segunda tabela
+        $fpdf->SetX(180);
+        $fpdf->Cell(120, 20, utf8_decode('Curso'), 1, 0, 'C', true);
+        $fpdf->Cell(100, 20, utf8_decode('Pontuação'), 1, 1, 'C', true);
 
-        // Dados da tabela
+        // Dados da segunda tabela
         $fpdf->SetFont('Arial', '', 10);
-        $fpdf->SetFillColor(240, 240, 240); // Fundo cinza claro para linhas
+        $fpdf->SetFillColor(240, 240, 240);
         $fill = false;
+        $rank = 1;
         foreach ($results as $row) {
-            $fpdf->SetX(50);
-            $fpdf->Cell(170, 20, utf8_decode($row['nome_curso']), 1, 0, 'C', $fill);
-            $fpdf->Cell(200, 20, utf8_decode($row['nome']), 1, 0, 'C', $fill);
-            $fpdf->Cell(120, 20, $row['pontuacao'], 1, 1, 'C', $fill);
-            $fill = !$fill; // Alterna a cor de fundo
+            $total = $row['total_pontuacao'];
+            $bonus = 0;
+            switch ($rank) {
+                case 1:
+                    $bonus = 500;
+                    break;
+                case 2:
+                    $bonus = 500;
+                    break;
+                case 3:
+                    $bonus = 500;
+                    break;
+                case 4:
+                    $bonus = 500;
+                    break;
+                case 5:
+                    $bonus = 500;
+                    break;
+                default:
+                    $bonus = 0;
+                    break;
+            }
+            $fpdf->SetX(180);
+            $fpdf->Cell(120, 20, utf8_decode($row['nome_curso']), 1, 0, 'C', $fill);
+            $fpdf->Cell(100, 20, utf8_decode($bonus), 1, 1, 'C', $fill);
+            $fill = !$fill;
+            $rank++;
         }
-
         // Gera o PDF
-        $fpdf->Output('relatorio grito de guerra.pdf', 'I');
+        $fpdf->Output('relatorio_grito_de_guerra.pdf', 'I');
     }
 }
 

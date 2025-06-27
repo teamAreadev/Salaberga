@@ -17,44 +17,79 @@ class PDF extends connect
         $fpdf = new FPDF('P', 'pt', 'A4');
         $fpdf->AliasNbPages();
 
-        // Adiciona uma página
+        // Primeira página: Tabelas com somatório e bônus
         $fpdf->AddPage();
-
-        // Adiciona o fundo, ajustando as dimensões
         $fpdf->Image('../../../assets/fundo.jpg', 0, 0, $fpdf->GetPageWidth(), $fpdf->GetPageHeight());
 
-        // Consulta SQL
+        // Consulta SQL para a primeira página
         $query = "
-            SELECT c.nome_curso, a.nome, e.valor_arrecadado
+            SELECT 
+                c.nome_curso,
+                SUM(e.valor_arrecadado) as total_valor_arrecadado
             FROM cursos c 
             INNER JOIN tarefa_12_empreendedorismo e ON e.curso_id = c.curso_id 
-            INNER JOIN avaliadores a ON a.id = e.id_avaliador;
+            GROUP BY c.nome_curso
+            ORDER BY SUM(e.valor_arrecadado) DESC;
         ";
         $stmt = $this->connect->query($query);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Configurações da tabela
-        $fpdf->SetFont('Arial', 'B', 10); // Tamanho da fonte reduzido para consistência
-        $fpdf->SetFillColor(255, 255, 255); // Fundo branco para o cabeçalho
-        $fpdf->SetTextColor(0, 0, 0); // Texto preto
+        // Título principal
+        $fpdf->SetFont('Arial', 'B', 24);
+        $fpdf->SetY(140);
+        $fpdf->SetX(0);
+        $fpdf->Cell(595, 20, utf8_decode('Tarefa 12: Empreendedorismo'), 0, 1, 'C');
+        // Título da segunda tabela
+        $fpdf->SetFont('Arial', 'B', 14);
+        $fpdf->Ln(20);
+        $fpdf->SetX(0);
+        $fpdf->Cell(595, 20, utf8_decode('Soma Total dos Critérios por Curso'), 0, 1, 'C');
+        $fpdf->Ln(20);
+        // Configurações da segunda tabela
+        $fpdf->SetFont('Arial', 'B', 12);
+        $fpdf->SetFillColor(255, 255, 255);
+        $fpdf->SetTextColor(0, 0, 0);
 
-        // Cabeçalho da tabela com larguras ajustadas
-        $fpdf->SetY(150);
-        $fpdf->SetX(50);
-        $fpdf->Cell(130, 20, utf8_decode('Curso'), 1, 0, 'C', true);
-        $fpdf->Cell(240, 20, utf8_decode('Avaliador'), 1, 0, 'C', true);
-        $fpdf->Cell(130, 20, utf8_decode('Valor Arrecadado'), 1, 1, 'C', true);
+        // Cabeçalho da segunda tabela
+        $fpdf->SetX(130);
+        $fpdf->Cell(120, 20, utf8_decode('Curso'), 1, 0, 'C', true);
+        $fpdf->Cell(100, 20, utf8_decode('Lucro bruto'), 1, 0, 'C', true);
+        $fpdf->Cell(100, 20, utf8_decode('Pontuação'), 1, 1, 'C', true);
 
-        // Dados da tabela
-        $fpdf->SetFont('Arial', '', 8); // Fonte menor para os dados
-        $fpdf->SetFillColor(240, 240, 240); // Fundo cinza claro para linhas
+        // Dados da segunda tabela
+        $fpdf->SetFont('Arial', '', 10);
+        $fpdf->SetFillColor(240, 240, 240);
         $fill = false;
+        $rank = 1;
         foreach ($results as $row) {
-            $fpdf->SetX(50);
-            $fpdf->Cell(150, 20, utf8_decode($row['nome_curso']), 1, 0, 'C', $fill);
-            $fpdf->Cell(240, 20, utf8_decode($row['nome']), 1, 0, 'C', $fill);
-            $fpdf->Cell(130, 20, utf8_decode($row['valor_arrecadado']), 1, 1, 'C', $fill);
-            $fill = !$fill; // Alterna a cor de fundo
+            $total = $row['total_valor_arrecadado'];
+            $bonus = 0;
+            switch ($rank) {
+                case 1:
+                    $bonus = 500;
+                    break;
+                case 2:
+                    $bonus = 450;
+                    break;
+                case 3:
+                    $bonus = 400;
+                    break;
+                case 4:
+                    $bonus = 350;
+                    break;
+                case 5:
+                    $bonus = 300;
+                    break;
+                default:
+                    $bonus = 0;
+                    break;
+            }
+            $fpdf->SetX(130);
+            $fpdf->Cell(120, 20, utf8_decode($row['nome_curso']), 1, 0, 'C', $fill);
+            $fpdf->Cell(100, 20, utf8_decode($total), 1, 0, 'C', $fill);
+            $fpdf->Cell(100, 20, utf8_decode($bonus), 1, 1, 'C', $fill);
+            $fill = !$fill;
+            $rank++;
         }
 
         // Gera o PDF
@@ -63,4 +98,3 @@ class PDF extends connect
 }
 
 $relatorio = new PDF();
-?>

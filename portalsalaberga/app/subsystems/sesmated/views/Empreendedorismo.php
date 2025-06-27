@@ -521,18 +521,19 @@ $session->autenticar_session();
         </div>
         <div class="modal-fullscreen-content flex flex-col items-center justify-center">
             <div class="card-bg rounded-3xl p-8 max-w-md w-full">
-                <form id="formLucroDia" action="../controllers/lucro_geral.php" method="post" autocomplete="off">
+                <form id="formLucroDia" action="../controllers/controller_empreendedorismo.php" method="post" autocomplete="off">
                     <div class="mb-6">
+                        <input type="hidden" name="id_avaliador" value="<?=$_SESSION['user_id']?>">
                         <label for="selectCursoLucro" class="block text-xs font-bold mb-2 text-gray-300 uppercase tracking-wide">
                             <i class="fas fa-graduation-cap mr-2"></i>Selecione o Curso
                         </label>
                         <select id="selectCursoLucro" name="curso" class="input-field w-full rounded-2xl px-3 py-2.5 text-white focus:outline-none">
                             <option value="">Selecione o curso</option>
-                            <option value="Enfermagem">Enfermagem</option>
-                            <option value="Informática">Informática</option>
-                            <option value="Meio ambiente">Meio ambiente</option>
-                            <option value="Administração">Administração</option>
-                            <option value="Edificações">Edificações</option>
+                            <option value="1">Enfermagem</option>
+                            <option value="2">Informática</option>
+                            <option value="3">Meio ambiente</option>
+                            <option value="4">Administração</option>
+                            <option value="5">Edificações</option>
                         </select>
                     </div>
                     <div id="inputLucroDiaContainer" class="mt-4 hidden">

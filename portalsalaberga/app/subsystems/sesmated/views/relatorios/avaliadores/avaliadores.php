@@ -53,7 +53,7 @@ class PDF extends connect
             $fpdf->Cell(100, 18, utf8_decode($dado['data']), 1, 0, 'C', true);
             $fpdf->Cell(100, 18, utf8_decode($dado['turno']), 1, 0, 'C', true);
         }
-        $fpdf->Output('relatorio_acervo.pdf', 'I');
+        $fpdf->Output('relatorio_avaliadores.pdf', 'I');
     }
 }
 
