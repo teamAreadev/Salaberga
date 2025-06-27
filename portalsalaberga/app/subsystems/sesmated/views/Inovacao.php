@@ -310,11 +310,17 @@ $session->autenticar_session();
                     <p class="text-gray-400 text-xs font-medium tracking-wider uppercase">Inovação</p>
                 </div>
                 <!-- Chip do Usuário - Posicionado à direita no desktop -->
-                <div class="user-chip user-chip-desktop">
-                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                        <i class="fas fa-user text-green-300 text-xs"></i>
+                <div class="flex items-center gap-2 user-chip-desktop">
+                    <a href="../../../main/views/subsytem/subsistema_sesmated.php" class="btn-secondary px-4 py-2 rounded-2xl font-semibold text-gray-300 flex items-center gap-2">
+                        <i class="fas fa-arrow-left"></i>
+                        Voltar
+                    </a>
+                    <div class="user-chip">
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                            <i class="fas fa-user text-green-300 text-xs"></i>
+                        </div>
+                        <span class="text-gray-100"><?=$_SESSION['Nome']?></span>
                     </div>
-                    <span class="text-gray-100"><?=$_SESSION['Nome']?></span>
                 </div>
             </div>
         </div>

@@ -94,47 +94,94 @@ $session->autenticar_session();
         }
     }
 
-    .grid-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 2rem;
-        padding: 2rem;
+    /* NOVA ABORDAGEM COM FLEXBOX */
+    .cards-container {
         max-width: 1400px;
         margin: 0 auto;
-        transition: all 0.3s ease-out;
+        padding: 2rem;
     }
 
-    .grid-container.transitioning {
-        transition: all 0.3s ease-out;
+    .cards-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2.5rem;
+        justify-content: center;
+        align-items: stretch;
     }
 
-    .app-card-link {
-        transition: all 0.3s ease-out;
-        width: 100%;
-        display: block;
-        text-decoration: none;
-        color: inherit;
+    .card-wrapper {
+        flex: 0 0 300px;
+        min-width: 300px;
+        max-width: 300px;
+        display: flex;
+        margin-bottom: 2.5rem;
+    }
+
+    @media (max-width: 1200px) {
+        .card-wrapper {
+            flex: 1 1 calc(25% - 1rem); /* 4 colunas */
+            max-width: calc(25% - 1rem);
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .card-wrapper {
+            flex: 1 1 calc(33.333% - 1rem); /* 3 colunas */
+            max-width: calc(33.333% - 1rem);
+        }
     }
 
     @media (max-width: 768px) {
-        .grid-container {
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
+        .cards-container {
             padding: 1rem;
         }
-
-        .app-card {
-            min-height: 150px;
-            padding: 1rem;
+        
+        .cards-grid {
+            gap: 1rem;
+        }
+        
+        .card-wrapper {
+            flex: 1 1 calc(50% - 0.8rem); /* 2 colunas */
+            max-width: calc(50% - 0.8rem);
+            min-width: auto;
         }
     }
 
     @media (max-width: 480px) {
-        .grid-container {
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 0.8rem;
+        .cards-container {
             padding: 0.8rem;
         }
+        
+        .cards-grid {
+            gap: 0.8rem;
+        }
+        .card-wrapper {
+            flex: 1 1 100%; /* 1 coluna */
+            max-width: 100%;
+        }
+        .app-card {
+            width: 85vw;
+            min-width: 85vw;
+            max-width: 85vw;
+            min-height: 110px;
+        }
+    }
+
+    @media (max-width: 340px) {
+        .app-card {
+            width: 95vw;
+            min-width: 95vw;
+            max-width: 95vw;
+            min-height: 90px;
+        }
+    }
+
+    .app-card-link {
+        display: flex;
+        width: 100%;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s ease-out;
     }
 
     .app-card {
@@ -148,11 +195,61 @@ $session->autenticar_session();
         position: relative;
         overflow: hidden;
         cursor: pointer;
-        height: 100%;
-        min-height: 200px;
+        /* Flexbox para ocupar toda a altura disponível */
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 300px;
+        min-width: 300px;
+        max-width: 300px;
+        min-height: 220px;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 340px) {
+        .app-card {
+            width: 95vw;
+            min-width: 95vw;
+            max-width: 95vw;
+            height: 180px;
+            min-height: 180px;
+            max-height: 180px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .app-card {
+            min-height: 200px;
+            padding: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .app-card {
+            min-height: 180px;
+            padding: 0.8rem;
+        }
+    }
+
+    /* Estrutura interna do card */
+    .card-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-grow: 1;
         justify-content: center;
+        width: 100%;
+    }
+
+    .card-footer {
+        margin-top: auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+        width: 100%;
+        padding-top: 1rem;
     }
 
     .clear-search {
@@ -238,6 +335,7 @@ $session->autenticar_session();
         justify-content: center;
         transition: all 0.3s ease;
         box-shadow: 0 8px 16px var(--icon-shadow);
+        flex-shrink: 0;
     }
 
     .app-card:hover .icon-wrapper {
@@ -251,12 +349,31 @@ $session->autenticar_session();
         transition: transform 0.3s ease;
     }
 
+    @media (max-width: 768px) {
+        .icon-wrapper {
+            width: 60px;
+            height: 60px;
+        }
+
+        .app-icon {
+            width: 40px;
+            height: 40px;
+        }
+    }
+
     .app-name {
         font-size: 1rem;
         font-weight: 600;
         color: var(--text-color);
-        margin-top: 1rem;
+        margin: 1rem 0;
         transition: color 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    @media (max-width: 768px) {
+        .app-name {
+            font-size: 0.9rem;
+        }
     }
 
     .app-card:hover .app-name {
@@ -312,6 +429,14 @@ $session->autenticar_session();
         color: var(--header-color);
         margin: 0.25rem;
         display: inline-block;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .category-tag:hover {
+        background: var(--header-color);
+        color: white;
+        transform: scale(1.05);
     }
 
     .search-container {
@@ -357,25 +482,10 @@ $session->autenticar_session();
         .mobile-nav {
             display: block;
         }
-
-        .icon-wrapper {
-            width: 60px;
-            height: 60px;
-        }
-
-        .app-icon {
-            width: 40px;
-            height: 40px;
-        }
-
-        .app-card {
-            padding: 1rem;
-        }
     }
 
     @media (max-width: 380px) {
-        .grid-container {
-            gap: 0.8rem;
+        .cards-container {
             padding: 0.8rem;
         }
 
@@ -516,6 +626,31 @@ $session->autenticar_session();
     .menu-overlay.active {
         opacity: 1;
         pointer-events: auto;
+    }
+
+    /* Animações de entrada */
+    .card-wrapper {
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    .card-wrapper:nth-child(1) { animation-delay: 0.1s; }
+    .card-wrapper:nth-child(2) { animation-delay: 0.2s; }
+    .card-wrapper:nth-child(3) { animation-delay: 0.3s; }
+    .card-wrapper:nth-child(4) { animation-delay: 0.4s; }
+    .card-wrapper:nth-child(5) { animation-delay: 0.5s; }
+    .card-wrapper:nth-child(6) { animation-delay: 0.6s; }
+    .card-wrapper:nth-child(7) { animation-delay: 0.7s; }
+    .card-wrapper:nth-child(8) { animation-delay: 0.8s; }
+    .card-wrapper:nth-child(9) { animation-delay: 0.9s; }
+    .card-wrapper:nth-child(n+10) { animation-delay: 1s; }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 </style>
 
@@ -679,147 +814,230 @@ $session->autenticar_session();
     </div>
 
     <main class="container mx-auto px-4">
-        <div class="grid-container">
-            <a href="../../../subsystems/sesmated/views/abertura.php" class="app-card-link" data-card-key="Dashboard_abertura">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/sDLfn46k/dashboard-removebg-preview.png" alt="Dashboard abertura" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Abertura</h3>
-
+        <div class="cards-container">
+            <div class="cards-grid">
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/abertura.php" class="app-card-link" data-card-key="Dashboard_abertura">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/sDLfn46k/dashboard-removebg-preview.png" alt="Dashboard abertura" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Abertura</h3>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
 
-            <a href="../../../subsystems/sesmated/views/cordel.php" class="app-card-link" data-card-key="Cordel">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Cordel" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Cordel</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/cordel/relatorio_cordel.php">Relatório</a></button>
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/cordel.php" class="app-card-link" data-card-key="Cordel">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Cordel" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Cordel</h3>
+                            </div>
+                            <div class="card-footer">
+                                <a href="../../../subsystems/sesmated/views/relatorios/cordel/relatorio_cordel.php" class="category-tag">Relatório</a>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
 
-            <a href="../../../subsystems/sesmated/views/Empreendedorismo.php" class="app-card-link" data-card-key="Empreendedorismo">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/j2sCbqPB/emopreendedorismo-removebg-preview.png" alt="Empreendedorismo" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Empreendedorismo</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/empreendedorismo/relatorio_empreendedorismo.php">Relatório empreendedorismo</a></button>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/empreendedorismo/relatorio_produtos.php">Relatório produtos</a></button>
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/Empreendedorismo.php" class="app-card-link" data-card-key="Empreendedorismo">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/j2sCbqPB/emopreendedorismo-removebg-preview.png" alt="Empreendedorismo" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Empreendedorismo</h3>
+                            </div>
+                            <div class="card-footer">
+                                <a href="../../../subsystems/sesmated/views/relatorios/empreendedorismo/relatorio_empreendedorismo.php" class="category-tag">Relatório empreendedorismo</a>
+                                <a href="../../../subsystems/sesmated/views/relatorios/empreendedorismo/relatorio_produtos.php" class="category-tag">Relatório produtos</a>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
 
-            <a href="../../../subsystems/sesmated/views/esquete.php" class="app-card-link" data-card-key="Esquete">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/ZqxSh8HK/esquete-removebg-preview.png" alt="Esquete" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Esquete</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/esquete/relatorio_esquete.php">Relatório</a></button>
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/esquete.php" class="app-card-link" data-card-key="Esquete">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/ZqxSh8HK/esquete-removebg-preview.png" alt="Esquete" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Esquete</h3>
+                            </div>
+                            <div class="card-footer">
+                                <a href="../../../subsystems/sesmated/views/relatorios/esquete/relatorio_esquete.php" class="category-tag">Relatório</a>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
 
-            <a href="../../../subsystems/sesmated/views/logo.php" class="app-card-link" data-card-key="Logo">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/Y92w2vDN/logo-removebg-preview-1.png" alt="Logo" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Logo</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/logo/relatorio_logo.php">Relatório</a></button>
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/logo.php" class="app-card-link" data-card-key="Logo">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/Y92w2vDN/logo-removebg-preview-1.png" alt="Logo" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Logo</h3>
+                            </div>
+                            <div class="card-footer">
+                                <a href="../../../subsystems/sesmated/views/relatorios/logo/relatorio_logo.php" class="category-tag">Relatório</a>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
 
-            <a href="../../../subsystems/sesmated/views/mascote.php" class="app-card-link" data-card-key="Mascote">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/SRJF8whJ/mawcote-removebg-preview.png" alt="Mascote" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Mascote</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/mascote/relatorio_mascote.php">Relatório</a></button>
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/mascote.php" class="app-card-link" data-card-key="Mascote">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/SRJF8whJ/mawcote-removebg-preview.png" alt="Mascote" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Mascote</h3>
+                            </div>
+                            <div class="card-footer">
+                                <a href="../../../subsystems/sesmated/views/relatorios/mascote/relatorio_mascote.php" class="category-tag">Relatório</a>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
 
-            <a href="../../../subsystems/sesmated/views/painel.php" class="app-card-link" data-card-key="Painel">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/ZqZGj9mk/painel-removebg-preview.png" alt="Painel" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Painel</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/painel/relatorio_painel.php">Relatório</a></button>
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/painel.php" class="app-card-link" data-card-key="Painel">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/ZqZGj9mk/painel-removebg-preview.png" alt="Painel" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Painel</h3>
+                            </div>
+                            <div class="card-footer">
+                                <a href="../../../subsystems/sesmated/views/relatorios/painel/relatorio_painel.php" class="category-tag">Relatório</a>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
 
-            <a href="../../../subsystems/sesmated/views/frequencia/index.php" class="app-card-link" data-card-key="Eventos">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/qRv9V9gj/palestras-removebg-preview.png" alt="Eventos" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Eventos</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/frequenciaEventos.php">Relatório</a></button>
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/frequencia/index.php" class="app-card-link" data-card-key="Eventos">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/qRv9V9gj/palestras-removebg-preview.png" alt="Eventos" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Eventos</h3>
+                            </div>
+                            <div class="card-footer">
+                                <a href="../../../subsystems/sesmated/views/relatorios/rifas/frequenciaEventos.php" class="category-tag">Relatório</a>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
 
-            <a href="../../../subsystems/sesmated/views/parodia.php" class="app-card-link" data-card-key="Paródia">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/NMyv23YL/parodia-removebg-preview.png" alt="Paródia" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Paródia</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/parodia/relatorios_parodia.php">Relatório</a></button>
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/parodia.php" class="app-card-link" data-card-key="Paródia">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/NMyv23YL/parodia-removebg-preview.png" alt="Paródia" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Paródia</h3>
+                            </div>
+                            <div class="card-footer">
+                                <a href="../../../subsystems/sesmated/views/relatorios/parodia/relatorios_parodia.php" class="category-tag">Relatório</a>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
 
-            <a href="../../../subsystems/sesmated/views/rifa.php" class="app-card-link" data-card-key="Rifa">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/MprBmBVH/rifa-removebg-preview.png" alt="Rifa" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Rifa</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/rifas/resumo_turma.php">Relatório</a></button>
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/rifa.php" class="app-card-link" data-card-key="Rifa">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/MprBmBVH/rifa-removebg-preview.png" alt="Rifa" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Rifa</h3>
+                            </div>
+                            <div class="card-footer">
+                                <a href="../../../subsystems/sesmated/views/relatorios/rifas/resumo_turma.php" class="category-tag">Relatório</a>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
 
-            <a href="../../../subsystems/sesmated/views/Sala_Tematica.php" class="app-card-link" data-card-key="Sala_tematica">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/sgKk6jgv/sala-tematica-removebg-preview.png" alt="Sala temática" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Sala temática</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/sala_tematica/sala_tematica.php">Relatório</a></button>
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/Sala_Tematica.php" class="app-card-link" data-card-key="Sala_tematica">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/sgKk6jgv/sala-tematica-removebg-preview.png" alt="Sala temática" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Sala temática</h3>
+                            </div>
+                            <div class="card-footer">
+                                <a href="../../../subsystems/sesmated/views/relatorios/sala_tematica/sala_tematica.php" class="category-tag">Relatório</a>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
 
-            <a href="../../../subsystems/sesmated/views/vestimentas_sustentaveis.php" class="app-card-link" data-card-key="Vestimentas">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/LscNvwLJ/vestimenstas-removebg-preview.png" alt="Vestimentas" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Vestimentas</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/vestimenta/relatorio_vestimenta.php">Relatório</a></button>
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/vestimentas_sustentaveis.php" class="app-card-link" data-card-key="Vestimentas">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/LscNvwLJ/vestimenstas-removebg-preview.png" alt="Vestimentas" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Vestimentas</h3>
+                            </div>
+                            <div class="card-footer">
+                                <a href="../../../subsystems/sesmated/views/relatorios/vestimenta/relatorio_vestimenta.php" class="category-tag">Relatório</a>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
 
-            <a href="../../../subsystems/sesmated/views/inovacao.php" class="app-card-link" data-card-key="Inovacao">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Inovação" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Inovação</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/invocao/relatorio_inovacao.php">Relatório</a></button>
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/inovacao.php" class="app-card-link" data-card-key="Inovacao">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Inovação" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Inovação</h3>
+                            </div>
+                            <div class="card-footer">
+                                <a href="../../../subsystems/sesmated/views/relatorios/invocao/relatorio_inovacao.php" class="category-tag">Relatório</a>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
-            <a href="../../../subsystems/sesmated/views/grito.php" class="app-card-link" data-card-key="Inovacao">
-                <div class="app-card">
-                    <div class="icon-wrapper">
-                        <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Inovação" class="app-icon">
-                    </div>
-                    <h3 class="app-name">Grito</h3>
-                    <button class="category-tag"><a href="../../../subsystems/sesmated/views/relatorios/grito/grito_relatorio.php">Relatório</a></button>
-                </div>
-            </a>
 
+                <div class="card-wrapper">
+                    <a href="../../../subsystems/sesmated/views/grito.php" class="app-card-link" data-card-key="Grito">
+                        <div class="app-card">
+                            <div class="card-content">
+                                <div class="icon-wrapper">
+                                    <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Grito" class="app-icon">
+                                </div>
+                                <h3 class="app-name">Grito</h3>
+                            </div>
+                            <div class="card-footer">
+                                <a href="../../../subsystems/sesmated/views/relatorios/grito/grito_relatorio.php" class="category-tag">Relatório</a>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -999,51 +1217,46 @@ $session->autenticar_session();
             });
 
             const searchInput = document.getElementById('search-input');
-            const appCardLinks = document.querySelectorAll('.grid-container a');
-            const gridContainer = document.querySelector('.grid-container');
+            const cardWrappers = document.querySelectorAll('.card-wrapper');
 
             searchInput.addEventListener('input', function(e) {
                 const searchTerm = e.target.value.toLowerCase().trim();
-                let visibleCards = [];
-                let hiddenCards = [];
 
                 if (searchTerm === '') {
                     showAllCards();
                     return;
                 }
 
-                appCardLinks.forEach(cardLink => {
-                    const appName = cardLink.querySelector('.app-name').textContent.toLowerCase();
-                    const categoryTags = cardLink.querySelectorAll('.category-tag');
+                cardWrappers.forEach(wrapper => {
+                    const appName = wrapper.querySelector('.app-name').textContent.toLowerCase();
+                    const categoryTags = wrapper.querySelectorAll('.category-tag');
                     let categoryText = '';
                     categoryTags.forEach(tag => {
                         categoryText += tag.textContent.toLowerCase() + ' ';
                     });
 
                     if (appName.includes(searchTerm) || categoryText.includes(searchTerm)) {
-                        visibleCards.push(cardLink);
-                        cardLink.style.display = 'block';
+                        wrapper.style.display = 'flex';
                         setTimeout(() => {
-                            cardLink.style.opacity = '1';
-                            cardLink.style.transform = 'scale(1)';
+                            wrapper.style.opacity = '1';
+                            wrapper.style.transform = 'translateY(0)';
                         }, 50);
                     } else {
-                        hiddenCards.push(cardLink);
-                        cardLink.style.opacity = '0';
-                        cardLink.style.transform = 'scale(0.8)';
+                        wrapper.style.opacity = '0';
+                        wrapper.style.transform = 'translateY(30px)';
                         setTimeout(() => {
-                            cardLink.style.display = 'none';
+                            wrapper.style.display = 'none';
                         }, 300);
                     }
                 });
             });
 
             function showAllCards() {
-                appCardLinks.forEach((cardLink, index) => {
-                    cardLink.style.display = 'block';
+                cardWrappers.forEach((wrapper, index) => {
+                    wrapper.style.display = 'flex';
                     setTimeout(() => {
-                        cardLink.style.opacity = '1';
-                        cardLink.style.transform = 'scale(1)';
+                        wrapper.style.opacity = '1';
+                        wrapper.style.transform = 'translateY(0)';
                     }, index * 50);
                 });
             }
@@ -1084,22 +1297,6 @@ $session->autenticar_session();
                 });
             });
 
-            const animateCards = () => {
-                const initialAppCardLinks = document.querySelectorAll('.grid-container a');
-                initialAppCardLinks.forEach((cardLink, index) => {
-                    cardLink.style.opacity = '0';
-                    cardLink.style.transform = 'translateY(20px)';
-
-                    setTimeout(() => {
-                        cardLink.style.transition = 'all 0.3s ease-out';
-                        cardLink.style.opacity = '1';
-                        cardLink.style.transform = 'translateY(0)';
-                    }, index * 100);
-                });
-            };
-
-            animateCards();
-
             document.querySelectorAll('.app-card').forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     const icon = this.querySelector('.icon-wrapper');
@@ -1135,8 +1332,44 @@ $session->autenticar_session();
                 }, 1000);
             };
 
-            document.querySelectorAll('.grid-container a').forEach(link => {
+            document.querySelectorAll('.card-wrapper a').forEach(link => {
                 link.addEventListener('click', showLoading);
+            });
+
+            // Função para equalizar alturas dos cards em cada linha
+            function equalizeCardHeights() {
+                if (window.innerWidth <= 768) return; // Não equalizar no mobile
+
+                const cards = document.querySelectorAll('.app-card');
+                const cardsPerRow = window.innerWidth > 1024 ? 3 : 2;
+                
+                // Reset heights
+                cards.forEach(card => card.style.height = 'auto');
+                
+                // Group cards by rows and equalize heights
+                for (let i = 0; i < cards.length; i += cardsPerRow) {
+                    const rowCards = Array.from(cards).slice(i, i + cardsPerRow);
+                    let maxHeight = 0;
+                    
+                    // Find max height in this row
+                    rowCards.forEach(card => {
+                        const height = card.offsetHeight;
+                        if (height > maxHeight) maxHeight = height;
+                    });
+                    
+                    // Apply max height to all cards in this row
+                    rowCards.forEach(card => {
+                        card.style.height = maxHeight + 'px';
+                    });
+                }
+            }
+
+            // Equalizar alturas após carregamento
+            setTimeout(equalizeCardHeights, 100);
+            
+            // Equalizar alturas após redimensionamento
+            window.addEventListener('resize', () => {
+                setTimeout(equalizeCardHeights, 100);
             });
         });
     </script>

@@ -985,37 +985,6 @@ if (isset($_GET['sair'])) {
                 });
             });
 
-            // Card animation only on initial load
-            const animateCards = () => {
-                const initialAppCardLinks = document.querySelectorAll('.grid-container a'); // Select the links
-                initialAppCardLinks.forEach((cardLink, index) => { // Iterate through links
-                    cardLink.style.opacity = '0';
-                    cardLink.style.transform = 'translateY(20px)';
-
-                    setTimeout(() => {
-                        cardLink.style.transition = 'all 0.3s ease-out';
-                        cardLink.style.opacity = '1';
-                        cardLink.style.transform = 'translateY(0)';
-                    }, index * 100);
-                });
-            };
-
-            animateCards(); // Run animation on page load
-
-            // Add event listeners to the .app-card element inside the link
-            document.querySelectorAll('.app-card').forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    const icon = this.querySelector('.icon-wrapper');
-                    icon.style.transform = 'scale(1.1) rotate(5deg)';
-                });
-
-                card.addEventListener('mouseleave', function() {
-                    const icon = this.querySelector('.icon-wrapper');
-                    icon.style.transform = 'scale(1) rotate(0)';
-                });
-            });
-
-
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -1172,6 +1141,15 @@ if (isset($_GET['sair'])) {
                     <span class="category-tag">Evento</span>
                 </div>
             </a>
+            <a href="../../../subsystems/sesmated/views/Inovacao.php" class="app-card-link" data-card-key="Inovação">
+                <div class="app-card w-{100px} h-full">
+                    <div class="icon-wrapper">
+                        <img src="https://i.postimg.cc/YS6pCKr7/cordell-removebg-preview.png" alt="Inovação" class="app-icon">
+                    </div>
+                    <h3 class="app-name">Inovação</h3>
+                    <span class="category-tag">Evento</span>
+                </div>
+            </a>
 
         </div>
     </main>
@@ -1219,7 +1197,7 @@ if (isset($_GET['sair'])) {
             }
             // 27/06
             else if (dia === 27 && mes === 6) {
-                mostrarPorChaves(['Sala_temática']);
+                mostrarPorChaves(['Paródia', 'Sala_temática', 'Painel_26', 'Esquete', 'Inovação']);
             }
         }
 
