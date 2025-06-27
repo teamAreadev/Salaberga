@@ -1,3 +1,33 @@
+<!-- 
+*******************************************************************************
+*                                                                             *
+*   AREA DEV 001 — FIZEMOS HISTÓRIA!                                         *
+*                                                                             *
+*   @mth_fl  @lvnas._  @rogercavalcantee  @p_.uchoa  @_jefferson.castro       *
+*   @otavio.ce                                                                  *
+*                                                                             *
+*   A primeira área de desenvolvimento não foi apenas o início de uma jornada  *
+*   técnica — foi o nascimento de uma cultura, de uma comunidade, de um sonho  *
+*   que hoje pulsa em cada linha de código que escrevemos.                     *
+*                                                                             *
+*   Foi ali que as primeiras ideias ganharam forma, que os primeiros desafios  *
+*   foram enfrentados com criatividade e coragem. Em meio a erros, testes e    *
+*   conquistas, formou-se o alicerce de tudo o que viria depois. Cada tela     *
+*   branca preenchida, cada console.log exibido, cada deploy feito… todos      *
+*   carregam um pouco da história dessa área pioneira.                         *
+*                                                                             *
+*   Essa primeira área não apenas abriu caminhos — ela construiu pontes.       *
+*   Conectou pessoas com propósitos, inspirou gerações de desenvolvedores e    *
+*   acendeu uma chama que continua a brilhar em cada nova aplicação criada.    *
+*                                                                             *
+*   Hoje, com gratidão e orgulho, celebramos esse marco. Que a memória dessa   *
+*   primeira área nos lembre sempre de onde viemos e nos inspire a continuar   *
+*   construindo o futuro com o mesmo entusiasmo, curiosidade e vontade de      *
+*   transformar o mundo com tecnologia.                                        *
+*                                                                             *
+*******************************************************************************
+-->
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
