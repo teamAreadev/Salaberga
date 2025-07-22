@@ -806,8 +806,19 @@
                 </div>
                 <div class="games-container">
                     <div class="games-grid">
-                        <div class="match-card queimada">
+
+                    <div class="match-card volei">
                             <div class="time-badge">8h00</div>
+                            <span class="sport-badge volei">
+                                <i class="fas fa-fire"></i>Vôlei
+                            </span>
+                            <div class="final-badge">
+                                 FINAL VÔLEI 
+                            </div>
+                        </div>
+
+                        <div class="match-card queimada">
+                            <div class="time-badge">8h30</div>
                             <span class="sport-badge queimada">
                                 <i class="fas fa-fire"></i>Queimada 
                             </span>
@@ -817,7 +828,7 @@
                         </div>
                         
                         <div class="match-card futsal">
-                            <div class="time-badge">8h30</div>
+                            <div class="time-badge">9h00</div>
                             <span class="sport-badge futsal">
                                 <i class="fas fa-futbol"></i>Futsal 
                             </span>
@@ -827,7 +838,7 @@
                         </div>
                         
                         <div class="match-card teqvolei">
-                            <div class="time-badge">9h00</div>
+                            <div class="time-badge">9h30</div>
                             <span class="sport-badge teqvolei">
                                 <i class="fas fa-volleyball-ball"></i>TeqVôlei 
                             </span>
@@ -837,7 +848,7 @@
                         </div>
                         
                         <div class="match-card x2futsal">
-                            <div class="time-badge">9h30</div>
+                            <div class="time-badge">10h00</div>
                             <span class="sport-badge x2futsal">
                                 <i class="fas fa-running"></i>X2 
                             </span>
