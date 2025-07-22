@@ -900,10 +900,5 @@
         });
     </script>
 
-    <footer class="w-full text-center py-6 bg-white/80 backdrop-blur-sm text-gray-600 text-sm mt-12 border-t border-gray-200">
-        <div class="w-full px-4">
-            <p class="font-medium">Desenvolvido por <a href="https://www.instagram.com/matheusfelix.dev/" target="_blank" class="text-green-600 hover:underline">Matheus Felix</a></p>
-        </div>
-    </footer>
 </body>
 </html>
