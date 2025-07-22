@@ -3,522 +3,896 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - Copa Grêmio 2025</title>
+    <title>Copa Grêmio 2025 - Programação</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="shortcut icon" href="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome-MOpK2hbpuoqfoF8sir0Ue6SvciAArc.svg" type="image/svg">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary-500: #007d40;
+            --primary-600: #006a36;
+            --primary-700: #005A24;
+            --primary-50: #f0fdf4;
+            --primary-100: #dcfce7;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            line-height: 1.6;
+            color: #1e293b;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-500) 50%, #059669 100%);
+        }
+        
+        .day-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+        
+        .day-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .day-header {
+            background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-500) 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
+        
+        .day-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+        }
+        
+        .games-container {
+            padding: 2rem;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .match-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 2px solid #f1f5f9;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        
+        .match-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--sport-color, var(--primary-500));
+            transition: width 0.3s ease;
+        }
+        
+        .match-card:hover {
+            border-color: var(--sport-color, var(--primary-500));
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .match-card:hover::before {
+            width: 6px;
+        }
+        
+        .match-card.futsal { --sport-color: #ef4444; }
+        .match-card.teqvolei { --sport-color: #3b82f6; }
+        .match-card.queimada { --sport-color: #f59e0b; }
+        .match-card.x2futsal { --sport-color: #8b5cf6; }
+        .match-card.volei { --sport-color: #10b981; }
+        .match-card.abertura { --sport-color: #6b7280; }
+        
+        .sport-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .sport-badge.futsal { 
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); 
+            color: #dc2626; 
+            border: 1px solid #fca5a5;
+        }
+        .sport-badge.teqvolei { 
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); 
+            color: #2563eb; 
+            border: 1px solid #93c5fd;
+        }
+        .sport-badge.queimada { 
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); 
+            color: #d97706; 
+            border: 1px solid #fcd34d;
+        }
+        .sport-badge.x2futsal { 
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%); 
+            color: #7c3aed; 
+            border: 1px solid #c4b5fd;
+        }
+        .sport-badge.volei { 
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); 
+            color: #059669; 
+            border: 1px solid #6ee7b7;
+        }
+        .sport-badge.abertura { 
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); 
+            color: #475569; 
+            border: 1px solid #cbd5e1;
+        }
+        
+        .time-badge {
+            background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
+            color: var(--primary-700);
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 2px solid var(--primary-200);
+            display: inline-block;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 125, 64, 0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .vs-divider {
+            color: var(--primary-600);
+            font-weight: 800;
+            font-size: 0.875rem;
+            background: var(--primary-50);
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 0 12px;
+            border: 1px solid var(--primary-100);
+        }
+        
+        .team-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.85rem;
+            line-height: 1.3;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            flex: 1;
+            text-align: center;
+            word-wrap: break-word;
+            hyphens: auto;
+            min-width: 0;
+        }
+        
+        .final-badge {
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-weight: 600;
+            padding: 16px 24px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            text-align: center;
+            border: 2px solid #fcd34d;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+        }
+        
+        .day-navigation {
+            position: sticky;
+            top: 20px;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
 
-    :root {
-        --primary-500: #007d40;
-        --primary-600: #006a36;
-        --primary-700: #005A24;
-    }
+        .nav-buttons-container {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
 
-    body {
-        font-family: 'Poppins', sans-serif;
-        background-color: #f8fafc;
-    }
+        .nav-button {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background: #f8fafc;
+            color: #64748b;
+            cursor: pointer;
+            white-space: nowrap;
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    .gradient-header {
-        background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-500) 100%);
-    }
+        .nav-button:hover {
+            background: var(--primary-50);
+            color: var(--primary-700);
+            border-color: var(--primary-200);
+        }
 
-    .gradient-btn {
-        background: linear-gradient(to right, var(--primary-600), var(--primary-500));
-        transition: all 0.3s ease;
-    }
+        .nav-button.active {
+            background: var(--primary-500);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 125, 64, 0.3);
+        }
 
-    .gradient-btn:hover {
-        background: linear-gradient(to right, var(--primary-700), var(--primary-600));
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(0, 90, 36, 0.3);
-    }
+        @media (max-width: 768px) {
+            .day-navigation {
+                position: static;
+                padding: 1.2rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .nav-buttons-container {
+                gap: 0.75rem;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto auto;
+            }
+            
+            .nav-button {
+                padding: 14px 16px;
+                font-size: 0.85rem;
+                border-radius: 10px;
+                min-width: auto;
+                min-height: 48px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+            
+            .nav-button[data-day="all"] {
+                grid-column: 1 / -1;
+                margin-bottom: 0.5rem;
+            }
+        }
 
-    .input-focus {
-        transition: all 0.3s ease;
-    }
+        @media (max-width: 1024px) {
+            .nav-button {
+                padding: 10px 18px;
+                font-size: 0.8rem;
+            }
+        }
 
-    .input-focus:focus {
-        border-color: #d1d5db;
-        box-shadow: none;
-        outline: none;
-    }
+        @media (max-width: 480px) {
+            .team-name {
+                font-size: 0.75rem;
+                padding: 8px 10px;
+                line-height: 1.2;
+            }
+            
+            .vs-divider {
+                padding: 6px 8px;
+                font-size: 0.75rem;
+                margin: 0 4px;
+            }
+            
+            .time-badge {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+                border-radius: 8px;
+            }
+        }
 
-    .card {
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    }
-
-    .card:hover {
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
-
-    .animate-fade-in {
-        animation: fadeIn 0.6s ease-out forwards;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .toast {
-        animation: toastIn 0.3s ease-out forwards;
-    }
-
-    @keyframes toastIn {
-        from { transform: translateY(100px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-
-    .toast-out {
-        animation: toastOut 0.3s ease-in forwards;
-    }
-
-    @keyframes toastOut {
-        from { transform: translateY(0); opacity: 1; }
-        to { transform: translateY(100px); opacity: 0; }
-    }
-
-    .dropdown-enter {
-        animation: dropdownOpen 0.2s ease-out forwards;
-    }
-
-    @keyframes dropdownOpen {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    select {
-        height: 48px;
-        line-height: 1.5;
-        background-color: #fff;
-        cursor: pointer;
-        border-color: #d1d5db;
-    }
-
-    select:focus {
-        border-color: #d1d5db;
-        box-shadow: none;
-        outline: none;
-    }
-
-    .select-icon {
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    select::-ms-expand {
-        display: none;
-    }
-
-    select option {
-        font-size: 0.875rem;
-        color: #1f2937;
-    }
-
-    .timer-box {
-        font-family: 'Poppins', monospace;
-        letter-spacing: 1px;
-    }
-
-    .timer-digit {
-        background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
-        border: 1px solid #e5e7eb;
-    }
-</style>
+        @media (max-width: 360px) {
+            .nav-button {
+                padding: 14px 10px;
+                font-size: 0.85rem;
+                min-height: 50px;
+            }
+            
+            .nav-button[data-day="all"] {
+                padding: 16px 16px;
+                font-size: 0.95rem;
+                min-height: 54px;
+            }
+            
+            .day-navigation {
+                padding: 1rem;
+            }
+        }
+        
+        .match-teams {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1rem;
+            gap: 6px;
+            flex-wrap: nowrap;
+        }
+        
+        .ceremony-content {
+            text-align: center;
+            padding: 1rem 0;
+        }
+        
+        .ceremony-title {
+            font-weight: 600;
+            color: #374151;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .ceremony-subtitle {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .day-header {
+                padding: 1.5rem;
+            }
+            
+            .games-container {
+                padding: 1.5rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .team-name {
+                font-size: 0.85rem;
+                padding: 10px 12px;
+            }
+            
+            .sport-badge {
+                font-size: 0.7rem;
+                padding: 6px 12px;
+            }
+            
+            .day-navigation {
+                position: static;
+                overflow-x: auto;
+                padding: 1rem;
+            }
+            
+            .nav-button {
+                white-space: nowrap;
+                min-width: 120px;
+            }
+        }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50">
-    <!-- Header -->
-    <header class="gradient-header text-white shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <div class="p-1 rounded-full shadow-md">
-                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome-MOpK2hbpuoqfoF8sir0Ue6SvciAArc.svg" 
-                             alt="Logo Copa Grêmio" 
-                             class="h-10 w-10" loading="lazy">
-                    </div>
-                    <div>
-                        <h1 class="text-xl md:text-2xl font-bold tracking-tight">Copa Grêmio 2025</h1>
-                        <p class="text-green-100 text-xs md:text-sm opacity-90">Grêmio Estudantil José Ivan Pontes Júnior</p>
-                    </div>
+<body class="min-h-screen">
+    <!-- Main Content -->
+    <main class="w-full px-4 py-8 max-w-7xl mx-auto">
+        <!-- Hero Section -->
+        <div class="hero-gradient text-white rounded-3xl p-8 md:p-12 shadow-2xl mb-8">
+            <div class="text-center relative">
+                <div class="absolute inset-0  to-transparent rounded-3xl"></div>
+                <div class="relative z-10">
+                    <h1 class="hero-title text-2xl md:text-5xl font-bold mb-4 tracking-tight">
+                        <i class="fas fa-trophy text-yellow-300 mr-2 drop-shadow-lg"></i>
+                        Copa Grêmio 2025
+                    </h1>
+                   
+                    <p class="text-green-200 text-sm">Desenvolvido por <a href="https://www.instagram.com/mth_fl/" target="_blank" class="text-yellow-300 hover:underline">Matheus Felix</a></p>
                 </div>
-                
-                <nav class="hidden md:flex items-center space-x-6">
-                    <a href="assets/img/Copa Grêmio 2025 1.0 - Edital.pdf" download class="flex items-center space-x-2 text-white hover:text-green-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10 font-semibold">
-                        <i class="fas fa-file-pdf text-red-400 text-lg"></i>
-                        <span>Edital</span>
-                    </a>
-                    <div class="relative group">
-                        <button id="loginDropdown" class="flex items-center space-x-2 text-white hover:text-green-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">
-                            <i class="fas fa-sign-in-alt text-lg"></i>
-                            <span class="font-medium">Login</span>
-                            <i class="fas fa-chevron-down text-xs transition-transform duration-200 transform group-hover:rotate-180"></i>
-                        </button>
-                        <div class="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-xl z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 origin-top-right transform scale-95 group-hover:scale-100 border border-green-100">
-                            <a href="usuario/login.php" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 flex items-center transition-colors border-b border-gray-100">
-                                <i class="fas fa-user mr-3 text-green-600"></i>Usuário
-                            </a>
-                            <a href="admin/login.php" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 flex items-center transition-colors">
-                                <i class="fas fa-lock mr-3 text-green-600"></i>Administrador
-                            </a>
-                        </div>
-                    </div>
-                </nav>
-                
-                <button id="mobile-menu-btn" class="md:hidden text-white p-2 focus:outline-none hover:bg-white/10 rounded-lg transition-colors">
-                    <i class="fas fa-bars text-xl"></i>
+            </div>
+        </div>
+
+        <!-- Day Navigation -->
+        <div class="day-navigation">
+            <div class="nav-buttons-container">
+                <button class="nav-button active" data-day="all">
+                    <i class="fas fa-calendar-alt mr-1"></i>
+                    <span>Todos os Dias</span>
+                </button>
+                <button class="nav-button" data-day="monday">
+                    <i class="fas fa-calendar-day mr-1"></i>
+                    <span>Segunda (11/08)</span>
+                </button>
+                <button class="nav-button" data-day="tuesday">
+                    <i class="fas fa-calendar-day mr-1"></i>
+                    <span>Terça (12/08)</span>
+                </button>
+                <button class="nav-button" data-day="wednesday">
+                    <i class="fas fa-calendar-day mr-1"></i>
+                    <span>Quarta (13/08)</span>
+                </button>
+                <button class="nav-button" data-day="thursday">
+                    <i class="fas fa-calendar-day mr-1"></i>
+                    <span>Quinta (14/08)</span>
+                </button>
+                <button class="nav-button" data-day="friday">
+                    <i class="fas fa-calendar-day mr-1"></i>
+                    <span>Sexta (15/08)</span>
                 </button>
             </div>
         </div>
-        
-        <div id="mobile-menu" class="hidden md:hidden bg-green-800/95 backdrop-blur-sm">
-            <div class="container mx-auto px-4 py-2">
-                <div class="flex flex-col space-y-1">
-                    <a href="assets/img/Copa Grêmio 2025 1.0 - Edital.pdf" download class="flex items-center text-red-200 hover:text-white px-3 py-3 rounded-lg font-semibold transition-colors">
-                        <i class="fas fa-file-pdf mr-2"></i> Edital
-                    </a>
-                    <button id="mobile-loginDropdown" class="flex items-center justify-between w-full text-white px-3 py-3 rounded-lg hover:bg-white/10 transition-colors">
-                        <div class="flex items-center">
-                            <i class="fas fa-sign-in-alt mr-3 text-lg"></i>
-                            <span class="font-medium">Login</span>
+
+        <!-- Schedule Container -->
+        <div id="schedule-container">
+            <!-- Segunda-feira -->
+            <div class="day-card" data-day="monday">
+                <div class="day-header text-white relative">
+                    <h3 class="font-bold text-2xl text-center relative z-10">Segunda-feira</h3>
+                    <p class="text-center text-green-100 text-lg relative z-10 mt-1">11 de Agosto</p>
+                </div>
+                <div class="games-container">
+                    <div class="games-grid">
+                        <div class="match-card abertura">
+                            <div class="time-badge">8h00</div>
+                            <span class="sport-badge abertura">
+                                <i class="fas fa-flag"></i>Abertura
+                            </span>
+                            <div class="ceremony-content">
+                                <p class="ceremony-title">Cerimônia de Abertura</p>
+                                <p class="ceremony-subtitle">Copa Grêmio 2025</p>
+                            </div>
                         </div>
-                        <i class="fas fa-chevron-down text-xs transition-transform duration-200"></i>
-                    </button>
-                    <div id="mobile-loginOptions" class="hidden pl-11 space-y-1">
-                        <a href="usuario/login.php" class="block px-3 py-2.5 text-green-200 hover:text-white hover:bg-white/10 rounded-lg flex items-center transition-colors">
-                            <i class="fas fa-user mr-3 text-green-300"></i> Usuário
-                        </a>
-                        <a href="admin/login.php" class="block px-3 py-2.5 text-green-200 hover:text-white hover:bg-white/10 rounded-lg flex items-center transition-colors">
-                            <i class="fas fa-lock mr-3 text-green-300"></i> Administrador
-                        </a>
+                        
+                        <div class="match-card abertura">
+                            <div class="time-badge">8h30</div>
+                            <span class="sport-badge abertura">
+                                <i class="fas fa-flag"></i>Abertura
+                            </span>
+                            <div class="ceremony-content">
+                                <p class="ceremony-title">Cerimônia de Abertura</p>
+                                <p class="ceremony-subtitle">Copa Grêmio 2025</p>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card abertura">
+                            <div class="time-badge">9h00</div>
+                            <span class="sport-badge abertura">
+                                <i class="fas fa-flag"></i>Abertura
+                            </span>
+                            <div class="ceremony-content">
+                                <p class="ceremony-title">Cerimônia de Abertura</p>
+                                <p class="ceremony-subtitle">Copa Grêmio 2025</p>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card futsal">
+                            <div class="time-badge">9h30</div>
+                            <span class="sport-badge futsal">
+                                <i class="fas fa-futbol"></i>Futsal
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Brasa</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">UZ 17</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card futsal">
+                            <div class="time-badge">10h00</div>
+                            <span class="sport-badge futsal">
+                                <i class="fas fa-futbol"></i>Futsal
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">ADM</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Inimigos do Gol</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card futsal">
+                            <div class="time-badge">10h30</div>
+                            <span class="sport-badge futsal">
+                                <i class="fas fa-futbol"></i>Futsal
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Independente</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">perd (1)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card futsal">
+                            <div class="time-badge">11h00</div>
+                            <span class="sport-badge futsal">
+                                <i class="fas fa-futbol"></i>Futsal
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Independente</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">perd (2)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terça-feira -->
+            <div class="day-card" data-day="tuesday">
+                <div class="day-header text-white relative">
+                    <h3 class="font-bold text-2xl text-center relative z-10">Terça-feira</h3>
+                    <p class="text-center text-green-100 text-lg relative z-10 mt-1">12 de Agosto</p>
+                </div>
+                <div class="games-container">
+                    <div class="games-grid">
+                        <div class="match-card teqvolei">
+                            <div class="time-badge">8h00</div>
+                            <span class="sport-badge teqvolei">
+                                <i class="fas fa-volleyball-ball"></i>TeqVôlei
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Trainetes</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Esquerdas</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card teqvolei">
+                            <div class="time-badge">8h30</div>
+                            <span class="sport-badge teqvolei">
+                                <i class="fas fa-volleyball-ball"></i>TeqVôlei
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Vascelona</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Joaoyerick</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card teqvolei">
+                            <div class="time-badge">9h00</div>
+                            <span class="sport-badge teqvolei">
+                                <i class="fas fa-volleyball-ball"></i>TeqVôlei
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Niell e jv</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Federados</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card teqvolei">
+                            <div class="time-badge">9h30</div>
+                            <span class="sport-badge teqvolei">
+                                <i class="fas fa-volleyball-ball"></i>TeqVôlei
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Venc (1)</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Esquerdas</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card teqvolei">
+                            <div class="time-badge">10h00</div>
+                            <span class="sport-badge teqvolei">
+                                <i class="fas fa-volleyball-ball"></i>TeqVôlei
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Venc (2)</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Os Irmãos</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card teqvolei">
+                            <div class="time-badge">10h30</div>
+                            <span class="sport-badge teqvolei">
+                                <i class="fas fa-volleyball-ball"></i>TeqVôlei
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Venc (3)</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Pladu G P</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card teqvolei">
+                            <div class="time-badge">11h00</div>
+                            <span class="sport-badge teqvolei">
+                                <i class="fas fa-volleyball-ball"></i>TeqVôlei
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Batutinhas</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Ataca Fofo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quarta-feira -->
+            <div class="day-card" data-day="wednesday">
+                <div class="day-header text-white relative">
+                    <h3 class="font-bold text-2xl text-center relative z-10">Quarta-feira</h3>
+                    <p class="text-center text-green-100 text-lg relative z-10 mt-1">13 de Agosto</p>
+                </div>
+                <div class="games-container">
+                    <div class="games-grid">
+                        <div class="match-card queimada">
+                            <div class="time-badge">8h30</div>
+                            <span class="sport-badge queimada">
+                                <i class="fas fa-fire"></i>Queimada
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">UZ 17</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Tropa da Sarrada</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card queimada">
+                            <div class="time-badge">9h00</div>
+                            <span class="sport-badge queimada">
+                                <i class="fas fa-fire"></i>Queimada
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Enfermáticos</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Perd (1)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card queimada">
+                            <div class="time-badge">9h30</div>
+                            <span class="sport-badge queimada">
+                                <i class="fas fa-fire"></i>Queimada
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">SJA</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Dia.bets</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card x2futsal">
+                            <div class="time-badge">10h00</div>
+                            <span class="sport-badge x2futsal">
+                                <i class="fas fa-running"></i>X2
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Bonde do GE</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Só Para Brincar</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card x2futsal">
+                            <div class="time-badge">10h30</div>
+                            <span class="sport-badge x2futsal">
+                                <i class="fas fa-running"></i>X2
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">JP e Davi</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Balança + Não Cai</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card x2futsal">
+                            <div class="time-badge">11h00</div>
+                            <span class="sport-badge x2futsal">
+                                <i class="fas fa-running"></i>X2
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">OS</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Gordos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quinta-feira -->
+            <div class="day-card" data-day="thursday">
+                <div class="day-header text-white relative">
+                    <h3 class="font-bold text-2xl text-center relative z-10">Quinta-feira</h3>
+                    <p class="text-center text-green-100 text-lg relative z-10 mt-1">14 de Agosto</p>
+                </div>
+                <div class="games-container">
+                    <div class="games-grid">
+                        <div class="match-card teqvolei">
+                            <div class="time-badge">8h00</div>
+                            <span class="sport-badge teqvolei">
+                                <i class="fas fa-volleyball-ball"></i>Semi TeqVôlei
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Venc (4)</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Venc (5)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card teqvolei">
+                            <div class="time-badge">8h30</div>
+                            <span class="sport-badge teqvolei">
+                                <i class="fas fa-volleyball-ball"></i>Semi TeqVôlei
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Venc (6)</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Venc (7)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card x2futsal">
+                            <div class="time-badge">9h30</div>
+                            <span class="sport-badge x2futsal">
+                                <i class="fas fa-running"></i>Semi X2
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Venc (3)</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Venc (4)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card volei">
+                            <div class="time-badge">10h00</div>
+                            <span class="sport-badge volei">
+                                <i class="fas fa-volleyball-ball"></i>Vôlei
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">Enfermagem 3A</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">Edificações</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-card volei">
+                            <div class="time-badge">10h30</div>
+                            <span class="sport-badge volei">
+                                <i class="fas fa-volleyball-ball"></i>Vôlei
+                            </span>
+                            <div class="match-teams">
+                                <div class="team-name">YES ADM</div>
+                                <div class="vs-divider">VS</div>
+                                <div class="team-name">UZ 17</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sexta-feira -->
+            <div class="day-card" data-day="friday">
+                <div class="day-header text-white relative">
+                    <h3 class="font-bold text-2xl text-center relative z-10">Sexta-feira</h3>
+                    <p class="text-center text-green-100 text-lg relative z-10 mt-1">15 de Agosto</p>
+                </div>
+                <div class="games-container">
+                    <div class="games-grid">
+                        <div class="match-card queimada">
+                            <div class="time-badge">8h00</div>
+                            <span class="sport-badge queimada">
+                                <i class="fas fa-fire"></i>Queimada 
+                            </span>
+                            <div class="final-badge">
+                                 FINAL CARIMBO 
+                            </div>
+                        </div>
+                        
+                        <div class="match-card futsal">
+                            <div class="time-badge">8h30</div>
+                            <span class="sport-badge futsal">
+                                <i class="fas fa-futbol"></i>Futsal 
+                            </span>
+                            <div class="final-badge">
+                                 FINAL FUTSAL 
+                            </div>
+                        </div>
+                        
+                        <div class="match-card teqvolei">
+                            <div class="time-badge">9h00</div>
+                            <span class="sport-badge teqvolei">
+                                <i class="fas fa-volleyball-ball"></i>TeqVôlei 
+                            </span>
+                            <div class="final-badge">
+                                 FINAL TEQVÔLEI 
+                            </div>
+                        </div>
+                        
+                        <div class="match-card x2futsal">
+                            <div class="time-badge">9h30</div>
+                            <span class="sport-badge x2futsal">
+                                <i class="fas fa-running"></i>X2 
+                            </span>
+                            <div class="final-badge">
+                                 FINAL X2  
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="flex-grow container mx-auto px-4 py-8">
-        <div class="card bg-white rounded-xl p-6 md:p-8 shadow-sm animate-fade-in" style="animation-delay: 0.1s">
-            <h3 class="text-xl md:text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-user-plus text-green-600 mr-3"></i>
-                <span>Cadastro de Usuário</span>
-            </h3>
-            
-            <form id="cadastroForm" method="post" novalidate>
-                <input type="hidden" name="action" value="cadastrar">
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="col-span-2">
-                        <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo *</label>
-                        <div class="relative">
-                            <input type="text" id="nome" name="nome" required 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus"
-                                   placeholder="Digite seu nome completo">
-                            <i class="fas fa-user absolute right-3 top-3 text-gray-400"></i>
-                        </div>
-                        <p id="nome-error" class="text-red-500 text-xs mt-1 hidden">Por favor, insira seu nome completo.</p>
-                    </div>
-                    
-                    <div class="col-span-2 md:col-span-1">
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail *</label>
-                        <div class="relative">
-                            <input type="email" id="email" name="email" required 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus"
-                                   placeholder="Digite seu e-mail">
-                            <i class="fas fa-envelope absolute right-3 top-3 text-gray-400"></i>
-                        </div>
-                        <p id="email-error" class="text-red-500 text-xs mt-1 hidden">Por favor, insira um e-mail válido.</p>
-                    </div>
-                    
-                    <div class="col-span-2 md:col-span-1">
-                        <label for="telefone" class="block text-sm font-medium text-gray-700 mb-1">Telefone *</label>
-                        <div class="relative">
-                            <input type="tel" id="telefone" name="telefone" required 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus"
-                                   placeholder="(00) 00000-0000">
-                            <i class="fas fa-phone-alt absolute right-3 top-3 text-gray-400"></i>
-                        </div>
-                        <p id="telefone-error" class="text-red-500 text-xs mt-1 hidden">Por favor, insira um telefone válido.</p>
-                    </div>
-                    
-                    <div class="col-span-2 md:col-span-1">
-                        <label for="ano" class="block text-sm font-medium text-gray-700 mb-1">Ano *</label>
-                        <div class="relative">
-                            <select id="ano" name="ano" required 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus appearance-none">
-                                <option value="">Selecione o ano</option>
-                                <option value="1">1º ano</option>
-                                <option value="2">2º ano</option>
-                                <option value="3">3º ano</option>
-                            </select>
-                            <i class="fas fa-chevron-down absolute right-3 select-icon text-gray-400 pointer-events-none"></i>
-                        </div>
-                        <p id="ano-error" class="text-red-500 text-xs mt-1 hidden">Por favor, selecione o ano.</p>
-                    </div>
-                    
-                    <div class="col-span-2 md:col-span-1">
-                        <label for="turma" class="block text-sm font-medium text-gray-700 mb-1">Turma *</label>
-                        <div class="relative">
-                            <select id="turma" name="turma" required 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus appearance-none">
-                                <option value="">Selecione a turma</option>
-                                <option value="A">Turma A</option>
-                                <option value="B">Turma B</option>
-                                <option value="C">Turma C</option>
-                                <option value="D">Turma D</option>
-                            </select>
-                            <i class="fas fa-chevron-down absolute right-3 select-icon text-gray-400 pointer-events-none"></i>
-                        </div>
-                        <p id="turma-error" class="text-red-500 text-xs mt-1 hidden">Por favor, selecione a turma.</p>
-                    </div>
-                </div>
-                
-                <div class="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <button type="submit" id="submitBtn" 
-                            class="gradient-btn text-white font-semibold py-3 px-8 rounded-lg w-full sm:w-auto flex items-center justify-center">
-                        <span id="submitText">Cadastrar</span>
-                        <i id="submitSpinner" class="fas fa-spinner fa-spin ml-2 hidden"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
     </main>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 hidden flex items-center">
-        <i class="fas fa-check-circle mr-2"></i>
-        <span id="toastMessage"></span>
-    </div>
-
     <script>
-        // Mobile Menu Toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-            
-            const loginOptions = document.getElementById('mobile-loginOptions');
-            if (!menu.classList.contains('hidden')) {
-                loginOptions.classList.add('hidden');
-                document.getElementById('mobile-loginDropdown').setAttribute('aria-expanded', 'false');
-            }
-        });
-
-        // Mobile Login Dropdown Toggle
-        document.getElementById('mobile-loginDropdown').addEventListener('click', function(e) {
-            e.stopPropagation();
-            const options = document.getElementById('mobile-loginOptions');
-            const isExpanded = options.classList.toggle('hidden');
-            this.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
-            
-            const icon = this.querySelector('i.fa-chevron-down');
-            icon.classList.toggle('transform');
-            icon.classList.toggle('rotate-180');
-        });
-
-        // Phone Number Mask
-        document.getElementById('telefone').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            
-            if (value.length > 11) {
-                value = value.substring(0, 11);
-            }
-            
-            if (value.length > 2) {
-                value = `(${value.substring(0, 2)}) ${value.substring(2)}`;
-            }
-            if (value.length > 10) {
-                value = `${value.substring(0, 10)}-${value.substring(10)}`;
-            }
-            
-            e.target.value = value;
-        });
-
-        // Form Validation
-        const form = document.getElementById('cadastroForm');
-        const fields = ['nome', 'email', 'telefone', 'ano', 'turma'];
+        // Day Navigation
+        const navButtons = document.querySelectorAll('.nav-button');
+        const dayCards = document.querySelectorAll('.day-card');
         
-        fields.forEach(field => {
-            const input = document.getElementById(field);
-            const error = document.getElementById(`${field}-error`);
-            
-            input.addEventListener('blur', function() {
-                validateField(field);
-            });
-            
-            input.addEventListener('input', function() {
-                if (this.classList.contains('border-red-500')) {
-                    this.classList.remove('border-red-500');
-                    error.classList.add('hidden');
-                }
-            });
-        });
-        
-        function validateField(fieldId) {
-            const field = document.getElementById(fieldId);
-            const value = field.value.trim();
-            const error = document.getElementById(`${fieldId}-error`);
-            let isValid = true;
-            
-            switch(fieldId) {
-                case 'nome':
-                    isValid = value.length >= 3;
-                    if (!isValid) error.textContent = 'O nome deve ter pelo menos 3 caracteres';
-                    break;
-                case 'email':
-                    isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-                    if (!isValid) error.textContent = 'Por favor, insira um e-mail válido';
-                    break;
-                case 'telefone':
-                    const digits = value.replace(/\D/g, '');
-                    isValid = digits.length >= 10;
-                    if (!isValid) error.textContent = 'O telefone deve ter pelo menos 10 dígitos';
-                    break;
-                case 'ano':
-                case 'turma':
-                    isValid = value !== '';
-                    if (!isValid) error.textContent = `Por favor, selecione ${fieldId === 'ano' ? 'o ano' : 'a turma'}`;
-                    break;
-            }
-            
-            if (!isValid) {
-                field.classList.add('border-red-500');
-                error.classList.remove('hidden');
-                return false;
-            }
-            
-            field.classList.remove('border-red-500');
-            error.classList.add('hidden');
-            return true;
-        }
-        
-        // Form Submission
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            let isValid = true;
-            fields.forEach(field => {
-                if (!validateField(field)) {
-                    isValid = false;
-                }
-            });
-            
-            if (!isValid) {
-                showToast('Por favor, corrija os erros no formulário', 'error');
-                return;
-            }
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const submitText = document.getElementById('submitText');
-            const submitSpinner = document.getElementById('submitSpinner');
-            
-            submitBtn.disabled = true;
-            submitText.textContent = 'Cadastrando...';
-            submitSpinner.classList.remove('hidden');
-            
-            try {
-                const formData = new FormData(form);
-                formData.set('action', 'cadastrar');
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetDay = button.dataset.day;
                 
-                console.log('Enviando dados:');
-                for (let pair of formData.entries()) {
-                    console.log(pair[0] + ': ' + pair[1]);
-                }
+                // Update active button
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
                 
-                const controllerPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1) + 'controllers/UsuarioController.php';
-                console.log('Enviando para:', controllerPath);
-                
-                const response = await fetch(controllerPath, {
-                    method: 'POST',
-                    body: formData
+                // Show/hide day cards
+                dayCards.forEach(card => {
+                    if (targetDay === 'all' || card.dataset.day === targetDay) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
                 });
-                
-                console.log('Status da resposta:', response.status);
-                const responseText = await response.text();
-                console.log('Resposta do servidor (texto):', responseText);
-                
-                let data;
-                try {
-                    data = JSON.parse(responseText);
-                    console.log('Resposta do servidor (JSON):', data);
-                } catch (jsonError) {
-                    console.error('Erro ao parsear JSON:', jsonError);
-                    throw new Error('Resposta inválida do servidor: ' + responseText);
-                }
-                
-                if (data.success) {
-                    Swal.fire({
-                        title: 'Cadastro realizado com sucesso!',
-                        text: 'Agora você pode fazer login para gerenciar suas inscrições.',
-                        icon: 'success',
-                        confirmButtonText: 'Ir para o login',
-                        confirmButtonColor: '#005A24',
-                        allowOutsideClick: false
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = 'usuario/login.php';
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Erro no cadastro',
-                        text: data.message || 'Ocorreu um erro ao processar seu cadastro.',
-                        icon: 'error',
-                        confirmButtonColor: '#005A24'
-                    });
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                Swal.fire({
-                    title: 'Erro de conexão',
-                    text: 'Não foi possível conectar ao servidor. Tente novamente mais tarde.',
-                    icon: 'error',
-                    confirmButtonColor: '#005A24'
-                });
-            } finally {
-                submitBtn.disabled = false;
-                submitText.textContent = 'Cadastrar';
-                submitSpinner.classList.add('hidden');
-            }
+            });
         });
+
+        // Adicionar números aos jogos por modalidade
+        const modalities = ['futsal', 'teqvolei', 'queimada', 'x2futsal', 'volei'];
         
-        // Toast Notification
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            
-            if (type === 'error') {
-                toast.classList.remove('bg-green-600');
-                toast.classList.add('bg-red-600');
-            } else {
-                toast.classList.remove('bg-red-600');
-                toast.classList.add('bg-green-600');
-            }
-            
-            toastMessage.textContent = message;
-            toast.classList.remove('hidden');
-            
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 3000);
-        }
-        
-        // Initialize animations
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputs = document.querySelectorAll('input, select');
-            inputs.forEach((input, index) => {
-                input.style.animationDelay = `${index * 0.05}s`;
-                input.classList.add('animate-fade-in');
+        modalities.forEach(modality => {
+            const matches = document.querySelectorAll(`.match-card.${modality}`);
+            matches.forEach((match, index) => {
+                const badge = match.querySelector('.sport-badge');
+                if (badge && !match.classList.contains('abertura')) {
+                    badge.innerHTML = `<i class="fas fa-${modality === 'futsal' ? 'futbol' : modality === 'queimada' ? 'fire' : modality === 'x2futsal' ? 'running' : 'volleyball-ball'}"></i> ${badge.textContent} #${index + 1}`;
+                }
             });
         });
     </script>
-    <footer class="w-full text-center py-4 bg-gray-100 text-gray-600 text-sm mt-8">
-        Desenvolvido por Matheus Felix
+
+    <footer class="w-full text-center py-6 bg-white/80 backdrop-blur-sm text-gray-600 text-sm mt-12 border-t border-gray-200">
+        <div class="w-full px-4">
+            <p class="font-medium">Desenvolvido por <a href="https://www.instagram.com/matheusfelix.dev/" target="_blank" class="text-green-600 hover:underline">Matheus Felix</a></p>
+        </div>
     </footer>
 </body>
 </html>
