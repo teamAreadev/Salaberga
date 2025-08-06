@@ -126,6 +126,7 @@
                             <th class="py-3 px-4 text-left">Nome</th>
                             <th class="py-3 px-4 text-left">Quantidade</th>
                             <th class="py-3 px-4 text-left">Categoria</th>
+                            <th class="py-3 px-4 text-left">Data Cadastro</th>
                             <th class="py-3 px-4 text-left">Ações</th>
                         </tr>
                     </thead>
@@ -143,6 +144,7 @@
                                 echo '<td class="py-3 px-4">' . htmlspecialchars($produto['nome_produto']) . '</td>';
                                 echo '<td class="py-3 px-4 ' . $quantidadeClass . '">' . htmlspecialchars($produto['quantidade']) . '</td>';
                                 echo '<td class="py-3 px-4">' . htmlspecialchars($produto['natureza']) . '</td>';
+                                echo '<td class="py-3 px-4">' . date('d/m/Y H:i', strtotime($produto['data'])) . '</td>';
                                 echo '<td class="py-3 px-4 flex space-x-2">';
                                 echo '<button onclick="abrirModalEditar(' . $produto['id'] . ')" class="text-primary hover:text-secondary mr-2" title="Editar">';
                                 echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>';
@@ -154,7 +156,7 @@
                                 echo '</tr>';
                             }
                         } else {
-                            echo '<tr><td colspan="5" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>';
+                            echo '<tr><td colspan="6" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>';
                         }
                         ?>
                     </tbody>
@@ -178,7 +180,8 @@
                     echo '<h3 class="font-bold text-lg text-primary mb-1">' . htmlspecialchars($produto['nome_produto']) . '</h3>';
                     echo '<div class="flex flex-col space-y-1">';
                     echo '<p class="text-sm text-gray-500 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg><span>' . htmlspecialchars($produto['barcode']) . '</span></p>';
-                    echo '<p class="text-sm flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg><span class="' . $quantidadeClass . '">Quantidade: ' . htmlspecialchars($produto['quantidade']) . '</span></p>';
+                    echo '<p class="text-sm flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg><span class="' . $quantidadeClass . '">Quantidade: ' . htmlspecialchars($produto['quantidade']) . '</span></p>';
+                    echo '<p class="text-sm text-gray-500 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg><span>Cadastrado: ' . date('d/m/Y H:i', strtotime($produto['data'])) . '</span></p>';
                     echo '</div></div>';
                     echo '<div class="flex space-x-1">';
                     echo '<button onclick="abrirModalEditar(' . $produto['id'] . ')" class="text-primary hover:text-secondary p-1 rounded-full bg-gray-50" title="Editar">';
