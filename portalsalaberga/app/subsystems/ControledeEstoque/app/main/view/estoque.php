@@ -314,6 +314,10 @@ if (isset($_GET['resultado'])) {
                 <button id="filtrarBtn" class="bg-secondary text-white font-bold py-3 px-6 rounded-lg hover:bg-opacity-90 transition-colors">
                     Filtrar
                 </button>
+                <a href="relatorio_por_data.php" class="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-opacity-90 transition-colors flex items-center">
+                    <i class="fas fa-calendar-alt mr-2"></i>
+                    Relatório por Data
+                </a>
             </div>
         </div>
 
@@ -326,6 +330,7 @@ if (isset($_GET['resultado'])) {
                             <th class="py-3 px-4 text-left">Nome</th>
                             <th class="py-3 px-4 text-left">Quantidade</th>
                             <th class="py-3 px-4 text-left">Categoria</th>
+                            <th class="py-3 px-4 text-left">Data</th>
                             <th class="py-3 px-4 text-left">Ações</th>
                         </tr>
                     </thead>
@@ -342,6 +347,9 @@ if (isset($_GET['resultado'])) {
                                         <td class="py-3 px-4"><?php echo htmlspecialchars($produto['nome_produto']); ?></td>
                                         <td class="py-3 px-4 <?php echo $quantidadeClass; ?>"><?php echo htmlspecialchars($produto['quantidade']); ?></td>
                                         <td class="py-3 px-4"><?php echo htmlspecialchars($produto['natureza']); ?></td>
+                                        <td class="py-3 px-4">
+                                            <?php echo isset($produto['data']) ? date('d/m/Y H:i', strtotime($produto['data'])) : 'N/A'; ?>
+                                        </td>
                                         <td class="py-3 px-4 flex space-x-2">
                                             <button class="text-primary hover:text-secondary mr-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -358,10 +366,10 @@ if (isset($_GET['resultado'])) {
                         <?php
                                 }
                             } else {
-                                echo '<tr><td colspan="5" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>';
+                                echo '<tr><td colspan="6" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>';
                             }
                         } else {
-                            echo '<tr><td colspan="5" class="py-4 px-4 text-center text-gray-500">Carregando produtos...</td></tr>';
+                            echo '<tr><td colspan="6" class="py-4 px-4 text-center text-gray-500">Carregando produtos...</td></tr>';
                         }
                         ?>
                         <!-- Exemplos estáticos para visualização -->
@@ -370,6 +378,7 @@ if (isset($_GET['resultado'])) {
                             <td class="py-3 px-4">Papel A4</td>
                             <td class="py-3 px-4">100</td>
                             <td class="py-3 px-4">Expedientes</td>
+                            <td class="py-3 px-4">01/08/2024 10:30</td>
                             <td class="py-3 px-4">
                                 <button class="text-primary hover:text-secondary mr-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -388,6 +397,7 @@ if (isset($_GET['resultado'])) {
                             <td class="py-3 px-4">Detergente</td>
                             <td class="py-3 px-4">50</td>
                             <td class="py-3 px-4">Limpeza</td>
+                            <td class="py-3 px-4">02/08/2024 14:15</td>
                             <td class="py-3 px-4">
                                 <button class="text-primary hover:text-secondary mr-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
