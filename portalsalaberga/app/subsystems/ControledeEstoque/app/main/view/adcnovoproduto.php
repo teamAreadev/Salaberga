@@ -1,6 +1,6 @@
 <?php
-// Capturar o barcode ou nome da URL
-$identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome']) ? $_GET['nome'] : '');
+// Capturar o barcode da URL
+$barcode = isset($_GET['barcode']) ? $_GET['barcode'] : '';
 ?>
 
 <!DOCTYPE html>
@@ -487,7 +487,7 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                             </label>
                         </div>
                     </div>
-                    <input type="hidden" name="barcode" value="<?php echo htmlspecialchars($identificador); ?>">
+                    <input type="hidden" name="barcode" value="<?php echo htmlspecialchars($barcode); ?>">
                 </div>
                 <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
                     aria-label="Adicionar produto">

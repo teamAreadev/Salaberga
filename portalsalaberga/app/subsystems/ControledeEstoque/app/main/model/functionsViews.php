@@ -19,52 +19,6 @@ class select extends connection
         return $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function selectProdutosFlexivel($identificador)
-    {
-        try {
-            // Verificar se é um barcode (numérico) ou nome do produto
-            if (is_numeric($identificador)) {
-                // Buscar por barcode
-                $consulta = "SELECT * FROM produtos WHERE barcode = :identificador";
-                $parametro = $identificador;
-                $nome_parametro = ":identificador";
-            } else {
-                // Verificar se já tem prefixo SC_
-                if (strpos($identificador, 'SC_') === 0) {
-                    // Já tem prefixo SC_, usar como está
-                    $consulta = "SELECT * FROM produtos WHERE UPPER(barcode) = UPPER(:barcode_com_prefixo)";
-                    $parametro = $identificador;
-                    $nome_parametro = ":barcode_com_prefixo";
-                } else {
-                    // Adicionar prefixo SC_ para produtos sem código
-                    $barcode_com_prefixo = 'SC_' . $identificador;
-                    $consulta = "SELECT * FROM produtos WHERE UPPER(barcode) = UPPER(:barcode_com_prefixo)";
-                    $parametro = $barcode_com_prefixo;
-                    $nome_parametro = ":barcode_com_prefixo";
-                }
-            }
-
-            error_log("Consulta SQL: " . $consulta);
-            error_log("Parâmetro final: " . $parametro);
-
-            $query = $this->pdo->prepare($consulta);
-            $query->bindValue($nome_parametro, $parametro);
-            $query->execute();
-
-            $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
-            error_log("Resultado encontrado: " . count($resultado) . " registros");
-            
-            // Debug: verificar todos os produtos no banco
-            $todos_produtos = $this->pdo->query("SELECT barcode, nome_produto FROM produtos")->fetchAll(PDO::FETCH_ASSOC);
-            error_log("Todos os produtos no banco: " . print_r($todos_produtos, true));
-            
-            return $resultado;
-        } catch (Exception $e) {
-            error_log("Erro no selectProdutosFlexivel: " . $e->getMessage());
-            return array();
-        }
-    }
-
     public function selectSolicitarProdutos($barcode)
     {
         try {

@@ -417,31 +417,15 @@
         <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
             <form action="../control/controllerConsultarProduto.php" method="POST" class="space-y-6">
                 <div class="space-y-4">
-                    <!-- Checkboxes para tipo de produto -->
-                    <div class="space-y-3">
-                        <label class="text-primary font-semibold text-sm">Tipo de Produto:</label>
-                        <div class="space-y-2">
-                            <label class="custom-radio flex items-center">
-                                <input type="radio" name="tipo_produto" value="com_codigo" id="com_codigo" checked>
-                                <span class="ml-2 text-gray-700">Produto com código</span>
-                            </label>
-                            <label class="custom-radio flex items-center">
-                                <input type="radio" name="tipo_produto" value="sem_codigo" id="sem_codigo">
-                                <span class="ml-2 text-gray-700">Produto sem código</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Campo de entrada dinâmico -->
                     <div>
                         <input type="text" placeholder="BARCODE" id="barcode" name="barcode" required
                             class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                             aria-label="Código de barras do produto">
                     </div>
-                    
+
                     <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
                         aria-label="Adicionar produto">
-                        CADASTRAR
+                        CONSULTAR
                     </button>
             </form>
         </div>
@@ -626,32 +610,6 @@
                     img.loading = 'lazy';
                 });
             }
-
-            // Controle das checkboxes de tipo de produto
-            const comCodigoRadio = document.getElementById('com_codigo');
-            const semCodigoRadio = document.getElementById('sem_codigo');
-            const inputField = document.getElementById('barcode');
-
-            function updateInputField() {
-                if (comCodigoRadio.checked) {
-                    // Produto com código
-                    inputField.placeholder = "BARCODE";
-                    inputField.name = "barcode";
-                    inputField.setAttribute('aria-label', 'Código de barras do produto');
-                } else {
-                    // Produto sem código
-                    inputField.placeholder = "NOME DO PRODUTO";
-                    inputField.name = "nome_produto";
-                    inputField.setAttribute('aria-label', 'Nome do produto');
-                }
-            }
-
-            // Adicionar event listeners para as checkboxes
-            comCodigoRadio.addEventListener('change', updateInputField);
-            semCodigoRadio.addEventListener('change', updateInputField);
-
-            // Inicializar o campo
-            updateInputField();
         });
     </script>
 </body>
