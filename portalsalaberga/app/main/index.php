@@ -71,7 +71,7 @@
                 extend: {
                     colors: {
                         // Paleta Studio Ghibli baseada na imagem
-                        'ghibli-sky': '#5BA3D2',
+                        'ghibli-sky': '#5BA3D24',
                         'ghibli-cloud': '#F8F8F8',
                         'ghibli-building': '#8B9DC3',
                         'ghibli-accent': '#D4A574',
