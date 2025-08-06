@@ -1005,7 +1005,7 @@ class gerenciamento extends connection
             // Adicionar prefixo SC_ para produtos sem código
             $barcode_com_prefixo = 'SC_' . $nome_produto;
         }
-        
+
         // Verificar se já existe um produto com este nome como barcode
         $consulta = "SELECT quantidade FROM produtos WHERE barcode = :barcode_com_prefixo";
         $query = $this->pdo->prepare($consulta);
@@ -1043,7 +1043,7 @@ class gerenciamento extends connection
             // Adicionar prefixo SC_ para produtos sem código
             $barcode_com_prefixo = 'SC_' . $nome_produto;
         }
-        
+
         $consulta = "UPDATE produtos SET quantidade = quantidade + :quantidade WHERE barcode = :barcode_com_prefixo";
         $query = $this->pdo->prepare($consulta);
         $query->bindValue(":quantidade", $quantidade);
@@ -1056,7 +1056,7 @@ class gerenciamento extends connection
     public function adcproduto($barcode, $nome,  $quantidade, $natureza)
     {
         error_log("Adicionando produto - barcode: " . $barcode . ", nome: " . $nome . ", quantidade: " . $quantidade . ", natureza: " . $natureza);
-        
+
         $consulta = "INSERT INTO produtos VALUES (null, :barcode, :nome, :quantidade, :natureza)";
         $query = $this->pdo->prepare($consulta);
         $query->bindValue(":nome", $nome);
@@ -1201,7 +1201,7 @@ class relatorios extends connection
     {
         parent::__construct();
     }
-    
+
     public function relatorioestoque()
     {
         $consulta = "SELECT * FROM produtos ORDER BY natureza, nome_produto";
@@ -1321,14 +1321,14 @@ class relatorios extends connection
         $larguraDisponivel = $pdf->GetPageWidth() - (2 * $margemTabela);
 
         // Definindo colunas e larguras proporcionais
-        $colunas = array('ID', 'Código', 'Produto', 'Quant.', 'Categoria');
+        $colunas = array('ID', 'Código', 'Produto', 'Quant.');
         $larguras = array(
-            round($larguraDisponivel * 0.06), // 6% para ID
-            round($larguraDisponivel * 0.18), // 18% para Código
-            round($larguraDisponivel * 0.44), // 44% para Produto
-            round($larguraDisponivel * 0.12), // 12% para Quantidade
-            round($larguraDisponivel * 0.20)  // 20% para Categoria
+            round($larguraDisponivel * 0.08), // ID
+            round($larguraDisponivel * 0.20), // Código
+            round($larguraDisponivel * 0.52), // Produto
+            round($larguraDisponivel * 0.20)  // Quantidade
         );
+
 
         $pdf->SetXY($margemTabela, $pdf->GetY() + 10);
         $pdf->SetFont('Arial', 'B', 11);
@@ -1495,11 +1495,6 @@ class relatorios extends connection
                 $pdf->SetFont('Arial', '', 10);
                 $posX += $larguras[3];
 
-                // Categoria
-                $pdf->Rect($posX, $y, $larguras[4], $alturaLinhaDados, 'FD');
-                $pdf->SetXY($posX + 5, $y);
-                $pdf->Cell($larguras[4] - 10, $alturaLinhaDados, utf8_decode($row['natureza']), 0, 0, 'L');
-
                 $y += $alturaLinhaDados;
                 $linhaAlternada = !$linhaAlternada;
 
@@ -1508,7 +1503,7 @@ class relatorios extends connection
                     // Adicionar cantos arredondados na última linha da tabela
                     $pdf->SetDrawColor(220, 220, 220);
                     $pdf->RoundedRect($margemTabela, $y - $alturaLinhaDados, $larguras[-0], $alturaLinhaDados, 5, 'D', '4');
-                    $pdf->RoundedRect($posX, $y - $alturaLinhaDados, $larguras[4], $alturaLinhaDados, 5, 'D', '3');
+                    $pdf->RoundedRect($posX, $y - $alturaLinhaDados, $larguras[3], $alturaLinhaDados, 5, 'D', '3');
 
                     // ===== RODAPÉ PROFISSIONAL =====
 
@@ -2018,13 +2013,12 @@ class relatorios extends connection
         $larguraDisponivel = $pdf->GetPageWidth() - (2 * $margemTabela);
 
         // Definindo colunas e larguras proporcionais
-        $colunas = array('ID', 'Código', 'Produto', 'Quant.', 'Categoria');
+        $colunas = array('ID', 'Código', 'Produto', 'Quant.');
         $larguras = array(
-            round($larguraDisponivel * 0.06), // 6% para ID
-            round($larguraDisponivel * 0.18), // 18% para Código
-            round($larguraDisponivel * 0.44), // 44% para Produto
-            round($larguraDisponivel * 0.12), // 12% para Quantidade
-            round($larguraDisponivel * 0.20)  // 20% para Categoria
+            round($larguraDisponivel * 0.08), // ID
+            round($larguraDisponivel * 0.20), // Código
+            round($larguraDisponivel * 0.52), // Produto
+            round($larguraDisponivel * 0.20)  // Quantidade
         );
 
         $pdf->SetXY($margemTabela, $startY + $cardHeight + 40);
@@ -2189,11 +2183,6 @@ class relatorios extends connection
                 $pdf->SetFont('Arial', '', 10);
                 $posX += $larguras[3];
 
-                // Categoria
-                $pdf->Rect($posX, $y, $larguras[4], $alturaLinhaDados, 'FD');
-                $pdf->SetXY($posX + 5, $y);
-                $pdf->Cell($larguras[4] - 10, $alturaLinhaDados, utf8_decode($row['natureza']), 0, 0, 'L');
-
                 $y += $alturaLinhaDados;
                 $linhaAlternada = !$linhaAlternada;
 
@@ -2202,7 +2191,7 @@ class relatorios extends connection
                     // Adicionar cantos arredondados na última linha da tabela
                     $pdf->SetDrawColor(220, 220, 220);
                     $pdf->RoundedRect($margemTabela, $y - $alturaLinhaDados, $larguras[0], $alturaLinhaDados, 5, 'D', '4');
-                    $pdf->RoundedRect($posX, $y - $alturaLinhaDados, $larguras[4], $alturaLinhaDados, 5, 'D', '3');
+                    $pdf->RoundedRect($posX, $y - $alturaLinhaDados, $larguras[3], $alturaLinhaDados, 5, 'D', '3');
 
                     // ===== RODAPÉ PROFISSIONAL =====
                     $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
@@ -2522,12 +2511,12 @@ class relatorios extends connection
     }
 
     public function relatorioDeCodigosSC()
-{
+    {
 
-    $consulta = "SELECT * FROM produtos WHERE barcode LIKE 'SC_%' ORDER BY natureza, nome_produto";
-    $query = $this->pdo->prepare($consulta);
-    $query->execute();
-    $result = $query->rowCount();
+        $consulta = "SELECT * FROM produtos WHERE barcode LIKE 'SC_%' ORDER BY natureza, nome_produto";
+        $query = $this->pdo->prepare($consulta);
+        $query->execute();
+        $result = $query->rowCount();
 
         // Criar PDF personalizado
         $pdf = new PDF("L", "pt", "A4");
@@ -2617,19 +2606,19 @@ class relatorios extends connection
         $pdf->SetTextColor($corSecondary[0], $corSecondary[1], $corSecondary[2]);
         $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 40);
         $pdf->Cell($cardWidth - 30, 25, $resumo['total_categorias'], 0, 1, 'L');
-       
+
 
         // ===== TABELA DE PRODUTOS COM MELHOR DESIGN =====
         $margemTabela = 40;
         $larguraDisponivel = $pdf->GetPageWidth() - (2 * $margemTabela);
 
         /// Definindo colunas e larguras proporcionais
-        $colunas = array('ID', 'Código', 'Produto', 'Quant.', 'Categoria');
+        $colunas = array('ID', 'Código', 'Produto', 'Quant.');
         $larguras = array(
-            round($larguraDisponivel * 0.06), // 6% para ID
-            round($larguraDisponivel * 0.18), // 18% para Código
-            round($larguraDisponivel * 0.44), // 44% para Produto
-            round($larguraDisponivel * 0.12), // 12% para Quantidade
+            round($larguraDisponivel * 0.11), // 6% para ID
+            round($larguraDisponivel * 0.23), // 18% para Código
+            round($larguraDisponivel * 0.49), // 44% para Produto
+            round($larguraDisponivel * 0.17), // 12% para Quantidade
             round($larguraDisponivel * 0.20)  // 20% para Categoria
         );
 
@@ -2767,7 +2756,7 @@ class relatorios extends connection
                 // Desenhar linha de dados
                 $posX = $margemTabela;
                 $estoqueCritico = $row['quantidade'] <= 5;
-                
+
                 // ID
                 $pdf->Rect($posX, $y, $larguras[0], $alturaLinhaDados, 'FD');
                 $pdf->SetXY($posX, $y);
@@ -2798,10 +2787,6 @@ class relatorios extends connection
                 $pdf->SetFont('Arial', '', 10);
                 $posX += $larguras[3];
 
-                // Categoria
-                $pdf->Rect($posX, $y, $larguras[4], $alturaLinhaDados, 'FD');
-                $pdf->SetXY($posX + 5, $y);
-                $pdf->Cell($larguras[4] - 10, $alturaLinhaDados, utf8_decode($row['natureza']), 0, 0, 'L');
 
                 $y += $alturaLinhaDados;
                 $linhaAlternada = !$linhaAlternada;
