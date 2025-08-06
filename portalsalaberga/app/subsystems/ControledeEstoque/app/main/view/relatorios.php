@@ -668,6 +668,17 @@
                     <i class="fas fa-calendar-plus mr-2"></i>
                     Selecionar Período
                 </button>
+            <!-- Relatório de Produtos sem Código de Barras -->
+            <div class="card-item bg-white border-2 border-primary rounded-xl shadow-lg p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.3s">
+                <div class="card-shine"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-primary mb-4 card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                <h2 class="text-xl font-bold text-primary text-center mb-2">Produtos sem Código de Barras</h2>
+                <p class="text-gray-600 text-center mb-4">Relatório detalhado de produtos sem código de barras</p>
+                <a href="../control/controllerrelatoriosc.php" class="bg-secondary text-white py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors font-semibold" target="_blank">
+                    Gerar Relatório
+                </a>
             </div>
         </div>
 
