@@ -70,6 +70,13 @@ class gerenciamento extends connection
     {
         parent::__construct();
     }
+    
+    // Método público para acessar o PDO
+    public function getPdo()
+    {
+        return $this->pdo;
+    }
+    
     public function removerAcentos($texto)
     {
         $texto = str_replace(
@@ -381,21 +388,12 @@ class gerenciamento extends connection
                         <i class="fas fa-plus-circle mr-2"></i>
                         <span>Adicionar</span>
                     </a>
-                    <div class="relative group">
-                        <a class="header-nav-link flex items-center cursor-pointer">
+                
+                        <a href="../view/solicitar.php" class="header-nav-link flex items-center cursor-pointer">
                             <i class="fas fa-clipboard-list mr-2"></i>
                             <span>Solicitar</span>
-                            <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                          
                         </a>
-                        <div class="absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg overflow-hidden transform scale-0 group-hover:scale-100 transition-transform origin-top z-50">
-                            <a href="../view/solicitar.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors">
-                                <i class="fas fa-clipboard-check mr-2"></i>Solicitar Produto
-                            </a>
-                            <a href="../view/solicitarnovproduto.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors">
-                                <i class="fas fa-plus-square mr-2"></i>Solicitar Novo Produto
-                            </a>
-                        </div>
-                    </div>
                     <a href="../view/relatorios.php" class="header-nav-link flex items-center">
                         <i class="fas fa-chart-bar mr-2"></i>
                         <span>Relatórios</span>
@@ -1279,11 +1277,6 @@ class relatorios extends connection
         $pdf->SetXY($startX + 15, $startY + 15);
         $pdf->Cell($cardWidth - 30, 20, utf8_decode("TOTAL DE PRODUTOS"), 0, 1, 'L');
 
-        $pdf->SetFont('Arial', 'B', 24);
-        $pdf->SetTextColor($corPrimary[0], $corPrimary[1], $corPrimary[2]);
-        $pdf->SetXY($startX + 15, $startY + 40);
-        $pdf->Cell($cardWidth - 30, 25, $resumo['total_produtos'], 0, 1, 'L');
-
         // Card 2 - Estoque Crítico
         $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
         $pdf->RoundedRect($startX + $cardWidth + $cardMargin, $startY, $cardWidth, $cardHeight, 8, 'F');
@@ -1292,11 +1285,6 @@ class relatorios extends connection
         $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
         $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 15);
         $pdf->Cell($cardWidth - 30, 20, utf8_decode("ESTOQUE CRÍTICO"), 0, 1, 'L');
-
-        $pdf->SetFont('Arial', 'B', 24);
-        $pdf->SetTextColor($corAlerta[0], $corAlerta[1], $corAlerta[2]);
-        $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 40);
-        $pdf->Cell($cardWidth - 30, 25, $resumo['produtos_criticos'], 0, 1, 'L');
 
         // Card 3 - Categorias
         $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
