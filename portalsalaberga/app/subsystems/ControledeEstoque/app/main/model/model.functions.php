@@ -1203,6 +1203,7 @@ class gerenciamento extends connection
             return null;
         }
     }
+
 }
 
 class relatorios extends connection
@@ -1210,6 +1211,33 @@ class relatorios extends connection
     function __construct()
     {
         parent::__construct();
+    }
+    
+    public function buscarProdutosPorData($data_inicio, $data_fim)
+    {
+        try {
+            error_log("Iniciando busca de produtos por data: " . $data_inicio . " a " . $data_fim);
+            
+            // Buscar produtos cadastrados no período especificado
+            $consulta = "SELECT id, barcode, nome_produto, quantidade, natureza, 
+                        data as data 
+                        FROM produtos 
+                        WHERE DATE(data) BETWEEN :data_inicio AND :data_fim
+                        ORDER BY data DESC";
+            
+            $query = $this->pdo->prepare($consulta);
+            $query->bindValue(":data_inicio", $data_inicio);
+            $query->bindValue(":data_fim", $data_fim);
+            $query->execute();
+            
+            $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
+            error_log("Produtos encontrados no período: " . count($resultado));
+            
+            return $resultado;
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar produtos por data: " . $e->getMessage());
+            return array();
+        }
     }
     
     public function relatorioestoque()
@@ -1684,7 +1712,7 @@ class relatorios extends connection
             // Cabeçalhos das colunas
             $pdf->Cell(40, 15, utf8_decode("ID"), 1, 0, 'C', true);
             $pdf->Cell(80, 15, utf8_decode("BARCODE"), 1, 0, 'C', true);
-            $pdf->Cell(120, 15, utf8_decode("PRODUTO"), 1, 0, 'C', true);
+            $pdf->Cell(375, 15, utf8_decode("PRODUTO"), 1, 0, 'C', true);
             $pdf->Cell(60, 15, utf8_decode("QTD. RETIRADA"), 1, 0, 'C', true);
             $pdf->Cell(80, 15, utf8_decode("RESPONSÁVEL"), 1, 0, 'C', true);
             $pdf->Cell(60, 15, utf8_decode("CARGO"), 1, 0, 'C', true);
@@ -1700,7 +1728,7 @@ class relatorios extends connection
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $pdf->Cell(40, 12, utf8_decode($row['id']), 1, 0, 'C', $fill);
                 $pdf->Cell(80, 12, utf8_decode($row['barcode_produto']), 1, 0, 'C', $fill);
-                $pdf->Cell(120, 12, utf8_decode($row['nome_produto']), 1, 0, 'L', $fill);
+                $pdf->Cell(375, 12, utf8_decode($row['nome_produto']), 1, 0, 'L', $fill);
                 $pdf->Cell(60, 12, utf8_decode($row['quantidade_retirada']), 1, 0, 'C', $fill);
                 $pdf->Cell(80, 12, utf8_decode($row['nome_responsavel']), 1, 0, 'L', $fill);
                 $pdf->Cell(60, 12, utf8_decode($row['cargo']), 1, 0, 'L', $fill);
@@ -1719,25 +1747,6 @@ class relatorios extends connection
         } catch (PDOException $e) {
             error_log("Erro no relatório por data: " . $e->getMessage());
             echo "Erro ao gerar relatório: " . $e->getMessage();
-        }
-    }
-
-    public function buscarProdutosPorData($data_inicio, $data_fim)
-    {
-        try {
-            $consulta = "SELECT id, barcode, nome_produto, quantidade, natureza, data 
-                        FROM produtos 
-                        WHERE DATE(data) BETWEEN :data_inicio AND :data_fim 
-                        ORDER BY data DESC";
-            $query = $this->pdo->prepare($consulta);
-            $query->bindParam(':data_inicio', $data_inicio);
-            $query->bindParam(':data_fim', $data_fim);
-            $query->execute();
-            
-            return $query->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            error_log("Erro ao buscar produtos por data: " . $e->getMessage());
-            return array();
         }
     }
 
@@ -2418,11 +2427,11 @@ class relatorios extends connection
             $pdf->SetTextColor($corBranco[0], $corBranco[1], $corBranco[2]);
 
             // Cabeçalho da tabela
-            $pdf->Cell(60, 15, utf8_decode("BARCODE"), 1, 0, 'C', true);
-            $pdf->Cell(120, 15, utf8_decode("NOME DO PRODUTO"), 1, 0, 'C', true);
-            $pdf->Cell(60, 15, utf8_decode("QUANTIDADE"), 1, 0, 'C', true);
-            $pdf->Cell(80, 15, utf8_decode("CATEGORIA"), 1, 0, 'C', true);
-            $pdf->Cell(80, 15, utf8_decode("DATA CADASTRO"), 1, 1, 'C', true);
+            $pdf->Cell(100, 15, utf8_decode("BARCODE"), 1, 0, 'C', true);
+            $pdf->Cell(370, 15, utf8_decode("NOME DO PRODUTO"), 1, 0, 'C', true);
+            $pdf->Cell(80, 15, utf8_decode("QUANTIDADE"), 1, 0, 'C', true);
+            $pdf->Cell(120, 15, utf8_decode("CATEGORIA"), 1, 0, 'C', true);
+            $pdf->Cell(120, 15, utf8_decode("DATA CADASTRO"), 1, 1, 'C', true);
 
             // Dados da tabela
             $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
@@ -2431,11 +2440,11 @@ class relatorios extends connection
 
             $fill = false;
             foreach ($produtos as $produto) {
-                $pdf->Cell(60, 12, utf8_decode($produto['barcode']), 1, 0, 'C', $fill);
-                $pdf->Cell(120, 12, utf8_decode($produto['nome_produto']), 1, 0, 'L', $fill);
-                $pdf->Cell(60, 12, utf8_decode($produto['quantidade']), 1, 0, 'C', $fill);
-                $pdf->Cell(80, 12, utf8_decode($produto['natureza']), 1, 0, 'L', $fill);
-                $pdf->Cell(80, 12, utf8_decode(date('d/m/Y H:i', strtotime($produto['data']))), 1, 1, 'C', $fill);
+                $pdf->Cell(100, 12, utf8_decode($produto['barcode']), 1, 0, 'L', $fill);
+                $pdf->Cell(370, 12, utf8_decode($produto['nome_produto']), 1, 0, 'L', $fill);
+                $pdf->Cell(80, 12, utf8_decode($produto['quantidade']), 1, 0, 'C', $fill);
+                $pdf->Cell(120, 12, utf8_decode($produto['natureza']), 1, 0, 'L', $fill);
+                $pdf->Cell(120, 12, utf8_decode(date('d/m/Y H:i', strtotime($produto['data']))), 1, 1, 'C', $fill);
                 $fill = !$fill;
             }
 
@@ -2450,6 +2459,29 @@ class relatorios extends connection
         } catch (PDOException $e) {
             error_log("Erro ao exportar relatório: " . $e->getMessage());
             echo "Erro ao gerar relatório: " . $e->getMessage();
+        }
+    }
+
+    public function buscarMovimentacoesPorData($data_inicio, $data_fim)
+    {
+        try {
+            $consulta = "SELECT e.id, e.fk_produtos_id, e.fk_responsaveis_id, e.barcode_produto, e.datareg, 
+                            e.quantidade_retirada,
+                            p.nome_produto AS nome_produto, r.nome AS nome_responsavel, r.cargo AS cargo
+                        FROM movimentacao e
+                        LEFT JOIN produtos p ON e.fk_produtos_id = p.id
+                        LEFT JOIN responsaveis r ON e.fk_responsaveis_id = r.id
+                        WHERE e.datareg BETWEEN :data_inicio AND :data_fim 
+                        ORDER BY e.datareg DESC";
+            $query = $this->pdo->prepare($consulta);
+            $query->bindParam(':data_inicio', $data_inicio);
+            $query->bindParam(':data_fim', $data_fim);
+            $query->execute();
+            
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar movimentações por data: " . $e->getMessage());
+            return array();
         }
     }
 }
