@@ -40,7 +40,7 @@ class MainModel extends connect
 
     public function RegistroEstagio($id_aluno, $date_time)
     {
-        try {
+        try {   
             if (empty($id_aluno) || empty($date_time)) {
                 error_log("Erro: id_aluno ou date_time vazios (id_aluno=$id_aluno, date_time=$date_time)");
                 return false;
@@ -127,11 +127,17 @@ class MainModel extends connect
             $queryVerificar->bindValue(":nome", $aluno, PDO::PARAM_STR);
             $queryVerificar->execute();
 
+            $verificarAluno = "SELECT id_aluno FROM aluno WHERE id_aluno = :id_aluno";
+            $queryVerificar_id = $this->connect->prepare($verificarAluno);
+            $queryVerificar_id->bindValue(":id_aluno", $aluno, PDO::PARAM_INT);
+            $queryVerificar_id->execute();
+
             // Verifica se o aluno foi encontrado
-            if ($queryVerificar->rowCount() > 0) {
+            if ($queryVerificar->rowCount() > 0 || $queryVerificar_id->rowCount() > 0) {
                 // Recupera o id_aluno
+                $row2 = $queryVerificar_id->fetch(PDO::FETCH_ASSOC);
                 $row = $queryVerificar->fetch(PDO::FETCH_ASSOC);
-                $id_aluno = $row['id_aluno'];
+                $id_aluno = $row['id_aluno'] ?? $row2['id_aluno'];
 
                 // Verifica se o aluno já foi registrado hoje
                 $verificarRegistro = "SELECT id_aluno FROM saida_estagio 

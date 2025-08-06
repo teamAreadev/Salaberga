@@ -12,6 +12,9 @@ $select = new select_model;
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     
     <script>
         tailwind.config = {
@@ -198,7 +201,7 @@ $select = new select_model;
 
             <!-- Form Container -->
             <div class="form-card p-8 border-t-4 border-ceara-green">
-                <form id="saida-estagio" action="../control/control_index.php" method="POST" class="space-y-6">
+                <form id="saida-estagio" action="../../control/control_index.php" method="POST" class="space-y-6">
                     
                     <!-- Aluno Selection -->
                     <div class="space-y-2">
@@ -207,10 +210,7 @@ $select = new select_model;
                             Aluno
                         </label>
                         <select 
-                            id="id_aluno" 
-                            name="id_aluno" 
-                            class="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-ceara-green input-focus-ring outline-none transition-all duration-300 bg-white text-sm"
-                            required
+                            class="js-example-basic-single" name="id_aluno" required
                         >
                             <option value="" disabled selected>Selecione o aluno</option>
                             <?php
@@ -292,11 +292,9 @@ $select = new select_model;
                     </button>
                 </form>
 
-              
-
                 <!-- Back Links -->
                 <div class="flex flex-col sm:flex-row gap-3 mt-6 text-center">
-                    <a href="../index.php" class="flex-1 inline-flex items-center justify-center gap-2 text-ceara-green hover:text-ceara-light-green font-medium transition-colors duration-300 text-sm">
+                    <a href="../../views/inicio.php" class="flex-1 inline-flex items-center justify-center gap-2 text-ceara-green hover:text-ceara-light-green font-medium transition-colors duration-300 text-sm">
                         <i class="fas fa-arrow-left text-sm"></i>
                         Voltar ao Menu
                     </a>
@@ -317,6 +315,10 @@ $select = new select_model;
     </footer>
 
     <script>
+        $(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
+
         class SaidaEstagioForm {
             constructor() {
                 this.form = document.getElementById('saida-estagio');

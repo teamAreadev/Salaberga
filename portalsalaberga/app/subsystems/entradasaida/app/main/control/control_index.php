@@ -35,24 +35,37 @@ if (
     }
 }
 //registro saida-estagio//
-else if (isset($_POST["Registrar"])) {
+else if (isset($_POST['id_aluno']) && !empty($_POST['id_aluno']) && isset($_POST['data']) && !empty($_POST['data']) && isset($_POST['hora']) && !empty($_POST['hora'])) {
+    
     $id_aluno = $_POST['id_aluno'];
     $data = $_POST['data'];
     $hora = $_POST['hora'];
 
-    $date_time = $data . ' ' . $hora . ':00';
+    $date_time = $data . ' ' . $hora;
 
-    $obj = new MainModel();
-    if ($obj->RegistroEstagio($id_aluno, $date_time)) {
-        header('Location: ../views/saida_estagio_view.php?status=success');
-    } else {
-        header('Location: ../views/saida_estagio.php?status=error');
+   $obj = new MainModel();
+   $result = $obj->registrarSaidaEstagio($id_aluno, $date_time);
+
+    switch ($result) {
+        case 0:
+            header('Location: ../views/estagio/saida_Estagio.php?status=success');
+            exit();
+        case 1:
+            header('Location: ../views/estagio/saida_Estagio.php?status=ja_registrado');
+            exit();
+        case 2:
+            header('Location: ../views/estagio/saida_Estagio.php?status=aluno_nao_encontrado');
+            exit();
+        case 3:
+            header('Location: ../views/estagio/saida_Estagio.php?status=erro_interno');
+            exit();
+        default:
     }
     exit();
 }
 
 //saida 
-if (isset($_POST['saida'])) {
+else if (isset($_POST['saida'])) {
     $nome_responsavel = $_POST['nome_responsavel'];
     $nome_conducente = $_POST['nome_conducente'] ?? '';
     $id_tipo_conducente = !empty($_POST['id_tipo_conducente']) && is_numeric($_POST['id_tipo_conducente']) ? (int)$_POST['id_tipo_conducente'] : null;
@@ -80,7 +93,7 @@ if (isset($_POST['saida'])) {
 }
 
 //entradas
-if (isset($_POST['entrada'])) {
+else if (isset($_POST['entrada'])) {
     $nome_responsavel = $_POST['nome_responsavel'];
     $nome_conducente = $_POST['nome_conducente'] ?? '';
     $id_tipo_conducente = !empty($_POST['id_tipo_conducente']) && is_numeric($_POST['id_tipo_conducente']) ? (int)$_POST['id_tipo_conducente'] : null;
@@ -105,10 +118,10 @@ if (isset($_POST['entrada'])) {
         echo "Falha ao salvar o registro.";
     }
     exit();
-};
+}
 
 //relatorios 
-if (isset($_POST['GerarRelatorio']) && isset($_POST['tipo_relatorio'])) {
+else if (isset($_POST['GerarRelatorio']) && isset($_POST['tipo_relatorio'])) {
     $gerar_relatorio = $_POST['GerarRelatorio'];
     $tipoRelatorio = $_POST['tipo_relatorio'];
     $id_aluno = $_POST['id_aluno'] ?? 0;
