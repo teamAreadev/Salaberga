@@ -1,9 +1,29 @@
 <?php
-// Capturar o barcode da URL
-$barcode = isset($_GET['barcode']) ? $_GET['barcode'] : '';
-require_once('../model/functionsViews.php');
-$select = new select();
-$resultado = $select->selectProdutos($barcode);
+// Capturar o barcode ou nome da URL
+$identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome']) ? $_GET['nome'] : '');
+
+// Debug: verificar o identificador recebido
+error_log("Identificador recebido: " . $identificador);
+
+try {
+    require_once('../model/functionsViews.php');
+    $select = new select();
+
+    // Debug: verificar se a classe foi carregada
+    error_log("Classe select carregada: " . (class_exists('select') ? 'sim' : 'não'));
+
+    $resultado = $select->selectProdutosFlexivel($identificador);
+
+    // Debug: verificar o resultado
+    error_log("Resultado da consulta: " . print_r($resultado, true));
+} catch (Exception $e) {
+    error_log("Erro na página adcprodutoexistente.php: " . $e->getMessage());
+    $resultado = array();
+}
+
+// Debug: mostrar informações básicas
+echo "<!-- Debug: Identificador = " . htmlspecialchars($identificador) . " -->";
+echo "<!-- Debug: Resultado count = " . count($resultado) . " -->";
 
 ?>
 
@@ -393,7 +413,7 @@ $resultado = $select->selectProdutos($barcode);
         </div>
 
         <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
-            <form action="../control/controllerAdicionarAoEstoque.php?barcode=" .$barcode method="POST" class="space-y-6">
+            <form action="../control/controllerAdicionarAoEstoque.php?barcode=" .$identificador method="POST" class="space-y-6">
                 <div class="space-y-4">
                     <div>
 
@@ -408,14 +428,15 @@ $resultado = $select->selectProdutos($barcode);
                                                                 }
                                                                 echo "</ul>";
                                                             } else {
-                                                                echo "<p>Nenhum produto encontrado para o barcode: " . htmlspecialchars($barcode) . "</p>";
+                                                                $tipo_identificador = is_numeric($identificador) ? "código" : "nome";
+                                                                echo "<p>Nenhum produto encontrado para o " . $tipo_identificador . ": " . htmlspecialchars($identificador) . "</p>";
                                                             }
                                                             ?>
 
                         </h1>
                     </div>
 
-                    <input type="hidden" name="barcode" value="<?php echo htmlspecialchars($barcode); ?>">
+                    <input type="hidden" name="barcode" value="<?php echo htmlspecialchars($identificador); ?>">
 
                     <div>
                         <input type="number" placeholder="QUANTIDADE" min="1" id="quantidade" name="quantidade" required

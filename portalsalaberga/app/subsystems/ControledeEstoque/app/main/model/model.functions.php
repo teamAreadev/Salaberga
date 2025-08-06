@@ -995,6 +995,33 @@ class gerenciamento extends connection
         }
     }
 
+    public function consultarProdutoSemCodigo($nome_produto)
+    {
+        // Verificar se já tem prefixo SC_
+        if (strpos($nome_produto, 'SC_') === 0) {
+            // Já tem prefixo SC_, usar como está
+            $barcode_com_prefixo = $nome_produto;
+        } else {
+            // Adicionar prefixo SC_ para produtos sem código
+            $barcode_com_prefixo = 'SC_' . $nome_produto;
+        }
+        
+        // Verificar se já existe um produto com este nome como barcode
+        $consulta = "SELECT quantidade FROM produtos WHERE barcode = :barcode_com_prefixo";
+        $query = $this->pdo->prepare($consulta);
+        $query->bindValue(":barcode_com_prefixo", $barcode_com_prefixo);
+        $query->execute();
+        $produto = $query->fetch(PDO::FETCH_ASSOC);
+
+        if ($produto) {
+            // Produto já existe, redirecionar para adicionar quantidade
+            header("location: ../view/adcprodutoexistente.php?barcode=" . urlencode($barcode_com_prefixo));
+        } else {
+            // Produto não existe, redirecionar para cadastrar novo produto
+            header("location: ../view/adcnovoproduto.php?barcode=" . urlencode($barcode_com_prefixo));
+        }
+    }
+
     public function adcaoestoque($barcode, $quantidade)
     {
         $consulta = "UPDATE produtos SET quantidade = quantidade + :quantidade WHERE barcode = :barcode";
@@ -1006,8 +1033,30 @@ class gerenciamento extends connection
         header("location:../view/estoque.php");
     }
 
+    public function adcaoestoquePorNome($nome_produto, $quantidade)
+    {
+        // Verificar se já tem prefixo SC_
+        if (strpos($nome_produto, 'SC_') === 0) {
+            // Já tem prefixo SC_, usar como está
+            $barcode_com_prefixo = $nome_produto;
+        } else {
+            // Adicionar prefixo SC_ para produtos sem código
+            $barcode_com_prefixo = 'SC_' . $nome_produto;
+        }
+        
+        $consulta = "UPDATE produtos SET quantidade = quantidade + :quantidade WHERE barcode = :barcode_com_prefixo";
+        $query = $this->pdo->prepare($consulta);
+        $query->bindValue(":quantidade", $quantidade);
+        $query->bindValue(":barcode_com_prefixo", $barcode_com_prefixo);
+        $query->execute();
+
+        header("location:../view/estoque.php");
+    }
+
     public function adcproduto($barcode, $nome,  $quantidade, $natureza)
     {
+        error_log("Adicionando produto - barcode: " . $barcode . ", nome: " . $nome . ", quantidade: " . $quantidade . ", natureza: " . $natureza);
+        
         $consulta = "INSERT INTO produtos VALUES (null, :barcode, :nome, :quantidade, :natureza)";
         $query = $this->pdo->prepare($consulta);
         $query->bindValue(":nome", $nome);
@@ -1015,6 +1064,8 @@ class gerenciamento extends connection
         $query->bindValue(":quantidade", $quantidade);
         $query->bindValue(":natureza", $natureza);
         $query->execute();
+
+        error_log("Produto adicionado com sucesso");
 
         header("location:../view/estoque.php");
     }
@@ -1228,11 +1279,6 @@ class relatorios extends connection
         $pdf->SetXY($startX + 15, $startY + 15);
         $pdf->Cell($cardWidth - 30, 20, utf8_decode("TOTAL DE PRODUTOS"), 0, 1, 'L');
 
-        $pdf->SetFont('Arial', 'B', 24);
-        $pdf->SetTextColor($corPrimary[0], $corPrimary[1], $corPrimary[2]);
-        $pdf->SetXY($startX + 15, $startY + 40);
-        $pdf->Cell($cardWidth - 30, 25, $resumo['total_produtos'], 0, 1, 'L');
-
         // Card 2 - Estoque Crítico
         $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
         $pdf->RoundedRect($startX + $cardWidth + $cardMargin, $startY, $cardWidth, $cardHeight, 8, 'F');
@@ -1242,11 +1288,6 @@ class relatorios extends connection
         $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 15);
         $pdf->Cell($cardWidth - 30, 20, utf8_decode("ESTOQUE CRÍTICO"), 0, 1, 'L');
 
-        $pdf->SetFont('Arial', 'B', 24);
-        $pdf->SetTextColor($corAlerta[0], $corAlerta[1], $corAlerta[2]);
-        $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 40);
-        $pdf->Cell($cardWidth - 30, 25, $resumo['produtos_criticos'], 0, 1, 'L');
-
         // Card 3 - Categorias
         $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
         $pdf->RoundedRect($startX + 2 * ($cardWidth + $cardMargin), $startY, $cardWidth, $cardHeight, 8, 'F');
@@ -1255,11 +1296,6 @@ class relatorios extends connection
         $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
         $pdf->SetXY($startX + 2 * ($cardWidth + $cardMargin) + 15, $startY + 15);
         $pdf->Cell($cardWidth - 30, 20, utf8_decode("CATEGORIAS"), 0, 1, 'L');
-
-        $pdf->SetFont('Arial', 'B', 24);
-        $pdf->SetTextColor($corSecondary[0], $corSecondary[1], $corSecondary[2]);
-        $pdf->SetXY($startX + 2 * ($cardWidth + $cardMargin) + 15, $startY + 40);
-        $pdf->Cell($cardWidth - 30, 25, $resumo['total_categorias'], 0, 1, 'L');
 
         // ===== TÍTULO DA TABELA =====
         $pdf->SetXY(40, $startY + $cardHeight + 30);
