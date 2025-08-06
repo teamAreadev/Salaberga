@@ -617,8 +617,8 @@
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                     <i class="fas fa-calendar-alt text-4xl"></i>
                 </div>
-                <h3 class="text-lg font-bold text-primary mb-2 text-center">Relatório de Movimentações</h3>
-                <p class="text-gray-600 text-center mb-4 text-sm">Relatório de movimentação de estoque por período específico</p>
+                <h3 class="text-lg font-bold text-primary mb-2 text-center">Por Período</h3>
+                <p class="text-gray-600 text-center mb-4 text-sm">Relatório de estoque por período específico</p>
                 <button id="openDateModal" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
                     <i class="fas fa-calendar-check mr-2"></i>
                     Selecionar Data
@@ -651,20 +651,6 @@
                     <i class="fas fa-search-plus mr-2"></i>
                     Selecionar Produto
                 </button>
-            </div>
-
-            <!-- Relatório por Data (Produtos Adicionados) -->
-            <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.4s">
-                <div class="card-shine"></div>
-                <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                    <i class="fas fa-plus-circle text-4xl"></i>
-                </div>
-                <h3 class="text-lg font-bold text-primary mb-2 text-center">Produtos por Data</h3>
-                <p class="text-gray-600 text-center mb-4 text-sm">Relatório de produtos adicionados em período específico</p>
-                <a href="relatorio_por_data.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
-                    <i class="fas fa-calendar-plus mr-2"></i>
-                    Selecionar Período
-                </a>
             </div>
         </div>
 

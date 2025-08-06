@@ -1,23 +1,13 @@
 <?php
 require("../model/model.functions.php");
 
-// Debug: verificar dados recebidos
-error_log("controllerAdicionarProduto.php - POST data: " . print_r($_POST, true));
-
 if (isset($_POST['btn'])) {
     $barcode = isset($_POST['barcode']) ? $_POST['barcode'] : '';
-    $nome = isset($_POST['nome']) ? $_POST['nome'] : '';
-    $quantidade = isset($_POST['quantidade']) ? $_POST['quantidade'] : '';
-    $natureza = isset($_POST['natureza']) ? $_POST['natureza'] : '';
+    $nome = $_POST['nome'];
+    $quantidade = $_POST['quantidade'];
+    $natureza = $_POST['natureza'];
 
     error_log("Dados recebidos - barcode: " . $barcode . ", nome: " . $nome . ", quantidade: " . $quantidade . ", natureza: " . $natureza);
-
-    // Verificar se todos os campos obrigatórios estão preenchidos
-    if (empty($nome) || empty($quantidade) || empty($natureza)) {
-        error_log("Erro: Campos obrigatórios não preenchidos");
-        header("location: ../view/adcnovoproduto.php?error=campos_vazios");
-        exit();
-    }
 
     $x = new gerenciamento();
     
@@ -29,7 +19,5 @@ if (isset($_POST['btn'])) {
     }
     
     $x->adcproduto($barcode, $nome, $quantidade, $natureza);
-} else {
-    error_log("controllerAdicionarProduto.php - btn não encontrado no POST");
 }
 ?>
