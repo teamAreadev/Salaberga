@@ -95,7 +95,7 @@
                         'hero-ghibli': 'url("https://hebbkx1anhila5yf.public.blob.vercel-storage.com/img_index3-9IdYq3BVf9Sebk6O6b0ZJtyMde0HUW.png")'
                     },
                     fontFamily: {
-                        'ghibli': ['Comforta', 'cursive'],
+                        'ghibli': ['Comfortaa', 'cursive'],
                         'ghibli-text': ['Nunito', 'sans-serif']
                     },
                     boxShadow: {
