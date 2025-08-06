@@ -992,6 +992,30 @@ class gerenciamento extends connection
         }
     }
 
+    public function buscarProdutoPorBarcode($barcode)
+    {
+        try {
+            error_log("Buscando produto com barcode: " . $barcode);
+            
+            $consulta = "SELECT id, barcode, nome_produto, quantidade, natureza FROM produtos WHERE barcode = :barcode";
+            $query = $this->pdo->prepare($consulta);
+            $query->bindValue(":barcode", $barcode);
+            $query->execute();
+            $produto = $query->fetch(PDO::FETCH_ASSOC);
+            
+            if ($produto) {
+                error_log("Produto encontrado: " . json_encode($produto));
+            } else {
+                error_log("Produto não encontrado para barcode: " . $barcode);
+            }
+            
+            return $produto;
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar produto por barcode: " . $e->getMessage());
+            return false;
+        }
+    }
+
     public function consultarProdutoSemCodigo($nome_produto)
     {
         // Verificar se já tem prefixo SC_
@@ -1070,14 +1094,21 @@ class gerenciamento extends connection
     public function solicitarproduto($valor_retirada, $barcode, $retirante)
     {
         try {
+            error_log("=== INICIANDO SOLICITAÇÃO DE PRODUTO ===");
+            error_log("Barcode: " . $barcode);
+            error_log("Quantidade: " . $valor_retirada);
+            error_log("Responsável: " . $retirante);
+            
             // Iniciar a sessão, caso ainda não esteja iniciada
             if (session_status() == PHP_SESSION_NONE) {
                 session_start();
             }
             // Iniciar transação
             $this->pdo->beginTransaction();
+            error_log("Transação iniciada");
 
             // Obter o ID e a quantidade do produto a partir do barcode
+            error_log("Buscando produto no banco...");
             $consultaProduto = "SELECT id, quantidade FROM produtos WHERE barcode = :barcode";
             $queryProduto = $this->pdo->prepare($consultaProduto);
             $queryProduto->bindValue(":barcode", $barcode);
@@ -1085,17 +1116,23 @@ class gerenciamento extends connection
             $produto = $queryProduto->fetch(PDO::FETCH_ASSOC);
 
             if (!$produto) {
+                error_log("ERRO: Produto não encontrado no banco");
                 throw new Exception("Produto com barcode $barcode não encontrado.");
             }
             $fk_produtos_id = $produto['id'];
             $quantidade_atual = $produto['quantidade'];
+            error_log("Produto encontrado - ID: " . $fk_produtos_id . ", Quantidade atual: " . $quantidade_atual);
 
             // Verificar se a quantidade solicitada é válida
+            error_log("Verificando quantidade solicitada: " . $valor_retirada . " vs disponível: " . $quantidade_atual);
             if ($valor_retirada > $quantidade_atual) {
+                error_log("ERRO: Quantidade solicitada excede estoque");
                 throw new Exception("Quantidade solicitada ($valor_retirada) excede o estoque disponível ($quantidade_atual).");
             }
+            error_log("Quantidade válida");
 
             // Obter o ID do responsável a partir do nome
+            error_log("Buscando responsável: " . $retirante);
             $consultaResponsavel = "SELECT id FROM responsaveis WHERE nome = :nome";
             $queryResponsavel = $this->pdo->prepare($consultaResponsavel);
             $queryResponsavel->bindValue(":nome", $retirante);
@@ -1103,18 +1140,23 @@ class gerenciamento extends connection
             $responsavel = $queryResponsavel->fetch(PDO::FETCH_ASSOC);
 
             if (!$responsavel) {
+                error_log("ERRO: Responsável não encontrado");
                 throw new Exception("Responsável $retirante não encontrado.");
             }
             $fk_responsaveis_id = $responsavel['id'];
+            error_log("Responsável encontrado - ID: " . $fk_responsaveis_id);
 
             // Atualiza a quantidade na tabela produtos
+            error_log("Atualizando estoque do produto...");
             $consultaUpdate = "UPDATE produtos SET quantidade = quantidade - :valor_retirada WHERE barcode = :barcode";
             $queryUpdate = $this->pdo->prepare($consultaUpdate);
             $queryUpdate->bindValue(":valor_retirada", $valor_retirada, PDO::PARAM_INT);
             $queryUpdate->bindValue(":barcode", $barcode);
             $queryUpdate->execute();
+            error_log("Estoque atualizado com sucesso");
 
             // Insere o registro na tabela movimentacao
+            error_log("Inserindo registro na tabela movimentacao...");
             $consultaInsert = "INSERT INTO movimentacao (fk_produtos_id, fk_responsaveis_id, barcode_produto, datareg, quantidade_retirada)
                        VALUES (:fk_produtos_id, :fk_responsaveis_id, :barcode_produto, NOW(), :quantidade_retirada)";
             $queryInsert = $this->pdo->prepare($consultaInsert);
@@ -1123,21 +1165,29 @@ class gerenciamento extends connection
             $queryInsert->bindValue(":barcode_produto", $barcode);
             $queryInsert->bindValue(":quantidade_retirada", $valor_retirada, PDO::PARAM_INT);
             $queryInsert->execute();
+            error_log("Registro inserido na movimentacao com sucesso");
 
             // Confirmar transação
+            error_log("Confirmando transação...");
             $this->pdo->commit();
+            error_log("Transação confirmada com sucesso");
 
             // Redireciona para a página de estoque
+            error_log("Redirecionando para estoque.php");
             header("Location: ../view/estoque.php");
             exit;
         } catch (PDOException $e) {
             // Reverter transação em caso de erro
+            error_log("ERRO PDO na solicitação: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
             $this->pdo->rollBack();
             $_SESSION['erro_solicitacao'] = "Erro na conexão ou consulta: " . $e->getMessage();
             header("Location: ../view/solicitar.php");
             exit;
         } catch (Exception $e) {
             // Reverter transação em caso de erro
+            error_log("ERRO GERAL na solicitação: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
             $this->pdo->rollBack();
             $_SESSION['erro_solicitacao'] = $e->getMessage();
             header("Location: ../view/solicitar.php");
@@ -1222,6 +1272,34 @@ class relatorios extends connection
         } catch (PDOException $e) {
             error_log("Erro ao buscar produtos por data: " . $e->getMessage());
             throw new Exception("Erro ao buscar produtos: " . $e->getMessage());
+        }
+    }
+    
+    public function buscarMovimentacoesPorData($data_inicio, $data_fim)
+    {
+        try {
+            // Buscar movimentações no período especificado
+            $consulta = "SELECT e.id, e.fk_produtos_id, e.fk_responsaveis_id, e.barcode_produto, e.datareg, 
+                            e.quantidade_retirada,
+                            p.nome_produto AS nome_produto, r.nome AS nome_responsavel, r.cargo AS cargo
+                     FROM movimentacao e
+                     LEFT JOIN produtos p ON e.fk_produtos_id = p.id
+                     LEFT JOIN responsaveis r ON e.fk_responsaveis_id = r.id
+                     WHERE e.datareg BETWEEN :data_inicio AND :data_fim 
+                     ORDER BY e.datareg DESC";
+            
+            $query = $this->pdo->prepare($consulta);
+            $query->bindValue(":data_inicio", $data_inicio);
+            $query->bindValue(":data_fim", $data_fim);
+            $query->execute();
+            
+            $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
+            error_log("Movimentações encontradas no período: " . count($resultado));
+            
+            return $resultado;
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar movimentações por data: " . $e->getMessage());
+            throw new Exception("Erro ao buscar movimentações: " . $e->getMessage());
         }
     }
     public function relatorioestoque()

@@ -1,3 +1,19 @@
+<?php
+// Processar mensagens de URL
+$mensagem = '';
+$tipoMensagem = '';
+$mostrarNotificacao = false;
+
+if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message'])) {
+    $mensagem = $_GET['message'];
+    $tipoMensagem = 'success';
+    $mostrarNotificacao = true;
+} elseif (isset($_GET['error']) && $_GET['error'] == '1' && isset($_GET['message'])) {
+    $mensagem = $_GET['message'];
+    $tipoMensagem = 'error';
+    $mostrarNotificacao = true;
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -325,10 +341,33 @@
             <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">SOLICITAR PRODUTO</h1>
         </div>
 
+        <!-- Notificação -->
+        <div id="notificacao" class="max-w-2xl mx-auto mb-4 hidden">
+            <div id="notificacaoConteudo" class="p-4 rounded-lg shadow-lg">
+                <div class="flex items-center">
+                    <i id="notificacaoIcon" class="mr-2"></i>
+                    <span id="notificacaoTexto"></span>
+                </div>
+            </div>
+        </div>
+
         <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
             <form action="../control/controllersolicitar.php" method="POST" class="space-y-6">
                 <div class="space-y-4">
-                    <div class="select-wrapper">
+                    <!-- Opções de seleção de produto -->
+                    <div class="mb-4">
+                        <div class="flex space-x-2 mb-3">
+                            <button type="button" id="btnSelect" class="flex-1 bg-primary text-white py-2 px-4 rounded-lg font-semibold transition-colors" onclick="mostrarOpcao('select')">
+                                <i class="fas fa-list mr-2"></i>Selecionar da Lista
+                            </button>
+                            <button type="button" id="btnBarcode" class="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors" onclick="mostrarOpcao('barcode')">
+                                <i class="fas fa-barcode mr-2"></i>Ler Código de Barras
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Opção 1: Select de produtos -->
+                    <div id="opcaoSelect" class="select-wrapper">
                         <select id="produto" name="produto" required class="custom-select" aria-label="Selecionar produto">
                             <option value="" disabled selected>SELECIONAR PRODUTO</option>
                             <?php
@@ -337,6 +376,29 @@
                             $resultado = $select->selectSolicitarProdutos($barcode);
                             ?>
                         </select>
+                    </div>
+
+                    <!-- Opção 2: Input para código de barras -->
+                    <div id="opcaoBarcode" class="hidden">
+                        <div class="relative">
+                            <input type="text" id="barcodeInput" name="barcode" placeholder="ESCANEIE O CÓDIGO DE BARRAS" 
+                                   class="custom-input text-center text-lg font-mono tracking-wider" 
+                                   aria-label="Código de barras">
+                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                <i class="fas fa-barcode text-gray-400"></i>
+                            </div>
+                        </div>
+                        <div id="produtoInfo" class="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg hidden">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-semibold text-green-800" id="produtoNome"></p>
+                                    <p class="text-sm text-green-600" id="produtoEstoque"></p>
+                                </div>
+                                <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                            </div>
+                        </div>
+                        <!-- Campo hidden para enviar o ID do produto -->
+                        <input type="hidden" id="produtoIdHidden" name="produto" value="">
                     </div>
 
                     <div>
@@ -435,7 +497,133 @@
     </footer>
 
     <script>
+        // Variáveis globais
+        let opcaoAtual = 'select';
+        let produtoSelecionado = null;
+
+        // Função para alternar entre as opções
+        function mostrarOpcao(opcao) {
+            const btnSelect = document.getElementById('btnSelect');
+            const btnBarcode = document.getElementById('btnBarcode');
+            const opcaoSelect = document.getElementById('opcaoSelect');
+            const opcaoBarcode = document.getElementById('opcaoBarcode');
+            const produtoSelect = document.getElementById('produto');
+            const barcodeInput = document.getElementById('barcodeInput');
+
+            // Resetar seleções
+            produtoSelect.value = '';
+            barcodeInput.value = '';
+            document.getElementById('produtoInfo').classList.add('hidden');
+            document.getElementById('produtoIdHidden').value = '';
+            produtoSelecionado = null;
+
+            if (opcao === 'select') {
+                // Ativar opção select
+                btnSelect.className = 'flex-1 bg-primary text-white py-2 px-4 rounded-lg font-semibold transition-colors';
+                btnBarcode.className = 'flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors';
+                opcaoSelect.classList.remove('hidden');
+                opcaoBarcode.classList.add('hidden');
+                produtoSelect.required = true;
+                produtoSelect.removeAttribute('disabled');
+                barcodeInput.required = false;
+                barcodeInput.setAttribute('disabled', 'disabled');
+                opcaoAtual = 'select';
+            } else {
+                // Ativar opção barcode
+                btnSelect.className = 'flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors';
+                btnBarcode.className = 'flex-1 bg-primary text-white py-2 px-4 rounded-lg font-semibold transition-colors';
+                opcaoSelect.classList.add('hidden');
+                opcaoBarcode.classList.remove('hidden');
+                produtoSelect.required = false;
+                produtoSelect.setAttribute('disabled', 'disabled');
+                barcodeInput.required = true;
+                barcodeInput.removeAttribute('disabled');
+                opcaoAtual = 'barcode';
+                
+                // Focar no input de barcode
+                setTimeout(() => {
+                    barcodeInput.focus();
+                }, 100);
+            }
+        }
+
+        // Função para buscar produto por código de barras
+        async function buscarProdutoPorBarcode(barcode) {
+            try {
+                const response = await fetch(`../control/controllerBuscarProduto.php?barcode=${encodeURIComponent(barcode)}`);
+                const data = await response.json();
+                
+                if (data.success && data.produto) {
+                    return data.produto;
+                } else {
+                    throw new Error(data.error || 'Produto não encontrado');
+                }
+            } catch (error) {
+                console.error('Erro ao buscar produto:', error);
+                return null;
+            }
+        }
+
+        // Função para exibir informações do produto
+        function exibirProdutoInfo(produto) {
+            const produtoInfo = document.getElementById('produtoInfo');
+            const produtoNome = document.getElementById('produtoNome');
+            const produtoEstoque = document.getElementById('produtoEstoque');
+            const produtoIdHidden = document.getElementById('produtoIdHidden');
+
+            produtoNome.textContent = produto.nome_produto;
+            produtoEstoque.textContent = `Estoque: ${produto.quantidade} unidades`;
+            produtoInfo.classList.remove('hidden');
+            produtoSelecionado = produto;
+            
+            // Definir o ID do produto no campo hidden
+            produtoIdHidden.value = produto.id;
+        }
+
+        // Função para validar formulário
+        function validarFormulario() {
+            if (opcaoAtual === 'select') {
+                const produtoSelect = document.getElementById('produto');
+                const valor = produtoSelect.value;
+                return valor !== '' && valor !== null;
+            } else {
+                const produtoIdHidden = document.getElementById('produtoIdHidden');
+                const valor = produtoIdHidden.value;
+                return produtoSelecionado !== null && valor !== '';
+            }
+        }
+
+        // Função para mostrar notificações
+        function mostrarNotificacao(mensagem, tipo) {
+            const notificacao = document.getElementById('notificacao');
+            const notificacaoConteudo = document.getElementById('notificacaoConteudo');
+            const notificacaoIcon = document.getElementById('notificacaoIcon');
+            const notificacaoTexto = document.getElementById('notificacaoTexto');
+            
+            notificacaoTexto.textContent = mensagem;
+            
+            if (tipo === 'success') {
+                notificacaoConteudo.className = 'p-4 rounded-lg shadow-lg bg-green-500 text-white';
+                notificacaoIcon.className = 'fas fa-check-circle mr-2';
+            } else if (tipo === 'error') {
+                notificacaoConteudo.className = 'p-4 rounded-lg shadow-lg bg-red-500 text-white';
+                notificacaoIcon.className = 'fas fa-exclamation-circle mr-2';
+            }
+            
+            notificacao.classList.remove('hidden');
+            
+            // Auto-hide após 5 segundos
+            setTimeout(() => {
+                notificacao.classList.add('hidden');
+            }, 5000);
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
+            // Mostrar notificação se houver mensagem
+            <?php if ($mostrarNotificacao): ?>
+            mostrarNotificacao('<?php echo addslashes($mensagem); ?>', '<?php echo $tipoMensagem; ?>');
+            <?php endif; ?>
+
             // Menu mobile toggle
             const menuButton = document.getElementById('menuButton');
             const headerNav = document.getElementById('headerNav');
@@ -502,6 +690,69 @@
                     e.preventDefault();
                     dropdownMenu.classList.toggle('scale-0');
                     dropdownMenu.classList.toggle('scale-100');
+                });
+            }
+
+            // Event listener para input de código de barras
+            const barcodeInput = document.getElementById('barcodeInput');
+            if (barcodeInput) {
+                let timeoutId;
+                
+                barcodeInput.addEventListener('input', function(e) {
+                    clearTimeout(timeoutId);
+                    const barcode = e.target.value.trim();
+                    
+                    if (barcode.length >= 3) { // Mínimo de 3 caracteres para buscar
+                        timeoutId = setTimeout(async () => {
+                            const produto = await buscarProdutoPorBarcode(barcode);
+                            if (produto) {
+                                exibirProdutoInfo(produto);
+                            } else {
+                                document.getElementById('produtoInfo').classList.add('hidden');
+                                produtoSelecionado = null;
+                            }
+                        }, 500); // Delay de 500ms para evitar muitas requisições
+                    } else {
+                        document.getElementById('produtoInfo').classList.add('hidden');
+                        produtoSelecionado = null;
+                    }
+                });
+
+                // Event listener para Enter (comum em leitores de código de barras)
+                barcodeInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const barcode = e.target.value.trim();
+                        if (barcode) {
+                            buscarProdutoPorBarcode(barcode).then(produto => {
+                                if (produto) {
+                                    exibirProdutoInfo(produto);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+
+            // Validação do formulário
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const valido = validarFormulario();
+                    
+                    if (!valido) {
+                        e.preventDefault();
+                        let mensagem = 'Por favor, selecione um produto antes de continuar.';
+                        
+                        if (opcaoAtual === 'barcode' && !produtoSelecionado) {
+                            mensagem = 'Por favor, escaneie um código de barras válido antes de continuar.';
+                        } else if (opcaoAtual === 'select') {
+                            mensagem = 'Por favor, selecione um produto da lista antes de continuar.';
+                        }
+                        
+                        alert(mensagem);
+                        return false;
+                    }
                 });
             }
         });
