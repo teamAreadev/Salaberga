@@ -247,25 +247,51 @@
         @media (max-width: 768px) {
             .header-nav {
                 display: none;
-                position: absolute;
-                top: 100%;
+                position: fixed;
+                top: 0;
                 left: 0;
                 right: 0;
+                bottom: 0;
                 background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
-                padding: 1rem;
+                padding: 2rem 1rem;
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-                z-index: 40;
+                z-index: 50;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                backdrop-filter: blur(10px);
             }
 
             .header-nav.show {
                 display: flex;
-                flex-direction: column;
+                animation: slideIn 0.3s ease-out;
+            }
+
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
 
             .header-nav-link {
-                padding: 0.75rem 1rem;
+                padding: 1rem 1.5rem;
                 text-align: center;
-                margin: 0.25rem 0;
+                margin: 0.5rem 0;
+                font-size: 1.1rem;
+                border-radius: 0.75rem;
+                transition: all 0.3s ease;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .header-nav-link:hover {
+                background-color: rgba(255, 255, 255, 0.15);
+                transform: translateX(5px);
             }
 
             .mobile-menu-button {
@@ -278,7 +304,8 @@
                 border: none;
                 cursor: pointer;
                 padding: 0;
-                z-index: 10;
+                z-index: 60;
+                position: relative;
             }
 
             .mobile-menu-button span {
@@ -286,23 +313,34 @@
                 height: 3px;
                 background-color: white;
                 border-radius: 10px;
-                transition: all 0.3s linear;
+                transition: all 0.3s ease;
                 position: relative;
-                transform-origin: 1px;
+                transform-origin: center;
             }
 
             .mobile-menu-button span:first-child.active {
-                transform: rotate(45deg);
-                top: 0px;
+                transform: rotate(45deg) translate(6px, 6px);
             }
 
             .mobile-menu-button span:nth-child(2).active {
                 opacity: 0;
+                transform: scale(0);
             }
 
             .mobile-menu-button span:nth-child(3).active {
-                transform: rotate(-45deg);
-                top: -1px;
+                transform: rotate(-45deg) translate(6px, -6px);
+            }
+
+            /* Overlay para fechar menu ao clicar fora */
+            .header-nav::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.3);
+                z-index: -1;
             }
         }
 
@@ -359,10 +397,6 @@
             <div class="flex items-center">
                 <img src="../assets/imagens/logostgm.png" alt="Logo S" class="h-12 mr-3 transition-transform hover:scale-105">
                 <span class="text-white font-heading text-xl font-semibold hidden md:inline">STGM Estoque</span>
-                <a href="https://salaberga.com/salaberga/portalsalaberga/app/main/views/autenticacao/login.php" class="header-nav-link flex items-center text-sm md:text-base">
-                    <i class="fas fa-sign-out-alt mr-2"></i>
-                    <span>Sair</span>
-                </a>
             </div>
 
             <button class="mobile-menu-button focus:outline-none" aria-label="Menu" id="menuButton">
@@ -384,34 +418,31 @@
                     <i class="fas fa-plus-circle mr-2"></i>
                     <span>Adicionar</span>
                 </a>
-                <div class="relative group">
-                    <a class="header-nav-link flex items-center cursor-pointer">
+            
+                    <a href="../view/solicitar.php" class="header-nav-link flex items-center cursor-pointer">
                         <i class="fas fa-clipboard-list mr-2"></i>
                         <span>Solicitar</span>
-                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                      
                     </a>
-                    <div class="absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg overflow-hidden transform scale-0 group-hover:scale-100 transition-transform origin-top z-50">
-                        <a href="../view/solicitar.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors">
-                            <i class="fas fa-clipboard-check mr-2"></i>Solicitar Produto
-                        </a>
-                        <a href="solicitarnovproduto.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors">
-                            <i class="fas fa-plus-square mr-2"></i>Solicitar Novo Produto
-                        </a>
-                    </div>
-                </div>
+                   
+        
                 <a href="../view/relatorios.php" class="header-nav-link flex items-center" target="_blank">
                     <i class="fas fa-chart-bar mr-2"></i>
                     <span>Relatórios</span>
+                </a>
+                <a href="https://salaberga.com/salaberga/portalsalaberga/app/main/views/autenticacao/login.php" class="header-nav-link flex items-center text-sm md:text-base ml-4">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    <span>Sair</span>
                 </a>
             </nav>
         </div>
     </header>
 
     <!-- Main content -->
-    <main class="container mx-auto px-4 py-8 md:py-12 flex-1 flex flex-col items-center justify-center">
-        <h1 class="text-primary text-3xl md:text-4xl font-bold mb-12 md:mb-16 mt-6 md:mt-8 text-center page-title tracking-tight font-heading">GERENCIAMENTO DE ESTOQUE</h1>
+    <main class="container mx-auto px-4 py-8 md:py-12 flex-1 flex flex-col items-center justify-start pt-16 md:pt-20">
+        <h1 class="text-primary text-3xl md:text-4xl font-bold mb-12 md:mb-16 text-center page-title tracking-tight font-heading">GERENCIAMENTO DE ESTOQUE</h1>
 
-        <div class="w-full max-w-7xl grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 px-2">
+        <div class="w-full max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 px-4 justify-center">
             <a href="../view/estoque.php" class="group animate-fade-in">
                 <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
                     <div class="card-shine"></div>
@@ -445,18 +476,9 @@
                 </div>
             </a>
 
-            <a href="../view/solicitarnovproduto.php" class="group animate-fade-in" style="animation-delay: 0.3s">
-                <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
-                    <div class="card-shine"></div>
-                    <div class="card-badge absolute top-0 right-0 bg-accent w-10 h-10 md:w-12 md:h-12 rounded-bl-xl md:rounded-bl-2xl rounded-tr-xl md:rounded-tr-2xl flex items-center justify-center">
-                        <span class="text-primary text-xs font-bold">4</span>
-                    </div>
-                    <i class="fas fa-truck-loading card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
-                    <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">SUPRIMENTOS</p>
-                </div>
-            </a>
+          
 
-            <a href="../view/relatorios.php" class="group animate-fade-in" style="animation-delay: 0.4s" target="_blank">
+            <a href="../view/relatorios.php" class="group animate-fade-in" style="animation-delay: 0.4s" >
                 <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
                     <div class="card-shine"></div>
                     <div class="card-badge absolute top-0 right-0 bg-accent w-10 h-10 md:w-12 md:h-12 rounded-bl-xl md:rounded-bl-2xl rounded-tr-xl md:rounded-tr-2xl flex items-center justify-center">
@@ -510,26 +532,22 @@
                         Dev Team
                     </h3>
                     <div class="grid grid-cols-2 gap-2">
-                        <a href="https://www.instagram.com/dudu.limasx/" target="_blank"
+                        <a 
                             class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Carlos E.
+                            Matheus Felix
                         </a>
-                        <a href="https://www.instagram.com/millenafreires_/" target="_blank"
+                        <a 
                             class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Millena F.
+                           Roger Cavalcante
                         </a>
-                        <a href="https://www.instagram.com/matheusz.mf/" target="_blank"
+                        <a 
                             class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Matheus M.
+                            Matheus Machado
                         </a>
-                        <a href="https://www.instagram.com/yanlucas10__/" target="_blank"
-                            class="text-xs flex items-center hover:text-secondary transition-colors">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Ian Lucas
-                        </a>
+                     
                     </div>
                 </div>
             </div>
@@ -550,7 +568,8 @@
             const headerNav = document.getElementById('headerNav');
 
             if (menuButton && headerNav) {
-                menuButton.addEventListener('click', function() {
+                menuButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     headerNav.classList.toggle('show');
 
                     // Animação para o botão do menu
@@ -558,6 +577,46 @@
                     spans.forEach(span => {
                         span.classList.toggle('active');
                     });
+
+                    // Prevenir scroll do body quando menu está aberto
+                    document.body.style.overflow = headerNav.classList.contains('show') ? 'hidden' : '';
+                });
+
+                // Fechar menu ao clicar em um link
+                const navLinks = headerNav.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        headerNav.classList.remove('show');
+                        const spans = menuButton.querySelectorAll('span');
+                        spans.forEach(span => {
+                            span.classList.remove('active');
+                        });
+                        document.body.style.overflow = '';
+                    });
+                });
+
+                // Fechar menu ao clicar fora
+                document.addEventListener('click', function(e) {
+                    if (!headerNav.contains(e.target) && !menuButton.contains(e.target)) {
+                        headerNav.classList.remove('show');
+                        const spans = menuButton.querySelectorAll('span');
+                        spans.forEach(span => {
+                            span.classList.remove('active');
+                        });
+                        document.body.style.overflow = '';
+                    }
+                });
+
+                // Fechar menu ao pressionar ESC
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && headerNav.classList.contains('show')) {
+                        headerNav.classList.remove('show');
+                        const spans = menuButton.querySelectorAll('span');
+                        spans.forEach(span => {
+                            span.classList.remove('active');
+                        });
+                        document.body.style.overflow = '';
+                    }
                 });
             }
 

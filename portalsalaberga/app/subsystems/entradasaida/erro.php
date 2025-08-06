@@ -1,20 +1,9 @@
 <?php
-session_start();
-function redirect_to_login()
-{
-  header('Location: ../../main/views/autenticacao/login.php');
-}
-if (!isset($_SESSION['Email'])) {
-  session_destroy();
-  redirect_to_login();
-}
-
-if (isset($_GET['id_aluno']) && isset($_GET['erro'])) {
-
-  $id_aluno = $_GET['id_aluno'];
-  $error = $_GET['erro'];
-} else {
-  header('Location: logado.php');
+include_once 'app/main/model/session.php';
+$session = new sessions();
+$session->autenticar_session();
+if(isset($_GET['sair'])){
+  $session->quebra_session();
 }
 ?>
 <!DOCTYPE html>

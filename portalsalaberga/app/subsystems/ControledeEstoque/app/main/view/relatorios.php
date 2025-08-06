@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerar Relatórios</title>
+    <title>Gerar Relatórios - STGM Estoque</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -19,7 +20,11 @@
                         accent: '#E6F4EA',
                         dark: '#1A3C34',
                         light: '#F8FAF9',
-                        white: '#FFFFFF'
+                        white: '#FFFFFF',
+                        success: '#28A745',
+                        warning: '#FFC107',
+                        danger: '#DC3545',
+                        info: '#17A2B8'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -27,20 +32,19 @@
                     },
                     boxShadow: {
                         card: '0 10px 15px -3px rgba(0, 90, 36, 0.1), 0 4px 6px -2px rgba(0, 90, 36, 0.05)',
-                        'card-hover': '0 20px 25px -5px rgba(0, 90, 36, 0.2), 0 10px 10px -5px rgba(0, 90, 36, 0.1)'
+                        'card-hover': '0 20px 25px -5px rgba(0, 90, 36, 0.2), 0 10px 10px -5px rgba(0, 90, 36, 0.1)',
+                        'glow': '0 0 20px rgba(255, 165, 0, 0.3)'
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.5s ease-in-out',
-                        'slide-up': 'slideUp 0.5s ease-out'
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'bounce-slow': 'bounce 2s infinite'
                     },
                     keyframes: {
                         fadeIn: {
-                            '0%': {
-                                opacity: '0'
-                            },
-                            '100%': {
-                                opacity: '1'
-                            }
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
                         },
                         slideUp: {
                             '0%': {
@@ -61,7 +65,7 @@
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
-            background-color: #F8FAF9;
+            background: linear-gradient(135deg, #F8FAF9 0%, #E6F4EA 100%);
         }
 
         .gradient-bg {
@@ -82,20 +86,19 @@
             transform: translateX(-50%);
             width: 80px;
             height: 3px;
-            background-color: #FFA500;
+            background: linear-gradient(90deg, #FFA500, #FF8C00);
             border-radius: 3px;
         }
 
-        .card-item {
+        .stats-card {
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             overflow: hidden;
-            will-change: transform;
-            width: 100%;
-            max-width: 320px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAF9 100%);
+            border: 2px solid transparent;
         }
 
-        .card-item::before {
+        .stats-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -108,11 +111,42 @@
             z-index: 1;
         }
 
-        .card-item:hover::before {
+        .stats-card:hover::before {
             opacity: 1;
         }
 
-        .card-item:hover {
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 90, 36, 0.2), 0 10px 10px -5px rgba(0, 90, 36, 0.1);
+            border-color: #FFA500;
+        }
+
+        .report-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAF9 100%);
+            border: 2px solid transparent;
+        }
+
+        .report-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(0, 90, 36, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .report-card:hover::before {
+            opacity: 1;
+        }
+
+        .report-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 90, 36, 0.2), 0 10px 10px -5px rgba(0, 90, 36, 0.1);
             border-color: #FFA500;
@@ -130,38 +164,35 @@
             z-index: 2;
         }
 
-        .card-item:hover .card-icon {
+        .stats-card:hover .card-shine,
+        .report-card:hover .card-shine {
+            left: 150%;
+        }
+
+        .stats-card:hover .card-icon,
+        .report-card:hover .card-icon {
             transform: scale(1.1);
             color: #FFA500;
         }
 
-        .card-item p {
+        .stats-card p,
+        .report-card p {
             z-index: 2;
             position: relative;
             transition: color 0.3s ease;
         }
 
-        .card-item:hover p {
+        .stats-card:hover p,
+        .report-card:hover p {
             color: #005A24;
         }
 
-        .card-item a,
-        .card-item button {
+        .stats-card a,
+        .stats-card button,
+        .report-card a,
+        .report-card button {
             position: relative;
             z-index: 3;
-        }
-
-        .card-item:hover .card-shine {
-            left: 150%;
-        }
-
-        .social-icon {
-            transition: all 0.3s ease;
-        }
-
-        .social-icon:hover {
-            transform: translateY(-3px);
-            filter: drop-shadow(0 4px 3px rgba(255, 165, 0, 0.3));
         }
 
         .header-nav-link {
@@ -204,15 +235,6 @@
             display: none;
         }
 
-        .bottom-row {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
         .modal {
             display: none;
             position: fixed;
@@ -224,6 +246,7 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(5px);
         }
 
         .modal.show {
@@ -231,14 +254,15 @@
         }
 
         .modal-content {
-            background-color: #FFFFFF;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAF9 100%);
             padding: 2rem;
             border-radius: 1rem;
             width: 90%;
-            max-width: 400px;
-            box-shadow: 0 10px 15px -3px rgba(0, 90, 36, 0.2);
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 90, 36, 0.25);
             animation: slideUp 0.5s ease-out;
             position: relative;
+            border: 2px solid #E6F4EA;
         }
 
         .modal-content h2 {
@@ -258,9 +282,11 @@
             font-size: 0.875rem;
             color: #1A3C34;
             margin-bottom: 0.5rem;
+            font-weight: 600;
         }
 
-        .modal-content input[type="date"] {
+        .modal-content input[type="date"],
+        .modal-content select {
             width: 100%;
             padding: 0.75rem;
             border: 2px solid #E6F4EA;
@@ -268,27 +294,32 @@
             font-size: 1rem;
             color: #1A3C34;
             background-color: #F8FAF9;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
-        .modal-content input[type="date"]:focus {
+        .modal-content input[type="date"]:focus,
+        .modal-content select:focus {
             border-color: #FFA500;
             outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
         }
 
         .modal-content .confirm-btn {
-            background-color: #FFA500;
+            background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
             color: #FFFFFF;
             padding: 0.75rem 1.5rem;
             border-radius: 0.5rem;
             font-weight: 600;
             width: 100%;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
         }
 
         .modal-content .confirm-btn:hover {
-            background-color: #E59400;
+            background: linear-gradient(135deg, #E59400 0%, #E67E00 100%);
             transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 165, 0, 0.3);
         }
 
         .modal-content .close-btn {
@@ -307,28 +338,115 @@
             color: #DC3545;
         }
 
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1rem 0;
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAF9 100%);
+            border: 2px solid #E6F4EA;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 90, 36, 0.15);
+            border-color: #FFA500;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #005A24;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #646464;
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            color: #FFA500;
+            margin-bottom: 0.5rem;
+        }
+
         @media (max-width: 768px) {
             .header-nav {
                 display: none;
-                position: absolute;
-                top: 100%;
+                position: fixed;
+                top: 0;
                 left: 0;
                 right: 0;
+                bottom: 0;
                 background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
-                padding: 1rem;
+                padding: 2rem 1rem;
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-                z-index: 40;
+                z-index: 50;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                backdrop-filter: blur(10px);
             }
 
             .header-nav.show {
                 display: flex;
-                flex-direction: column;
+                animation: slideIn 0.3s ease-out;
+            }
+
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
 
             .header-nav-link {
-                padding: 0.75rem 1rem;
+                padding: 1rem 1.5rem;
                 text-align: center;
-                margin: 0.25rem 0;
+                margin: 0.5rem 0;
+                font-size: 1.1rem;
+                border-radius: 0.75rem;
+                transition: all 0.3s ease;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .header-nav-link:hover {
+                background-color: rgba(255, 255, 255, 0.15);
+                transform: translateX(5px);
             }
 
             .mobile-menu-button {
@@ -341,7 +459,8 @@
                 border: none;
                 cursor: pointer;
                 padding: 0;
-                z-index: 10;
+                z-index: 60;
+                position: relative;
             }
 
             .mobile-menu-button span {
@@ -349,37 +468,44 @@
                 height: 3px;
                 background-color: white;
                 border-radius: 10px;
-                transition: all 0.3s linear;
+                transition: all 0.3s ease;
                 position: relative;
-                transform-origin: 1px;
+                transform-origin: center;
             }
 
             .mobile-menu-button span:first-child.active {
-                transform: rotate(45deg);
-                top: 0px;
+                transform: rotate(45deg) translate(6px, 6px);
             }
 
             .mobile-menu-button span:nth-child(2).active {
                 opacity: 0;
+                transform: scale(0);
             }
 
             .mobile-menu-button span:nth-child(3).active {
-                transform: rotate(-45deg);
-                top: auto;
-                bottom: 0px;
+                transform: rotate(-45deg) translate(6px, -6px);
             }
 
-            .bottom-row {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 1.5rem;
+            /* Overlay para fechar menu ao clicar fora */
+            .header-nav::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.3);
+                z-index: -1;
+            }
+
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
 
-<body class="min-h-screen flex flex-col font-sans bg-light">
+<body class="min-h-screen flex flex-col font-sans">
     <!-- Header -->
     <header class="sticky top-0 bg-gradient-to-r from-primary to-dark text-white py-4 shadow-lg z-50">
         <div class="container mx-auto px-4 flex justify-between items-center">
@@ -407,21 +533,12 @@
                     <i class="fas fa-plus-circle mr-2"></i>
                     <span>Adicionar</span>
                 </a>
-                <div class="relative group">
-                    <a class="header-nav-link flex items-center cursor-pointer">
+            
+                    <a href="solicitar.php" class="header-nav-link flex items-center cursor-pointer">
                         <i class="fas fa-clipboard-list mr-2"></i>
                         <span>Solicitar</span>
-                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                      
                     </a>
-                    <div class="absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg overflow-hidden transform scale-0 group-hover:scale-100 transition-transform origin-top z-50">
-                        <a href="solicitar.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors">
-                            <i class="fas fa-clipboard-check mr-2"></i>Solicitar Produto
-                        </a>
-                        <a href="solicitarnovproduto.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors">
-                            <i class="fas fa-plus-square mr-2"></i>Solicitar Novo Produto
-                        </a>
-                    </div>
-                </div>
                 <a href="relatorios.php" class="header-nav-link active flex items-center">
                     <i class="fas fa-chart-bar mr-2"></i>
                     <span>Relatórios</span>
@@ -430,59 +547,109 @@
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-8 md:py-12 flex-1 flex flex-col items-center">
-        <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-12 text-center page-title tracking-tight font-heading w-full">GERAR RELATÓRIOS</h1>
+    <main class="container mx-auto px-4 py-8 md:py-12 flex-1">
+        <!-- Título da Página -->
+        <div class="text-center mb-8">
+            <h1 class="text-primary text-3xl md:text-4xl font-bold mb-4 page-title tracking-tight font-heading">
+                <i class="fas fa-chart-line mr-3 text-secondary"></i>
+                CENTRO DE RELATÓRIOS
+            </h1>
+            <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                Acesse relatórios detalhados e estatísticas em tempo real do seu estoque
+            </p>
+        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-6xl mx-auto justify-items-center">
-            <!-- Relatório de Estoque -->
-            <div class="card-item bg-white border-2 border-primary rounded-xl shadow-lg p-6 flex flex-col items-center animate-fade-in">
+        <!-- Estatísticas Rápidas -->
+        <div class="quick-stats mb-8">
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <div class="stat-number" id="totalProdutos">-</div>
+                <div class="stat-label">Total de Produtos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                </div>
+                <div class="stat-number" id="produtosCriticos">-</div>
+                <div class="stat-label">Estoque Crítico</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <div class="stat-number" id="totalCategorias">-</div>
+                <div class="stat-label">Categorias</div>
+            </div>
+        </div>
+
+        <!-- Gráfico de Estoque -->
+        <div class="bg-white rounded-xl shadow-card p-6 mb-8">
+            <h2 class="text-xl font-bold text-primary mb-4 flex items-center">
+                <i class="fas fa-chart-pie mr-2 text-secondary"></i>
+                Visão Geral do Estoque
+            </h2>
+            <div class="chart-container">
+                <canvas id="estoqueChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Relatórios Disponíveis -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Relatório de Estoque Completo -->
+            <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in">
                 <div class="card-shine"></div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-primary mb-4 card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                <h2 class="text-xl font-bold text-primary mb-2">Relatório de Estoque</h2>
-                <p class="text-gray-600 text-center mb-4">Gerar relatório completo do estoque atual</p>
-                <a href="../control/controllerEstoqueAtual.php" class="bg-secondary text-white py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors font-semibold" target="_blank">
-                    Gerar Relatório
+                <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                    <i class="fas fa-clipboard-list text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-primary mb-2 text-center">Relatório Completo</h3>
+                <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de todo o estoque atual</p>
+                <a href="../control/controllerEstoqueAtual.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
+                    <i class="fas fa-download mr-2"></i>
+                    Gerar PDF
                 </a>
             </div>
 
-            <!-- Relatório de Estoque por Data -->
-            <div class="card-item bg-white border-2 border-primary rounded-xl shadow-lg p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.1s">
+            <!-- Relatório por Período -->
+            <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.1s">
                 <div class="card-shine"></div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-primary mb-4 card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <h2 class="text-xl font-bold text-primary mb-2">Estoque por Data</h2>
-                <p class="text-gray-600 text-center mb-4">Relatório de estoque por período</p>
-                <button id="openDateModal" class="bg-secondary text-white py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors font-semibold">
-                    Gerar Relatório
+                <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                    <i class="fas fa-calendar-alt text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-primary mb-2 text-center">Por Período</h3>
+                <p class="text-gray-600 text-center mb-4 text-sm">Relatório de estoque por período específico</p>
+                <button id="openDateModal" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                    <i class="fas fa-calendar-check mr-2"></i>
+                    Selecionar Data
                 </button>
             </div>
 
             <!-- Relatório de Estoque Crítico -->
-            <div class="card-item bg-white border-2 border-primary rounded-xl shadow-lg p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
+            <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
                 <div class="card-shine"></div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-primary mb-4 card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h2 class="text-xl font-bold text-primary mb-2">Estoque Crítico</h2>
-                <p class="text-gray-600 text-center mb-4">Relatório de itens com estoque baixo igual ou abaixo de 5</p>
-                <a href="../control/controllerrelatoriocritico.php" class="bg-secondary text-white py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors font-semibold" target="_blank">
-                    Gerar Relatório
+                <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-primary mb-2 text-center">Estoque Crítico</h3>
+                <p class="text-gray-600 text-center mb-4 text-sm">Produtos com estoque baixo (≤ 5 unidades)</p>
+                <a href="../control/controllerrelatoriocritico.php" class="bg-gradient-to-r from-warning to-yellow-500 text-white py-2 px-6 rounded-lg hover:from-yellow-500 hover:to-warning transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    Ver Críticos
                 </a>
             </div>
 
-            <!-- Relatório de Estoque por Produto -->
-            <div class="card-item bg-white border-2 border-primary rounded-xl shadow-lg p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.3s">
+            <!-- Relatório por Produto -->
+            <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.3s">
                 <div class="card-shine"></div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-primary mb-4 card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                </svg>
-                <h2 class="text-xl font-bold text-primary mb-2">Estoque por Produto</h2>
-                <p class="text-gray-600 text-center mb-4">Relatório detalhado por produto e data específica</p>
-                <button id="openProductModal" class="bg-secondary text-white py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors font-semibold">
-                    Gerar Relatório
+                <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                    <i class="fas fa-search text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-primary mb-2 text-center">Por Produto</h3>
+                <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de produto específico</p>
+                <button id="openProductModal" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                    <i class="fas fa-search-plus mr-2"></i>
+                    Selecionar Produto
                 </button>
             </div>
 
@@ -499,44 +666,69 @@
                 </a>
             </div>
         </div>
+
     </main>
 
-    <!-- Modal for Date Selection -->
+    <!-- Modal para Seleção de Data -->
     <div id="dateModal" class="modal">
         <div class="modal-content">
             <button class="close-btn" id="closeDateModal">×</button>
-            <h2 class="font-heading">Selecionar Período</h2>
+            <h2 class="font-heading">
+                <i class="fas fa-calendar-alt mr-2 text-secondary"></i>
+                Selecionar Período
+            </h2>
             <form id="dateForm" action="../control/controllerRelatorioData.php" method="GET" target="_blank" class="space-y-4">
                 <div class="form-group">
-                    <label for="data_inicio" class="font-semibold">Data de Início</label>
-                    <input type="date" id="data_inicio" name="data_inicio" class="border border-accent rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-secondary" required>
+                    <label for="data_inicio" class="font-semibold">
+                        <i class="fas fa-play mr-1"></i>
+                        Data de Início
+                    </label>
+                    <input type="date" id="data_inicio" name="data_inicio" required>
                 </div>
                 <div class="form-group">
-                    <label for="data_fim" class="font-semibold">Data de Fim</label>
-                    <input type="date" id="data_fim" name="data_fim" class="border border-accent rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-secondary" required>
+                    <label for="data_fim" class="font-semibold">
+                        <i class="fas fa-stop mr-1"></i>
+                        Data de Fim
+                    </label>
+                    <input type="date" id="data_fim" name="data_fim" required>
                 </div>
-                <button type="submit" class="confirm-btn">Confirmar</button>
+                <button type="submit" class="confirm-btn">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Gerar Relatório
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- Modal for Product Selection -->
+    <!-- Modal para Seleção de Produto -->
     <div id="productModal" class="modal">
         <div class="modal-content">
             <button class="close-btn" id="closeProductModal">×</button>
-            <h2 class="font-heading">Selecionar Produto</h2>
+            <h2 class="font-heading">
+                <i class="fas fa-search mr-2 text-secondary"></i>
+                Selecionar Produto
+            </h2>
             <form id="productForm" action="../control/controllerRelatorioProduto.php" method="GET" target="_blank" class="space-y-4">
                 <div class="form-group">
-                    <label for="data_inicio" class="font-semibold">Data de Início</label>
-                    <input type="date" id="data_inicio_product" name="data_inicio" class="border border-accent rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-secondary" required>
+                    <label for="data_inicio" class="font-semibold">
+                        <i class="fas fa-play mr-1"></i>
+                        Data de Início
+                    </label>
+                    <input type="date" id="data_inicio_product" name="data_inicio" required>
                 </div>
                 <div class="form-group">
-                    <label for="data_fim" class="font-semibold">Data de Fim</label>
-                    <input type="date" id="data_fim_product" name="data_fim" class="border border-accent rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-secondary" required>
+                    <label for="data_fim" class="font-semibold">
+                        <i class="fas fa-stop mr-1"></i>
+                        Data de Fim
+                    </label>
+                    <input type="date" id="data_fim_product" name="data_fim" required>
                 </div>
                 <div class="form-group">
-                    <label for="produto" class="font-semibold">Produto</label>
-                    <select id="produto" name="produto" class="border border-accent rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-secondary" required>
+                    <label for="produto" class="font-semibold">
+                        <i class="fas fa-box mr-1"></i>
+                        Produto
+                    </label>
+                    <select id="produto" name="produto" required>
                         <option value="" disabled selected>SELECIONAR PRODUTO</option>
                         <?php
                         require_once('../model/functionsViews.php');
@@ -545,7 +737,10 @@
                         ?>
                     </select>
                 </div>
-                <button type="submit" class="confirm-btn">Confirmar</button>
+                <button type="submit" class="confirm-btn">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Gerar Relatório
+                </button>
             </form>
         </div>
     </div>
@@ -584,33 +779,28 @@
                     </div>
                 </div>
 
-                <!-- Desenvolvedores em Grid -->
                 <div>
                     <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
                         <i class="fas fa-code mr-2 text-sm"></i>
                         Dev Team
                     </h3>
                     <div class="grid grid-cols-2 gap-2">
-                        <a href="https://www.instagram.com/dudu.limasx/" target="_blank"
+                        <a
                             class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Carlos E.
+                            Matheus Felix
                         </a>
-                        <a href="https://www.instagram.com/millenafreires_/" target="_blank"
+                        <a 
                             class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Millena F.
+                           Roger Cavalcante
                         </a>
-                        <a href="https://www.instagram.com/matheusz.mf/" target="_blank"
+                        <a 
                             class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Matheus M.
+                            Matheus Machado
                         </a>
-                        <a href="https://www.instagram.com/yanlucas10__/" target="_blank"
-                            class="text-xs flex items-center hover:text-secondary transition-colors">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Ian Lucas
-                        </a>
+                     
                     </div>
                 </div>
             </div>
@@ -626,6 +816,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Elementos do modal
             const openDateModalBtn = document.getElementById('openDateModal');
             const dateModal = document.getElementById('dateModal');
             const closeDateModalBtn = document.getElementById('closeDateModal');
@@ -636,7 +827,13 @@
             const closeProductModalBtn = document.getElementById('closeProductModal');
             const productForm = document.getElementById('productForm');
 
-            // Open Date Modal
+            // Carregar estatísticas em tempo real
+            loadStatistics();
+
+            // Configurar gráfico
+            // setupChart(); // Remover chamada antiga
+
+            // Abrir Modal de Data
             openDateModalBtn.addEventListener('click', function() {
                 dateModal.classList.add('show');
                 const today = new Date();
@@ -646,13 +843,13 @@
                 document.getElementById('data_fim').value = today.toISOString().split('T')[0];
             });
 
-            // Close Date Modal
+            // Fechar Modal de Data
             closeDateModalBtn.addEventListener('click', function() {
                 dateModal.classList.remove('show');
                 dateForm.reset();
             });
 
-            // Open Product Modal
+            // Abrir Modal de Produto
             openProductModalBtn.addEventListener('click', function() {
                 productModal.classList.add('show');
                 const today = new Date();
@@ -662,13 +859,13 @@
                 document.getElementById('data_fim_product').value = today.toISOString().split('T')[0];
             });
 
-            // Close Product Modal
+            // Fechar Modal de Produto
             closeProductModalBtn.addEventListener('click', function() {
                 productModal.classList.remove('show');
                 productForm.reset();
             });
 
-            // Close Modals when clicking outside
+            // Fechar Modais ao clicar fora
             [dateModal, productModal].forEach(modal => {
                 modal.addEventListener('click', function(e) {
                     if (e.target === modal) {
@@ -682,26 +879,35 @@
                 });
             });
 
-            // Form Submission for Date
+            // Validação do formulário de data
             dateForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const data_inicio = document.getElementById('data_inicio').value;
                 const data_fim = document.getElementById('data_fim').value;
 
                 if (!data_inicio || !data_fim) {
-                    alert('Por favor, preencha ambas as datas.');
+                    showNotification('Por favor, preencha ambas as datas.', 'error');
                     return;
                 }
 
                 if (new Date(data_inicio) > new Date(data_fim)) {
-                    alert('A data de início deve ser anterior à data de fim.');
+                    showNotification('A data de início deve ser anterior à data de fim.', 'error');
                     return;
                 }
 
-                dateForm.submit();
+                // Mostrar loading
+                const submitBtn = dateForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+                submitBtn.disabled = true;
+
+                // Simular delay e enviar
+                setTimeout(() => {
+                    dateForm.submit();
+                }, 1000);
             });
 
-            // Form Submission for Product
+            // Validação do formulário de produto
             productForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const produto = document.getElementById('produto').value;
@@ -709,30 +915,191 @@
                 const data_fim = document.getElementById('data_fim_product').value;
 
                 if (!produto) {
-                    alert('Por favor, selecione um produto.');
+                    showNotification('Por favor, selecione um produto.', 'error');
                     return;
                 }
                 if (!data_inicio || !data_fim) {
-                    alert('Por favor, preencha ambas as datas.');
+                    showNotification('Por favor, preencha ambas as datas.', 'error');
                     return;
                 }
                 if (new Date(data_inicio) > new Date(data_fim)) {
-                    alert('A data de início deve ser anterior à data de fim.');
+                    showNotification('A data de início deve ser anterior à data de fim.', 'error');
                     return;
                 }
 
-                productForm.submit();
+                // Mostrar loading
+                const submitBtn = productForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+                submitBtn.disabled = true;
+
+                // Simular delay e enviar
+                setTimeout(() => {
+                    productForm.submit();
+                }, 1000);
             });
 
-            // Mobile Menu Toggle
+            // Menu mobile
             const mobileMenuButton = document.querySelector('.mobile-menu-button');
             const headerNav = document.querySelector('.header-nav');
             const menuSpans = document.querySelectorAll('.mobile-menu-button span');
 
-            mobileMenuButton.addEventListener('click', () => {
-                headerNav.classList.toggle('show');
-                menuSpans.forEach(span => span.classList.toggle('active'));
-            });
+            if (mobileMenuButton && headerNav) {
+                mobileMenuButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    headerNav.classList.toggle('show');
+
+                    // Animação para o botão do menu
+                    menuSpans.forEach(span => {
+                        span.classList.toggle('active');
+                    });
+
+                    // Prevenir scroll do body quando menu está aberto
+                    document.body.style.overflow = headerNav.classList.contains('show') ? 'hidden' : '';
+                });
+
+                // Fechar menu ao clicar em um link
+                const navLinks = headerNav.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        headerNav.classList.remove('show');
+                        menuSpans.forEach(span => {
+                            span.classList.remove('active');
+                        });
+                        document.body.style.overflow = '';
+                    });
+                });
+
+                // Fechar menu ao clicar fora
+                document.addEventListener('click', function(e) {
+                    if (!headerNav.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+                        headerNav.classList.remove('show');
+                        menuSpans.forEach(span => {
+                            span.classList.remove('active');
+                        });
+                        document.body.style.overflow = '';
+                    }
+                });
+
+                // Fechar menu ao pressionar ESC
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && headerNav.classList.contains('show')) {
+                        headerNav.classList.remove('show');
+                        menuSpans.forEach(span => {
+                            span.classList.remove('active');
+                        });
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
+            // Função para carregar estatísticas e gráfico reais
+            function loadStatistics() {
+                console.log('Carregando estatísticas...');
+                fetch('../control/controllerEstatisticas.php')
+                    .then(response => {
+                        console.log('Response status:', response.status);
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Dados recebidos:', data);
+                        if (data.success) {
+                            document.getElementById('totalProdutos').textContent = data.estatisticas.total_produtos;
+                            document.getElementById('produtosCriticos').textContent = data.estatisticas.produtos_criticos;
+                            document.getElementById('totalCategorias').textContent = data.estatisticas.total_categorias;
+                            setupChart(data.grafico);
+                            console.log('Estatísticas carregadas com sucesso');
+                        } else {
+                            console.error('Erro nos dados:', data.error);
+                            document.getElementById('totalProdutos').textContent = '-';
+                            document.getElementById('produtosCriticos').textContent = '-';
+                            document.getElementById('totalCategorias').textContent = '-';
+                            setupChart({em_estoque: 0, estoque_critico: 0, sem_estoque: 0});
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao carregar estatísticas:', error);
+                        document.getElementById('totalProdutos').textContent = '-';
+                        document.getElementById('produtosCriticos').textContent = '-';
+                        document.getElementById('totalCategorias').textContent = '-';
+                        setupChart({em_estoque: 0, estoque_critico: 0, sem_estoque: 0});
+                    });
+            }
+
+            // Função para configurar gráfico com dados reais
+            function setupChart(graficoData) {
+                const ctx = document.getElementById('estoqueChart').getContext('2d');
+                if (window.estoqueChartInstance) {
+                    window.estoqueChartInstance.destroy();
+                }
+                window.estoqueChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Em Estoque', 'Estoque Crítico', 'Sem Estoque'],
+                        datasets: [{
+                            data: [
+                                graficoData.em_estoque || 0,
+                                graficoData.estoque_critico || 0,
+                                graficoData.sem_estoque || 0
+                            ],
+                            backgroundColor: [
+                                '#28A745',
+                                '#FFC107',
+                                '#DC3545'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#FFFFFF'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    usePointStyle: true,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Função para mostrar notificações
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
+                
+                const bgColor = type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-green-500' : 'bg-blue-500';
+                notification.className += ` ${bgColor} text-white`;
+                
+                notification.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'} mr-2"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Animar entrada
+                setTimeout(() => {
+                    notification.classList.remove('translate-x-full');
+                }, 100);
+                
+                // Remover após 3 segundos
+                setTimeout(() => {
+                    notification.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
         });
     </script>
 </body>
