@@ -596,7 +596,7 @@
         </div>
 
         <!-- Relatórios Disponíveis -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Relatório de Estoque Completo -->
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in">
                 <div class="card-shine"></div>
@@ -653,9 +653,6 @@
                 </button>
             </div>
 
-            <!-- Relatório por Data (Produtos Adicionados) -->
-            
-
             <!-- Relatório por Data (Produtos Cadastrados) -->
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.4s">
                 <div class="card-shine"></div>
@@ -668,15 +665,18 @@
                     <i class="fas fa-calendar-plus mr-2"></i>
                     Selecionar Período
                 </button>
+            </div>
+
             <!-- Relatório de Produtos sem Código de Barras -->
-            <div class="card-item bg-white border-2 border-primary rounded-xl shadow-lg p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.3s">
+            <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.5s">
                 <div class="card-shine"></div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-primary mb-4 card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                </svg>
-                <h2 class="text-xl font-bold text-primary text-center mb-2">Produtos sem Código de Barras</h2>
-                <p class="text-gray-600 text-center mb-4">Relatório detalhado de produtos sem código de barras</p>
-                <a href="../control/controllerrelatoriosc.php" class="bg-secondary text-white py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors font-semibold" target="_blank">
+                <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                    <i class="fas fa-barcode text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-primary mb-2 text-center">Sem Código de Barras</h3>
+                <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de produtos sem código de barras</p>
+                <a href="../control/controllerrelatoriosc.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
+                    <i class="fas fa-file-pdf mr-2"></i>
                     Gerar Relatório
                 </a>
             </div>
