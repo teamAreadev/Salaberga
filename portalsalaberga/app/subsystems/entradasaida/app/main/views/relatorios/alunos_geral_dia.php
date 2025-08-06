@@ -40,19 +40,15 @@ class PDF extends FPDF {
         $this->Image('../../assets/img/logo.png', 18, 8, 40, 40);
         // Título principal
         $this->SetFont('Arial', 'B', 18);
-        $this->SetTextColor($this->colors['secondary'][0], $this->colors['secondary'][1], $this->colors['secondary'][2]); // Texto branco
+        $this->SetTextColor($this->colors['secondary'][0], $this->colors['secondary'][1], $this->colors['secondary'][2]); // Texto laranja
         $this->Cell(240, 0, utf8_decode('Frequência de Saída'), 0, 1, 'C');
 
         $this->SetFont('Arial', 'B', 10);
         $this->SetTextColor(255,255,255); // Texto branco
         $this->Cell(128, 30, utf8_decode('Estágio 2025'), 0, 1, 'C');
 
-        // Data e hora
-        $this->SetFont('Arial', '', 12);
-//        $this->Cell(0, 23, utf8_decode('Data: ' . date('d/m/Y') . ' | Hora: ' . date('H:i')) , 0, 1, 'C');
-
         // Linha decorativa
-        $this->SetDrawColor($this->colors['secondary'][0], $this->colors['secondary'][1], $this->colors['secondary'][2]);;
+        $this->SetDrawColor($this->colors['secondary'][0], $this->colors['secondary'][1], $this->colors['secondary'][2]);
 
         $this->Ln(15); // Espaço após o cabeçalho
     }
@@ -85,8 +81,8 @@ class PDF extends FPDF {
         $this->AliasNbPages(); // Necessário para o {nb} no footer
         $this->AddPage();
 
-        $this->SetFont('Arial', 'B', 10);
         // 3º Ano A
+        $this->SetFont('Arial', 'B', 10);
         $this->SetFillColor($this->colors['turma_3a'][0], $this->colors['turma_3a'][1], $this->colors['turma_3a'][2]);
         $this->SetTextColor(255, 255, 255);
         $this->Cell(0, 15, utf8_decode('3ºA - ENFERMAGEM'), 0, 1, 'L', true);
@@ -96,8 +92,8 @@ class PDF extends FPDF {
         $this->imprimirAlunos($dados_3a);
         $this->Ln(15);
 
-        $this->SetFont('Arial', 'B', 10);
         // 3º Ano B
+        $this->SetFont('Arial', 'B', 10);
         $this->SetFillColor($this->colors['turma_3b'][0], $this->colors['turma_3b'][1], $this->colors['turma_3b'][2]);
         $this->SetTextColor(255, 255, 255);
         $this->Cell(0, 15, utf8_decode('3ºB - INFORMÁTICA'), 0, 1, 'L', true);
@@ -105,10 +101,12 @@ class PDF extends FPDF {
         $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
         $dados_3b = $this->select->saida_estagio_3B_relatorio_dia($this->data);
         $this->imprimirAlunos($dados_3b);
-        $this->Ln(15);
+        
+        // Adicionar nova página para 3ºC e 3ºD
+        $this->AddPage();
 
-        $this->SetFont('Arial', 'B', 10);
         // 3º Ano C
+        $this->SetFont('Arial', 'B', 10);
         $this->SetFillColor($this->colors['turma_3c'][0], $this->colors['turma_3c'][1], $this->colors['turma_3c'][2]);
         $this->SetTextColor(255, 255, 255);
         $this->Cell(0, 15, utf8_decode('3ºC - ADMINISTRAÇÃO'), 0, 1, 'L', true);
@@ -118,8 +116,8 @@ class PDF extends FPDF {
         $this->imprimirAlunos($dados_3c);
         $this->Ln(15);
 
-        $this->SetFont('Arial', 'B', 10);
         // 3º Ano D
+        $this->SetFont('Arial', 'B', 10);
         $this->SetFillColor($this->colors['turma_3d'][0], $this->colors['turma_3d'][1], $this->colors['turma_3d'][2]);
         $this->SetTextColor(255, 255, 255);
         $this->Cell(0, 15, utf8_decode('3ºD - EDIFICAÇÃO'), 0, 1, 'L', true);
@@ -172,6 +170,4 @@ class PDF extends FPDF {
 $pdf = new PDF();
 $pdf->generateReport();
 $pdf->Output('Frequência de Saída.pdf', 'I');
-
 ?>
-
