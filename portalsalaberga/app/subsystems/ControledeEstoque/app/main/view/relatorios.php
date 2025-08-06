@@ -766,33 +766,28 @@
                     </div>
                 </div>
 
-                <!-- Desenvolvedores em Grid -->
                 <div>
                     <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
                         <i class="fas fa-code mr-2 text-sm"></i>
                         Dev Team
                     </h3>
                     <div class="grid grid-cols-2 gap-2">
-                        <a href="https://www.instagram.com/dudu.limasx/" target="_blank"
+                        <a
                             class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Carlos E.
+                            Matheus Felix
                         </a>
-                        <a href="https://www.instagram.com/millenafreires_/" target="_blank"
+                        <a 
                             class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Millena F.
+                           Roger Cavalcante
                         </a>
-                        <a href="https://www.instagram.com/matheusz.mf/" target="_blank"
+                        <a 
                             class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Matheus M.
+                            Matheus Machado
                         </a>
-                        <a href="https://www.instagram.com/yanlucas10__/" target="_blank"
-                            class="text-xs flex items-center hover:text-secondary transition-colors">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Ian Lucas
-                        </a>
+                     
                     </div>
                 </div>
             </div>
