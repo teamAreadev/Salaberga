@@ -266,25 +266,51 @@
         @media (max-width: 768px) {
             .header-nav {
                 display: none;
-                position: absolute;
-                top: 100%;
+                position: fixed;
+                top: 0;
                 left: 0;
                 right: 0;
+                bottom: 0;
                 background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
-                padding: 1rem;
+                padding: 2rem 1rem;
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-                z-index: 40;
+                z-index: 50;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                backdrop-filter: blur(10px);
             }
 
             .header-nav.show {
                 display: flex;
-                flex-direction: column;
+                animation: slideIn 0.3s ease-out;
+            }
+
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
 
             .header-nav-link {
-                padding: 0.75rem 1rem;
+                padding: 1rem 1.5rem;
                 text-align: center;
-                margin: 0.25rem 0;
+                margin: 0.5rem 0;
+                font-size: 1.1rem;
+                border-radius: 0.75rem;
+                transition: all 0.3s ease;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .header-nav-link:hover {
+                background-color: rgba(255, 255, 255, 0.15);
+                transform: translateX(5px);
             }
 
             .mobile-menu-button {
@@ -297,7 +323,8 @@
                 border: none;
                 cursor: pointer;
                 padding: 0;
-                z-index: 10;
+                z-index: 60;
+                position: relative;
             }
 
             .mobile-menu-button span {
@@ -305,23 +332,34 @@
                 height: 3px;
                 background-color: white;
                 border-radius: 10px;
-                transition: all 0.3s linear;
+                transition: all 0.3s ease;
                 position: relative;
-                transform-origin: 1px;
+                transform-origin: center;
             }
 
             .mobile-menu-button span:first-child.active {
-                transform: rotate(45deg);
-                top: 0px;
+                transform: rotate(45deg) translate(6px, 6px);
             }
 
             .mobile-menu-button span:nth-child(2).active {
                 opacity: 0;
+                transform: scale(0);
             }
 
             .mobile-menu-button span:nth-child(3).active {
-                transform: rotate(-45deg);
-                top: -1px;
+                transform: rotate(-45deg) translate(6px, -6px);
+            }
+
+            /* Overlay para fechar menu ao clicar fora */
+            .header-nav::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.3);
+                z-index: -1;
             }
         }
     </style>
@@ -357,21 +395,12 @@
                     <i class="fas fa-plus-circle mr-2"></i>
                     <span>Adicionar</span>
                 </a>
-                <div class="relative group">
-                    <a class="header-nav-link flex items-center cursor-pointer">
+            
+                    <a href="solicitar.php" class="header-nav-link flex items-center cursor-pointer">
                         <i class="fas fa-clipboard-list mr-2"></i>
                         <span>Solicitar</span>
-                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                      
                     </a>
-                    <div class="absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg overflow-hidden transform scale-0 group-hover:scale-100 transition-transform origin-top z-50">
-                        <a href="solicitar.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors">
-                            <i class="fas fa-clipboard-check mr-2"></i>Solicitar Produto
-                        </a>
-                        <a href="solicitarnovproduto.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors">
-                            <i class="fas fa-plus-square mr-2"></i>Solicitar Novo Produto
-                        </a>
-                    </div>
-                </div>
                 <a href="relatorios.php" class="header-nav-link flex items-center">
                     <i class="fas fa-chart-bar mr-2"></i>
                     <span>Relatórios</span>
@@ -388,15 +417,31 @@
         <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
             <form action="../control/controllerConsultarProduto.php" method="POST" class="space-y-6">
                 <div class="space-y-4">
+                    <!-- Checkboxes para tipo de produto -->
+                    <div class="space-y-3">
+                        <label class="text-primary font-semibold text-sm">Tipo de Produto:</label>
+                        <div class="space-y-2">
+                            <label class="custom-radio flex items-center">
+                                <input type="radio" name="tipo_produto" value="com_codigo" id="com_codigo" checked>
+                                <span class="ml-2 text-gray-700">Produto com código</span>
+                            </label>
+                            <label class="custom-radio flex items-center">
+                                <input type="radio" name="tipo_produto" value="sem_codigo" id="sem_codigo">
+                                <span class="ml-2 text-gray-700">Produto sem código</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Campo de entrada dinâmico -->
                     <div>
                         <input type="text" placeholder="BARCODE" id="barcode" name="barcode" required
                             class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                             aria-label="Código de barras do produto">
                     </div>
-
+                    
                     <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
                         aria-label="Adicionar produto">
-                        CONSULTAR
+                        CADASTRAR
                     </button>
             </form>
         </div>
@@ -487,7 +532,8 @@
             const headerNav = document.getElementById('headerNav');
 
             if (menuButton && headerNav) {
-                menuButton.addEventListener('click', function() {
+                menuButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     headerNav.classList.toggle('show');
 
                     // Animação para o botão do menu
@@ -495,6 +541,46 @@
                     spans.forEach(span => {
                         span.classList.toggle('active');
                     });
+
+                    // Prevenir scroll do body quando menu está aberto
+                    document.body.style.overflow = headerNav.classList.contains('show') ? 'hidden' : '';
+                });
+
+                // Fechar menu ao clicar em um link
+                const navLinks = headerNav.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        headerNav.classList.remove('show');
+                        const spans = menuButton.querySelectorAll('span');
+                        spans.forEach(span => {
+                            span.classList.remove('active');
+                        });
+                        document.body.style.overflow = '';
+                    });
+                });
+
+                // Fechar menu ao clicar fora
+                document.addEventListener('click', function(e) {
+                    if (!headerNav.contains(e.target) && !menuButton.contains(e.target)) {
+                        headerNav.classList.remove('show');
+                        const spans = menuButton.querySelectorAll('span');
+                        spans.forEach(span => {
+                            span.classList.remove('active');
+                        });
+                        document.body.style.overflow = '';
+                    }
+                });
+
+                // Fechar menu ao pressionar ESC
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && headerNav.classList.contains('show')) {
+                        headerNav.classList.remove('show');
+                        const spans = menuButton.querySelectorAll('span');
+                        spans.forEach(span => {
+                            span.classList.remove('active');
+                        });
+                        document.body.style.overflow = '';
+                    }
                 });
             }
 
@@ -540,6 +626,32 @@
                     img.loading = 'lazy';
                 });
             }
+
+            // Controle das checkboxes de tipo de produto
+            const comCodigoRadio = document.getElementById('com_codigo');
+            const semCodigoRadio = document.getElementById('sem_codigo');
+            const inputField = document.getElementById('barcode');
+
+            function updateInputField() {
+                if (comCodigoRadio.checked) {
+                    // Produto com código
+                    inputField.placeholder = "BARCODE";
+                    inputField.name = "barcode";
+                    inputField.setAttribute('aria-label', 'Código de barras do produto');
+                } else {
+                    // Produto sem código
+                    inputField.placeholder = "NOME DO PRODUTO";
+                    inputField.name = "nome_produto";
+                    inputField.setAttribute('aria-label', 'Nome do produto');
+                }
+            }
+
+            // Adicionar event listeners para as checkboxes
+            comCodigoRadio.addEventListener('change', updateInputField);
+            semCodigoRadio.addEventListener('change', updateInputField);
+
+            // Inicializar o campo
+            updateInputField();
         });
     </script>
 </body>
