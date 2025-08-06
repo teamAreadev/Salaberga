@@ -120,6 +120,47 @@ class select_model extends connect
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function saida_estagio_3A_relatorio_dia($data)
+    {
+        $queryStr = "SELECT a.nome, s.dae FROM aluno a 
+                    JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                    WHERE a.id_turma = 9 
+                    AND DATE(s.dae) = '$data' 
+                    ORDER BY a.nome ASC";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function saida_estagio_3B_relatorio_dia($data)
+    {
+        $queryStr = "SELECT a.nome, s.dae FROM aluno a 
+                    JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                    WHERE a.id_turma = 10 
+                    AND DATE(s.dae) = '$data'
+                    ORDER BY a.nome ASC";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function saida_estagio_3C_relatorio_dia($data)
+    {
+        $queryStr = "SELECT a.nome, s.dae FROM aluno a 
+                    JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                    WHERE a.id_turma = 11 
+                    AND DATE(s.dae) = '$data'
+                    ORDER BY a.nome ASC";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function saida_estagio_3D_relatorio_dia($data)
+    {
+        $queryStr = "SELECT a.nome, s.dae FROM aluno a 
+                    JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                    WHERE a.id_turma = 12 
+                    AND DATE(s.dae) = '$data'
+                    ORDER BY a.nome ASC";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getSaidasEstagioPorTurma($id_turma, $data)
     {
         try {

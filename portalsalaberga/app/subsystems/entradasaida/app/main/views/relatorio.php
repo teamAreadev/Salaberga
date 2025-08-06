@@ -148,26 +148,26 @@
                     </div>
                 </a>
 
-                <a href="relatorios/alunos_geral.php" class="report-card block p-6 text-left">
+                <a href="relatorios/escolher_dia.php" class="report-card block p-6 text-left">
                     <div class="flex items-center gap-4">
                         <div class="report-icon bg-yellow-50 text-yellow-600">
                             <i class="fas fa-users text-xl"></i>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-900">Relatório Geral de Alunos</h3>
-                            <p class="text-sm text-gray-500">Visualize informações gerais sobre todos os alunos</p>
+                            <h3 class="font-semibold text-gray-900">Relatório Geral de Alunos por Dia</h3>
+                            <p class="text-sm text-gray-500">Visualize informações gerais sobre todos os alunos por dia</p>
                         </div>
                     </div>
                 </a>
                 
-                <a href="relatorios/alunos_geral.php" class="report-card block p-6 text-left">
+                <a href="./QRCode/decisao.php" class="report-card block p-6 text-left">
                     <div class="flex items-center gap-4">
                         <div class="report-icon bg-yellow-50 text-yellow-600">
                             <i class="fas fa-users text-xl"></i>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-900">Relatório Geral de Alunos</h3>
-                            <p class="text-sm text-gray-500">Visualize informações gerais sobre todos os alunos</p>
+                            <h3 class="font-semibold text-gray-900">Relatório Geral de QRCodes</h3>
+                            <p class="text-sm text-gray-500">Gere QRCodes para todos os alunos</p>
                         </div>
                     </div>
                 </a>

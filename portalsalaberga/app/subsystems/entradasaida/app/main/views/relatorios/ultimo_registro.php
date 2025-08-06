@@ -1,16 +1,14 @@
 <?php
 require_once(__DIR__ . '/../../model/select_model.php');
+require_once(__DIR__ . '/../../model/session.php');
+$session = new sessions();
 $select = new select_model();
 
-session_start();
-function redirect_to_login()
-{
-    header('Location: ../../../../../../main/views/autenticacao/login.php');
+$session->autenticar_session();
+if(isset($_GET['sair'])){
+  $session->quebra_session();
 }
-if (!isset($_SESSION['Email'])) {
-    session_destroy();
-    redirect_to_login();
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
