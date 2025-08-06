@@ -139,32 +139,81 @@
                     </thead>
                     <tbody id="tabelaEstoque">
                         <?php
-                        // Aqui você deve buscar os produtos do banco e gerar as linhas da tabela
-                        require_once '../model/model.functions.php';
-                        $gerenciamento = new gerenciamento();
-                        $produtos = $gerenciamento->getPdo()->query('SELECT * FROM produtos')->fetchAll(PDO::FETCH_ASSOC);
-                        if ($produtos && count($produtos) > 0) {
-                            foreach ($produtos as $produto) {
-                                $quantidadeClass = $produto['quantidade'] <= 5 ? 'text-red-600 font-bold' : 'text-gray-700';
-                                echo '<tr class="border-b border-gray-200 hover:bg-gray-50">';
-                                echo '<td class="py-3 px-4">' . htmlspecialchars($produto['barcode']) . '</td>';
-                                echo '<td class="py-3 px-4">' . htmlspecialchars($produto['nome_produto']) . '</td>';
-                                echo '<td class="py-3 px-4 ' . $quantidadeClass . '">' . htmlspecialchars($produto['quantidade']) . '</td>';
-                                echo '<td class="py-3 px-4">' . htmlspecialchars($produto['natureza']) . '</td>';
-                                echo '<td class="py-3 px-4 flex space-x-2">';
-                                echo '<button onclick="abrirModalEditar(' . $produto['id'] . ')" class="text-primary hover:text-secondary mr-2" title="Editar">';
-                                echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>';
-                                echo '</button>';
-                                echo '<button onclick="abrirModalExcluir(' . $produto['id'] . ', \' ' . htmlspecialchars(addslashes($produto['nome_produto'])) . '\')" class="text-red-500 hover:text-red-700" title="Excluir">';
-                                echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>';
-                                echo '</button>';
-                                echo '</td>';
-                                echo '</tr>';
+                        if (isset($_GET['resultado'])) {
+                            $resultado = json_decode($_GET['resultado'], true);
+                            if (is_array($resultado) && count($resultado) > 0) {
+                                foreach ($resultado as $produto) {
+                                    $quantidadeClass = $produto['quantidade'] <= 5 ? 'text-red-600 font-bold' : 'text-gray-700';
+                        ?>
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                        <td class="py-3 px-4"><?php echo htmlspecialchars($produto['barcode']); ?></td>
+                                        <td class="py-3 px-4"><?php echo htmlspecialchars($produto['nome_produto']); ?></td>
+                                        <td class="py-3 px-4 <?php echo $quantidadeClass; ?>"><?php echo htmlspecialchars($produto['quantidade']); ?></td>
+                                        <td class="py-3 px-4"><?php echo htmlspecialchars($produto['natureza']); ?></td>
+                                        <td class="py-3 px-4">
+                                            <?php echo isset($produto['data']) ? date('d/m/Y H:i', strtotime($produto['data'])) : 'N/A'; ?>
+                                        </td>
+                                        <td class="py-3 px-4 flex space-x-2">
+                                            <button class="text-primary hover:text-secondary mr-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                </svg>
+                                            </button>
+                                            <button class="text-red-500 hover:text-red-700">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                        <?php
+                                }
+                            } else {
+                                echo '<tr><td colspan="6" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>';
                             }
                         } else {
-                            echo '<tr><td colspan="5" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>';
+                            echo '<tr><td colspan="6" class="py-4 px-4 text-center text-gray-500">Carregando produtos...</td></tr>';
                         }
                         ?>
+                        <!-- Exemplos estáticos para visualização -->
+                        <tr class="border-b border-gray-200 hover:bg-gray-50">
+                            <td class="py-3 px-4">001</td>
+                            <td class="py-3 px-4">Papel A4</td>
+                            <td class="py-3 px-4">100</td>
+                            <td class="py-3 px-4">Expedientes</td>
+                            <td class="py-3 px-4">01/08/2024 10:30</td>
+                            <td class="py-3 px-4">
+                                <button class="text-primary hover:text-secondary mr-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                </button>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-gray-50">
+                            <td class="py-3 px-4">002</td>
+                            <td class="py-3 px-4">Detergente</td>
+                            <td class="py-3 px-4">50</td>
+                            <td class="py-3 px-4">Limpeza</td>
+                            <td class="py-3 px-4">02/08/2024 14:15</td>
+                            <td class="py-3 px-4">
+                                <button class="text-primary hover:text-secondary mr-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                </button>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
