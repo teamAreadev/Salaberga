@@ -1,6 +1,13 @@
 <?php
 require_once('../../model/select_model.php');
 $select = new select_model;
+
+include_once '../../model/session.php';
+$session = new sessions();
+$session->autenticar_session();
+if(isset($_GET['sair'])){
+  $session->quebra_session();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -165,11 +172,11 @@ $select = new select_model;
             Salaberga
         </div>
         <nav class="flex items-center gap-3">
-            <a href="inicio.php" class="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
+            <a href="../inicio.php" class="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
                 <i class="fas fa-home"></i>
                 <span>Menu</span>
             </a>
-            <a href="saida_estagio_view.php" class="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
+            <a href="../relatorios/ultimo_registro.php" class="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
                 <i class="fas fa-eye"></i>
                 <span class="hidden sm:inline">Tempo Real</span>
                 <span class="sm:hidden">Ver</span>
@@ -285,10 +292,7 @@ $select = new select_model;
                             <i class="fas fa-save"></i>
                             Registrar Saída
                         </span>
-                        <span id="submitLoading" class="hidden flex items-center justify-center gap-2">
-                            <div class="loading-spinner"></div>
-                            Registrando...
-                        </span>
+        
                     </button>
                 </form>
 
@@ -298,7 +302,7 @@ $select = new select_model;
                         <i class="fas fa-arrow-left text-sm"></i>
                         Voltar ao Menu
                     </a>
-                    <a href="saida_estagio_view.php" class="flex-1 inline-flex items-center justify-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-300 text-sm">
+                    <a href="../relatorios/ultimo_registro.php" class="flex-1 inline-flex items-center justify-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-300 text-sm">
                         <i class="fas fa-eye text-sm"></i>
                         Ver em Tempo Real
                     </a>
