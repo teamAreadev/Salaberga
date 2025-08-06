@@ -11,10 +11,10 @@ if (isset($_POST['btn'])) {
 
     $x = new gerenciamento();
     
-    // Se não houver barcode, usar o nome com prefixo SC_ como identificador
+    // Se não houver barcode, usar o nome com prefixo SCB_ como identificador
     if (empty($barcode) || !is_numeric($barcode)) {
-        // Para produtos sem código, usar SC_ + nome como identificador
-        $barcode = 'SC_' . $nome;
+        // Para produtos sem código, usar SCB_ + nome como identificador
+        $barcode = 'SCB_' . $nome;
         error_log("Produto sem código - barcode final: " . $barcode);
     }
     

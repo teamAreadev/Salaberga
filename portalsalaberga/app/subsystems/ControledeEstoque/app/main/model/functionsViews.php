@@ -29,15 +29,15 @@ class select extends connection
                 $parametro = $identificador;
                 $nome_parametro = ":identificador";
             } else {
-                // Verificar se já tem prefixo SC_
-                if (strpos($identificador, 'SC_') === 0) {
-                    // Já tem prefixo SC_, usar como está
+                // Verificar se já tem prefixo SCB_
+                if (strpos($identificador, 'SCB_') === 0) {
+                    // Já tem prefixo SCB_, usar como está
                     $consulta = "SELECT * FROM produtos WHERE UPPER(barcode) = UPPER(:barcode_com_prefixo)";
                     $parametro = $identificador;
                     $nome_parametro = ":barcode_com_prefixo";
                 } else {
-                    // Adicionar prefixo SC_ para produtos sem código
-                    $barcode_com_prefixo = 'SC_' . $identificador;
+                    // Adicionar prefixo SCB_ para produtos sem código
+                    $barcode_com_prefixo = 'SCB_' . $identificador;
                     $consulta = "SELECT * FROM produtos WHERE UPPER(barcode) = UPPER(:barcode_com_prefixo)";
                     $parametro = $barcode_com_prefixo;
                     $nome_parametro = ":barcode_com_prefixo";

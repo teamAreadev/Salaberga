@@ -236,7 +236,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
                 <h2 class="text-2xl font-bold text-primary mb-4">Editar Produto</h2>
-                <form id="formEditar" action="../control/controllerEditarProduto.php" method="POST" class="space-y-4">
+                <form id="formEditar" action="../control/controllerEditarProduto.php" method="POST" class="space-y-4" onsubmit="return enviarFormularioEdicao(event)">
                     <input type="hidden" id="editar_id" name="editar_id">
                     <div>
                         <label for="editar_barcode" class="block text-sm font-medium text-gray-700 mb-1">Código de Barras</label>
@@ -400,23 +400,84 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         }
         // Modais de edição/exclusão
         window.abrirModalEditar = function(id) {
-            // Aqui você pode buscar os dados do produto via AJAX ou preencher manualmente se já tiver os dados
-            // Exemplo: preencher campos do modal com os dados do produto
-            // document.getElementById('editar_id').value = id;
-            // ...
-            document.getElementById('modalEditar').classList.remove('hidden');
+            // Buscar dados do produto via AJAX
+            fetch('../control/controllerEditarProduto.php?id=' + id)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.erro) {
+                        alert('Erro ao carregar dados do produto: ' + data.erro);
+                        return;
+                    }
+                    
+                    // Preencher campos do modal
+                    document.getElementById('editar_id').value = data.id;
+                    document.getElementById('editar_barcode').value = data.barcode;
+                    document.getElementById('editar_nome').value = data.nome_produto;
+                    document.getElementById('editar_quantidade').value = data.quantidade;
+                    document.getElementById('editar_natureza').value = data.natureza;
+                    
+                    // Mostrar modal
+                    document.getElementById('modalEditar').classList.remove('hidden');
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar dados do produto:', error);
+                    alert('Erro ao carregar dados do produto');
+                });
         };
         window.fecharModalEditar = function() {
+            // Limpar formulário
+            document.getElementById('formEditar').reset();
+            
+            // Limpar campos específicos
+            document.getElementById('editar_id').value = '';
+            document.getElementById('editar_barcode').value = '';
+            document.getElementById('editar_nome').value = '';
+            document.getElementById('editar_quantidade').value = '';
+            document.getElementById('editar_natureza').value = '';
+            
+            // Fechar modal
             document.getElementById('modalEditar').classList.add('hidden');
         };
         window.abrirModalExcluir = function(id, nome) {
             document.getElementById('nomeProdutoExcluir').textContent = nome;
-            document.getElementById('linkExcluir').href = '../control/controllerExcluirProduto.php?id=' + id;
+            document.getElementById('linkExcluir').href = '../control/controllerApagarProduto.php?id=' + id;
             document.getElementById('modalExcluir').classList.remove('hidden');
         };
         window.fecharModalExcluir = function() {
             document.getElementById('modalExcluir').classList.add('hidden');
         };
+        
+        // Fechar modais ao clicar fora
+        document.addEventListener('click', function(e) {
+            const modalEditar = document.getElementById('modalEditar');
+            const modalExcluir = document.getElementById('modalExcluir');
+            
+            // Fechar modal de edição
+            if (e.target === modalEditar) {
+                fecharModalEditar();
+            }
+            
+            // Fechar modal de exclusão
+            if (e.target === modalExcluir) {
+                fecharModalExcluir();
+            }
+        });
+        
+        // Fechar modais ao pressionar ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modalEditar = document.getElementById('modalEditar');
+                const modalExcluir = document.getElementById('modalExcluir');
+                
+                if (!modalEditar.classList.contains('hidden')) {
+                    fecharModalEditar();
+                }
+                
+                if (!modalExcluir.classList.contains('hidden')) {
+                    fecharModalExcluir();
+                }
+            }
+        });
         
         // Função para mostrar alertas
         window.mostrarAlerta = function(mensagem, tipo) {
@@ -440,6 +501,57 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             setTimeout(() => {
                 alerta.classList.add('hidden');
             }, 5000);
+        };
+        
+        // Função para enviar formulário de edição
+        window.enviarFormularioEdicao = function(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            // Mostrar loading no botão
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Salvando...';
+            submitBtn.disabled = true;
+            
+            fetch('../control/controllerEditarProduto.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Fechar modal
+                fecharModalEditar();
+                
+                if (data.success) {
+                    // Mostrar mensagem de sucesso
+                    mostrarAlerta(data.message || 'Produto atualizado com sucesso!', 'success');
+                    
+                    // Recarregar a página após 1 segundo
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    // Mostrar mensagem de erro
+                    mostrarAlerta(data.message || 'Erro ao atualizar produto', 'error');
+                    
+                    // Restaurar botão
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao editar produto:', error);
+                mostrarAlerta('Erro ao atualizar produto', 'error');
+                
+                // Restaurar botão
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+            
+            return false;
         };
     });
     </script>
