@@ -25,6 +25,7 @@ class PDF extends FPDF {
         parent::__construct('P', 'pt', 'A4'); // 'P' para Portrait, 'pt' para points, 'A4' size
         $this->select = new select_model();
         $this->data = $_POST['data'];
+        $this->SetMargins(20, 20, 20); // Define margens de 20pt para melhor alinhamento
     }
 
     // Header method (FPDF calls this automatically on new page)
@@ -41,11 +42,11 @@ class PDF extends FPDF {
         // Título principal
         $this->SetFont('Arial', 'B', 18);
         $this->SetTextColor($this->colors['secondary'][0], $this->colors['secondary'][1], $this->colors['secondary'][2]); // Texto laranja
-        $this->Cell(240, 0, utf8_decode('Frequência de Saída'), 0, 1, 'C');
+        $this->Cell(0, 0, utf8_decode('Frequência de Saída'), 0, 1, 'C');
 
         $this->SetFont('Arial', 'B', 10);
-        $this->SetTextColor(255,255,255); // Texto branco
-        $this->Cell(128, 30, utf8_decode('Estágio 2025'), 0, 1, 'C');
+        $this->SetTextColor(255, 255, 255); // Texto branco
+        $this->Cell(0, 30, utf8_decode('Estágio 2025'), 0, 1, 'C');
 
         // Linha decorativa
         $this->SetDrawColor($this->colors['secondary'][0], $this->colors['secondary'][1], $this->colors['secondary'][2]);
@@ -79,48 +80,46 @@ class PDF extends FPDF {
     public function generateReport()
     {
         $this->AliasNbPages(); // Necessário para o {nb} no footer
-        $this->AddPage();
 
         // 3º Ano A
-        $this->SetFont('Arial', 'B', 10);
+        $this->AddPage();
+        $this->SetFont('Arial', 'B', 12); // Aumentar tamanho da fonte para 12
         $this->SetFillColor($this->colors['turma_3a'][0], $this->colors['turma_3a'][1], $this->colors['turma_3a'][2]);
         $this->SetTextColor(255, 255, 255);
-        $this->Cell(0, 15, utf8_decode('3ºA - ENFERMAGEM'), 0, 1, 'L', true);
+        $this->Cell(0, 20, utf8_decode('3ºA - ENFERMAGEM'), 0, 1, 'L', true);
         $this->SetFillColor(255, 255, 255);
         $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
         $dados_3a = $this->select->saida_estagio_3A_relatorio_dia($this->data);
         $this->imprimirAlunos($dados_3a);
-        $this->Ln(15);
 
         // 3º Ano B
-        $this->SetFont('Arial', 'B', 10);
+        $this->AddPage();
+        $this->SetFont('Arial', 'B', 12); // Aumentar tamanho da fonte para 12
         $this->SetFillColor($this->colors['turma_3b'][0], $this->colors['turma_3b'][1], $this->colors['turma_3b'][2]);
         $this->SetTextColor(255, 255, 255);
-        $this->Cell(0, 15, utf8_decode('3ºB - INFORMÁTICA'), 0, 1, 'L', true);
+        $this->Cell(0, 20, utf8_decode('3ºB - INFORMÁTICA'), 0, 1, 'L', true);
         $this->SetFillColor(255, 255, 255);
         $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
         $dados_3b = $this->select->saida_estagio_3B_relatorio_dia($this->data);
         $this->imprimirAlunos($dados_3b);
-        
-        // Adicionar nova página para 3ºC e 3ºD
-        $this->AddPage();
 
         // 3º Ano C
-        $this->SetFont('Arial', 'B', 10);
+        $this->AddPage();
+        $this->SetFont('Arial', 'B', 12); // Aumentar tamanho da fonte para 12
         $this->SetFillColor($this->colors['turma_3c'][0], $this->colors['turma_3c'][1], $this->colors['turma_3c'][2]);
         $this->SetTextColor(255, 255, 255);
-        $this->Cell(0, 15, utf8_decode('3ºC - ADMINISTRAÇÃO'), 0, 1, 'L', true);
+        $this->Cell(0, 20, utf8_decode('3ºC - ADMINISTRAÇÃO'), 0, 1, 'L', true);
         $this->SetFillColor(255, 255, 255);
         $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
         $dados_3c = $this->select->saida_estagio_3C_relatorio_dia($this->data);
         $this->imprimirAlunos($dados_3c);
-        $this->Ln(15);
 
         // 3º Ano D
-        $this->SetFont('Arial', 'B', 10);
+        $this->AddPage();
+        $this->SetFont('Arial', 'B', 12); // Aumentar tamanho da fonte para 12
         $this->SetFillColor($this->colors['turma_3d'][0], $this->colors['turma_3d'][1], $this->colors['turma_3d'][2]);
         $this->SetTextColor(255, 255, 255);
-        $this->Cell(0, 15, utf8_decode('3ºD - EDIFICAÇÃO'), 0, 1, 'L', true);
+        $this->Cell(0, 20, utf8_decode('3ºD - EDIFICAÇÃO'), 0, 1, 'L', true);
         $this->SetFillColor(255, 255, 255);
         $this->SetTextColor($this->colors['dark'][0], $this->colors['dark'][1], $this->colors['dark'][2]);
         $dados_3d = $this->select->saida_estagio_3D_relatorio_dia($this->data);
@@ -145,9 +144,9 @@ class PDF extends FPDF {
         $this->SetLineWidth(0.2);
 
         // Larguras das colunas
-        $pageWidth = $this->GetPageWidth() - 57; // Considerando as margens padrão de 20pt de cada lado
-        $colWidthNome = $pageWidth * 0.8; // 70% para o nome
-        $colWidthHorario = $pageWidth * 0.2; // 30% para o horário;
+        $pageWidth = $this->GetPageWidth() - 40; // Considerando margens de 20pt de cada lado
+        $colWidthNome = $pageWidth * 0.8; // 80% para o nome
+        $colWidthHorario = $pageWidth * 0.2; // 20% para o horário
 
         // Dados dos alunos
         $this->SetFont('Arial', '', 8);
@@ -160,7 +159,7 @@ class PDF extends FPDF {
 
             // Ajuste de alinhamento explícito
             $this->Cell($colWidthNome, 10, utf8_decode(strtoUpper($dado['nome'])), 1, 0, 'L', true); // Nome: Left
-            $this->Cell($colWidthHorario, 10, isset($dado['dae']) ? date('d/m/Y     H:i:s', strtotime($dado['dae'])): '--:--', 1, 1, 'R', true); // Horário: Center
+            $this->Cell($colWidthHorario, 10, isset($dado['dae']) ? date('d/m/Y     H:i:s', strtotime($dado['dae'])) : '--:--', 1, 1, 'R', true); // Horário: Right
 
             $rowCounter++;
         }

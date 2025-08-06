@@ -57,9 +57,6 @@ class qrCode1 extends connect
                 die("Erro: QR Code não gerado para " . $id['nome']);
             }
 
-
-https://salaberga.com/salaberga/portalsalaberga/app/main/views/subsytem/subsistema.php?id_aluno=236
-
             // Calcular a posição do QR code para centralizá-lo em cima da imagem
             $qr_x = $current_x + ($cracha_width - $qr_size) / 2; // Centraliza o QR code
             $qr_y = $current_y + 3; // 0.5 cm de margem do topo da imagem
