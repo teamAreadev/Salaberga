@@ -1464,7 +1464,7 @@ class relatorios extends connection
                 $pdf->Cell($larguras[3], $alturaLinhaDados, $row['quantidade'], 0, 0, 'C');
                 $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
                 $pdf->SetFont('Arial', '', 10);
-                $posX += $larguras[3];
+                $posX += $larguras[2];
 
                 $y += $alturaLinhaDados;
                 $linhaAlternada = !$linhaAlternada;
@@ -2152,7 +2152,7 @@ class relatorios extends connection
                 $pdf->Cell($larguras[3], $alturaLinhaDados, $row['quantidade'], 0, 0, 'C');
                 $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
                 $pdf->SetFont('Arial', '', 10);
-                $posX += $larguras[3];
+                $posX += $larguras[2];
 
                 $y += $alturaLinhaDados;
                 $linhaAlternada = !$linhaAlternada;
