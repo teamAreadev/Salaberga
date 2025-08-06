@@ -1,17 +1,13 @@
+<?php
+include_once '../model/session.php';
+$session = new sessions();
+$session->autenticar_session();
+if(isset($_GET['sair'])){
+  $session->quebra_session();
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <!--CÓDIGO PARA VERIFICAR SE O USUÁRIO TEM LOGIN POR MEIO DA SESSÃO-->
-  <?php 
- session_start();
- function redirect_to_login()
- {
-   header('Location: ../../../../../main/views/autenticacao/login.php');
- }
- if (!isset($_SESSION['Email'])) {
-   session_destroy();
-   redirect_to_login();
- }    
-  ?>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -104,7 +100,7 @@
   <header class="header fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-6 text-white shadow-md z-50">
     <div class="text-xl font-semibold">Salaberga</div>
     <nav>
-      <a href="../control/controller_sessao/verificar_sessao.php?sair=1" 
+      <a href="inicio.php?sair" 
          class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors">
         <i class="fas fa-sign-out-alt"></i>
         <span>Sair</span>
@@ -122,15 +118,6 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <a href="cadastrar_aluno.php" class="menu-card p-6 flex items-center gap-4 group">
-          <div class="menu-icon bg-green-50 text-ceara-green">
-            <i class="fas fa-user-plus text-xl"></i>
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 group-hover:text-ceara-green transition-colors">Cadastrar Aluno</h3>
-            <p class="text-sm text-gray-500">Adicione novos alunos ao sistema</p>
-          </div>
-        </a>
 
         <a href="./entradas/registro_entrada.php" class="menu-card p-6 flex items-center gap-4 group">
           <div class="menu-icon bg-blue-50 text-blue-600">
