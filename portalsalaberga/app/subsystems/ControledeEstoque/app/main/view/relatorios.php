@@ -652,6 +652,23 @@
                     Selecionar Produto
                 </button>
             </div>
+
+            <!-- Relatório por Data (Produtos Adicionados) -->
+            
+
+            <!-- Relatório por Data (Produtos Cadastrados) -->
+            <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.4s">
+                <div class="card-shine"></div>
+                <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                    <i class="fas fa-plus-circle text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-primary mb-2 text-center">Produtos Cadastrados</h3>
+                <p class="text-gray-600 text-center mb-4 text-sm">Relatório de produtos adicionados em período específico</p>
+                <button id="openProdutosCadastradosModal" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                    <i class="fas fa-calendar-plus mr-2"></i>
+                    Selecionar Período
+                </button>
+            </div>
         </div>
 
     </main>
@@ -723,6 +740,37 @@
                         $resultado = $select->modalRelatorio($barcode);
                         ?>
                     </select>
+                </div>
+                <button type="submit" class="confirm-btn">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Gerar Relatório
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Produtos Cadastrados -->
+    <div id="produtosCadastradosModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeProdutosCadastradosModal">×</button>
+            <h2 class="font-heading">
+                <i class="fas fa-plus-circle mr-2 text-secondary"></i>
+                Selecionar Período
+            </h2>
+            <form id="produtosCadastradosForm" action="../control/controllerRelatorioProdutosCadastrados.php" method="GET" target="_blank" class="space-y-4">
+                <div class="form-group">
+                    <label for="data_inicio_cadastrados" class="font-semibold">
+                        <i class="fas fa-play mr-1"></i>
+                        Data de Início
+                    </label>
+                    <input type="date" id="data_inicio_cadastrados" name="data_inicio" required>
+                </div>
+                <div class="form-group">
+                    <label for="data_fim_cadastrados" class="font-semibold">
+                        <i class="fas fa-stop mr-1"></i>
+                        Data de Fim
+                    </label>
+                    <input type="date" id="data_fim_cadastrados" name="data_fim" required>
                 </div>
                 <button type="submit" class="confirm-btn">
                     <i class="fas fa-file-pdf mr-2"></i>
@@ -814,6 +862,11 @@
             const closeProductModalBtn = document.getElementById('closeProductModal');
             const productForm = document.getElementById('productForm');
 
+            const openProdutosCadastradosModalBtn = document.getElementById('openProdutosCadastradosModal');
+            const produtosCadastradosModal = document.getElementById('produtosCadastradosModal');
+            const closeProdutosCadastradosModalBtn = document.getElementById('closeProdutosCadastradosModal');
+            const produtosCadastradosForm = document.getElementById('produtosCadastradosForm');
+
             // Carregar estatísticas em tempo real
             loadStatistics();
 
@@ -852,8 +905,24 @@
                 productForm.reset();
             });
 
+            // Abrir Modal de Produtos Cadastrados
+            openProdutosCadastradosModalBtn.addEventListener('click', function() {
+                produtosCadastradosModal.classList.add('show');
+                const today = new Date();
+                const thirtyDaysAgo = new Date(today);
+                thirtyDaysAgo.setDate(today.getDate() - 30);
+                document.getElementById('data_inicio_cadastrados').value = thirtyDaysAgo.toISOString().split('T')[0];
+                document.getElementById('data_fim_cadastrados').value = today.toISOString().split('T')[0];
+            });
+
+            // Fechar Modal de Produtos Cadastrados
+            closeProdutosCadastradosModalBtn.addEventListener('click', function() {
+                produtosCadastradosModal.classList.remove('show');
+                produtosCadastradosForm.reset();
+            });
+
             // Fechar Modais ao clicar fora
-            [dateModal, productModal].forEach(modal => {
+            [dateModal, productModal, produtosCadastradosModal].forEach(modal => {
                 modal.addEventListener('click', function(e) {
                     if (e.target === modal) {
                         modal.classList.remove('show');
@@ -861,6 +930,8 @@
                             dateForm.reset();
                         } else if (modal === productModal) {
                             productForm.reset();
+                        } else if (modal === produtosCadastradosModal) {
+                            produtosCadastradosForm.reset();
                         }
                     }
                 });
@@ -891,6 +962,34 @@
                 // Simular delay e enviar
                 setTimeout(() => {
                     dateForm.submit();
+                }, 1000);
+            });
+
+            // Validação do formulário de produtos cadastrados
+            produtosCadastradosForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const data_inicio = document.getElementById('data_inicio_cadastrados').value;
+                const data_fim = document.getElementById('data_fim_cadastrados').value;
+
+                if (!data_inicio || !data_fim) {
+                    showNotification('Por favor, preencha ambas as datas.', 'error');
+                    return;
+                }
+
+                if (new Date(data_inicio) > new Date(data_fim)) {
+                    showNotification('A data de início deve ser anterior à data de fim.', 'error');
+                    return;
+                }
+
+                // Mostrar loading
+                const submitBtn = produtosCadastradosForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+                submitBtn.disabled = true;
+
+                // Simular delay e enviar
+                setTimeout(() => {
+                    produtosCadastradosForm.submit();
                 }, 1000);
             });
 
