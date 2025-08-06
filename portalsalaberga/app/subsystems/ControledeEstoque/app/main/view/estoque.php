@@ -1,5 +1,29 @@
 
 
+<?php
+// Processar mensagens de URL
+$mensagem = '';
+$tipoMensagem = '';
+$mostrarAlerta = false;
+
+if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message'])) {
+    $mensagem = $_GET['message'];
+    $tipoMensagem = 'success';
+    $mostrarAlerta = true;
+} elseif (isset($_GET['error']) && $_GET['error'] == '1' && isset($_GET['message'])) {
+    $mensagem = $_GET['message'];
+    $tipoMensagem = 'error';
+    $mostrarAlerta = true;
+} elseif (isset($_GET['mensagem'])) {
+    $mensagem = $_GET['mensagem'];
+    $tipoMensagem = 'success';
+    $mostrarAlerta = true;
+} elseif (isset($_GET['erro'])) {
+    $mensagem = $_GET['erro'];
+    $tipoMensagem = 'error';
+    $mostrarAlerta = true;
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -267,9 +291,9 @@
             </div>
         </div>
         <!-- Alerta de mensagem -->
-        <div id="alertaMensagem" class="fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md hidden animate-fade-in z-50 bg-green-500 text-white">
+        <div id="alertaMensagem" class="fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md hidden animate-fade-in z-50">
             <div class="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                <svg id="alertaIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"></svg>
                 <span id="mensagemTexto">Operação realizada com sucesso!</span>
             </div>
         </div>
@@ -306,6 +330,10 @@
     <script>
     // JS para menu mobile, modais, filtro, alerta, etc. (igual ao model.functions.php)
     document.addEventListener('DOMContentLoaded', function() {
+        // Mostrar alerta se houver mensagem
+        <?php if ($mostrarAlerta): ?>
+        mostrarAlerta('<?php echo addslashes($mensagem); ?>', '<?php echo $tipoMensagem; ?>');
+        <?php endif; ?>
         // Menu mobile toggle
         const menuButton = document.getElementById('menuButton');
         const headerNav = document.getElementById('headerNav');
@@ -388,6 +416,30 @@
         };
         window.fecharModalExcluir = function() {
             document.getElementById('modalExcluir').classList.add('hidden');
+        };
+        
+        // Função para mostrar alertas
+        window.mostrarAlerta = function(mensagem, tipo) {
+            const alerta = document.getElementById('alertaMensagem');
+            const mensagemTexto = document.getElementById('mensagemTexto');
+            const alertaIcon = document.getElementById('alertaIcon');
+            
+            mensagemTexto.textContent = mensagem;
+            
+            if (tipo === 'success') {
+                alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-green-500 text-white';
+                alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />';
+            } else if (tipo === 'error') {
+                alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-red-500 text-white';
+                alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />';
+            }
+            
+            alerta.classList.remove('hidden');
+            
+            // Auto-hide após 5 segundos
+            setTimeout(() => {
+                alerta.classList.add('hidden');
+            }, 5000);
         };
     });
     </script>

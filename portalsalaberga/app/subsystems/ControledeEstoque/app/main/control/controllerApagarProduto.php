@@ -1,17 +1,30 @@
 <?php
-require("../model/model.functions.php");
+require_once("../model/model.functions.php");
 
-if (isset($_GET['id'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     $id = $_GET['id'];
-    $gerenciamento = new gerenciamento();
-    $resultado = $gerenciamento->apagarProduto($id);
-
-    if ($resultado) {
-        header('location:../view/estoque.php?mensagem=Produto excluído com sucesso!');
-    } else {
-        header('location:../view/estoque.php?erro=Erro ao excluir produto.');
+    
+    try {
+        $gerenciamento = new gerenciamento();
+        $resultado = $gerenciamento->apagarProduto($id);
+        
+        if ($resultado) {
+            // Sucesso - redirecionar com mensagem de sucesso
+            header("Location: ../view/estoque.php?success=1&message=Produto excluído com sucesso!");
+            exit;
+        } else {
+            // Erro - redirecionar com mensagem de erro
+            header("Location: ../view/estoque.php?error=1&message=Erro ao excluir produto!");
+            exit;
+        }
+    } catch (Exception $e) {
+        // Exceção - redirecionar com mensagem de erro
+        header("Location: ../view/estoque.php?error=1&message=Erro: " . $e->getMessage());
+        exit;
     }
 } else {
-    header('location:../view/estoque.php');
+    // Parâmetros inválidos
+    header("Location: ../view/estoque.php?error=1&message=Parâmetros inválidos!");
+    exit;
 }
 ?>
