@@ -13,9 +13,5 @@
                 echo "Erro: ".$e->getMessage();
             }
         }
-        
-        public function getPdo(){
-            return $this->pdo;
-        }
     }
 ?>

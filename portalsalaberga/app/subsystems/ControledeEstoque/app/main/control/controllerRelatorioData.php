@@ -5,16 +5,8 @@ require "../model/model.functions.php";
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['data_inicio']) && isset($_GET['data_fim'])) {
     $data_inicio = $_GET['data_inicio'];
     $data_fim = $_GET['data_fim'];
-    
-    // Se for uma requisição para PDF (com parâmetro pdf=1)
-    if (isset($_GET['pdf']) && $_GET['pdf'] == '1') {
-        $x = new relatorios();
-        $x->relatorioEstoquePorData($data_inicio, $data_fim);
-    } else {
-        // Redirecionar para a página de visualização
-        header("Location: ../view/relatorio_movimentacoes.php?data_inicio=" . urlencode($data_inicio) . "&data_fim=" . urlencode($data_fim));
-        exit;
-    }
+    $x = new relatorios();
+    $x->relatorioEstoquePorData($data_inicio, $data_fim);
 } else {
     echo "Erro: Parâmetros de data não fornecidos.";
     exit;
