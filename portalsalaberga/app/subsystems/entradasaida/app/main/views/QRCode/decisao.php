@@ -214,11 +214,9 @@ if(isset($_GET['sair'])){
                     </button>
                 </form>
 
-                
-
                 <!-- Back Link -->
                 <div class="text-center mt-6">
-                    <a href="index.php" class="inline-flex items-center gap-2 text-ceara-green hover:text-ceara-light-green font-medium transition-colors duration-300 text-sm">
+                    <a href="../relatorio.php" class="inline-flex items-center gap-2 text-ceara-green hover:text-ceara-light-green font-medium transition-colors duration-300 text-sm">
                         <i class="fas fa-arrow-left text-sm"></i>
                         Voltar ao Menu
                     </a>
