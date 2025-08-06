@@ -434,43 +434,42 @@ class gerenciamento extends connection
                     <table class=\"w-full\">
                         <thead class=\"bg-primary text-white\">
                             <tr>
-                                <th class=\"py-3 px-4 text-left\">Barcode</th>
-                                <th class=\"py-3 px-4 text-left\">Nome</th>
-                                <th class=\"py-3 px-4 text-left\">Quantidade</th>
-                                <th class=\"py-3 px-4 text-left\">Categoria</th>
-                                <th class=\"py-3 px-4 text-left\">Ações</th>
+                                <th class="py-3 px-4 text-left">Barcode</th>
+                                <th class="py-3 px-4 text-left">Nome</th>
+                                <th class="py-3 px-4 text-left">Quantidade</th>
+                                <th class="py-3 px-4 text-left">Categoria</th>
+                                <th class="py-3 px-4 text-left">Data</th>
+                                <th class="py-3 px-4 text-left">Ações</th>
                             </tr>
                         </thead>
-                        <tbody>";
-
-        if ($result > 0) {
-            foreach ($produtos as $value) {
-                $quantidadeClass = $value['quantidade'] <= 5 ? 'text-red-600 font-bold' : 'text-gray-700';
-
-                echo "<tr class=\"border-b border-gray-200 hover:bg-gray-50\">
-                        <td class=\"py-3 px-4\">" . htmlspecialchars($value['barcode']) . "</td>
-                        <td class=\"py-3 px-4\">" . htmlspecialchars($value['nome_produto']) . "</td>
-                        <td class=\"py-3 px-4 " . $quantidadeClass . "\">" . htmlspecialchars($value['quantidade']) . "</td>
-                        <td class=\"py-3 px-4\">" . htmlspecialchars($value['natureza']) . "</td>
-                        <td class=\"py-3 px-4 flex space-x-2\">
-                            <button onclick=\"abrirModalEditar(" . $value['id'] . ")\" class=\"text-primary hover:text-secondary\" title=\"Editar\">
-                                <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">
-                                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z\" />
-                                </svg>
-                            </button>
-                            <button onclick=\"abrirModalExcluir(" . $value['id'] . ", '" . htmlspecialchars(addslashes($value['nome_produto'])) . "')\" class=\"text-red-500 hover:text-red-700\" title=\"Excluir\">
-                                <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">
-                                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16\" />
-                                </svg>
-                            </button>
-                        </td>
-                    </tr>";
-            }
-        } else {
-            echo "<tr><td colspan=\"5\" class=\"py-4 px-4 text-center text-gray-500\">Nenhum produto encontrado</td></tr>";
-        }
-
-        echo "</tbody>
+                        <tbody>';
+                        if ($result > 0) {
+                            foreach ($produtos as $value) {
+                                $quantidadeClass = $value['quantidade'] <= 5 ? 'text-red-600 font-bold' : 'text-gray-700';
+                                echo '<tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4">' . htmlspecialchars($value['barcode']) . '</td>
+                                    <td class="py-3 px-4">' . htmlspecialchars($value['nome_produto']) . '</td>
+                                    <td class="py-3 px-4 ' . $quantidadeClass . '">' . htmlspecialchars($value['quantidade']) . '</td>
+                                    <td class="py-3 px-4">' . htmlspecialchars($value['natureza']) . '</td>
+                                    <td class="py-3 px-4">' . (isset($value['data']) ? date('d/m/Y H:i', strtotime($value['data'])) : 'N/A') . '</td>
+                                    <td class="py-3 px-4 flex space-x-2">
+                                        <button onclick="abrirModalEditar(' . $value['id'] . ')" class="text-primary hover:text-secondary" title="Editar">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                            </svg>
+                                        </button>
+                                        <button onclick="abrirModalExcluir(' . $value['id'] . ', \'' . htmlspecialchars(addslashes($value['nome_produto'])) . '\')" class="text-red-500 hover:text-red-700" title="Excluir">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>';
+                            }
+                        } else {
+                            echo '<tr><td colspan="6" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>';
+                        }
+                        echo '</tbody>
                     </table>
                 </div>
             </div>
@@ -1028,7 +1027,20 @@ class gerenciamento extends connection
     {
         error_log("Adicionando produto - barcode: " . $barcode . ", nome: " . $nome . ", quantidade: " . $quantidade . ", natureza: " . $natureza);
         
-        $consulta = "INSERT INTO produtos VALUES (null, :barcode, :nome, :quantidade, :natureza)";
+        // Verificar se o produto já existe
+        $consulta_existe = "SELECT id FROM produtos WHERE barcode = :barcode";
+        $query_existe = $this->pdo->prepare($consulta_existe);
+        $query_existe->bindValue(":barcode", $barcode);
+        $query_existe->execute();
+        $produto_existe = $query_existe->fetch(PDO::FETCH_ASSOC);
+        
+        if ($produto_existe) {
+            error_log("Produto já existe com barcode: " . $barcode);
+            header("location: ../view/adcprodutoexistente.php?barcode=" . urlencode($barcode));
+            return;
+        }
+        
+        $consulta = "INSERT INTO produtos (barcode, nome_produto, quantidade, natureza) VALUES (:barcode, :nome, :quantidade, :natureza)";
         $query = $this->pdo->prepare($consulta);
         $query->bindValue(":nome", $nome);
         $query->bindValue(":barcode", $barcode);
@@ -1612,7 +1624,7 @@ class relatorios extends connection
             $pdf->SetFont('Arial', 'B', 12);
             $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
             $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 15);
-            $pdf->Cell($cardWidth - 30, 20, utf8_decode("TOTAL DE PRODUTOS"), 0, 1, 'L');
+            $pdf->Cell($cardWidth - 30, 20, utf8_decode("PRODUTOS DIFERENTES"), 0, 1, 'L');
             $pdf->SetFont('Arial', 'B', 24);
             $pdf->SetTextColor($corSecondary[0], $corSecondary[1], $corSecondary[2]);
             $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 40);
@@ -1630,237 +1642,75 @@ class relatorios extends connection
             $pdf->SetXY($startX + 2 * ($cardWidth + $cardMargin) + 15, $startY + 40);
             $pdf->Cell($cardWidth - 30, 25, $resumo['total_retirado'], 0, 1, 'L');
 
-            // ===== TABELA DE ITENS COM MELHOR DESIGN =====
-            // Definir a largura total da tabela como 80% da largura da página
-            $percentualLarguraTabela = 0.8; // 80% da largura da página
-            $larguraTabela = $pdf->GetPageWidth() * $percentualLarguraTabela;
-            $margemTabela = ($pdf->GetPageWidth() - $larguraTabela) / 2; // Centralizar calculando margem
-            $larguraDisponivel = $larguraTabela;
-
-            // Definindo colunas e larguras proporcionais ajustadas
-            $colunas = array('Produto', 'Responsável', 'Cargo', 'Código', 'Qtd. Retirada', 'Data Cad.');
-            $larguras = array(
-                round($larguraDisponivel * 0.25), // 25% para Nome do Produto
-                round($larguraDisponivel * 0.18), // 18% para Nome do Responsável
-                round($larguraDisponivel * 0.15), // 15% para Cargo
-                round($larguraDisponivel * 0.19), // 19% para Código
-                round($larguraDisponivel * 0.16), // 16% para Quantidade Retirada
-                round($larguraDisponivel * 0.12)  // 12% para Data Cadastro
-            );
-
-            $pdf->SetXY($margemTabela, $startY + $cardHeight + 30);
+            // ===== TÍTULO DA TABELA =====
+            $pdf->SetY($startY + $cardHeight + 40);
             $pdf->SetFont('Arial', 'B', 16);
             $pdf->SetTextColor($corPrimary[0], $corPrimary[1], $corPrimary[2]);
-            $pdf->Cell(0, 20, utf8_decode("LISTAGEM DE MOVIMENTAÇÕES"), 0, 1, 'L');
+            $pdf->Cell(0, 20, utf8_decode("DETALHAMENTO DAS MOVIMENTAÇÕES"), 0, 1, 'C');
 
-            // Cabeçalho da tabela
-            $pdf->SetXY($margemTabela, $pdf->GetY() + 10);
-            $pdf->SetFont('Arial', 'B', 11);
+            // ===== CABEÇALHO DA TABELA =====
+            $pdf->SetY($pdf->GetY() + 10);
             $pdf->SetFillColor($corPrimary[0], $corPrimary[1], $corPrimary[2]);
             $pdf->SetTextColor($corBranco[0], $corBranco[1], $corBranco[2]);
-            $pdf->SetDrawColor(220, 220, 220);
+            $pdf->SetFont('Arial', 'B', 10);
 
-            $alturaLinha = 30;
-            $posX = $margemTabela;
+            // Cabeçalhos das colunas
+            $pdf->Cell(40, 15, utf8_decode("ID"), 1, 0, 'C', true);
+            $pdf->Cell(80, 15, utf8_decode("BARCODE"), 1, 0, 'C', true);
+            $pdf->Cell(120, 15, utf8_decode("PRODUTO"), 1, 0, 'C', true);
+            $pdf->Cell(60, 15, utf8_decode("QTD. RETIRADA"), 1, 0, 'C', true);
+            $pdf->Cell(80, 15, utf8_decode("RESPONSÁVEL"), 1, 0, 'C', true);
+            $pdf->Cell(60, 15, utf8_decode("CARGO"), 1, 0, 'C', true);
+            $pdf->Cell(80, 15, utf8_decode("DATA"), 1, 1, 'C', true);
 
-            // Célula de cabeçalho com canto arredondado (esquerda superior)
-            $pdf->RoundedRect($posX, $pdf->GetY(), $larguras[0], $alturaLinha, 5, 'FD', '1');
-            $pdf->SetXY($posX, $pdf->GetY());
-            $pdf->Cell($larguras[0], $alturaLinha, utf8_decode($colunas[0]), 0, 0, 'C');
-            $posX += $larguras[0];
+            // ===== DADOS DA TABELA =====
+            $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->SetFillColor($corCinzaClaro[0], $corCinzaClaro[1], $corCinzaClaro[2]);
 
-            // Células de cabeçalho intermediárias
-            for ($i = 1; $i < count($colunas) - 1; $i++) {
-                $pdf->Rect($posX, $pdf->GetY(), $larguras[$i], $alturaLinha, 'FD');
-                $pdf->SetXY($posX, $pdf->GetY());
-                $pdf->Cell($larguras[$i], $alturaLinha, utf8_decode($colunas[$i]), 0, 0, 'C');
-                $posX += $larguras[$i];
+            $fill = false;
+            $query->execute();
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $pdf->Cell(40, 12, utf8_decode($row['id']), 1, 0, 'C', $fill);
+                $pdf->Cell(80, 12, utf8_decode($row['barcode_produto']), 1, 0, 'C', $fill);
+                $pdf->Cell(120, 12, utf8_decode($row['nome_produto']), 1, 0, 'L', $fill);
+                $pdf->Cell(60, 12, utf8_decode($row['quantidade_retirada']), 1, 0, 'C', $fill);
+                $pdf->Cell(80, 12, utf8_decode($row['nome_responsavel']), 1, 0, 'L', $fill);
+                $pdf->Cell(60, 12, utf8_decode($row['cargo']), 1, 0, 'L', $fill);
+                $pdf->Cell(80, 12, utf8_decode(date('d/m/Y H:i', strtotime($row['datareg']))), 1, 1, 'C', $fill);
+                $fill = !$fill;
             }
 
-            // Última célula com canto arredondado (direita superior)
-            $pdf->RoundedRect($posX, $pdf->GetY(), $larguras[count($colunas) - 1], $alturaLinha, 5, 'FD', '2');
-            $pdf->SetXY($posX, $pdf->GetY());
-            $pdf->Cell($larguras[count($colunas) - 1], $alturaLinha, utf8_decode($colunas[count($colunas) - 1]), 0, 0, 'C');
+            // ===== RODAPÉ =====
+            $pdf->SetY($pdf->GetPageHeight() - 60);
+            $pdf->SetFont('Arial', '', 10);
+            $pdf->SetTextColor($corTextoSubtil[0], $corTextoSubtil[1], $corTextoSubtil[2]);
+            $pdf->Cell(0, 15, utf8_decode("Relatório gerado automaticamente pelo sistema STGM Estoque"), 0, 1, 'C');
+            $pdf->Cell(0, 15, utf8_decode("Período: " . date("d/m/Y", strtotime($data_inicio)) . " a " . date("d/m/Y", strtotime($data_fim))), 0, 1, 'C');
 
-            $pdf->Ln($alturaLinha);
-
-            // Dados da tabela
-            $y = $pdf->GetY();
-            $categoriaAtual = '';
-            $linhaAlternada = false;
-            $alturaLinhaDados = 24;
-
-            if ($result > 0) {
-                foreach ($query as $idx => $row) {
-                    // Cabeçalho de categoria (usando nome_produto como agrupador)
-                    if ($categoriaAtual != $row['nome_produto']) {
-                        $categoriaAtual = $row['nome_produto'];
-
-                        // Verificar se é necessário adicionar nova página
-                        if ($y + 40 > $pdf->GetPageHeight() - 60) {
-                            $pdf->AddPage();
-                            $pdf->SetDrawColor($corSecondary[0], $corSecondary[1], $corSecondary[2]);
-                            $pdf->SetLineWidth(2);
-                            $pdf->Line($margemTabela, 40, $margemTabela + $larguraTabela, 40); // Ajustar linha para centralizar
-                            $pdf->SetLineWidth(0.5);
-                            $y = 50;
-                        } else {
-                            $y += 10;
-                        }
-
-                        $pdf->SetXY($margemTabela, $y);
-                        $pdf->SetFont('Arial', 'B', 12);
-                        $pdf->SetTextColor($corBranco[0], $corBranco[1], $corBranco[2]);
-                        $pdf->SetFillColor($corSecondary[0], $corSecondary[1], $corSecondary[2]);
-                        $pdf->RoundedRect($margemTabela, $y, array_sum($larguras), 26, 5, 'FD');
-                        $pdf->SetXY($margemTabela + 10, $y);
-                        $pdf->Cell(array_sum($larguras) - 20, 26, utf8_decode("PRODUTO: " . $categoriaAtual), 0, 1, 'L');
-
-                        $y = $pdf->GetY();
-                        $linhaAlternada = false;
-                    }
-
-                    // Cor de fundo alternada para linhas
-                    if ($linhaAlternada) {
-                        $pdf->SetFillColor($corCinzaClaro[0], $corCinzaClaro[1], $corCinzaClaro[2]);
-                    } else {
-                        $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
-                    }
-
-                    // Verificar se é necessário adicionar nova página
-                    if ($y + $alturaLinhaDados > $pdf->GetPageHeight() - 60) {
-                        $pdf->AddPage();
-                        $y = 40;
-                        $posX = $margemTabela;
-                        $pdf->SetFillColor($corPrimary[0], $corPrimary[1], $corPrimary[2]);
-                        $pdf->SetTextColor($corBranco[0], $corBranco[1], $corBranco[2]);
-
-                        // Redesenhar cabeçalho da tabela
-                        $pdf->RoundedRect($posX, $y, $larguras[0], $alturaLinha, 5, 'FD', '1');
-                        $pdf->SetXY($posX, $y);
-                        $pdf->SetFont('Arial', 'B', 11);
-                        $pdf->Cell($larguras[0], $alturaLinha, utf8_decode($colunas[0]), 0, 0, 'C');
-                        $posX += $larguras[0];
-
-                        for ($i = 1; $i < count($colunas) - 1; $i++) {
-                            $pdf->Rect($posX, $y, $larguras[$i], $alturaLinha, 'FD');
-                            $pdf->SetXY($posX, $y);
-                            $pdf->Cell($larguras[$i], $alturaLinha, utf8_decode($colunas[$i]), 0, 0, 'C');
-                            $posX += $larguras[$i];
-                        }
-
-                        $pdf->RoundedRect($posX, $y, $larguras[count($colunas) - 1], $alturaLinha, 5, 'FD', '2');
-                        $pdf->SetXY($posX, $y);
-                        $pdf->Cell($larguras[count($colunas) - 1], $alturaLinha, utf8_decode($colunas[count($colunas) - 1]), 0, 0, 'C');
-
-                        $pdf->Ln($alturaLinha);
-                        $y = $pdf->GetY();
-
-                        // Redesenhar cabeçalho de categoria
-                        $pdf->SetXY($margemTabela, $y);
-                        $pdf->SetFont('Arial', 'B', 12);
-                        $pdf->SetTextColor($corBranco[0], $corBranco[1], $corBranco[2]);
-                        $pdf->SetFillColor($corSecondary[0], $corSecondary[1], $corSecondary[2]);
-                        $pdf->RoundedRect($margemTabela, $y, array_sum($larguras), 26, 5, 'FD');
-                        $pdf->SetXY($margemTabela + 10, $y);
-                        $pdf->Cell(array_sum($larguras) - 20, 26, utf8_decode("PRODUTO: " . $categoriaAtual), 0, 1, 'L');
-
-                        $y = $pdf->GetY();
-                        if ($linhaAlternada) {
-                            $pdf->SetFillColor($corCinzaClaro[0], $corCinzaClaro[1], $corCinzaClaro[2]);
-                        } else {
-                            $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
-                        }
-                    }
-
-                    // Configurar texto
-                    $pdf->SetFont('Arial', '', 10);
-                    $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
-
-                    // Desenhar linha de dados
-                    $posX = $margemTabela;
-
-                    // Nome do Produto
-                    $pdf->Rect($posX, $y, $larguras[0], $alturaLinhaDados, 'FD');
-                    $pdf->SetXY($posX + 5, $y);
-                    $pdf->Cell($larguras[0] - 10, $alturaLinhaDados, utf8_decode($row['nome_produto'] ?? 'N/A'), 0, 0, 'L');
-                    $posX += $larguras[0];
-
-                    // Nome do Responsável
-                    $pdf->Rect($posX, $y, $larguras[1], $alturaLinhaDados, 'FD');
-                    $pdf->SetXY($posX + 5, $y);
-                    $pdf->Cell($larguras[1] - 10, $alturaLinhaDados, utf8_decode($row['nome_responsavel'] ?? 'N/A'), 0, 0, 'L');
-                    $posX += $larguras[1];
-
-                    // Cargo
-                    $pdf->Rect($posX, $y, $larguras[2], $alturaLinhaDados, 'FD');
-                    $pdf->SetXY($posX + 5, $y);
-                    $pdf->Cell($larguras[2] - 10, $alturaLinhaDados, utf8_decode($row['cargo'] ?? 'N/A'), 0, 0, 'L');
-                    $posX += $larguras[2];
-
-                    // Código
-                    $pdf->Rect($posX, $y, $larguras[3], $alturaLinhaDados, 'FD');
-                    $pdf->SetXY($posX + 5, $y);
-                    $pdf->Cell($larguras[3] - 10, $alturaLinhaDados, $row['barcode_produto'], 0, 0, 'L');
-                    $posX += $larguras[3];
-
-                    // Quantidade Retirada
-                    $pdf->Rect($posX, $y, $larguras[4], $alturaLinhaDados, 'FD');
-                    $pdf->SetXY($posX + 5, $y);
-                    $pdf->Cell($larguras[4] - 10, $alturaLinhaDados, $row['quantidade_retirada'] ?? '0', 0, 0, 'C');
-                    $posX += $larguras[4];
-
-                    // Data Cadastro
-                    $pdf->Rect($posX, $y, $larguras[5], $alturaLinhaDados, 'FD');
-                    $pdf->SetXY($posX + 5, $y);
-                    $pdf->Cell($larguras[5] - 10, $alturaLinhaDados, date("d/m/Y", strtotime($row['datareg'])), 0, 0, 'C');
-
-                    $y += $alturaLinhaDados;
-                    $linhaAlternada = !$linhaAlternada;
-
-                    // Verificar se é o último item
-                    if ($idx == $result - 1) {
-                        $pdf->SetDrawColor(220, 220, 220);
-                        $pdf->RoundedRect($margemTabela, $y - $alturaLinhaDados, $larguras[0], $alturaLinhaDados, 5, 'D', '4');
-                        $pdf->RoundedRect($posX, $y - $alturaLinhaDados, $larguras[5], $alturaLinhaDados, 5, 'D', '3');
-
-                        // ===== RODAPÉ PROFISSIONAL =====
-                        $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
-                        $pdf->SetFont('Arial', '', 10);
-                        $pdf->SetXY(40, $y + 15);
-                        $pdf->Cell(0, 10, utf8_decode("Sistema de Gerenciamento de Estoque - STGM v1.2.0"), 0, 0, 'L');
-                        $pdf->SetXY(40, $y + 25);
-                        $pdf->Cell(0, 10, utf8_decode("© " . date('Y') . " - Desenvolvido por alunos EEEP STGM"), 0, 0, 'L');
-                        $pdf->SetX(-60);
-                        $pdf->Cell(30, 10, utf8_decode('Página ' . $pdf->PageNo()), 0, 0, 'R');
-                    }
-                }
-            } else {
-                $pdf->SetXY($margemTabela, $y);
-                $pdf->SetFont('Arial', 'I', 12);
-                $pdf->SetTextColor($corTextoSubtil[0], $corTextoSubtil[1], $corTextoSubtil[2]);
-                $pdf->SetFillColor(250, 250, 250);
-                $pdf->RoundedRect($margemTabela, $y, array_sum($larguras), 40, 5, 'FD');
-                $pdf->SetXY($margemTabela, $y + 12);
-                $pdf->Cell(array_sum($larguras), 16, utf8_decode("Não existem movimentações no período selecionado"), 0, 1, 'C');
-
-                // ===== RODAPÉ PROFISSIONAL =====
-                $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
-                $pdf->SetFont('Arial', '', 10);
-                $pdf->SetXY(40, $y + 60);
-                $pdf->Cell(0, 10, utf8_decode("Sistema de Gerenciamento de Estoque - STGM v1.2.0"), 0, 0, 'L');
-                $pdf->SetXY(40, $y + 70);
-                $pdf->Cell(0, 10, utf8_decode("© " . date('Y') . " - Desenvolvido por alunos EEEP STGM"), 0, 0, 'L');
-                $pdf->SetX(-60);
-                $pdf->Cell(30, 10, utf8_decode('Página ' . $pdf->PageNo()), 0, 0, 'R');
-            }
-
-            // Saída do PDF
-            $pdf->Output("relatorio_movimentacao_por_data.pdf", "I");
+            $pdf->Output("relatorio_movimentacao_" . date("Y-m-d") . ".pdf", "D");
         } catch (PDOException $e) {
-            echo "Erro na conexão ou consulta: " . $e->getMessage();
-        } catch (Exception $e) {
-            echo "Erro ao gerar o PDF: " . $e->getMessage();
+            error_log("Erro no relatório por data: " . $e->getMessage());
+            echo "Erro ao gerar relatório: " . $e->getMessage();
+        }
+    }
+
+    public function buscarProdutosPorData($data_inicio, $data_fim)
+    {
+        try {
+            $consulta = "SELECT id, barcode, nome_produto, quantidade, natureza, data 
+                        FROM produtos 
+                        WHERE DATE(data) BETWEEN :data_inicio AND :data_fim 
+                        ORDER BY data DESC";
+            $query = $this->pdo->prepare($consulta);
+            $query->bindParam(':data_inicio', $data_inicio);
+            $query->bindParam(':data_fim', $data_fim);
+            $query->execute();
+            
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar produtos por data: " . $e->getMessage());
+            return array();
         }
     }
 
@@ -2047,8 +1897,6 @@ class relatorios extends connection
                     $pdf->SetFont('Arial', 'B', 12);
                     $pdf->SetTextColor($corBranco[0], $corBranco[1], $corBranco[2]);
                     $pdf->SetFillColor($corSecondary[0], $corSecondary[1], $corSecondary[2]);
-
-                    // Cabeçalho de categoria com cantos arredondados
                     $pdf->RoundedRect($margemTabela, $y, array_sum($larguras), 26, 5, 'FD');
                     $pdf->SetXY($margemTabela + 10, $y);
                     $pdf->Cell(array_sum($larguras) - 20, 26, utf8_decode(strtoupper($categoriaAtual)), 0, 1, 'L');
@@ -2479,6 +2327,102 @@ class relatorios extends connection
             echo "Erro na conexão ou consulta: " . $e->getMessage();
         } catch (Exception $e) {
             echo "Erro ao gerar o PDF: " . $e->getMessage();
+        }
+    }
+
+    public function exportarRelatorioProdutosPorData($data_inicio, $data_fim)
+    {
+        try {
+            $produtos = $this->buscarProdutosPorData($data_inicio, $data_fim);
+            
+            // Criar PDF
+            $pdf = new PDF("L", "pt", "A4");
+            $pdf->AddPage();
+            $pdf->SetAutoPageBreak(true, 60);
+
+            // Paleta de cores
+            $corPrimary = array(0, 90, 36);       // #005A24 - Verde principal
+            $corSecondary = array(255, 165, 0);   // #FFA500 - Laranja
+            $corBranco = array(255, 255, 255);    // #FFFFFF - Branco
+            $corPreto = array(40, 40, 40);        // #282828 - Quase preto
+            $corCinzaClaro = array(248, 250, 249); // #F8FAF9 - Fundo alternado
+
+            // Cabeçalho
+            $pdf->SetFillColor($corPrimary[0], $corPrimary[1], $corPrimary[2]);
+            $pdf->Rect(0, 0, $pdf->GetPageWidth(), 80, 'F');
+
+            // Logo
+            $logoPath = "../assets/imagens/logostgm.png";
+            $logoWidth = 50;
+            if (file_exists($logoPath)) {
+                $pdf->Image($logoPath, 40, 15, $logoWidth);
+                $pdf->SetXY(40 + $logoWidth + 15, 25);
+            } else {
+                $pdf->SetXY(40, 25);
+            }
+
+            // Título
+            $pdf->SetFont('Arial', 'B', 20);
+            $pdf->SetTextColor($corBranco[0], $corBranco[1], $corBranco[2]);
+            $pdf->Cell(0, 20, utf8_decode("RELATÓRIO DE PRODUTOS POR PERÍODO"), 0, 1, 'L');
+
+            $pdf->SetFont('Arial', '', 12);
+            $pdf->SetXY(40 + $logoWidth + 15, $pdf->GetY());
+            $pdf->Cell(0, 15, utf8_decode("EEEP Salaberga Torquato Gomes de Matos"), 0, 1, 'L');
+
+            // Informações do período
+            $pdf->SetXY($pdf->GetPageWidth() - 200, 25);
+            $pdf->SetFont('Arial', '', 10);
+            $pdf->Cell(160, 15, utf8_decode("Gerado em: " . date("d/m/Y H:i")), 0, 1, 'R');
+            $pdf->SetXY($pdf->GetPageWidth() - 200, 40);
+            $pdf->Cell(160, 15, utf8_decode("Período: " . date("d/m/Y", strtotime($data_inicio)) . " a " . date("d/m/Y", strtotime($data_fim))), 0, 1, 'R');
+
+            // Resumo
+            $total_produtos = count($produtos);
+            $pdf->SetY(100);
+            $pdf->SetFont('Arial', 'B', 14);
+            $pdf->SetTextColor($corPrimary[0], $corPrimary[1], $corPrimary[2]);
+            $pdf->Cell(0, 20, utf8_decode("Total de produtos encontrados: " . $total_produtos), 0, 1, 'C');
+
+            // Tabela
+            $pdf->SetY(140);
+            $pdf->SetFont('Arial', 'B', 11);
+            $pdf->SetFillColor($corPrimary[0], $corPrimary[1], $corPrimary[2]);
+            $pdf->SetTextColor($corBranco[0], $corBranco[1], $corBranco[2]);
+
+            // Cabeçalho da tabela
+            $pdf->Cell(60, 15, utf8_decode("BARCODE"), 1, 0, 'C', true);
+            $pdf->Cell(120, 15, utf8_decode("NOME DO PRODUTO"), 1, 0, 'C', true);
+            $pdf->Cell(60, 15, utf8_decode("QUANTIDADE"), 1, 0, 'C', true);
+            $pdf->Cell(80, 15, utf8_decode("CATEGORIA"), 1, 0, 'C', true);
+            $pdf->Cell(80, 15, utf8_decode("DATA CADASTRO"), 1, 1, 'C', true);
+
+            // Dados da tabela
+            $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
+            $pdf->SetFont('Arial', '', 10);
+            $pdf->SetFillColor($corCinzaClaro[0], $corCinzaClaro[1], $corCinzaClaro[2]);
+
+            $fill = false;
+            foreach ($produtos as $produto) {
+                $pdf->Cell(60, 12, utf8_decode($produto['barcode']), 1, 0, 'C', $fill);
+                $pdf->Cell(120, 12, utf8_decode($produto['nome_produto']), 1, 0, 'L', $fill);
+                $pdf->Cell(60, 12, utf8_decode($produto['quantidade']), 1, 0, 'C', $fill);
+                $pdf->Cell(80, 12, utf8_decode($produto['natureza']), 1, 0, 'L', $fill);
+                $pdf->Cell(80, 12, utf8_decode(date('d/m/Y H:i', strtotime($produto['data']))), 1, 1, 'C', $fill);
+                $fill = !$fill;
+            }
+
+            // Rodapé
+            $pdf->SetY($pdf->GetPageHeight() - 60);
+            $pdf->SetFont('Arial', '', 10);
+            $pdf->SetTextColor(100, 100, 100);
+            $pdf->Cell(0, 15, utf8_decode("Relatório gerado automaticamente pelo sistema STGM Estoque"), 0, 1, 'C');
+            $pdf->Cell(0, 15, utf8_decode("Período: " . date("d/m/Y", strtotime($data_inicio)) . " a " . date("d/m/Y", strtotime($data_fim))), 0, 1, 'C');
+
+            $pdf->Output("relatorio_produtos_" . date("Y-m-d") . ".pdf", "D");
+        } catch (PDOException $e) {
+            error_log("Erro ao exportar relatório: " . $e->getMessage());
+            echo "Erro ao gerar relatório: " . $e->getMessage();
         }
     }
 }

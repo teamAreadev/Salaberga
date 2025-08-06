@@ -114,6 +114,13 @@
                     <option value="informatica">Informática</option>
                     <option value="ferramentas">Ferramentas</option>
                 </select>
+                <button id="filtrarBtn" class="bg-secondary text-white font-bold py-3 px-6 rounded-lg hover:bg-opacity-90 transition-colors">
+                    Filtrar
+                </button>
+                <a href="relatorio_por_data.php" class="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-opacity-90 transition-colors flex items-center">
+                    <i class="fas fa-calendar-alt mr-2"></i>
+                    Relatório por Data
+                </a>
             </div>
         </div>
         <!-- Tabela para desktop -->
@@ -126,6 +133,7 @@
                             <th class="py-3 px-4 text-left">Nome</th>
                             <th class="py-3 px-4 text-left">Quantidade</th>
                             <th class="py-3 px-4 text-left">Categoria</th>
+                            <th class="py-3 px-4 text-left">Data</th>
                             <th class="py-3 px-4 text-left">Ações</th>
                         </tr>
                     </thead>
