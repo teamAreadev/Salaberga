@@ -675,7 +675,7 @@
                 </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Sem Código de Barras</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de produtos sem código de barras</p>
-                <a href="../control/controllerrelatoriosc.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
+                <a href="../control/controllerrelatorioscb.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
                     <i class="fas fa-file-pdf mr-2"></i>
                     Gerar Relatório
                 </a>
