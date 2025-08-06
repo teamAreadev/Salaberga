@@ -179,51 +179,25 @@
         @media (max-width: 768px) {
             .header-nav {
                 display: none;
-                position: fixed;
-                top: 0;
+                position: absolute;
+                top: 100%;
                 left: 0;
                 right: 0;
-                bottom: 0;
                 background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
-                padding: 2rem 1rem;
+                padding: 1rem;
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-                z-index: 50;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                backdrop-filter: blur(10px);
+                z-index: 40;
             }
 
             .header-nav.show {
                 display: flex;
-                animation: slideIn 0.3s ease-out;
-            }
-
-            @keyframes slideIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(-20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
+                flex-direction: column;
             }
 
             .header-nav-link {
-                padding: 1rem 1.5rem;
+                padding: 0.75rem 1rem;
                 text-align: center;
-                margin: 0.5rem 0;
-                font-size: 1.1rem;
-                border-radius: 0.75rem;
-                transition: all 0.3s ease;
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .header-nav-link:hover {
-                background-color: rgba(255, 255, 255, 0.15);
-                transform: translateX(5px);
+                margin: 0.25rem 0;
             }
 
             .mobile-menu-button {
@@ -236,8 +210,7 @@
                 border: none;
                 cursor: pointer;
                 padding: 0;
-                z-index: 60;
-                position: relative;
+                z-index: 10;
             }
 
             .mobile-menu-button span {
@@ -245,34 +218,23 @@
                 height: 3px;
                 background-color: white;
                 border-radius: 10px;
-                transition: all 0.3s ease;
+                transition: all 0.3s linear;
                 position: relative;
-                transform-origin: center;
+                transform-origin: 1px;
             }
 
             .mobile-menu-button span:first-child.active {
-                transform: rotate(45deg) translate(6px, 6px);
+                transform: rotate(45deg);
+                top: 0px;
             }
 
             .mobile-menu-button span:nth-child(2).active {
                 opacity: 0;
-                transform: scale(0);
             }
 
             .mobile-menu-button span:nth-child(3).active {
-                transform: rotate(-45deg) translate(6px, -6px);
-            }
-
-            /* Overlay para fechar menu ao clicar fora */
-            .header-nav::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.3);
-                z-index: -1;
+                transform: rotate(-45deg);
+                top: -1px;
             }
         }
     </style>
@@ -306,12 +268,21 @@
                     <i class="fas fa-plus-circle mr-2"></i>
                     <span>Adicionar</span>
                 </a>
-            
-                    <a href="solicitar.php" class="header-nav-link active flex items-center cursor-pointer">
+                <div class="relative group">
+                    <a class="header-nav-link active flex items-center cursor-pointer">
                         <i class="fas fa-clipboard-list mr-2"></i>
                         <span>Solicitar</span>
-                      
+                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
                     </a>
+                    <div class="absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg overflow-hidden transform scale-0 group-hover:scale-100 transition-transform origin-top z-50">
+                        <a href="solicitar.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors">
+                            <i class="fas fa-clipboard-check mr-2"></i>Solicitar Produto
+                        </a>
+                        <a href="solicitarnovproduto.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors">
+                            <i class="fas fa-plus-square mr-2"></i>Solicitar Novo Produto
+                        </a>
+                    </div>
+                </div>
                 <a href="relatorios.php" class="header-nav-link flex items-center">
                     <i class="fas fa-chart-bar mr-2"></i>
                     <span>Relatórios</span>
@@ -440,60 +411,16 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Menu mobile toggle
             const menuButton = document.getElementById('menuButton');
             const headerNav = document.getElementById('headerNav');
 
             if (menuButton && headerNav) {
-                menuButton.addEventListener('click', function(e) {
-                    e.stopPropagation();
+                menuButton.addEventListener('click', function() {
                     headerNav.classList.toggle('show');
-
-                    // Animação para o botão do menu
                     const spans = menuButton.querySelectorAll('span');
                     spans.forEach(span => {
                         span.classList.toggle('active');
                     });
-
-                    // Prevenir scroll do body quando menu está aberto
-                    document.body.style.overflow = headerNav.classList.contains('show') ? 'hidden' : '';
-                });
-
-                // Fechar menu ao clicar em um link
-                const navLinks = headerNav.querySelectorAll('a');
-                navLinks.forEach(link => {
-                    link.addEventListener('click', function() {
-                        headerNav.classList.remove('show');
-                        const spans = menuButton.querySelectorAll('span');
-                        spans.forEach(span => {
-                            span.classList.remove('active');
-                        });
-                        document.body.style.overflow = '';
-                    });
-                });
-
-                // Fechar menu ao clicar fora
-                document.addEventListener('click', function(e) {
-                    if (!headerNav.contains(e.target) && !menuButton.contains(e.target)) {
-                        headerNav.classList.remove('show');
-                        const spans = menuButton.querySelectorAll('span');
-                        spans.forEach(span => {
-                            span.classList.remove('active');
-                        });
-                        document.body.style.overflow = '';
-                    }
-                });
-
-                // Fechar menu ao pressionar ESC
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape' && headerNav.classList.contains('show')) {
-                        headerNav.classList.remove('show');
-                        const spans = menuButton.querySelectorAll('span');
-                        spans.forEach(span => {
-                            span.classList.remove('active');
-                        });
-                        document.body.style.overflow = '';
-                    }
                 });
             }
 

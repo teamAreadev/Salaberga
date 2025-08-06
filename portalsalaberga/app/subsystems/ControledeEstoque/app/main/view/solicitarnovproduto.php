@@ -1,19 +1,10 @@
-<?php
-// Capturar o barcode da URL
-$barcode = isset($_GET['barcode']) ? $_GET['barcode'] : '';
-require_once('../model/functionsViews.php');
-$select = new select();
-$resultado = $select->selectProdutos($barcode);
-
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adicionar Produto</title>
+    <title>Solicitar Novo Produto</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
@@ -77,128 +68,34 @@ $resultado = $select->selectProdutos($barcode);
             background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
         }
 
-        .custom-radio {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .custom-radio:hover {
-            background-color: rgba(0, 90, 36, 0.05);
-        }
-
-        .custom-radio input[type="radio"] {
+        .card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
-            cursor: pointer;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #005A24;
-            border-radius: 50%;
-            margin-right: 10px;
-            outline: none;
+            overflow: hidden;
+            will-change: transform;
         }
 
-        .custom-radio input[type="radio"]:checked {
-            background-color: #FFA500;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 90, 36, 0.2), 0 10px 10px -5px rgba(0, 90, 36, 0.1);
             border-color: #FFA500;
         }
 
-        .custom-radio input[type="radio"]:checked::after {
+        .card::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: white;
-        }
-
-        .nav-link {
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
+            top: 0;
             left: 0;
             width: 100%;
-            height: 2px;
-            background-color: #FFA500;
-            transition: width 0.3s ease;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background-color: white;
-            margin: 2px 0;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu {
-            transition: max-height 0.3s ease-in-out;
-        }
-
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .nav-links.active {
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
-                padding: 1rem;
-                max-height: 400px;
-            }
-        }
-
-        .back-to-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #FFA500;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(0, 90, 36, 0.05) 100%);
             opacity: 0;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            z-index: 1000;
+            transition: opacity 0.3s ease;
+            z-index: 1;
         }
 
-        .back-to-top.visible {
+        .card:hover::before {
             opacity: 1;
-            transform: translateY(0);
-        }
-
-        .back-to-top:hover {
-            background-color: #E69500;
-            transform: scale(1.1);
         }
 
         .social-icon {
@@ -213,22 +110,34 @@ $resultado = $select->selectProdutos($barcode);
         .page-title {
             position: relative;
             display: inline-block;
-            background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 4px rgba(0, 90, 36, 0.3);
         }
 
         .page-title::after {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px;
-            height: 4px;
+            width: 80px;
+            height: 3px;
             background-color: #FFA500;
-            border-radius: 4px;
+            border-radius: 3px;
+        }
+
+        .card-shine {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            transition: all 0.75s ease;
+            z-index: 2;
+        }
+
+        .card:hover .card-shine {
+            left: 150%;
         }
 
         /* Estilos para o header melhorado */
@@ -352,7 +261,9 @@ $resultado = $select->selectProdutos($barcode);
             </button>
 
             <nav class="header-nav md:flex items-center space-x-1" id="headerNav">
+
                 <a href="paginainicial.php" class="header-nav-link flex items-center">
+
                     <i class="fas fa-home mr-2"></i>
                     <span>Início</span>
                 </a>
@@ -360,12 +271,12 @@ $resultado = $select->selectProdutos($barcode);
                     <i class="fas fa-boxes mr-2"></i>
                     <span>Estoque</span>
                 </a>
-                <a href="adicionarproduto.php" class="header-nav-link active flex items-center">
+                <a href="adicionarproduto.php" class="header-nav-link flex items-center">
                     <i class="fas fa-plus-circle mr-2"></i>
                     <span>Adicionar</span>
                 </a>
                 <div class="relative group">
-                    <a class="header-nav-link flex items-center cursor-pointer">
+                    <a class="header-nav-link active flex items-center cursor-pointer">
                         <i class="fas fa-clipboard-list mr-2"></i>
                         <span>Solicitar</span>
                         <i class="fas fa-chevron-down ml-1 text-xs"></i>
@@ -374,7 +285,7 @@ $resultado = $select->selectProdutos($barcode);
                         <a href="solicitar.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors">
                             <i class="fas fa-clipboard-check mr-2"></i>Solicitar Produto
                         </a>
-                        <a href="solicitarnovproduto.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors">
+                        <a href="solicitarnovproduto.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors bg-primary bg-opacity-10">
                             <i class="fas fa-plus-square mr-2"></i>Solicitar Novo Produto
                         </a>
                     </div>
@@ -389,51 +300,62 @@ $resultado = $select->selectProdutos($barcode);
 
     <main class="container mx-auto px-4 py-8 md:py-12 flex-1">
         <div class="text-center mb-10">
-            <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">ADICIONAR AO ESTOQUE</h1>
+            <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">SOLICITAR NOVO PRODUTO</h1>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
-            <form action="../control/controllerAdicionarAoEstoque.php?barcode=" .$barcode method="POST" class="space-y-6">
-                <div class="space-y-4">
-                    <div>
+        <div class="bg-white rounded-xl shadow-lg p-8 max-w-5xl w-full border-2 border-primary mx-auto">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto w-full">
+                <!-- Card 1 -->
+                <div class="card bg-white border-2 border-primary rounded-xl shadow-lg p-6 flex flex-col items-center">
+                    <div class="card-shine"></div>
+                    <div class="text-4xl mb-4">👤</div>
+                    <p class="font-bold text-primary text-xl mb-2 text-center">PAPEL HIGIÊNICO</p>
+                    <p class="text-gray-600 text-center">CONTATO: (85) 9-9999-9999</p>
+                </div>
 
-                        <h1 type="text" placeholder="NOME DO PRODUTO" id="nome" name="nome"
-                            class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
-                            aria-label="Nome do produto"><?php
-                                                            if ($resultado) {
-                                                                echo "<ul>";
-                                                                foreach ($resultado as $linha) {
-                                                                    echo "<li>" . htmlspecialchars($linha['nome_produto']);
-                                                                    "</li>";
-                                                                }
-                                                                echo "</ul>";
-                                                            } else {
-                                                                echo "<p>Nenhum produto encontrado para o barcode: " . htmlspecialchars($barcode) . "</p>";
-                                                            }
-                                                            ?>
+                <!-- Card 2 -->
+                <div class="card bg-white border-2 border-primary rounded-xl shadow-lg p-6 flex flex-col items-center" style="animation-delay: 0.1s">
+                    <div class="card-shine"></div>
+                    <div class="text-4xl mb-4">👤</div>
+                    <p class="font-bold text-primary text-xl mb-2 text-center">PAPEL TOALHA</p>
+                    <p class="text-gray-600 text-center">CONTATO: (85) 9-8888-8888</p>
+                </div>
 
-                        </h1>
-                    </div>
+                <!-- Card 3 -->
+                <div class="card bg-white border-2 border-primary rounded-xl shadow-lg p-6 flex flex-col items-center" style="animation-delay: 0.2s">
+                    <div class="card-shine"></div>
+                    <div class="text-4xl mb-4">👤</div>
+                    <p class="font-bold text-primary text-xl mb-2 text-center">SABÃO EM PÓ</p>
+                    <p class="text-gray-600 text-center">CONTATO: (85) 9-7777-7777</p>
+                </div>
 
-                    <input type="hidden" name="barcode" value="<?php echo htmlspecialchars($barcode); ?>">
+                <!-- Card 4 -->
+                <div class="card bg-white border-2 border-primary rounded-xl shadow-lg p-6 flex flex-col items-center" style="animation-delay: 0.3s">
+                    <div class="card-shine"></div>
+                    <div class="text-4xl mb-4">👤</div>
+                    <p class="font-bold text-primary text-xl mb-2 text-center">DETERGENTE</p>
+                    <p class="text-gray-600 text-center">CONTATO: (85) 9-6666-6666</p>
+                </div>
 
-                    <div>
-                        <input type="number" placeholder="QUANTIDADE" min="1" id="quantidade" name="quantidade" required
-                            class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
-                            aria-label="Quantidade do produto">
-                    </div>
+                <!-- Card 5 -->
+                <div class="card bg-white border-2 border-primary rounded-xl shadow-lg p-6 flex flex-col items-center" style="animation-delay: 0.4s">
+                    <div class="card-shine"></div>
+                    <div class="text-4xl mb-4">👤</div>
+                    <p class="font-bold text-primary text-xl mb-2 text-center">ÁLCOOL EM GEL</p>
+                    <p class="text-gray-600 text-center">CONTATO: (85) 9-5555-5555</p>
+                </div>
 
-
-
-                    <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
-                        aria-label="Adicionar produto">
-                        ADICIONAR QUANTIDADE
-                    </button>
-            </form>
+                <!-- Card 6 -->
+                <div class="card bg-white border-2 border-primary rounded-xl shadow-lg p-6 flex flex-col items-center" style="animation-delay: 0.5s">
+                    <div class="card-shine"></div>
+                    <div class="text-4xl mb-4">👤</div>
+                    <p class="font-bold text-primary text-xl mb-2 text-center">ESPONJA</p>
+                    <p class="text-gray-600 text-center">CONTATO: (85) 9-4444-4444</p>
+                </div>
+            </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-6 mt-8">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -506,9 +428,6 @@ $resultado = $select->selectProdutos($barcode);
                 </p>
             </div>
         </div>
-        <button class="back-to-top hidden" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Voltar ao topo">
-            <i class="fas fa-arrow-up"></i>
-        </button>
     </footer>
 
     <script>
@@ -541,36 +460,14 @@ $resultado = $select->selectProdutos($barcode);
                 });
             }
 
-            // Hamburger menu toggle
-            const hamburger = document.querySelector('.hamburger');
-            const navLinks = document.querySelector('.nav-links');
-
-            if (hamburger && navLinks) {
-                hamburger.addEventListener('click', () => {
-                    navLinks.classList.toggle('active');
-                    hamburger.classList.toggle('open');
-                });
-            }
-
-            // Back to top button visibility
-            const backToTop = document.querySelector('.back-to-top');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 300) {
-                    backToTop.classList.add('visible');
-                    backToTop.classList.remove('hidden');
-                } else {
-                    backToTop.classList.remove('visible');
-                    backToTop.classList.add('hidden');
-                }
+            // Card entrance animation
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('translate-y-0', 'opacity-100');
+                    card.classList.remove('translate-y-4', 'opacity-0');
+                }, index * 100);
             });
-
-            // Lazy loading for images
-            if ('loading' in HTMLImageElement.prototype) {
-                const images = document.querySelectorAll('img[loading="lazy"]');
-                images.forEach(img => {
-                    img.loading = 'lazy';
-                });
-            }
         });
     </script>
 </body>

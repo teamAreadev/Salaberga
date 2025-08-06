@@ -7,7 +7,7 @@
         }
         public function connect_database(){
             try{
-                $this->pdo = new PDO("mysql:host=localhost;dbname=u750204740_estoque", "root", "");
+                $this->pdo = new PDO("mysql:host=localhost;dbname=u750204740_estoque", "u750204740_estoque", "paoComOvo123!@##");
                 $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }catch(PDOException $e){
                 echo "Erro: ".$e->getMessage();
