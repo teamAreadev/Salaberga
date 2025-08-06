@@ -1054,7 +1054,7 @@ class gerenciamento extends connection
     {
         error_log("Adicionando produto - barcode: " . $barcode . ", nome: " . $nome . ", quantidade: " . $quantidade . ", natureza: " . $natureza);
 
-        $consulta = "INSERT INTO produtos VALUES (null, :barcode, :nome, :quantidade, :natureza)";
+        $consulta = "INSERT INTO produtos (barcode, nome_produto, quantidade, natureza) VALUES (:barcode, :nome, :quantidade, :natureza)";
         $query = $this->pdo->prepare($consulta);
         $query->bindValue(":nome", $nome);
         $query->bindValue(":barcode", $barcode);
