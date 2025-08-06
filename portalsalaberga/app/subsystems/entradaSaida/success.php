@@ -1,13 +1,11 @@
 <?php
-session_start();
-function redirect_to_login()
-{
-  header('Location: ../../main/views/autenticacao/login.php');
+include_once 'app/main/model/session.php';
+$session = new sessions();
+$session->autenticar_session();
+if(isset($_GET['sair'])){
+  $session->quebra_session();
 }
-if (!isset($_SESSION['Email'])) {
-  session_destroy();
-  redirect_to_login();
-}
+?>
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">

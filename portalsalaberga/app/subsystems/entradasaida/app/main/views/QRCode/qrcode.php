@@ -29,7 +29,6 @@ class qrCode1 extends connect
 
         $id_aluno = $query->fetchAll(PDO::FETCH_ASSOC);
 
-
         // Configurações de layout
         $cracha_width = 5; // Largura do crachá (cm)
         $cracha_height = 8; // Altura do crachá (cm)
