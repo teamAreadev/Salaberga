@@ -46,26 +46,29 @@ class select_model extends connect
     {
         $sql_nome_livro = $this->connect->query(
             "SELECT 
-                        c.id,
-                        c.titulo_livro,
-                        c.edicao,
-                        c.editora,
-                        c.quantidade,
-                        g.generos,
-                        sg.subgenero,
-                        c.ano_publicacao,
-                        c.corredor,
-                        c.estantes,
-                        c.prateleiras,
-                        c.ficcao,
-                        c.brasileira,
-                        c.cativo
-                    FROM catalogo c 
-                    INNER JOIN livros_autores l ON c.id = l.id_livro 
-                    INNER JOIN autores a ON l.id_autor = a.id 
-                    LEFT JOIN genero g ON c.id_genero = g.id 
-                    LEFT JOIN subgenero sg ON c.id_subgenero = sg.id 
-                    ORDER BY c.titulo_livro, c.edicao"
+                c.id,
+                c.titulo_livro,
+                c.edicao,
+                c.editora,
+                c.quantidade,
+                g.generos,
+                sg.subgenero,
+                c.ano_publicacao,
+                c.corredor,
+                c.estantes,
+                c.prateleiras,
+                c.ficcao,
+                c.brasileira,
+                c.cativo,
+                GROUP_CONCAT(CONCAT(a.nome_autor, ' ', a.sobrenome_autor) SEPARATOR ', ') AS autores
+            FROM catalogo c 
+            LEFT JOIN genero g ON c.id_genero = g.id 
+            LEFT JOIN subgenero sg ON c.id_subgenero = sg.id 
+            LEFT JOIN livros_autores l ON c.id = l.id_livro 
+            LEFT JOIN autores a ON l.id_autor = a.id 
+            GROUP BY c.id, c.titulo_livro, c.edicao, c.editora, c.quantidade, g.generos, sg.subgenero, 
+                     c.ano_publicacao, c.corredor, c.estantes, c.prateleiras, c.ficcao, c.brasileira, c.cativo
+            ORDER BY c.titulo_livro, c.edicao"
         );
         $nome = $sql_nome_livro->fetchAll(PDO::FETCH_ASSOC);
 
@@ -101,6 +104,13 @@ class select_model extends connect
         $nome_autor = $sql_nome_autor->fetchAll(PDO::FETCH_ASSOC);
 
         return $nome_autor;
+    }
+    public function select_nome_autor_livro()
+    {
+        $sql_nome_autor = $this->connect->query("SELECT * FROM autores");
+        $nome_autor = $sql_nome_autor->fetchAll(PDO::FETCH_ASSOC);
+
+        return $nomes_autores = $nome_autor['nome_autor'].' '.$nome_autor['sobrenome_autor'];
     }
     public function id_aluno_selecionado($id_aluno_selecionado) {
         if ($id_aluno_selecionado) {

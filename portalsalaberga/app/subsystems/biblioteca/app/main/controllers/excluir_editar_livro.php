@@ -28,7 +28,10 @@ if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
     isset($_POST['prateleira']) && !empty($_POST['prateleira']) &&
     isset($_POST['subgenero']) && !empty($_POST['subgenero']) &&
     isset($_POST['genero']) && !empty($_POST['genero']) &&
-    isset($_POST['ano_publicacao']) && !empty($_POST['ano_publicacao'])
+    isset($_POST['ano_publicacao']) && !empty($_POST['ano_publicacao']) &&
+    isset($_POST['id_autor']) && !empty($_POST['id_autor']) &&
+    isset($_POST['nome']) && !empty($_POST['nome']) &&
+    isset($_POST['sobrenome']) && !empty($_POST['sobrenome'])
 ) {
     $id_livro = $_POST['id_livro'];
     $titulo = $_POST['titulo'];
