@@ -2,7 +2,8 @@
 require_once "model/model.functions.php";
 
 try {
-    $gerenciamento = new gerenciamento();
+    $env = isset($_GET['env']) ? $_GET['env'] : 'local';
+    $gerenciamento = new gerenciamento($env);
     $pdo = $gerenciamento->getPdo();
     
     echo "<h2>Verificando estrutura da tabela movimentacao</h2>";

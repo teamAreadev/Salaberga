@@ -2,7 +2,8 @@
 require_once "model/model.functions.php";
 
 try {
-    $relatorios = new relatorios();
+    $env = isset($_GET['env']) ? $_GET['env'] : 'local';
+    $relatorios = new relatorios($env);
     
     // Definir período de hoje
     $data_inicio = date('Y-m-d');
@@ -39,7 +40,7 @@ try {
     // Verificar todas as movimentações da tabela
     echo "<h2>Todas as Movimentações na Tabela</h2>";
     
-    $gerenciamento = new gerenciamento();
+    $gerenciamento = new gerenciamento($env);
     $pdo = $gerenciamento->getPdo();
     
     $consulta = "SELECT * FROM movimentacao ORDER BY datareg DESC LIMIT 10";

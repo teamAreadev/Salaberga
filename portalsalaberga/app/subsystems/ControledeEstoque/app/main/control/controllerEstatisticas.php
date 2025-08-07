@@ -4,7 +4,8 @@ require_once("../model/model.functions.php");
 header('Content-Type: application/json');
 
 try {
-    $gerenciamento = new gerenciamento();
+    $env = isset($_GET['env']) ? $_GET['env'] : 'local';
+    $gerenciamento = new gerenciamento($env);
     
     // Verificar se a conexão está funcionando usando o método público
     $pdo = $gerenciamento->getPdo();
