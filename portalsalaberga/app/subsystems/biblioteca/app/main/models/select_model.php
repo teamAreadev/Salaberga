@@ -106,6 +106,7 @@ class select_model extends connect
         return $nome_autor;
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     public function select_nome_autor_livro()
     {
         $sql_nome_autor = $this->connect->query("SELECT * FROM autores");
@@ -115,6 +116,8 @@ class select_model extends connect
     }
     public function id_aluno_selecionado($id_aluno_selecionado) {
 =======
+=======
+>>>>>>> Stashed changes
 
     public function select_nome_autor_livro($id_livro)
     {
@@ -125,6 +128,9 @@ class select_model extends connect
 
     public function id_aluno_selecionado($id_aluno_selecionado)
     {
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         if ($id_aluno_selecionado) {
             $stmt = $this->connect->prepare("
