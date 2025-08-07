@@ -66,9 +66,9 @@ class PDF extends FPDF
 
 class gerenciamento extends connection
 {
-    function __construct()
+    function __construct($env = 'local')
     {
-        parent::__construct();
+        parent::__construct($env);
     }
 
     // Método público para acessar o PDO
@@ -1313,9 +1313,9 @@ class gerenciamento extends connection
 
 class relatorios extends connection
 {
-    function __construct()
+    function __construct($env = 'local')
     {
-        parent::__construct();
+        parent::__construct($env);
     }
 
     public function buscarProdutosPorData($data_inicio, $data_fim)

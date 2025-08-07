@@ -158,7 +158,8 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                         <?php
                         // Aqui você deve buscar os produtos do banco e gerar as linhas da tabela
                         require_once '../model/model.functions.php';
-                        $gerenciamento = new gerenciamento();
+                        $env = isset($_GET['env']) ? $_GET['env'] : 'local';
+                        $gerenciamento = new gerenciamento($env);
                         $produtos = $gerenciamento->getPdo()->query('SELECT * FROM produtos')->fetchAll(PDO::FETCH_ASSOC);
                         if ($produtos && count($produtos) > 0) {
                             foreach ($produtos as $produto) {

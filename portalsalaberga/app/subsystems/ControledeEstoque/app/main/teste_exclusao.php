@@ -4,7 +4,8 @@ require_once "model/model.functions.php";
 echo "<h2>Teste de Exclusão de Produto</h2>";
 
 try {
-    $gerenciamento = new gerenciamento();
+    $env = isset($_GET['env']) ? $_GET['env'] : 'local';
+    $gerenciamento = new gerenciamento($env);
     
     // Buscar um produto para testar
     $produtos = $gerenciamento->getPdo()->query('SELECT * FROM produtos LIMIT 1')->fetchAll(PDO::FETCH_ASSOC);
