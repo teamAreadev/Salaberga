@@ -105,7 +105,6 @@ class select_model extends connect
 
         return $nome_autor;
     }
-<<<<<<< Updated upstream
     public function select_nome_autor_livro()
     {
         $sql_nome_autor = $this->connect->query("SELECT * FROM autores");
@@ -114,18 +113,6 @@ class select_model extends connect
         return $nomes_autores = $nome_autor['nome_autor'].' '.$nome_autor['sobrenome_autor'];
     }
     public function id_aluno_selecionado($id_aluno_selecionado) {
-=======
-
-    public function select_nome_autor_livro($id_livro)
-    {
-        $sql_nome_autor = $this->connect->query("SELECT * FROM autores WHERE id_livro = '$id_livro'");
-        $nome_autor = $sql_nome_autor->fetchAll(PDO::FETCH_ASSOC);
-        return $nome_autor;
-    }
-
-    public function id_aluno_selecionado($id_aluno_selecionado)
-    {
->>>>>>> Stashed changes
         if ($id_aluno_selecionado) {
             $stmt = $this->connect->prepare("
                 SELECT 

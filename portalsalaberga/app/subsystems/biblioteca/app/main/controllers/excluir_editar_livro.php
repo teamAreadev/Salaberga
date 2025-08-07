@@ -1,6 +1,6 @@
 <?php
 require_once ('../models/main_model.php');
-
+print_r($_POST);
 /*controller para excluir livro*/
 if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
     $id_livro = $_POST['excluir_livro'];
