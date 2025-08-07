@@ -72,17 +72,11 @@ $select_model = new select_model();
             accent-color: #007A33;
         }
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
         .select2-container {
             width: 100% !important;
         }
 
-=======
-        .select2-container {
-            width: 100% !important;
-        }
->>>>>>> Stashed changes
 =======
         .select2-container {
             width: 100% !important;
@@ -97,10 +91,7 @@ $select_model = new select_model();
             transition: all 0.2s ease-in-out;
         }
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         .select2-container--default.select2-container--focus .select2-selection--single {
@@ -108,7 +99,6 @@ $select_model = new select_model();
             box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2);
         }
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
 =======
 >>>>>>> Stashed changes
@@ -123,15 +113,6 @@ $select_model = new select_model();
         }
 
 =======
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 40px;
-        }
->>>>>>> Stashed changes
-=======
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: #4b5563;
-            line-height: 40px;
-        }
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 40px;
         }
@@ -209,20 +190,13 @@ $select_model = new select_model();
 =======
                                     foreach ($livros as $livro) { ?>
                                         <option value="<?= $livro['id'] ?>"
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
 >>>>>>> Stashed changes
                                             data-titulo="<?= htmlspecialchars($livro['titulo_livro']) ?>"
                                             data-edicao="<?= htmlspecialchars($livro['edicao']) ?>"
                                             data-editora="<?= htmlspecialchars($livro['editora']) ?>"
                                             data-estante="<?= htmlspecialchars($livro['estantes']) ?>"
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
                                             data-prateleira="<?= htmlspecialchars($prateleira) ?>"
-=======
-                                            data-prateleira="<?= htmlspecialchars($livro['prateleiras']) ?>"
->>>>>>> Stashed changes
 =======
                                             data-prateleira="<?= htmlspecialchars($livro['prateleiras']) ?>"
 >>>>>>> Stashed changes
@@ -236,11 +210,7 @@ $select_model = new select_model();
                                             data-cativo="<?= htmlspecialchars($livro['cativo']) ?>"
                                             data-autores="<?= htmlspecialchars($livro['autores']) ?>">
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
                                             <?= htmlspecialchars($livro['titulo_livro']) ?> | edição: <?= htmlspecialchars($livro['edicao']) ?> | editora: <?= htmlspecialchars($livro['editora']) ?> | estante: <?= htmlspecialchars($livro['estantes']) ?> | prateleira: <?= htmlspecialchars($prateleira) ?> | quantidade: <?= htmlspecialchars($livro['quantidade']) ?>
-=======
-                                            <?= htmlspecialchars($livro['titulo_livro']) ?> | edição: <?= htmlspecialchars($livro['edicao']) ?> | editora: <?= htmlspecialchars($livro['editora']) ?> | estante: <?= htmlspecialchars($livro['estantes']) ?> | prateleira: <?= htmlspecialchars($livro['prateleiras']) ?> | quantidade: <?= htmlspecialchars($livro['quantidade']) ?>
->>>>>>> Stashed changes
 =======
                                             <?= htmlspecialchars($livro['titulo_livro']) ?> | edição: <?= htmlspecialchars($livro['edicao']) ?> | editora: <?= htmlspecialchars($livro['editora']) ?> | estante: <?= htmlspecialchars($livro['estantes']) ?> | prateleira: <?= htmlspecialchars($livro['prateleiras']) ?> | quantidade: <?= htmlspecialchars($livro['quantidade']) ?>
 >>>>>>> Stashed changes
@@ -363,7 +333,6 @@ $select_model = new select_model();
                                 </div>
                             </div>
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
                             <select name="" id="">
                                 <?php
                                 $autores = $select_model->select_nome_autor();
@@ -375,8 +344,6 @@ $select_model = new select_model();
                                 }
                                 ?>
                             </select>
-=======
->>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
                             <!-- Autores -->
