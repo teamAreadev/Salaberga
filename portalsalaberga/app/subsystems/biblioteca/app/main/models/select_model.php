@@ -105,6 +105,7 @@ class select_model extends connect
 
         return $nome_autor;
     }
+<<<<<<< Updated upstream
     public function select_nome_autor_livro()
     {
         $sql_nome_autor = $this->connect->query("SELECT * FROM autores");
@@ -113,6 +114,18 @@ class select_model extends connect
         return $nomes_autores = $nome_autor['nome_autor'].' '.$nome_autor['sobrenome_autor'];
     }
     public function id_aluno_selecionado($id_aluno_selecionado) {
+=======
+
+    public function select_nome_autor_livro($id_livro)
+    {
+        $sql_nome_autor = $this->connect->query("SELECT * FROM autores WHERE id_livro = '$id_livro'");
+        $nome_autor = $sql_nome_autor->fetchAll(PDO::FETCH_ASSOC);
+        return $nome_autor;
+    }
+
+    public function id_aluno_selecionado($id_aluno_selecionado)
+    {
+>>>>>>> Stashed changes
         if ($id_aluno_selecionado) {
             $stmt = $this->connect->prepare("
                 SELECT 
@@ -135,14 +148,16 @@ class select_model extends connect
         }
         return null;
     }
-    public function select_livros(){
+    public function select_livros()
+    {
 
         $sql_livro = $this->connect->query('SELECT id, titulo_livro FROM catalogo');
         $livros = $sql_livro->fetchAll(PDO::FETCH_ASSOC);
 
         return $livros;
     }
-    public function id_livro_selecionado($id_livro_selecionado) {
+    public function id_livro_selecionado($id_livro_selecionado)
+    {
         if ($id_livro_selecionado) {
             $stmt = $this->connect->prepare("SELECT * FROM catalogo WHERE id = ?");
             $stmt->execute([$id_livro_selecionado]);
@@ -151,25 +166,29 @@ class select_model extends connect
         }
         return null;
     }
-    public function select_emprestimo(){
+    public function select_emprestimo()
+    {
         $sql_emprestimo = $this->connect->query(
             'SELECT emprestimo.id, emprestimo.id_aluno, emprestimo.id_catalogo, catalogo.titulo_livro 
                     FROM emprestimo 
-                    JOIN catalogo ON emprestimo.id_catalogo = catalogo.id WHERE status = 1');
+                    JOIN catalogo ON emprestimo.id_catalogo = catalogo.id WHERE status = 1'
+        );
         $emprestimos = $sql_emprestimo->fetchAll(PDO::FETCH_ASSOC);
 
         return $emprestimos;
     }
-    public function id_emprestimo_selecionado($id_emprestimo_selecionado) {
+    public function id_emprestimo_selecionado($id_emprestimo_selecionado)
+    {
         if ($id_emprestimo_selecionado) {
             $stmt = $this->connect->prepare("SELECT * FROM emprestimo WHERE id = ?");
             $stmt->execute([$id_emprestimo_selecionado]);
             $info = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $info;   
+            return $info;
         }
         return null;
     }
-    public function dados_aluno($id_emprestimo) {
+    public function dados_aluno($id_emprestimo)
+    {
         if ($id_emprestimo) {
             $stmt = $this->connect->prepare('
                 SELECT 
@@ -206,10 +225,10 @@ class select_model extends connect
             $stmt->bindParam(':id_turma', $id_turma, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-           
+
             // Debug para verificar os dados
             error_log("Nome da turma encontrado: " . print_r($result, true));
-           
+
             return $result ? $result['nome_turma'] : false;
         } catch (PDOException $e) {
             error_log("Erro ao buscar nome da turma no model: " . $e->getMessage());
@@ -218,22 +237,22 @@ class select_model extends connect
     }
 
 
-     /**
-      * Busca o aluno que mais pegou livros emprestados em uma turma e mês específicos.
-      * Filtra por mês e pelo ano atual.
-      * @param int $id_turma O ID da turma.
-      * @param int $mes_numero O número do mês (1 a 12).
-      * @return string|false Retorna o nome do aluno destaque ou false se não encontrado/erro.
-      */
+    /**
+     * Busca o aluno que mais pegou livros emprestados em uma turma e mês específicos.
+     * Filtra por mês e pelo ano atual.
+     * @param int $id_turma O ID da turma.
+     * @param int $mes_numero O número do mês (1 a 12).
+     * @return string|false Retorna o nome do aluno destaque ou false se não encontrado/erro.
+     */
 
-public function get_aluno_destaque($id_turma, $mes_numero)
+    public function get_aluno_destaque($id_turma, $mes_numero)
     {
         if ($id_turma === null || $mes_numero === null) {
             return false;
         }
-         try {
-             // Consulta para encontrar o aluno com mais empréstimos na turma e mês DO ANO ATUAL
-             $sql = "
+        try {
+            // Consulta para encontrar o aluno com mais empréstimos na turma e mês DO ANO ATUAL
+            $sql = "
                  SELECT
                      a.nome
                  FROM
@@ -252,27 +271,26 @@ public function get_aluno_destaque($id_turma, $mes_numero)
              ";
 
 
-             $stmt = $this->connect->prepare($sql);
-             $stmt->bindParam(':id_turma', $id_turma, PDO::PARAM_INT);
-             $stmt->bindParam(':mes_numero', $mes_numero, PDO::PARAM_INT);
-             // Não precisa bindar o ano, pois YEAR(CURDATE()) é resolvido no lado do BD
+            $stmt = $this->connect->prepare($sql);
+            $stmt->bindParam(':id_turma', $id_turma, PDO::PARAM_INT);
+            $stmt->bindParam(':mes_numero', $mes_numero, PDO::PARAM_INT);
+            // Não precisa bindar o ano, pois YEAR(CURDATE()) é resolvido no lado do BD
 
 
-             $stmt->execute();
-             $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-             // Retorna o nome do aluno ou uma string vazia se não houver resultado
-             return $result ? $result['nome'] : '';
-
-
-         } catch (PDOException $e) {
-             error_log("Erro ao buscar aluno destaque no model: " . $e->getMessage());
-             return false; // Retorna false em caso de erro de banco de dados
-         }
+            // Retorna o nome do aluno ou uma string vazia se não houver resultado
+            return $result ? $result['nome'] : '';
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar aluno destaque no model: " . $e->getMessage());
+            return false; // Retorna false em caso de erro de banco de dados
+        }
     }
 
-    public function select_turmas() {
+    public function select_turmas()
+    {
         try {
             $sql = "SELECT id_turma, CONCAT(ano, ' ', turma) as nome_turma FROM turma ORDER BY ano, turma";
             $stmt = $this->connect->prepare($sql);
@@ -283,7 +301,8 @@ public function get_aluno_destaque($id_turma, $mes_numero)
             return false;
         }
     }
-    public function select_aluno(){
+    public function select_aluno()
+    {
 
         $sql_aluno = $this->connect->query('SELECT id_aluno, nome FROM aluno');
         $alunos = $sql_aluno->fetchAll(PDO::FETCH_ASSOC);

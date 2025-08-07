@@ -4,7 +4,6 @@ $select_model = new select_model();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,12 +41,10 @@ $select_model = new select_model();
             background-color: #007A33 !important;
             border-color: #007A33 !important;
         }
-
         input[type="checkbox"]:checked:focus,
         input[type="radio"]:checked:focus {
             --tw-ring-color: rgba(0, 122, 51, 0.2);
         }
-
         input[type="radio"] {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -59,30 +56,32 @@ $select_model = new select_model();
             outline: none;
             transition: all 0.2s ease-in-out;
         }
-
         input[type="radio"]:checked {
             border-color: #007A33;
             background-color: #007A33;
             box-shadow: inset 0 0 0 4px #fff;
         }
-
         input[type="radio"]:focus {
             box-shadow: 0 0 0 3px rgba(0, 122, 51, 0.2);
         }
-
         .tab-button.active {
             color: #007A33 !important;
             border-bottom: 2px solid #007A33 !important;
         }
-
         input[type="checkbox"] {
             accent-color: #007A33;
         }
+<<<<<<< Updated upstream
 
         .select2-container {
             width: 100% !important;
         }
 
+=======
+        .select2-container {
+            width: 100% !important;
+        }
+>>>>>>> Stashed changes
         .select2-container--default .select2-selection--single {
             background-color: white;
             border: 2px solid #e5e7eb;
@@ -91,55 +90,61 @@ $select_model = new select_model();
             padding: 4px;
             transition: all 0.2s ease-in-out;
         }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         .select2-container--default.select2-container--focus .select2-selection--single {
             border-color: #007A33;
             box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2);
         }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             color: #4b5563;
             line-height: 40px;
         }
+<<<<<<< Updated upstream
 
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 40px;
         }
 
+=======
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 40px;
+        }
+>>>>>>> Stashed changes
         .select2-container--default .select2-results__option--highlighted[aria-selected] {
             background-color: #007A33;
             color: white;
         }
-
         .select2-dropdown {
             border: 2px solid #e5e7eb;
             border-radius: 0.5rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-
         .select2-container--default .select2-search--dropdown .select2-search__field {
             border: 2px solid #e5e7eb;
             border-radius: 0.375rem;
             padding: 8px;
         }
-
         .select2-container--default .select2-search--dropdown .select2-search__field:focus {
             border-color: #007A33;
             outline: none;
             box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2);
         }
-
         .select2-container--default .select2-results__option {
             padding: 8px 12px;
         }
-
         .select2-container--default .select2-results__option[aria-selected=true] {
             background-color: #e6f3ed;
             color: #007A33;
         }
     </style>
 </head>
-
 <body class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-4 sm:p-6 md:p-8 lg:p-12 select-none"
     style="background-image: url('../assets/img/layout.png'); background-size: cover; background-attachment: fixed;">
     <a href="decisão.php"
@@ -176,16 +181,25 @@ $select_model = new select_model();
                                     <option value="" selected disabled>Selecione um livro para editar</option>
                                     <?php
                                     $livros = $select_model->select_nome_livro();
+<<<<<<< Updated upstream
                                     foreach ($livros as $livro) {
                                         // Normalize prateleira to match select options (p1 -> P1, etc.)
                                         $prateleira = strtoupper($livro['prateleiras']); // Convert p1 to P1
                                     ?>
                                         <option value="<?= htmlspecialchars($livro['id']) ?>"
+=======
+                                    foreach ($livros as $livro) { ?>
+                                        <option value="<?= $livro['id'] ?>"
+>>>>>>> Stashed changes
                                             data-titulo="<?= htmlspecialchars($livro['titulo_livro']) ?>"
                                             data-edicao="<?= htmlspecialchars($livro['edicao']) ?>"
                                             data-editora="<?= htmlspecialchars($livro['editora']) ?>"
                                             data-estante="<?= htmlspecialchars($livro['estantes']) ?>"
+<<<<<<< Updated upstream
                                             data-prateleira="<?= htmlspecialchars($prateleira) ?>"
+=======
+                                            data-prateleira="<?= htmlspecialchars($livro['prateleiras']) ?>"
+>>>>>>> Stashed changes
                                             data-quantidade="<?= htmlspecialchars($livro['quantidade']) ?>"
                                             data-genero="<?= htmlspecialchars($livro['generos']) ?>"
                                             data-subgenero="<?= htmlspecialchars($livro['subgenero']) ?>"
@@ -195,7 +209,11 @@ $select_model = new select_model();
                                             data-brasileira="<?= htmlspecialchars($livro['brasileira']) ?>"
                                             data-cativo="<?= htmlspecialchars($livro['cativo']) ?>"
                                             data-autores="<?= htmlspecialchars($livro['autores']) ?>">
+<<<<<<< Updated upstream
                                             <?= htmlspecialchars($livro['titulo_livro']) ?> | edição: <?= htmlspecialchars($livro['edicao']) ?> | editora: <?= htmlspecialchars($livro['editora']) ?> | estante: <?= htmlspecialchars($livro['estantes']) ?> | prateleira: <?= htmlspecialchars($prateleira) ?> | quantidade: <?= htmlspecialchars($livro['quantidade']) ?>
+=======
+                                            <?= htmlspecialchars($livro['titulo_livro']) ?> | edição: <?= htmlspecialchars($livro['edicao']) ?> | editora: <?= htmlspecialchars($livro['editora']) ?> | estante: <?= htmlspecialchars($livro['estantes']) ?> | prateleira: <?= htmlspecialchars($livro['prateleiras']) ?> | quantidade: <?= htmlspecialchars($livro['quantidade']) ?>
+>>>>>>> Stashed changes
                                         </option>
                                     <?php } ?>
                                 </select>
@@ -314,6 +332,7 @@ $select_model = new select_model();
                                     </div>
                                 </div>
                             </div>
+<<<<<<< Updated upstream
                             <select name="" id="">
                                 <?php
                                 $autores = $select_model->select_nome_autor();
@@ -325,6 +344,8 @@ $select_model = new select_model();
                                 }
                                 ?>
                             </select>
+=======
+>>>>>>> Stashed changes
                             <!-- Autores -->
                             <div id="authorFields" class="space-y-4">
                                 <label class="block text-sm font-medium text-gray-700">Autores</label>
@@ -554,5 +575,4 @@ $select_model = new select_model();
         });
     </script>
 </body>
-
 </html>
