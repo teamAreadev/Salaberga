@@ -1204,7 +1204,7 @@ class gerenciamento extends connection
             error_log("Barcode: " . $barcode);
             error_log("Quantidade: " . $quantidade);
             error_log("Natureza: " . $natureza);
-
+            
             $consulta = "UPDATE produtos SET barcode = :barcode, nome_produto = :nome, quantidade = :quantidade, natureza = :natureza WHERE id = :id";
             $query = $this->pdo->prepare($consulta);
             $query->bindValue(":id", $id);
@@ -1212,13 +1212,13 @@ class gerenciamento extends connection
             $query->bindValue(":nome", $nome);
             $query->bindValue(":quantidade", $quantidade);
             $query->bindValue(":natureza", $natureza);
-
+            
             $resultado = $query->execute();
             $linhasAfetadas = $query->rowCount();
-
+            
             error_log("Query executada com sucesso");
             error_log("Linhas afetadas: " . $linhasAfetadas);
-
+            
             if ($linhasAfetadas > 0) {
                 error_log("Produto editado com sucesso");
                 return true;
@@ -1238,30 +1238,30 @@ class gerenciamento extends connection
         try {
             error_log("=== INICIANDO EXCLUSÃO DE PRODUTO ===");
             error_log("ID do produto: " . $id);
-
+            
             // Verificar se o produto existe antes de tentar excluir
             $consultaVerificar = "SELECT id, nome_produto FROM produtos WHERE id = :id";
             $queryVerificar = $this->pdo->prepare($consultaVerificar);
             $queryVerificar->bindValue(":id", $id);
             $queryVerificar->execute();
             $produto = $queryVerificar->fetch(PDO::FETCH_ASSOC);
-
+            
             if (!$produto) {
                 error_log("Produto não encontrado com ID: " . $id);
                 return false;
             }
-
+            
             error_log("Produto encontrado: " . $produto['nome_produto']);
-
+            
             // Verificar se há movimentações relacionadas
             $consultaMovimentacoes = "SELECT COUNT(*) as total FROM movimentacao WHERE fk_produtos_id = :id";
             $queryMovimentacoes = $this->pdo->prepare($consultaMovimentacoes);
             $queryMovimentacoes->bindValue(":id", $id);
             $queryMovimentacoes->execute();
             $movimentacoes = $queryMovimentacoes->fetch(PDO::FETCH_ASSOC);
-
+            
             error_log("Movimentações relacionadas: " . $movimentacoes['total']);
-
+            
             // Excluir movimentações relacionadas primeiro (se houver)
             if ($movimentacoes['total'] > 0) {
                 error_log("Excluindo movimentações relacionadas...");
@@ -1271,17 +1271,17 @@ class gerenciamento extends connection
                 $queryDeleteMovimentacoes->execute();
                 error_log("Movimentações excluídas com sucesso");
             }
-
+            
             // Excluir o produto
             $consulta = "DELETE FROM produtos WHERE id = :id";
             $query = $this->pdo->prepare($consulta);
             $query->bindValue(":id", $id);
             $resultado = $query->execute();
             $linhasAfetadas = $query->rowCount();
-
+            
             error_log("Query de exclusão executada");
             error_log("Linhas afetadas: " . $linhasAfetadas);
-
+            
             if ($linhasAfetadas > 0) {
                 error_log("Produto excluído com sucesso");
                 return true;
@@ -2552,7 +2552,7 @@ class relatorios extends connection
         }
 
         // Título e subtítulo
-        $pdf->SetFont('Arial', 'B', 21);
+        $pdf->SetFont('Arial', 'B', 20);
         $pdf->SetTextColor($corBranco[0], $corBranco[1], $corBranco[2]);
         $pdf->Cell(0, 24, utf8_decode("RELATÓRIO DE PRODUTOS SEM CÓDIGO DE BARRA"), 0, 1, 'L');
 
@@ -2829,14 +2829,10 @@ class relatorios extends connection
             // ===== RODAPÉ PROFISSIONAL =====
             $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
             $pdf->SetFont('Arial', '', 10);
-
             $pdf->SetXY(40, $y + 55);
-            $pdf->Cell(0, 10, utf8_decode("SCB = SEM CÓDIGO DE BARRA"), 0, 0, 'L');
-
-            $pdf->SetXY(40, $y + 65);
             $pdf->Cell(0, 10, utf8_decode("Sistema de Gerenciamento de Estoque - STGM v1.2.0"), 0, 0, 'L');
 
-            $pdf->SetXY(40, $y + 75);
+            $pdf->SetXY(40, $y + 65);
             $pdf->Cell(0, 10, utf8_decode("© " . date('Y') . " - Desenvolvido por alunos EEEP STGM"), 0, 0, 'L');
 
             $pdf->SetX(-60);
