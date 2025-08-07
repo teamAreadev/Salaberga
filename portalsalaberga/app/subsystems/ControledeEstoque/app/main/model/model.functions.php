@@ -2829,10 +2829,14 @@ class relatorios extends connection
             // ===== RODAPÉ PROFISSIONAL =====
             $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
             $pdf->SetFont('Arial', '', 10);
+
             $pdf->SetXY(40, $y + 55);
-            $pdf->Cell(0, 10, utf8_decode("Sistema de Gerenciamento de Estoque - STGM v1.2.0"), 0, 0, 'L');
+            $pdf->Cell(0, 10, utf8_decode("SCB = SEM CÓDIGO DE BARRA"), 0, 0, 'L');
 
             $pdf->SetXY(40, $y + 65);
+            $pdf->Cell(0, 10, utf8_decode("Sistema de Gerenciamento de Estoque - STGM v1.2.0"), 0, 0, 'L');
+
+            $pdf->SetXY(40, $y + 75);
             $pdf->Cell(0, 10, utf8_decode("© " . date('Y') . " - Desenvolvido por alunos EEEP STGM"), 0, 0, 'L');
 
             $pdf->SetX(-60);
