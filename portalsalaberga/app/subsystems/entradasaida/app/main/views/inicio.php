@@ -121,7 +121,7 @@ if(isset($_GET['sair'])){
 
         <a href="./entradas/registro_entrada.php" class="menu-card p-6 flex items-center gap-4 group">
           <div class="menu-icon bg-blue-50 text-blue-600">
-            <i class="fas fa-sign-in-alt text-xl"></i>
+            <i class="fas fa-door-open text-xl"></i>
           </div>
           <div>
             <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">Registrar Entrada</h3>
@@ -131,7 +131,7 @@ if(isset($_GET['sair'])){
 
         <a href="./saidas/registro_saida.php" class="menu-card p-6 flex items-center gap-4 group">
           <div class="menu-icon bg-red-50 text-red-600">
-            <i class="fas fa-sign-out-alt text-xl"></i>
+            <i class="fas fa-door-closed text-xl"></i>
           </div>
           <div>
             <h3 class="font-semibold text-gray-900 group-hover:text-red-600 transition-colors">Registrar Saída</h3>
@@ -141,7 +141,7 @@ if(isset($_GET['sair'])){
 
         <a href="./estagio/saida_Estagio.php" class="menu-card p-6 flex items-center gap-4 group">
           <div class="menu-icon bg-purple-50 text-purple-600">
-            <i class="fas fa-briefcase text-xl"></i>
+            <i class="fas fa-user-graduate text-xl"></i>
           </div>
           <div>
             <h3 class="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">Registrar Saída-Estágio</h3>
@@ -151,7 +151,7 @@ if(isset($_GET['sair'])){
 
         <a href="relatorio.php" class="menu-card p-6 flex items-center gap-4 group">
           <div class="menu-icon bg-yellow-50 text-yellow-600">
-            <i class="fas fa-chart-bar text-xl"></i>
+            <i class="fas fa-file-alt text-xl"></i>
           </div>
           <div>
             <h3 class="font-semibold text-gray-900 group-hover:text-yellow-600 transition-colors">Relatórios</h3>
@@ -161,7 +161,7 @@ if(isset($_GET['sair'])){
 
         <a href="relatorios/ultimo_registro.php" class="menu-card p-6 flex items-center gap-4 group">
           <div class="menu-icon bg-cyan-50 text-cyan-600">
-            <i class="fas fa-history text-xl"></i>
+            <i class="fas fa-clock-rotate-left text-xl"></i>
           </div>
           <div>
             <h3 class="font-semibold text-gray-900 group-hover:text-cyan-600 transition-colors">Últimas Saídas</h3>

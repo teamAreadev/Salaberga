@@ -59,7 +59,7 @@
             <a href="cadastrar_genero.php"
                 class="card-hover block w-full bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-between hover:bg-gray-100">
                 <span class="flex items-center">
-                    <i class="fas fa-tags mr-4 text-xl text-ceara-green"></i>
+                    <i class="fas fa-tags mr-4 text-xl text-primary"></i>
                     <span class="text-lg">Cadastrar Gênero Literário</span>
                 </span>
                 <i class="fas fa-chevron-right text-gray-400"></i>
@@ -68,7 +68,7 @@
             <a href="cadastrar_subgenero.php"
                 class="card-hover block w-full bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-between hover:bg-gray-100">
                 <span class="flex items-center">
-                    <i class="fas fa-tags mr-4 text-xl text-ceara-orange"></i>
+                    <i class="fas fa-layer-group mr-4 text-xl text-primary"></i>
                     <span class="text-lg">Cadastrar Subgênero</span>
                 </span>
                 <i class="fas fa-chevron-right text-gray-400"></i>
@@ -77,7 +77,7 @@
             <a href="cadastrar_livro.php"
                 class="card-hover block w-full bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-between hover:bg-gray-100">
                 <span class="flex items-center">
-                    <i class="fas fa-book mr-4 text-xl text-primary"></i>
+                    <i class="fas fa-book-medical mr-4 text-xl text-primary"></i>
                     <span class="text-lg">Cadastrar Livro</span>
                 </span>
                 <i class="fas fa-chevron-right text-gray-400"></i>
@@ -85,7 +85,7 @@
             <a href="excluir_livro.php"
                 class="card-hover block w-full bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-between hover:bg-gray-100">
                 <span class="flex items-center">
-                    <i class="fas fa-book mr-4 text-xl text-primary"></i>
+                    <i class="fas fa-book-dead mr-4 text-xl text-primary"></i>
                     <span class="text-lg">Excluir Livro</span>
                 </span>
                 <i class="fas fa-chevron-right text-gray-400"></i>
@@ -93,7 +93,7 @@
             <a href="editar_livro.php"
                 class="card-hover block w-full bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-between hover:bg-gray-100">
                 <span class="flex items-center">
-                    <i class="fas fa-book mr-4 text-xl text-primary"></i>
+                    <i class="fas fa-pen-to-square mr-4 text-xl text-primary"></i>
                     <span class="text-lg">Editar Livro</span>
                 </span>
                 <i class="fas fa-chevron-right text-gray-400"></i>
@@ -101,7 +101,7 @@
             <a href="editar_autor.php"
                 class="card-hover block w-full bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-between hover:bg-gray-100">
                 <span class="flex items-center">
-                    <i class="fas fa-book mr-4 text-xl text-primary"></i>
+                    <i class="fas fa-user-edit mr-4 text-xl text-primary"></i>
                     <span class="text-lg">Editar Autor</span>
                 </span>
                 <i class="fas fa-chevron-right text-gray-400"></i>
