@@ -162,8 +162,8 @@
                 
                 <a href="./QRCode/decisao.php" class="report-card block p-6 text-left">
                     <div class="flex items-center gap-4">
-                        <div class="report-icon bg-yellow-50 text-yellow-600">
-                            <i class="fas fa-users text-xl"></i>
+                        <div class="report-icon bg-green-50 text-green-600">
+                            <i class="fas fa-qrcode text-xl"></i>
                         </div>
                         <div>
                             <h3 class="font-semibold text-gray-900">Relatório Geral de QRCodes</h3>

@@ -4,6 +4,9 @@ $mensagem = '';
 $tipoMensagem = '';
 $mostrarNotificacao = false;
 
+// Definir variável $barcode para evitar warnings
+$barcode = '';
+
 if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message'])) {
     $mensagem = $_GET['message'];
     $tipoMensagem = 'success';
@@ -576,8 +579,8 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             produtoInfo.classList.remove('hidden');
             produtoSelecionado = produto;
             
-            // Definir o ID do produto no campo hidden
-            produtoIdHidden.value = produto.id;
+            // Definir o código de barras no campo hidden (não o ID)
+            produtoIdHidden.value = produto.barcode;
         }
 
         // Função para validar formulário

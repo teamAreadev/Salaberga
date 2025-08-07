@@ -526,6 +526,14 @@ if(isset($_GET['sair'])){
     <div class="main-container max-w-7xl mx-auto p-6 lg:p-8">
         <!-- Header -->
         <div class="text-center mb-8">
+            <!-- Botão Voltar -->
+            <div class="flex justify-start mb-4">
+                <button onclick="history.back()" class="inline-flex items-center text-gray-600 bg-white rounded-lg px-4 py-2 shadow-sm border hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-arrow-left mr-2 text-ceara-green"></i>
+                    <span class="text-sm">Voltar</span>
+                </button>
+            </div>
+            
             <div class="flex flex-col lg:flex-row items-center justify-center gap-4">
                 <h1 class="text-2xl lg:text-3xl font-semibold">
                     <span class="gradient-text">Relatório de Frequências em:</span>

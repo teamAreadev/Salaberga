@@ -1,3 +1,7 @@
+<?php
+// Definir variável $barcode para evitar warnings
+$barcode = '';
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 

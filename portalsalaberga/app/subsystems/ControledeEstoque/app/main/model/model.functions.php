@@ -1018,13 +1018,13 @@ class gerenciamento extends connection
 
     public function consultarProdutoSemCodigo($nome_produto)
     {
-        // Verificar se já tem prefixo SC_
-        if (strpos($nome_produto, 'SC_') === 0) {
-            // Já tem prefixo SC_, usar como está
+        // Verificar se já tem prefixo SCB_
+        if (strpos($nome_produto, 'SCB_') === 0) {
+            // Já tem prefixo SCB_, usar como está
             $barcode_com_prefixo = $nome_produto;
         } else {
-            // Adicionar prefixo SC_ para produtos sem código
-            $barcode_com_prefixo = 'SC_' . $nome_produto;
+            // Adicionar prefixo SCB_ para produtos sem código
+            $barcode_com_prefixo = 'SCB_' . $nome_produto;
         }
 
         // Verificar se já existe um produto com este nome como barcode
@@ -1056,13 +1056,13 @@ class gerenciamento extends connection
 
     public function adcaoestoquePorNome($nome_produto, $quantidade)
     {
-        // Verificar se já tem prefixo SC_
-        if (strpos($nome_produto, 'SC_') === 0) {
-            // Já tem prefixo SC_, usar como está
+        // Verificar se já tem prefixo SCB_
+        if (strpos($nome_produto, 'SCB_') === 0) {
+            // Já tem prefixo SCB_, usar como está
             $barcode_com_prefixo = $nome_produto;
         } else {
-            // Adicionar prefixo SC_ para produtos sem código
-            $barcode_com_prefixo = 'SC_' . $nome_produto;
+            // Adicionar prefixo SCB_ para produtos sem código
+            $barcode_com_prefixo = 'SCB_' . $nome_produto;
         }
 
         $consulta = "UPDATE produtos SET quantidade = quantidade + :quantidade WHERE barcode = :barcode_com_prefixo";
@@ -1198,6 +1198,13 @@ class gerenciamento extends connection
     public function editarProduto($id, $nome, $barcode, $quantidade, $natureza)
     {
         try {
+            error_log("=== INICIANDO EDIÇÃO DE PRODUTO ===");
+            error_log("ID: " . $id);
+            error_log("Nome: " . $nome);
+            error_log("Barcode: " . $barcode);
+            error_log("Quantidade: " . $quantidade);
+            error_log("Natureza: " . $natureza);
+            
             $consulta = "UPDATE produtos SET barcode = :barcode, nome_produto = :nome, quantidade = :quantidade, natureza = :natureza WHERE id = :id";
             $query = $this->pdo->prepare($consulta);
             $query->bindValue(":id", $id);
@@ -1205,10 +1212,23 @@ class gerenciamento extends connection
             $query->bindValue(":nome", $nome);
             $query->bindValue(":quantidade", $quantidade);
             $query->bindValue(":natureza", $natureza);
-            $query->execute();
-            return true;
+            
+            $resultado = $query->execute();
+            $linhasAfetadas = $query->rowCount();
+            
+            error_log("Query executada com sucesso");
+            error_log("Linhas afetadas: " . $linhasAfetadas);
+            
+            if ($linhasAfetadas > 0) {
+                error_log("Produto editado com sucesso");
+                return true;
+            } else {
+                error_log("Nenhuma linha foi afetada - produto pode não existir");
+                return false;
+            }
         } catch (PDOException $e) {
             error_log("Erro ao editar produto: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
             return false;
         }
     }
@@ -1216,13 +1236,62 @@ class gerenciamento extends connection
     public function apagarProduto($id)
     {
         try {
+            error_log("=== INICIANDO EXCLUSÃO DE PRODUTO ===");
+            error_log("ID do produto: " . $id);
+            
+            // Verificar se o produto existe antes de tentar excluir
+            $consultaVerificar = "SELECT id, nome_produto FROM produtos WHERE id = :id";
+            $queryVerificar = $this->pdo->prepare($consultaVerificar);
+            $queryVerificar->bindValue(":id", $id);
+            $queryVerificar->execute();
+            $produto = $queryVerificar->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$produto) {
+                error_log("Produto não encontrado com ID: " . $id);
+                return false;
+            }
+            
+            error_log("Produto encontrado: " . $produto['nome_produto']);
+            
+            // Verificar se há movimentações relacionadas
+            $consultaMovimentacoes = "SELECT COUNT(*) as total FROM movimentacao WHERE fk_produtos_id = :id";
+            $queryMovimentacoes = $this->pdo->prepare($consultaMovimentacoes);
+            $queryMovimentacoes->bindValue(":id", $id);
+            $queryMovimentacoes->execute();
+            $movimentacoes = $queryMovimentacoes->fetch(PDO::FETCH_ASSOC);
+            
+            error_log("Movimentações relacionadas: " . $movimentacoes['total']);
+            
+            // Excluir movimentações relacionadas primeiro (se houver)
+            if ($movimentacoes['total'] > 0) {
+                error_log("Excluindo movimentações relacionadas...");
+                $consultaDeleteMovimentacoes = "DELETE FROM movimentacao WHERE fk_produtos_id = :id";
+                $queryDeleteMovimentacoes = $this->pdo->prepare($consultaDeleteMovimentacoes);
+                $queryDeleteMovimentacoes->bindValue(":id", $id);
+                $queryDeleteMovimentacoes->execute();
+                error_log("Movimentações excluídas com sucesso");
+            }
+            
+            // Excluir o produto
             $consulta = "DELETE FROM produtos WHERE id = :id";
             $query = $this->pdo->prepare($consulta);
             $query->bindValue(":id", $id);
-            $query->execute();
-            return true;
+            $resultado = $query->execute();
+            $linhasAfetadas = $query->rowCount();
+            
+            error_log("Query de exclusão executada");
+            error_log("Linhas afetadas: " . $linhasAfetadas);
+            
+            if ($linhasAfetadas > 0) {
+                error_log("Produto excluído com sucesso");
+                return true;
+            } else {
+                error_log("Nenhuma linha foi afetada na exclusão");
+                return false;
+            }
         } catch (PDOException $e) {
             error_log("Erro ao apagar produto: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
             return false;
         }
     }
@@ -1284,7 +1353,7 @@ class relatorios extends connection
                      FROM movimentacao e
                      LEFT JOIN produtos p ON e.fk_produtos_id = p.id
                      LEFT JOIN responsaveis r ON e.fk_responsaveis_id = r.id
-                     WHERE e.datareg BETWEEN :data_inicio AND :data_fim 
+                     WHERE DATE(e.datareg) BETWEEN :data_inicio AND :data_fim 
                      ORDER BY e.datareg DESC";
 
             $query = $this->pdo->prepare($consulta);
@@ -1378,11 +1447,6 @@ class relatorios extends connection
         $pdf->SetXY($startX + 15, $startY + 15);
         $pdf->Cell($cardWidth - 30, 20, utf8_decode("PRODUTOS CRÍTICOS"), 0, 1, 'L');
 
-        $pdf->SetFont('Arial', 'B', 24);
-        $pdf->SetTextColor($corAlerta[0], $corAlerta[1], $corAlerta[2]);
-        $pdf->SetXY($startX + 15, $startY + 40);
-        $pdf->Cell($cardWidth - 30, 25, $resumo['total_produtos'], 0, 1, 'L');
-
         // Card 2 - Categorias
         $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
         $pdf->RoundedRect($startX + $cardWidth + $cardMargin, $startY, $cardWidth, $cardHeight, 8, 'F');
@@ -1391,11 +1455,6 @@ class relatorios extends connection
         $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
         $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 15);
         $pdf->Cell($cardWidth - 30, 20, utf8_decode("CATEGORIAS"), 0, 1, 'L');
-
-        $pdf->SetFont('Arial', 'B', 24);
-        $pdf->SetTextColor($corSecondary[0], $corSecondary[1], $corSecondary[2]);
-        $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 40);
-        $pdf->Cell($cardWidth - 30, 25, $resumo['total_categorias'], 0, 1, 'L');
 
         // Card 3 - (Placeholder para futuro uso, mantendo layout com 3 cards)
         $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
@@ -2457,7 +2516,7 @@ class relatorios extends connection
     public function relatorioDeCodigosSCB()
     {
 
-        $consulta = "SELECT * FROM produtos WHERE barcode LIKE 'SC_%' ORDER BY natureza, nome_produto";
+        $consulta = "SELECT * FROM produtos WHERE barcode LIKE 'SCB_%' ORDER BY natureza, nome_produto";
         $query = $this->pdo->prepare($consulta);
         $query->execute();
         $result = $query->rowCount();
@@ -2499,7 +2558,7 @@ class relatorios extends connection
 
         $pdf->SetFont('Arial', '', 12);
         $pdf->SetXY(40 + $logoWidth + 15, $pdf->GetY());
-        $pdf->Cell(0, 15, utf8_decode("EEEP Salaberga Torquato Gomes de Matos"), 0, 1, 'L');
+        $pdf->Cell(0, 25, utf8_decode("EEEP Salaberga Torquato Gomes de Matos"), 0, 1, 'L');
 
         // Data de geração
         $pdf->SetXY($pdf->GetPageWidth() - 200, 30);
@@ -2511,7 +2570,7 @@ class relatorios extends connection
             COUNT(*) as total_produtos,
             SUM(CASE WHEN quantidade <= 5 THEN 1 ELSE 0 END) as produtos_criticos,
             COUNT(DISTINCT natureza) as total_categorias
-            FROM produtos WHERE barcode LIKE 'SC_%' ORDER BY natureza, nome_produto";
+            FROM produtos WHERE barcode LIKE 'SCB_%' ORDER BY natureza, nome_produto";
         $queryResumo = $this->pdo->prepare($consultaResumo);
         $queryResumo->execute();
         $resumo = $queryResumo->fetch(PDO::FETCH_ASSOC);
@@ -2781,7 +2840,7 @@ class relatorios extends connection
         }
 
         // Saída do PDF
-        $pdf->Output("relatorio_produtos_sc.pdf", "I");
+        $pdf->Output("relatorio_produtos_sem_codigo.pdf", "I");
     }
 
     public function exportarRelatorioProdutosPorData($data_inicio, $data_fim)
