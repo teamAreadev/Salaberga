@@ -443,7 +443,7 @@
         <h1 class="text-primary text-3xl md:text-4xl font-bold mb-12 md:mb-16 text-center page-title tracking-tight font-heading">GERENCIAMENTO DE ESTOQUE</h1>
 
         <div class="w-full max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 px-4 justify-center">
-            <a href="../estoque.php" class="group animate-fade-in">
+            <a href="../view/estoque.php" class="group animate-fade-in">
                 <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
                     <div class="card-shine"></div>
                     <div class="card-badge absolute top-0 right-0 bg-accent w-10 h-10 md:w-12 md:h-12 rounded-bl-xl md:rounded-bl-2xl rounded-tr-xl md:rounded-tr-2xl flex items-center justify-center">
