@@ -291,6 +291,7 @@
                     opacity: 0;
                     transform: translateY(-20px);
                 }
+
                 to {
                     opacity: 1;
                     transform: translateY(0);
@@ -395,12 +396,12 @@
                     <i class="fas fa-plus-circle mr-2"></i>
                     <span>Adicionar</span>
                 </a>
-            
-                    <a href="solicitar.php" class="header-nav-link flex items-center cursor-pointer">
-                        <i class="fas fa-clipboard-list mr-2"></i>
-                        <span>Solicitar</span>
-                      
-                    </a>
+
+                <a href="solicitar.php" class="header-nav-link flex items-center cursor-pointer">
+                    <i class="fas fa-clipboard-list mr-2"></i>
+                    <span>Solicitar</span>
+
+                </a>
                 <a href="relatorios.php" class="header-nav-link flex items-center">
                     <i class="fas fa-chart-bar mr-2"></i>
                     <span>Relatórios</span>
@@ -438,7 +439,7 @@
                             class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                             aria-label="Código de barras do produto">
                     </div>
-                    
+
                     <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
                         aria-label="Adicionar produto">
                         CADASTRAR
@@ -488,22 +489,22 @@
                         Dev Team
                     </h3>
                     <div class="grid grid-cols-2 gap-2">
-                        <a 
+                        <a
                             class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
                             Matheus Felix
                         </a>
-                        <a 
+                        <a
                             class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
-                           Roger Cavalcante
+                            Roger Cavalcante
                         </a>
-                        <a 
+                        <a
                             class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
                             Matheus Machado
                         </a>
-                     
+
                     </div>
                 </div>
             </div>
@@ -630,9 +631,14 @@
             function updateInputField() {
                 if (comCodigoRadio.checked) {
                     // Produto com código
-                    inputField.placeholder = "BARCODE";
+                    inputField.placeholder = "BARCODE"; // Já está maiúsculo conforme o código original
                     inputField.name = "barcode";
-                    inputField.setAttribute('aria-label', 'Código de barras do produto');
+                    inputField.setAttribute('aria-label', 'CÓDIGO DE BARRAS DO PRODUTO');
+
+                    // Forçar texto em maiúsculas durante a digitação
+                    inputField.addEventListener('input', function() {
+                        this.value = this.value.toUpperCase();
+                    });
                 } else {
                     // Produto sem código
                     inputField.placeholder = "NOME DO PRODUTO";
