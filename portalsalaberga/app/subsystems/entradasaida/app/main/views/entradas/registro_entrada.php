@@ -15,6 +15,9 @@ $select = new select_model;
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     
     <script>
         tailwind.config = {
@@ -422,6 +425,16 @@ $select = new select_model;
     </footer>
 
     <script>
+           $(document).ready(function() {
+            $('.js-example-basic-single').select2({
+                placeholder: 'Selecione o aluno',
+                allowClear: true,
+                dropdownParent: $('body'),
+                width: '100%',
+                language: 'pt-BR',
+                minimumResultsForSearch: 0
+            });
+        });
         // Custom Select Functionality
         document.addEventListener('DOMContentLoaded', function() {
             const selectTrigger = document.getElementById('select-trigger');
