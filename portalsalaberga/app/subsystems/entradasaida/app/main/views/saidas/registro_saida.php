@@ -15,6 +15,10 @@ $select = new select_model;
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     
     <script>
         tailwind.config = {
@@ -317,10 +321,13 @@ $select = new select_model;
                                 </label>
                                 <select id="id_tipo_responsavel" name="id_tipo_responsavel" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green form-select" required>
                                     <option value="" disabled selected>Selecione o tipo</option>
-                                    <option value="1">Mãe</option>
-                                    <option value="2">Pai</option>
-                                    <option value="3">Responsável</option>
-                                    <option value="4">Parentes de 1° grau</option>
+                                    <?php
+                                    $dados = $select->select_responsavel();
+                                    foreach ($dados as $dado) {
+                                    ?>
+
+                                        <option value="<?=$dado['id_tipo_responsavel']?>"><?=$dado['tipo']?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -347,9 +354,13 @@ $select = new select_model;
                                 </label>
                                 <select id="id_tipo_conducente" name="id_tipo_conducente" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green form-select">
                                     <option value="" disabled selected>Selecione o tipo</option>
-                                    <option value="1">Uber</option>
-                                    <option value="2">Responsável</option>
-                                    <option value="3">Amigo(a)</option>
+                                    <?php
+                                    $dados = $select->select_conducente();
+                                    foreach ($dados as $dado) {
+                                    ?>
+
+                                        <option value="<?=$dado['id_tipo_conducente']?>"><?=$dado['tipo']?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -368,10 +379,13 @@ $select = new select_model;
                                 </label>
                                 <select id="id_motivo" name="id_motivo" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green form-select" required>
                                     <option value="" disabled selected>Selecione o motivo</option>
-                                    <option value="1">Saúde</option>
-                                    <option value="2">Imprevisto</option>
-                                    <option value="3">Compromisso Pessoal</option>
-                                    <option value="4">Outros</option>
+                                    <?php
+                                    $dados = $select->select_motivo();
+                                    foreach ($dados as $dado) {
+                                    ?>
+
+                                        <option value="<?=$dado['id_motivo']?>"><?=$dado['motivo']?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -380,11 +394,13 @@ $select = new select_model;
                                 </label>
                                 <select id="id_usuario" name="id_usuario" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green form-select" required>
                                     <option value="" disabled selected>Selecione o administrador</option>
-                                    <option value="1">Rosana</option>
-                                    <option value="2">Adriana</option>
-                                    <option value="3">Carlos Henrique</option>
-                                    <option value="4">Reginaldo</option>
-                                    <option value="5">Cícero</option>
+                                    <?php
+                                    $dados = $select->select_funcionario();
+                                    foreach ($dados as $dado) {
+                                    ?>
+
+                                        <option value="<?=$dado['id_funcionario']?>"><?=$dado['nome']?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>

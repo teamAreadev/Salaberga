@@ -154,7 +154,7 @@
                             <i class="fas fa-users text-xl"></i>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-900">Relatório Geral de Alunos por Dia</h3>
+                            <h3 class="font-semibold text-gray-900">Relatório de Saídas-Estágio no dia especifico</h3>
                             <p class="text-sm text-gray-500">Visualize informações gerais sobre todos os alunos por dia</p>
                         </div>
                     </div>
