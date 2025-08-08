@@ -1,50 +1,79 @@
 <?php
 
 require_once '../model/model_indexClass.php';
+print_r($_POST);
 
-//CADASTRAR ALUNO
+//entradas
+
 if (
-    isset($_POST['cadastrar']) &&
-    isset($_POST['id_turma']) && !empty($_POST['id_turma']) &&
-    isset($_POST['matricula']) && !empty($_POST['matricula']) &&
-    isset($_POST['nome']) && !empty($_POST['nome']) &&
-    isset($_POST['id_curso']) && !empty($_POST['id_curso'])
-    ) {
-    $id_turma = $_POST['id_turma'];
-    $matricula = $_POST['matricula'];
-    $nome = $_POST['nome'];
-    $id_curso = $_POST['id_curso'];
+    isset($_POST['id_aluno']) && !empty(trim($_POST['id_aluno'])) &&
+    isset($_POST['nome_responsavel']) && !empty(trim($_POST['nome_responsavel'])) &&
+    isset($_POST['id_tipo_responsavel']) && !empty(trim($_POST['id_tipo_responsavel'])) &&
+    isset($_POST['nome_conducente']) && !empty(trim($_POST['nome_conducente'])) &&
+    isset($_POST['id_tipo_conducente']) && !empty(trim($_POST['id_tipo_conducente'])) &&
+    isset($_POST['id_motivo']) && !empty(trim($_POST['id_motivo'])) &&
+    isset($_POST['id_usuario']) && !empty(trim($_POST['id_usuario'])) &&
+    isset($_POST['data']) && !empty(trim($_POST['data'])) &&
+    isset($_POST['hora']) && !empty(trim($_POST['hora']))
+) {
+    // Atribui os valores do $_POST às variáveis
+    $id_aluno = trim($_POST['id_aluno']);
+    $nome_responsavel = trim($_POST['nome_responsavel']);
+    $id_tipo_responsavel = trim($_POST['id_tipo_responsavel']);
+    $nome_conducente = trim($_POST['nome_conducente']);
+    $id_tipo_conducente = trim($_POST['id_tipo_conducente']);
+    $id_motivo = trim($_POST['id_motivo']);
+    $id_usuario = trim($_POST['id_usuario']);
+    $data = trim($_POST['data']);
+    $hora = trim($_POST['hora']);
 
-    $main_model = new MainModel();
-    $result = $main_model->cadastrar($id_turma, $matricula, $nome, $id_curso);
-    
+    // Combina data e hora no formato Y-m-d H:i:s
+    $date_time = $data . ' ' . $hora . ':00';
+
+    // Instancia o modelo e registra a entrada
+    $obj = new MainModel();
+    $result = $obj->registrarEntrada(
+        nome_responsavel: $nome_responsavel,
+        nome_conducente: $nome_conducente,
+        id_tipo_conducente: $id_tipo_conducente,
+        id_tipo_responsavel: $id_tipo_responsavel,
+        date_time: $date_time,
+        id_motivo: $id_motivo,
+        id_usuario: $id_usuario,
+        id_aluno: $id_aluno
+    );
+
+    // Redireciona com base no resultado
     switch ($result) {
+        case 0:
+            header('Location: ../views/entradas/registro_entrada.php?status=success');
+            exit();
         case 1:
-            header('location: ../views/cadastrar_aluno.php?aluno_cadastrado');
+            header('Location: ../views/entradas/registro_entrada.php?status=ja_registrado');
             exit();
         case 2:
-            header('location: ../views/cadastrar_aluno.php?erro');
+            header('Location: ../views/entradas/registro_entrada.php?status=aluno_nao_encontrado');
             exit();
         case 3:
-            header('location: ../views/cadastrar_aluno.php?ja_cadastrado');
+            header('Location: ../views/entradas/registro_entrada.php?status=erro_interno');
             exit();
-
         default:
-        header('location: ../views/inicio.php');
-        exit();
+            header('Location: ../views/entradas/registro_entrada.php?status=erro_desconhecido');
+            exit();
     }
 }
+
 //registro saida-estagio//
 else if (isset($_POST['id_aluno']) && !empty($_POST['id_aluno']) && isset($_POST['data']) && !empty($_POST['data']) && isset($_POST['hora']) && !empty($_POST['hora'])) {
-    
+
     $id_aluno = $_POST['id_aluno'];
     $data = $_POST['data'];
     $hora = $_POST['hora'];
 
     $date_time = $data . ' ' . $hora;
 
-   $obj = new MainModel();
-   $result = $obj->registrarSaidaEstagio($id_aluno, $date_time);
+    $obj = new MainModel();
+    $result = $obj->registrarSaidaEstagio($id_aluno, $date_time);
 
     switch ($result) {
         case 0:
@@ -92,33 +121,8 @@ else if (isset($_POST['saida'])) {
     exit();
 }
 
-//entradas
-else if (isset($_POST['entrada'])) {
-    $nome_responsavel = $_POST['nome_responsavel'];
-    $nome_conducente = $_POST['nome_conducente'] ?? '';
-    $id_tipo_conducente = !empty($_POST['id_tipo_conducente']) && is_numeric($_POST['id_tipo_conducente']) ? (int)$_POST['id_tipo_conducente'] : null;
-    $id_tipo_responsavel = $_POST['id_tipo_responsavel'];
-    $data = $_POST['data'];
-    $hora = $_POST['hora'];
-    $id_motivo = $_POST['id_motivo'];
-    $id_usuario = $_POST['id_usuario'];
-    $id_aluno = $_POST['id_aluno'];
 
-    $date_time = $data . ' ' . $hora . ':00';
 
-    if (!DateTime::createFromFormat(format: 'Y-m-d H:i:s', datetime: $date_time)) {
-        echo "Formato de data e hora inválido!";
-        exit;
-    }
-
-    $obj = new MainModel();
-    if ($obj->registrarEntrada(nome_responsavel: $nome_responsavel, nome_conducente: $nome_conducente, id_tipo_conducente: $id_tipo_conducente, id_tipo_responsavel: $id_tipo_responsavel, date_time: $date_time, id_motivo: $id_motivo, id_usuario: $id_usuario, id_aluno: $id_aluno)) {
-        echo "Registro salvo com sucesso!";
-    } else {
-        echo "Falha ao salvar o registro.";
-    }
-    exit();
-}
 
 //relatorios 
 else if (isset($_POST['GerarRelatorio']) && isset($_POST['tipo_relatorio'])) {
@@ -204,5 +208,6 @@ else if (isset($_POST['GerarRelatorio']) && isset($_POST['tipo_relatorio'])) {
             return;
     }
 } else {
-    echo "Selecione um tipo de relatório e clique em Gerar!";
+    /*header('location:../views/inicio.php');
+    exit();*/
 }

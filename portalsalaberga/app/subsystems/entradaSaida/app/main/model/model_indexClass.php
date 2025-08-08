@@ -93,30 +93,67 @@ class MainModel extends connect
         }
     }
 
-    public function registrarEntrada($nome_responsavel, $nome_conducente, $id_tipo_conducente, $id_tipo_responsavel, $date_time, $id_motivo, $id_usuario, $id_aluno)
+
+    public function registrarEntrada($nome_responsavel,
+        $nome_conducente,
+         $id_tipo_conducente,
+         $id_tipo_responsavel,
+         $date_time,
+         $id_motivo,
+         $id_usuario,
+     $id_aluno
+    )
     {
-        try {
-            // Conexão com o banco de dados
-            $registrar = "INSERT INTO registro_entrada VALUES (NULL, :nome_responsavel, :nome_conducente, :id_tipo_conducente, :id_tipo_responsavel, :date_time, :id_motivo, :id_usuario, :id_aluno)";
-            $query = $this->connect->prepare($registrar);
+        /*try {
+            // Verifica se o aluno existe na tabela aluno com base no nome
+            $verificarAluno = "SELECT id_aluno FROM aluno WHERE nome = :nome";
+            $queryVerificar = $this->connect->prepare($verificarAluno);
+            $queryVerificar->bindValue(":nome", $aluno, PDO::PARAM_STR);
+            $queryVerificar->execute();
 
-            $query->bindValue(":nome_responsavel", $nome_responsavel);
-            $query->bindValue(":nome_conducente", $nome_conducente);
-            $query->bindValue(":id_tipo_conducente", $id_tipo_conducente);
-            $query->bindValue("id_tipo_responsavel", $id_tipo_responsavel);
-            $query->bindValue(":date_time", $date_time);
-            $query->bindValue(":id_motivo", $id_motivo);
-            $query->bindValue(":id_usuario", $id_usuario);
-            $query->bindValue(":id_aluno", $id_aluno);
+            $verificarAluno = "SELECT id_aluno FROM aluno WHERE id_aluno = :id_aluno";
+            $queryVerificar_id = $this->connect->prepare($verificarAluno);
+            $queryVerificar_id->bindValue(":id_aluno", $aluno, PDO::PARAM_INT);
+            $queryVerificar_id->execute();
 
-            $query->execute();
+            // Verifica se o aluno foi encontrado
+            if ($queryVerificar->rowCount() > 0 || $queryVerificar_id->rowCount() > 0) {
+                // Recupera o id_aluno
+                $row2 = $queryVerificar_id->fetch(PDO::FETCH_ASSOC);
+                $row = $queryVerificar->fetch(PDO::FETCH_ASSOC);
+                $id_aluno = $row['id_aluno'] ?? $row2['id_aluno'];
 
-            return true;
+                // Verifica se o aluno já foi registrado hoje
+                $verificarRegistro = "SELECT id_aluno FROM saida_estagio 
+                                    WHERE id_aluno = :id_aluno 
+                                    AND DATE(dae) = CURDATE()";
+                $queryVerificarRegistro = $this->connect->prepare($verificarRegistro);
+                $queryVerificarRegistro->bindValue(":id_aluno", $id_aluno, PDO::PARAM_INT);
+                $queryVerificarRegistro->execute();
+
+                if ($queryVerificarRegistro->rowCount() > 0) {
+
+                    return 1;
+                }
+
+                // Query SQL para inserir id_aluno e date_time na coluna dae
+                $registrar = "INSERT INTO saida_estagio (id_aluno, dae) VALUES (:id_aluno, :dae)";
+                $query = $this->connect->prepare($registrar);
+
+                // Vincula os parâmetros
+                $query->bindValue(":id_aluno", $id_aluno, PDO::PARAM_INT);
+                $query->bindValue(":dae", $date_time, PDO::PARAM_STR);
+
+                $query->execute();
+
+                return 0; 
+            } else {
+
+                return 2;
+            }
         } catch (PDOException $e) {
-
-            echo "Erro: " . $e->getMessage();
-            return false;
-        }
+            return 3;
+        }*/
     }
     public function registrarSaidaEstagio($aluno, $date_time)
     {
