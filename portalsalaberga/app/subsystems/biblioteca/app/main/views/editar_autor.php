@@ -148,38 +148,6 @@ $select_model = new select_model();
             background-color: #e6f3ed;
             color: #007A33;
         }
-        /* Customização extra para o Select2 do campo de autor */
-        .select2-container--default .select2-selection--single {
-            background-color: #fff;
-            border: 2px solid #e5e7eb;
-            border-radius: 0.75rem;
-            min-height: 48px;
-            padding: 8px 16px;
-            font-size: 1.125rem;
-            color: #374151;
-            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03);
-            transition: border 0.2s, box-shadow 0.2s;
-        }
-        .select2-container--default .select2-selection--single:focus,
-        .select2-container--default .select2-selection--single.select2-selection--focus {
-            border-color: #007A33;
-            box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.15);
-        }
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: #374151;
-            font-size: 1.125rem;
-            line-height: 2.25rem;
-            padding-left: 0;
-        }
-        .select2-container--default .select2-selection--single .select2-selection__placeholder {
-            color: #9ca3af;
-            font-size: 1.125rem;
-            opacity: 1;
-        }
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 48px;
-            right: 8px;
-        }
     </style>
 </head>
 
@@ -195,28 +163,31 @@ $select_model = new select_model();
         <img src="../assets/img/logo1.png"
             class="w-[200px] sm:w-[250px] md:w-[300px] mx-auto mb-8 drop-shadow-xl hover:scale-105 transition-transform duration-300"
             alt="Logo">
-        <div class="bg-white/90 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 transition-all duration-300 hover:shadow-2xl mt-8 mb-12">
-            <div class="bg-gradient-ceara p-8 flex flex-col items-center">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-white text-center tracking-wide drop-shadow-lg flex items-center gap-3">
-                    <i class="fas fa-user-edit"></i> Editar Autor
+        <div class="bg-white rounded-xl shadow-custom overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg">
+            <div class="bg-gradient-ceara p-6 sm:p-8">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center tracking-wide">
+                    <i class="fas fa-user-edit mr-3"></i>Editar Autor
                 </h2>
             </div>
-            <form id="editAuthorForm" action="../controllers/excluir_editar_livro.php" method="post" class="p-8 md:p-12 space-y-8">
+
+            <form id="editAuthorForm" action="../controllers/excluir_editar_livro.php" method="post" class="p-6 sm:p-8">
                 <div class="mb-8">
-                    <div class="flex justify-center border-b border-gray-200 pb-2">
+                    <div class="flex border-b border-gray-200">
                         <button type="button"
-                            class="tab-button py-2 px-6 font-semibold text-ceara-green border-b-2 border-ceara-green cursor-default active text-lg bg-gray-50 rounded-t-lg shadow-sm"
+                            class="tab-button py-2 px-4 font-medium text-ceara-green border-b-2 border-ceara-green cursor-default active"
                             data-tab="search-author">Buscar Autor</button>
                     </div>
                 </div>
+
                 <div id="validationMessage" class="hidden"></div>
-                <div id="search-author" class="tab-content space-y-8">
-                    <div class="space-y-8">
+
+                <div id="search-author" class="tab-content space-y-6">
+                    <div class="space-y-6">
                         <!-- Campo de Busca -->
                         <div class="relative">
-                          
+                            <label for="searchAuthor" class="block text-sm font-medium text-gray-700 mb-1">Buscar Autor</label>
                             <div class="relative">
-                                <select class="js-example-basic-single border-2 border-gray-200 rounded-lg px-5 py-3 w-full focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none text-lg bg-white text-gray-700 transition-all duration-200" name="id_autor">
+                                <select class="js-example-basic-single" name="id_autor">
                                     <option value="" selected disabled>Selecione um autor para editar</option>
                                     <?php
                                     $autores = $select_model->select_nome_autor();
@@ -230,50 +201,61 @@ $select_model = new select_model();
                                 </select>
                             </div>
                         </div>
+
                         <!-- Formulário de Edição -->
-                        <div id="editForm" class="hidden mt-8 space-y-8">
-                            <div class="bg-gray-50 rounded-2xl p-8 border border-gray-200 shadow-inner">
-                                <h3 class="text-xl font-bold text-ceara-green mb-6 flex items-center gap-2"><i class="fas fa-id-card-alt"></i> Informações do Autor</h3>
+                        <div id="editForm" class="hidden mt-6 space-y-6">
+                            <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Editar Informações do Autor</h3>
+
                                 <!-- Nome e Sobrenome -->
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                     <div>
-                                        <label for="editNome" class="block text-base font-medium text-gray-700 mb-2">Nome</label>
-                                        <input type="text" id="editNome" name="nome" class="w-full px-5 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-700 placeholder-gray-400 transition-all duration-200 text-lg">
+                                        <label for="editNome" class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+                                        <input type="text" id="editNome" name="nome" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
                                     </div>
                                     <div>
-                                        <label for="editSobrenome" class="block text-base font-medium text-gray-700 mb-2">Sobrenome</label>
-                                        <input type="text" id="editSobrenome" name="sobrenome" class="w-full px-5 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-700 placeholder-gray-400 transition-all duration-200 text-lg">
+                                        <label for="editSobrenome" class="block text-sm font-medium text-gray-700 mb-1">Sobrenome</label>
+                                        <input type="text" id="editSobrenome" name="sobrenome" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
                                     </div>
                                 </div>
+
                                 <!-- Botões de Ação -->
-                                <div class="flex flex-col md:flex-row gap-4 mt-6">
+                                <div class="flex space-x-4">
                                     <button type="submit" name="action" value="edit"
-                                        class="flex-1 bg-ceara-green hover:bg-ceara-green-dark text-white font-bold py-4 px-6 rounded-lg transition duration-300 ease-in-out hover:shadow-lg flex items-center justify-center text-lg shadow-md">
+                                        class="flex-1 bg-ceara-green hover:bg-ceara-green-dark text-white font-medium py-4 px-6 rounded-lg transition duration-300 ease-in-out hover:shadow-lg flex items-center justify-center text-lg shadow-md">
                                         <i class="fas fa-save mr-3"></i>
                                         Salvar Alterações
                                     </button>
                                     <button type="button" id="cancelEdit"
-                                        class="flex-1 bg-gray-400 hover:bg-gray-600 text-white font-bold py-4 px-6 rounded-lg transition duration-300 ease-in-out hover:shadow-lg flex items-center justify-center text-lg shadow-md">
+                                        class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-medium py-4 px-6 rounded-lg transition duration-300 ease-in-out hover:shadow-lg flex items-center justify-center text-lg shadow-md">
                                         <i class="fas fa-times mr-3"></i>
                                         Cancelar
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <!-- Botão de Editar Principal -->
+
+                        <!-- Botão de Exclusão -->
+                        <button type="submit" name="action" value="delete"
+                            class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-4 px-6 rounded-lg transition duration-300 ease-in-out hover:shadow-lg flex items-center justify-center text-lg shadow-md">
+                            <i class="fas fa-trash-alt mr-3"></i>
+                            Excluir Autor
+                        </button>
                     </div>
+
                     <?php if (isset($_GET['true'])): ?>
                         <div class="flex items-center p-4 mb-4 text-green-800 border-l-4 border-green-500 bg-green-50 rounded-md"
                             role="alert">
                             <i class="fas fa-check-circle text-xl mr-3"></i>
-                            <span class="text-base font-semibold">Autor editado com sucesso!</span>
+                            <span class="text-sm font-medium">Autor editado com sucesso!</span>
                         </div>
                     <?php endif; ?>
+
                     <?php if (isset($_GET['error'])): ?>
                         <div class="flex items-center p-4 mb-4 text-red-800 border-l-4 border-red-500 bg-red-50 rounded-md"
                             role="alert">
                             <i class="fas fa-exclamation-circle text-xl mr-3"></i>
-                            <span class="text-base font-semibold">ERRO ao editar autor!</span>
+                            <span class="text-sm font-medium">ERRO ao editar autor!</span>
                         </div>
                     <?php endif; ?>
                 </div>
