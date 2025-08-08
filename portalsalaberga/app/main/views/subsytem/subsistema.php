@@ -4,6 +4,7 @@ require_once('../../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 
+
 if (isset($_GET['sair'])) {
     $session->quebra_session();
 }
@@ -79,7 +80,7 @@ $alwaysVisibleCards = [
 $systemPermissionCardMap = [
     // Entradas para outros sistemas (manter as que parecem corretas)
     'Entrada/saída_usuario(1)' => [
-        'url' => '#',
+        'url' => '../../../subsystems/entradasaida/app/main/views/inicio.php',
         'image' => '../../assets/img/logos_sistemas/entrada e saida.png',
         'name' => 'Entrada/saída',
         'category' => 'Sistema'
@@ -193,7 +194,7 @@ $systemPermissionCardMap = [
         'category' => 'Sistema'
     ],
     'Estoque_adm(10)' => [
-        'url' => '../../../subsystems/ControledeEstoque/default.php',
+        'url' => '../../../subsystems/ControledeEstoque/app/main/view/paginainicial.php',
         'image' => '../../assets/img/logos_sistemas/estoque.png',
         'name' => 'Controler de estoque (Admin)',
         'category' => 'Sistema'

@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
+    <?php
+        require_once('../model/sessions.php');
+        $session = new sessions();
+        $session->autenticar_session();
+        
+    ?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -430,7 +435,7 @@
                     <i class="fas fa-chart-bar mr-2"></i>
                     <span>Relatórios</span>
                 </a>
-                <a href="https://salaberga.com/salaberga/portalsalaberga/app/main/views/autenticacao/login.php" class="header-nav-link flex items-center text-sm md:text-base ml-4">
+                <a href="../model/sessions.php?sair" class="header-nav-link flex items-center text-sm md:text-base ml-4">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     <span>Sair</span>
                 </a>
