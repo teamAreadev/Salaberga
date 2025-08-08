@@ -1,5 +1,4 @@
 
-
 <?php
 // Processar mensagens de URL
 $mensagem = '';
@@ -174,7 +173,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                                 echo '<button onclick="abrirModalEditar(' . $produto['id'] . ')" class="text-primary hover:text-secondary mr-2" title="Editar">';
                                 echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>';
                                 echo '</button>';
-                                echo '<button onclick="abrirModalExcluir(' . $produto['id'] . ', \' ' . htmlspecialchars(addslashes($produto['nome_produto'])) . '\')" class="text-red-500 hover:text-red-700" title="Excluir">';
+                                echo '<button onclick="abrirModalExcluir(' . $produto['id'] . ', \'' . htmlspecialchars(addslashes($produto['nome_produto'])) . '\')" class="text-red-500 hover:text-red-700" title="Excluir">';
                                 echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>';
                                 echo '</button>';
                                 echo '</td>';
@@ -205,14 +204,14 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     echo '<h3 class="font-bold text-lg text-primary mb-1">' . htmlspecialchars($produto['nome_produto']) . '</h3>';
                     echo '<div class="flex flex-col space-y-1">';
                     echo '<p class="text-sm text-gray-500 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg><span>' . htmlspecialchars($produto['barcode']) . '</span></p>';
-                    echo '<p class="text-sm flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg><span class="' . $quantidadeClass . '">Quantidade: ' . htmlspecialchars($produto['quantidade']) . '</span></p>';
+                    echo '<p class="text-sm flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3v8a3 3 0 003 3z" /></svg><span class="' . $quantidadeClass . '">Quantidade: ' . htmlspecialchars($produto['quantidade']) . '</span></p>';
                     echo '<p class="text-sm text-gray-500 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg><span>Cadastrado: ' . date('d/m/Y H:i', strtotime($produto['data'])) . '</span></p>';
                     echo '</div></div>';
                     echo '<div class="flex space-x-1">';
                     echo '<button onclick="abrirModalEditar(' . $produto['id'] . ')" class="text-primary hover:text-secondary p-1 rounded-full bg-gray-50" title="Editar">';
                     echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>';
                     echo '</button>';
-                    echo '<button onclick="abrirModalExcluir(' . $produto['id'] . ', \' ' . htmlspecialchars(addslashes($produto['nome_produto'])) . '\')" class="text-red-500 hover:text-red-700 p-1 rounded-full bg-gray-50" title="Excluir">';
+                    echo '<button onclick="abrirModalExcluir(' . $produto['id'] . ', \'' . htmlspecialchars(addslashes($produto['nome_produto'])) . '\')" class="text-red-500 hover:text-red-700 p-1 rounded-full bg-gray-50" title="Excluir">';
                     echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>';
                     echo '</button>';
                     echo '</div></div></div>';
@@ -329,232 +328,279 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         </div>
     </footer>
     <script>
-    // JS para menu mobile, modais, filtro, alerta, etc. (igual ao model.functions.php)
     document.addEventListener('DOMContentLoaded', function() {
-        // Mostrar alerta se houver mensagem
-        <?php if ($mostrarAlerta): ?>
+    // Verificar se os elementos do alerta existem
+    const alerta = document.getElementById('alertaMensagem');
+    const mensagemTexto = document.getElementById('mensagemTexto');
+    const alertaIcon = document.getElementById('alertaIcon');
+    console.log('Elementos do alerta encontrados:', {
+        alerta: !!alerta,
+        mensagemTexto: !!mensagemTexto,
+        alertaIcon: !!alertaIcon
+    });
+
+    // Mostrar alerta se houver mensagem
+    <?php if ($mostrarAlerta): ?>
+    console.log('Inicializando alerta com mensagem: "<?php echo addslashes($mensagem); ?>", tipo: "<?php echo $tipoMensagem; ?>"');
+    try {
         mostrarAlerta('<?php echo addslashes($mensagem); ?>', '<?php echo $tipoMensagem; ?>');
-        <?php endif; ?>
-        // Menu mobile toggle
-        const menuButton = document.getElementById('menuButton');
-        const headerNav = document.getElementById('headerNav');
-        if (menuButton && headerNav) {
-            menuButton.addEventListener('click', function(e) {
-                e.stopPropagation();
-                headerNav.classList.toggle('show');
+    } catch (error) {
+        console.error('Erro ao inicializar alerta:', error);
+    }
+    <?php endif; ?>
+
+    // Menu mobile toggle
+    const menuButton = document.getElementById('menuButton');
+    const headerNav = document.getElementById('headerNav');
+    if (menuButton && headerNav) {
+        menuButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            headerNav.classList.toggle('show');
+            const spans = menuButton.querySelectorAll('span');
+            spans.forEach(span => { span.classList.toggle('active'); });
+            document.body.style.overflow = headerNav.classList.contains('show') ? 'hidden' : '';
+        });
+        // Fechar menu ao clicar em um link
+        const navLinks = headerNav.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                headerNav.classList.remove('show');
                 const spans = menuButton.querySelectorAll('span');
-                spans.forEach(span => { span.classList.toggle('active'); });
-                document.body.style.overflow = headerNav.classList.contains('show') ? 'hidden' : '';
+                spans.forEach(span => { span.classList.remove('active'); });
+                document.body.style.overflow = '';
             });
-            // Fechar menu ao clicar em um link
-            const navLinks = headerNav.querySelectorAll('a');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    headerNav.classList.remove('show');
-                    const spans = menuButton.querySelectorAll('span');
-                    spans.forEach(span => { span.classList.remove('active'); });
-                    document.body.style.overflow = '';
-                });
-            });
-            // Fechar menu ao clicar fora
-            document.addEventListener('click', function(e) {
-                if (!headerNav.contains(e.target) && !menuButton.contains(e.target)) {
-                    headerNav.classList.remove('show');
-                    const spans = menuButton.querySelectorAll('span');
-                    spans.forEach(span => { span.classList.remove('active'); });
-                    document.body.style.overflow = '';
-                }
-            });
-            // Fechar menu ao pressionar ESC
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && headerNav.classList.contains('show')) {
-                    headerNav.classList.remove('show');
-                    const spans = menuButton.querySelectorAll('span');
-                    spans.forEach(span => { span.classList.remove('active'); });
-                    document.body.style.overflow = '';
-                }
-            });
-        }
-        // Filtro de produtos (desktop e mobile)
-        const pesquisarInput = document.getElementById('pesquisar');
-        const filtroCategoria = document.getElementById('filtroCategoria');
-        const tabelaEstoque = document.getElementById('tabelaEstoque');
-        if (pesquisarInput && filtroCategoria && tabelaEstoque) {
-            pesquisarInput.addEventListener('input', filtrarProdutos);
-            filtroCategoria.addEventListener('change', filtrarProdutos);
-            function filtrarProdutos() {
-                const termo = pesquisarInput.value.toLowerCase();
-                const categoria = filtroCategoria.value.toLowerCase();
-                // Filtrar linhas da tabela
-                const linhas = tabelaEstoque.querySelectorAll('tr');
-                linhas.forEach(linha => {
-                    const colunas = linha.querySelectorAll('td');
-                    if (colunas.length > 0) {
-                        const nome = colunas[1].textContent.toLowerCase();
-                        const cat = colunas[3].textContent.toLowerCase();
-                        const matchTermo = nome.includes(termo);
-                        const matchCategoria = categoria === '' || cat === categoria;
-                        linha.style.display = matchTermo && matchCategoria ? '' : 'none';
-                    }
-                });
-            }
-        }
-        // Modais de edição/exclusão
-        window.abrirModalEditar = function(id) {
-            // Buscar dados do produto via AJAX
-            fetch('../control/controllerEditarProduto.php?id=' + id)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.erro) {
-                        alert('Erro ao carregar dados do produto: ' + data.erro);
-                        return;
-                    }
-                    
-                    // Preencher campos do modal
-                    document.getElementById('editar_id').value = data.id;
-                    document.getElementById('editar_barcode').value = data.barcode;
-                    document.getElementById('editar_nome').value = data.nome_produto;
-                    document.getElementById('editar_quantidade').value = data.quantidade;
-                    document.getElementById('editar_natureza').value = data.natureza;
-                    
-                    // Mostrar modal
-                    document.getElementById('modalEditar').classList.remove('hidden');
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar dados do produto:', error);
-                    alert('Erro ao carregar dados do produto');
-                });
-        };
-        window.fecharModalEditar = function() {
-            // Limpar formulário
-            document.getElementById('formEditar').reset();
-            
-            // Limpar campos específicos
-            document.getElementById('editar_id').value = '';
-            document.getElementById('editar_barcode').value = '';
-            document.getElementById('editar_nome').value = '';
-            document.getElementById('editar_quantidade').value = '';
-            document.getElementById('editar_natureza').value = '';
-            
-            // Fechar modal
-            document.getElementById('modalEditar').classList.add('hidden');
-        };
-        window.abrirModalExcluir = function(id, nome) {
-            document.getElementById('nomeProdutoExcluir').textContent = nome;
-            document.getElementById('linkExcluir').href = '../control/controllerApagarProduto.php?id=' + id;
-            document.getElementById('modalExcluir').classList.remove('hidden');
-        };
-        window.fecharModalExcluir = function() {
-            document.getElementById('modalExcluir').classList.add('hidden');
-        };
-        
-        // Fechar modais ao clicar fora
+        });
+        // Fechar menu ao clicar fora
         document.addEventListener('click', function(e) {
+            if (!headerNav.contains(e.target) && !menuButton.contains(e.target)) {
+                headerNav.classList.remove('show');
+                const spans = menuButton.querySelectorAll('span');
+                spans.forEach(span => { span.classList.remove('active'); });
+                document.body.style.overflow = '';
+            }
+        });
+        // Fechar menu ao pressionar ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && headerNav.classList.contains('show')) {
+                headerNav.classList.remove('show');
+                const spans = menuButton.querySelectorAll('span');
+                spans.forEach(span => { span.classList.remove('active'); });
+                document.body.style.overflow = '';
+            }
+        });
+    }
+
+    // Filtro de produtos (desktop e mobile)
+    const pesquisarInput = document.getElementById('pesquisar');
+    const filtroCategoria = document.getElementById('filtroCategoria');
+    const tabelaEstoque = document.getElementById('tabelaEstoque');
+    if (pesquisarInput && filtroCategoria && tabelaEstoque) {
+        pesquisarInput.addEventListener('input', filtrarProdutos);
+        filtroCategoria.addEventListener('change', filtrarProdutos);
+        function filtrarProdutos() {
+            const termo = pesquisarInput.value.toLowerCase();
+            const categoria = filtroCategoria.value.toLowerCase();
+            const linhas = tabelaEstoque.querySelectorAll('tr');
+            linhas.forEach(linha => {
+                const colunas = linha.querySelectorAll('td');
+                if (colunas.length > 0) {
+                    const nome = colunas[1].textContent.toLowerCase();
+                    const cat = colunas[3].textContent.toLowerCase();
+                    const matchTermo = nome.includes(termo);
+                    const matchCategoria = categoria === '' || cat === categoria;
+                    linha.style.display = matchTermo && matchCategoria ? '' : 'none';
+                }
+            });
+        }
+    }
+
+    // Modais de edição/exclusão
+    window.abrirModalEditar = function(id) {
+        console.log('Abrindo modal de edição para ID:', id);
+        fetch('../control/controllerEditarProduto.php?id=' + id)
+            .then(response => response.json())
+            .then(data => {
+                if (data.erro) {
+                    alert('Erro ao carregar dados do produto: ' + data.erro);
+                    return;
+                }
+                document.getElementById('editar_id').value = data.id;
+                document.getElementById('editar_barcode').value = data.barcode;
+                document.getElementById('editar_nome').value = data.nome_produto;
+                document.getElementById('editar_quantidade').value = data.quantidade;
+                document.getElementById('editar_natureza').value = data.natureza;
+                document.getElementById('modalEditar').classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Erro ao carregar dados do produto:', error);
+                alert('Erro ao carregar dados do produto');
+            });
+    };
+
+    window.fecharModalEditar = function() {
+        console.log('Fechando modal de edição');
+        document.getElementById('formEditar').reset();
+        document.getElementById('editar_id').value = '';
+        document.getElementById('editar_barcode').value = '';
+        document.getElementById('editar_nome').value = '';
+        document.getElementById('editar_quantidade').value = '';
+        document.getElementById('editar_natureza').value = '';
+        document.getElementById('modalEditar').classList.add('hidden');
+    };
+
+    window.abrirModalExcluir = function(id, nome) {
+        console.log('Tentando abrir modal de exclusão para ID:', id, 'Nome:', nome);
+        const modalExcluir = document.getElementById('modalExcluir');
+        const nomeProdutoExcluir = document.getElementById('nomeProdutoExcluir');
+        const linkExcluir = document.getElementById('linkExcluir');
+        
+        if (!modalExcluir || !nomeProdutoExcluir || !linkExcluir) {
+            console.error('Elementos do modal de exclusão não encontrados');
+            return;
+        }
+        
+        nomeProdutoExcluir.textContent = nome;
+        linkExcluir.href = '../control/controllerApagarProduto.php?id=' + id;
+        modalExcluir.classList.remove('hidden');
+        console.log('Modal de exclusão visível:', !modalExcluir.classList.contains('hidden'));
+    };
+
+    window.fecharModalExcluir = function() {
+        console.log('Fechando modal de exclusão');
+        document.getElementById('modalExcluir').classList.add('hidden');
+    };
+
+    // Fechar modais ao clicar fora, apenas no fundo do modal
+    document.addEventListener('click', function(e) {
+        const modalEditar = document.getElementById('modalEditar');
+        const modalExcluir = document.getElementById('modalExcluir');
+        
+        if (e.target === modalEditar) {
+            console.log('Clique fora do modal de edição');
+            fecharModalEditar();
+        }
+        if (e.target === modalExcluir) {
+            console.log('Clique fora do modal de exclusão');
+            fecharModalExcluir();
+        }
+    });
+
+    // Fechar modais ao pressionar ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
             const modalEditar = document.getElementById('modalEditar');
             const modalExcluir = document.getElementById('modalExcluir');
             
-            // Fechar modal de edição
-            if (e.target === modalEditar) {
+            if (modalEditar && !modalEditar.classList.contains('hidden')) {
+                console.log('Fechando modal de edição via ESC');
                 fecharModalEditar();
             }
-            
-            // Fechar modal de exclusão
-            if (e.target === modalExcluir) {
+            if (modalExcluir && !modalExcluir.classList.contains('hidden')) {
+                console.log('Fechando modal de exclusão via ESC');
                 fecharModalExcluir();
             }
-        });
+        }
+    });
+
+    // Função para mostrar alertas
+    window.mostrarAlerta = function(mensagem, tipo) {
+        console.log('Exibindo alerta:', mensagem, tipo);
+        const alerta = document.getElementById('alertaMensagem');
+        const mensagemTexto = document.getElementById('mensagemTexto');
+        const alertaIcon = document.getElementById('alertaIcon');
         
-        // Fechar modais ao pressionar ESC
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const modalEditar = document.getElementById('modalEditar');
-                const modalExcluir = document.getElementById('modalExcluir');
+        if (!alerta || !mensagemTexto || !alertaIcon) {
+            console.error('Elementos do alerta não encontrados:', {
+                alerta: !!alerta,
+                mensagemTexto: !!mensagemTexto,
+                alertaIcon: !!alertaIcon
+            });
+            return;
+        }
+        
+        mensagemTexto.textContent = mensagem;
+        
+        if (tipo === 'success') {
+            alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-green-500 text-white';
+            alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />';
+        } else if (tipo === 'error') {
+            alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-red-500 text-white';
+            alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />';
+        }
+        
+        alerta.classList.remove('hidden');
+        console.log('Alerta visível:', !alerta.classList.contains('hidden'));
+        
+        // Auto-hide após 5 segundos e limpar URL
+        setTimeout(() => {
+            console.log('Iniciando ocultação do alerta e limpeza da URL');
+            alerta.classList.add('hidden');
+            console.log('Alerta oculto:', alerta.classList.contains('hidden'));
+            
+            try {
+                // Tentar limpar a URL com pathname
+                const cleanUrl = window.location.pathname;
+                console.log('Tentando limpar URL para:', cleanUrl);
+                window.history.replaceState({}, document.title, cleanUrl);
+                console.log('URL após tentativa com pathname:', window.location.href);
                 
-                if (!modalEditar.classList.contains('hidden')) {
-                    fecharModalEditar();
+                // Verificar se a URL ainda contém parâmetros
+                if (window.location.search) {
+                    console.log('URL ainda contém parâmetros, tentando caminho fixo');
+                    const fixedUrl = '/GitHub/Salaberga/portalsalaberga/app/subsystems/ControledeEstoque/app/main/view/estoque.php';
+                    window.history.replaceState({}, document.title, fixedUrl);
+                    console.log('URL após tentativa com caminho fixo:', window.location.href);
                 }
-                
-                if (!modalExcluir.classList.contains('hidden')) {
-                    fecharModalExcluir();
-                }
+            } catch (error) {
+                console.error('Erro ao limpar URL:', error);
+                // Solução de contingência: recarregar a página sem parâmetros
+                console.log('Recarregando página como contingência');
+                window.location = '/GitHub/Salaberga/portalsalaberga/app/subsystems/ControledeEstoque/app/main/view/estoque.php';
             }
-        });
+        }, 5000);
+    };
+
+    // Função para enviar formulário de edição
+    window.enviarFormularioEdicao = function(event) {
+        event.preventDefault();
         
-        // Função para mostrar alertas
-        window.mostrarAlerta = function(mensagem, tipo) {
-            const alerta = document.getElementById('alertaMensagem');
-            const mensagemTexto = document.getElementById('mensagemTexto');
-            const alertaIcon = document.getElementById('alertaIcon');
-            
-            mensagemTexto.textContent = mensagem;
-            
-            if (tipo === 'success') {
-                alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-green-500 text-white';
-                alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />';
-            } else if (tipo === 'error') {
-                alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-red-500 text-white';
-                alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />';
-            }
-            
-            alerta.classList.remove('hidden');
-            
-            // Auto-hide após 5 segundos
-            setTimeout(() => {
-                alerta.classList.add('hidden');
-            }, 5000);
-        };
+        const form = event.target;
+        const formData = new FormData(form);
         
-        // Função para enviar formulário de edição
-        window.enviarFormularioEdicao = function(event) {
-            event.preventDefault();
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Salvando...';
+        submitBtn.disabled = true;
+        
+        fetch('../control/controllerEditarProduto.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            fecharModalEditar();
             
-            const form = event.target;
-            const formData = new FormData(form);
-            
-            // Mostrar loading no botão
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Salvando...';
-            submitBtn.disabled = true;
-            
-            fetch('../control/controllerEditarProduto.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Fechar modal
-                fecharModalEditar();
-                
-                if (data.success) {
-                    // Mostrar mensagem de sucesso
-                    mostrarAlerta(data.message || 'Produto atualizado com sucesso!', 'success');
-                    
-                    // Recarregar a página após 1 segundo
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
-                } else {
-                    // Mostrar mensagem de erro
-                    mostrarAlerta(data.message || 'Erro ao atualizar produto', 'error');
-                    
-                    // Restaurar botão
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao editar produto:', error);
-                mostrarAlerta('Erro ao atualizar produto', 'error');
-                
-                // Restaurar botão
+            if (data.success) {
+                mostrarAlerta(data.message || 'Produto atualizado com sucesso!', 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                mostrarAlerta(data.message || 'Erro ao atualizar produto', 'error');
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-            });
-            
-            return false;
-        };
-    });
-    </script>
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao editar produto:', error);
+            mostrarAlerta('Erro ao atualizar produto', 'error');
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        });
+        
+        return false;
+    };
+});
+</script>
 </body>
 </html>
