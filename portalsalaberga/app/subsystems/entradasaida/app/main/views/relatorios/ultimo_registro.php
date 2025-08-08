@@ -528,7 +528,7 @@ if(isset($_GET['sair'])){
         <div class="text-center mb-8">
             <!-- Botão Voltar -->
             <div class="flex justify-start mb-4">
-                <button onclick="history.back()" class="inline-flex items-center text-gray-600 bg-white rounded-lg px-4 py-2 shadow-sm border hover:bg-gray-50 transition-colors">
+                <button onclick="window.location.href='../inicio.php'" class="inline-flex items-center text-gray-600 bg-white rounded-lg px-4 py-2 shadow-sm border hover:bg-gray-50 transition-colors">
                     <i class="fas fa-arrow-left mr-2 text-ceara-green"></i>
                     <span class="text-sm">Voltar</span>
                 </button>
