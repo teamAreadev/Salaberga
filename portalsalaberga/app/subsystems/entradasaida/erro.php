@@ -15,7 +15,7 @@ if(isset($_GET['sair'])){
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Sistema SEEPS - Confirmação de Inscrição">
   <meta name="author" content="SEEPS">
-  <meta http-equiv="refresh" content="1; url=app/main/views/relatorios/ultimo_registro.php">
+
   <title>Saida - Confirmação</title>
 
   <link rel="shortcut icon" href="../assets/images/icone_salaberga.png" type="image">
@@ -267,11 +267,11 @@ if(isset($_GET['sair'])){
   </div>
 
   <script>
-    // Fecha a página após 2 segundos
+    // Redireciona a página após 2 segundos
     setTimeout(function() {
-      window.close();
-    }, 1000);
-  </script>
+      window.location.href = "app/main/views/relatorios/ultimo_registro.php";
+    }, 550);
+</script>
 </body>
 
 </html>
