@@ -5,6 +5,7 @@ $select = new select_model;
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +19,7 @@ $select = new select_model;
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -42,7 +43,7 @@ $select = new select_model;
             },
         };
     </script>
-    
+
     <style>
         * {
             font-family: 'Inter', sans-serif;
@@ -249,7 +250,7 @@ $select = new select_model;
             <!-- Form Content -->
             <div class="p-6 lg:p-8">
                 <form id="registro-e" action="../../control/control_index.php" method="POST" class="space-y-6">
-                    
+
                     <!-- Seção: Dados do Aluno -->
                     <div class="bg-gray-50 rounded-lg p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
@@ -276,9 +277,9 @@ $select = new select_model;
                                             $dados = $select->select_alunos();
                                             foreach ($dados as $dado) {
                                             ?>
-                                            <div class="select-option" data-value="<?=$dado['id_aluno']?>" data-nome="<?=strtolower($dado['nome'])?>">
-                                                <?=$dado['nome']?>
-                                            </div>
+                                                <div class="select-option" data-value="<?= $dado['id_aluno'] ?>" data-nome="<?= strtolower($dado['nome']) ?>">
+                                                    <?= $dado['nome'] ?>
+                                                </div>
                                             <?php
                                             }
                                             ?>
@@ -289,7 +290,7 @@ $select = new select_model;
                                         <?php
                                         foreach ($dados as $dado) {
                                         ?>
-                                        <option value="<?=$dado['id_aluno']?>"><?=$dado['nome']?></option>
+                                            <option value="<?= $dado['id_aluno'] ?>"><?= $dado['nome'] ?></option>
                                         <?php
                                         }
                                         ?>
@@ -310,9 +311,9 @@ $select = new select_model;
                                 <label for="nome_responsavel" class="block text-sm font-medium text-gray-700 mb-2 required-field">
                                     Nome do Responsável
                                 </label>
-                                <input type="text" id="nome_responsavel" name="nome_responsavel" 
-                                       placeholder="Digite o nome completo" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green" required>
+                                <input type="text" id="nome_responsavel" name="nome_responsavel"
+                                    placeholder="Digite o nome completo"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green" required>
                             </div>
                             <div class="form-group">
                                 <label for="id_tipo_responsavel" class="block text-sm font-medium text-gray-700 mb-2 required-field">
@@ -320,10 +321,14 @@ $select = new select_model;
                                 </label>
                                 <select id="id_tipo_responsavel" name="id_tipo_responsavel" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green form-select" required>
                                     <option value="" disabled selected>Selecione o tipo</option>
-                                    <option value="1">Mãe</option>
-                                    <option value="2">Pai</option>
-                                    <option value="3">Responsável</option>
-                                    <option value="4">Parentes de 1° grau</option>
+                                    <?php
+                                    $dados = $select->select_responsavel();
+                                    foreach ($dados as $dado) {
+                                    ?>
+
+                                        <option value="<?=$dado['id_tipo_responsavel']?>"><?=$dado['tipo']?></option>
+                                    <?php } ?>
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -340,9 +345,9 @@ $select = new select_model;
                                 <label for="nome_conducente" class="block text-sm font-medium text-gray-700 mb-2">
                                     Nome do Acompanhante
                                 </label>
-                                <input type="text" id="nome_conducente" name="nome_conducente" 
-                                       placeholder="Digite o nome do acompanhante" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green">
+                                <input type="text" id="nome_conducente" name="nome_conducente"
+                                    placeholder="Digite o nome do acompanhante"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green">
                             </div>
                             <div class="form-group">
                                 <label for="id_tipo_conducente" class="block text-sm font-medium text-gray-700 mb-2">
@@ -350,9 +355,13 @@ $select = new select_model;
                                 </label>
                                 <select id="id_tipo_conducente" name="id_tipo_conducente" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green form-select">
                                     <option value="" disabled selected>Selecione o tipo</option>
-                                    <option value="1">Uber</option>
-                                    <option value="2">Responsável</option>
-                                    <option value="3">Amigo(a)</option>
+                                    <?php
+                                    $dados = $select->select_conducente();
+                                    foreach ($dados as $dado) {
+                                    ?>
+
+                                        <option value="<?=$dado['id_tipo_conducente']?>"><?=$dado['tipo']?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -371,10 +380,13 @@ $select = new select_model;
                                 </label>
                                 <select id="id_motivo" name="id_motivo" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green form-select" required>
                                     <option value="" disabled selected>Selecione o motivo</option>
-                                    <option value="1">Saúde</option>
-                                    <option value="2">Imprevisto</option>
-                                    <option value="3">Compromisso Pessoal</option>
-                                    <option value="4">Outros</option>
+                                    <?php
+                                    $dados = $select->select_motivo();
+                                    foreach ($dados as $dado) {
+                                    ?>
+
+                                        <option value="<?=$dado['id_motivo']?>"><?=$dado['motivo']?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -383,11 +395,13 @@ $select = new select_model;
                                 </label>
                                 <select id="id_usuario" name="id_usuario" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green form-select" required>
                                     <option value="" disabled selected>Selecione o administrador</option>
-                                    <option value="1">Rosana</option>
-                                    <option value="2">Adriana</option>
-                                    <option value="3">Carlos Henrique</option>
-                                    <option value="4">Reginaldo</option>
-                                    <option value="5">Cícero</option>
+                                    <?php
+                                    $dados = $select->select_funcionario();
+                                    foreach ($dados as $dado) {
+                                    ?>
+
+                                        <option value="<?=$dado['id_funcionario']?>"><?=$dado['nome']?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -425,7 +439,7 @@ $select = new select_model;
     </footer>
 
     <script>
-           $(document).ready(function() {
+        $(document).ready(function() {
             $('.js-example-basic-single').select2({
                 placeholder: 'Selecione o aluno',
                 allowClear: true,
@@ -450,7 +464,7 @@ $select = new select_model;
                 e.stopPropagation();
                 selectDropdown.classList.toggle('active');
                 selectTrigger.classList.toggle('active');
-                
+
                 if (selectDropdown.classList.contains('active')) {
                     searchInput.focus();
                 }
@@ -467,7 +481,7 @@ $select = new select_model;
             // Search functionality
             searchInput.addEventListener('input', function() {
                 const searchTerm = this.value.toLowerCase().trim();
-                
+
                 selectOptions.forEach(option => {
                     const nome = option.getAttribute('data-nome');
                     if (nome.includes(searchTerm)) {
@@ -483,22 +497,22 @@ $select = new select_model;
                 option.addEventListener('click', function() {
                     const value = this.getAttribute('data-value');
                     const text = this.textContent;
-                    
+
                     // Update hidden select
                     hiddenSelect.value = value;
-                    
+
                     // Update trigger display
                     placeholder.textContent = text;
                     placeholder.style.color = '#374151';
-                    
+
                     // Update visual state
                     selectOptions.forEach(opt => opt.classList.remove('selected'));
                     this.classList.add('selected');
-                    
+
                     // Close dropdown
                     selectDropdown.classList.remove('active');
                     selectTrigger.classList.remove('active');
-                    
+
                     // Clear search
                     searchInput.value = '';
                     selectOptions.forEach(opt => opt.classList.remove('hidden'));
@@ -552,4 +566,5 @@ $select = new select_model;
         });
     </script>
 </body>
+
 </html>

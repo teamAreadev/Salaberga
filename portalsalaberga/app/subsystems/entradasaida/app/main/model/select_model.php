@@ -292,4 +292,25 @@ class select_model extends connect
             return [];
         }
     }
+
+    public function select_motivo(){
+        $queryStr = "SELECT * FROM motivo";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function select_conducente(){
+        $queryStr = "SELECT * FROM tipo_conducente";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function select_responsavel(){
+        $queryStr = "SELECT * FROM tipo_responsavel";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function select_funcionario(){
+        $queryStr = "SELECT * FROM funcionario";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
 };
