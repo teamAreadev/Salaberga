@@ -411,23 +411,23 @@
                     <span>Início</span>
                 </a>
                 <a href="estoque.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-warehouse card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
+                    <i class="fas fa-boxes mr-2"></i>
                     <span>Estoque</span>
                 </a>
                 <a href="adicionarproduto.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-cart-plus card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
+                    <i class="fas fa-plus-circle mr-2"></i>
                     <span>Adicionar</span>
                 </a>
             
                     <a href="solicitar.php" class="header-nav-link flex items-center cursor-pointer">
-                        <i class="fas fa-hand-holding-box card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
+                        <i class="fas fa-clipboard-list mr-2"></i>
                         <span>Solicitar</span>
                       
                     </a>
                    
         
                 <a href="relatorios.php" class="header-nav-link flex items-center" target="_blank">
-                    <i class="fas fa-file-invoice card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
+                    <i class="fas fa-chart-bar mr-2"></i>
                     <span>Relatórios</span>
                 </a>
                 <a href="https://salaberga.com/salaberga/portalsalaberga/app/main/views/autenticacao/login.php" class="header-nav-link flex items-center text-sm md:text-base ml-4">
