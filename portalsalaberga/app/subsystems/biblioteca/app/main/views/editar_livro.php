@@ -132,23 +132,26 @@ $select_model = new select_model();
         <img src="../assets/img/logo1.png"
             class="w-[200px] sm:w-[250px] md:w-[300px] mx-auto mb-8 drop-shadow-xl hover:scale-105 transition-transform duration-300"
             alt="Logo">
-        <div class="bg-white/90 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 transition-all duration-300 hover:shadow-2xl mt-8 mb-12">
-            <div class="bg-gradient-ceara p-8 flex flex-col items-center">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-white text-center tracking-wide drop-shadow-lg flex items-center gap-3">
-                    <i class="fas fa-pen-to-square"></i> Editar Livro
+        <div class="bg-white rounded-xl shadow-custom overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg">
+            <div class="bg-gradient-ceara p-6 sm:p-8">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center tracking-wide">
+                    <i class="fas fa-trash-alt mr-3"></i>Editar Livro
                 </h2>
             </div>
-            <form id="deleteBookForm" action="../controllers/excluir_editar_livro.php" method="post" class="p-8 md:p-12 space-y-8">
+
+            <form id="deleteBookForm" action="../controllers/excluir_editar_livro.php" method="post" class="p-6 sm:p-8">
                 <div class="mb-8">
-                    <div class="flex justify-center border-b border-gray-200 pb-2">
+                    <div class="flex border-b border-gray-200">
                         <button type="button"
-                            class="tab-button py-2 px-6 font-semibold text-ceara-green border-b-2 border-ceara-green cursor-default active text-lg bg-gray-50 rounded-t-lg shadow-sm"
+                            class="tab-button py-2 px-4 font-medium text-ceara-green border-b-2 border-ceara-green cursor-default active"
                             data-tab="search-book">Buscar Livro</button>
                     </div>
                 </div>
+
                 <div id="validationMessage" class="hidden"></div>
-                <div id="search-book" class="tab-content space-y-8">
-                    <div class="space-y-8">
+
+                <div id="search-book" class="tab-content space-y-6">
+                    <div class="space-y-6">
                         <!-- Campo de Busca -->
                         <div class="relative">
                             <label for="searchBook" class="block text-base font-medium text-gray-700 mb-2">Buscar Livro</label>
@@ -181,6 +184,7 @@ $select_model = new select_model();
                                 </select>
                             </div>
                         </div>
+
                         <!-- Formulário de Edição -->
                         <div id="editForm" class="hidden mt-8 space-y-8">
                             <div class="bg-gray-50 rounded-2xl p-8 border border-gray-200 shadow-inner">
@@ -188,14 +192,23 @@ $select_model = new select_model();
                                 <!-- Título e Edição -->
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                     <div>
-                                        <label for="editTitulo" class="block text-base font-medium text-gray-700 mb-2">Título</label>
-                                        <input type="text" id="editTitulo" name="titulo" class="w-full px-5 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-700 placeholder-gray-400 transition-all duration-200 text-lg">
+                                        <label for="editEstante" class="block text-sm font-medium text-gray-700 mb-1">Estante</label>
+                                        <select id="editEstante" name="estante" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 transition-all duration-200">
+                                            <?php for ($i = 1; $i <= 32; $i++) { ?>
+                                                <option value="<?= $i ?>">Estante <?= $i ?></option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                     <div>
-                                        <label for="editEdicao" class="block text-base font-medium text-gray-700 mb-2">Edição</label>
-                                        <input type="text" id="editEdicao" name="edicao" class="w-full px-5 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-700 placeholder-gray-400 transition-all duration-200 text-lg">
+                                        <label for="editPrateleira" class="block text-sm font-medium text-gray-700 mb-1">Prateleira</label>
+                                        <select id="editPrateleira" name="prateleira" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 transition-all duration-200">
+                                            <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                                <option value="P<?= $i ?>">Prateleira <?= $i ?></option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                 </div>
+<<<<<<< HEAD
                                 <!-- Editora e Localização -->
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                     <div>
@@ -263,12 +276,14 @@ $select_model = new select_model();
                                         </select>
                                     </div>
                                 </div>
+<<<<<<< HEAD
                                 <!-- Corredor e Classificações -->
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                     <div>
-                                        <label for="editCorredor" class="block text-base font-medium text-gray-700 mb-2">Corredor</label>
-                                        <input type="text" id="editCorredor" name="corredor" class="w-full px-5 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-700 placeholder-gray-400 transition-all duration-200 text-lg">
+                                        <label for="editAnoPublicacao" class="block text-sm font-medium text-gray-700 mb-1">Ano de Publicação</label>
+                                        <input type="text" id="editAnoPublicacao" name="ano_publicacao" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-600 placeholder-gray-400 transition-all duration-200">
                                     </div>
+<<<<<<< HEAD
                                     <div class="grid grid-cols-3 gap-4">
                                         <div class="flex items-center">
                                             <input type="radio" id="editFiccaoTrue" name="ficcao" value="1" class="w-5 h-5 text-ceara-green border-gray-300 rounded focus:ring-ceara-green">
@@ -330,7 +345,22 @@ $select_model = new select_model();
                                     </button>
                                 </div>
                             </div>
+
+                            <!-- Botões de Ação -->
+                            <div class="flex space-x-4">
+                                <button type="submit"
+                                    class="flex-1 bg-ceara-green hover:bg-ceara-green-dark text-white font-medium py-4 px-6 rounded-lg transition duration-300 ease-in-out hover:shadow-lg flex items-center justify-center text-lg shadow-md">
+                                    <i class="fas fa-save mr-3"></i>
+                                    Salvar Alterações
+                                </button>
+                                <button type="button" id="cancelEdit"
+                                    class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-medium py-4 px-6 rounded-lg transition duration-300 ease-in-out hover:shadow-lg flex items-center justify-center text-lg shadow-md">
+                                    <i class="fas fa-times mr-3"></i>
+                                    Cancelar
+                                </button>
+                            </div>
                         </div>
+<<<<<<< HEAD
                         <!-- Botão de Exclusão -->
                         <button type="submit" name="action" value="delete"
                             class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-6 rounded-lg transition duration-300 ease-in-out hover:shadow-lg flex items-center justify-center text-lg shadow-md">
@@ -338,18 +368,20 @@ $select_model = new select_model();
                             Excluir Livro
                         </button>
                     </div>
+
                     <?php if (isset($_GET['true'])): ?>
                         <div class="flex items-center p-4 mb-4 text-green-800 border-l-4 border-green-500 bg-green-50 rounded-md"
                             role="alert">
                             <i class="fas fa-check-circle text-xl mr-3"></i>
-                            <span class="text-base font-semibold">Livro editado com sucesso!</span>
+                            <span class="text-sm font-medium">Livro editado com sucesso!</span>
                         </div>
                     <?php endif; ?>
+
                     <?php if (isset($_GET['error'])): ?>
                         <div class="flex items-center p-4 mb-4 text-red-800 border-l-4 border-red-500 bg-red-50 rounded-md"
                             role="alert">
                             <i class="fas fa-exclamation-circle text-xl mr-3"></i>
-                            <span class="text-base font-semibold">ERRO ao editar livro!</span>
+                            <span class="text-sm font-medium">ERRO ao editar livro!</span>
                         </div>
                     <?php endif; ?>
                 </div>
