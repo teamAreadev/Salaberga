@@ -9,12 +9,14 @@ class select_model extends connect
         parent::__construct();
     }
 
-    public function select_curso(){
+    public function select_curso()
+    {
         $queryStr = "SELECT * FROM curso";
         $query = $this->connect->query($queryStr);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function select_turmas(){
+    public function select_turmas()
+    {
         $queryStr = "SELECT * FROM turma";
         $query = $this->connect->query($queryStr);
         return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -120,6 +122,58 @@ class select_model extends connect
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function alunos_ausentes_3A_relatorio()
+    {
+        $queryStr = "SELECT a.nome, '3ºA - ENFERMAGEM' AS turma 
+                 FROM aluno a 
+                 LEFT JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                 AND DATE(s.dae) = CURDATE()
+                 WHERE a.id_turma = 9 
+                 AND s.id_aluno IS NULL
+                 ORDER BY a.nome ASC";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function alunos_ausentes_3B_relatorio()
+    {
+        $queryStr = "SELECT a.nome, '3ºB - INFORMÁTICA' AS turma 
+                 FROM aluno a 
+                 LEFT JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                 AND DATE(s.dae) = CURDATE()
+                 WHERE a.id_turma = 10 
+                 AND s.id_aluno IS NULL
+                 ORDER BY a.nome ASC";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function alunos_ausentes_3C_relatorio()
+    {
+        $queryStr = "SELECT a.nome, '3ºC - ADMINISTRAÇÃO' AS turma 
+                 FROM aluno a 
+                 LEFT JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                 AND DATE(s.dae) = CURDATE()
+                 WHERE a.id_turma = 11 
+                 AND s.id_aluno IS NULL
+                 ORDER BY a.nome ASC";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function alunos_ausentes_3D_relatorio()
+    {
+        $queryStr = "SELECT a.nome, '3ºD - EDIFICAÇÃO' AS turma 
+                 FROM aluno a 
+                 LEFT JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                 AND DATE(s.dae) = CURDATE()
+                 WHERE a.id_turma = 12 
+                 AND s.id_aluno IS NULL
+                 ORDER BY a.nome ASC";
+        $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function saida_estagio_3A_relatorio_dia($data)
     {
         $queryStr = "SELECT a.nome, s.dae FROM aluno a 
@@ -158,6 +212,62 @@ class select_model extends connect
                     AND DATE(s.dae) = '$data'
                     ORDER BY a.nome ASC";
         $query = $this->connect->query($queryStr);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function alunos_ausentes_3A_relatorio_dia($data)
+    {
+        $queryStr = "SELECT a.nome, '3ºA - ENFERMAGEM' AS turma 
+                 FROM aluno a 
+                 LEFT JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                 AND DATE(s.dae) = :data
+                 WHERE a.id_turma = 9 
+                 AND s.id_aluno IS NULL
+                 ORDER BY a.nome ASC";
+        $query = $this->connect->prepare($queryStr);
+        $query->execute(['data' => $data]);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function alunos_ausentes_3B_relatorio_dia($data)
+    {
+        $queryStr = "SELECT a.nome, '3ºB - INFORMÁTICA' AS turma 
+                 FROM aluno a 
+                 LEFT JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                 AND DATE(s.dae) = :data
+                 WHERE a.id_turma = 10 
+                 AND s.id_aluno IS NULL
+                 ORDER BY a.nome ASC";
+        $query = $this->connect->prepare($queryStr);
+        $query->execute(['data' => $data]);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function alunos_ausentes_3C_relatorio_dia($data)
+    {
+        $queryStr = "SELECT a.nome, '3ºC - ADMINISTRAÇÃO' AS turma 
+                 FROM aluno a 
+                 LEFT JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                 AND DATE(s.dae) = :data
+                 WHERE a.id_turma = 11 
+                 AND s.id_aluno IS NULL
+                 ORDER BY a.nome ASC";
+        $query = $this->connect->prepare($queryStr);
+        $query->execute(['data' => $data]);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function alunos_ausentes_3D_relatorio_dia($data)
+    {
+        $queryStr = "SELECT a.nome, '3ºD - EDIFICAÇÃO' AS turma 
+                 FROM aluno a 
+                 LEFT JOIN saida_estagio s ON a.id_aluno = s.id_aluno 
+                 AND DATE(s.dae) = :data
+                 WHERE a.id_turma = 12 
+                 AND s.id_aluno IS NULL
+                 ORDER BY a.nome ASC";
+        $query = $this->connect->prepare($queryStr);
+        $query->execute(['data' => $data]);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
