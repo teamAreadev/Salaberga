@@ -48,7 +48,7 @@
     <meta name="keywords" content="educação profissional, ensino médio técnico, Maranguape educação, cursos técnicos, EEEP Salaberga Torquato, EEEP Salaberga, Salaberga, Escola Salaberga, Salaberga Torquato">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="./assets/img/S.png">
+    <link rel="ico" type="image/png" href="./assets/img/S.png">
 
     <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
