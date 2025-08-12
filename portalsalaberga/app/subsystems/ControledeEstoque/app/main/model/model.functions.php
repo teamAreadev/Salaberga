@@ -1316,13 +1316,26 @@ class gerenciamento extends connection
     public function buscarProdutoPorId($id)
     {
         try {
+            error_log("Buscando produto com ID: " . $id);
+            error_log("Tipo do ID: " . gettype($id));
+            
             $consulta = "SELECT * FROM produtos WHERE id = :id";
             $query = $this->pdo->prepare($consulta);
-            $query->bindValue(":id", $id);
+            $query->bindValue(":id", $id, PDO::PARAM_INT);
             $query->execute();
-            return $query->fetch(PDO::FETCH_ASSOC);
+            
+            $resultado = $query->fetch(PDO::FETCH_ASSOC);
+            
+            if ($resultado) {
+                error_log("Produto encontrado por ID: " . json_encode($resultado));
+            } else {
+                error_log("Produto não encontrado para ID: " . $id);
+            }
+            
+            return $resultado;
         } catch (PDOException $e) {
-            error_log("Erro ao buscar produto: " . $e->getMessage());
+            error_log("Erro ao buscar produto por ID: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
             return null;
         }
     }

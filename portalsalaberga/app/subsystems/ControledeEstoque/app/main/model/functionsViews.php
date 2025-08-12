@@ -75,9 +75,9 @@ class select extends connection
     public function selectSolicitarProdutos($barcode)
     {
         try {
-            $query = $this->pdo->query('SELECT barcode, nome_produto FROM produtos ORDER BY nome_produto');
+            $query = $this->pdo->query('SELECT id, barcode, nome_produto, quantidade FROM produtos ORDER BY nome_produto');
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                echo "<option value='" . htmlspecialchars($row['barcode']) . "'>" . htmlspecialchars($row['nome_produto']) . " (Barcode: " . htmlspecialchars($row['barcode']) . ")</option>";      
+                echo "<option value='" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['nome_produto']) . " (Estoque: " . htmlspecialchars($row['quantidade']) . ")</option>";      
             }
         } catch (PDOException $e) {
             echo "<option value='' disabled>Erro ao conectar ao banco: " . htmlspecialchars($e->getMessage()) . "</option>";

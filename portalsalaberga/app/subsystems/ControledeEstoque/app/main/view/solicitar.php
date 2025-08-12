@@ -350,69 +350,56 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                         </div>
                     </div>
 
-                    <!-- Opção 1: Select de produtos -->
-                    <div id="opcaoSelect" class="select-wrapper">
-                        <select id="produto" name="produto" required class="custom-select" aria-label="Selecionar produto" onchange="validarSelecao()">
-                            <option value="" disabled selected>SELECIONAR PRODUTO</option>
-                            <?php
-                            require_once('../model/functionsViews.php');
-                            $select = new select();
-                            $resultado = $select->selectSolicitarProdutos(null);
-                            if ($resultado) {
-                                foreach ($resultado as $produto) {
-                                    echo "<option value=\"{$produto['id']}\">{$produto['nome_produto']} (Estoque: {$produto['quantidade']})</option>";
-                                }
-                            } else {
-                                echo "<option value=\"\">Nenhum produto disponível</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
+                                         <!-- Opção 1: Select de produtos -->
+                     <div id="opcaoSelect" class="select-wrapper">
+                         <select id="produto" name="produto" required class="custom-select" aria-label="Selecionar produto" onchange="validarSelecao()">
+                             <option value="" disabled selected>SELECIONAR PRODUTO</option>
+                             <?php
+                             require_once('../model/functionsViews.php');
+                             $select = new select();
+                             $select->selectSolicitarProdutos(null);
+                             ?>
+                         </select>
+                     </div>
 
-                    <!-- Opção 2: Input para código de barras -->
-                    <div id="opcaoBarcode" class="hidden">
-                        <div class="relative">
-                            <input type="text" id="barcodeInput" name="barcode" value="<? echo $_GET['barcode'] ?? ''?>" placeholder="ESCANEIE O CÓDIGO DE BARRAS" 
-                                   class="custom-input text-center text-lg font-mono tracking-wider" 
-                                   aria-label="Código de barras">
-                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
-                                <i class="fas fa-barcode text-gray-400"></i>
-                            </div>
-                        </div>
-                        <div id="produtoInfo" class="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg hidden">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="font-semibold text-green-800" id="produtoNome"></p>
-                                    <p class="text-sm text-green-600" id="produtoEstoque"></p>
-                                </div>
-                                <i class="fas fa-check-circle text-green-500 text-xl"></i>
-                            </div>
-                        </div>
-                        <input type="hidden" id="produtoIdHidden" name="produto" value="">
-                    </div>
+                                         <!-- Opção 2: Input para código de barras -->
+                     <div id="opcaoBarcode" class="hidden">
+                         <div class="relative">
+                             <input type="text" id="barcodeInput" name="barcode" value="<?php echo $_GET['barcode'] ?? ''; ?>" placeholder="ESCANEIE O CÓDIGO DE BARRAS" 
+                                    class="custom-input text-center text-lg font-mono tracking-wider" 
+                                    aria-label="Código de barras">
+                             <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                 <i class="fas fa-barcode text-gray-400"></i>
+                             </div>
+                         </div>
+                         <div id="produtoInfo" class="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg hidden">
+                             <div class="flex items-center justify-between">
+                                 <div>
+                                     <p class="font-semibold text-green-800" id="produtoNome"></p>
+                                     <p class="text-sm text-green-600" id="produtoEstoque"></p>
+                                 </div>
+                                 <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                             </div>
+                         </div>
+                         <input type="hidden" id="produtoIdHidden" name="" value="">
+                         <input type="hidden" id="opcaoAtualHidden" name="opcao_atual" value="barcode">
+                     </div>
 
                     <div>
                         <input type="number" placeholder="QUANTIDADE" min="1" id="quantidade" name="quantidade" required
                             class="custom-input" aria-label="Quantidade do produto">
                     </div>
 
-                    <div class="select-wrapper">
-                        <select id="retirante" name="retirante" required class="custom-select" aria-label="Selecionar retirante">
-                            <option value="" disabled selected>SELECIONAR RESPONSÁVEL</option>
-                            <?php
-                            require_once('../model/functionsViews.php');
-                            $select = new select();
-                            $resultado = $select->selectSolicitarResponsaveis(null);
-                            if ($resultado) {
-                                foreach ($resultado as $responsavel) {
-                                    echo "<option value=\"{$responsavel['id']}\">{$responsavel['nome']}</option>";
-                                }
-                            } else {
-                                echo "<option value=\"\">Nenhum responsável disponível</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
+                                         <div class="select-wrapper">
+                         <select id="retirante" name="retirante" required class="custom-select" aria-label="Selecionar retirante">
+                             <option value="" disabled selected>SELECIONAR RESPONSÁVEL</option>
+                             <?php
+                             require_once('../model/functionsViews.php');
+                             $select = new select();
+                             $select->selectSolicitarResponsaveis(null);
+                             ?>
+                         </select>
+                     </div>
                 </div>
 
                 <button type="submit" name="btn" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
@@ -500,6 +487,17 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
     <script>
         let opcaoAtual = 'select';
         let produtoSelecionado = null;
+        
+        // Inicializar a opção atual no hidden
+        document.addEventListener('DOMContentLoaded', function() {
+            const opcaoAtualHidden = document.getElementById('opcaoAtualHidden');
+            if (opcaoAtualHidden) {
+                opcaoAtualHidden.value = opcaoAtual;
+            }
+            
+            // Validar seleção inicial
+            validarSelecao();
+        });
 
         function mostrarOpcao(opcao) {
             const btnSelect = document.getElementById('btnSelect');
@@ -508,11 +506,13 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             const opcaoBarcode = document.getElementById('opcaoBarcode');
             const produtoSelect = document.getElementById('produto');
             const barcodeInput = document.getElementById('barcodeInput');
+            const opcaoAtualHidden = document.getElementById('opcaoAtualHidden');
 
             produtoSelect.value = '';
             barcodeInput.value = '';
             document.getElementById('produtoInfo').classList.add('hidden');
             document.getElementById('produtoIdHidden').value = '';
+            document.getElementById('produtoIdHidden').name = '';
             produtoSelecionado = null;
 
             if (opcao === 'select') {
@@ -524,7 +524,10 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 produtoSelect.removeAttribute('disabled');
                 barcodeInput.required = false;
                 barcodeInput.setAttribute('disabled', 'disabled');
+                barcodeInput.name = ''; // Remove o name para não enviar
+                produtoSelect.name = 'produto'; // Garante que o name está correto
                 opcaoAtual = 'select';
+                opcaoAtualHidden.value = 'select';
             } else {
                 btnSelect.className = 'flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors';
                 btnBarcode.className = 'flex-1 bg-primary text-white py-2 px-4 rounded-lg font-semibold transition-colors';
@@ -532,11 +535,17 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 opcaoBarcode.classList.remove('hidden');
                 produtoSelect.required = false;
                 produtoSelect.setAttribute('disabled', 'disabled');
+                produtoSelect.name = ''; // Remove o name para não enviar
                 barcodeInput.required = true;
                 barcodeInput.removeAttribute('disabled');
+                barcodeInput.name = 'barcode'; // Garante que o name está correto
                 opcaoAtual = 'barcode';
+                opcaoAtualHidden.value = 'barcode';
                 setTimeout(() => barcodeInput.focus(), 100);
             }
+            
+            console.log('Opção alterada para:', opcao);
+            console.log('Opção atual:', opcaoAtual);
         }
 
         async function buscarProdutoPorBarcode(barcode) {
@@ -560,30 +569,66 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             const produtoEstoque = document.getElementById('produtoEstoque');
             const produtoIdHidden = document.getElementById('produtoIdHidden');
 
+            console.log('Exibindo informações do produto:', produto);
+
             produtoNome.textContent = produto.nome_produto;
             produtoEstoque.textContent = `Estoque: ${produto.quantidade} unidades`;
             produtoInfo.classList.remove('hidden');
             produtoSelecionado = produto;
             produtoIdHidden.value = produto.id;
+            produtoIdHidden.name = 'produto'; // Garantir que o name está correto
+            
+            console.log('Produto selecionado:', produtoSelecionado);
+            console.log('Valor do hidden:', produtoIdHidden.value);
+            console.log('Name do hidden:', produtoIdHidden.name);
         }
 
         function validarSelecao() {
             const produtoSelect = document.getElementById('produto');
-            if (produtoSelect.value !== '' && produtoSelect.value !== null) {
-                produtoSelecionado = { id: produtoSelect.value };
-                console.log('Produto selecionado:', produtoSelecionado);
+            const produtoIdHidden = document.getElementById('produtoIdHidden');
+            
+            console.log('Validando seleção...');
+            console.log('Valor do select:', produtoSelect.value);
+            console.log('Opção atual:', opcaoAtual);
+            
+            if (opcaoAtual === 'select') {
+                if (produtoSelect.value !== '' && produtoSelect.value !== null) {
+                    produtoSelecionado = { id: produtoSelect.value };
+                    produtoIdHidden.value = produtoSelect.value; // Garantir que o hidden também tenha o valor
+                    produtoIdHidden.name = 'produto'; // Garantir que o name está correto
+                    console.log('Produto selecionado via select:', produtoSelecionado);
+                    console.log('Valor do hidden atualizado:', produtoIdHidden.value);
+                } else {
+                    produtoSelecionado = null;
+                    produtoIdHidden.value = '';
+                    produtoIdHidden.name = ''; // Remove o name
+                    console.log('Produto desmarcado via select');
+                }
             } else {
-                produtoSelecionado = null;
+                // Se estiver na opção barcode, não alterar o produtoSelecionado
+                console.log('Opção barcode ativa, mantendo produtoSelecionado:', produtoSelecionado);
             }
         }
 
         function validarFormulario() {
+            console.log('Validando formulário...');
+            console.log('Opção atual:', opcaoAtual);
+            
             if (opcaoAtual === 'select') {
                 const produtoSelect = document.getElementById('produto');
-                return produtoSelect.value !== '' && produtoSelect.value !== null;
+                const valor = produtoSelect.value;
+                console.log('Valor do select:', valor);
+                const valido = valor !== '' && valor !== null;
+                console.log('Validação select:', valido);
+                return valido;
             } else {
                 const produtoIdHidden = document.getElementById('produtoIdHidden');
-                return produtoSelecionado !== null && produtoIdHidden.value !== '';
+                const valor = produtoIdHidden.value;
+                console.log('Valor do hidden:', valor);
+                console.log('Produto selecionado:', produtoSelecionado);
+                const valido = produtoSelecionado !== null && valor !== '';
+                console.log('Validação barcode:', valido);
+                return valido;
             }
         }
 
@@ -793,7 +838,21 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             if (form) {
                 form.addEventListener('submit', function(e) {
                     const valido = validarFormulario();
-                    console.log('Validação:', valido, 'Opção:', opcaoAtual, 'Produto:', document.getElementById('produto').value, 'Dados:', new FormData(form));
+                    const formData = new FormData(form);
+                    const formDataObj = {};
+                    formData.forEach((value, key) => {
+                        formDataObj[key] = value;
+                    });
+                    
+                    console.log('=== SUBMISSÃO DO FORMULÁRIO ===');
+                    console.log('Validação:', valido);
+                    console.log('Opção atual:', opcaoAtual);
+                    console.log('Produto selecionado:', produtoSelecionado);
+                    console.log('Valor do select:', document.getElementById('produto').value);
+                    console.log('Valor do hidden:', document.getElementById('produtoIdHidden').value);
+                    console.log('Valor do barcode:', document.getElementById('barcodeInput').value);
+                    console.log('Dados do formulário:', formDataObj);
+                    
                     if (!valido) {
                         e.preventDefault();
                         let mensagem = 'Por favor, selecione um produto antes de continuar.';
