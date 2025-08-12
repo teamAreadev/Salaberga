@@ -1,25 +1,16 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 require_once('../model/model.functions.php');
+print_r($_POST);
+
 if (isset($_POST['btn'])) {
     $retirante = $_POST['retirante'];
     $valor_retirada = $_POST['quantidade'];
 
-    error_log("=== INICIANDO PROCESSAMENTO DE SOLICITAÇÃO ===");
-    error_log("POST data: " . json_encode($_POST));
-
     $x = new gerenciamento();
 
-    // 1️⃣ Prioriza o uso do barcode se estiver presente
     if (!empty($_POST['barcode'])) {
         $barcode = $_POST['barcode'];
-
-        error_log("=== SOLICITAÇÃO POR BARCODE ===");
-        error_log("Barcode recebido: " . $barcode);
-        error_log("Quantidade: " . $valor_retirada);
-        error_log("Responsável: " . $retirante);
 
         $produtoEncontrado = $x->buscarProdutoPorBarcode($barcode);
         if ($produtoEncontrado) {
@@ -39,6 +30,8 @@ if (isset($_POST['btn'])) {
     elseif (!empty($_POST['produto'])) {
         $produto_id = $_POST['produto']; // aqui é o ID
         $produtoEncontrado = $x->buscarProdutoPorID($produto_id); // supondo que você tenha essa função
+
+
 
         if ($produtoEncontrado) {
             $x->solicitarproduto($valor_retirada, $produtoEncontrado['barcode'], $retirante); // também usa o barcode aqui

@@ -1,4 +1,6 @@
 <?php
+require_once('../model/functionsViews.php');
+$select = new select();
 require_once('../model/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
@@ -34,6 +36,9 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -229,6 +234,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     opacity: 0;
                     transform: translateY(-20px);
                 }
+
                 to {
                     opacity: 1;
                     transform: translateY(0);
@@ -373,29 +379,27 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
 
                     <!-- Opção 1: Select de produtos -->
                     <div id="opcaoSelect" class="select-wrapper">
-                        <select id="produto" name="produto" required class="custom-select" aria-label="Selecionar produto" onchange="validarSelecao()">
+                    <select class="js-example-basic-single" name="state">
                             <option value="" disabled selected>SELECIONAR PRODUTO</option>
                             <?php
-                            require_once('../model/functionsViews.php');
-                            $select = new select();
-                            $resultado = $select->selectSolicitarProdutos(null);
-                            if ($resultado) {
-                                foreach ($resultado as $produto) {
-                                    echo "<option value=\"{$produto['id']}\">{$produto['nome_produto']} (Estoque: {$produto['quantidade']})</option>";
-                                }
-                            } else {
-                                echo "<option value=\"\">Nenhum produto disponível</option>";
-                            }
+                            $dados = $select->selectProdutosTotal();
+
+                            foreach ($dados as $dado) {
                             ?>
+                                <option value="<?=$dado['id']?>"><?=$dado['nome_produto']?></option>
+
+                            <?php } ?>
+
+
                         </select>
                     </div>
 
                     <!-- Opção 2: Input para código de barras -->
                     <div id="opcaoBarcode" class="hidden">
                         <div class="relative">
-                            <input type="text" id="barcodeInput" name="barcode" value="<? echo $_GET['barcode'] ?? ''?>" placeholder="ESCANEIE O CÓDIGO DE BARRAS" 
-                                   class="custom-input text-center text-lg font-mono tracking-wider" 
-                                   aria-label="Código de barras">
+                            <input type="text" id="barcodeInput" name="barcode" value="<? echo $_GET['barcode'] ?? '' ?>" placeholder="ESCANEIE O CÓDIGO DE BARRAS"
+                                class="custom-input text-center text-lg font-mono tracking-wider"
+                                aria-label="Código de barras">
                             <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
                                 <i class="fas fa-barcode text-gray-400"></i>
                             </div>
@@ -507,6 +511,9 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
     </footer>
 
     <script>
+        $(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
         let opcaoAtual = 'select';
         let produtoSelecionado = null;
 
@@ -579,7 +586,9 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         function validarSelecao() {
             const produtoSelect = document.getElementById('produto');
             if (produtoSelect.value !== '' && produtoSelect.value !== null) {
-                produtoSelecionado = { id: produtoSelect.value };
+                produtoSelecionado = {
+                    id: produtoSelect.value
+                };
                 console.log('Produto selecionado:', produtoSelecionado);
             } else {
                 produtoSelecionado = null;
@@ -619,33 +628,33 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 mostrarNotificacao('<?php echo addslashes($_SESSION['erro_solicitacao']); ?>', 'error');
                 <?php unset($_SESSION['erro_solicitacao']); ?>
             <?php endif; ?>
-            
+
             // Verificar se há barcode na URL e buscar produto automaticamente
             <?php if (isset($_GET['barcode']) && !empty($_GET['barcode'])): ?>
-            const barcodeFromURL = '<?php echo htmlspecialchars($_GET['barcode']); ?>';
-            if (barcodeFromURL) {
-                // Mudar para opção de barcode
-                mostrarOpcao('barcode');
-                
-                // Definir o valor no input
-                const barcodeInput = document.getElementById('barcodeInput');
-                if (barcodeInput) {
-                    barcodeInput.value = barcodeFromURL;
-                    
-                    // Buscar produto automaticamente
-                    setTimeout(() => {
-                        buscarProdutoPorBarcode(barcodeFromURL).then(produto => {
-                            if (produto) {
-                                exibirProdutoInfo(produto);
-                                // Mostrar notificação de sucesso
-                                mostrarNotificacao(`Produto encontrado: ${produto.nome_produto}`, 'success');
-                            } else {
-                                mostrarNotificacao('Produto não encontrado para este código de barras', 'error');
-                            }
-                        });
-                    }, 500);
+                const barcodeFromURL = '<?php echo htmlspecialchars($_GET['barcode']); ?>';
+                if (barcodeFromURL) {
+                    // Mudar para opção de barcode
+                    mostrarOpcao('barcode');
+
+                    // Definir o valor no input
+                    const barcodeInput = document.getElementById('barcodeInput');
+                    if (barcodeInput) {
+                        barcodeInput.value = barcodeFromURL;
+
+                        // Buscar produto automaticamente
+                        setTimeout(() => {
+                            buscarProdutoPorBarcode(barcodeFromURL).then(produto => {
+                                if (produto) {
+                                    exibirProdutoInfo(produto);
+                                    // Mostrar notificação de sucesso
+                                    mostrarNotificacao(`Produto encontrado: ${produto.nome_produto}`, 'success');
+                                } else {
+                                    mostrarNotificacao('Produto não encontrado para este código de barras', 'error');
+                                }
+                            });
+                        }, 500);
+                    }
                 }
-            }
             <?php endif; ?>
 
             const menuButton = document.getElementById('menuButton');
