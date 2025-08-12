@@ -128,7 +128,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             <div class="flex-1 w-full">
                 <input type="text" id="pesquisar" placeholder="Pesquisar produto..." class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
             </div>
-            <div class="flex gap-2 flex-wrap justify-center">
+            <div class="flex gap-2 flex-wrap justify-center items-center">
                 <select id="filtroCategoria" class="px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
                     <option value="">Todas as categorias</option>
                     <option value="limpeza">Limpeza</option>
@@ -142,6 +142,12 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     <option value="informatica">Informática</option>
                     <option value="ferramentas">Ferramentas</option>
                 </select>
+                <a href="perdas.php">
+                    <button class="bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center shadow-md">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        Perdas
+                    </button>
+                </a>
             </div>
         </div>
         <!-- Tabela para desktop -->
@@ -228,21 +234,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             ?>
         </div>
         
-        <!-- Botões de ação -->
-        <div class="mt-8 flex justify-center w-full gap-4">
-            <a href="perdas.php">
-                <button class="bg-red-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-700 transition-colors flex items-center shadow-md">
-                    <i class="fas fa-exclamation-triangle mr-2"></i>
-                    Perdas
-                </button>
-            </a>
-            <a href="relatorios.php">
-                <button id="exportarBtn" class="bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition-colors flex items-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                    Exportar para PDF
-                </button>
-            </a>
-        </div>
+
        
         <!-- Modal de Edição -->
         <div id="modalEditar" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">

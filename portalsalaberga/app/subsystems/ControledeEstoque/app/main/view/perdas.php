@@ -125,13 +125,25 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         </div>
         
         <!-- Formulário para registrar perda -->
-        <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto mb-8">
-            <h2 class="text-2xl font-bold text-primary mb-6 text-center">Registrar Nova Perda</h2>
+        <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl w-full border-2 border-primary mx-auto mb-8">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+                    <i class="fas fa-exclamation-triangle text-2xl text-red-600"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-primary mb-2">Registrar Nova Perda</h2>
+                <p class="text-gray-600">Preencha os dados abaixo para registrar uma perda no estoque</p>
+            </div>
+            
             <form action="../control/controllerRegistrarPerda.php" method="POST" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="produto_id" class="block text-sm font-medium text-gray-700 mb-2">Produto</label>
-                        <select id="produto_id" name="produto_id" required class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
+                <!-- Primeira linha: Produto e Quantidade -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label for="produto_id" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                            <i class="fas fa-box text-primary mr-2"></i>
+                            Produto
+                        </label>
+                        <select id="produto_id" name="produto_id" required 
+                                class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm">
                             <option value="">Selecione o produto</option>
                             <?php
                             // Aqui você deve buscar os produtos do banco
@@ -147,112 +159,62 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                             ?>
                         </select>
                     </div>
-                    <div>
-                        <label for="quantidade_perdida" class="block text-sm font-medium text-gray-700 mb-2">Quantidade Perdida</label>
-                        <input type="number" id="quantidade_perdida" name="quantidade_perdida" min="1" required class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
+                    <div class="space-y-2">
+                        <label for="quantidade_perdida" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                            <i class="fas fa-sort-numeric-down text-primary mr-2"></i>
+                            Quantidade Perdida
+                        </label>
+                        <input type="number" id="quantidade_perdida" name="quantidade_perdida" min="1" required 
+                               class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm"
+                               placeholder="Ex: 5">
                     </div>
                 </div>
                 
-                <div>
-                    <label for="tipo_perda" class="block text-sm font-medium text-gray-700 mb-2">Tipo de Perda</label>
-                    <select id="tipo_perda" name="tipo_perda" required class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
-                        <option value="">Selecione o tipo de perda</option>
-                        <option value="dano_fisico">Dano Físico</option>
-                        <option value="vencimento">Vencimento</option>
-                        <option value="desaparecimento">Desaparecimento</option>
-                        <option value="ma_conservacao">Má Conservação</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label for="data_perda" class="block text-sm font-medium text-gray-700 mb-2">Data da Perda</label>
-                    <input type="date" id="data_perda" name="data_perda" required class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
+                <!-- Segunda linha: Tipo de Perda e Data -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label for="tipo_perda" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                            <i class="fas fa-tag text-primary mr-2"></i>
+                            Tipo de Perda
+                        </label>
+                        <select id="tipo_perda" name="tipo_perda" required 
+                                class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm">
+                            <option value="">Selecione o tipo de perda</option>
+                            <option value="dano_fisico" class="py-2">🚨 Dano Físico</option>
+                            <option value="vencimento" class="py-2">⏰ Vencimento</option>
+                            <option value="desaparecimento" class="py-2">🔍 Desaparecimento</option>
+                            <option value="ma_conservacao" class="py-2">🌡️ Má Conservação</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="data_perda" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                            <i class="fas fa-calendar-alt text-primary mr-2"></i>
+                            Data da Perda
+                        </label>
+                        <input type="date" id="data_perda" name="data_perda" required 
+                               class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm">
+                    </div>
                 </div>
                 
                
                 
-                <button type="submit" class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-colors">
-                    <i class="fas fa-exclamation-triangle mr-2"></i>
-                    Registrar Perda
-                </button>
+                <!-- Botão de envio -->
+                <div class="pt-4 flex justify-center">
+                    <button type="submit" class="bg-gradient-to-r from-red-600 to-red-700 text-white font-bold py-3 px-8 rounded-xl hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-exclamation-triangle mr-3"></i>
+                        Registrar Perda
+                    </button>
+                </div>
             </form>
         </div>
         
-        <!-- Tabela de perdas registradas -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-primary max-w-5xl mx-auto">
-            <div class="p-6 border-b border-gray-200">
-                <h3 class="text-xl font-bold text-primary">Histórico de Perdas</h3>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-primary text-white">
-                        <tr>
-                            <th class="py-3 px-4 text-left">Produto</th>
-                            <th class="py-3 px-4 text-left">Quantidade</th>
-                            <th class="py-3 px-4 text-left">Tipo de Perda</th>
-                            <th class="py-3 px-4 text-left">Data</th>
-                            <th class="py-3 px-4 text-left">Observações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabelaPerdas">
-                        <?php
-                        // Aqui você deve buscar as perdas do banco
-                        try {
-                            $perdas = $gerenciamento->getPdo()->query('SELECT p.*, pr.nome_produto, pr.barcode FROM perdas p JOIN produtos pr ON p.produto_id = pr.id ORDER BY p.data_perda DESC')->fetchAll(PDO::FETCH_ASSOC);
-                            if ($perdas && count($perdas) > 0) {
-                                foreach ($perdas as $perda) {
-                                    $tipoPerdaLabels = [
-                                        'dano_fisico' => 'Dano Físico',
-                                        'vencimento' => 'Vencimento',
-                                        'desaparecimento' => 'Desaparecimento',
-                                        'ma_conservacao' => 'Má Conservação'
-                                    ];
-                                    $tipoLabel = $tipoPerdaLabels[$perda['tipo_perda']] ?? $perda['tipo_perda'];
-                                    
-                                    echo '<tr class="border-b border-gray-200 hover:bg-gray-50">';
-                                    echo '<td class="py-3 px-4">';
-                                    echo '<div class="font-semibold text-primary">' . htmlspecialchars($perda['nome_produto']) . '</div>';
-                                    echo '<div class="text-sm text-gray-500">' . htmlspecialchars($perda['barcode']) . '</div>';
-                                    echo '</td>';
-                                    echo '<td class="py-3 px-4 font-bold text-red-600">' . htmlspecialchars($perda['quantidade_perdida']) . '</td>';
-                                    echo '<td class="py-3 px-4">';
-                                    echo '<span class="px-2 py-1 text-xs font-semibold rounded-full ';
-                                    switch($perda['tipo_perda']) {
-                                        case 'dano_fisico': echo 'bg-red-100 text-red-800'; break;
-                                        case 'vencimento': echo 'bg-yellow-100 text-yellow-800'; break;
-                                        case 'desaparecimento': echo 'bg-blue-100 text-blue-800'; break;
-                                        case 'ma_conservacao': echo 'bg-orange-100 text-orange-800'; break;
-                                        default: echo 'bg-gray-100 text-gray-800';
-                                    }
-                                    echo '">' . htmlspecialchars($tipoLabel) . '</span>';
-                                    echo '</td>';
-                                    echo '<td class="py-3 px-4 text-gray-600">' . date('d/m/Y', strtotime($perda['data_perda'])) . '</td>';
-                                    echo '<td class="py-3 px-4 text-gray-600">' . htmlspecialchars($perda['observacoes'] ?: '-') . '</td>';
-                                    echo '</tr>';
-                                }
-                            } else {
-                                echo '<tr><td colspan="5" class="py-8 px-4 text-center text-gray-500">';
-                                echo '<i class="fas fa-check-circle text-4xl mb-2 text-green-500"></i>';
-                                echo '<p>Nenhuma perda registrada</p>';
-                                echo '</td></tr>';
-                            }
-                        } catch (Exception $e) {
-                            echo '<tr><td colspan="5" class="py-8 px-4 text-center text-gray-500">';
-                            echo '<i class="fas fa-exclamation-triangle text-4xl mb-2 text-yellow-500"></i>';
-                            echo '<p>Erro ao carregar perdas</p>';
-                            echo '</td></tr>';
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+
         
         <!-- Botões de ação -->
-        <div class="mt-8 flex justify-center w-full gap-4">
-            <a href="estoque.php">
-                <button class="bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition-colors flex items-center shadow-md">
-                    <i class="fas fa-arrow-left mr-2"></i>
+        <div class="mt-12 flex justify-center w-full gap-6">
+            <a href="estoque.php" class="group">
+                <button class="bg-gradient-to-r from-primary to-primary/90 text-white font-bold py-4 px-8 rounded-xl hover:from-primary/90 hover:to-primary transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center">
+                    <i class="fas fa-arrow-left mr-3 group-hover:-translate-x-1 transition-transform duration-300"></i>
                     Voltar ao Estoque
                 </button>
             </a>
