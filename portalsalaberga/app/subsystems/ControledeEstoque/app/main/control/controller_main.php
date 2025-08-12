@@ -1,7 +1,21 @@
 <?php 
 require_once('../model/model.main.php');
 
-print_r($_POST);
+if( isset($_GET['barcode']) && !empty(trim($_GET['barcode']))){
+
+    $barcode = $_GET['barcode'];
+
+    $obj = new MainModel();
+    $result = $obj->verificar_produto($barcode);
+
+    if($result){
+        header('Location: ../view/solicitar.php?barcode='.$barcode);
+        exit();
+    }else{
+        header('Location: ../view/adcnovoproduto.php?barcode='.$barcode);
+            exit();
+    }
+}
 if (
     isset($_POST['id_produto']) && !empty(trim($_POST['id_produto'])) &&
     isset($_POST['quantidade_perdida']) && !empty(trim($_POST['quantidade_perdida'])) &&

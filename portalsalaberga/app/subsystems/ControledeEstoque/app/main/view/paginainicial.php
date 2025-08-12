@@ -705,7 +705,37 @@
                 });
             });
 
-            // Somente layout do campo de barcode na página inicial; sem lógica adicional
+            // Funcionalidade do campo de código de barras
+            const barcodeInput = document.getElementById('barcodeHome');
+            
+            if (barcodeInput) {
+                // Função para redirecionar com o código de barras
+                function redirecionarComBarcode() {
+                    const barcode = barcodeInput.value.trim();
+                    if (barcode) {
+                        // Redirecionar para o controller com o código de barras como parâmetro
+                        window.location.href = `../control/controller_main.php?barcode=${encodeURIComponent(barcode)}`;
+                    }
+                }
+                
+                // Redirecionar quando pressionar Enter
+                barcodeInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        redirecionarComBarcode();
+                    }
+                });
+                
+                // Redirecionar quando o input perder o foco (opcional)
+                barcodeInput.addEventListener('blur', function() {
+                    if (this.value.trim()) {
+                        redirecionarComBarcode();
+                    }
+                });
+                
+                // Focar no input quando a página carregar
+                barcodeInput.focus();
+            }
         });
     </script>
 </body>

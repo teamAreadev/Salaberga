@@ -41,4 +41,19 @@ class MainModel extends connection
             return 3;
         }
     }
+
+    public function verificar_produto($barcode){
+
+        $stmt_check = $this->pdo->prepare("SELECT * FROM produtos WHERE barcode = :barcode");
+        $stmt_check->bindParam(':barcode', $barcode);
+        $stmt_check->execute();
+
+        if ($stmt_check->rowCount() > 0) {
+
+            return true;
+        }else{
+
+            return false;
+        }
+    }
 };
