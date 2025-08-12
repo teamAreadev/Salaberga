@@ -252,7 +252,8 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                         if ($produtos && count($produtos) > 0) {
                             foreach ($produtos as $produto) {
                                 $quantidadeClass = $produto['quantidade'] <= 5 ? 'text-red-600 font-bold' : 'text-gray-700';
-                                echo '<tr class="border-b border-gray-200 hover:bg-gray-50">';
+                                $rowClass = $produto['quantidade'] <= 5 ? 'border-b border-gray-200 hover:bg-red-50 bg-red-50' : 'border-b border-gray-200 hover:bg-gray-50';
+                                echo '<tr class="' . $rowClass . '">';
                                 echo '<td class="py-3 px-4">' . htmlspecialchars($produto['barcode']) . '</td>';
                                 echo '<td class="py-3 px-4">' . htmlspecialchars($produto['nome_produto']) . '</td>';
                                 echo '<td class="py-3 px-4 ' . $quantidadeClass . '">' . htmlspecialchars($produto['quantidade']) . '</td>';

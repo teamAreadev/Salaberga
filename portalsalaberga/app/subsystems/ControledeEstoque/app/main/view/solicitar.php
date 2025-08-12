@@ -392,7 +392,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
 
                                          <div class="select-wrapper">
                          <select id="retirante" name="retirante" required class="custom-select" aria-label="Selecionar retirante">
-                             <option value="" disabled selected>SELECIONAR RESPONSÁVEL</option>
+                             <option value="" disabled selected>SELECIONAR SOLICITANTE</option>
                              <?php
                              require_once('../model/functionsViews.php');
                              $select = new select();
