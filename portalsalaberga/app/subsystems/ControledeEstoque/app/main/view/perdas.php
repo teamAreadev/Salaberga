@@ -1,5 +1,7 @@
 <?php
         require_once('../model/sessions.php');
+        require_once('../model/functionsViews.php');
+        $select = new select();
         $session = new sessions();
         $session->autenticar_session();
         
@@ -39,6 +41,9 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -134,29 +139,21 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 <p class="text-gray-600">Preencha os dados abaixo para registrar uma perda no estoque</p>
             </div>
             
-            <form action="../control/controllerRegistrarPerda.php" method="POST" class="space-y-6">
-                <!-- Primeira linha: Produto e Quantidade -->
+            <form action="../control/controller_main.php" method="POST" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label for="produto_id" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
                             <i class="fas fa-box text-primary mr-2"></i>
                             Produto
                         </label>
-                        <select id="produto_id" name="produto_id" required 
-                                class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm">
+                        <select class="js-example-basic-single" name="id_produto">
                             <option value="">Selecione o produto</option>
                             <?php
-                            // Aqui você deve buscar os produtos do banco
-                            require_once '../model/model.functions.php';
-                            $env = isset($_GET['env']) ? $_GET['env'] : 'local';
-                            $gerenciamento = new gerenciamento($env);
-                            $produtos = $gerenciamento->getPdo()->query('SELECT id, nome_produto, barcode FROM produtos ORDER BY nome_produto')->fetchAll(PDO::FETCH_ASSOC);
-                            if ($produtos && count($produtos) > 0) {
-                                foreach ($produtos as $produto) {
-                                    echo '<option value="' . $produto['id'] . '">' . htmlspecialchars($produto['nome_produto']) . ' (' . htmlspecialchars($produto['barcode']) . ')</option>';
-                                }
-                            }
+                            $dados = $select->selectProdutosTotal();
+                            foreach($dados as $dado){
                             ?>
+                            <option value="<?= htmlspecialchars($dado['id']) ?>"><?= htmlspecialchars($dado['nome_produto']) ?></option>
+                            <?php }?>
                         </select>
                     </div>
                     <div class="space-y-2">
@@ -180,10 +177,10 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                         <select id="tipo_perda" name="tipo_perda" required 
                                 class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm">
                             <option value="">Selecione o tipo de perda</option>
-                            <option value="dano_fisico" class="py-2">🚨 Dano Físico</option>
-                            <option value="vencimento" class="py-2">⏰ Vencimento</option>
-                            <option value="desaparecimento" class="py-2">🔍 Desaparecimento</option>
-                            <option value="ma_conservacao" class="py-2">🌡️ Má Conservação</option>
+                            <option value="Dano Físico" class="py-2">🚨 Dano Físico</option>
+                            <option value="Vencimento" class="py-2">⏰ Vencimento</option>
+                            <option value="Desaparecimento" class="py-2">🔍 Desaparecimento</option>
+                            <option value="Má conservacao" class="py-2">🌡️ Má Conservação</option>
                         </select>
                     </div>
                     <div class="space-y-2">
@@ -259,6 +256,9 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         </div>
     </footer>
     <script>
+        $(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
     document.addEventListener('DOMContentLoaded', function() {
         // Menu mobile toggle
         const menuButton = document.getElementById('menuButton');

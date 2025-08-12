@@ -8,6 +8,13 @@ class select extends connection
         parent::__construct();
     }
 
+    public function selectProdutosTotal()
+    {
+        $query = $this->pdo->query('SELECT * FROM produtos');
+        $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        return $resultado;
+    }
     public function selectProdutos($barcode)
     {
         $consulta = "SELECT * FROM produtos WHERE barcode = :barcode";
