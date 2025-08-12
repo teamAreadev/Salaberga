@@ -393,7 +393,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     <!-- Opção 2: Input para código de barras -->
                     <div id="opcaoBarcode" class="hidden">
                         <div class="relative">
-                            <input type="text" id="barcodeInput" name="barcode" placeholder="ESCANEIE O CÓDIGO DE BARRAS" 
+                            <input type="text" id="barcodeInput" name="barcode" value="<? echo $_GET['barcode'] ?? ''?>" placeholder="ESCANEIE O CÓDIGO DE BARRAS" 
                                    class="custom-input text-center text-lg font-mono tracking-wider" 
                                    aria-label="Código de barras">
                             <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -618,6 +618,34 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             <?php if (isset($_SESSION['erro_solicitacao'])): ?>
                 mostrarNotificacao('<?php echo addslashes($_SESSION['erro_solicitacao']); ?>', 'error');
                 <?php unset($_SESSION['erro_solicitacao']); ?>
+            <?php endif; ?>
+            
+            // Verificar se há barcode na URL e buscar produto automaticamente
+            <?php if (isset($_GET['barcode']) && !empty($_GET['barcode'])): ?>
+            const barcodeFromURL = '<?php echo htmlspecialchars($_GET['barcode']); ?>';
+            if (barcodeFromURL) {
+                // Mudar para opção de barcode
+                mostrarOpcao('barcode');
+                
+                // Definir o valor no input
+                const barcodeInput = document.getElementById('barcodeInput');
+                if (barcodeInput) {
+                    barcodeInput.value = barcodeFromURL;
+                    
+                    // Buscar produto automaticamente
+                    setTimeout(() => {
+                        buscarProdutoPorBarcode(barcodeFromURL).then(produto => {
+                            if (produto) {
+                                exibirProdutoInfo(produto);
+                                // Mostrar notificação de sucesso
+                                mostrarNotificacao(`Produto encontrado: ${produto.nome_produto}`, 'success');
+                            } else {
+                                mostrarNotificacao('Produto não encontrado para este código de barras', 'error');
+                            }
+                        });
+                    }, 500);
+                }
+            }
             <?php endif; ?>
 
             const menuButton = document.getElementById('menuButton');
