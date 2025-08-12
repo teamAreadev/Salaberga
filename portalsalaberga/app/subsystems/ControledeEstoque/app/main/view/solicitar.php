@@ -1,4 +1,10 @@
 <?php
+require_once('../model/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+
+?>
+<?php
 // Processar mensagens de URL
 $mensagem = '';
 $tipoMensagem = '';
@@ -305,13 +311,11 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 <img src="../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
                 <span class="text-white font-heading text-xl font-semibold hidden md:inline">STGM Estoque</span>
             </div>
-
             <button class="mobile-menu-button focus:outline-none" aria-label="Menu" id="menuButton">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
-
             <nav class="header-nav md:flex items-center space-x-1" id="headerNav">
                 <a href="paginainicial.php" class="header-nav-link flex items-center">
                     <i class="fas fa-home mr-2"></i>
@@ -325,12 +329,10 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     <i class="fas fa-plus-circle mr-2"></i>
                     <span>Adicionar</span>
                 </a>
-            
-                    <a href="solicitar.php" class="header-nav-link active flex items-center cursor-pointer">
-                        <i class="fas fa-clipboard-list mr-2"></i>
-                        <span>Solicitar</span>
-                      
-                    </a>
+                <a href="solicitar.php" class="header-nav-link active flex items-center cursor-pointer">
+                    <i class="fas fa-clipboard-list mr-2"></i>
+                    <span>Solicitar</span>
+                </a>
                 <a href="relatorios.php" class="header-nav-link flex items-center">
                     <i class="fas fa-chart-bar mr-2"></i>
                     <span>Relatórios</span>
@@ -345,17 +347,17 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         </div>
 
         <!-- Notificação -->
-        <div id="notificacao" class="max-w-2xl mx-auto mb-4 hidden">
-            <div id="notificacaoConteudo" class="p-4 rounded-lg shadow-lg">
+        <div id="notificacao" class="max-w-2xl mx-auto mb-4 <?php echo isset($_SESSION['erro_solicitacao']) ? '' : 'hidden'; ?>">
+            <div id="notificacaoConteudo" class="p-4 rounded-lg shadow-lg bg-red-500 text-white">
                 <div class="flex items-center">
-                    <i id="notificacaoIcon" class="mr-2"></i>
-                    <span id="notificacaoTexto"></span>
+                    <i id="notificacaoIcon" class="fas fa-exclamation-circle mr-2"></i>
+                    <span id="notificacaoTexto"><?php echo $_SESSION['erro_solicitacao'] ?? 'Erro desconhecido'; ?></span>
                 </div>
             </div>
         </div>
 
         <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
-            <form action="../control/controllersolicitar.php" method="POST" class="space-y-6">
+            <form action="../control/controllersolicitar.php" method="POST" class="space-y-6" id="solicitarForm">
                 <div class="space-y-4">
                     <!-- Opções de seleção de produto -->
                     <div class="mb-4">
@@ -371,12 +373,19 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
 
                     <!-- Opção 1: Select de produtos -->
                     <div id="opcaoSelect" class="select-wrapper">
-                        <select id="produto" name="produto" required class="custom-select" aria-label="Selecionar produto">
+                        <select id="produto" name="produto" required class="custom-select" aria-label="Selecionar produto" onchange="validarSelecao()">
                             <option value="" disabled selected>SELECIONAR PRODUTO</option>
                             <?php
                             require_once('../model/functionsViews.php');
                             $select = new select();
-                            $resultado = $select->selectSolicitarProdutos($barcode);
+                            $resultado = $select->selectSolicitarProdutos(null);
+                            if ($resultado) {
+                                foreach ($resultado as $produto) {
+                                    echo "<option value=\"{$produto['id']}\">{$produto['nome_produto']} (Estoque: {$produto['quantidade']})</option>";
+                                }
+                            } else {
+                                echo "<option value=\"\">Nenhum produto disponível</option>";
+                            }
                             ?>
                         </select>
                     </div>
@@ -400,7 +409,6 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                                 <i class="fas fa-check-circle text-green-500 text-xl"></i>
                             </div>
                         </div>
-                        <!-- Campo hidden para enviar o ID do produto -->
                         <input type="hidden" id="produtoIdHidden" name="produto" value="">
                     </div>
 
@@ -415,7 +423,14 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                             <?php
                             require_once('../model/functionsViews.php');
                             $select = new select();
-                            $resultado = $select->selectSolicitarResponsaveis($barcode);
+                            $resultado = $select->selectSolicitarResponsaveis(null);
+                            if ($resultado) {
+                                foreach ($resultado as $responsavel) {
+                                    echo "<option value=\"{$responsavel['id']}\">{$responsavel['nome']}</option>";
+                                }
+                            } else {
+                                echo "<option value=\"\">Nenhum responsável disponível</option>";
+                            }
                             ?>
                         </select>
                     </div>
@@ -444,7 +459,6 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                         Maranguape - CE
                     </p>
                 </div>
-
                 <!-- Contato -->
                 <div>
                     <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
@@ -462,7 +476,6 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                         </p>
                     </div>
                 </div>
-
                 <!-- Desenvolvedores em Grid -->
                 <div>
                     <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
@@ -470,27 +483,21 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                         Dev Team
                     </h3>
                     <div class="grid grid-cols-2 gap-2">
-                        <a
-                            class="text-xs flex items-center hover:text-secondary transition-colors">
+                        <a class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
                             Matheus Felix
                         </a>
-                        <a 
-                            class="text-xs flex items-center hover:text-secondary transition-colors">
+                        <a class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
-                           Roger Cavalcante
+                            Roger Cavalcante
                         </a>
-                        <a 
-                            class="text-xs flex items-center hover:text-secondary transition-colors">
+                        <a class="text-xs flex items-center hover:text-secondary transition-colors">
                             <i class="fab fa-instagram mr-1 text-xs"></i>
                             Matheus Machado
                         </a>
-                     
                     </div>
                 </div>
             </div>
-
-            <!-- Rodapé inferior compacto -->
             <div class="border-t border-white/20 pt-4 mt-4 text-center">
                 <p class="text-xs">
                     © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
@@ -500,11 +507,9 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
     </footer>
 
     <script>
-        // Variáveis globais
         let opcaoAtual = 'select';
         let produtoSelecionado = null;
 
-        // Função para alternar entre as opções
         function mostrarOpcao(opcao) {
             const btnSelect = document.getElementById('btnSelect');
             const btnBarcode = document.getElementById('btnBarcode');
@@ -513,7 +518,6 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             const produtoSelect = document.getElementById('produto');
             const barcodeInput = document.getElementById('barcodeInput');
 
-            // Resetar seleções
             produtoSelect.value = '';
             barcodeInput.value = '';
             document.getElementById('produtoInfo').classList.add('hidden');
@@ -521,7 +525,6 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             produtoSelecionado = null;
 
             if (opcao === 'select') {
-                // Ativar opção select
                 btnSelect.className = 'flex-1 bg-primary text-white py-2 px-4 rounded-lg font-semibold transition-colors';
                 btnBarcode.className = 'flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors';
                 opcaoSelect.classList.remove('hidden');
@@ -532,7 +535,6 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 barcodeInput.setAttribute('disabled', 'disabled');
                 opcaoAtual = 'select';
             } else {
-                // Ativar opção barcode
                 btnSelect.className = 'flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors';
                 btnBarcode.className = 'flex-1 bg-primary text-white py-2 px-4 rounded-lg font-semibold transition-colors';
                 opcaoSelect.classList.add('hidden');
@@ -542,20 +544,14 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 barcodeInput.required = true;
                 barcodeInput.removeAttribute('disabled');
                 opcaoAtual = 'barcode';
-                
-                // Focar no input de barcode
-                setTimeout(() => {
-                    barcodeInput.focus();
-                }, 100);
+                setTimeout(() => barcodeInput.focus(), 100);
             }
         }
 
-        // Função para buscar produto por código de barras
         async function buscarProdutoPorBarcode(barcode) {
             try {
                 const response = await fetch(`../control/controllerBuscarProduto.php?barcode=${encodeURIComponent(barcode)}`);
                 const data = await response.json();
-                
                 if (data.success && data.produto) {
                     return data.produto;
                 } else {
@@ -567,7 +563,6 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             }
         }
 
-        // Função para exibir informações do produto
         function exibirProdutoInfo(produto) {
             const produtoInfo = document.getElementById('produtoInfo');
             const produtoNome = document.getElementById('produtoNome');
@@ -578,33 +573,36 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             produtoEstoque.textContent = `Estoque: ${produto.quantidade} unidades`;
             produtoInfo.classList.remove('hidden');
             produtoSelecionado = produto;
-            
-            // Definir o código de barras no campo hidden (não o ID)
-            produtoIdHidden.value = produto.barcode;
+            produtoIdHidden.value = produto.id;
         }
 
-        // Função para validar formulário
-        function validarFormulario() {
-            if (opcaoAtual === 'select') {
-                const produtoSelect = document.getElementById('produto');
-                const valor = produtoSelect.value;
-                return valor !== '' && valor !== null;
+        function validarSelecao() {
+            const produtoSelect = document.getElementById('produto');
+            if (produtoSelect.value !== '' && produtoSelect.value !== null) {
+                produtoSelecionado = { id: produtoSelect.value };
+                console.log('Produto selecionado:', produtoSelecionado);
             } else {
-                const produtoIdHidden = document.getElementById('produtoIdHidden');
-                const valor = produtoIdHidden.value;
-                return produtoSelecionado !== null && valor !== '';
+                produtoSelecionado = null;
             }
         }
 
-        // Função para mostrar notificações
+        function validarFormulario() {
+            if (opcaoAtual === 'select') {
+                const produtoSelect = document.getElementById('produto');
+                return produtoSelect.value !== '' && produtoSelect.value !== null;
+            } else {
+                const produtoIdHidden = document.getElementById('produtoIdHidden');
+                return produtoSelecionado !== null && produtoIdHidden.value !== '';
+            }
+        }
+
         function mostrarNotificacao(mensagem, tipo) {
             const notificacao = document.getElementById('notificacao');
             const notificacaoConteudo = document.getElementById('notificacaoConteudo');
             const notificacaoIcon = document.getElementById('notificacaoIcon');
             const notificacaoTexto = document.getElementById('notificacaoTexto');
-            
+
             notificacaoTexto.textContent = mensagem;
-            
             if (tipo === 'success') {
                 notificacaoConteudo.className = 'p-4 rounded-lg shadow-lg bg-green-500 text-white';
                 notificacaoIcon.className = 'fas fa-check-circle mr-2';
@@ -612,22 +610,16 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 notificacaoConteudo.className = 'p-4 rounded-lg shadow-lg bg-red-500 text-white';
                 notificacaoIcon.className = 'fas fa-exclamation-circle mr-2';
             }
-            
             notificacao.classList.remove('hidden');
-            
-            // Auto-hide após 5 segundos
-            setTimeout(() => {
-                notificacao.classList.add('hidden');
-            }, 5000);
+            setTimeout(() => notificacao.classList.add('hidden'), 5000);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Mostrar notificação se houver mensagem
-            <?php if ($mostrarNotificacao): ?>
-            mostrarNotificacao('<?php echo addslashes($mensagem); ?>', '<?php echo $tipoMensagem; ?>');
+            <?php if (isset($_SESSION['erro_solicitacao'])): ?>
+                mostrarNotificacao('<?php echo addslashes($_SESSION['erro_solicitacao']); ?>', 'error');
+                <?php unset($_SESSION['erro_solicitacao']); ?>
             <?php endif; ?>
 
-            // Menu mobile toggle
             const menuButton = document.getElementById('menuButton');
             const headerNav = document.getElementById('headerNav');
 
@@ -635,60 +627,43 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 menuButton.addEventListener('click', function(e) {
                     e.stopPropagation();
                     headerNav.classList.toggle('show');
-
-                    // Animação para o botão do menu
                     const spans = menuButton.querySelectorAll('span');
-                    spans.forEach(span => {
-                        span.classList.toggle('active');
-                    });
-
-                    // Prevenir scroll do body quando menu está aberto
+                    spans.forEach(span => span.classList.toggle('active'));
                     document.body.style.overflow = headerNav.classList.contains('show') ? 'hidden' : '';
                 });
 
-                // Fechar menu ao clicar em um link
                 const navLinks = headerNav.querySelectorAll('a');
                 navLinks.forEach(link => {
                     link.addEventListener('click', function() {
                         headerNav.classList.remove('show');
                         const spans = menuButton.querySelectorAll('span');
-                        spans.forEach(span => {
-                            span.classList.remove('active');
-                        });
+                        spans.forEach(span => span.classList.remove('active'));
                         document.body.style.overflow = '';
                     });
                 });
 
-                // Fechar menu ao clicar fora
                 document.addEventListener('click', function(e) {
                     if (!headerNav.contains(e.target) && !menuButton.contains(e.target)) {
                         headerNav.classList.remove('show');
                         const spans = menuButton.querySelectorAll('span');
-                        spans.forEach(span => {
-                            span.classList.remove('active');
-                        });
+                        spans.forEach(span => span.classList.remove('active'));
                         document.body.style.overflow = '';
                     }
                 });
 
-                // Fechar menu ao pressionar ESC
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && headerNav.classList.contains('show')) {
                         headerNav.classList.remove('show');
                         const spans = menuButton.querySelectorAll('span');
-                        spans.forEach(span => {
-                            span.classList.remove('active');
-                        });
+                        spans.forEach(span => span.classList.remove('active'));
                         document.body.style.overflow = '';
                     }
                 });
             }
 
-            // Adicionar suporte para dropdown no mobile
             const dropdownToggle = document.querySelector('.group > a');
             const dropdownMenu = document.querySelector('.group > div');
-
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth <= 768 && dropdownToggle && dropdownMenu) {
                 dropdownToggle.addEventListener('click', function(e) {
                     e.preventDefault();
                     dropdownMenu.classList.toggle('scale-0');
@@ -696,16 +671,13 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 });
             }
 
-            // Event listener para input de código de barras
             const barcodeInput = document.getElementById('barcodeInput');
             if (barcodeInput) {
                 let timeoutId;
-                
                 barcodeInput.addEventListener('input', function(e) {
                     clearTimeout(timeoutId);
                     const barcode = e.target.value.trim();
-                    
-                    if (barcode.length >= 3) { // Mínimo de 3 caracteres para buscar
+                    if (barcode.length >= 3) {
                         timeoutId = setTimeout(async () => {
                             const produto = await buscarProdutoPorBarcode(barcode);
                             if (produto) {
@@ -714,14 +686,13 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                                 document.getElementById('produtoInfo').classList.add('hidden');
                                 produtoSelecionado = null;
                             }
-                        }, 500); // Delay de 500ms para evitar muitas requisições
+                        }, 500);
                     } else {
                         document.getElementById('produtoInfo').classList.add('hidden');
                         produtoSelecionado = null;
                     }
                 });
 
-                // Event listener para Enter (comum em leitores de código de barras)
                 barcodeInput.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
                         e.preventDefault();
@@ -737,29 +708,27 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 });
             }
 
-            // Validação do formulário
-            const form = document.querySelector('form');
+            const form = document.getElementById('solicitarForm');
             if (form) {
                 form.addEventListener('submit', function(e) {
                     const valido = validarFormulario();
-                    
+                    console.log('Validação:', valido, 'Opção:', opcaoAtual, 'Produto:', document.getElementById('produto').value, 'Dados:', new FormData(form));
                     if (!valido) {
                         e.preventDefault();
                         let mensagem = 'Por favor, selecione um produto antes de continuar.';
-                        
                         if (opcaoAtual === 'barcode' && !produtoSelecionado) {
                             mensagem = 'Por favor, escaneie um código de barras válido antes de continuar.';
-                        } else if (opcaoAtual === 'select') {
+                        } else if (opcaoAtual === 'select' && document.getElementById('produto').value === '') {
                             mensagem = 'Por favor, selecione um produto da lista antes de continuar.';
                         }
-                        
-                        alert(mensagem);
+                        mostrarNotificacao(mensagem, 'error');
                         return false;
                     }
                 });
             }
         });
     </script>
+</body>
 </body>
 
 </html>

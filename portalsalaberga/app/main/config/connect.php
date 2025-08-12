@@ -8,7 +8,7 @@ class Database {
         // Configurações do banco de dados local
         $localConfig = [
             'host' => 'localhost',
-            'dbname' => 'login_parcial',
+            'dbname' => 'u750204740_salaberga',
             'user' => 'root',
             'pass' => ''
         ];

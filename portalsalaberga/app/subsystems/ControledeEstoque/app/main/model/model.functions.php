@@ -1098,15 +1098,31 @@ class gerenciamento extends connection
             error_log("Barcode: " . $barcode);
             error_log("Quantidade: " . $valor_retirada);
             error_log("Responsável: " . $retirante);
-
+    
             // Iniciar a sessão, caso ainda não esteja iniciada
             if (session_status() == PHP_SESSION_NONE) {
                 session_start();
             }
+    
+            // Validar $_SESSION['Nome']
+            if (!isset($_SESSION['Nome'])) {
+                error_log("ERRO: Sessão 'Nome' não definida");
+                throw new Exception("Usuário não autenticado. A sessão 'Nome' não está definida.");
+            }
+            $usuario = $_SESSION['Nome'];
+            error_log("Usuário da sessão: " . $usuario);
+    
+            // Validar entrada
+            if (!is_numeric($valor_retirada) || $valor_retirada <= 0) {
+                error_log("ERRO: Quantidade inválida: " . $valor_retirada);
+                throw new Exception("Quantidade solicitada deve ser um número positivo.");
+            }
+            $valor_retirada_str = (string)$valor_retirada; // Converte para string para compatibilidade com varchar
+    
             // Iniciar transação
             $this->pdo->beginTransaction();
             error_log("Transação iniciada");
-
+    
             // Obter o ID e a quantidade do produto a partir do barcode
             error_log("Buscando produto no banco...");
             $consultaProduto = "SELECT id, quantidade FROM produtos WHERE barcode = :barcode";
@@ -1114,7 +1130,7 @@ class gerenciamento extends connection
             $queryProduto->bindValue(":barcode", $barcode);
             $queryProduto->execute();
             $produto = $queryProduto->fetch(PDO::FETCH_ASSOC);
-
+    
             if (!$produto) {
                 error_log("ERRO: Produto não encontrado no banco");
                 throw new Exception("Produto com barcode $barcode não encontrado.");
@@ -1122,7 +1138,7 @@ class gerenciamento extends connection
             $fk_produtos_id = $produto['id'];
             $quantidade_atual = $produto['quantidade'];
             error_log("Produto encontrado - ID: " . $fk_produtos_id . ", Quantidade atual: " . $quantidade_atual);
-
+    
             // Verificar se a quantidade solicitada é válida
             error_log("Verificando quantidade solicitada: " . $valor_retirada . " vs disponível: " . $quantidade_atual);
             if ($valor_retirada > $quantidade_atual) {
@@ -1130,7 +1146,7 @@ class gerenciamento extends connection
                 throw new Exception("Quantidade solicitada ($valor_retirada) excede o estoque disponível ($quantidade_atual).");
             }
             error_log("Quantidade válida");
-
+    
             // Obter o ID do responsável a partir do nome
             error_log("Buscando responsável: " . $retirante);
             $consultaResponsavel = "SELECT id FROM responsaveis WHERE nome = :nome";
@@ -1138,14 +1154,14 @@ class gerenciamento extends connection
             $queryResponsavel->bindValue(":nome", $retirante);
             $queryResponsavel->execute();
             $responsavel = $queryResponsavel->fetch(PDO::FETCH_ASSOC);
-
+    
             if (!$responsavel) {
                 error_log("ERRO: Responsável não encontrado");
                 throw new Exception("Responsável $retirante não encontrado.");
             }
             $fk_responsaveis_id = $responsavel['id'];
             error_log("Responsável encontrado - ID: " . $fk_responsaveis_id);
-
+    
             // Atualiza a quantidade na tabela produtos
             error_log("Atualizando estoque do produto...");
             $consultaUpdate = "UPDATE produtos SET quantidade = quantidade - :valor_retirada WHERE barcode = :barcode";
@@ -1154,24 +1170,25 @@ class gerenciamento extends connection
             $queryUpdate->bindValue(":barcode", $barcode);
             $queryUpdate->execute();
             error_log("Estoque atualizado com sucesso");
-
+    
             // Insere o registro na tabela movimentacao
             error_log("Inserindo registro na tabela movimentacao...");
-            $consultaInsert = "INSERT INTO movimentacao (fk_produtos_id, fk_responsaveis_id, barcode_produto, datareg, quantidade_retirada)
-                       VALUES (:fk_produtos_id, :fk_responsaveis_id, :barcode_produto, NOW(), :quantidade_retirada)";
+            $consultaInsert = "INSERT INTO movimentacao (fk_produtos_id, usuario, fk_responsaveis_id, barcode_produto, quantidade_retirada)
+                               VALUES (:fk_produtos_id, :usuario, :fk_responsaveis_id, :barcode_produto, :quantidade_retirada)";
             $queryInsert = $this->pdo->prepare($consultaInsert);
             $queryInsert->bindValue(":fk_produtos_id", $fk_produtos_id, PDO::PARAM_INT);
+            $queryInsert->bindValue(":usuario", $usuario);
             $queryInsert->bindValue(":fk_responsaveis_id", $fk_responsaveis_id, PDO::PARAM_INT);
             $queryInsert->bindValue(":barcode_produto", $barcode);
-            $queryInsert->bindValue(":quantidade_retirada", $valor_retirada, PDO::PARAM_INT);
+            $queryInsert->bindValue(":quantidade_retirada", $valor_retirada_str); // Usa string para compatibilidade com varchar
             $queryInsert->execute();
             error_log("Registro inserido na movimentacao com sucesso");
-
+    
             // Confirmar transação
             error_log("Confirmando transação...");
             $this->pdo->commit();
             error_log("Transação confirmada com sucesso");
-
+    
             // Redireciona para a página de estoque
             error_log("Redirecionando para estoque.php");
             header("Location: ../view/estoque.php");
