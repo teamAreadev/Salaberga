@@ -13,7 +13,7 @@ class Connection {
         $local_pass = "";
         
         // Configurações de conexão da hospedagem
-        $host_dsn = "mysql:host=seu_host_hospedagem;dbname=u750204740_estoque;charset=utf8mb4";
+        $host_dsn = "mysql:host=u750204740_estoque;dbname=u750204740_estoque;charset=utf8mb4";
         $host_user = "u750204740_estoque";
         $host_pass = "paoComOvo123!@##";
         

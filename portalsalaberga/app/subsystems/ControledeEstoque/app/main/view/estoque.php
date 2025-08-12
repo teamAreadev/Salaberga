@@ -74,18 +74,58 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         .header-nav-link:hover::after, .header-nav-link.active::after { width: 80%; }
         .header-nav-link.active { background-color: rgba(255,255,255,0.15); }
         .mobile-menu-button { display: none; }
+        
+        /* Estilos para a sidebar */
+        .sidebar-link {
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+        }
+        
+        .sidebar-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(0.5rem);
+        }
+        
+        .sidebar-link.active {
+            background-color: rgba(255, 165, 0, 0.2);
+            color: #FFA500;
+        }
+        
+        /* Responsividade da sidebar */
         @media (max-width: 768px) {
-            .header-nav { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%); padding: 2rem 1rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); z-index: 50; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
-            .header-nav.show { display: flex; animation: slideIn 0.3s ease-out; }
-            @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-            .header-nav-link { padding: 1rem 1.5rem; text-align: center; margin: 0.5rem 0; font-size: 1.1rem; border-radius: 0.75rem; transition: all 0.3s ease; width: 100%; max-width: 300px; }
-            .header-nav-link:hover { background-color: rgba(255,255,255,0.15); transform: translateX(5px); }
-            .mobile-menu-button { display: flex; flex-direction: column; justify-content: space-between; width: 30px; height: 21px; background: transparent; border: none; cursor: pointer; padding: 0; z-index: 60; position: relative; }
-            .mobile-menu-button span { width: 100%; height: 3px; background-color: white; border-radius: 10px; transition: all 0.3s ease; position: relative; transform-origin: center; }
-            .mobile-menu-button span:first-child.active { transform: rotate(45deg) translate(6px, 6px); }
-            .mobile-menu-button span:nth-child(2).active { opacity: 0; transform: scale(0); }
-            .mobile-menu-button span:nth-child(3).active { transform: rotate(-45deg) translate(6px, -6px); }
-            .header-nav::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: -1; }
+            #sidebar {
+                transform: translateX(-100%);
+            }
+            
+            #sidebar.show {
+                transform: translateX(0);
+            }
+            
+            main {
+                margin-left: 0 !important;
+            }
+            
+            /* Botão do menu mobile */
+            #menuButton {
+                transition: all 0.3s ease;
+            }
+            
+            #menuButton.hidden {
+                opacity: 0;
+                visibility: hidden;
+                transform: scale(0.8);
+            }
+            
+            /* Footer responsivo para mobile */
+            footer {
+                margin-left: 0 !important;
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+            
+            footer .ml-64 {
+                margin-left: 0 !important;
+            }
         }
         .desktop-table { display: block; width: 100%; }
         .mobile-cards { display: none; }
@@ -99,28 +139,66 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
     </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans bg-light">
-    <!-- Header -->
-    <header class="sticky top-0 bg-gradient-to-r from-primary to-dark text-white py-4 shadow-lg z-50">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
-                <span class="text-white font-heading text-xl font-semibold hidden md:inline">STGM Estoque</span>
+    <!-- Sidebar -->
+    <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="flex flex-col h-full">
+            <!-- Logo e título -->
+            <div class="p-6 border-b border-white/20">
+                <div class="flex items-center">
+                    <img src="../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
+                    <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
+                </div>
             </div>
-            <button class="mobile-menu-button focus:outline-none" aria-label="Menu" id="menuButton">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <nav class="header-nav md:flex items-center space-x-1" id="headerNav">
-                <a href="paginainicial.php" class="header-nav-link flex items-center"><i class="fas fa-home mr-2"></i><span>Início</span></a>
-                <a href="estoque.php" class="header-nav-link active flex items-center"><i class="fas fa-boxes mr-2"></i><span>Estoque</span></a>
-                <a href="adicionarproduto.php" class="header-nav-link flex items-center"><i class="fas fa-plus-circle mr-2"></i><span>Adicionar</span></a>
-                <a href="solicitar.php" class="header-nav-link flex items-center cursor-pointer"><i class="fas fa-clipboard-list mr-2"></i><span>Solicitar</span></a>
-                <a href="relatorios.php" class="header-nav-link flex items-center"><i class="fas fa-chart-bar mr-2"></i><span>Relatórios</span></a>
+            
+            <!-- Menu de navegação -->
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="paginainicial.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-home mr-3 text-lg"></i>
+                    <span>Início</span>
+                </a>
+                <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                    <i class="fas fa-boxes mr-3 text-lg"></i>
+                    <span>Estoque</span>
+                </a>
+                <a href="adicionarproduto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-plus-circle mr-3 text-lg"></i>
+                    <span>Adicionar</span>
+                </a>
+                <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                    <span>Solicitar</span>
+                </a>
+                <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-chart-bar mr-3 text-lg"></i>
+                    <span>Relatórios</span>
+                </a>
             </nav>
+            
+            <!-- Botão de fechar sidebar no mobile -->
+            <div class="p-4 border-t border-white/20 md:hidden">
+                <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
+                    <i class="fas fa-times mr-2"></i>
+                    Fechar Menu
+                </button>
+            </div>
         </div>
-    </header>
-    <main class="container mx-auto px-4 py-8 md:py-12 flex-1">
+    </div>
+    
+    <!-- Botão de menu mobile -->
+    <button class="fixed top-4 left-4 z-50 md:hidden bg-primary text-white p-3 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
+        <i class="fas fa-bars text-lg"></i>
+    </button>
+    
+    <!-- Overlay para mobile -->
+    <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
+    
+    <!-- Botão Voltar ao Topo -->
+    <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
+        <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
+    </button>
+
+    <!-- Main content -->
+    <main class="ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
         <div class="text-center mb-10">
             <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">VISUALIZAR ESTOQUE</h1>
         </div>
@@ -305,34 +383,82 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             </div>
         </div>
     </main>
-    <footer class="bg-gradient-to-r from-primary to-dark text-white py-6 mt-8">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <h3 class="font-heading text-lg font-semibold mb-3 flex items-center"><i class="fas fa-school mr-2 text-sm"></i>EEEP STGM</h3>
-                    <p class="text-xs leading-relaxed"><i class="fas fa-map-marker-alt mr-1 text-xs"></i> AV. Marta Maria Carvalho Nojoza, SN<br>Maranguape - CE</p>
-                </div>
-                <div>
-                    <h3 class="font-heading text-lg font-semibold mb-3 flex items-center"><i class="fas fa-address-book mr-2 text-sm"></i>Contato</h3>
-                    <div class="text-xs leading-relaxed space-y-1">
-                        <p class="flex items-start"><i class="fas fa-phone-alt mr-1 mt-0.5 text-xs"></i>(85) 3341-3990</p>
-                        <p class="flex items-start"><i class="fas fa-envelope mr-1 mt-0.5 text-xs"></i>eeepsantariamata@gmail.com</p>
+    <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
+        <!-- Efeito de brilho sutil no topo -->
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
+        
+        <div class="px-4 md:px-8 transition-all duration-300" id="footerContent">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                    <!-- Sobre a Escola -->
+                    <div class="group">
+                        <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
+                            <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
+                            EEEP STGM
+                        </h3>
+                        <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
+                            <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
+                            AV. Marta Maria Carvalho Nojoza, SN<br>
+                            Maranguape - CE
+                        </p>
+                    </div>
+
+                    <!-- Contato -->
+                    <div class="group">
+                        <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
+                            <i class="fas fa-address-book mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
+                            Contato
+                        </h3>
+                        <div class="space-y-3">
+                            <a href="tel:+558533413990" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
+                                <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                (85) 3341-3990
+                            </a>
+                            <a href="mailto:eeepsantariamata@gmail.com" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
+                                <i class="fas fa-envelope mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                eeepsantariamata@gmail.com
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Desenvolvedores -->
+                    <div class="group">
+                        <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
+                            <i class="fas fa-code mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
+                            Dev Team
+                        </h3>
+                        <div class="grid grid-cols-1 gap-3">
+                            <a href="https://www.instagram.com/dudu.limasx/" target="_blank" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Carlos E.
+                            </a>
+                            <a href="https://www.instagram.com/millenafreires_/" target="_blank" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Millena F.
+                            </a>
+                            <a href="https://www.instagram.com/matheusz.mf/" target="_blank" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Matheus M.
+                            </a>
+                            <a href="https://www.instagram.com/yanlucas10__/" target="_blank" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Ian Lucas
+                            </a>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <h3 class="font-heading text-lg font-semibold mb-3 flex items-center"><i class="fas fa-code mr-2 text-sm"></i>Dev Team</h3>
-                    <div class="grid grid-cols-2 gap-2">
-                        <a href="https://www.instagram.com/dudu.limasx/" target="_blank" class="text-xs flex items-center hover:text-secondary transition-colors"><i class="fab fa-instagram mr-1 text-xs"></i>Carlos E.</a>
-                        <a href="https://www.instagram.com/millenafreires_/" target="_blank" class="text-xs flex items-center hover:text-secondary transition-colors"><i class="fab fa-instagram mr-1 text-xs"></i>Millena F.</a>
-                        <a href="https://www.instagram.com/matheusz.mf/" target="_blank" class="text-xs flex items-center hover:text-secondary transition-colors"><i class="fab fa-instagram mr-1 text-xs"></i>Matheus M.</a>
-                        <a href="https://www.instagram.com/yanlucas10__/" target="_blank" class="text-xs flex items-center hover:text-secondary transition-colors"><i class="fab fa-instagram mr-1 text-xs"></i>Ian Lucas</a>
-                    </div>
+
+                <!-- Rodapé inferior -->
+                <div class="border-t border-white/20 pt-6 mt-8 text-center">
+                    <p class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">
+                        © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
+                    </p>
                 </div>
-            </div>
-            <div class="border-t border-white/20 pt-4 mt-4 text-center">
-                <p class="text-xs">© 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM</p>
             </div>
         </div>
+        
+        <!-- Efeito de brilho sutil na base -->
+        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -356,44 +482,91 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
     }
     <?php endif; ?>
 
-    // Menu mobile toggle
+    // Sidebar mobile toggle
     const menuButton = document.getElementById('menuButton');
-    const headerNav = document.getElementById('headerNav');
-    if (menuButton && headerNav) {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const closeSidebar = document.getElementById('closeSidebar');
+
+    if (menuButton && sidebar) {
         menuButton.addEventListener('click', function(e) {
             e.stopPropagation();
-            headerNav.classList.toggle('show');
-            const spans = menuButton.querySelectorAll('span');
-            spans.forEach(span => { span.classList.toggle('active'); });
-            document.body.style.overflow = headerNav.classList.contains('show') ? 'hidden' : '';
+            sidebar.classList.toggle('show');
+            overlay.classList.toggle('hidden');
+            
+            // Mostrar/ocultar o botão do menu
+            if (sidebar.classList.contains('show')) {
+                menuButton.classList.add('hidden');
+            } else {
+                menuButton.classList.remove('hidden');
+            }
+            
+            document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
         });
-        // Fechar menu ao clicar em um link
-        const navLinks = headerNav.querySelectorAll('a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                headerNav.classList.remove('show');
-                const spans = menuButton.querySelectorAll('span');
-                spans.forEach(span => { span.classList.remove('active'); });
+
+        // Fechar sidebar ao clicar no overlay
+        if (overlay) {
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('show');
+                overlay.classList.add('hidden');
+                menuButton.classList.remove('hidden');
                 document.body.style.overflow = '';
             });
-        });
-        // Fechar menu ao clicar fora
-        document.addEventListener('click', function(e) {
-            if (!headerNav.contains(e.target) && !menuButton.contains(e.target)) {
-                headerNav.classList.remove('show');
-                const spans = menuButton.querySelectorAll('span');
-                spans.forEach(span => { span.classList.remove('active'); });
+        }
+
+        // Fechar sidebar ao clicar no botão fechar
+        if (closeSidebar) {
+            closeSidebar.addEventListener('click', function() {
+                sidebar.classList.remove('show');
+                overlay.classList.add('hidden');
+                menuButton.classList.remove('hidden');
                 document.body.style.overflow = '';
-            }
+            });
+        }
+
+        // Fechar sidebar ao clicar em um link
+        const navLinks = sidebar.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('show');
+                    overlay.classList.add('hidden');
+                    menuButton.classList.remove('hidden');
+                    document.body.style.overflow = '';
+                }
+            });
         });
-        // Fechar menu ao pressionar ESC
+
+        // Fechar sidebar ao pressionar ESC
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && headerNav.classList.contains('show')) {
-                headerNav.classList.remove('show');
-                const spans = menuButton.querySelectorAll('span');
-                spans.forEach(span => { span.classList.remove('active'); });
+            if (e.key === 'Escape' && sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+                overlay.classList.add('hidden');
+                menuButton.classList.remove('hidden');
                 document.body.style.overflow = '';
             }
+        });
+    }
+
+    // Back to top button visibility and functionality
+    const backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+                backToTop.classList.remove('hidden');
+            } else {
+                backToTop.classList.remove('visible');
+                backToTop.classList.add('hidden');
+            }
+        });
+        
+        // Funcionalidade do botão voltar ao topo
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
     }
 
