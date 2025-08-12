@@ -435,19 +435,33 @@
                     <i class="fas fa-chart-bar mr-2"></i>
                     <span>Relatórios</span>
                 </a>
-                <a href="../model/sessions.php?sair" class="header-nav-link flex items-center text-sm md:text-base ml-4">
-                    <i class="fas fa-sign-out-alt mr-2"></i>
-                    <span>Sair</span>
-                </a>
+               
             </nav>
         </div>
     </header>
 
     <!-- Main content -->
     <main class="container mx-auto px-4 py-8 md:py-12 flex-1 flex flex-col items-center justify-start pt-16 md:pt-20">
-        <h1 class="text-primary text-3xl md:text-4xl font-bold mb-12 md:mb-16 text-center page-title tracking-tight font-heading">GERENCIAMENTO DE ESTOQUE</h1>
+        <h1 class="text-primary text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-center page-title tracking-tight font-heading">GERENCIAMENTO DE ESTOQUE</h1>
 
-        <div class="w-full max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 px-4 justify-center">
+        <!-- Layout: Leitor de código de barras (somente visual) -->
+        <div class="w-full max-w-5xl mx-auto px-4 mb-8 md:mb-10">
+        
+            <div class="relative">
+                <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-primary">
+                    <i class="fas fa-barcode text-xl"></i>
+                </span>
+                <input
+                    id="barcodeHome"
+                    type="text"
+                    placeholder="Escaneie o código de barras aqui"
+                    class="w-full pl-12 pr-4 py-4 bg-white border-2 border-primary/50 focus:border-secondary focus:ring-2 focus:ring-secondary/40 rounded-2xl outline-none placeholder:text-gray-400 text-gray-700 shadow-card text-lg"
+                    autocomplete="off"
+                />
+            </div>
+        </div>
+
+        <div id="cardsGrid" class="w-full max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 px-4 justify-center">
             <a href="../view/estoque.php" class="group animate-fade-in">
                 <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
                     <div class="card-shine"></div>
@@ -690,6 +704,8 @@
                     }
                 });
             });
+
+            // Somente layout do campo de barcode na página inicial; sem lógica adicional
         });
     </script>
 </body>

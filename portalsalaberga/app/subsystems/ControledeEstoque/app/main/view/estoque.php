@@ -155,7 +155,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                             <th class="py-3 px-4 text-left">Quantidade</th>
                             <th class="py-3 px-4 text-left">Categoria</th>
                             <th class="py-3 px-4 text-left">Data Cadastro</th>
-                            <th class="py-3 px-4 text-left">Ações</th>
+                            <!-- <th class="py-3 px-4 text-left">Ações</th> -->
                         </tr>
                     </thead>
                     <tbody id="tabelaEstoque">
@@ -174,18 +174,18 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                                 echo '<td class="py-3 px-4 ' . $quantidadeClass . '">' . htmlspecialchars($produto['quantidade']) . '</td>';
                                 echo '<td class="py-3 px-4">' . htmlspecialchars($produto['natureza']) . '</td>';
                                 echo '<td class="py-3 px-4">' . date('d/m/Y H:i', strtotime($produto['data'])) . '</td>';
-                                echo '<td class="py-3 px-4 flex space-x-2">';
-                                echo '<button onclick="abrirModalEditar(' . $produto['id'] . ')" class="text-primary hover:text-secondary mr-2" title="Editar">';
-                                echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>';
-                                echo '</button>';
-                                echo '<button onclick="abrirModalExcluir(' . $produto['id'] . ', \'' . htmlspecialchars(addslashes($produto['nome_produto'])) . '\')" class="text-red-500 hover:text-red-700" title="Excluir">';
-                                echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>';
-                                echo '</button>';
-                                echo '</td>';
+                                // echo '<td class="py-3 px-4 flex space-x-2">';
+                                // echo '<button onclick="abrirModalEditar(' . $produto['id'] . ')" class="text-primary hover:text-secondary mr-2" title="Editar">';
+                                // echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>';
+                                // echo '</button>';
+                                // echo '<button onclick="abrirModalExcluir(' . $produto['id'] . ', \'' . htmlspecialchars(addslashes($produto['nome_produto'])) . '\')" class="text-red-500 hover:text-red-700" title="Excluir">';
+                                // echo '<svg xmlns="http://www/w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>';
+                                // echo '</button>';
+                                // echo '</td>';
                                 echo '</tr>';
                             }
                         } else {
-                            echo '<tr><td colspan="6" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>';
+                            echo '<tr><td colspan="5" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>';
                         }
                         ?>
                     </tbody>
@@ -212,21 +212,30 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     echo '<p class="text-sm flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3v8a3 3 0 003 3z" /></svg><span class="' . $quantidadeClass . '">Quantidade: ' . htmlspecialchars($produto['quantidade']) . '</span></p>';
                     echo '<p class="text-sm text-gray-500 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg><span>Cadastrado: ' . date('d/m/Y H:i', strtotime($produto['data'])) . '</span></p>';
                     echo '</div></div>';
-                    echo '<div class="flex space-x-1">';
-                    echo '<button onclick="abrirModalEditar(' . $produto['id'] . ')" class="text-primary hover:text-secondary p-1 rounded-full bg-gray-50" title="Editar">';
-                    echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>';
-                    echo '</button>';
-                    echo '<button onclick="abrirModalExcluir(' . $produto['id'] . ', \'' . htmlspecialchars(addslashes($produto['nome_produto'])) . '\')" class="text-red-500 hover:text-red-700 p-1 rounded-full bg-gray-50" title="Excluir">';
-                    echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>';
-                    echo '</button>';
-                    echo '</div></div></div>';
+                    // echo '<div class="flex space-x-1">';
+                    // echo '<button onclick="abrirModalEditar(' . $produto['id'] . ')" class="text-primary hover:text-secondary p-1 rounded-full bg-gray-50" title="Editar">';
+                    // echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>';
+                    // echo '</button>';
+                    // echo '<button onclick="abrirModalExcluir(' . $produto['id'] . ', \'' . htmlspecialchars(addslashes($produto['nome_produto'])) . '\')" class="text-red-500 hover:text-red-700 p-1 rounded-full bg-gray-50" title="Excluir">';
+                    // echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>';
+                    // echo '</button>';
+                    // echo '</div></div></div>';
+                    echo '</div></div>';
                 }
             } else {
                 echo '<div class="text-center py-8 text-gray-500"><i class="fas fa-box-open text-4xl mb-2"></i><p>Nenhum produto encontrado</p></div>';
             }
             ?>
         </div>
-        <div class="mt-8 flex justify-center w-full">
+        
+        <!-- Botões de ação -->
+        <div class="mt-8 flex justify-center w-full gap-4">
+            <a href="perdas.php">
+                <button class="bg-red-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-700 transition-colors flex items-center shadow-md">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    Perdas
+                </button>
+            </a>
             <a href="relatorios.php">
                 <button id="exportarBtn" class="bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition-colors flex items-center shadow-md">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
@@ -234,6 +243,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 </button>
             </a>
         </div>
+       
         <!-- Modal de Edição -->
         <div id="modalEditar" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
             <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
