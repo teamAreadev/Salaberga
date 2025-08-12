@@ -166,67 +166,74 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
         }
 
-        .header-nav-link {
+        .nav-link {
             position: relative;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
+            transition: color 0.3s ease;
         }
 
-        .header-nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .header-nav-link::after {
+        .nav-link:hover::after,
+        .nav-link.active::after {
             content: '';
             position: absolute;
             bottom: -2px;
-            left: 50%;
-            width: 0;
+            left: 0;
+            width: 100%;
             height: 2px;
             background-color: #FFA500;
+            transition: width 0.3s ease;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #FFA500;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background-color: #E69500;
+            transform: scale(1.1);
+        }
+
+        /* Estilos para a sidebar */
+        .sidebar-link {
             transition: all 0.3s ease;
-            transform: translateX(-50%);
+            border-radius: 0.5rem;
         }
-
-        .header-nav-link:hover::after {
-            width: 80%;
+        
+        .sidebar-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(0.5rem);
         }
-
-        .header-nav-link.active {
-            background-color: rgba(255, 255, 255, 0.15);
+        
+        .sidebar-link.active {
+            background-color: rgba(255, 165, 0, 0.2);
+            color: #FFA500;
         }
-
-        .header-nav-link.active::after {
-            width: 80%;
-        }
-
-        .mobile-menu-button {
-            display: none;
-        }
-
+        
+        /* Responsividade da sidebar */
         @media (max-width: 768px) {
-            .header-nav {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
-                padding: 2rem 1rem;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-                z-index: 50;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                backdrop-filter: blur(10px);
+            #sidebar {
+                transform: translateX(-100%);
             }
-
-            .header-nav.show {
-                display: flex;
-                animation: slideIn 0.3s ease-out;
+            
+            #sidebar.show {
+                transform: translateX(0);
             }
 
             @keyframes slideIn {
@@ -240,114 +247,93 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     transform: translateY(0);
                 }
             }
-
-            .header-nav-link {
-                padding: 1rem 1.5rem;
-                text-align: center;
-                margin: 0.5rem 0;
-                font-size: 1.1rem;
-                border-radius: 0.75rem;
+            
+            /* Botão do menu mobile */
+            #menuButton {
                 transition: all 0.3s ease;
-                width: 100%;
-                max-width: 300px;
             }
-
-            .header-nav-link:hover {
-                background-color: rgba(255, 255, 255, 0.15);
-                transform: translateX(5px);
-            }
-
-            .mobile-menu-button {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                width: 30px;
-                height: 21px;
-                background: transparent;
-                border: none;
-                cursor: pointer;
-                padding: 0;
-                z-index: 60;
-                position: relative;
-            }
-
-            .mobile-menu-button span {
-                width: 100%;
-                height: 3px;
-                background-color: white;
-                border-radius: 10px;
-                transition: all 0.3s ease;
-                position: relative;
-                transform-origin: center;
-            }
-
-            .mobile-menu-button span:first-child.active {
-                transform: rotate(45deg) translate(6px, 6px);
-            }
-
-            .mobile-menu-button span:nth-child(2).active {
+            
+            #menuButton.hidden {
                 opacity: 0;
-                transform: scale(0);
+                visibility: hidden;
+                transform: scale(0.8);
             }
-
-            .mobile-menu-button span:nth-child(3).active {
-                transform: rotate(-45deg) translate(6px, -6px);
+            
+            /* Footer responsivo para mobile */
+            footer {
+                margin-left: 0 !important;
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
             }
-
-            /* Overlay para fechar menu ao clicar fora */
-            .header-nav::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.3);
-                z-index: -1;
+            
+            footer .ml-64 {
+                margin-left: 0 !important;
             }
         }
     </style>
 </head>
 
 <body class="min-h-screen flex flex-col font-sans bg-light">
-    <!-- Header -->
-    <header class="sticky top-0 bg-gradient-to-r from-primary to-dark text-white py-4 shadow-lg z-50">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
-                <span class="text-white font-heading text-xl font-semibold hidden md:inline">STGM Estoque</span>
+    <!-- Sidebar -->
+    <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="flex flex-col h-full">
+            <!-- Logo e título -->
+            <div class="p-6 border-b border-white/20">
+                <div class="flex items-center">
+                    <img src="../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
+                    <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
+                </div>
             </div>
-            <button class="mobile-menu-button focus:outline-none" aria-label="Menu" id="menuButton">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <nav class="header-nav md:flex items-center space-x-1" id="headerNav">
-                <a href="paginainicial.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-home mr-2"></i>
+            
+            <!-- Menu de navegação -->
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="paginainicial.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
                 </a>
-                <a href="estoque.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-boxes mr-2"></i>
+                <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-boxes mr-3 text-lg"></i>
                     <span>Estoque</span>
                 </a>
-                <a href="adicionarproduto.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-plus-circle mr-2"></i>
+                <a href="adicionarproduto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-                <a href="solicitar.php" class="header-nav-link active flex items-center cursor-pointer">
-                    <i class="fas fa-clipboard-list mr-2"></i>
+                <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                    <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
                 </a>
-                <a href="relatorios.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-chart-bar mr-2"></i>
+                <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-chart-bar mr-3 text-lg"></i>
                     <span>Relatórios</span>
                 </a>
             </nav>
+            
+            <!-- Botão de fechar sidebar no mobile -->
+            <div class="p-4 border-t border-white/20 md:hidden">
+                <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
+                    <i class="fas fa-times mr-2"></i>
+                    Fechar Menu
+                </button>
+            </div>
         </div>
-    </header>
+    </div>
+    
+    <!-- Botão de menu mobile -->
+    <button class="fixed top-4 left-4 z-50 md:hidden bg-primary text-white p-3 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
+        <i class="fas fa-bars text-lg"></i>
+    </button>
+    
+    <!-- Overlay para mobile -->
+    <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
+    
+    <!-- Botão Voltar ao Topo -->
+    <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
+        <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
+    </button>
 
-    <main class="container mx-auto px-4 py-8 md:py-12 flex-1">
+    <!-- Main content -->
+    <main class="ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
         <div class="text-center mb-10">
             <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">SOLICITAR PRODUTO</h1>
         </div>
@@ -377,67 +363,56 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                         </div>
                     </div>
 
-                    <!-- Opção 1: Select de produtos -->
-                    <div id="opcaoSelect" class="select-wrapper">
-                    <select class="js-example-basic-single" name="state">
-                            <option value="" disabled selected>SELECIONAR PRODUTO</option>
-                            <?php
-                            $dados = $select->selectProdutosTotal();
+                                         <!-- Opção 1: Select de produtos -->
+                     <div id="opcaoSelect" class="select-wrapper">
+                         <select id="produto" name="produto" required class="custom-select" aria-label="Selecionar produto" onchange="validarSelecao()">
+                             <option value="" disabled selected>SELECIONAR PRODUTO</option>
+                             <?php
+                             require_once('../model/functionsViews.php');
+                             $select = new select();
+                             $select->selectSolicitarProdutos(null);
+                             ?>
+                         </select>
+                     </div>
 
-                            foreach ($dados as $dado) {
-                            ?>
-                                <option value="<?=$dado['id']?>"><?=$dado['nome_produto']?></option>
-
-                            <?php } ?>
-
-
-                        </select>
-                    </div>
-
-                    <!-- Opção 2: Input para código de barras -->
-                    <div id="opcaoBarcode" class="hidden">
-                        <div class="relative">
-                            <input type="text" id="barcodeInput" name="barcode" value="<? echo $_GET['barcode'] ?? '' ?>" placeholder="ESCANEIE O CÓDIGO DE BARRAS"
-                                class="custom-input text-center text-lg font-mono tracking-wider"
-                                aria-label="Código de barras">
-                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
-                                <i class="fas fa-barcode text-gray-400"></i>
-                            </div>
-                        </div>
-                        <div id="produtoInfo" class="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg hidden">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="font-semibold text-green-800" id="produtoNome"></p>
-                                    <p class="text-sm text-green-600" id="produtoEstoque"></p>
-                                </div>
-                                <i class="fas fa-check-circle text-green-500 text-xl"></i>
-                            </div>
-                        </div>
-                        <input type="hidden" id="produtoIdHidden" name="produto" value="">
-                    </div>
+                                         <!-- Opção 2: Input para código de barras -->
+                     <div id="opcaoBarcode" class="hidden">
+                         <div class="relative">
+                             <input type="text" id="barcodeInput" name="barcode" value="<?php echo $_GET['barcode'] ?? ''; ?>" placeholder="ESCANEIE O CÓDIGO DE BARRAS" 
+                                    class="custom-input text-center text-lg font-mono tracking-wider" 
+                                    aria-label="Código de barras">
+                             <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                 <i class="fas fa-barcode text-gray-400"></i>
+                             </div>
+                         </div>
+                         <div id="produtoInfo" class="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg hidden">
+                             <div class="flex items-center justify-between">
+                                 <div>
+                                     <p class="font-semibold text-green-800" id="produtoNome"></p>
+                                     <p class="text-sm text-green-600" id="produtoEstoque"></p>
+                                 </div>
+                                 <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                             </div>
+                         </div>
+                         <input type="hidden" id="produtoIdHidden" name="" value="">
+                         <input type="hidden" id="opcaoAtualHidden" name="opcao_atual" value="barcode">
+                     </div>
 
                     <div>
                         <input type="number" placeholder="QUANTIDADE" min="1" id="quantidade" name="quantidade" required
                             class="custom-input" aria-label="Quantidade do produto">
                     </div>
 
-                    <div class="select-wrapper">
-                        <select id="retirante" name="retirante" required class="custom-select" aria-label="Selecionar retirante">
-                            <option value="" disabled selected>SELECIONAR RESPONSÁVEL</option>
-                            <?php
-                            require_once('../model/functionsViews.php');
-                            $select = new select();
-                            $resultado = $select->selectSolicitarResponsaveis(null);
-                            if ($resultado) {
-                                foreach ($resultado as $responsavel) {
-                                    echo "<option value=\"{$responsavel['id']}\">{$responsavel['nome']}</option>";
-                                }
-                            } else {
-                                echo "<option value=\"\">Nenhum responsável disponível</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
+                                         <div class="select-wrapper">
+                         <select id="retirante" name="retirante" required class="custom-select" aria-label="Selecionar retirante">
+                             <option value="" disabled selected>SELECIONAR SOLICITANTE</option>
+                             <?php
+                             require_once('../model/functionsViews.php');
+                             $select = new select();
+                             $select->selectSolicitarResponsaveis(null);
+                             ?>
+                         </select>
+                     </div>
                 </div>
 
                 <button type="submit" name="btn" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
@@ -448,66 +423,78 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         </div>
     </main>
 
-    <footer class="bg-gradient-to-r from-primary to-dark text-white py-6 mt-8">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Sobre a Escola -->
-                <div>
-                    <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
-                        <i class="fas fa-school mr-2 text-sm"></i>
-                        EEEP STGM
-                    </h3>
-                    <p class="text-xs leading-relaxed">
-                        <i class="fas fa-map-marker-alt mr-1 text-xs"></i>
-                        AV. Marta Maria Carvalho Nojoza, SN<br>
-                        Maranguape - CE
+    <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
+        <!-- Efeito de brilho sutil no topo -->
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
+        
+        <div class="ml-64 px-4 md:px-8 transition-all duration-300" id="footerContent">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                    <!-- Sobre a Escola -->
+                    <div class="group">
+                        <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
+                            <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
+                            EEEP STGM
+                        </h3>
+                        <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
+                            <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
+                            AV. Marta Maria Carvalho Nojoza, SN<br>
+                            Maranguape - CE
+                        </p>
+                    </div>
+
+                    <!-- Contato -->
+                    <div class="group">
+                        <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
+                            <i class="fas fa-address-book mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
+                            Contato
+                        </h3>
+                        <div class="space-y-3">
+                            <a href="tel:+558533413990" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
+                                <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                (85) 3341-3990
+                            </a>
+                            <a href="mailto:eeepsantariamata@gmail.com" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
+                                <i class="fas fa-envelope mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                eeepsantariamata@gmail.com
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Desenvolvedores -->
+                    <div class="group">
+                        <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
+                            <i class="fas fa-code mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
+                            Dev Team
+                        </h3>
+                        <div class="grid grid-cols-1 gap-3">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Matheus Felix
+                            </a>
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Roger Cavalcante
+                            </a>
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Matheus Machado
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rodapé inferior -->
+                <div class="border-t border-white/20 pt-6 mt-8 text-center">
+                    <p class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">
+                        © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
                     </p>
                 </div>
-                <!-- Contato -->
-                <div>
-                    <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
-                        <i class="fas fa-address-book mr-2 text-sm"></i>
-                        Contato
-                    </h3>
-                    <div class="text-xs leading-relaxed space-y-1">
-                        <p class="flex items-start">
-                            <i class="fas fa-phone-alt mr-1 mt-0.5 text-xs"></i>
-                            (85) 3341-3990
-                        </p>
-                        <p class="flex items-start">
-                            <i class="fas fa-envelope mr-1 mt-0.5 text-xs"></i>
-                            eeepsantariamata@gmail.com
-                        </p>
-                    </div>
-                </div>
-                <!-- Desenvolvedores em Grid -->
-                <div>
-                    <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
-                        <i class="fas fa-code mr-2 text-sm"></i>
-                        Dev Team
-                    </h3>
-                    <div class="grid grid-cols-2 gap-2">
-                        <a class="text-xs flex items-center hover:text-secondary transition-colors">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Matheus Felix
-                        </a>
-                        <a class="text-xs flex items-center hover:text-secondary transition-colors">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Roger Cavalcante
-                        </a>
-                        <a class="text-xs flex items-center hover:text-secondary transition-colors">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Matheus Machado
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-white/20 pt-4 mt-4 text-center">
-                <p class="text-xs">
-                    © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
-                </p>
             </div>
         </div>
+        
+        <!-- Efeito de brilho sutil na base -->
+        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
 
     <script>
@@ -516,6 +503,17 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
 });
         let opcaoAtual = 'select';
         let produtoSelecionado = null;
+        
+        // Inicializar a opção atual no hidden
+        document.addEventListener('DOMContentLoaded', function() {
+            const opcaoAtualHidden = document.getElementById('opcaoAtualHidden');
+            if (opcaoAtualHidden) {
+                opcaoAtualHidden.value = opcaoAtual;
+            }
+            
+            // Validar seleção inicial
+            validarSelecao();
+        });
 
         function mostrarOpcao(opcao) {
             const btnSelect = document.getElementById('btnSelect');
@@ -524,11 +522,13 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             const opcaoBarcode = document.getElementById('opcaoBarcode');
             const produtoSelect = document.getElementById('produto');
             const barcodeInput = document.getElementById('barcodeInput');
+            const opcaoAtualHidden = document.getElementById('opcaoAtualHidden');
 
             produtoSelect.value = '';
             barcodeInput.value = '';
             document.getElementById('produtoInfo').classList.add('hidden');
             document.getElementById('produtoIdHidden').value = '';
+            document.getElementById('produtoIdHidden').name = '';
             produtoSelecionado = null;
 
             if (opcao === 'select') {
@@ -540,7 +540,10 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 produtoSelect.removeAttribute('disabled');
                 barcodeInput.required = false;
                 barcodeInput.setAttribute('disabled', 'disabled');
+                barcodeInput.name = ''; // Remove o name para não enviar
+                produtoSelect.name = 'produto'; // Garante que o name está correto
                 opcaoAtual = 'select';
+                opcaoAtualHidden.value = 'select';
             } else {
                 btnSelect.className = 'flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors';
                 btnBarcode.className = 'flex-1 bg-primary text-white py-2 px-4 rounded-lg font-semibold transition-colors';
@@ -548,11 +551,17 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 opcaoBarcode.classList.remove('hidden');
                 produtoSelect.required = false;
                 produtoSelect.setAttribute('disabled', 'disabled');
+                produtoSelect.name = ''; // Remove o name para não enviar
                 barcodeInput.required = true;
                 barcodeInput.removeAttribute('disabled');
+                barcodeInput.name = 'barcode'; // Garante que o name está correto
                 opcaoAtual = 'barcode';
+                opcaoAtualHidden.value = 'barcode';
                 setTimeout(() => barcodeInput.focus(), 100);
             }
+            
+            console.log('Opção alterada para:', opcao);
+            console.log('Opção atual:', opcaoAtual);
         }
 
         async function buscarProdutoPorBarcode(barcode) {
@@ -576,32 +585,59 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             const produtoEstoque = document.getElementById('produtoEstoque');
             const produtoIdHidden = document.getElementById('produtoIdHidden');
 
+            console.log('Exibindo informações do produto:', produto);
+
             produtoNome.textContent = produto.nome_produto;
             produtoEstoque.textContent = `Estoque: ${produto.quantidade} unidades`;
             produtoInfo.classList.remove('hidden');
             produtoSelecionado = produto;
             produtoIdHidden.value = produto.id;
+            produtoIdHidden.name = 'produto'; // Garantir que o name está correto
+            
+            console.log('Produto selecionado:', produtoSelecionado);
+            console.log('Valor do hidden:', produtoIdHidden.value);
+            console.log('Name do hidden:', produtoIdHidden.name);
         }
 
         function validarSelecao() {
             const produtoSelect = document.getElementById('produto');
-            if (produtoSelect.value !== '' && produtoSelect.value !== null) {
-                produtoSelecionado = {
-                    id: produtoSelect.value
-                };
-                console.log('Produto selecionado:', produtoSelecionado);
+            const produtoIdHidden = document.getElementById('produtoIdHidden');
+            
+            console.log('Validando seleção...');
+            console.log('Valor do select:', produtoSelect.value);
+            console.log('Opção atual:', opcaoAtual);
+            
+            if (opcaoAtual === 'select') {
+                if (produtoSelect.value !== '' && produtoSelect.value !== null) {
+                    produtoSelecionado = { id: produtoSelect.value };
+                    produtoIdHidden.value = produtoSelect.value; // Garantir que o hidden também tenha o valor
+                    produtoIdHidden.name = 'produto'; // Garantir que o name está correto
+                    console.log('Produto selecionado via select:', produtoSelecionado);
+                    console.log('Valor do hidden atualizado:', produtoIdHidden.value);
+                } else {
+                    produtoSelecionado = null;
+                    produtoIdHidden.value = '';
+                    produtoIdHidden.name = ''; // Remove o name
+                    console.log('Produto desmarcado via select');
+                }
             } else {
-                produtoSelecionado = null;
+                // Se estiver na opção barcode, não alterar o produtoSelecionado
+                console.log('Opção barcode ativa, mantendo produtoSelecionado:', produtoSelecionado);
             }
         }
 
         function validarFormulario() {
+            console.log('Validando formulário...');
+            console.log('Opção atual:', opcaoAtual);
+            
             if (opcaoAtual === 'select') {
                 const produtoSelect = document.getElementById('produto');
-                return produtoSelect.value !== '' && produtoSelect.value !== null;
-            } else {
-                const produtoIdHidden = document.getElementById('produtoIdHidden');
-                return produtoSelecionado !== null && produtoIdHidden.value !== '';
+                const valor = produtoSelect.value;
+                console.log('Valor do select:', valor);
+                console.log('Produto selecionado:', produtoSelecionado);
+                const valido = produtoSelecionado !== null && valor !== '';
+                console.log('Validação barcode:', valido);
+                return valido;
             }
         }
 
@@ -617,13 +653,125 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 notificacaoIcon.className = 'fas fa-check-circle mr-2';
             } else if (tipo === 'error') {
                 notificacaoConteudo.className = 'p-4 rounded-lg shadow-lg bg-red-500 text-white';
-                notificacaoIcon.className = 'fas fa-exclamation-circle mr-2';
             }
             notificacao.classList.remove('hidden');
             setTimeout(() => notificacao.classList.add('hidden'), 5000);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            // Sidebar mobile toggle
+            const menuButton = document.getElementById('menuButton');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const closeSidebar = document.getElementById('closeSidebar');
+
+            if (menuButton && sidebar) {
+                menuButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('show');
+                    overlay.classList.toggle('hidden');
+                    
+                    // Mostrar/ocultar o botão do menu
+                    if (sidebar.classList.contains('show')) {
+                        menuButton.classList.add('hidden');
+                    } else {
+                        menuButton.classList.remove('hidden');
+                    }
+                    
+                    document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
+                });
+
+                // Fechar sidebar ao clicar no overlay
+                if (overlay) {
+                    overlay.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        overlay.classList.add('hidden');
+                        menuButton.classList.remove('hidden');
+                        document.body.style.overflow = '';
+                    });
+                }
+
+                // Fechar sidebar ao clicar no botão fechar
+                if (closeSidebar) {
+                    closeSidebar.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        overlay.classList.add('hidden');
+                        menuButton.classList.remove('hidden');
+                        document.body.style.overflow = '';
+                    });
+                }
+
+                // Fechar sidebar ao clicar em um link
+                const navLinks = sidebar.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 768) {
+                            sidebar.classList.remove('show');
+                            overlay.classList.add('hidden');
+                            menuButton.classList.remove('hidden');
+                            document.body.style.overflow = '';
+                        }
+                    });
+                });
+
+                // Fechar sidebar ao pressionar ESC
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && sidebar.classList.contains('show')) {
+                        sidebar.classList.remove('show');
+                        overlay.classList.add('hidden');
+                        menuButton.classList.remove('hidden');
+                        document.body.style.overflow = '';
+                    }
+                });
+                
+                // Ajustar footer quando sidebar é aberta/fechada no mobile
+                const footerContent = document.getElementById('footerContent');
+                if (footerContent) {
+                    const adjustFooter = () => {
+                        if (window.innerWidth <= 768) {
+                            if (sidebar.classList.contains('show')) {
+                                footerContent.style.marginLeft = '0';
+                            } else {
+                                footerContent.style.marginLeft = '0';
+                            }
+                        } else {
+                            footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
+                        }
+                    };
+                    
+                    // Ajustar na inicialização
+                    adjustFooter();
+                    
+                    // Ajustar quando a sidebar é aberta/fechada
+                    menuButton.addEventListener('click', adjustFooter);
+                    
+                    // Ajustar quando a janela é redimensionada
+                    window.addEventListener('resize', adjustFooter);
+                }
+            }
+
+            // Back to top button visibility and functionality
+            const backToTop = document.querySelector('.back-to-top');
+            if (backToTop) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300) {
+                        backToTop.classList.add('visible');
+                        backToTop.classList.remove('hidden');
+                    } else {
+                        backToTop.classList.remove('visible');
+                        backToTop.classList.add('hidden');
+                    }
+                });
+                
+                // Funcionalidade do botão voltar ao topo
+                backToTop.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
             <?php if (isset($_SESSION['erro_solicitacao'])): ?>
                 mostrarNotificacao('<?php echo addslashes($_SESSION['erro_solicitacao']); ?>', 'error');
                 <?php unset($_SESSION['erro_solicitacao']); ?>
@@ -656,57 +804,6 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     }
                 }
             <?php endif; ?>
-
-            const menuButton = document.getElementById('menuButton');
-            const headerNav = document.getElementById('headerNav');
-
-            if (menuButton && headerNav) {
-                menuButton.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    headerNav.classList.toggle('show');
-                    const spans = menuButton.querySelectorAll('span');
-                    spans.forEach(span => span.classList.toggle('active'));
-                    document.body.style.overflow = headerNav.classList.contains('show') ? 'hidden' : '';
-                });
-
-                const navLinks = headerNav.querySelectorAll('a');
-                navLinks.forEach(link => {
-                    link.addEventListener('click', function() {
-                        headerNav.classList.remove('show');
-                        const spans = menuButton.querySelectorAll('span');
-                        spans.forEach(span => span.classList.remove('active'));
-                        document.body.style.overflow = '';
-                    });
-                });
-
-                document.addEventListener('click', function(e) {
-                    if (!headerNav.contains(e.target) && !menuButton.contains(e.target)) {
-                        headerNav.classList.remove('show');
-                        const spans = menuButton.querySelectorAll('span');
-                        spans.forEach(span => span.classList.remove('active'));
-                        document.body.style.overflow = '';
-                    }
-                });
-
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape' && headerNav.classList.contains('show')) {
-                        headerNav.classList.remove('show');
-                        const spans = menuButton.querySelectorAll('span');
-                        spans.forEach(span => span.classList.remove('active'));
-                        document.body.style.overflow = '';
-                    }
-                });
-            }
-
-            const dropdownToggle = document.querySelector('.group > a');
-            const dropdownMenu = document.querySelector('.group > div');
-            if (window.innerWidth <= 768 && dropdownToggle && dropdownMenu) {
-                dropdownToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    dropdownMenu.classList.toggle('scale-0');
-                    dropdownMenu.classList.toggle('scale-100');
-                });
-            }
 
             const barcodeInput = document.getElementById('barcodeInput');
             if (barcodeInput) {
@@ -749,7 +846,21 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             if (form) {
                 form.addEventListener('submit', function(e) {
                     const valido = validarFormulario();
-                    console.log('Validação:', valido, 'Opção:', opcaoAtual, 'Produto:', document.getElementById('produto').value, 'Dados:', new FormData(form));
+                    const formData = new FormData(form);
+                    const formDataObj = {};
+                    formData.forEach((value, key) => {
+                        formDataObj[key] = value;
+                    });
+                    
+                    console.log('=== SUBMISSÃO DO FORMULÁRIO ===');
+                    console.log('Validação:', valido);
+                    console.log('Opção atual:', opcaoAtual);
+                    console.log('Produto selecionado:', produtoSelecionado);
+                    console.log('Valor do select:', document.getElementById('produto').value);
+                    console.log('Valor do hidden:', document.getElementById('produtoIdHidden').value);
+                    console.log('Valor do barcode:', document.getElementById('barcodeInput').value);
+                    console.log('Dados do formulário:', formDataObj);
+                    
                     if (!valido) {
                         e.preventDefault();
                         let mensagem = 'Por favor, selecione um produto antes de continuar.';
@@ -765,7 +876,6 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             }
         });
     </script>
-</body>
 </body>
 
 </html>

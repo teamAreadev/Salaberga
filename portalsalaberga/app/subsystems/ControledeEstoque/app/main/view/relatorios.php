@@ -516,48 +516,66 @@ $barcode = '';
 </head>
 
 <body class="min-h-screen flex flex-col font-sans">
-    <!-- Header -->
-    <header class="sticky top-0 bg-gradient-to-r from-primary to-dark text-white py-4 shadow-lg z-50">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="../assets/imagens/logostgm.png" alt="Logo S" class="h-12 mr-3 transition-transform hover:scale-105">
-                <span class="text-white font-heading text-xl font-semibold hidden md:inline">STGM Estoque</span>
+    <!-- Sidebar -->
+    <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="flex flex-col h-full">
+            <!-- Logo e título -->
+            <div class="p-6 border-b border-white/20">
+                <div class="flex items-center">
+                    <img src="../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
+                    <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
+                </div>
             </div>
-
-            <button class="mobile-menu-button focus:outline-none" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-
-            <nav class="header-nav md:flex items-center space-x-1">
-                <a href="./paginainicial.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-home mr-2"></i>
+            
+            <!-- Menu de navegação -->
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="paginainicial.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
                 </a>
-                <a href="estoque.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-boxes mr-2"></i>
+                <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-boxes mr-3 text-lg"></i>
                     <span>Estoque</span>
                 </a>
-                <a href="adicionarproduto.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-plus-circle mr-2"></i>
+                <a href="adicionarproduto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-            
-                    <a href="solicitar.php" class="header-nav-link flex items-center cursor-pointer">
-                        <i class="fas fa-clipboard-list mr-2"></i>
-                        <span>Solicitar</span>
-                      
-                    </a>
-                <a href="relatorios.php" class="header-nav-link active flex items-center">
-                    <i class="fas fa-chart-bar mr-2"></i>
+                <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                    <span>Solicitar</span>
+                </a>
+                <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                    <i class="fas fa-chart-bar mr-3 text-lg"></i>
                     <span>Relatórios</span>
                 </a>
             </nav>
+            
+            <!-- Botão de fechar sidebar no mobile -->
+            <div class="p-4 border-t border-white/20 md:hidden">
+                <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
+                    <i class="fas fa-times mr-2"></i>
+                    Fechar Menu
+                </button>
+            </div>
         </div>
-    </header>
+    </div>
+    
+    <!-- Botão de menu mobile -->
+    <button class="fixed top-4 left-4 z-50 md:hidden bg-primary text-white p-3 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
+        <i class="fas fa-bars text-lg"></i>
+    </button>
+    
+    <!-- Overlay para mobile -->
+    <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
+    
+    <!-- Botão Voltar ao Topo -->
+    <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
+        <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
+    </button>
 
-    <main class="container mx-auto px-4 py-8 md:py-12 flex-1">
+    <!-- Main content -->
+    <main class="ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
         <!-- Título da Página -->
         <div class="text-center mb-8">
             <h1 class="text-primary text-3xl md:text-4xl font-bold mb-4 page-title tracking-tight font-heading">
@@ -643,9 +661,9 @@ $barcode = '';
                 </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Estoque Crítico</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Produtos com estoque baixo (≤ 5 unidades)</p>
-                <a href="../control/controllerrelatoriocritico.php" class="bg-gradient-to-r from-warning to-yellow-500 text-white py-2 px-6 rounded-lg hover:from-yellow-500 hover:to-warning transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
-                    <i class="fas fa-exclamation-circle mr-2"></i>
-                    Ver Críticos
+                <a href="../control/controllerrelatoriocritico.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Gerar PDF
                 </a>
             </div>
 
@@ -688,6 +706,20 @@ $barcode = '';
                 <a href="../control/controllerrelatorioscb.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
                     <i class="fas fa-file-pdf mr-2"></i>
                     Gerar Relatório
+                </a>
+            </div>
+
+            <!-- Relatório de Perdas -->
+            <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.6s">
+                <div class="card-shine"></div>
+                <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-primary mb-2 text-center">Relatório de Perdas</h3>
+                <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de todas as perdas registradas no sistema</p>
+                <a href="../control/controllerRelatorioPerdas.php?pdf=1" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Gerar PDF
                 </a>
             </div>
         </div>
@@ -801,78 +833,78 @@ $barcode = '';
         </div>
     </div>
 
-    <footer class="bg-gradient-to-r from-primary to-dark text-white py-6 mt-8">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Sobre a Escola -->
-                <div>
-                    <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
-                        <i class="fas fa-school mr-2 text-sm"></i>
-                        EEEP STGM
-                    </h3>
-                    <p class="text-xs leading-relaxed">
-                        <i class="fas fa-map-marker-alt mr-1 text-xs"></i>
-                        AV. Marta Maria Carvalho Nojoza, SN<br>
-                        Maranguape - CE
+    <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
+        <!-- Efeito de brilho sutil no topo -->
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
+        
+        <div class="ml-64 px-4 md:px-8 transition-all duration-300" id="footerContent">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                    <!-- Sobre a Escola -->
+                    <div class="group">
+                        <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
+                            <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
+                            EEEP STGM
+                        </h3>
+                        <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
+                            <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
+                            AV. Marta Maria Carvalho Nojoza, SN<br>
+                            Maranguape - CE
+                        </p>
+                    </div>
+
+                    <!-- Contato -->
+                    <div class="group">
+                        <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
+                            <i class="fas fa-address-book mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
+                            Contato
+                        </h3>
+                        <div class="space-y-3">
+                            <a href="tel:+558533413990" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
+                                <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                (85) 3341-3990
+                            </a>
+                            <a href="mailto:eeepsantariamata@gmail.com" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
+                                <i class="fas fa-envelope mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                eeepsantariamata@gmail.com
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Desenvolvedores -->
+                    <div class="group">
+                        <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
+                            <i class="fas fa-code mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
+                            Dev Team
+                        </h3>
+                        <div class="grid grid-cols-1 gap-3">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Matheus Felix
+                            </a>
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Roger Cavalcante
+                            </a>
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Matheus Machado
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rodapé inferior -->
+                <div class="border-t border-white/20 pt-6 mt-8 text-center">
+                    <p class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">
+                        © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
                     </p>
                 </div>
-
-                <!-- Contato -->
-                <div>
-                    <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
-                        <i class="fas fa-address-book mr-2 text-sm"></i>
-                        Contato
-                    </h3>
-                    <div class="text-xs leading-relaxed space-y-1">
-                        <p class="flex items-start">
-                            <i class="fas fa-phone-alt mr-1 mt-0.5 text-xs"></i>
-                            (85) 3341-3990
-                        </p>
-                        <p class="flex items-start">
-                            <i class="fas fa-envelope mr-1 mt-0.5 text-xs"></i>
-                            eeepsantariamata@gmail.com
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Desenvolvedores em Grid -->
-                <div>
-                    <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
-                        <i class="fas fa-code mr-2 text-sm"></i>
-                        Dev Team
-                    </h3>
-                    <div class="grid grid-cols-2 gap-2">
-                        <a href="https://www.instagram.com/dudu.limasx/" target="_blank"
-                            class="text-xs flex items-center hover:text-secondary transition-colors">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Carlos E.
-                        </a>
-                        <a href="https://www.instagram.com/millenafreires_/" target="_blank"
-                            class="text-xs flex items-center hover:text-secondary transition-colors">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Millena F.
-                        </a>
-                        <a href="https://www.instagram.com/matheusz.mf/" target="_blank"
-                            class="text-xs flex items-center hover:text-secondary transition-colors">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Matheus M.
-                        </a>
-                        <a href="https://www.instagram.com/yanlucas10__/" target="_blank"
-                            class="text-xs flex items-center hover:text-secondary transition-colors">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Ian Lucas
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Rodapé inferior compacto -->
-            <div class="border-t border-white/20 pt-4 mt-4 text-center">
-                <p class="text-xs">
-                    © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
-                </p>
             </div>
         </div>
+        
+        <!-- Efeito de brilho sutil na base -->
+        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
 
     <script>
@@ -895,6 +927,9 @@ $barcode = '';
 
             // Carregar estatísticas em tempo real
             loadStatistics();
+
+            // Resetar estados dos botões ao carregar a página
+            resetButtonStates();
 
             // Configurar gráfico
             // setupChart(); // Remover chamada antiga
@@ -989,6 +1024,14 @@ $barcode = '';
                 setTimeout(() => {
                     dateForm.submit();
                 }, 1000);
+
+                // Timeout de segurança para resetar o botão caso algo dê errado
+                setTimeout(() => {
+                    if (submitBtn.disabled) {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                }, 5000);
             });
 
             // Validação do formulário de produtos cadastrados
@@ -1017,6 +1060,14 @@ $barcode = '';
                 setTimeout(() => {
                     produtosCadastradosForm.submit();
                 }, 1000);
+
+                // Timeout de segurança para resetar o botão caso algo dê errado
+                setTimeout(() => {
+                    if (submitBtn.disabled) {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                }, 5000);
             });
 
             // Validação do formulário de produto
@@ -1049,6 +1100,14 @@ $barcode = '';
                 setTimeout(() => {
                     productForm.submit();
                 }, 1000);
+
+                // Timeout de segurança para resetar o botão caso algo dê errado
+                setTimeout(() => {
+                    if (submitBtn.disabled) {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                }, 5000);
             });
 
             // Menu mobile
@@ -1138,6 +1197,20 @@ $barcode = '';
                     });
             }
 
+            // Função para resetar estado dos botões
+            function resetButtonStates() {
+                const submitButtons = document.querySelectorAll('button[type="submit"]');
+                submitButtons.forEach(button => {
+                    if (button.classList.contains('confirm-btn')) {
+                        // Verificar se o botão está em estado de loading
+                        if (button.innerHTML.includes('loading-spinner')) {
+                            button.innerHTML = '<i class="fas fa-file-pdf mr-2"></i>Gerar Relatório';
+                            button.disabled = false;
+                        }
+                    }
+                });
+            }
+
             // Função para configurar gráfico com dados reais
             function setupChart(graficoData) {
                 const ctx = document.getElementById('estoqueChart').getContext('2d');
@@ -1212,6 +1285,27 @@ $barcode = '';
                     }, 300);
                 }, 3000);
             }
+
+            // Listener para quando a página volta a ficar visível (resolve o bug do loading infinito)
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    // Página voltou a ficar visível, resetar estados dos botões
+                    resetButtonStates();
+                }
+            });
+
+            // Listener para quando a página é carregada novamente
+            window.addEventListener('pageshow', function(event) {
+                // Se a página foi carregada do cache (back/forward), resetar estados
+                if (event.persisted) {
+                    resetButtonStates();
+                }
+            });
+
+            // Listener para quando a página é focada novamente
+            window.addEventListener('focus', function() {
+                resetButtonStates();
+            });
         });
     </script>
 </body>
