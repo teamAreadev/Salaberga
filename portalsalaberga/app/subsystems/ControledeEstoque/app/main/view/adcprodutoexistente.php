@@ -530,21 +530,14 @@ echo "<!-- Debug: Resultado count = " . count($resultado) . " -->";
                         Dev Team
                     </h3>
                     <div class="grid grid-cols-2 gap-2">
-                        <a 
-                            class="text-xs flex items-center hover:text-secondary transition-colors">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Matheus Felix
-                        </a>
-                        <a 
-                            class="text-xs flex items-center hover:text-secondary transition-colors">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                           Roger Cavalcante
-                        </a>
-                        <a 
-                            class="text-xs flex items-center hover:text-secondary transition-colors">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Matheus Machado
-                        </a>
+                    <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Matheus Felix
+                            </a>
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Pedro Uchoa 
+                            </a>
                      
                     </div>
                 </div>

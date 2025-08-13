@@ -183,9 +183,8 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             </div>
         </div>
     </div>
-    
-    <!-- Botão de menu mobile -->
-    <button class="fixed top-4 left-4 z-50 md:hidden bg-primary text-white p-3 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
+
+    <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
     
@@ -198,7 +197,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
     </button>
 
     <!-- Main content -->
-    <main class="ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
+    <main class="ml-0 md:ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
         <div class="text-center mb-10">
             <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">VISUALIZAR ESTOQUE</h1>
         </div>
@@ -388,7 +387,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
         
-        <div class="px-4 md:px-8 transition-all duration-300" id="footerContent">
+        <div class="px-4 md:px-8 transition-all duration-300 ml-0 md:ml-64" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                     <!-- Sobre a Escola -->
@@ -429,21 +428,13 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                            <a href="https://www.instagram.com/dudu.limasx/" target="_blank" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                              <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Carlos E.
+                                Matheus Felix
                             </a>
-                            <a href="https://www.instagram.com/millenafreires_/" target="_blank" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Millena F.
-                            </a>
-                            <a href="https://www.instagram.com/matheusz.mf/" target="_blank" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
-                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Matheus M.
-                            </a>
-                            <a href="https://www.instagram.com/yanlucas10__/" target="_blank" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
-                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Ian Lucas
+                                Pedro Uchoa 
                             </a>
                         </div>
                     </div>

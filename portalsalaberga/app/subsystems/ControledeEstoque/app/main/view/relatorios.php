@@ -511,6 +511,69 @@ $barcode = '';
             .quick-stats {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            /* Responsividade da sidebar */
+            #sidebar {
+                transform: translateX(-100%);
+            }
+            
+            #sidebar.show {
+                transform: translateX(0);
+            }
+
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            /* Botão do menu mobile */
+            #menuButton {
+                transition: all 0.3s ease;
+            }
+            
+            #menuButton.hidden {
+                opacity: 0;
+                visibility: hidden;
+                transform: scale(0.8);
+            }
+            
+            /* Footer responsivo para mobile */
+            footer {
+                margin-left: 0 !important;
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+            
+            footer .ml-64 {
+                margin-left: 0 !important;
+            }
+
+            /* Main content responsivo */
+            main {
+                margin-left: 0 !important;
+            }
+        }
+
+        /* Estilos dos links do sidebar */
+        .sidebar-link {
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(0.5rem);
+        }
+        
+        .sidebar-link.active {
+            background-color: rgba(255, 165, 0, 0.2);
+            color: #FFA500;
         }
     </style>
 </head>
@@ -561,8 +624,7 @@ $barcode = '';
         </div>
     </div>
     
-    <!-- Botão de menu mobile -->
-    <button class="fixed top-4 left-4 z-50 md:hidden bg-primary text-white p-3 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
+    <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
     
@@ -575,7 +637,7 @@ $barcode = '';
     </button>
 
     <!-- Main content -->
-    <main class="ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
+    <main class="ml-0 md:ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
         <!-- Título da Página -->
         <div class="text-center mb-8">
             <h1 class="text-primary text-3xl md:text-4xl font-bold mb-4 page-title tracking-tight font-heading">
@@ -928,17 +990,13 @@ $barcode = '';
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Roger Cavalcante
-                            </a>
-                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
-                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Matheus Machado
+                                Pedro Uchoa 
                             </a>
                         </div>
                     </div>
@@ -959,6 +1017,72 @@ $barcode = '';
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Sidebar mobile toggle
+            const menuButton = document.getElementById('menuButton');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const closeSidebar = document.getElementById('closeSidebar');
+
+            if (menuButton && sidebar) {
+                menuButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('show');
+                    overlay.classList.toggle('hidden');
+                    
+                    // Mostrar/ocultar o botão do menu
+                    if (sidebar.classList.contains('show')) {
+                        menuButton.classList.add('hidden');
+                    } else {
+                        menuButton.classList.remove('hidden');
+                    }
+                    
+                    document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
+                });
+
+                // Fechar sidebar ao clicar no overlay
+                if (overlay) {
+                    overlay.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        overlay.classList.add('hidden');
+                        menuButton.classList.remove('hidden');
+                        document.body.style.overflow = '';
+                    });
+                }
+
+                // Fechar sidebar ao clicar no botão fechar
+                if (closeSidebar) {
+                    closeSidebar.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        overlay.classList.add('hidden');
+                        menuButton.classList.remove('hidden');
+                        document.body.style.overflow = '';
+                    });
+                }
+
+                // Fechar sidebar ao clicar em um link
+                const navLinks = sidebar.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 768) {
+                            sidebar.classList.remove('show');
+                            overlay.classList.add('hidden');
+                            menuButton.classList.remove('hidden');
+                            document.body.style.overflow = '';
+                        }
+                    });
+                });
+
+                // Fechar sidebar ao pressionar ESC
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && sidebar.classList.contains('show')) {
+                        sidebar.classList.remove('show');
+                        overlay.classList.add('hidden');
+                        menuButton.classList.remove('hidden');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
             // Elementos do modal
             const openDateModalBtn = document.getElementById('openDateModal');
             const dateModal = document.getElementById('dateModal');

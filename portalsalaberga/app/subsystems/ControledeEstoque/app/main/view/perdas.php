@@ -278,8 +278,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         </div>
     </div>
     
-    <!-- Botão de menu mobile -->
-    <button class="fixed top-4 left-4 z-50 md:hidden bg-primary text-white p-3 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
+    <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
     
@@ -476,21 +475,13 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                            <a href="https://www.instagram.com/dudu.limasx/" target="_blank" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Carlos E.
+                                Matheus Felix
                             </a>
-                            <a href="https://www.instagram.com/millenafreires_/" target="_blank" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Millena F.
-                            </a>
-                            <a href="https://www.instagram.com/matheusz.mf/" target="_blank" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
-                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Matheus M.
-                            </a>
-                            <a href="https://www.instagram.com/yanlucas10__/" target="_blank" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
-                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Ian Lucas
+                                Pedro Uchoa 
                             </a>
                         </div>
                     </div>

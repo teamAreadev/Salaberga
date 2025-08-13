@@ -127,16 +127,24 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         .custom-input,
         .custom-select {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.5rem 0.75rem;
             border: 2px solid #005A24;
             border-radius: 0.5rem;
-            font-size: 1rem;
+            font-size: 0.875rem;
             color: #1A3C34;
             background-color: #F8FAF9;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
             font-family: 'Inter', sans-serif;
             font-weight: 500;
             text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .custom-input,
+            .custom-select {
+                padding: 0.75rem;
+                font-size: 1rem;
+            }
         }
 
         .custom-select {
@@ -270,6 +278,40 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 margin-left: 0 !important;
             }
         }
+
+        /* Responsividade para elementos específicos */
+        @media (max-width: 640px) {
+            .page-title::after {
+                width: 60px;
+                height: 2px;
+                bottom: -6px;
+            }
+            
+            .custom-input,
+            .custom-select {
+                font-size: 0.875rem;
+                padding: 0.5rem;
+            }
+            
+            .custom-input::placeholder,
+            .custom-select option {
+                font-size: 0.875rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title::after {
+                width: 50px;
+                height: 2px;
+                bottom: -4px;
+            }
+            
+            .custom-input,
+            .custom-select {
+                font-size: 0.8rem;
+                padding: 0.4rem;
+            }
+        }
     </style>
 </head>
 
@@ -319,8 +361,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         </div>
     </div>
     
-    <!-- Botão de menu mobile -->
-    <button class="fixed top-4 left-4 z-50 md:hidden bg-primary text-white p-3 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
+    <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
     
@@ -333,14 +374,14 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
     </button>
 
     <!-- Main content -->
-    <main class="ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
-        <div class="text-center mb-10">
-            <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">SOLICITAR PRODUTO</h1>
+    <main class="ml-0 md:ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
+        <div class="text-center mb-6 md:mb-10">
+            <h1 class="text-primary text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 lg:mb-8 text-center page-title tracking-tight font-heading inline-block mx-auto">SOLICITAR PRODUTO</h1>
         </div>
 
         <!-- Notificação -->
-        <div id="notificacao" class="max-w-2xl mx-auto mb-4 <?php echo isset($_SESSION['erro_solicitacao']) ? '' : 'hidden'; ?>">
-            <div id="notificacaoConteudo" class="p-4 rounded-lg shadow-lg bg-red-500 text-white">
+        <div id="notificacao" class="max-w-2xl mx-auto mb-4 px-4 md:px-0 <?php echo isset($_SESSION['erro_solicitacao']) ? '' : 'hidden'; ?>">
+            <div id="notificacaoConteudo" class="p-3 md:p-4 rounded-lg shadow-lg bg-red-500 text-white text-sm md:text-base">
                 <div class="flex items-center">
                     <i id="notificacaoIcon" class="fas fa-exclamation-circle mr-2"></i>
                     <span id="notificacaoTexto"><?php echo $_SESSION['erro_solicitacao'] ?? 'Erro desconhecido'; ?></span>
@@ -348,74 +389,74 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
-            <form action="../control/controllersolicitar.php" method="POST" class="space-y-6" id="solicitarForm">
-                <div class="space-y-4">
+        <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 lg:p-8 max-w-2xl w-full border-2 border-primary mx-auto">
+            <form action="../control/controllersolicitar.php" method="POST" class="space-y-4 md:space-y-6" id="solicitarForm">
+                <div class="space-y-3 md:space-y-4">
                     <!-- Opções de seleção de produto -->
-                    <div class="mb-4">
-                        <div class="flex space-x-2 mb-3">
-                            <button type="button" id="btnSelect" class="flex-1 bg-primary text-white py-2 px-4 rounded-lg font-semibold transition-colors" onclick="mostrarOpcao('select')">
+                    <div class="mb-3 md:mb-4">
+                        <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                            <button type="button" id="btnSelect" class="w-full sm:flex-1 bg-primary text-white py-2 px-3 md:px-4 rounded-lg font-semibold transition-colors text-sm md:text-base" onclick="mostrarOpcao('select')">
                                 <i class="fas fa-list mr-2"></i>Selecionar da Lista
                             </button>
-                            <button type="button" id="btnBarcode" class="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors" onclick="mostrarOpcao('barcode')">
+                            <button type="button" id="btnBarcode" class="w-full sm:flex-1 bg-gray-300 text-gray-700 py-2 px-3 md:px-4 rounded-lg font-semibold transition-colors text-sm md:text-base" onclick="mostrarOpcao('barcode')">
                                 <i class="fas fa-barcode mr-2"></i>Ler Código de Barras
                             </button>
                         </div>
                     </div>
 
-                                         <!-- Opção 1: Select de produtos -->
-                     <div id="opcaoSelect" class="select-wrapper">
-                         <select id="produto" name="produto" required class="custom-select" aria-label="Selecionar produto" onchange="validarSelecao()">
-                             <option value="" disabled selected>SELECIONAR PRODUTO</option>
-                             <?php
-                             require_once('../model/functionsViews.php');
-                             $select = new select();
-                             $select->selectSolicitarProdutos(null);
-                             ?>
-                         </select>
-                     </div>
+                    <!-- Opção 1: Select de produtos -->
+                    <div id="opcaoSelect" class="select-wrapper">
+                        <select id="produto" name="produto" required class="custom-select text-sm md:text-base" aria-label="Selecionar produto" onchange="validarSelecao()">
+                            <option value="" disabled selected>SELECIONAR PRODUTO</option>
+                            <?php
+                            require_once('../model/functionsViews.php');
+                            $select = new select();
+                            $select->selectSolicitarProdutos(null);
+                            ?>
+                        </select>
+                    </div>
 
-                                         <!-- Opção 2: Input para código de barras -->
-                     <div id="opcaoBarcode" class="hidden">
-                         <div class="relative">
-                             <input type="text" id="barcodeInput" name="barcode" value="<?php echo $_GET['barcode'] ?? ''; ?>" placeholder="ESCANEIE O CÓDIGO DE BARRAS" 
-                                    class="custom-input text-center text-lg font-mono tracking-wider" 
-                                    aria-label="Código de barras">
-                             <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
-                                 <i class="fas fa-barcode text-gray-400"></i>
-                             </div>
-                         </div>
-                         <div id="produtoInfo" class="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg hidden">
-                             <div class="flex items-center justify-between">
-                                 <div>
-                                     <p class="font-semibold text-green-800" id="produtoNome"></p>
-                                     <p class="text-sm text-green-600" id="produtoEstoque"></p>
-                                 </div>
-                                 <i class="fas fa-check-circle text-green-500 text-xl"></i>
-                             </div>
-                         </div>
-                         <input type="hidden" id="produtoIdHidden" name="" value="">
-                         <input type="hidden" id="opcaoAtualHidden" name="opcao_atual" value="barcode">
-                     </div>
+                    <!-- Opção 2: Input para código de barras -->
+                    <div id="opcaoBarcode" class="hidden">
+                        <div class="relative">
+                            <input type="text" id="barcodeInput" name="barcode" value="<?php echo $_GET['barcode'] ?? ''; ?>" placeholder="ESCANEIE O CÓDIGO DE BARRAS" 
+                                   class="custom-input text-center text-base md:text-lg font-mono tracking-wider" 
+                                   aria-label="Código de barras">
+                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                <i class="fas fa-barcode text-gray-400"></i>
+                            </div>
+                        </div>
+                        <div id="produtoInfo" class="mt-3 p-2 md:p-3 bg-green-50 border border-green-200 rounded-lg hidden">
+                            <div class="flex items-center justify-between">
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-green-800 text-sm md:text-base truncate" id="produtoNome"></p>
+                                    <p class="text-xs md:text-sm text-green-600" id="produtoEstoque"></p>
+                                </div>
+                                <i class="fas fa-check-circle text-green-500 text-lg md:text-xl ml-2 flex-shrink-0"></i>
+                            </div>
+                        </div>
+                        <input type="hidden" id="produtoIdHidden" name="" value="">
+                        <input type="hidden" id="opcaoAtualHidden" name="opcao_atual" value="barcode">
+                    </div>
 
                     <div>
                         <input type="number" placeholder="QUANTIDADE" min="1" id="quantidade" name="quantidade" required
-                            class="custom-input" aria-label="Quantidade do produto">
+                            class="custom-input text-sm md:text-base" aria-label="Quantidade do produto">
                     </div>
 
-                                         <div class="select-wrapper">
-                         <select id="retirante" name="retirante" required class="custom-select" aria-label="Selecionar retirante">
-                             <option value="" disabled selected>SELECIONAR SOLICITANTE</option>
-                             <?php
-                             require_once('../model/functionsViews.php');
-                             $select = new select();
-                             $select->selectSolicitarResponsaveis(null);
-                             ?>
-                         </select>
-                     </div>
+                    <div class="select-wrapper">
+                        <select id="retirante" name="retirante" required class="custom-select text-sm md:text-base" aria-label="Selecionar retirante">
+                            <option value="" disabled selected>SELECIONAR SOLICITANTE</option>
+                            <?php
+                            require_once('../model/functionsViews.php');
+                            $select = new select();
+                            $select->selectSolicitarResponsaveis(null);
+                            ?>
+                        </select>
+                    </div>
                 </div>
 
-                <button type="submit" name="btn" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
+                <button type="submit" name="btn" class="w-full bg-secondary text-white font-bold py-2 md:py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors text-sm md:text-base"
                     aria-label="Confirmar solicitação">
                     CONFIRMAR
                 </button>
@@ -427,7 +468,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
         
-        <div class="ml-64 px-4 md:px-8 transition-all duration-300" id="footerContent">
+        <div class="ml-0 md:ml-64 px-4 md:px-8 transition-all duration-300" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                     <!-- Sobre a Escola -->
@@ -468,17 +509,13 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Roger Cavalcante
-                            </a>
-                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
-                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Matheus Machado
+                                Pedro Uchoa 
                             </a>
                         </div>
                     </div>
@@ -532,8 +569,8 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             produtoSelecionado = null;
 
             if (opcao === 'select') {
-                btnSelect.className = 'flex-1 bg-primary text-white py-2 px-4 rounded-lg font-semibold transition-colors';
-                btnBarcode.className = 'flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors';
+                btnSelect.className = 'w-full sm:flex-1 bg-primary text-white py-2 px-3 md:px-4 rounded-lg font-semibold transition-colors text-sm md:text-base';
+                btnBarcode.className = 'w-full sm:flex-1 bg-gray-300 text-gray-700 py-2 px-3 md:px-4 rounded-lg font-semibold transition-colors text-sm md:text-base';
                 opcaoSelect.classList.remove('hidden');
                 opcaoBarcode.classList.add('hidden');
                 produtoSelect.required = true;
@@ -545,8 +582,8 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 opcaoAtual = 'select';
                 opcaoAtualHidden.value = 'select';
             } else {
-                btnSelect.className = 'flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors';
-                btnBarcode.className = 'flex-1 bg-primary text-white py-2 px-4 rounded-lg font-semibold transition-colors';
+                btnSelect.className = 'w-full sm:flex-1 bg-gray-300 text-gray-700 py-2 px-3 md:px-4 rounded-lg font-semibold transition-colors text-sm md:text-base';
+                btnBarcode.className = 'w-full sm:flex-1 bg-primary text-white py-2 px-3 md:px-4 rounded-lg font-semibold transition-colors text-sm md:text-base';
                 opcaoSelect.classList.add('hidden');
                 opcaoBarcode.classList.remove('hidden');
                 produtoSelect.required = false;
@@ -649,10 +686,10 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
 
             notificacaoTexto.textContent = mensagem;
             if (tipo === 'success') {
-                notificacaoConteudo.className = 'p-4 rounded-lg shadow-lg bg-green-500 text-white';
+                notificacaoConteudo.className = 'p-3 md:p-4 rounded-lg shadow-lg bg-green-500 text-white text-sm md:text-base';
                 notificacaoIcon.className = 'fas fa-check-circle mr-2';
             } else if (tipo === 'error') {
-                notificacaoConteudo.className = 'p-4 rounded-lg shadow-lg bg-red-500 text-white';
+                notificacaoConteudo.className = 'p-3 md:p-4 rounded-lg shadow-lg bg-red-500 text-white text-sm md:text-base';
             }
             notificacao.classList.remove('hidden');
             setTimeout(() => notificacao.classList.add('hidden'), 5000);
@@ -729,11 +766,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 if (footerContent) {
                     const adjustFooter = () => {
                         if (window.innerWidth <= 768) {
-                            if (sidebar.classList.contains('show')) {
-                                footerContent.style.marginLeft = '0';
-                            } else {
-                                footerContent.style.marginLeft = '0';
-                            }
+                            footerContent.style.marginLeft = '0';
                         } else {
                             footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
                         }

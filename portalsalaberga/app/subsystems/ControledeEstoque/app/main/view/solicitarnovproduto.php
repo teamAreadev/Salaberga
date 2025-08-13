@@ -402,26 +402,14 @@
                         Dev Team
                     </h3>
                     <div class="grid grid-cols-2 gap-2">
-                        <a href="https://www.instagram.com/dudu.limasx/" target="_blank"
-                            class="text-xs flex items-center hover:text-secondary transition-colors social-icon">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Carlos E.
-                        </a>
-                        <a href="https://www.instagram.com/millenafreires_/" target="_blank"
-                            class="text-xs flex items-center hover:text-secondary transition-colors social-icon">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Millena F.
-                        </a>
-                        <a href="https://www.instagram.com/matheusz.mf/" target="_blank"
-                            class="text-xs flex items-center hover:text-secondary transition-colors social-icon">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Matheus M.
-                        </a>
-                        <a href="https://www.instagram.com/yanlucas10__/" target="_blank"
-                            class="text-xs flex items-center hover:text-secondary transition-colors social-icon">
-                            <i class="fab fa-instagram mr-1 text-xs"></i>
-                            Ian Lucas
-                        </a>
+                    <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Matheus Felix
+                            </a>
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Pedro Uchoa 
+                            </a>
                     </div>
                 </div>
             </div>
