@@ -8,6 +8,13 @@ class select extends connection
         parent::__construct();
     }
 
+    public function select_categoria()
+    {
+        $query = $this->pdo->query('SELECT * FROM categorias');
+        $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        return $resultado;
+    }
     public function selectProdutosTotal()
     {
         $query = $this->pdo->query('SELECT * FROM produtos');

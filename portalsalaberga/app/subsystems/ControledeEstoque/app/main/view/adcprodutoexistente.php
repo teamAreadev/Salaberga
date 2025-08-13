@@ -428,6 +428,10 @@ echo "<!-- Debug: Resultado count = " . count($resultado) . " -->";
                     <i class="fas fa-plus-circle mr-2"></i>
                     <span>Adicionar</span>
                 </a>
+                <a href="criar_categoria.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-chart-bar mr-3 text-lg"></i>
+                    <span>Cadastrar categoria</span>
+                </a>
             
                     <a href="solicitar.php" class="header-nav-link flex items-center cursor-pointer">
                         <i class="fas fa-clipboard-list mr-2"></i>

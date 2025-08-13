@@ -1,9 +1,11 @@
 <?php
-        require_once('../model/sessions.php');
-        $session = new sessions();
-        $session->autenticar_session();
-        
-    ?>
+require_once('../model/functionsViews.php');
+$select = new select();
+require_once('../model/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+
+?>
 <?php
 // Capturar o barcode ou nome da URL
 $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome']) ? $_GET['nome'] : '');
@@ -279,49 +281,49 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
             transition: all 0.3s ease;
             border-radius: 0.5rem;
         }
-        
+
         .sidebar-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(0.5rem);
         }
-        
+
         .sidebar-link.active {
             background-color: rgba(255, 165, 0, 0.2);
             color: #FFA500;
         }
-        
+
         /* Responsividade da sidebar */
         @media (max-width: 768px) {
             #sidebar {
                 transform: translateX(-100%);
             }
-            
+
             #sidebar.show {
                 transform: translateX(0);
             }
-            
+
             main {
                 margin-left: 0 !important;
             }
-            
+
             /* Botão do menu mobile */
             #menuButton {
                 transition: all 0.3s ease;
             }
-            
+
             #menuButton.hidden {
                 opacity: 0;
                 visibility: hidden;
                 transform: scale(0.8);
             }
-            
+
             /* Footer responsivo para mobile */
             footer {
                 margin-left: 0 !important;
                 padding-left: 1rem !important;
                 padding-right: 1rem !important;
             }
-            
+
             footer .ml-64 {
                 margin-left: 0 !important;
             }
@@ -340,7 +342,7 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                     <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
                 </div>
             </div>
-            
+
             <!-- Menu de navegação -->
             <nav class="flex-1 p-4 space-y-2">
                 <a href="paginainicial.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
@@ -355,6 +357,10 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
+                <a href="criar_categoria.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-chart-bar mr-3 text-lg"></i>
+                    <span>Cadastrar categoria</span>
+                </a>
                 <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
@@ -364,7 +370,7 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                     <span>Relatórios</span>
                 </a>
             </nav>
-            
+
             <!-- Botão de fechar sidebar no mobile -->
             <div class="p-4 border-t border-white/20 md:hidden">
                 <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
@@ -374,14 +380,14 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
             </div>
         </div>
     </div>
-    
+
     <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
-    
+
     <!-- Overlay para mobile -->
     <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
-    
+
     <!-- Botão Voltar ao Topo -->
     <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
         <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
@@ -416,57 +422,15 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                     <div class="p-4 border-2 border-primary rounded-lg">
                         <p class="font-semibold text-primary mb-3 text-center">Selecione a Categoria</p>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                            <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="limpeza" name="natureza" value="limpeza" aria-label="Limpeza">
-                                <span class="text-gray-700">Limpeza</span>
-                            </label>
+                        <select class="js-example-basic-single" name="state">
 
-                            <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="expedientes" name="natureza" value="expedientes" aria-label="Expedientes" required>
-                                <span class="text-gray-700">Expedientes</span>
-                            </label>
-
-                            <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="manutencao" name="natureza" value="manutencao" aria-label="Manutenção" required>
-                                <span class="text-gray-700">Manutenção</span>
-                            </label>
-
-                            <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="eletrico" name="natureza" value="eletrico" aria-label="Elétrico" required>
-                                <span class="text-gray-700">Elétrico</span>
-                            </label>
-
-                            <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="hidraulico" name="natureza" value="hidraulico" aria-label="Hidráulico" required>
-                                <span class="text-gray-700">Hidráulico</span>
-                            </label>
-
-                            <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="educacao_fisica" name="natureza" value="educacao_fisica" aria-label="Educação Física" required>
-                                <span class="text-gray-700">Educação Física</span>
-                            </label>
-
-                            <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="epi" name="natureza" value="epi" aria-label="EPI" required>
-                                <span class="text-gray-700">EPI</span>
-                            </label>
-
-                            <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="copa_e_cozinha" name="natureza" value="copa_e_cozinha" aria-label="Copa e Cozinha">
-                                <span class="text-gray-700">Copa e Cozinha</span>
-                            </label>
-
-                            <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="informatica" name="natureza" value="informatica" aria-label="Informática">
-                                <span class="text-gray-700">Informática</span>
-                            </label>
-
-                            <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="ferramentas" name="natureza" value="ferramentas" aria-label="Ferramentas">
-                                <span class="text-gray-700">Ferramentas</span>
-                            </label>
-                        </div>
+                            <?php
+                            $dados = $select->select_categoria();
+                            foreach ($dados as $dado) {
+                            ?>
+                                <option value="<?= $dado['id'] ?>"><?= $dado['nome_categoria'] ?></option>
+                            <?php } ?>
+                        </select>
                     </div>
                     <input type="hidden" name="barcode" value="<?php echo htmlspecialchars($identificador); ?>">
                 </div>
@@ -485,7 +449,7 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-        
+
         <div class="ml-64 px-4 md:px-8 transition-all duration-300" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
@@ -527,13 +491,13 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Pedro Uchoa 
+                                Pedro Uchoa
                             </a>
                         </div>
                     </div>
@@ -547,12 +511,15 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                 </div>
             </div>
         </div>
-        
+
         <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
 
     <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
         document.addEventListener('DOMContentLoaded', function() {
             // Sidebar mobile toggle
             const menuButton = document.getElementById('menuButton');
@@ -565,14 +532,14 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                     e.stopPropagation();
                     sidebar.classList.toggle('show');
                     overlay.classList.toggle('hidden');
-                    
+
                     // Mostrar/ocultar o botão do menu
                     if (sidebar.classList.contains('show')) {
                         menuButton.classList.add('hidden');
                     } else {
                         menuButton.classList.remove('hidden');
                     }
-                    
+
                     document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
                 });
 
@@ -655,7 +622,7 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                         backToTop.classList.add('hidden');
                     }
                 });
-                
+
                 // Funcionalidade do botão voltar ao topo
                 backToTop.addEventListener('click', () => {
                     window.scrollTo({
