@@ -1,22 +1,21 @@
-<?php 
+<?php
 require_once('../model/model.main.php');
-
-if( isset($_GET['barcode']) && !empty(trim($_GET['barcode']))){
+print_r($_POST);
+if (isset($_GET['barcode']) && !empty(trim($_GET['barcode']))) {
 
     $barcode = $_GET['barcode'];
 
     $obj = new MainModel();
     $result = $obj->verificar_produto($barcode);
 
-    if($result){
-        header('Location: ../view/solicitar.php?barcode='.$barcode);
+    if ($result) {
+        header('Location: ../view/solicitar.php?barcode=' . $barcode);
         exit();
-    }else{
-        header('Location: ../view/adcnovoproduto.php?barcode='.$barcode);
-            exit();
+    } else {
+        header('Location: ../view/adcnovoproduto.php?barcode=' . $barcode);
+        exit();
     }
-}
-if (
+} else if (
     isset($_POST['id_produto']) && !empty(trim($_POST['id_produto'])) &&
     isset($_POST['quantidade_perdida']) && !empty(trim($_POST['quantidade_perdida'])) &&
     isset($_POST['tipo_perda']) && !empty(trim($_POST['tipo_perda'])) &&
@@ -36,7 +35,6 @@ if (
         $data_perda
     );
 
-
     switch ($result) {
         case 1:
             header('Location: ../view/perdas.php?registrado');
@@ -51,5 +49,7 @@ if (
             header('Location: ../view/perdas.php?falha');
             exit();
     }
+} else {
+    header('Location: ../view/paginaincial.php');
+    exit();
 }
-?>
