@@ -722,6 +722,20 @@ $barcode = '';
                     Gerar PDF
                 </a>
             </div>
+
+            <!-- Relatório por categoria -->
+            <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.6s">
+                <div class="card-shine"></div>
+                <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                    <i class="fas fa-tags text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-primary mb-2 text-center">Relatório por Categoria</h3>
+                <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de produtos por categoria específica</p>
+                <button onclick="openCategoryModal()" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Gerar PDF
+                </button>
+            </div>
         </div>
 
     </main>
@@ -833,6 +847,42 @@ $barcode = '';
         </div>
     </div>
 
+    <!-- Modal para Seleção de Categoria -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeCategoryModal">×</button>
+            <h2 class="font-heading">
+                <i class="fas fa-tags mr-2 text-secondary"></i>
+                Selecionar Categoria
+            </h2>
+            <form id="categoryForm" action="../control/controllerRelatorioCategoria.php" method="POST" target="_blank" class="space-y-4">
+                <div class="form-group">
+                    <label for="categoria" class="font-semibold">
+                        <i class="fas fa-tag mr-1"></i>
+                        Categoria do Produto
+                    </label>
+                    <select id="categoria" name="categoria" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="" disabled selected>SELECIONAR CATEGORIA</option>
+                        <option value="informatica">Informática</option>
+                        <option value="epi">EPI (Equipamentos de Proteção Individual)</option>
+                        <option value="limpeza">Limpeza</option>
+                        <option value="escritorio">Material de Escritório</option>
+                        <option value="manutencao">Material de Manutenção</option>
+                        <option value="seguranca">Segurança</option>
+                        <option value="alimentacao">Alimentação</option>
+                        <option value="higiene">Higiene</option>
+                        <option value="ferramentas">Ferramentas</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                <button type="submit" class="confirm-btn">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Gerar Relatório
+                </button>
+            </form>
+        </div>
+    </div>
+
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
@@ -925,6 +975,10 @@ $barcode = '';
             const closeProdutosCadastradosModalBtn = document.getElementById('closeProdutosCadastradosModal');
             const produtosCadastradosForm = document.getElementById('produtosCadastradosForm');
 
+            const categoryModal = document.getElementById('categoryModal');
+            const closeCategoryModalBtn = document.getElementById('closeCategoryModal');
+            const categoryForm = document.getElementById('categoryForm');
+
             // Carregar estatísticas em tempo real
             loadStatistics();
 
@@ -982,8 +1036,14 @@ $barcode = '';
                 produtosCadastradosForm.reset();
             });
 
+            // Fechar Modal de Categoria
+            closeCategoryModalBtn.addEventListener('click', function() {
+                categoryModal.classList.remove('show');
+                categoryForm.reset();
+            });
+
             // Fechar Modais ao clicar fora
-            [dateModal, productModal, produtosCadastradosModal].forEach(modal => {
+            [dateModal, productModal, produtosCadastradosModal, categoryModal].forEach(modal => {
                 modal.addEventListener('click', function(e) {
                     if (e.target === modal) {
                         modal.classList.remove('show');
@@ -993,6 +1053,8 @@ $barcode = '';
                             productForm.reset();
                         } else if (modal === produtosCadastradosModal) {
                             produtosCadastradosForm.reset();
+                        } else if (modal === categoryModal) {
+                            categoryForm.reset();
                         }
                     }
                 });
@@ -1305,6 +1367,41 @@ $barcode = '';
             // Listener para quando a página é focada novamente
             window.addEventListener('focus', function() {
                 resetButtonStates();
+            });
+
+            // Função para abrir modal de categoria
+            window.openCategoryModal = function() {
+                categoryModal.classList.add('show');
+            };
+
+            // Validação do formulário de categoria
+            categoryForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const categoria = document.getElementById('categoria').value;
+
+                if (!categoria) {
+                    showNotification('Por favor, selecione uma categoria.', 'error');
+                    return;
+                }
+
+                // Mostrar loading
+                const submitBtn = categoryForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+                submitBtn.disabled = true;
+
+                // Simular delay e enviar
+                setTimeout(() => {
+                    categoryForm.submit();
+                }, 1000);
+
+                // Timeout de segurança para resetar o botão caso algo dê errado
+                setTimeout(() => {
+                    if (submitBtn.disabled) {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                }, 5000);
             });
         });
     </script>
