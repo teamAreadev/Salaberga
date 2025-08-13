@@ -1478,11 +1478,6 @@ class relatorios extends connection
         $pdf->SetXY($startX + 15, $startY + 15);
         $pdf->Cell($cardWidth - 30, 20, utf8_decode("PRODUTOS CRÍTICOS"), 0, 1, 'L');
 
-        $pdf->SetFont('Arial', 'B', 24);
-        $pdf->SetTextColor($corAlerta[0], $corAlerta[1], $corAlerta[2]);
-        $pdf->SetXY($startX + 15, $startY + 40);
-        $pdf->Cell($cardWidth - 30, 25, $resumo['produtos_criticos'], 0, 1, 'L');
-
         // Card 2 - Categorias
         $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
         $pdf->RoundedRect($startX + $cardWidth + $cardMargin, $startY, $cardWidth, $cardHeight, 8, 'F');
@@ -1491,11 +1486,6 @@ class relatorios extends connection
         $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
         $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 15);
         $pdf->Cell($cardWidth - 30, 20, utf8_decode("CATEGORIAS"), 0, 1, 'L');
-
-        $pdf->SetFont('Arial', 'B', 24);
-        $pdf->SetTextColor($corSecondary[0], $corSecondary[1], $corSecondary[2]);
-        $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 40);
-        $pdf->Cell($cardWidth - 30, 25, $resumo['total_categorias'], 0, 1, 'L');
 
         // Card 3 - (Placeholder para futuro uso, mantendo layout com 3 cards)
         $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
@@ -2084,14 +2074,14 @@ class relatorios extends connection
         // Calculando a largura disponível para o título
         $larguraDisponivel = $pdf->GetPageWidth() - 300; // Deixando espaço para logo
         $pdf->SetXY(40 + $logoWidth + 5, 30); // Reduzindo o espaçamento de 15 para 5
-        $pdf->Cell($larguraDisponivel, 24, utf8_decode("RELATÓRIO DE ESTOQUE CRÍTICO"), 0, 1, 'L');
+        $pdf->Cell($larguraDisponivel, 24, utf8_decode("RELATÓRIO POR CATEGORIA - " . mb_strtoupper($categoria, 'UTF-8')), 0, 1, 'L');
 
         $pdf->SetFont('Arial', '', 12);
         $pdf->SetXY(40 + $logoWidth + 5, $pdf->GetY()); // Reduzindo o espaçamento de 15 para 5
         $pdf->Cell($larguraDisponivel, 10, utf8_decode("EEEP Salaberga Torquato Gomes de Matos"), 0, 1, 'L');
 
         // ===== RESUMO DE DADOS EM CARDS =====
-        $totalProdutosCriticos = $result;
+        $totalProdutosNaCategoria = $result;
         $totalQuantidade = 0;
         $categoriasUnicas = 0;
         $produtos = array();
@@ -2109,31 +2099,31 @@ class relatorios extends connection
         $startX = ($pdf->GetPageWidth() - (2 * $cardWidth + $cardMargin)) / 2; // Centralizar 2 cards
         $startY = 110;
 
-        // Card 1 - Total de Itens
+        // Card 1 - Total de Produtos
         $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
         $pdf->RoundedRect($startX, $startY, $cardWidth, $cardHeight, 8, 'F');
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
         $pdf->SetXY($startX + 15, $startY + 15);
-        $pdf->Cell($cardWidth - 30, 20, utf8_decode("TOTAL DE ITENS"), 0, 1, 'L');
+        $pdf->Cell($cardWidth - 30, 20, utf8_decode("TOTAL DE PRODUTOS"), 0, 1, 'L');
         $pdf->SetFont('Arial', 'B', 24);
         $pdf->SetTextColor($corAlerta[0], $corAlerta[1], $corAlerta[2]); // Vermelho como na imagem
         $pdf->SetXY($startX + 15, $startY + 40);
-        $pdf->Cell($cardWidth - 30, 25, $totalProdutosCriticos, 0, 1, 'L');
+        $pdf->Cell($cardWidth - 30, 25, $totalProdutosNaCategoria, 0, 1, 'L');
 
-        // Card 2 - Tipos de Perda
+        // Card 2 - Categorias
         $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
         $pdf->RoundedRect($startX + $cardWidth + $cardMargin, $startY, $cardWidth, $cardHeight, 8, 'F');
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
         $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 15);
-        $pdf->Cell($cardWidth - 30, 20, utf8_decode("TIPOS DE PERDA"), 0, 1, 'L');
+        $pdf->Cell($cardWidth - 30, 20, utf8_decode("CATEGORIAS"), 0, 1, 'L');
         $pdf->SetFont('Arial', 'B', 24);
-        $pdf->SetTextColor($corAlerta[0], $corAlerta[1], $corAlerta[2]); // Vermelho como na imagem
+        $pdf->SetTextColor($corSecondary[0], $corSecondary[1], $corSecondary[2]); // Laranja para categorias
         $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 40);
         $pdf->Cell($cardWidth - 30, 25, $categoriasUnicas, 0, 1, 'L');
 
-        // ===== TABELA DE PRODUTOS CRÍTICOS =====
+        // ===== TABELA DE PRODUTOS NA CATEGORIA =====
         $pdf->Ln(20);
         $y = $pdf->GetY();
         $margemTabela = 40;
@@ -2146,7 +2136,7 @@ class relatorios extends connection
         
         $pdf->RoundedRect($margemTabela, $y, $larguraPagina, 30, 5, 'FD');
         $pdf->SetXY($margemTabela + 15, $y + 8);
-        $pdf->Cell($larguraPagina - 30, 15, utf8_decode("DETALHAMENTO DO ESTOQUE CRÍTICO"), 0, 1, 'L');
+        $pdf->Cell($larguraPagina - 30, 15, utf8_decode("DETALHAMENTO DOS PRODUTOS NA CATEGORIA"), 0, 1, 'L');
         
         $y += 35;
         
@@ -2254,7 +2244,7 @@ class relatorios extends connection
             $pdf->SetFillColor(250, 250, 250);
             $pdf->RoundedRect($margemTabela, $y, array_sum($larguras), 40, 5, 'FD');
             $pdf->SetXY($margemTabela, $y + 12);
-            $pdf->Cell(array_sum($larguras), 16, utf8_decode("Não existem produtos com estoque crítico (quantidade ≤ 5)"), 0, 1, 'C');
+            $pdf->Cell(array_sum($larguras), 16, utf8_decode(""), 0, 1, 'C');
         }
 
 
@@ -2270,9 +2260,9 @@ class relatorios extends connection
         $pdf->SetFont('Arial', '', 9);
         
         $pdf->SetXY($margemTabela, $y + 10);
-        $pdf->Cell(0, 15, utf8_decode("Este relatório foi gerado automaticamente pelo sistema STGM Estoque"), 0, 1, 'C');
+        $pdf->Cell(0, 15, utf8_decode(""), 0, 1, 'C');
         $pdf->SetXY($margemTabela, $y + 25);
-        $pdf->Cell(0, 15, utf8_decode("Desenvolvido por alunos EEEP STGM - v1.2.0"), 0, 1, 'C');
+        $pdf->Cell(0, 15, utf8_decode(""), 0, 1, 'C');
         
         // Saída do PDF (mesmo padrão dos outros relatórios)
         $pdf->Output("relatorio_estoque_critico.pdf", "I");
@@ -2346,29 +2336,29 @@ class relatorios extends connection
         $startX = ($pdf->GetPageWidth() - (2 * $cardWidth + $cardMargin)) / 2; // Centralizar 2 cards
         $startY = 110;
 
-        // Card 1 - Total de Itens
+        // Card 1 - Total de Itens Críticos
         $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
         $pdf->RoundedRect($startX, $startY, $cardWidth, $cardHeight, 8, 'F');
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
         $pdf->SetXY($startX + 15, $startY + 15);
-        $pdf->Cell($cardWidth - 30, 20, utf8_decode("TOTAL DE ITENS"), 0, 1, 'L');
+        $pdf->Cell($cardWidth - 30, 20, utf8_decode("ITENS CRÍTICOS"), 0, 1, 'L');
         $pdf->SetFont('Arial', 'B', 24);
         $pdf->SetTextColor($corAlerta[0], $corAlerta[1], $corAlerta[2]); // Vermelho como na imagem
         $pdf->SetXY($startX + 15, $startY + 40);
         $pdf->Cell($cardWidth - 30, 25, $totalProdutosCriticos, 0, 1, 'L');
 
-        // Card 2 - Tipos de Perda
+        // Card 2 - Total em Estoque (quantidade total dos itens críticos)
         $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
         $pdf->RoundedRect($startX + $cardWidth + $cardMargin, $startY, $cardWidth, $cardHeight, 8, 'F');
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
         $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 15);
-        $pdf->Cell($cardWidth - 30, 20, utf8_decode("TIPOS DE PERDA"), 0, 1, 'L');
+        $pdf->Cell($cardWidth - 30, 20, utf8_decode("TOTAL EM ESTOQUE"), 0, 1, 'L');
         $pdf->SetFont('Arial', 'B', 24);
         $pdf->SetTextColor($corAlerta[0], $corAlerta[1], $corAlerta[2]); // Vermelho como na imagem
         $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 40);
-        $pdf->Cell($cardWidth - 30, 25, $categoriasUnicas, 0, 1, 'L');
+        $pdf->Cell($cardWidth - 30, 25, $totalQuantidade, 0, 1, 'L');
 
         // ===== TABELA DE PRODUTOS CRÍTICOS =====
         $pdf->Ln(20);
@@ -2494,8 +2484,6 @@ class relatorios extends connection
             $pdf->Cell(array_sum($larguras), 16, utf8_decode("Não existem produtos com estoque crítico (quantidade ≤ 5)"), 0, 1, 'C');
         }
 
-
-
         // ===== RODAPÉ PROFISSIONAL =====
         if ($y + 60 > $pdf->GetPageHeight() - 60) {
             $pdf->AddPage();
@@ -2507,9 +2495,9 @@ class relatorios extends connection
         $pdf->SetFont('Arial', '', 9);
         
         $pdf->SetXY($margemTabela, $y + 10);
-        $pdf->Cell(0, 15, utf8_decode("Este relatório foi gerado automaticamente pelo sistema STGM Estoque"), 0, 1, 'C');
+        $pdf->Cell(0, 15, utf8_decode(""), 0, 1, 'C');
         $pdf->SetXY($margemTabela, $y + 25);
-        $pdf->Cell(0, 15, utf8_decode("Desenvolvido por alunos EEEP STGM - v1.2.0"), 0, 1, 'C');
+        $pdf->Cell(0, 15, utf8_decode(""), 0, 1, 'C');
         
         // Saída do PDF (mesmo padrão dos outros relatórios)
         $pdf->Output("relatorio_estoque_critico.pdf", "I");
@@ -2518,8 +2506,8 @@ class relatorios extends connection
         public function relatorioEstoqueProduto($data_inicio, $data_fim, $produto_id = null)
     {
         try {
-            // Usar a classe relatorios que já funciona
-            $relatorios = new relatorios();
+            // Usar a conexão PDO da classe atual
+            $pdo = $this->getPdo();
             
             // Buscar dados de movimentação
             $query = "
@@ -2534,26 +2522,32 @@ class relatorios extends connection
                 FROM movimentacao e
                 LEFT JOIN produtos p ON e.fk_produtos_id = p.id
                 LEFT JOIN responsaveis r ON e.fk_responsaveis_id = r.id
-                WHERE e.datareg BETWEEN :data_inicio AND :data_fim
+                WHERE DATE(e.datareg) BETWEEN :data_inicio AND :data_fim
             ";
-            if ($produto_id) {
+            if ($produto_id && $produto_id != '') {
                 $query .= " AND e.fk_produtos_id = :produto_id ";
             }
             $query .= " ORDER BY e.datareg DESC, e.id DESC";
             
-            $stmt = $relatorios->getPdo()->prepare($query);
+            $stmt = $pdo->prepare($query);
             if (!$stmt) {
                 throw new Exception('Erro ao preparar consulta SQL');
             }
             
             $stmt->bindParam(':data_inicio', $data_inicio);
             $stmt->bindParam(':data_fim', $data_fim);
-            if ($produto_id) {
+            if ($produto_id && $produto_id != '') {
                 $stmt->bindParam(':produto_id', $produto_id, PDO::PARAM_INT);
             }
             
             $stmt->execute();
             $movimentacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Debug: verificar se há dados
+            if (empty($movimentacoes)) {
+                // Log para debug
+                error_log("Relatório por produto: Nenhuma movimentação encontrada para período: $data_inicio a $data_fim, produto_id: $produto_id");
+            }
             
             // Criar PDF personalizado (mesmo padrão dos outros relatórios)
             $pdf = new PDF("P", "pt", "A4");
@@ -2701,7 +2695,18 @@ class relatorios extends connection
             
             // Dados da tabela
             $linhaAlternada = false;
-            foreach ($movimentacoes as $idx => $mov) {
+            
+            if (empty($movimentacoes)) {
+                // Mensagem quando não há movimentações
+                $pdf->SetXY($margemTabela, $y);
+                $pdf->SetFont('Arial', 'I', 12);
+                $pdf->SetTextColor($corTextoSubtil[0], $corTextoSubtil[1], $corTextoSubtil[2]);
+                $pdf->SetFillColor(250, 250, 250);
+                $pdf->RoundedRect($margemTabela, $y, array_sum($larguras), 40, 5, 'FD');
+                $pdf->SetXY($margemTabela, $y + 12);
+                $pdf->Cell(array_sum($larguras), 16, utf8_decode("Nenhuma movimentação encontrada para o período selecionado"), 0, 1, 'C');
+            } else {
+                foreach ($movimentacoes as $idx => $mov) {
                 // Verificar se precisa de nova página
                 if ($y + 25 > $pdf->GetPageHeight() - 60) {
                     $pdf->AddPage();
@@ -2773,6 +2778,7 @@ class relatorios extends connection
                 
                 $y += 25;
                 $linhaAlternada = !$linhaAlternada;
+                }
             }
             
             // ===== RODAPÉ PROFISSIONAL =====
@@ -2786,9 +2792,9 @@ class relatorios extends connection
             $pdf->SetFont('Arial', '', 9);
             
             $pdf->SetXY($margemTabela, $y + 10);
-            $pdf->Cell(0, 15, utf8_decode("Este relatório foi gerado automaticamente pelo sistema STGM Estoque"), 0, 1, 'C');
+            $pdf->Cell(0, 15, utf8_decode(""), 0, 1, 'C');
             $pdf->SetXY($margemTabela, $y + 25);
-            $pdf->Cell(0, 15, utf8_decode("Desenvolvido por alunos EEEP STGM - v1.2.0"), 0, 1, 'C');
+            $pdf->Cell(0, 15, utf8_decode(""), 0, 1, 'C');
             
             // Saída do PDF (mesmo padrão dos outros relatórios)
             $pdf->Output("relatorio_movimentacao_produto_data.pdf", "I");
@@ -3111,7 +3117,7 @@ class relatorios extends connection
             $pdf->SetFillColor(250, 250, 250);
             $pdf->RoundedRect($margemTabela, $y, array_sum($larguras), 40, 5, 'FD');
             $pdf->SetXY($margemTabela, $y + 12);
-            $pdf->Cell(array_sum($larguras), 16, utf8_decode("Não existem produtos com estoque crítico (quantidade ≤ 5)"), 0, 1, 'C');
+            $pdf->Cell(array_sum($larguras), 16, utf8_decode(""), 0, 1, 'C');
 
             // ===== RODAPÉ PROFISSIONAL =====
             $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
