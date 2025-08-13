@@ -164,7 +164,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-                <a href="criar_categoria.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                <a href="#" onclick="abrirModalCategoria()" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-chart-bar mr-3 text-lg"></i>
                     <span>Cadastrar categoria</span>
                 </a>
@@ -229,6 +229,10 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                         Perdas
                     </button>
                 </a>
+                <button onclick="abrirModalCategoria()" class="bg-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-primary/90 transition-colors flex items-center shadow-md">
+                    <i class="fas fa-plus mr-2"></i>
+                    Nova Categoria
+                </button>
             </div>
         </div>
         <!-- Tabela para desktop -->
@@ -373,6 +377,41 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 </div>
             </div>
         </div>
+        <!-- Modal de Categoria -->
+        <div id="modalCategoria" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+            <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
+                <button onclick="fecharModalCategoria()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+                <div class="text-center mb-6">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-4">
+                        <i class="fas fa-chart-bar text-primary text-xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-primary mb-2">Nova Categoria</h2>
+                    <p class="text-gray-600">Adicione uma nova categoria para organizar seus produtos</p>
+                </div>
+                <form id="formCategoria" action="../control/controller_categoria.php" method="POST" class="space-y-4" onsubmit="return enviarFormularioCategoria(event)">
+                    <div>
+                        <label for="categoria" class="block text-sm font-medium text-gray-700 mb-1">Nome da Categoria</label>
+                        <input type="text" id="categoria" name="categoria" required 
+                               class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200"
+                               placeholder="Ex: Informática, Limpeza, etc.">
+                    </div>
+                                         <div class="flex justify-center space-x-3 mt-6">
+                         <button type="button" onclick="fecharModalCategoria()" 
+                                 class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+                             Cancelar
+                         </button>
+                         <button type="submit" 
+                                 class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors flex items-center">
+                             <i class="fas fa-plus mr-2"></i>
+                             Cadastrar Categoria
+                         </button>
+                     </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Alerta de mensagem -->
         <div id="alertaMensagem" class="fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md hidden animate-fade-in z-50">
             <div class="flex items-center">
@@ -770,6 +809,79 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         
         return false;
     };
+
+    // Funções para o modal de categoria
+    window.abrirModalCategoria = function() {
+        console.log('Abrindo modal de categoria');
+        document.getElementById('modalCategoria').classList.remove('hidden');
+        document.getElementById('categoria').focus();
+    };
+
+    window.fecharModalCategoria = function() {
+        console.log('Fechando modal de categoria');
+        document.getElementById('formCategoria').reset();
+        document.getElementById('modalCategoria').classList.add('hidden');
+    };
+
+    // Função para enviar formulário de categoria
+    window.enviarFormularioCategoria = function(event) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const formData = new FormData(form);
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Cadastrando...';
+        submitBtn.disabled = true;
+        
+        fetch('../control/controller_categoria.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            fecharModalCategoria();
+            
+            // Verificar se a resposta indica sucesso
+            if (data.includes('sucesso') || data.includes('success') || data.includes('cadastrada')) {
+                mostrarAlerta('Categoria cadastrada com sucesso!', 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                mostrarAlerta('Erro ao cadastrar categoria. Tente novamente.', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao cadastrar categoria:', error);
+            mostrarAlerta('Erro ao cadastrar categoria', 'error');
+        })
+        .finally(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+        
+        return false;
+    };
+
+    // Fechar modal de categoria ao clicar fora
+    document.addEventListener('click', function(e) {
+        const modalCategoria = document.getElementById('modalCategoria');
+        if (e.target === modalCategoria) {
+            fecharModalCategoria();
+        }
+    });
+
+    // Fechar modal de categoria ao pressionar ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modalCategoria = document.getElementById('modalCategoria');
+            if (modalCategoria && !modalCategoria.classList.contains('hidden')) {
+                fecharModalCategoria();
+            }
+        }
+    });
 });
 </script>
 </body>
