@@ -435,7 +435,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                                 <i class="fas fa-check-circle text-green-500 text-lg md:text-xl ml-2 flex-shrink-0"></i>
                             </div>
                         </div>
-                        <input type="hidden" id="produtoIdHidden" name="" value="">
+                        <input type="hidden" id="produtoIdHidden" name="barcode" value="">
                         <input type="hidden" id="opcaoAtualHidden" name="opcao_atual" value="barcode">
                     </div>
 
@@ -541,11 +541,26 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         let opcaoAtual = 'select';
         let produtoSelecionado = null;
         
+        // Função para configurar campos baseado na opção atual
+        function configurarCampos(opcao) {
+            const produtoIdHidden = document.getElementById('produtoIdHidden');
+            if (produtoIdHidden) {
+                produtoIdHidden.name = opcao;
+                produtoIdHidden.value = '';
+            }
+        }
+        
         // Inicializar a opção atual no hidden
         document.addEventListener('DOMContentLoaded', function() {
             const opcaoAtualHidden = document.getElementById('opcaoAtualHidden');
             if (opcaoAtualHidden) {
                 opcaoAtualHidden.value = opcaoAtual;
+            }
+            
+            // Configurar campo hidden inicial
+            const produtoIdHidden = document.getElementById('produtoIdHidden');
+            if (produtoIdHidden) {
+                produtoIdHidden.name = opcaoAtual;
             }
             
             // Validar seleção inicial
@@ -565,7 +580,6 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             barcodeInput.value = '';
             document.getElementById('produtoInfo').classList.add('hidden');
             document.getElementById('produtoIdHidden').value = '';
-            document.getElementById('produtoIdHidden').name = '';
             produtoSelecionado = null;
 
             if (opcao === 'select') {
@@ -581,6 +595,9 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 produtoSelect.name = 'produto'; // Garante que o name está correto
                 opcaoAtual = 'select';
                 opcaoAtualHidden.value = 'select';
+                
+                // Configurar o campo hidden para produto
+                configurarCampos('produto');
             } else {
                 btnSelect.className = 'w-full sm:flex-1 bg-gray-300 text-gray-700 py-2 px-3 md:px-4 rounded-lg font-semibold transition-colors text-sm md:text-base';
                 btnBarcode.className = 'w-full sm:flex-1 bg-primary text-white py-2 px-3 md:px-4 rounded-lg font-semibold transition-colors text-sm md:text-base';
@@ -594,6 +611,14 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 barcodeInput.name = 'barcode'; // Garante que o name está correto
                 opcaoAtual = 'barcode';
                 opcaoAtualHidden.value = 'barcode';
+                
+                // Configurar o campo hidden para barcode
+                const produtoIdHidden = document.getElementById('produtoIdHidden');
+                if (produtoIdHidden) {
+                    produtoIdHidden.name = 'barcode';
+                    produtoIdHidden.value = '';
+                }
+                
                 setTimeout(() => barcodeInput.focus(), 100);
             }
             
@@ -628,12 +653,29 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             produtoEstoque.textContent = `Estoque: ${produto.quantidade} unidades`;
             produtoInfo.classList.remove('hidden');
             produtoSelecionado = produto;
-            produtoIdHidden.value = produto.id;
-            produtoIdHidden.name = 'produto'; // Garantir que o name está correto
+            
+            // Configurar o campo hidden para barcode quando produto é encontrado
+            produtoIdHidden.value = produto.barcode; // Usar o barcode do produto
+            produtoIdHidden.name = 'barcode'; // Garantir que o name está correto para barcode
+            
+            // Também garantir que o input de barcode tenha o valor correto
+            const barcodeInput = document.getElementById('barcodeInput');
+            if (barcodeInput) {
+                barcodeInput.value = produto.barcode;
+            }
             
             console.log('Produto selecionado:', produtoSelecionado);
-            console.log('Valor do hidden:', produtoIdHidden.value);
+            console.log('Valor do hidden (barcode):', produtoIdHidden.value);
             console.log('Name do hidden:', produtoIdHidden.name);
+            
+            // Atualizar a opção atual para barcode se não estiver já definida
+            if (opcaoAtual !== 'barcode') {
+                opcaoAtual = 'barcode';
+                const opcaoAtualHidden = document.getElementById('opcaoAtualHidden');
+                if (opcaoAtualHidden) {
+                    opcaoAtualHidden.value = 'barcode';
+                }
+            }
         }
 
         function validarSelecao() {
@@ -654,12 +696,19 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 } else {
                     produtoSelecionado = null;
                     produtoIdHidden.value = '';
-                    produtoIdHidden.name = ''; // Remove o name
                     console.log('Produto desmarcado via select');
                 }
-            } else {
-                // Se estiver na opção barcode, não alterar o produtoSelecionado
-                console.log('Opção barcode ativa, mantendo produtoSelecionado:', produtoSelecionado);
+            } else if (opcaoAtual === 'barcode') {
+                // Se estiver na opção barcode, verificar se há produto selecionado
+                if (produtoSelecionado) {
+                    produtoIdHidden.value = produtoSelecionado.barcode;
+                    produtoIdHidden.name = 'barcode';
+                    console.log('Produto barcode ativo, produtoSelecionado:', produtoSelecionado);
+                } else {
+                    produtoIdHidden.value = '';
+                    produtoIdHidden.name = 'barcode';
+                    console.log('Opção barcode ativa, mas sem produto selecionado');
+                }
             }
         }
 
@@ -673,9 +722,27 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 console.log('Valor do select:', valor);
                 console.log('Produto selecionado:', produtoSelecionado);
                 const valido = produtoSelecionado !== null && valor !== '';
+                console.log('Validação select:', valido);
+                return valido;
+            } else if (opcaoAtual === 'barcode') {
+                const barcodeInput = document.getElementById('barcodeInput');
+                const valor = barcodeInput.value.trim();
+                console.log('Valor do barcode:', valor);
+                console.log('Produto selecionado:', produtoSelecionado);
+                const valido = produtoSelecionado !== null && valor !== '';
                 console.log('Validação barcode:', valido);
+                
+                // Verificação adicional para barcode
+                if (valido) {
+                    const produtoIdHidden = document.getElementById('produtoIdHidden');
+                    console.log('Campo hidden barcode:', produtoIdHidden.value);
+                    console.log('Campo hidden name:', produtoIdHidden.name);
+                }
+                
                 return valido;
             }
+            
+            return false;
         }
 
         function mostrarNotificacao(mensagem, tipo) {
@@ -829,6 +896,9 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                                     exibirProdutoInfo(produto);
                                     // Mostrar notificação de sucesso
                                     mostrarNotificacao(`Produto encontrado: ${produto.nome_produto}`, 'success');
+                                    
+                                    // Garantir que a validação seja executada
+                                    validarSelecao();
                                 } else {
                                     mostrarNotificacao('Produto não encontrado para este código de barras', 'error');
                                 }
@@ -849,14 +919,20 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                             const produto = await buscarProdutoPorBarcode(barcode);
                             if (produto) {
                                 exibirProdutoInfo(produto);
+                                // Executar validação após exibir produto
+                                validarSelecao();
                             } else {
                                 document.getElementById('produtoInfo').classList.add('hidden');
                                 produtoSelecionado = null;
+                                // Executar validação quando produto não é encontrado
+                                validarSelecao();
                             }
                         }, 500);
                     } else {
                         document.getElementById('produtoInfo').classList.add('hidden');
                         produtoSelecionado = null;
+                        // Executar validação quando barcode é limpo
+                        validarSelecao();
                     }
                 });
 
@@ -868,6 +944,11 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                             buscarProdutoPorBarcode(barcode).then(produto => {
                                 if (produto) {
                                     exibirProdutoInfo(produto);
+                                    // Executar validação após exibir produto
+                                    validarSelecao();
+                                } else {
+                                    // Executar validação quando produto não é encontrado
+                                    validarSelecao();
                                 }
                             });
                         }
@@ -892,7 +973,28 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     console.log('Valor do select:', document.getElementById('produto').value);
                     console.log('Valor do hidden:', document.getElementById('produtoIdHidden').value);
                     console.log('Valor do barcode:', document.getElementById('barcodeInput').value);
+                    console.log('Name do hidden:', document.getElementById('produtoIdHidden').name);
                     console.log('Dados do formulário:', formDataObj);
+                    
+                    // Verificar se o campo hidden está configurado corretamente
+                    const produtoIdHidden = document.getElementById('produtoIdHidden');
+                    if (opcaoAtual === 'barcode' && produtoSelecionado) {
+                        // Garantir que o campo hidden tenha o barcode correto
+                        produtoIdHidden.value = produtoSelecionado.barcode;
+                        produtoIdHidden.name = 'barcode';
+                        console.log('Campo hidden configurado para barcode:', produtoIdHidden.value);
+                        
+                        // Também definir o valor no input de barcode para garantir
+                        const barcodeInput = document.getElementById('barcodeInput');
+                        if (barcodeInput) {
+                            barcodeInput.value = produtoSelecionado.barcode;
+                        }
+                    } else if (opcaoAtual === 'select' && document.getElementById('produto').value) {
+                        // Garantir que o campo hidden tenha o ID correto
+                        produtoIdHidden.value = document.getElementById('produto').value;
+                        produtoIdHidden.name = 'produto';
+                        console.log('Campo hidden configurado para produto:', produtoIdHidden.value);
+                    }
                     
                     if (!valido) {
                         e.preventDefault();

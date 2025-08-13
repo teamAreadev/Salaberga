@@ -237,6 +237,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                             <th class="py-3 px-4 text-left">Nome</th>
                             <th class="py-3 px-4 text-left">Quantidade</th>
                             <th class="py-3 px-4 text-left">Categoria</th>
+                            <th class="py-3 px-4 text-left">Validade</th>
                             <th class="py-3 px-4 text-left">Data Cadastro</th>
                             <!-- <th class="py-3 px-4 text-left">Ações</th> -->
                         </tr>
@@ -257,15 +258,8 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                                 echo '<td class="py-3 px-4">' . htmlspecialchars($produto['nome_produto']) . '</td>';
                                 echo '<td class="py-3 px-4 ' . $quantidadeClass . '">' . htmlspecialchars($produto['quantidade']) . '</td>';
                                 echo '<td class="py-3 px-4">' . htmlspecialchars($produto['natureza']) . '</td>';
+                                echo '<td class="py-3 px-4">' . htmlspecialchars($produto['vencimento'] = $produto['vencimento'] == '' ? 'Sem vencimento' : $produto['vencimento']) . '</td>';
                                 echo '<td class="py-3 px-4">' . date('d/m/Y H:i', strtotime($produto['data'])) . '</td>';
-                                // echo '<td class="py-3 px-4 flex space-x-2">';
-                                // echo '<button onclick="abrirModalEditar(' . $produto['id'] . ')" class="text-primary hover:text-secondary mr-2" title="Editar">';
-                                // echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>';
-                                // echo '</button>';
-                                // echo '<button onclick="abrirModalExcluir(' . $produto['id'] . ', \'' . htmlspecialchars(addslashes($produto['nome_produto'])) . '\')" class="text-red-500 hover:text-red-700" title="Excluir">';
-                                // echo '<svg xmlns="http://www/w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>';
-                                // echo '</button>';
-                                // echo '</td>';
                                 echo '</tr>';
                             }
                         } else {

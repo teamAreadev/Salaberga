@@ -1074,17 +1074,18 @@ class gerenciamento extends connection
         header("location:../view/estoque.php");
     }
 
-    public function adcproduto($barcode, $nome,  $quantidade, $natureza)
+    public function adcproduto($barcode, $nome,  $quantidade, $natureza, $validade)
     {
         date_default_timezone_set('America/Fortaleza');
         $data = date('Y-m-d H:i:s');
         
-        $consulta = "INSERT INTO produtos VALUES (null, :barcode, :nome, :quantidade, :natureza, :data)";
+        $consulta = "INSERT INTO produtos VALUES (null, :barcode, :nome, :quantidade, :natureza,:validade, :data)";
         $query = $this->pdo->prepare($consulta);
         $query->bindValue(":nome", $nome);
         $query->bindValue(":barcode", $barcode);
         $query->bindValue(":quantidade", $quantidade);
         $query->bindValue(":natureza", $natureza);
+        $query->bindValue(":validade", $validade);
         $query->bindValue(":data", $data);
         $query->execute();
 
@@ -1092,13 +1093,9 @@ class gerenciamento extends connection
         header("location:../view/estoque.php");
     }
 
-    public function solicitarproduto($valor_retirada, $barcode, $retirante)
+    public function solicitarproduto($valor_retirada, $barcode, $retirante, $datetime)
     {
         try {
-            error_log("=== INICIANDO SOLICITAÇÃO DE PRODUTO ===");
-            error_log("Barcode: " . $barcode);
-            error_log("Quantidade: " . $valor_retirada);
-            error_log("Responsável: " . $retirante);
     
             // Iniciar a sessão, caso ainda não esteja iniciada
             if (session_status() == PHP_SESSION_NONE) {
@@ -1107,7 +1104,6 @@ class gerenciamento extends connection
     
             // Validar $_SESSION['Nome']
             if (!isset($_SESSION['Nome'])) {
-                error_log("ERRO: Sessão 'Nome' não definida");
                 throw new Exception("Usuário não autenticado. A sessão 'Nome' não está definida.");
             }
             $usuario = $_SESSION['Nome'];
@@ -1163,23 +1159,19 @@ class gerenciamento extends connection
             $fk_responsaveis_id = $responsavel['id'];
             error_log("Responsável encontrado - ID: " . $fk_responsaveis_id);
     
-            // Atualiza a quantidade na tabela produtos
-            error_log("Atualizando estoque do produto...");
             $consultaUpdate = "UPDATE produtos SET quantidade = quantidade - :valor_retirada WHERE barcode = :barcode";
             $queryUpdate = $this->pdo->prepare($consultaUpdate);
             $queryUpdate->bindValue(":valor_retirada", $valor_retirada, PDO::PARAM_INT);
             $queryUpdate->bindValue(":barcode", $barcode);
             $queryUpdate->execute();
-            error_log("Estoque atualizado com sucesso");
-    
-            // Insere o registro na tabela movimentacao
-            error_log("Inserindo registro na tabela movimentacao...");
-            $consultaInsert = "INSERT INTO movimentacao (fk_produtos_id, usuario, fk_responsaveis_id, barcode_produto, quantidade_retirada)
-                               VALUES (:fk_produtos_id, :usuario, :fk_responsaveis_id, :barcode_produto, :quantidade_retirada)";
+          
+            $consultaInsert = "INSERT INTO movimentacao (fk_produtos_id, usuario, fk_responsaveis_id, datared, barcode_produto, quantidade_retirada)
+                               VALUES (:fk_produtos_id, :usuario, :fk_responsaveis_id, :datareg, :barcode_produto, :quantidade_retirada)";
             $queryInsert = $this->pdo->prepare($consultaInsert);
             $queryInsert->bindValue(":fk_produtos_id", $fk_produtos_id, PDO::PARAM_INT);
             $queryInsert->bindValue(":usuario", $usuario);
             $queryInsert->bindValue(":fk_responsaveis_id", $fk_responsaveis_id, PDO::PARAM_INT);
+            $queryInsert->bindValue(":datareg", $datetime);
             $queryInsert->bindValue(":barcode_produto", $barcode);
             $queryInsert->bindValue(":quantidade_retirada", $valor_retirada_str); // Usa string para compatibilidade com varchar
             $queryInsert->execute();
@@ -1202,15 +1194,7 @@ class gerenciamento extends connection
             $_SESSION['erro_solicitacao'] = "Erro na conexão ou consulta: " . $e->getMessage();
             header("Location: ../view/solicitar.php");
             exit;
-        } catch (Exception $e) {
-            // Reverter transação em caso de erro
-            error_log("ERRO GERAL na solicitação: " . $e->getMessage());
-            error_log("Stack trace: " . $e->getTraceAsString());
-            $this->pdo->rollBack();
-            $_SESSION['erro_solicitacao'] = $e->getMessage();
-            header("Location: ../view/solicitar.php");
-            exit;
-        }
+        } 
     }
 
     public function editarProduto($id, $nome, $barcode, $quantidade, $natureza)

@@ -407,6 +407,11 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                             class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                             aria-label="Quantidade do produto">
                     </div>
+                    <div>
+                        <input type="date" placeholder="VALIDADE" min="1" id="validade" name="validade"
+                            class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
+                            aria-label="Quantidade do produto">
+                    </div>
 
                     <div class="p-4 border-2 border-primary rounded-lg">
                         <p class="font-semibold text-primary mb-3 text-center">Selecione a Categoria</p>
@@ -418,32 +423,32 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                             </label>
 
                             <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="expedientes" name="natureza" value="expedientes" aria-label="Expedientes">
+                                <input type="radio" id="expedientes" name="natureza" value="expedientes" aria-label="Expedientes" required>
                                 <span class="text-gray-700">Expedientes</span>
                             </label>
 
                             <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="manutencao" name="natureza" value="manutencao" aria-label="Manutenção">
+                                <input type="radio" id="manutencao" name="natureza" value="manutencao" aria-label="Manutenção" required>
                                 <span class="text-gray-700">Manutenção</span>
                             </label>
 
                             <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="eletrico" name="natureza" value="eletrico" aria-label="Elétrico">
+                                <input type="radio" id="eletrico" name="natureza" value="eletrico" aria-label="Elétrico" required>
                                 <span class="text-gray-700">Elétrico</span>
                             </label>
 
                             <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="hidraulico" name="natureza" value="hidraulico" aria-label="Hidráulico">
+                                <input type="radio" id="hidraulico" name="natureza" value="hidraulico" aria-label="Hidráulico" required>
                                 <span class="text-gray-700">Hidráulico</span>
                             </label>
 
                             <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="educacao_fisica" name="natureza" value="educacao_fisica" aria-label="Educação Física">
+                                <input type="radio" id="educacao_fisica" name="natureza" value="educacao_fisica" aria-label="Educação Física" required>
                                 <span class="text-gray-700">Educação Física</span>
                             </label>
 
                             <label class="custom-radio p-2 rounded-lg">
-                                <input type="radio" id="epi" name="natureza" value="epi" aria-label="EPI">
+                                <input type="radio" id="epi" name="natureza" value="epi" aria-label="EPI" required>
                                 <span class="text-gray-700">EPI</span>
                             </label>
 
