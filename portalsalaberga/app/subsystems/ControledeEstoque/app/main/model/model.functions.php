@@ -2875,34 +2875,7 @@ class relatorios extends connection
         $startX = ($pdf->GetPageWidth() - (3 * $cardWidth + 2 * $cardMargin)) / 2;
         $startY = 110;
 
-        // Card 1 - Total Produtos Críticos
-        $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
-        $pdf->RoundedRect($startX, $startY, $cardWidth, $cardHeight, 8, 'F');
-
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
-        $pdf->SetXY($startX + 15, $startY + 15);
-        $pdf->Cell($cardWidth - 30, 20, utf8_decode("PRODUTOS CRÍTICOS"), 0, 1, 'L');
-
-        $pdf->SetFont('Arial', 'B', 24);
-        $pdf->SetTextColor($corAlerta[0], $corAlerta[1], $corAlerta[2]);
-        $pdf->SetXY($startX + 15, $startY + 40);
-        $pdf->Cell($cardWidth - 30, 25, $resumo['produtos_criticos'], 0, 1, 'L');
-
-        // Card 2 - Categorias
-        $pdf->SetFillColor($corBranco[0], $corBranco[1], $corBranco[2]);
-        $pdf->RoundedRect($startX + $cardWidth + $cardMargin, $startY, $cardWidth, $cardHeight, 8, 'F');
-
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->SetTextColor($corPreto[0], $corPreto[1], $corPreto[2]);
-        $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 15);
-        $pdf->Cell($cardWidth - 30, 20, utf8_decode("CATEGORIAS"), 0, 1, 'L');
-
-        $pdf->SetFont('Arial', 'B', 24);
-        $pdf->SetTextColor($corSecondary[0], $corSecondary[1], $corSecondary[2]);
-        $pdf->SetXY($startX + $cardWidth + $cardMargin + 15, $startY + 40);
-        $pdf->Cell($cardWidth - 30, 25, $resumo['total_categorias'], 0, 1, 'L');
-
+      
 
         // ===== TABELA DE PRODUTOS COM MELHOR DESIGN =====
         $margemTabela = 40;
@@ -3100,12 +3073,6 @@ class relatorios extends connection
                     $pdf->SetXY(40, $y + 15);
                     $pdf->Cell(0, 10, utf8_decode("SCB = SEM CÓDIGO DE BARRA"), 0, 0, 'L');
 
-                    $pdf->SetXY(40, $y + 25);
-                    $pdf->Cell(0, 10, utf8_decode("Sistema de Gerenciamento de Estoque - STGM v1.2.0"), 0, 0, 'L');
-
-                    $pdf->SetXY(40, $y + 35);
-                    $pdf->Cell(0, 10, utf8_decode("© " . date('Y') . " - Desenvolvido por alunos EEEP STGM"), 0, 0, 'L');
-
                     $pdf->SetX(-60);
                     $pdf->Cell(30, 10, utf8_decode('Página ' . $pdf->PageNo()), 0, 0, 'R');
                 }
@@ -3126,11 +3093,7 @@ class relatorios extends connection
             $pdf->SetXY(40, $y + 55);
             $pdf->Cell(0, 10, utf8_decode("SCB = SEM CÓDIGO DE BARRA"), 0, 0, 'L');
 
-            $pdf->SetXY(40, $y + 65);
-            $pdf->Cell(0, 10, utf8_decode("Sistema de Gerenciamento de Estoque - STGM v1.2.0"), 0, 0, 'L');
-
-            $pdf->SetXY(40, $y + 75);
-            $pdf->Cell(0, 10, utf8_decode("© " . date('Y') . " - Desenvolvido por alunos EEEP STGM"), 0, 0, 'L');
+           
 
             $pdf->SetX(-60);
             $pdf->Cell(30, 10, utf8_decode('Página ' . $pdf->PageNo()), 0, 0, 'R');
