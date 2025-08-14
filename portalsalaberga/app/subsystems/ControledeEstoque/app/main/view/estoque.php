@@ -5,6 +5,10 @@
         
     ?>
 <?php
+// Incluir o arquivo com a classe select
+require_once('../model/functionsViews.php');
+$select = new select();
+
 // Processar mensagens de URL
 $mensagem = '';
 $tipoMensagem = '';
@@ -211,17 +215,14 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             </div>
             <div class="flex gap-2 flex-wrap justify-center items-center">
                 <select id="filtroCategoria" class="px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
-                    <option value="">Todas as categorias</option>
-                    <option value="limpeza">Limpeza</option>
-                    <option value="expedientes">Expedientes</option>
-                    <option value="manutencao">Manutenção</option>
-                    <option value="eletrico">Elétrico</option>
-                    <option value="hidraulico">Hidráulico</option>
-                    <option value="educacao_fisica">Educação Física</option>
-                    <option value="epi">EPI</option>
-                    <option value="copa_e_cozinha">Copa e Cozinha</option>
-                    <option value="informatica">Informática</option>
-                    <option value="ferramentas">Ferramentas</option>
+                    <option value="" >Todas as categorias</option>
+                    <?php 
+                    $dados = $select->select_categoria();
+                    foreach ($dados as $dado) {
+                    ?>
+                         <option value="<?=$dado['nome_categoria']?>"><?=$dado['nome_categoria']?></option>
+                        
+                    <?php } ?>
                 </select>
                 <a href="perdas.php">
                     <button class="bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center shadow-md">
@@ -256,7 +257,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                         require_once '../model/model.functions.php';
                         $env = isset($_GET['env']) ? $_GET['env'] : 'local';
                         $gerenciamento = new gerenciamento($env);
-                        $produtos = $gerenciamento->getPdo()->query('SELECT * FROM produtos')->fetchAll(PDO::FETCH_ASSOC);
+                        $produtos = $gerenciamento->getPdo()->query('SELECT p.*, c.nome_categoria as categoria FROM produtos p INNER JOIN categorias c ON p.natureza = c.id')->fetchAll(PDO::FETCH_ASSOC);
                         if ($produtos && count($produtos) > 0) {
                             foreach ($produtos as $produto) {
                                 $quantidadeClass = $produto['quantidade'] <= 5 ? 'text-red-600 font-bold' : 'text-gray-700';
@@ -265,7 +266,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                                 echo '<td class="py-3 px/-4">' . htmlspecialchars($produto['barcode']) . '</td>';
                                 echo '<td class="py-3 px-4">' . htmlspecialchars($produto['nome_produto']) . '</td>';
                                 echo '<td class="py-3 px-4 ' . $quantidadeClass . '">' . htmlspecialchars($produto['quantidade']) . '</td>';
-                                echo '<td class="py-3 px-4">' . htmlspecialchars($produto['natureza']) . '</td>';
+                                echo '<td class="py-3 px-4">' . htmlspecialchars($produto['categoria']) . '</td>';
                                 echo '<td class="py-3 px-4">' . htmlspecialchars($produto['vencimento'] = $produto['vencimento'] == '' ? 'Sem vencimento' : $produto['vencimento']) . '</td>';
                                 echo '<td class="py-3 px-4">' . date('d/m/Y H:i', strtotime($produto['data'])) . '</td>';
                                 echo '</tr>';
@@ -284,9 +285,9 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             if ($produtos && count($produtos) > 0) {
                 $categoriaAtual = '';
                 foreach ($produtos as $produto) {
-                    if ($categoriaAtual != $produto['natureza']) {
-                        $categoriaAtual = $produto['natureza'];
-                        echo '<div class="bg-primary text-white font-bold py-2 px-4 rounded-lg mt-6 mb-3 categoria-header"><h3 class="text-sm uppercase tracking-wider">' . htmlspecialchars(ucfirst($produto['natureza'])) . '</h3></div>';
+                    if ($categoriaAtual != $produto['categoria']) {
+                        $categoriaAtual = $produto['categoria'];
+                        echo '<div class="bg-primary text-white font-bold py-2 px-4 rounded-lg mt-6 mb-3 categoria-header"><h3 class="text-sm uppercase tracking-wider">' . htmlspecialchars(ucfirst($produto['categoria'])) . '</h3></div>';
                     }
                     $quantidadeClass = $produto['quantidade'] <= 5 ? 'quantidade-critica' : '';
                     echo '<div class="card-item bg-white shadow rounded-lg border-l-4 border-primary p-4 mb-3">';
@@ -298,14 +299,6 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     echo '<p class="text-sm flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3v8a3 3 0 003 3z" /></svg><span class="' . $quantidadeClass . '">Quantidade: ' . htmlspecialchars($produto['quantidade']) . '</span></p>';
                     echo '<p class="text-sm text-gray-500 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg><span>Cadastrado: ' . date('d/m/Y H:i', strtotime($produto['data'])) . '</span></p>';
                     echo '</div></div>';
-                    // echo '<div class="flex space-x-1">';
-                    // echo '<button onclick="abrirModalEditar(' . $produto['id'] . ')" class="text-primary hover:text-secondary p-1 rounded-full bg-gray-50" title="Editar">';
-                    // echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>';
-                    // echo '</button>';
-                    // echo '<button onclick="abrirModalExcluir(' . $produto['id'] . ', \'' . htmlspecialchars(addslashes($produto['nome_produto'])) . '\')" class="text-red-500 hover:text-red-700 p-1 rounded-full bg-gray-50" title="Excluir">';
-                    // echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>';
-                    // echo '</button>';
-                    // echo '</div></div></div>';
                     echo '</div></div>';
                 }
             } else {
@@ -390,24 +383,24 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     <h2 class="text-2xl font-bold text-primary mb-2">Nova Categoria</h2>
                     <p class="text-gray-600">Adicione uma nova categoria para organizar seus produtos</p>
                 </div>
-                <form id="formCategoria" action="../control/controller_categoria.php" method="POST" class="space-y-4" onsubmit="return enviarFormularioCategoria(event)">
+                <form id="formCategoria" action="../control/controller_categoria.php" method="POST" class="space-y-4">
                     <div>
                         <label for="categoria" class="block text-sm font-medium text-gray-700 mb-1">Nome da Categoria</label>
                         <input type="text" id="categoria" name="categoria" required 
                                class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200"
                                placeholder="Ex: Informática, Limpeza, etc.">
                     </div>
-                                         <div class="flex justify-center space-x-3 mt-6">
-                         <button type="button" onclick="fecharModalCategoria()" 
-                                 class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
-                             Cancelar
-                         </button>
-                         <button type="submit" 
-                                 class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors flex items-center">
-                             <i class="fas fa-plus mr-2"></i>
-                             Cadastrar Categoria
-                         </button>
-                     </div>
+                    <div class="flex justify-center space-x-3 mt-6">
+                        <button type="button" onclick="fecharModalCategoria()" 
+                                class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors flex items-center">
+                            <i class="fas fa-plus mr-2"></i>
+                            Cadastrar Categoria
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

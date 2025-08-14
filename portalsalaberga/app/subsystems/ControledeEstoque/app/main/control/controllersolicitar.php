@@ -2,7 +2,7 @@
 
 require_once('../model/model.functions.php');
 print_r($_POST);
-
+date_default_timezone_set('America/Fortaleza');
 if (isset($_POST['btn'])) {
     $retirante = $_POST['retirante'];
     $valor_retirada = $_POST['quantidade'];
@@ -15,8 +15,8 @@ if (isset($_POST['btn'])) {
         $produtoEncontrado = $x->buscarProdutoPorBarcode($barcode);
         if ($produtoEncontrado) {
 
-            date_default_timezone_set('America/Fortaleza');
-        $datatime = date('Y-m-d H:i:s');
+            
+        $datetime = date('Y-m-d H:i:s');
             $x->solicitarproduto($valor_retirada, $produtoEncontrado['barcode'], $retirante, $datetime);
         } else {
 
@@ -32,8 +32,7 @@ if (isset($_POST['btn'])) {
 
         if ($produtoEncontrado) {
  
-            date_default_timezone_set('America/Fortaleza');
-        $datatime = date('Y-m-d H:i:s');
+        $datetime = date('Y-m-d H:i:s');
             $x->solicitarproduto($valor_retirada, $produtoEncontrado['barcode'], $retirante, $datetime); 
         } else {
             header("Location: ../view/solicitar.php?error=1&message=" . urlencode("Produto não encontrado pelo ID informado."));

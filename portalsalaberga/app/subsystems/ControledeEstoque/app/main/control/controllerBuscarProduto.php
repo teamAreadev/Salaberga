@@ -1,38 +1,38 @@
 <?php
-require_once "../model/model.functions.php";
+require_once('../model/functionsViews.php');
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['barcode'])) {
-    $barcode = $_GET['barcode'];
+header('Content-Type: application/json');
+
+try {
+    $select = new select();
     
-    try {
-        $gerenciamento = new gerenciamento();
-        $produto = $gerenciamento->buscarProdutoPorBarcode($barcode);
-        
-        header('Content-Type: application/json');
-        
-        if ($produto) {
-            echo json_encode([
-                'success' => true,
-                'produto' => $produto
-            ]);
-        } else {
-            echo json_encode([
-                'success' => false,
-                'error' => 'Produto não encontrado'
-            ]);
-        }
-    } catch (Exception $e) {
-        header('Content-Type: application/json');
+    // Verificar se foi passado um ID ou barcode
+    if (isset($_GET['id']) && !empty($_GET['id'])) {
+        // Buscar por ID
+        $produto = $select->buscarProdutoPorId($_GET['id']);
+    } elseif (isset($_GET['barcode']) && !empty($_GET['barcode'])) {
+        // Buscar por barcode
+        $produto = $select->buscarProdutoPorBarcode($_GET['barcode']);
+    } else {
+        throw new Exception('ID ou barcode não fornecido');
+    }
+    
+    if ($produto) {
+        echo json_encode([
+            'success' => true,
+            'produto' => $produto
+        ]);
+    } else {
         echo json_encode([
             'success' => false,
-            'error' => 'Erro ao buscar produto: ' . $e->getMessage()
+            'error' => 'Produto não encontrado'
         ]);
     }
-} else {
-    header('Content-Type: application/json');
+    
+} catch (Exception $e) {
     echo json_encode([
         'success' => false,
-        'error' => 'Parâmetros inválidos'
+        'error' => $e->getMessage()
     ]);
 }
 ?> 

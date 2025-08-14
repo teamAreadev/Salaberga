@@ -8,6 +8,31 @@ class MainModel extends connection
         parent::__construct();
     }
 
+    public function criar_categoria($categoria)
+    {
+
+        $stmt_check = $this->pdo->prepare("SELECT * FROM categorias WHERE nome_categoria = :nome");
+        $stmt_check->bindValue(':nome', $categoria);
+        $stmt_check->execute();
+
+        if ($stmt_check->rowCount() >= 0) {
+
+            $stmt_registrar = $this->pdo->prepare("INSERT INTO categorias VALUES (null, :nome_categoria)");
+            $stmt_registrar->bindValue(':nome_categoria', $categoria);
+            $stmt_registrar->execute();
+
+            if ($stmt_registrar) {
+
+                return 1;
+            } else {
+
+                return 2;
+            }
+        } else {
+
+            return 3;
+        }
+    }
     public function registrar_perda(
         $id_produto,
         $quantidade,
@@ -18,7 +43,7 @@ class MainModel extends connection
         $stmt_check = $this->pdo->prepare("SELECT * FROM produtos WHERE id = :id");
         $stmt_check->bindParam(':id', $id_produto);
         $stmt_check->execute();
-        
+
         if ($stmt_check->rowCount() > 0) {
 
             $dados = $stmt_check->fetch(PDO::FETCH_ASSOC);
@@ -35,21 +60,21 @@ class MainModel extends connection
             $stmt_registrar->bindParam(':data_perda', $data_perda);
             $stmt_registrar->execute();
 
-            if($stmt_registrar){
+            if ($stmt_registrar) {
 
                 return 1;
-            }else{
+            } else {
 
                 return 2;
             }
-            
-        }else{
+        } else {
 
             return 3;
         }
     }
 
-    public function verificar_produto($barcode){
+    public function verificar_produto($barcode)
+    {
 
         $stmt_check = $this->pdo->prepare("SELECT * FROM produtos WHERE barcode = :barcode");
         $stmt_check->bindParam(':barcode', $barcode);
@@ -58,7 +83,7 @@ class MainModel extends connection
         if ($stmt_check->rowCount() > 0) {
 
             return true;
-        }else{
+        } else {
 
             return false;
         }

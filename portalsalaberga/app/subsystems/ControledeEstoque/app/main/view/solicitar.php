@@ -312,6 +312,23 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 padding: 0.4rem;
             }
         }
+
+        /* Estilos para validação de quantidade */
+        .quantidade-error {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .erro-quantidade {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-left: 4px solid #ef4444;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1);
+        }
     </style>
 </head>
 
@@ -377,7 +394,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
     <!-- Main content -->
     <main class="ml-0 md:ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
         <div class="text-center mb-6 md:mb-10">
-            <h1 class="text-primary text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 lg:mb-8 text-center page-title tracking-tight font-heading inline-block mx-auto">SOLICITAR PRODUTO</h1>
+            <h1 class="text-primary text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 lg:mb-8 text-center page-title tracking-tight font-heading inline-block mx-auto">RETIRAR PRODUTO</h1>
         </div>
 
         <!-- Notificação -->
@@ -677,6 +694,11 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     opcaoAtualHidden.value = 'barcode';
                 }
             }
+            
+            // Validar quantidade atual após exibir produto
+            setTimeout(() => {
+                validarQuantidade();
+            }, 100);
         }
 
         function validarSelecao() {
@@ -694,10 +716,16 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     produtoIdHidden.name = 'produto'; // Garantir que o name está correto
                     console.log('Produto selecionado via select:', produtoSelecionado);
                     console.log('Valor do hidden atualizado:', produtoIdHidden.value);
+                    
+                    // Buscar informações completas do produto
+                    atualizarInfoProdutoSelect(produtoSelect.value);
                 } else {
                     produtoSelecionado = null;
                     produtoIdHidden.value = '';
                     console.log('Produto desmarcado via select');
+                    
+                    // Limpar validação de quantidade
+                    validarQuantidade();
                 }
             } else if (opcaoAtual === 'barcode') {
                 // Se estiver na opção barcode, verificar se há produto selecionado
@@ -705,10 +733,16 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     produtoIdHidden.value = produtoSelecionado.barcode;
                     produtoIdHidden.name = 'barcode';
                     console.log('Produto barcode ativo, produtoSelecionado:', produtoSelecionado);
+                    
+                    // Validar quantidade atual
+                    validarQuantidade();
                 } else {
                     produtoIdHidden.value = '';
                     produtoIdHidden.name = 'barcode';
                     console.log('Opção barcode ativa, mas sem produto selecionado');
+                    
+                    // Limpar validação de quantidade
+                    validarQuantidade();
                 }
             }
         }
@@ -716,6 +750,15 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         function validarFormulario() {
             console.log('Validando formulário...');
             console.log('Opção atual:', opcaoAtual);
+            
+            // Validar quantidade
+            const quantidadeInput = document.getElementById('quantidade');
+            const quantidade = parseInt(quantidadeInput.value);
+            
+            if (produtoSelecionado && quantidade > produtoSelecionado.quantidade) {
+                mostrarNotificacao(`Quantidade solicitada (${quantidade}) excede o estoque disponível (${produtoSelecionado.quantidade})`, 'error');
+                return false;
+            }
             
             if (opcaoAtual === 'select') {
                 const produtoSelect = document.getElementById('produto');
@@ -744,6 +787,66 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             }
             
             return false;
+        }
+
+        // Função para validar quantidade em tempo real
+        function validarQuantidade() {
+            const quantidadeInput = document.getElementById('quantidade');
+            const quantidade = parseInt(quantidadeInput.value) || 0;
+            
+            // Remover classes de erro anteriores
+            quantidadeInput.classList.remove('border-red-500', 'bg-red-50', 'quantidade-error');
+            quantidadeInput.classList.add('border-primary', 'bg-light');
+            
+            // Remover mensagem de erro anterior
+            const erroQuantidade = document.getElementById('erroQuantidade');
+            if (erroQuantidade) {
+                erroQuantidade.remove();
+            }
+            
+            if (produtoSelecionado && quantidade > produtoSelecionado.quantidade) {
+                // Adicionar classes de erro
+                quantidadeInput.classList.remove('border-primary', 'bg-light');
+                quantidadeInput.classList.add('border-red-500', 'bg-red-50', 'quantidade-error');
+                
+                // Criar e mostrar mensagem de erro
+                const mensagemErro = document.createElement('div');
+                mensagemErro.id = 'erroQuantidade';
+                mensagemErro.className = 'text-red-600 text-sm mt-2 p-3 rounded-lg erro-quantidade flex items-center';
+                mensagemErro.innerHTML = `
+                    <i class="fas fa-exclamation-triangle mr-2 text-red-500"></i>
+                    <span class="font-medium">Quantidade solicitada (${quantidade}) excede o estoque disponível (${produtoSelecionado.quantidade})</span>
+                `;
+                
+                // Inserir mensagem após o input de quantidade
+                quantidadeInput.parentNode.appendChild(mensagemErro);
+                
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Função para atualizar informações do produto quando selecionado via select
+        async function atualizarInfoProdutoSelect(produtoId) {
+            if (!produtoId) {
+                produtoSelecionado = null;
+                return;
+            }
+            
+            try {
+                const response = await fetch(`../control/controllerBuscarProduto.php?id=${encodeURIComponent(produtoId)}`);
+                const data = await response.json();
+                if (data.success && data.produto) {
+                    produtoSelecionado = data.produto;
+                    console.log('Produto selecionado via select:', produtoSelecionado);
+                    
+                    // Validar quantidade atual
+                    validarQuantidade();
+                }
+            } catch (error) {
+                console.error('Erro ao buscar produto por ID:', error);
+            }
         }
 
         function mostrarNotificacao(mensagem, tipo) {
@@ -953,6 +1056,28 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                                 }
                             });
                         }
+                    }
+                });
+            }
+
+            // Event listener para validação de quantidade em tempo real
+            const quantidadeInput = document.getElementById('quantidade');
+            if (quantidadeInput) {
+                let timeoutQuantidade;
+                quantidadeInput.addEventListener('input', function(e) {
+                    clearTimeout(timeoutQuantidade);
+                    timeoutQuantidade = setTimeout(() => {
+                        validarQuantidade();
+                    }, 300); // Pequeno delay para evitar muitas validações
+                });
+
+                quantidadeInput.addEventListener('blur', function(e) {
+                    validarQuantidade();
+                });
+
+                quantidadeInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        validarQuantidade();
                     }
                 });
             }

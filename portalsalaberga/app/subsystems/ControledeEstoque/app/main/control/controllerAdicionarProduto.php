@@ -1,6 +1,6 @@
 <?php
 require("../model/model.functions.php");
-
+print_r($_POST);
 if (isset($_POST['btn'])) {
     $barcode = isset($_POST['barcode']) ? $_POST['barcode'] : '';
     $nome = $_POST['nome'];

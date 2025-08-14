@@ -101,12 +101,12 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
             border: 2px solid #005A24;
             border-radius: 50%;
             margin-right: 10px;
-            outline: none;
+            transition: all 0.2s ease;
         }
 
         .custom-radio input[type="radio"]:checked {
-            background-color: #FFA500;
-            border-color: #FFA500;
+            background-color: #005A24;
+            border-color: #005A24;
         }
 
         .custom-radio input[type="radio"]:checked::after {
@@ -115,10 +115,54 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
+            width: 8px;
+            height: 8px;
             background-color: white;
+            border-radius: 50%;
+        }
+
+        /* Estilos para o select customizado */
+        .custom-select {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .custom-select:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 90, 36, 0.15);
+        }
+
+        .custom-select select {
+            background-image: none !important;
+        }
+
+        .custom-select select:focus {
+            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
+        }
+
+        .custom-select select option {
+            padding: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .custom-select select option:hover {
+            background-color: #005A24;
+            color: white;
+        }
+
+        .custom-select select option:checked {
+            background-color: #005A24;
+            color: white;
+        }
+
+        /* Animação para o ícone da seta */
+        .custom-select select:focus + .select-arrow {
+            transform: rotate(180deg);
+        }
+
+        .select-arrow {
+            transition: transform 0.3s ease;
         }
 
         .nav-link {
@@ -416,18 +460,34 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                             aria-label="Quantidade do produto">
                     </div>
 
-                    <div class="p-4 border-2 border-primary rounded-lg">
-                        <p class="font-semibold text-primary mb-3 text-center">Selecione a Categoria</p>
+                    <div class="p-4 border-2 border-primary rounded-lg bg-white shadow-sm custom-select">
+                        <p class="font-semibold text-primary mb-3 text-center flex items-center justify-center">
+                            <i class="fas fa-tags mr-2 text-secondary"></i>
+                            Selecione a Categoria
+                        </p>
 
-                        <select class="js-example-basic-single" name="state">
-
-                            <?php
-                            $dados = $select->select_categoria();
-                            foreach ($dados as $dado) {
-                            ?>
-                                <option value="<?= $dado['id'] ?>"><?= $dado['nome_categoria'] ?></option>
-                            <?php } ?>
-                        </select>
+                        <div class="relative">
+                            <select class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200 bg-white text-gray-700 font-medium appearance-none cursor-pointer hover:border-secondary" name="natureza" required>
+                                <option value="" disabled selected class="text-gray-500">Escolha uma categoria...</option>
+                                <?php
+                                $dados = $select->select_categoria();
+                                foreach ($dados as $dado) {
+                                ?>
+                                    <option value="<?= $dado['id'] ?>" class="py-2 hover:bg-primary hover:text-white"><?= $dado['nome_categoria'] ?></option>
+                                <?php } ?>
+                            </select>
+                            
+                            <!-- Ícone de seta customizado -->
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none select-arrow">
+                                <i class="fas fa-chevron-down text-primary transition-transform duration-200 group-hover:text-secondary"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Texto de ajuda -->
+                        <p class="text-sm text-gray-500 mt-2 text-center">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Escolha a categoria que melhor descreve o produto
+                        </p>
                     </div>
                     <input type="hidden" name="barcode" value="<?php echo htmlspecialchars($identificador); ?>">
                 </div>
@@ -634,6 +694,33 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                 const images = document.querySelectorAll('img[loading="lazy"]');
                 images.forEach(img => {
                     img.loading = 'lazy';
+                });
+            }
+
+            // Melhorar interatividade do select customizado
+            const customSelect = document.querySelector('select[name="natureza"]');
+            const selectArrow = document.querySelector('.select-arrow i');
+            
+            if (customSelect && selectArrow) {
+                // Adicionar classe group ao container do select
+                customSelect.closest('.custom-select').classList.add('group');
+                
+                // Rotacionar seta quando o select estiver focado
+                customSelect.addEventListener('focus', function() {
+                    selectArrow.style.transform = 'rotate(180deg)';
+                });
+                
+                customSelect.addEventListener('blur', function() {
+                    selectArrow.style.transform = 'rotate(0deg)';
+                });
+                
+                // Adicionar efeito hover no container
+                customSelect.addEventListener('mouseenter', function() {
+                    this.closest('.custom-select').style.transform = 'translateY(-1px)';
+                });
+                
+                customSelect.addEventListener('mouseleave', function() {
+                    this.closest('.custom-select').style.transform = 'translateY(0)';
                 });
             }
         });

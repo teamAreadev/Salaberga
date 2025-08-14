@@ -504,7 +504,7 @@
                         <td class="px-4 py-3 text-center font-bold text-success bg-green-50 rounded-lg mx-2">${produto.quantidade}</td>
                         <td class="px-4 py-3">
                             <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
-                                ${produto.natureza}
+                                ${produto.categoria}
                             </span>
                         </td>
                         <td class="px-4 py-3 text-center text-sm text-gray-600 font-medium">${dataCadastro}</td>
@@ -518,7 +518,7 @@
 
             function calcularEstatisticas(produtos) {
                 const totalProdutos = produtos.length;
-                const categorias = [...new Set(produtos.map(p => p.natureza))];
+                const categorias = [...new Set(produtos.map(p => p.categoria))];
                 const estoqueTotal = produtos.reduce((sum, p) => sum + parseInt(p.quantidade), 0);
 
                 document.getElementById('totalProdutos').textContent = totalProdutos;

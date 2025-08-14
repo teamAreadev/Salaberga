@@ -10,11 +10,20 @@ class select extends connection
 
     public function select_categoria()
     {
-        $query = $this->pdo->query('SELECT * FROM categorias');
-        $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
-
-        return $resultado;
+        try {
+            $query = $this->pdo->query('SELECT * FROM categorias');
+            $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Debug: verificar se há dados
+            error_log("Função select_categoria executada. Resultados encontrados: " . count($resultado));
+            
+            return $resultado;
+        } catch (PDOException $e) {
+            error_log("Erro na função select_categoria: " . $e->getMessage());
+            return array();
+        }
     }
+
     public function selectProdutosTotal()
     {
         $query = $this->pdo->query('SELECT * FROM produtos');
@@ -76,6 +85,34 @@ class select extends connection
         } catch (Exception $e) {
             error_log("Erro no selectProdutosFlexivel: " . $e->getMessage());
             return array();
+        }
+    }
+
+    public function buscarProdutoPorId($id)
+    {
+        try {
+            $query = $this->pdo->prepare('SELECT * FROM produtos WHERE id = ?');
+            $query->execute([$id]);
+            $resultado = $query->fetch(PDO::FETCH_ASSOC);
+            
+            return $resultado;
+        } catch (PDOException $e) {
+            error_log("Erro na função buscarProdutoPorId: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function buscarProdutoPorBarcode($barcode)
+    {
+        try {
+            $query = $this->pdo->prepare('SELECT * FROM produtos WHERE barcode = ?');
+            $query->execute([$barcode]);
+            $resultado = $query->fetch(PDO::FETCH_ASSOC);
+            
+            return $resultado;
+        } catch (PDOException $e) {
+            error_log("Erro na função buscarProdutoPorBarcode: " . $e->getMessage());
+            return false;
         }
     }
 

@@ -401,48 +401,51 @@ echo "<!-- Debug: Resultado count = " . count($resultado) . " -->";
 </head>
 
 <body class="min-h-screen flex flex-col font-sans bg-light">
-    <!-- Header Melhorado -->
-    <header class="sticky top-0 bg-gradient-to-r from-primary to-dark text-white py-4 shadow-lg z-50">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
-                <span class="text-white font-heading text-xl font-semibold hidden md:inline">STGM Estoque</span>
+    <!-- Sidebar -->
+    <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="flex flex-col h-full">
+            <!-- Logo e título -->
+            <div class="p-6 border-b border-white/20">
+                <div class="flex items-center">
+                    <img src="../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
+                    <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
+                </div>
             </div>
-
-            <button class="mobile-menu-button focus:outline-none" aria-label="Menu" id="menuButton">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-
-            <nav class="header-nav md:flex items-center space-x-1" id="headerNav">
-                <a href="paginainicial.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-home mr-2"></i>
+            
+            <!-- Menu de navegação -->
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="paginainicial.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
                 </a>
-                <a href="estoque.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-boxes mr-2"></i>
+                <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-boxes mr-3 text-lg"></i>
                     <span>Estoque</span>
                 </a>
-                <a href="adicionarproduto.php" class="header-nav-link active flex items-center">
-                    <i class="fas fa-plus-circle mr-2"></i>
+                <a href="adicionarproduto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-         
-            
-                    <a href="solicitar.php" class="header-nav-link flex items-center cursor-pointer">
-                        <i class="fas fa-clipboard-list mr-2"></i>
-                        <span>Solicitar</span>
-                      
-                    </a>
-                <a href="relatorios.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-chart-bar mr-2"></i>
+             
+                <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                    <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                    <span>Solicitar</span>
+                </a>
+                <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-chart-bar mr-3 text-lg"></i>
                     <span>Relatórios</span>
                 </a>
             </nav>
+            
+            <!-- Botão de fechar sidebar no mobile -->
+            <div class="p-4 border-t border-white/20 md:hidden">
+                <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
+                    <i class="fas fa-times mr-2"></i>
+                    Fechar Menu
+                </button>
+            </div>
         </div>
-    </header>
-
+    </div>
     <main class="container mx-auto px-4 py-8 md:py-12 flex-1">
         <div class="text-center mb-10">
             <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">ADICIONAR AO ESTOQUE</h1>

@@ -1165,7 +1165,7 @@ class gerenciamento extends connection
             $queryUpdate->bindValue(":barcode", $barcode);
             $queryUpdate->execute();
           
-            $consultaInsert = "INSERT INTO movimentacao (fk_produtos_id, usuario, fk_responsaveis_id, datared, barcode_produto, quantidade_retirada)
+            $consultaInsert = "INSERT INTO movimentacao (fk_produtos_id, usuario, fk_responsaveis_id, datareg, barcode_produto, quantidade_retirada)
                                VALUES (:fk_produtos_id, :usuario, :fk_responsaveis_id, :datareg, :barcode_produto, :quantidade_retirada)";
             $queryInsert = $this->pdo->prepare($consultaInsert);
             $queryInsert->bindValue(":fk_produtos_id", $fk_produtos_id, PDO::PARAM_INT);
@@ -2254,7 +2254,7 @@ class relatorios extends connection
 
     public function relatoriocriticostoque()
     {
-        $consulta = "SELECT * FROM produtos WHERE quantidade <= 5 ORDER BY natureza, nome_produto";
+        $consulta = "SELECT p.*, c.nome_categoria as categoria FROM produtos p INNER JOIN categorias c ON p.natureza = c.id WHERE quantidade <= 5 ORDER BY natureza, nome_produto";
         $query = $this->pdo->prepare($consulta);
         $query->execute();
         $result = $query->rowCount();
@@ -2453,7 +2453,7 @@ class relatorios extends connection
                 // Natureza
                 $pdf->Rect($posX, $y, $larguras[4], 20, 'FD');
                 $pdf->SetXY($posX + 5, $y + 5);
-                $pdf->Cell($larguras[4] - 10, 15, utf8_decode($row['natureza']), 0, 0, 'L');
+                $pdf->Cell($larguras[4] - 10, 15, utf8_decode($row['categoria']), 0, 0, 'L');
                 
                 $y += 25;
                 $linhaAlternada = !$linhaAlternada;

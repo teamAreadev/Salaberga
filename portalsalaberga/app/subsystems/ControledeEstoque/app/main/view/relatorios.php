@@ -1,4 +1,6 @@
 <?php
+require_once('../model/functionsViews.php');
+$select = new select();
         require_once('../model/sessions.php');
         $session = new sessions();
         $session->autenticar_session();
@@ -926,16 +928,12 @@ $barcode = '';
                     </label>
                     <select id="categoria" name="categoria" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                         <option value="" disabled selected>SELECIONAR CATEGORIA</option>
-                        <option value="informatica">Informática</option>
-                        <option value="epi">EPI (Equipamentos de Proteção Individual)</option>
-                        <option value="limpeza">Limpeza</option>
-                        <option value="escritorio">Material de Escritório</option>
-                        <option value="manutencao">Material de Manutenção</option>
-                        <option value="seguranca">Segurança</option>
-                        <option value="alimentacao">Alimentação</option>
-                        <option value="higiene">Higiene</option>
-                        <option value="ferramentas">Ferramentas</option>
-                        <option value="outros">Outros</option>
+                        <?php 
+                        $dados = $select->select_categoria();
+                        foreach ($dados as $dado){
+                        ?>
+                        <option value="<?=$dado['id']?>"><?=$dado['nome_categoria']?></option>
+                        <?php } ?>
                     </select>
                 </div>
                 <button type="submit" class="confirm-btn">
