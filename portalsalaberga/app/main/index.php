@@ -1044,7 +1044,7 @@
                             x-transition:leave-start="opacity-100 transform translate-y-0"
                             x-transition:leave-end="opacity-0 transform -translate-y-2"
                             class="dropdown-menu absolute right-0 mt-2 w-56 bg-ghibli-cream rounded-xl shadow-xl py-3 z-50 border border-ghibli-forest/20">
-                            <a href="../main/views/autenticacao/login.php" 
+                            <a href="./views/autenticacao/login.php" 
                                class="block px-4 py-3 text-ghibli-forest hover:text-ghibli-coral hover:bg-white/20 transition duration-300 rounded-lg mx-2 font-ghibli">
                                 <i class="fas fa-user mr-3"></i> Login Principal
                             </a>
