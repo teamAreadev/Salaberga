@@ -16,12 +16,12 @@ class select extends connect
     function __construct()
     {
         parent::__construct();
-        require(__DIR__.'/private/tables.php');
-        $this->table1 = $table['crede_users'][1];
-        $this->table2 = $table['crede_users'][2];
-        $this->table3 = $table['crede_users'][3];
-        $this->table4 = $table['crede_users'][4];
-        $this->table5 = $table['crede_users'][5];
+        require(__DIR__.'/../../../../.env/tables.php');
+        $this->table1 = $table['salaberga_users'][1];
+        $this->table2 = $table['salaberga_users'][2];
+        $this->table3 = $table['salaberga_users'][3];
+        $this->table4 = $table['salaberga_users'][4];
+        $this->table5 = $table['salaberga_users'][5];
     }
     
     public function listar_usuarios_setores($setores)

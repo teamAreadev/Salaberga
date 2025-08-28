@@ -557,7 +557,7 @@
 
                 <!-- Formulário de Login -->
                 <form id="loginForm" 
-                      action="controllers/controller_auth.php" 
+                      action="../../controllers/controller_auth.php" 
                       method="POST" 
                       class="space-y-4 sm:space-y-6">
                     
@@ -616,7 +616,7 @@
 
                 <!-- Formulário de Primeiro Acesso -->
                 <form id="primeiroAcessoForm" 
-                      action="controllers/controller_auth.php" 
+                      action="../../controllers/controller_auth.php" 
                       method="POST" 
                       class="space-y-4 sm:space-y-6 hidden">
                     

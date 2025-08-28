@@ -2,7 +2,7 @@
 require_once('../../model/select_model.php');
 $select = new select_model;
 
-include_once '../../model/session.php';
+include_once '../../model/sessions.php';
 $session = new sessions();
 $session->autenticar_session();
 if(isset($_GET['sair'])){

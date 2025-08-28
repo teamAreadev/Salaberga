@@ -11,12 +11,12 @@ class model_usuario extends connect
     function __construct()
     {
         parent::__construct();
-        $table = require(__DIR__ . '/private/tables.php');
-        $this->table1 = $table['crede_users'][1];
-        $this->table2 = $table['crede_users'][2];
-        $this->table3 = $table['crede_users'][3];
-        $this->table4 = $table['crede_users'][4];
-        $this->table5 = $table['crede_users'][5];
+        $table = require(__DIR__ . '/../../../.env/tables.php');
+        $this->table1 = $table['salaberga_users'][1];
+        $this->table2 = $table['salaberga_users'][2];
+        $this->table3 = $table['salaberga_users'][3];
+        $this->table4 = $table['salaberga_users'][4];
+        $this->table5 = $table['salaberga_users'][5];
     }
 
     public function pre_cadastro(string $cpf, string $email): int

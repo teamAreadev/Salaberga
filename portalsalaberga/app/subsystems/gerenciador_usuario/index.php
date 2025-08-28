@@ -2,9 +2,6 @@
 require_once(__DIR__ . '/../../main/models/sessions.php');
 require_once(__DIR__ . '/../../main/models/model.usuario.php');
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
 $session = new sessions();
 $session->autenticar_session();
@@ -17,7 +14,6 @@ try {
 } catch (Throwable $e) {
     $dadosUsuario = [];
 }
-
 
 $userName = isset($_SESSION['nome']) ? $_SESSION['nome'] : 'Usuário';
 $userSetor = isset($_SESSION['setor']) ? $_SESSION['setor'] : 'Sistema de Gestão';

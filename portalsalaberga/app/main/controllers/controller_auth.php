@@ -15,13 +15,13 @@ if (
 
     switch ($result) {
         case 1:
-            header('Location: ../views/primeiro_acesso.php');
+            header('Location: ../views/autenticacao/primeiro_acesso.php');
             exit();
         case 2:
-            header('Location: ../login.php?erro');
+            header('Location: ../views/autenticacao/login.php?erro');
             exit();
         case 3:
-            header('Location: ../login.php?nao_existe');
+            header('Location: ../views/autenticacao/login.php?nao_existe');
             exit();
         default:
             header('Location: ../windows/fatal_erro.php');
@@ -43,7 +43,7 @@ else if (
 
     if ($senha !== $confirmar_senha) {
 
-        header('location:../views/primeiro_acesso.php?senhas_nao_condizem');
+        header('location:../views/autenticacao/primeiro_acesso.php?senhas_nao_condizem');
         exit();
     }
 
@@ -52,16 +52,16 @@ else if (
 
     switch ($result) {
         case 1:
-            header('Location: ../login.php');
+            header('Location: ../views/autenticacao/login.php');
             exit();
         case 2:
-            header('Location: ../views/primeiro_acesso.php?erro');
+            header('Location: ../views/autenticacao/primeiro_acesso.php?erro');
             exit();
         case 3:
-            header('Location: ../login.php?nao_existe');
+            header('Location: ../views/autenticacao/login.php?nao_existe');
             exit();
         default:
-            header('Location: ../login.php?falha');
+            header('Location: ../views/autenticacao/login.php?falha');
             exit();
     }
 }
@@ -83,20 +83,20 @@ else if (
             header('Location: ../views/subsystems.php');
             exit();
         case 2:
-            header('Location: ../login.php?erro');
+            header('Location: ../views/autenticacao/login.php?erro');
             exit();
         case 3:
-            header('Location: ../login.php?erro_email');
+            header('Location: ../views/autenticacao/login.php?erro_email');
             exit();
         case 4:
-            header('Location: ../login.php?erro_senha');
+            header('Location: ../views/autenticacao/login.php?erro_senha');
             exit();
         default:
-            header('Location: ../login.php?falha');
+            header('Location: ../views/autenticacao/login.php?falha');
             exit();
     }
 }else{
 
-    header('location:../login.php');
+    header('location:../views/autenticacao/login.php');
     exit();
 }

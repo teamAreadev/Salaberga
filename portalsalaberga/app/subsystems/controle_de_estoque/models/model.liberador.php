@@ -15,11 +15,11 @@ class liberador extends connect
     function __construct()
     {
         parent::__construct();
-        require(__DIR__ . '/private/tables.php');
-        $this->table1 = $table['crede_estoque'][1];
-        $this->table2 = $table['crede_estoque'][2];
-        $this->table3 = $table['crede_estoque'][3];
-        $this->table4 = $table['crede_estoque'][4];
+        $table = require(__DIR__.'/../../../../.env/tables.php');
+        $this->table1 = $table['salaberga_estoque'][1];
+        $this->table2 = $table['salaberga_estoque'][2];
+        $this->table3 = $table['salaberga_estoque'][3];
+        $this->table4 = $table['salaberga_estoque'][4];
     }
 
     public function cadastrar_produto($barcode, string $nome, int $quantidade, int $id_categoria, string $validade): int

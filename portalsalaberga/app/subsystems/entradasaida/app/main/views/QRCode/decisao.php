@@ -1,5 +1,5 @@
 <?php 
-require_once(__DIR__ . '/../../model/session.php');
+require_once(__DIR__ . '/../../model/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 if(isset($_GET['sair'])){
