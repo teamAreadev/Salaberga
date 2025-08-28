@@ -540,7 +540,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
                 <!-- Enhanced Form -->
                 <form
-                    action="../controllers/controller_auth.php"
+                    action="../../controllers/controller_auth.php"
                     method="post"
                     id="primeiroAcessoForm"
                     class="space-y-4 sm:space-y-6">
