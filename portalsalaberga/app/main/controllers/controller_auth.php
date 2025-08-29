@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__."/../models/model.usuario.php");
+//print_r($_POST);
 
 //pre-cadastro
 if (
