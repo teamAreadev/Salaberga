@@ -2,9 +2,6 @@
 include_once 'app/main/model/sessions.php';
 $session = new sessions();
 $session->autenticar_session();
-if(isset($_GET['sair'])){
-  $session->quebra_session();
-}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">

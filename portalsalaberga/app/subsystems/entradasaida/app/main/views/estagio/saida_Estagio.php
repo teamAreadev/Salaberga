@@ -5,9 +5,6 @@ $select = new select_model;
 include_once '../../model/sessions.php';
 $session = new sessions();
 $session->autenticar_session();
-if(isset($_GET['sair'])){
-  $session->quebra_session();
-}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

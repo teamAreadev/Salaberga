@@ -1,6 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../model/select_model.php');
-require_once(__DIR__ . '/../../model/session.php');
+require_once(__DIR__ . '/../../model/sessions.php');
 $session = new sessions();
 $select = new select_model();
 

@@ -97,7 +97,7 @@ $session->autenticar_session();
   <header class="header fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-6 text-white shadow-md z-50">
     <div class="text-xl font-semibold">Salaberga</div>
     <nav>
-      <a href="inicio.php?sair" 
+      <a href="../model/sessions.php?sair" 
          class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors">
         <i class="fas fa-sign-out-alt"></i>
         <span>Sair</span>

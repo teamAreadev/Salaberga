@@ -1,6 +1,7 @@
 <?php
 require_once ('../models/main_model.php');
 print_r($_POST);
+
 /*controller para excluir livro*/
 if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
     $id_livro = $_POST['excluir_livro'];
@@ -19,7 +20,7 @@ if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
     /*controller para editar livro*/
 } else if (
     isset($_POST['id_livro']) && !empty($_POST['id_livro']) &&
-    isset($_POST['titulo']) && !empty($_POST['titulo']) &&
+    isset($_POST['titulo_livro']) && !empty($_POST['titulo_livro']) &&
     isset($_POST['edicao']) && !empty($_POST['edicao']) &&
     isset($_POST['editora']) && !empty($_POST['editora']) &&
     isset($_POST['quantidade']) && !empty($_POST['quantidade']) &&
@@ -28,13 +29,10 @@ if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
     isset($_POST['prateleira']) && !empty($_POST['prateleira']) &&
     isset($_POST['subgenero']) && !empty($_POST['subgenero']) &&
     isset($_POST['genero']) && !empty($_POST['genero']) &&
-    isset($_POST['ano_publicacao']) && !empty($_POST['ano_publicacao']) &&
-    isset($_POST['id_autor']) && !empty($_POST['id_autor']) &&
-    isset($_POST['nome']) && !empty($_POST['nome']) &&
-    isset($_POST['sobrenome']) && !empty($_POST['sobrenome'])
+    isset($_POST['ano_publicacao']) && !empty($_POST['ano_publicacao'])
 ) {
     $id_livro = $_POST['id_livro'];
-    $titulo = $_POST['titulo'];
+    $titulo = $_POST['titulo_livro'];
     $edicao = $_POST['edicao'];
     $editora = $_POST['editora'];
     $quantidade = $_POST['quantidade'];
@@ -82,4 +80,8 @@ if (isset($_POST['excluir_livro']) && !empty($_POST['excluir_livro'])) {
             header('location:../views/editar_autor.php?error');
             break;
     }
+}else{
+
+    header('location:../views/decisao.php');
+    exit();
 }
