@@ -11,7 +11,7 @@ class connect
     {
         try {
             $host= 'localhost';
-            $database= 'sist_biblioteca';
+            $database= 'salaberga_biblioteca';
             $user= 'root';
             $password= '';
             
