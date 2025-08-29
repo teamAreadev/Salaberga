@@ -17,7 +17,7 @@ $session->tempo_session();
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <title>Subsistemas - CREDE 1</title>
+    <title>Subsistemas - stgm </title>
 
     <!-- SEO Meta Tags -->
     <meta name="description" content="Subsistemas do Sistema CREDE 1 - Coordenadoria Regional de Desenvolvimento da Educação">
@@ -25,7 +25,7 @@ $session->tempo_session();
     <meta name="keywords" content="subsistemas, CREDE 1, sistema, educação, controle de estoque">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png">
 
     <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,26 +40,8 @@ $session->tempo_session();
             theme: {
                 extend: {
                     colors: {
-                        primary: '#005A24',
+                        primary: '#007A33',
                         secondary: '#FFA500',
-                        accent: '#E6F4EA',
-                        dark: '#1A3C34',
-                        light: '#F8FAF9',
-                        success: '#10B981',
-                        warning: '#F59E0B',
-                        error: '#EF4444',
-                        info: '#3B82F6'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Poppins', 'sans-serif']
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.6s ease-out',
-                        'slide-up': 'slideUp 0.8s ease-out',
-                        'scale-in': 'scaleIn 0.5s ease-out',
-                        'float': 'float 3s ease-in-out infinite',
-                        'pulse-soft': 'pulseSoft 2s ease-in-out infinite'
                     }
                 }
             }
@@ -67,18 +49,58 @@ $session->tempo_session();
     </script>
 
     <style>
-        /* Reset e base */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --background-color: #f0f7ff;
+            --text-color: #333333;
+            --header-color: #007A33;
+            --icon-bg: #ffffff;
+            --icon-shadow: rgba(0, 0, 0, 0.1);
+            --accent-color: #FFA500;
+            --grid-color: #e0e0e0;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --mobile-nav-bg: rgba(255, 255, 255, 0.95);
+            --search-bar-bg: white;
+            --card-border-hover: var(--header-color);
+        }
+
+        .dark {
+            --background-color: #1a1a1a;
+            --text-color: #ffffff;
+            --header-color: #00b348;
+            --icon-bg: #2d2d2d;
+            --icon-shadow: rgba(0, 0, 0, 0.3);
+            --accent-color: #ffb733;
+            --grid-color: #333333;
+            --card-bg: rgba(45, 45, 45, 0.9);
+            --header-bg: rgba(28, 28, 28, 0.95);
+            --mobile-nav-bg: rgba(28, 28, 28, 0.95);
+            --search-bar-bg: #2d2d2d;
+            --card-border-hover: var(--accent-color);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #F8FAF9 0%, #E6F4EA 100%);
+            background-color: var(--background-color);
             min-height: 100vh;
-            line-height: 1.6;
+            padding-top: 80px;
+            background-image: radial-gradient(circle at 10% 20%, rgba(52, 152, 219, 0.05) 0%, rgba(52, 152, 219, 0) 20%), radial-gradient(circle at 90% 80%, rgba(46, 204, 113, 0.05) 0%, rgba(46, 204, 113, 0) 20%);
+            color: var(--text-color);
+            transition: background-color 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-bottom: 100px;
+            }
         }
 
         /* Animações */
@@ -223,116 +245,248 @@ $session->tempo_session();
             color: #FFA500;
         }
 
-        /* Cards melhorados */
-        .card-grid {
+        .grid-container.transitioning {
+            transition: all 0.3s ease-out;
+        }
+
+        .app-card-link {
+            transition: all 0.3s ease-out;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .app-card {
+                min-height: 150px;
+                padding: 1rem;
+            }
+        }
+
+        .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-            max-width: 900px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
             margin: 0 auto;
+            transition: all 0.3s ease-out;
+        }
+
+        .app-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            height: 100%;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
         }
 
-        .system-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 90, 36, 0.1);
-            border-radius: 20px;
-            padding: 36px 28px;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .clear-search {
+
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+
+
+            background: none;
+            border: none;
+            border-radius: 50%;
+            padding: 8px;
+            margin: 0;
+
+            color: #666;
+            transition: all 0.2s ease;
+            opacity: 0.7;
+
+
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            user-select: none;
+            -webkit-user-select: none;
+
+            min-width: 32px;
+            min-height: 32px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .system-card::before {
+        .clear-search::before {
+            content: "×";
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 1;
+        }
+
+        .clear-search:hover {
+            color: #333;
+            opacity: 1;
+
+        }
+
+        .clear-search:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .app-card-link {
+            transition: all 0.3s ease-out;
+        }
+
+        .transitioning {
+            pointer-events: none;
+        }
+
+        .app-card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 165, 0, 0.1), transparent);
-            transition: left 0.6s ease;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
         }
 
-        .system-card:hover::before {
-            left: 100%;
+        .app-card:hover::before {
+            transform: translateX(100%);
         }
 
-        .system-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: #FFA500;
-            box-shadow: 0 20px 40px rgba(0, 90, 36, 0.15);
+        .app-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--card-border-hover);
+            box-shadow: 0 20px 30px rgba(0, 122, 51, 0.1);
         }
 
-        .system-card:active {
-            transform: translateY(-4px) scale(1.01);
-        }
-
-        .card-icon {
+        .icon-wrapper {
             width: 80px;
             height: 80px;
-            margin: 0 auto 20px;
+            margin: 0 auto 1rem;
+            background: var(--icon-bg);
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
+            box-shadow: 0 8px 16px var(--icon-shadow);
         }
 
-        .card-icon img {
+        .app-card:hover .icon-wrapper {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 24px var(--icon-shadow);
+        }
 
-            border-radius: 20px;
+        .app-icon {
+            width: 50px;
+            height: 50px;
             transition: transform 0.3s ease;
         }
 
-        .system-card:hover .card-icon img {
-            transform: rotate(5deg);
-        }
-
-
-
-        .card-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 22px;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 8px;
-            transition: color 0.3s ease;
-            line-height: 1.2;
-        }
-
-        .system-card:hover .card-title {
-            color: #005A24;
-        }
-
-        .card-description {
-            color: #64748b;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            font-weight: 400;
-        }
-
-        .card-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
-            color: white;
-            border-radius: 25px;
-            font-size: 11px;
+        .app-name {
+            font-size: 1rem;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 12px rgba(0, 90, 36, 0.25);
+            color: var(--text-color);
+            margin-top: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .app-card:hover .app-name {
+            color: var(--header-color);
+        }
+
+        .main-header {
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 2px solid rgba(0, 122, 51, 0.1);
             transition: all 0.3s ease;
         }
 
-        .system-card:hover .card-badge {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 90, 36, 0.35);
+        .main-header.scrolled {
+            background: var(--header-bg);
+            box-shadow: 0 4px 20px var(--icon-shadow);
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--header-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .category-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            background: rgba(0, 122, 51, 0.1);
+            color: var(--header-color);
+            margin-top: 0.5rem;
+            display: inline-block;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: 2px solid rgba(0, 122, 51, 0.2);
+            background: var(--search-bar-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--header-color);
+            box-shadow: 0 4px 12px rgba(0, 122, 51, 0.1);
         }
 
         /* Gradientes para ícones */
@@ -962,97 +1116,139 @@ $session->tempo_session();
 </head>
 
 <body>
-    <!-- Header -->
-    <header class="header-gradient shadow-sm">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between header-content">
-                <div class="flex items-center space-x-4 sm:space-x-6">
-                    <div class="w-14 h-14 flex items-center justify-center bg-white rounded-2xl ">
-                        <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png"
-                            alt="Logo Ceará"
-                            class="w-10 h-10 object-contain">
-                    </div>
+    <header class="main-header">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo"
+                        class="h-12 w-auto object-contain">
                     <div>
-                        <h1 class="text-xl sm:text-2xl font-semibold font-heading">
-                            <span class="text-primary">Subsistemas</span> <span class="text-secondary">CREDE 1</span>
+                        <h1 class="md:text-xl lg:text-lg font-bold text-primary ">Subsistemas <span
+                                class="text-secondary">STGM</span>
                         </h1>
+                        <div class="h-0.5 bg-primary/20 rounded-full mt-1"></div>
                     </div>
                 </div>
 
-                <!-- Botões de Navegação (Desktop) -->
-                <div class="hidden md:flex items-center space-x-4">
-                    <button class="header-btn-with-text" title="Início" onclick="window.location.href='#'">
-                        <i class="fas fa-home"></i>
-                        <span>Início</span>
+                <nav class="hidden md:flex items-center gap-5">
+                    <a href="../../" class="nav-link">Início</a>
+                    <a href="./subsistemas.php?sair" class="nav-link">Sair</a>
+                    <button id="darkModeToggle"
+                        class="inline-flex items-center justify-center p-2 rounded-lg transition-colors" role="switch"
+                        aria-label="Alternar modo escuro">
+                        <svg class="w-5 h-5 sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        <svg class="w-5 h-5 moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                        <span class="sr-only">Alternar modo escuro</span>
                     </button>
-                    <button class="header-btn-with-text" title="Perfil do usuário" onclick="window.location.href='perfil.php'">
-                        <i class="fas fa-user"></i>
-                        <span>Perfil</span>
-                    </button>
-                    <div class="w-px h-8 bg-gray-300 mx-3"></div>
-                    <button class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-red-50 text-red-600 hover:text-red-700 transition-all duration-300 flex items-center justify-center" title="Sair" onclick="window.location.href='../models/sessions.php?sair'">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
+
+                    <div class="relative">
+                        <button id="accessibilityBtnDesktop"
+                            class="flex items-center gap-2 p-2 rounded-lg transition-colors duration-300"
+                            aria-expanded="false" aria-haspopup="true">
+                            <i class="fa-solid fa-universal-access text-xl"></i>
+                        </button>
+
+                        <div id="accessibilityMenuDesktop"
+                            class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 hidden z-50"
+                            role="menu">
+                            <div class="px-4 py-2 border-b" style="color: #1a1a1a;">
+                                <span class="block text-sm font-semibold mb-2">Tamanho do Texto</span>
+                                <div class="flex gap-2">
+                                    <button class="p-2 hover:bg-gray-100 rounded"
+                                        aria-label="Diminuir tamanho do texto"><i
+                                            class="fa-solid fa-a"></i><b>-</b></button>
+                                    <button class="p-2 hover:bg-gray-100 rounded"
+                                        aria-label="Tamanho padrão do texto"><i class="fa-solid fa-a"></i></button>
+                                    <button class="p-2 hover:bg-gray-100 rounded"
+                                        aria-label="Aumentar tamanho do texto"><i
+                                            class="fa-solid fa-a"></i><b>+</b></button>
+                                </div>
+                            </div>
+
+                            <button class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
+                                style="color: #1a1a1a;">
+                                <i class="fa-solid fa-ear-listen"></i>
+                                <span>Leitor de Tela</span>
+                            </button>
+
+                            <button id="themeBtnDesktop"
+                                class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center justify-between"
+                                style="color: #1a1a1a;">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-half-stroke"></i>
+                                    <span>Temas de Contraste</span>
+                                </div>
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+
+                        <div id="themeMenuDesktop"
+                            class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 hidden z-50">
+                            <div class="flex items-center px-4 py-2 border-b">
+                                <button id="backToMainMenuDesktop" class="mr-2" style="color: #1a1a1a;">
+                                    <i class="fa-solid fa-arrow-left"></i>
+                                </button>
+                                <span class="font-semibold">Temas de Contraste</span>
+                            </div>
+
+                            <div class="py-2" style="color: #1a1a1a;">
+                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100"
+                                    data-theme="monochrome">Monocromático</button>
+                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100"
+                                    data-theme="inverted-grayscale">Escala de cinza invertida</button>
+                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100"
+                                    data-theme="inverted-color">Cor invertida</button>
+                                <button class="w-full px-4 py-2 text-left hover:bg-gray-100" data-theme="original">Cores
+                                    originais</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Profile dropdown placeholder -->
+                </nav>
+
+                <div class="md:hidden">
+                    <!-- Mobile profile placeholder -->
                 </div>
-
-
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-6 py-12">
-        <div class="max-w-6xl mx-auto">
-
-
-
-            <!-- Search Bar -->
-            <div class="mb-12 animate-on-scroll">
-                <div class="search-container">
-                    <input type="text"
-                        id="searchSubsystems"
-                        placeholder="Buscar aplicativos e sistemas..."
-                        class="search-input"
-                        autocomplete="off">
-                    <i class="fas fa-search search-icon mx-2"></i>
-                </div>
-            </div>
-
-            <!-- Application Cards Grid -->
-            <div class="card-grid">
+    <div class="search-container">
+        <input type="text" class="search-bar" placeholder="Buscar aplicativos..." id="search-input">
+    </div>
+    <main class="container mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 md:gap-8 p-4 md:p-8 max-w-[1400px] mx-auto transition-all duration-300 grid-container">
 
                 <!-- Card 1: Gerenciador de Usuários -->
                 <?php if (isset($_SESSION['Admin_usuario'])) { ?>
-                    <a href="../../subsystems/gerenciador_usuario/index.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Gerenciador de Usuários - Sistema de gestão de usuários, setores e permissões"
-                            data-system="usuarios">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/ZqY5Z9TG/useradm.png" alt="Ícone Gerenciador de Usuários" class="w-24 h-24 object-contain">
+                    <a href="../../subsystems/gerenciador_usuario/index.php" class="app-card-link">
+                        <div class="app-card w-{100px} h-full">
+                            <div class="icon-wrapper">
+                                <img src="https://i.postimg.cc/ZqY5Z9TG/useradm.png" alt="Ícone Gerenciador de Usuários" class="app-icon">
                             </div>
-                            <h3 class="card-title">Gerenciador de Usuários</h3>
-                            <p class="card-description">Gestão de usuários, setores e permissões</p>
-                            <span class="card-badge">Sistema Ativo</span>
+                            <h3 class="app-name">Gerenciador de Usuários</h3>
+                            <span class="category-tag">Sistema</span>
                         </div>
                     </a>
                 <?php } ?>
 
                 <!-- Card 2: Controle de Estoque -->
                 <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                    <a href="../../subsystems/controle_de_estoque/default.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
+                    <a href="../../subsystems/controle_de_estoque/default.php" class="app-card-link">
+                        <div class="app-card w-{100px} h-full">
+                            <div class="icon-wrapper">
+                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="app-icon">
                             </div>
-                            <h3 class="card-title">Controle de Estoque</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
+                            <h3 class="app-name">Controle de Estoque</h3>
+                            <span class="category-tag">Sistema</span>
                         </div>
                     </a>
                 <?php } ?>

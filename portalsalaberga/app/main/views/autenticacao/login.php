@@ -1,4 +1,20 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
+// Verifica se o parâmetro 'sair' está presente na URL para realizar o logout
+if (isset($_GET['sair']) && $_GET['sair'] === 'true') {
+    // Destroi todas as variáveis de sessão
+    session_unset();
+    // Destroi a sessão
+    session_destroy();
+    // Redireciona para a página de login (sem o parâmetro sair) para evitar logout automático em refresh
+    header('Location: login.php');
+    exit();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -7,24 +23,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta http-equiv="content-language" content="pt-BR">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta name="theme-color" content="#005A24">
+    <meta name="theme-color" content="#7FB069">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <title>Login CREDE 1</title>
+    <title>Login | EEEP Salaberga Torquato Gomes de Matos</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Acesso ao Sistema CREDE1 - Coordenadoria Regional de Desenvolvimento da Educação">
-    <meta name="author" content="CREDE 1">
-    <meta name="keywords" content="login, acesso, CREDE 1, sistema, educação">
+    <meta name="description" content="Acesso ao sistema da EEEP Salaberga Torquato Gomes de Matos - Hub Educacional em Maranguape">
+    <meta name="author" content="EEEP Salaberga Torquato Gomes de Matos">
+    <meta name="keywords" content="login, acesso, EEEP Salaberga, sistema educacional, Maranguape">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
+    <link rel="icon" type="image/png" href="../../assets/img/S.png">
 
     <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -34,42 +50,39 @@
             theme: {
                 extend: {
                     colors: {
-                        // Paleta original
-                        primary: '#005A24',
-                        secondary: '#FFA500',
-                        accent: '#E6F4EA',
-                        dark: '#1A3C34',
-                        light: '#F8FAF9',
-                        white: '#FFFFFF',
-                        gray: {
-                            50: '#F9FAFB',
-                            100: '#F3F4F6',
-                            200: '#E5E7EB',
-                            300: '#D1D5DB',
-                            400: '#9CA3AF',
-                            500: '#6B7280',
-                            600: '#4B5563',
-                            700: '#374151',
-                            800: '#1F2937',
-                            900: '#111827'
-                        }
+                        // Paleta Studio Ghibli baseada na imagem
+                        'ghibli-sky': '#5BA3D4',
+                        'ghibli-cloud': '#F8F8F8',
+                        'ghibli-building': '#8B9DC3',
+                        'ghibli-accent': '#D4A574',
+                        'ghibli-green': '#7FB069',
+                        'ghibli-sage': '#A4C3A2',
+                        'ghibli-cream': '#F7F3E9',
+                        'ghibli-peach': '#F4A261',
+                        'ghibli-coral': '#E76F51',
+                        'ghibli-lavender': '#B19CD9',
+                        'ghibli-gold': '#F1C40F',
+                        'ghibli-brown': '#8B4513',
+                        'ghibli-forest': '#2D5016',
+                        'ghibli-mist': '#E8F4F8',
+                        'ghibli-sunset': '#FF6B6B'
                     },
                     backgroundImage: {
-                        'gradient-primary': 'linear-gradient(135deg, #005A24 0%, #7FB069 50%, #1A3C34 100%)',
-                        'gradient-secondary': 'linear-gradient(135deg, #F4A261 0%, #E76F51 100%)',
-                        'gradient-light': 'linear-gradient(135deg, #E8F4F8 0%, #F7F3E9 100%)',
-                        'gradient-dark': 'linear-gradient(135deg, #2D5016 0%, #005A24 100%)'
+                        'ghibli-gradient': 'linear-gradient(135deg, #7FB069 0%, #A4C3A2 100%)',
+                        'ghibli-sunset': 'linear-gradient(135deg, #F4A261 0%, #E76F51 100%)',
+                        'ghibli-sky-gradient': 'linear-gradient(135deg, #5BA3D4 0%, #87CEEB 100%)',
+                        'ghibli-forest': 'linear-gradient(135deg, #2D5016 0%, #7FB069 100%)',
+                        'hero-ghibli': 'url("https://hebbkx1anhila5yf.public.blob.vercel-storage.com/img_index3-9IdYq3BVf9Sebk6O6b0ZJtyMde0HUW.png")'
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Poppins', 'sans-serif']
+                        'ghibli': ['Comfortaa', 'cursive'],
+                        'ghibli-text': ['Nunito', 'sans-serif']
                     },
                     boxShadow: {
-                        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
-                        'medium': '0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                        'strong': '0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 2px 10px -2px rgba(0, 0, 0, 0.05)',
-                        'primary': '0 10px 25px -5px rgba(0, 90, 36, 0.3)',
-                        'secondary': '0 10px 25px -5px rgba(255, 165, 0, 0.3)'
+                        'ghibli': '0 10px 25px -5px rgba(127, 176, 105, 0.3)',
+                        'ghibli-warm': '0 10px 25px -5px rgba(244, 162, 97, 0.3)',
+                        'ghibli-soft': '0 5px 15px -3px rgba(164, 195, 162, 0.2)',
+                        'ghibli-cloud': '0 8px 32px rgba(248, 248, 248, 0.4)'
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
@@ -86,11 +99,11 @@
     <style>
         /* Fonte principal */
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #F7F3E9 0%, #E8F4F8 100%);
         }
 
-        /* Animações */
+        /* Animações Studio Ghibli */
         @keyframes float {
             0%, 100% {
                 transform: translateY(0px) rotate(0deg);
@@ -164,10 +177,10 @@
 
         @keyframes pulse-glow {
             0%, 100% {
-                box-shadow: 0 0 20px rgba(0, 90, 36, 0.4);
+                box-shadow: 0 0 20px rgba(127, 176, 105, 0.4);
             }
             50% {
-                box-shadow: 0 0 30px rgba(0, 90, 36, 0.6);
+                box-shadow: 0 0 30px rgba(127, 176, 105, 0.6);
             }
         }
 
@@ -187,31 +200,31 @@
             position: absolute;
             width: 20px;
             height: 20px;
-            background: #005A24;
+            background: #7FB069;
             border-radius: 0 100% 0 100%;
             animation: drift 15s linear infinite;
             opacity: 0.6;
         }
 
         .leaf:nth-child(2n) {
-            background: #FFA500;
+            background: #A4C3A2;
             animation-duration: 20s;
             animation-delay: -5s;
         }
 
         .leaf:nth-child(3n) {
-            background: #7FB069;
+            background: #F4A261;
             animation-duration: 18s;
             animation-delay: -10s;
         }
 
-        .cloud {
+        .ghibli-cloud {
             position: absolute;
-            background: rgba(248, 250, 249, 0.9);
+            background: rgba(248, 248, 248, 0.9);
             border-radius: 50px;
             animation: cloud-drift 30s linear infinite;
             opacity: 0.8;
-            box-shadow: 0 4px 20px rgba(248, 250, 249, 0.3);
+            box-shadow: 0 4px 20px rgba(248, 248, 248, 0.3);
         }
 
         @keyframes cloud-drift {
@@ -223,27 +236,27 @@
             }
         }
 
-        .cloud::before,
-        .cloud::after {
+        .ghibli-cloud::before,
+        .ghibli-cloud::after {
             content: '';
             position: absolute;
-            background: rgba(248, 250, 249, 0.9);
+            background: rgba(248, 248, 248, 0.9);
             border-radius: 50px;
         }
 
-        .cloud.small {
+        .ghibli-cloud.small {
             width: 60px;
             height: 30px;
         }
 
-        .cloud.small::before {
+        .ghibli-cloud.small::before {
             width: 40px;
             height: 40px;
             top: -15px;
             left: 10px;
         }
 
-        .cloud.small::after {
+        .ghibli-cloud.small::after {
             width: 30px;
             height: 30px;
             top: -10px;
@@ -257,16 +270,16 @@
 
         .input-group input {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: linear-gradient(135deg, rgba(248, 250, 249, 0.8) 0%, rgba(255, 255, 255, 0.9) 100%);
-            border: 2px solid rgba(0, 90, 36, 0.3);
+            background: linear-gradient(135deg, rgba(247, 243, 233, 0.8) 0%, rgba(255, 255, 255, 0.9) 100%);
+            border: 2px solid rgba(127, 176, 105, 0.3);
             backdrop-filter: blur(5px);
         }
 
         .input-group input:focus {
             transform: translateY(-2px);
             outline: none;
-            border-color: #FFA500;
-            box-shadow: 0 8px 25px rgba(255, 165, 0, 0.3);
+            border-color: #F4A261;
+            box-shadow: 0 8px 25px rgba(244, 162, 97, 0.3);
             background: rgba(255, 255, 255, 0.95);
         }
 
@@ -275,14 +288,14 @@
             left: 10px;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(26, 60, 52, 0.6);
+            color: rgba(45, 80, 22, 0.6);
             font-size: 1rem;
             transition: all 0.3s ease;
             pointer-events: none;
             padding: 0 5px;
             background-color: transparent;
             z-index: 1;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Nunito', sans-serif;
         }
 
         .input-group input:focus + label,
@@ -290,9 +303,9 @@
             top: -12px;
             left: 10px;
             font-size: 0.85rem;
-            color: #FFA500;
+            color: #E76F51;
             transform: translateY(0);
-            background: linear-gradient(135deg, #F8FAF9 0%, #E8F4F8 100%);
+            background: linear-gradient(135deg, #F7F3E9 0%, #E8F4F8 100%);
             padding: 0 8px;
             font-weight: 600;
             border-radius: 4px;
@@ -300,12 +313,12 @@
 
         /* Enhanced button styles */
         .btn-enhanced {
-            background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
+            background: linear-gradient(135deg, #7FB069 0%, #A4C3A2 100%);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            font-family: 'Poppins', sans-serif;
-            box-shadow: 0 8px 20px rgba(0, 90, 36, 0.3);
+            font-family: 'Comfortaa', cursive;
+            box-shadow: 0 8px 20px rgba(127, 176, 105, 0.3);
         }
 
         .btn-enhanced::before {
@@ -325,7 +338,7 @@
 
         .btn-enhanced:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(0, 90, 36, 0.4);
+            box-shadow: 0 15px 35px rgba(127, 176, 105, 0.4);
         }
 
         /* Password strength indicator */
@@ -333,7 +346,7 @@
             height: 4px;
             border-radius: 2px;
             transition: all 0.3s ease;
-            background: linear-gradient(90deg, #ff4444 0%, #ffaa00 50%, #005A24 100%);
+            background: linear-gradient(90deg, #ff4444 0%, #ffaa00 50%, #7FB069 100%);
         }
 
         /* Error message styling */
@@ -346,7 +359,7 @@
             font-weight: 500;
             box-shadow: 0 4px 15px rgba(231, 111, 81, 0.3);
             animation: fadeInUp 0.5s ease-out;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Nunito', sans-serif;
         }
 
         /* Loading state */
@@ -379,14 +392,14 @@
             position: absolute;
             width: 4px;
             height: 4px;
-            background: #FFA500;
+            background: #F1C40F;
             border-radius: 50%;
             animation: sparkle 2s ease-in-out infinite;
         }
 
         /* Elementos com brilho mágico */
         .magical-glow {
-            box-shadow: 0 0 20px rgba(0, 90, 36, 0.4), 0 0 40px rgba(255, 165, 0, 0.2);
+            box-shadow: 0 0 20px rgba(127, 176, 105, 0.4), 0 0 40px rgba(244, 162, 97, 0.2);
         }
 
         .animate-fade-in-up {
@@ -407,7 +420,7 @@
 
         /* Focus styles */
         *:focus {
-            outline: 2px solid #FFA500;
+            outline: 2px solid #F4A261;
             outline-offset: 2px;
             border-radius: 4px;
         }
@@ -423,12 +436,12 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #005A24 0%, #FFA500 100%);
+            background: linear-gradient(135deg, #7FB069 0%, #F4A261 100%);
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #1A3C34 0%, #E76F51 100%);
+            background: linear-gradient(135deg, #2D5016 0%, #E76F51 100%);
         }
         
         /* Enhanced responsive styles */
@@ -462,93 +475,108 @@
     </style>
 </head>
 
-<body class="font-sans bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 min-h-screen flex items-center justify-center p-0 sm:p-4">
+<body class="font-ghibli-text bg-gradient-to-br from-ghibli-mist via-ghibli-cloud to-ghibli-sky min-h-screen flex items-center justify-center p-0 sm:p-4">
     
-    <!-- Elementos flutuantes -->
+    <!-- Elementos flutuantes Studio Ghibli -->
     <div class="floating-elements">
+        <div class="leaf" style="top: -10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="leaf" style="top: -10%; left: 80%; animation-delay: -3s;"></div>
+        <div class="leaf" style="top: -10%; left: 20%; animation-delay: -6s;"></div>
+        <div class="leaf" style="top: -10%; left: 70%; animation-delay: -9s;"></div>
+        <div class="leaf" style="top: -10%; left: 90%; animation-delay: -12s;"></div>
+        <div class="leaf" style="top: -10%; left: 40%; animation-delay: -15s;"></div>
+        <div class="leaf" style="top: -10%; left: 60%; animation-delay: -18s;"></div>
+        <div class="leaf" style="top: -10%; left: 30%; animation-delay: -21s;"></div>
+
         <!-- Nuvens flutuantes -->
-        <div class="cloud small" style="top: 20%; animation-delay: 0s;"></div>
-        <div class="cloud small" style="top: 60%; animation-delay: -10s;"></div>
-        <div class="cloud small" style="top: 40%; animation-delay: -20s;"></div>
+        <div class="ghibli-cloud small" style="top: 20%; animation-delay: 0s;"></div>
+        <div class="ghibli-cloud small" style="top: 60%; animation-delay: -10s;"></div>
+        <div class="ghibli-cloud small" style="top: 40%; animation-delay: -20s;"></div>
     </div>
 
-    <div class="main-container w-full max-w-6xl bg-white rounded-none sm:rounded-3xl shadow-strong overflow-hidden animate-fade-in-up relative z-10">
+    <div class="main-container w-full max-w-6xl bg-ghibli-cream rounded-none sm:rounded-3xl shadow-ghibli overflow-hidden animate-fade-in-up relative z-10">
         <div class="flex flex-col lg:flex-row min-h-[100vh] sm:min-h-[600px]">
             
-            <!-- Enhanced Image Container -->
-            <div class="hidden md:block lg:flex-1 bg-gradient-primary relative overflow-hidden animate-slide-in-left">
+            <!-- Enhanced Image Container com traços Ghibli -->
+            <div class="hidden md:block lg:flex-1 bg-ghibli-forest relative overflow-hidden animate-slide-in-left">
                 <div class="absolute inset-0 bg-black/40"></div>
-                <div class="absolute inset-0 bg-gradient-to-br from-primary/80 via-transparent to-secondary/80"></div>
+                <div class="absolute inset-0 bg-gradient-to-br from-ghibli-forest/80 via-transparent to-ghibli-coral/80"></div>
                 
-                <!-- Elementos decorativos -->
+                <!-- Elementos decorativos Ghibli -->
                 <div class="absolute top-10 left-10 w-20 h-20 border-2 border-white/30 rounded-full animate-float"></div>
                 <div class="absolute bottom-20 right-10 w-16 h-16 border-2 border-white/30 rounded-full animate-sway"></div>
                 <div class="absolute top-1/3 right-20 w-12 h-12 bg-white/20 rounded-full animate-bounce-gentle"></div>
                 
-                
+                <!-- Sparkles mágicos -->
+                <div class="sparkle" style="top: 15%; left: 20%; animation-delay: 0s;"></div>
+                <div class="sparkle" style="top: 70%; left: 80%; animation-delay: 1s;"></div>
+                <div class="sparkle" style="top: 40%; left: 15%; animation-delay: 2s;"></div>
+                <div class="sparkle" style="top: 80%; left: 30%; animation-delay: 3s;"></div>
                 
                 <div class="relative z-10 h-full flex flex-col justify-center items-center p-8 lg:p-12 text-center text-white">
                     <div class="mb-8">
-                        <i class="fas fa-building text-6xl lg:text-8xl mb-6 text-secondary"></i>
-        </div>
-
-                    <h1 class="text-3xl lg:text-5xl font-bold mb-6 leading-tight font-heading">
-                        Login <span class="text-secondary">CREDE 1</span>
+                        <i class="fas fa-graduation-cap text-6xl lg:text-8xl mb-6 text-ghibli-peach"></i>
+                    </div>
+                    
+                    <h1 class="text-3xl lg:text-5xl font-bold mb-6 leading-tight font-ghibli">
+                        EEEP <span class="text-ghibli-peach">Salaberga</span>
                     </h1>
                     
-                    <p class="text-lg lg:text-xl mb-8 max-w-md leading-relaxed opacity-90 font-sans">
-                        Coordenadoria Regional de Desenvolvimento da Educação
+                    <p class="text-lg lg:text-xl mb-8 max-w-md leading-relaxed opacity-90 font-ghibli-text">
+                        Transformando o futuro através da educação e inovação tecnológica
                     </p>
                     
                     <div class="flex space-x-4 text-sm opacity-80">
                         <div class="flex items-center animate-bounce-gentle" style="animation-delay: 0.5s;">
-                            <i class="fas fa-graduation-cap mr-2 text-yellow-300"></i>
-                            <span>Educação</span>
+                            <i class="fas fa-users mr-2 text-ghibli-gold"></i>
+                            <span>Comunidade</span>
                         </div>
                         <div class="flex items-center animate-bounce-gentle" style="animation-delay: 1s;">
-                            <i class="fas fa-users mr-2 text-yellow-300"></i>
-                            <span>Desenvolvimento</span>
+                            <i class="fas fa-award mr-2 text-ghibli-gold"></i>
+                            <span>Excelência</span>
                         </div>
                         <div class="flex items-center animate-bounce-gentle" style="animation-delay: 1.5s;">
-                            <i class="fas fa-star mr-2 text-yellow-300"></i>
-                            <span>Qualidade</span>
+                            <i class="fas fa-rocket mr-2 text-ghibli-gold"></i>
+                            <span>Inovação</span>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Enhanced Form Container -->
+            
+            <!-- Enhanced Form Container com traços Ghibli -->
             <div class="w-full lg:flex-1 p-4 xs:p-6 sm:p-8 lg:p-12 flex flex-col justify-center animate-slide-in-right relative">
                 
+                <!-- Sparkles no formulário -->
+                <div class="sparkle" style="top: 10%; right: 10%; animation-delay: 0s;"></div>
+                <div class="sparkle" style="bottom: 20%; left: 15%; animation-delay: 2s;"></div>
                 
-                
-                <!-- Logo Container -->
+                <!-- Logo Container com efeitos Ghibli -->
                 <div class="text-center mb-6 sm:mb-8">
                     <div class="inline-block p-3 sm:p-4 rounded-2xl">
-                        <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" 
-                             alt="Logo Sistema" 
+                        <img src="../../assets/img/S.png" 
+                             alt="Logo EEEP Salaberga" 
                              class="w-16 h-16 sm:w-20 sm:h-20 object-contain">
                     </div>
-                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-2 font-heading">
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-ghibli-forest mb-2 font-ghibli">
                         Bem-vindo
                     </h2>
-                    <p class="text-gray-600 text-base sm:text-lg font-sans">
-                        Acesse o Sistema CREDE 1
+                    <p class="text-ghibli-forest/70 text-base sm:text-lg font-ghibli-text">
+                        Acesse sua conta institucional
                     </p>
                 </div>
 
                 <!-- Tipo de Acesso -->
                 <div class="mb-6">
-                    <div class="flex bg-gray-100 rounded-xl p-1">
+                    <div class="flex bg-ghibli-sage/20 rounded-xl p-1">
                         <button type="button" 
                                 id="loginOption" 
-                                class="flex-1 py-2 px-4 rounded-lg font-medium transition-all duration-300 bg-white text-primary shadow-sm">
+                                class="flex-1 py-2 px-4 rounded-lg font-medium transition-all duration-300 bg-white text-ghibli-forest shadow-ghibli-soft">
                             <i class="fas fa-sign-in-alt mr-2"></i>
                             Login
                         </button>
                         <button type="button" 
                                 id="primeiroAcessoOption" 
-                                class="flex-1 py-2 px-4 rounded-lg font-medium transition-all duration-300 text-gray-600 hover:text-primary">
+                                class="flex-1 py-2 px-4 rounded-lg font-medium transition-all duration-300 text-ghibli-forest/60 hover:text-ghibli-forest">
                             <i class="fas fa-key mr-2"></i>
                             Primeiro Acesso
                         </button>
@@ -569,12 +597,12 @@
                                    id="loginEmail" 
                                    placeholder=" " 
                                    required 
-                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 rounded-xl text-gray-800 focus:shadow-primary transition-all duration-300 peer text-sm sm:text-base">
+                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 rounded-xl text-ghibli-forest focus:shadow-ghibli-soft transition-all duration-300 peer text-sm sm:text-base">
                             <label for="loginEmail" 
-                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-secondary peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]: peer-[:not(:placeholder-shown)]:text-secondary peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
+                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-ghibli-coral peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]: peer-[:not(:placeholder-shown)]:text-ghibli-coral peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 E-mail
                             </label>
-                            <i class="fas fa-envelope absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-primary text-base sm:text-lg"></i>
+                            <i class="fas fa-envelope absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-ghibli-green text-base sm:text-lg"></i>
                         </div>
                     </div>
 
@@ -586,13 +614,13 @@
                                    id="loginPassword" 
                                    placeholder=" " 
                                    required
-                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 pr-10 sm:pr-12 rounded-xl text-gray-800 focus:shadow-primary transition-all duration-300 peer text-sm sm:text-base">
+                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 pr-10 sm:pr-12 rounded-xl text-ghibli-forest focus:shadow-ghibli-soft transition-all duration-300 peer text-sm sm:text-base">
                             <label for="loginPassword" 
-                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-secondary peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-secondary peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
+                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-ghibli-coral peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-ghibli-coral peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 Senha
                             </label>
-                            <i class="fas fa-lock absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-primary text-base sm:text-lg"></i>
-                            <i class="fas fa-eye toggle-password absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-secondary cursor-pointer transition-colors duration-300 text-base sm:text-lg"></i>
+                            <i class="fas fa-lock absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-ghibli-green text-base sm:text-lg"></i>
+                            <i class="fas fa-eye toggle-password absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-ghibli-forest/40 hover:text-ghibli-coral cursor-pointer transition-colors duration-300 text-base sm:text-lg"></i>
                         </div>
                     </div>
 
@@ -607,7 +635,7 @@
                     <!-- Submit Button Login -->
                     <div class="mt-4 sm:mt-6">
                         <button type="submit" 
-                                class="btn-enhanced w-full px-6 py-3 sm:py-4 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 text-sm sm:text-base font-semibold bg-gradient-to-r from-primary to-dark hover:from-dark hover:to-primary">
+                                class="btn-enhanced w-full px-6 py-3 sm:py-4 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-ghibli-sage focus:ring-opacity-50 text-sm sm:text-base font-semibold bg-gradient-to-r from-ghibli-green to-ghibli-sage hover:from-ghibli-forest hover:to-ghibli-green">
                             <i class="fas fa-sign-in-alt mr-2"></i>
                             <span>Acessar Sistema</span>
                         </button>
@@ -628,12 +656,12 @@
                                    id="primeiroAcessoEmail" 
                                    placeholder=" " 
                                    required 
-                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 rounded-xl text-gray-800 focus:shadow-primary transition-all duration-300 peer text-sm sm:text-base">
+                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 rounded-xl text-ghibli-forest focus:shadow-ghibli-soft transition-all duration-300 peer text-sm sm:text-base">
                             <label for="primeiroAcessoEmail" 
-                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-secondary peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]: peer-[:not(:placeholder-shown)]:text-secondary peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
+                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-ghibli-coral peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]: peer-[:not(:placeholder-shown)]:text-ghibli-coral peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 E-mail
                             </label>
-                            <i class="fas fa-envelope absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-primary text-base sm:text-lg"></i>
+                            <i class="fas fa-envelope absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-ghibli-green text-base sm:text-lg"></i>
                         </div>
                     </div>
 
@@ -646,19 +674,19 @@
                                    placeholder=" " 
                                    required
                                    maxlength="14"
-                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 rounded-xl text-gray-800 focus:shadow-primary transition-all duration-300 peer text-sm sm:text-base">
+                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 rounded-xl text-ghibli-forest focus:shadow-ghibli-soft transition-all duration-300 peer text-sm sm:text-base">
                             <label for="primeiroAcessoCpf" 
-                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-secondary peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]: peer-[:not(:placeholder-shown)]:text-secondary peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
+                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-ghibli-coral peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]: peer-[:not(:placeholder-shown)]:text-ghibli-coral peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 CPF
                             </label>
-                            <i class="fas fa-id-card absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-primary text-base sm:text-lg"></i>
+                            <i class="fas fa-id-card absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-ghibli-green text-base sm:text-lg"></i>
                         </div>
                     </div>
 
                     <!-- Submit Button Primeiro Acesso -->
                     <div class="mt-4 sm:mt-6">
                         <button type="submit"
-                                class="btn-enhanced w-full px-6 py-3 sm:py-4 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 text-sm sm:text-base font-semibold bg-gradient-to-r from-primary to-dark hover:from-dark hover:to-primary">
+                                class="btn-enhanced w-full px-6 py-3 sm:py-4 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-ghibli-sage focus:ring-opacity-50 text-sm sm:text-base font-semibold bg-gradient-to-r from-ghibli-green to-ghibli-sage hover:from-ghibli-forest hover:to-ghibli-green">
                             <i class="fas fa-key mr-2"></i>
                             <span>Verificar Primeiro Acesso</span>
                         </button>
@@ -667,14 +695,18 @@
 
                 <!-- Additional Links -->
                 <div class="mt-6 sm:mt-8 text-center space-y-3 sm:space-y-4">
-                    <div class="pt-3 sm:pt-4 border-t border-gray-200">
-                        <p class="text-gray-500 text-xs sm:text-sm font-sans">
-                            <a href="#" class="text-secondary hover:text-primary transition-colors duration-300">
+                    <div class="pt-3 sm:pt-4 border-t border-ghibli-sage/20">
+                        <p class="text-ghibli-forest/60 text-xs sm:text-sm font-ghibli-text">
+                            <a href="../../index.php" class="text-ghibli-coral hover:text-ghibli-peach transition-colors duration-300">
+                                <i class="fas fa-arrow-left mr-1"></i>Voltar ao portal
+                            </a>
+                            <span class="mx-2">•</span>
+                            <a href="#" class="text-ghibli-coral hover:text-ghibli-peach transition-colors duration-300">
                                 <i class="fas fa-question-circle mr-1"></i>Precisa de ajuda?
                             </a>
                             <span class="mx-2">•</span>
-                            <a href="mailto:suporte@sistema.com" 
-                               class="text-secondary hover:text-primary transition-colors duration-300">
+                            <a href="mailto:suporte@eeepsalaberga.edu.br" 
+                               class="text-ghibli-coral hover:text-ghibli-peach transition-colors duration-300">
                                 Contate o suporte
                             </a>
                         </p>
@@ -704,10 +736,10 @@
             function toggleMode(isPrimeiroAcessoMode) {
                 if (isPrimeiroAcessoMode) {
                     // Modo primeiro acesso
-                    loginOption.classList.remove('bg-white', 'text-primary', 'shadow-sm');
-                    loginOption.classList.add('text-gray-600');
-                    primeiroAcessoOption.classList.remove('text-gray-600');
-                    primeiroAcessoOption.classList.add('bg-white', 'text-primary', 'shadow-sm');
+                    loginOption.classList.remove('bg-white', 'text-ghibli-forest', 'shadow-ghibli-soft');
+                    loginOption.classList.add('text-ghibli-forest/60');
+                    primeiroAcessoOption.classList.remove('text-ghibli-forest/60');
+                    primeiroAcessoOption.classList.add('bg-white', 'text-ghibli-forest', 'shadow-ghibli-soft');
                     
                     // Mostrar formulário de primeiro acesso, esconder login
                     loginForm.classList.add('hidden');
@@ -715,10 +747,10 @@
                     
                 } else {
                     // Modo login
-                    primeiroAcessoOption.classList.remove('bg-white', 'text-primary', 'shadow-sm');
-                    primeiroAcessoOption.classList.add('text-gray-600');
-                    loginOption.classList.remove('text-gray-600');
-                    loginOption.classList.add('bg-white', 'text-primary', 'shadow-sm');
+                    primeiroAcessoOption.classList.remove('bg-white', 'text-ghibli-forest', 'shadow-ghibli-soft');
+                    primeiroAcessoOption.classList.add('text-ghibli-forest/60');
+                    loginOption.classList.remove('text-ghibli-forest/60');
+                    loginOption.classList.add('bg-white', 'text-ghibli-forest', 'shadow-ghibli-soft');
                     
                     // Mostrar formulário de login, esconder primeiro acesso
                     primeiroAcessoForm.classList.add('hidden');
@@ -753,11 +785,8 @@
                 e.target.value = value;
             });
 
-
-
             // Enhanced form submission for login
             loginForm.addEventListener('submit', function(e) {
-                
                 const email = loginEmailInput.value.trim();
                 const password = loginPasswordInput.value;
 
@@ -796,8 +825,6 @@
 
             // Enhanced form submission for primeiro acesso
             primeiroAcessoForm.addEventListener('submit', function(e) {
-               
-                
                 const email = primeiroAcessoEmailInput.value.trim();
                 const cpf = primeiroAcessoCpfInput.value.trim();
 
@@ -821,8 +848,6 @@
                 
                 const originalText = submitButton.innerHTML;
                 submitButton.innerHTML = '<span><i class="fas fa-spinner fa-spin mr-2"></i>Verificando...</span>';
-                
-                
             });
 
             // Enhanced input animations
@@ -830,7 +855,7 @@
             inputs.forEach(input => {
                 input.addEventListener('focus', function() {
                     this.parentElement.style.transform = 'translateY(-2px)';
-                    this.style.boxShadow = '0 0 20px rgba(0, 90, 36, 0.3)';
+                    this.style.boxShadow = '0 0 20px rgba(127, 176, 105, 0.3)';
                 });
                 
                 input.addEventListener('blur', function() {
@@ -840,31 +865,34 @@
             });
 
             // Add ripple effect to button
-            submitButton.addEventListener('click', function(e) {
-                const ripple = document.createElement('span');
-                const rect = this.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = e.clientX - rect.left - size / 2;
-                const y = e.clientY - rect.top - size / 2;
-                
-                ripple.style.cssText = `
-                    position: absolute;
-                    width: ${size}px;
-                    height: ${size}px;
-                    left: ${x}px;
-                    top: ${y}px;
-                    background: rgba(255, 165, 0, 0.4);
-                    border-radius: 50%;
-                    transform: scale(0);
-                    animation: ripple 0.6s ease-out;
-                    pointer-events: none;
-                `;
-                
-                this.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
+            const submitButtons = document.querySelectorAll('.btn-enhanced');
+            submitButtons.forEach(submitButton => {
+                submitButton.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: rgba(244, 162, 97, 0.4);
+                        border-radius: 50%;
+                        transform: scale(0);
+                        animation: ripple 0.6s ease-out;
+                        pointer-events: none;
+                    `;
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
             });
 
             // Add CSS for ripple animation
@@ -879,13 +907,27 @@
             `;
             document.head.appendChild(style);
 
+            // Criar sparkles dinamicamente
+            function createSparkle() {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                
+                document.querySelector('.animate-slide-in-right').appendChild(sparkle);
+                
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 2000);
+            }
 
-            
-            
+            // Criar sparkles periodicamente
+            setInterval(createSparkle, 4000);
         });
 
         // Enhanced accessibility
-            document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Tab') {
                 document.body.classList.add('keyboard-navigation');
             }
