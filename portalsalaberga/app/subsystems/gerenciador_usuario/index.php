@@ -370,10 +370,10 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                             <i class="fa-solid fa-building text-3xl text-primary group-hover:text-white transition-colors duration-300"></i>
                         </div>
                         <h3 class="text-2xl font-bold text-dark mb-3 font-heading group-hover:text-primary transition-colors">
-                            Setores
+                            Perfis
                         </h3>
                         <p class="text-gray-600 leading-relaxed mb-4">
-                            Organize e gerencie setores organizacionais com estrutura hierárquica completa
+                            Organize e gerencie perfis com estrutura hierárquica completa
                         </p>
                         <div class="flex items-center text-primary font-semibold text-sm group-hover:translate-x-2 transition-transform">
                             <span>Acessar módulo</span>

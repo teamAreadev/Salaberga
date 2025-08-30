@@ -413,7 +413,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     </div>
                     <div>
                         <h1 class="font-bold text-sm sm:text-base md:text-xl text-dark font-heading">STGM</h1>
-                        <p class="text-xs sm:text-xs md:text-sm text-gray-500 font-medium hidden sm:block">Gerenciamento de Setores</p>
+                        <p class="text-xs sm:text-xs md:text-sm text-gray-500 font-medium hidden sm:block">Gerenciamento de Perfis</p>
                     </div>
                 </div>
                 
@@ -430,7 +430,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                         <div class="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center">
                             <i class="fa-solid fa-building text-white text-sm"></i>
                         </div>
-                        <span class="text-sm sm:text-base">Cadastrar Setor</span>
+                        <span class="text-sm sm:text-base">Cadastrar Perfil</span>
                     </button>
                 </div>
 
@@ -449,7 +449,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                                 <i class="fa-solid fa-building text-xl"></i>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-600 font-medium">Total de Setores</p>
+                                <p class="text-sm text-gray-600 font-medium">Total de perfil</p>
                                 <p class="text-2xl font-bold text-dark"><?php echo $totalSetores; ?></p>
                             </div>
                         </div>
@@ -475,7 +475,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                                 <i class="fa-solid fa-check-circle text-xl"></i>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-600 font-medium">Setores Ativos</p>
+                                <p class="text-sm text-gray-600 font-medium">Perfis Ativos</p>
                                 <p class="text-2xl font-bold text-dark"><?php echo $setoresAtivos; ?></p>
                             </div>
                         </div>
@@ -490,8 +490,8 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                         <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl animate-fade-in hover:scale-105 transition-all duration-300 group" style="animation-delay: <?php echo ($index * 0.1) . 's'; ?>;">
                             <!-- Header do Card -->
                             <div class="flex items-start justify-between mb-4">
-                                <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-secondary to-orange-500 text-white flex items-center justify-center relative overflow-hidden flex-shrink-0 group-hover:scale-110 transition-all duration-300">
-                                    <i class="fa-solid fa-building text-lg sm:text-xl lg:text-2xl relative z-10"></i>
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-xl bg-gradient-to-br from-secondary to-orange-500 text-white flex items-center justify-center relative overflow-hidden flex-shrink-0 group-hover:scale-110 transition-all duration-300">
+                                    <i class="fa-solid fa-building text-base sm:text-lg lg:text-xl relative z-10"></i>
                                     <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
                                 </div>
                                 <div class="flex items-center gap-2">
