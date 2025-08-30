@@ -1256,7 +1256,7 @@ $session->tempo_session();
                     <a href="../../subsystems/biblioteca/default.php" class="app-card-link">
                         <div class="app-card w-{100px} h-full">
                             <div class="icon-wrapper">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="app-icon">
+                                <img src="https://i.postimg.cc/4dvShV26/icon-biblioteca.png" alt="Ícone Controle de Estoque" class="app-icon">
                             </div>
                             <h3 class="app-name">Biblioteca</h3>
                             <span class="category-tag">Sistema</span>
@@ -1268,7 +1268,7 @@ $session->tempo_session();
                     <a href="../../subsystems/entradasaida/app/main/views/inicio.php" class="app-card-link">
                         <div class="app-card w-{100px} h-full">
                             <div class="icon-wrapper">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="app-icon">
+                                <img src="https://i.postimg.cc/j2mdwpFn/icon-entrada-e-saida.png" alt="Ícone Controle de Estoque" class="app-icon">
                             </div>
                             <h3 class="app-name">Entrada/saída</h3>
                             <span class="category-tag">Sistema</span>
