@@ -288,10 +288,10 @@ $select = new select();
 <body class="min-h-screen flex flex-col font-sans bg-light">
     <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
         <div class="flex flex-col h-full">
-            <div class="p-6 border-b border-white/20">
+        <div class="p-6 border-b border-white/20">
                 <div class="flex items-center">
-                    <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
-                    <span class="text-white font-heading text-lg font-semibold">CREDE Estoque</span>
+                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png " alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
+                    <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
                 </div>
             </div>
             <nav class="flex-1 p-4 space-y-2">
@@ -395,20 +395,26 @@ $select = new select();
     </main>
 
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
+        <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-        <div class="px-4 md:px-8 transition-all duration-300 ml-0 md:ml-64" id="footerContent">
+        
+        <div class="px-4 md:px-8 transition-all duration-300" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                    <!-- Sobre a Escola -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
-                            CREDE 1
+                            EEEP STGM
                         </h3>
                         <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
                             <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
-                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I,
+                            AV. Marta Maria Carvalho Nojoza, SN<br>
+                            Maranguape - CE
                         </p>
                     </div>
+
+                    <!-- Contato -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-address-book mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
@@ -419,25 +425,33 @@ $select = new select();
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 (85) 3341-3990
                             </a>
+                            <a href="mailto:eeepsantariamata@gmail.com" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
+                                <i class="fas fa-envelope mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                eeepsantariamata@gmail.com
+                            </a>
                         </div>
                     </div>
+
+                    <!-- Desenvolvedores -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-code mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Pedro Uchoa
+                                Pedro Uchoa 
                             </a>
                         </div>
                     </div>
                 </div>
+
+                <!-- Rodapé inferior -->
                 <div class="border-t border-white/20 pt-6 mt-8 text-center">
                     <p class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">
                         © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
@@ -445,6 +459,8 @@ $select = new select();
                 </div>
             </div>
         </div>
+        
+        <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
 
