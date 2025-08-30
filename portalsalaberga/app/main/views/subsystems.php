@@ -1132,7 +1132,7 @@ $session->tempo_session();
 
                 <nav class="hidden md:flex items-center gap-5">
                     <a href="../../" class="nav-link">Início</a>
-                    <a href="./subsistemas.php?sair" class="nav-link">Sair</a>
+                    <a href="../models/sessions.php?sair" class="nav-link">Sair</a>
                     <button id="darkModeToggle"
                         class="inline-flex items-center justify-center p-2 rounded-lg transition-colors" role="switch"
                         aria-label="Alternar modo escuro">
