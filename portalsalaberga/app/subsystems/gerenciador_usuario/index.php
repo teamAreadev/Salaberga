@@ -28,7 +28,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="content-language" content="pt-BR">
-    <title>Gerenciador de Usuários - CREDE</title>
+    <title>Gerenciador de Usuários - STGM</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -303,10 +303,10 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             <div class="flex items-center justify-between max-w-7xl mx-auto">
             <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-2xl flex items-center justify-center">
-                        <img class="w-8 h-8 object-contain" src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo CREDE">
+                        <img class="w-8 h-8 object-contain" src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo STGM">
                 </div>
                 <div>
-                        <h1 class="font-bold text-xl text-dark font-heading">CREDE 1</h1>
+                        <h1 class="font-bold text-xl text-dark font-heading">STGM</h1>
                        
                     </div>
                 </div>
