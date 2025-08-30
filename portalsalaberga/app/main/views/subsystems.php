@@ -3,7 +3,6 @@ require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
-
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -1132,7 +1131,7 @@ $session->tempo_session();
 
                 <nav class="hidden md:flex items-center gap-5">
                     <a href="../../" class="nav-link">Início</a>
-                    <a href="./subsistemas.php?sair" class="nav-link">Sair</a>
+                    <a href="../models/sessions.php?sair" class="nav-link">Sair</a>
                     <button id="darkModeToggle"
                         class="inline-flex items-center justify-center p-2 rounded-lg transition-colors" role="switch"
                         aria-label="Alternar modo escuro">
@@ -1228,7 +1227,7 @@ $session->tempo_session();
         <div class="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 md:gap-8 p-4 md:p-8 max-w-[1400px] mx-auto transition-all duration-300 grid-container">
 
                 <!-- Card 1: Gerenciador de Usuários -->
-                <?php if (isset($_SESSION['Admin_usuario'])) { ?>
+                <?php if (isset($_SESSION['Gerenciador de Usuarios'])) { ?>
                     <a href="../../subsystems/gerenciador_usuario/index.php" class="app-card-link">
                         <div class="app-card w-{100px} h-full">
                             <div class="icon-wrapper">
@@ -1241,7 +1240,7 @@ $session->tempo_session();
                 <?php } ?>
 
                 <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
+                <?php if (isset($_SESSION['Estoque'])) { ?>
                     <a href="../../subsystems/controle_de_estoque/default.php" class="app-card-link">
                         <div class="app-card w-{100px} h-full">
                             <div class="icon-wrapper">
@@ -1253,223 +1252,26 @@ $session->tempo_session();
                     </a>
                 <?php } ?>
                 <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_biblioteca'])) { ?>
-                    <a href="../../subsystems/biblioteca/app/main/index.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
+                <?php if (isset($_SESSION['Biblioteca'])) { ?>
+                    <a href="../../subsystems/biblioteca/default.php" class="app-card-link">
+                        <div class="app-card w-{100px} h-full">
+                            <div class="icon-wrapper">
+                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="app-icon">
                             </div>
-                            <h3 class="card-title">Biblioteca</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
+                            <h3 class="app-name">Biblioteca</h3>
+                            <span class="category-tag">Sistema</span>
                         </div>
                     </a>
                 <?php } ?>
                 <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_entrada_saida'])) { ?>
-                    <a href="../../subsystems/entradasaida/app/main/views/inicio.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
+                <?php if (isset($_SESSION['Entrada/saída'])) { ?>
+                    <a href="../../subsystems/entradasaida/app/main/views/inicio.php" class="app-card-link">
+                        <div class="app-card w-{100px} h-full">
+                            <div class="icon-wrapper">
+                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="app-icon">
                             </div>
-                            <h3 class="card-title">Entrada e saida</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
-                        </div>
-                    </a>
-                <?php } ?>
-                <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                    <a href="../../subsystems/controle_de_estoque/default.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
-                            </div>
-                            <h3 class="card-title">Controle de Estoque</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
-                        </div>
-                    </a>
-                <?php } ?>
-                <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                    <a href="../../subsystems/controle_de_estoque/default.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
-                            </div>
-                            <h3 class="card-title">Controle de Estoque</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
-                        </div>
-                    </a>
-                <?php } ?>
-                <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                    <a href="../../subsystems/controle_de_estoque/default.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
-                            </div>
-                            <h3 class="card-title">Controle de Estoque</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
-                        </div>
-                    </a>
-                <?php } ?>
-                <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                    <a href="../../subsystems/controle_de_estoque/default.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
-                            </div>
-                            <h3 class="card-title">Controle de Estoque</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
-                        </div>
-                    </a>
-                <?php } ?>
-                <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                    <a href="../../subsystems/controle_de_estoque/default.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
-                            </div>
-                            <h3 class="card-title">Controle de Estoque</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
-                        </div>
-                    </a>
-                <?php } ?>
-                <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                    <a href="../../subsystems/controle_de_estoque/default.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
-                            </div>
-                            <h3 class="card-title">Controle de Estoque</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
-                        </div>
-                    </a>
-                <?php } ?>
-                <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                    <a href="../../subsystems/controle_de_estoque/default.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
-                            </div>
-                            <h3 class="card-title">Controle de Estoque</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
-                        </div>
-                    </a>
-                <?php } ?>
-                <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                    <a href="../../subsystems/controle_de_estoque/default.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
-                            </div>
-                            <h3 class="card-title">Controle de Estoque</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
-                        </div>
-                    </a>
-                <?php } ?>
-                <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                    <a href="../../subsystems/controle_de_estoque/default.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
-                            </div>
-                            <h3 class="card-title">Controle de Estoque</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
-                        </div>
-                    </a>
-                <?php } ?>
-                <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                    <a href="../../subsystems/controle_de_estoque/default.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
-                            </div>
-                            <h3 class="card-title">Controle de Estoque</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
-                        </div>
-                    </a>
-                <?php } ?>
-                <!-- Card 2: Controle de Estoque -->
-                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                    <a href="../../subsystems/controle_de_estoque/default.php">
-                        <div class="system-card animate-on-scroll"
-                            tabindex="0"
-                            role="button"
-                            aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                            data-system="estoque">
-                            <div class="card-icon">
-                                <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
-                            </div>
-                            <h3 class="card-title">Controle de Estoque</h3>
-                            <p class="card-description">Gestão completa de materiais e recursos</p>
-                            <span class="card-badge">Sistema Ativo</span>
+                            <h3 class="app-name">Entrada/saída</h3>
+                            <span class="category-tag">Sistema</span>
                         </div>
                     </a>
                 <?php } ?>
