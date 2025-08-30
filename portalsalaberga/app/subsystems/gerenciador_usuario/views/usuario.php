@@ -879,7 +879,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             input.value = value;
         }
 
-        // Função para remover máscara do CPF (apenas números)
+        // Função para remover máscara do CPF (apenas números) - usada apenas para validação
         function removerMascaraCPF(cpf) {
             return cpf.replace(/\D/g, '');
         }
@@ -921,8 +921,9 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     return;
                 }
                 
-                // Atualizar o valor do campo CPF para enviar apenas números
-                this.inpCpf.value = cpf;
+                // Manter o CPF com máscara (formato: 000.000.000-00) para enviar ao backend
+                // O valor já está formatado no campo, então não precisa alterar
+                // this.inpCpf.value permanece com a máscara
             });
 
             document.getElementById('userTypeForm').addEventListener('submit', function(e) {
