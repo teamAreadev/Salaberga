@@ -1321,12 +1321,6 @@
                     <p class="text-xl text-gray-600 max-w-3xl mx-auto">Fique por dentro das oportunidades e eventos da nossa escola</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-
-
-
-
-
                     <div class="card-enhanced p-8 hover-scale">
                         <div class="flex items-center mb-6">
                             <div class="w-16 h-16 bg-gradient-secondary rounded-full flex items-center justify-center mr-6">
@@ -1339,6 +1333,21 @@
                         </div>
                         <p class="text-gray-700 mb-6 leading-relaxed">Capacitação em computação em nuvem com a plataforma Amazon Web Services.</p>
                         <a href="views/form/form_areaDev.php" target="_blank" class="btn-primary">
+                            <i class="fas fa-external-link-alt mr-2"></i> Acesse aqui
+                        </a>
+                    </div>
+                    <div class="card-enhanced p-8 hover-scale">
+                        <div class="flex items-center mb-6">
+                            <div class="w-16 h-16 bg-gradient-secondary rounded-full flex items-center justify-center mr-6">
+                                <i class="fas fa-cloud text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-2xl mb-2 text-ceara-green">Sistema de seleção</h3>
+                                <p class="text-gray-600 font-medium">20 de dezembro, 2025</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6 leading-relaxed">Sistema de seleção da EEEP Salaberga Torquato Gomes de Matos pra futuros alunos!</p>
+                        <a href="https://crede1.salaberga.com/app/subsystems/gerenciador_escolas/index.php" target="_blank" class="btn-primary">
                             <i class="fas fa-external-link-alt mr-2"></i> Acesse aqui
                         </a>
                     </div>
