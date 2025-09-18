@@ -194,7 +194,7 @@ $select = new select();
                 margin-left: 0 !important;
             }
 
-            .card-item > .flex {
+            .card-item>.flex {
                 flex-wrap: wrap;
                 gap: 0.5rem;
                 flex-direction: column;
@@ -390,7 +390,7 @@ $select = new select();
     <!-- Sidebar -->
     <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
         <div class="flex flex-col h-full">
-        <div class="p-6 border-b border-white/20">
+            <div class="p-6 border-b border-white/20">
                 <div class="flex items-center">
                     <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png " alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
                     <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
@@ -421,10 +421,16 @@ $select = new select();
                         <span>Solicitar</span>
                     </a>
                 <?php } ?>
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])|| isset($_SESSION['liberador_estoque'])) { ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque']) || isset($_SESSION['liberador_estoque'])) { ?>
                     <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                         <span>Relatórios</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="ambiente.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Ambiente</span>
                     </a>
                 <?php } ?>
             </nav>
@@ -493,6 +499,7 @@ $select = new select();
                             <th class="py-3 px-4 text-left">Quantidade</th>
                             <th class="py-3 px-4 text-left">Categoria</th>
                             <th class="py-3 px-4 text-left">Validade</th>
+                            <th class="py-3 px-4 text-left">Ambiente</th>
                             <th class="py-3 px-4 text-left">Data Cadastro</th>
                             <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                                 <th class="py-3 px-4 text-left">Editar</th>
@@ -516,6 +523,7 @@ $select = new select();
                                     <td class="py-3 px-4 <?= $quantidadeClass ?>"><?= htmlspecialchars($produto['quantidade']) ?></td>
                                     <td class="py-3 px-4"><?= htmlspecialchars($produto['categoria']) ?></td>
                                     <td class="py-3 px-4"><?= htmlspecialchars($produto['vencimento'] == '' ? 'Sem vencimento' : $produto['vencimento']) ?></td>
+                                    <td class="py-3 px-4"><?= htmlspecialchars($produto['nome_ambiente']) ?></td>
                                     <td class="py-3 px-4"><?= date('d/m/Y H:i', strtotime($produto['data'])) ?></td>
                                     <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                                         <td class="py-3 px-4">
@@ -659,7 +667,7 @@ $select = new select();
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-        
+
         <div class="px-4 md:px-8 transition-all duration-300" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
@@ -701,13 +709,13 @@ $select = new select();
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Pedro Uchoa 
+                                Pedro Uchoa
                             </a>
                         </div>
                     </div>
@@ -721,7 +729,7 @@ $select = new select();
                 </div>
             </div>
         </div>
-        
+
         <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>

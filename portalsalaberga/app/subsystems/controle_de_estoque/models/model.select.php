@@ -17,6 +17,7 @@ class select extends connect
     protected string $table7;
     protected string $table8;
     protected string $table9;
+    protected string $table10;
 
     function __construct()
     {
@@ -31,6 +32,7 @@ class select extends connect
         $this->table7 = $table['salaberga_users'][3];
         $this->table8 = $table['salaberga_users'][4];
         $this->table9 = $table['salaberga_users'][5];
+        $this->table10 = $table['salaberga_estoque'][5];
     }
 
     public function select_produtos_id($id)
@@ -49,7 +51,11 @@ class select extends connect
     }
     public function select_produtos()
     {
-        $query = $this->connect->query("SELECT p.*, c.nome_categoria AS categoria, c.id as id_categoria FROM $this->table4 p INNER JOIN $this->table1 c ON p.id_categoria = c.id ORDER BY p.id DESC");
+        $query = $this->connect->query(
+            "SELECT p.*, c.nome_categoria AS categoria, c.id AS id_categoria, a.nome_ambiente FROM $this->table4 p 
+            INNER JOIN $this->table1 c ON p.id_categoria = c.id 
+            INNER JOIN $this->table10 a ON p.id_ambiente = a.id 
+            ORDER BY p.id DESC");
         $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
 
         return $resultado;
@@ -123,6 +129,13 @@ class select extends connect
         $sem_estoque = $this->select_produtos_sem_estoque();
         
         return $em_estoque + $critico + $sem_estoque;
+    }
+
+    public function select_ambientes(){
+        $query = $this->connect->query("SELECT * FROM $this->table10");
+        $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        return $resultado;
     }
     
 }

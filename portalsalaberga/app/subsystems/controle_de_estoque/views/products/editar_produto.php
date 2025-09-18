@@ -423,13 +423,18 @@ if (isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
                         <span>Solicitar</span>
                     </a>
                 <?php } ?>
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])|| isset($_SESSION['liberador_estoque'])) { ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque']) || isset($_SESSION['liberador_estoque'])) { ?>
                     <a href="../relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                         <span>Relatórios</span>
                     </a>
                 <?php } ?>
-
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="../ambiente.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Ambiente</span>
+                    </a>
+                <?php } ?>
             </nav>
 
             <!-- Botão de Sair -->
@@ -533,7 +538,7 @@ if (isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-        
+
         <div class="px-4 md:px-8 transition-all duration-300" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
@@ -575,13 +580,13 @@ if (isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Pedro Uchoa 
+                                Pedro Uchoa
                             </a>
                         </div>
                     </div>
@@ -595,13 +600,13 @@ if (isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
                 </div>
             </div>
         </div>
-        
+
         <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
 
-        <!-- Efeito de brilho sutil na base -->
-        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
+    <!-- Efeito de brilho sutil na base -->
+    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
 
     <script>

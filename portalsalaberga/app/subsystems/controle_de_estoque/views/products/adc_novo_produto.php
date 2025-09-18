@@ -450,6 +450,12 @@ $select = new select();
                         <span>Relatórios</span>
                     </a>
                 <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="../ambiente.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Ambiente</span>
+                    </a>
+                <?php } ?>
             </nav>
 
             <!-- Botão de Sair -->
@@ -522,6 +528,20 @@ $select = new select();
                             foreach ($dados as $dado) {
                             ?>
                                 <option value="<?= $dado['id'] ?>"><?= $dado['nome_categoria'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="p-4 border-2 border-primary rounded-lg">
+                        
+                        <select class="js-example-basic-single " id="categoria" name="id_ambiente" required data-placeholder="Selecione um ambiente">
+                            <option class="text-center " value="" disabled selected hidden>Selecione uma categoria</option>
+
+                            <?php
+                            $dados = $select->select_ambientes();
+                            foreach ($dados as $dado) {
+                            ?>
+                                <option value="<?= $dado['id'] ?>"><?= $dado['nome_ambiente'] ?></option>
                             <?php } ?>
                         </select>
                     </div>

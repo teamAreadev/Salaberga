@@ -147,8 +147,8 @@ if (
         'count' => $produtos ? count($produtos) : 0
     ]);
     exit();
-} /*else {
+} else {
 
     header('location:../views/index.php');
     exit();
-}*/
+}

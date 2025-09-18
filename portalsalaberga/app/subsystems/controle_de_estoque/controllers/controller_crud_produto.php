@@ -8,7 +8,7 @@ require_once(__DIR__ . '/../models/model.liberador.php');
 require_once(__DIR__ . '/../models/model.admin.php');
 $select = new liberador();
 //print_r($_GET);
-print_r($_POST);
+//print_r($_POST);
 
 //cadastrar produto com codigo de barra
 if (
@@ -21,6 +21,7 @@ if (
     $quantidade = $_POST['quantidade'] ?? null;
     $validade = $_POST['validade'] ?? null;
     $id_categoria = $_POST['id_categoria'] ?? null;
+    $id_ambiente = $_POST['id_ambiente'] ?? null;
 
     if (isset($_POST['editar'])) {
 
@@ -45,7 +46,7 @@ if (
             }
         } else {
             $obj = new admin();
-            $result = $obj->editar_produto_geral($id_produto, $barcode, $nome, $quantidade, $id_categoria, $validade);
+            $result = $obj->editar_produto_geral($id_produto, $barcode, $nome, $quantidade, $id_categoria, $validade, $id_ambiente);
 
             switch ($result) {
                 case 1:
@@ -65,7 +66,7 @@ if (
     } else {
 
         $obj = new liberador();
-        $result = $obj->cadastrar_produto($barcode, $nome, $quantidade, $id_categoria, $validade);
+        $result = $obj->cadastrar_produto($barcode, $nome, $quantidade, $id_categoria, $validade, $id_ambiente);
 
         switch ($result) {
             case 1:

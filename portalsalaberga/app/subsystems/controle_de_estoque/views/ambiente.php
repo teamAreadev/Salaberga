@@ -1,9 +1,12 @@
+```php
 <?php
 require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
+require_once(__DIR__ . '/../models/model.select.php');
+$select = new select();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -11,11 +14,12 @@ $session->tempo_session();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciamento de Estoque</title>
+    <title>Gerenciar Ambientes - STGM Estoque</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -26,7 +30,11 @@ $session->tempo_session();
                         accent: '#E6F4EA',
                         dark: '#1A3C34',
                         light: '#F8FAF9',
-                        white: '#FFFFFF'
+                        white: '#FFFFFF',
+                        success: '#28A745',
+                        warning: '#FFC107',
+                        danger: '#DC3545',
+                        info: '#17A2B8'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -34,30 +42,23 @@ $session->tempo_session();
                     },
                     boxShadow: {
                         card: '0 10px 15px -3px rgba(0, 90, 36, 0.1), 0 4px 6px -2px rgba(0, 90, 36, 0.05)',
-                        'card-hover': '0 20px 25px -5px rgba(0, 90, 36, 0.2), 0 10px 10px -5px rgba(0, 90, 36, 0.1)'
+                        'card-hover': '0 20px 25px -5px rgba(0, 90, 36, 0.2), 0 10px 10px -5px rgba(0, 90, 36, 0.1)',
+                        'glow': '0 0 20px rgba(255, 165, 0, 0.3)'
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.5s ease-in-out',
-                        'slide-up': 'slideUp 0.5s ease-out'
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'bounce-slow': 'bounce 2s infinite'
                     },
                     keyframes: {
                         fadeIn: {
-                            '0%': {
-                                opacity: '0'
-                            },
-                            '100%': {
-                                opacity: '1'
-                            }
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
                         },
                         slideUp: {
-                            '0%': {
-                                transform: 'translateY(20px)',
-                                opacity: '0'
-                            },
-                            '100%': {
-                                transform: 'translateY(0)',
-                                opacity: '1'
-                            }
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
                         }
                     }
                 }
@@ -68,21 +69,40 @@ $session->tempo_session();
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
-            background-color: #F8FAF9;
+            background: linear-gradient(135deg, #F8FAF9 0%, #E6F4EA 100%);
         }
 
         .gradient-bg {
             background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
         }
 
-        .card-item {
+        .page-title {
+            position: relative;
+            width: 100%;
+            text-align: center;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #FFA500, #FF8C00);
+            border-radius: 3px;
+        }
+
+        .stats-card, .report-card {
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             overflow: hidden;
-            will-change: transform;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAF9 100%);
+            border: 2px solid transparent;
         }
 
-        .card-item::before {
+        .stats-card::before, .report-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -95,79 +115,14 @@ $session->tempo_session();
             z-index: 1;
         }
 
-        .card-item:hover::before {
+        .stats-card:hover::before, .report-card:hover::before {
             opacity: 1;
         }
 
-        .card-item:hover {
+        .stats-card:hover, .report-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 90, 36, 0.2), 0 10px 10px -5px rgba(0, 90, 36, 0.1);
             border-color: #FFA500;
-        }
-
-        .card-icon {
-            transition: all 0.3s ease;
-            z-index: 2;
-            position: relative;
-        }
-
-        .card-item:hover .card-icon {
-            transform: scale(1.1);
-            color: #FFA500;
-        }
-
-        .card-item p {
-            z-index: 2;
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
-        .card-item:hover p {
-            color: #005A24;
-        }
-
-        .logo-pulse {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: translateY(-50%) translateX(-50%) scale(1);
-            }
-
-            50% {
-                transform: translateY(-50%) translateX(-50%) scale(1.05);
-            }
-
-            100% {
-                transform: translateY(-50%) translateX(-50%) scale(1);
-            }
-        }
-
-        .social-icon {
-            transition: all 0.3s ease;
-        }
-
-        .social-icon:hover {
-            transform: translateY(-3px);
-            filter: drop-shadow(0 4px 3px rgba(255, 165, 0, 0.3));
-        }
-
-        .page-title {
-            position: relative;
-            display: inline-block;
-        }
-
-        .page-title::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background-color: #FFA500;
-            border-radius: 3px;
         }
 
         .card-shine {
@@ -182,33 +137,28 @@ $session->tempo_session();
             z-index: 2;
         }
 
-        .card-item:hover .card-shine {
+        .stats-card:hover .card-shine, .report-card:hover .card-shine {
             left: 150%;
         }
 
-        .card-badge {
-            transition: all 0.3s ease;
+        .stats-card:hover .card-icon, .report-card:hover .card-icon {
+            transform: scale(1.1);
+            color: #FFA500;
         }
 
-        .card-item:hover .card-badge {
-            background-color: #FFA500;
-            color: white;
+        .stats-card p, .report-card p {
+            z-index: 2;
+            position: relative;
+            transition: color 0.3s ease;
         }
 
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            width: 20px;
-            height: 20px;
-            background-color: #FF5252;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: bold;
+        .stats-card:hover p, .report-card:hover p {
+            color: #005A24;
+        }
+
+        .stats-card a, .stats-card button, .report-card a, .report-card button {
+            position: relative;
+            z-index: 3;
         }
 
         .header-nav-link {
@@ -251,6 +201,150 @@ $session->tempo_session();
             display: none;
         }
 
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAF9 100%);
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 90, 36, 0.25);
+            animation: slideUp 0.5s ease-out;
+            position: relative;
+            border: 2px solid #E6F4EA;
+        }
+
+        .modal-content h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            color: #005A24;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .modal-content .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-content label {
+            display: block;
+            font-size: 0.875rem;
+            color: #1A3C34;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .modal-content input[type="text"],
+        .modal-content input[type="date"],
+        .modal-content select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #E6F4EA;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            color: #1A3C34;
+            background-color: #F8FAF9;
+            transition: all 0.3s ease;
+        }
+
+        .modal-content input[type="text"]:focus,
+        .modal-content input[type="date"]:focus,
+        .modal-content select:focus {
+            border-color: #FFA500;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+        }
+
+        .modal-content .confirm-btn {
+            background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal-content .confirm-btn:hover {
+            background: linear-gradient(135deg, #E59400 0%, #E67E00 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 165, 0, 0.3);
+        }
+
+        .modal-content .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #1A3C34;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-content .close-btn:hover {
+            color: #DC3545;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: white;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .notification.success {
+            background-color: #28A745;
+        }
+
+        .notification.error {
+            background-color: #DC3545;
+        }
+
+        .notification.warning {
+            background-color: #FFC107;
+            color: #1A3C34;
+        }
+
         @media (max-width: 768px) {
             .header-nav {
                 display: none;
@@ -275,15 +369,8 @@ $session->tempo_session();
             }
 
             @keyframes slideIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(-20px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
+                from { opacity: 0; transform: translateY(-20px); }
+                to { opacity: 1; transform: translateY(0); }
             }
 
             .header-nav-link {
@@ -339,7 +426,6 @@ $session->tempo_session();
                 transform: rotate(-45deg) translate(6px, -6px);
             }
 
-            /* Overlay para fechar menu ao clicar fora */
             .header-nav::before {
                 content: '';
                 position: absolute;
@@ -350,56 +436,42 @@ $session->tempo_session();
                 background: rgba(0, 0, 0, 0.3);
                 z-index: -1;
             }
+
+            #sidebar {
+                transform: translateX(-100%);
+            }
+
+            #sidebar.show {
+                transform: translateX(0);
+            }
+
+            #menuButton {
+                transition: all 0.3s ease;
+            }
+
+            #menuButton.hidden {
+                opacity: 0;
+                visibility: hidden;
+                transform: scale(0.8);
+            }
+
+            footer {
+                margin-left: 0 !important;
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+
+            footer .ml-64 {
+                margin-left: 0 !important;
+            }
+
+            main {
+                margin-left: 0 !important;
+            }
         }
 
-        .nav-link {
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: #FFA500;
-            transition: width 0.3s ease;
-        }
-
-        .back-to-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #FFA500;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            z-index: 1000;
-        }
-
-        .back-to-top.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .back-to-top:hover {
-            background-color: #E69500;
-            transform: scale(1.1);
-        }
-
-        /* Estilos para a sidebar */
         .sidebar-link {
             transition: all 0.3s ease;
-            border-radius: 0.5rem;
         }
 
         .sidebar-link:hover {
@@ -411,106 +483,55 @@ $session->tempo_session();
             background-color: rgba(255, 165, 0, 0.2);
             color: #FFA500;
         }
-
-        /* Responsividade da sidebar */
-        @media (max-width: 768px) {
-            #sidebar {
-                transform: translateX(-100%);
-            }
-
-            #sidebar.show {
-                transform: translateX(0);
-            }
-
-            main {
-                margin-left: 0 !important;
-            }
-
-            /* Botão do menu mobile */
-            #menuButton {
-                transition: all 0.3s ease;
-            }
-
-            #menuButton.hidden {
-                opacity: 0;
-                visibility: hidden;
-                transform: scale(0.8);
-            }
-
-            /* Footer responsivo para mobile */
-            footer {
-                margin-left: 0 !important;
-                padding-left: 1rem !important;
-                padding-right: 1rem !important;
-            }
-
-            footer .ml-64 {
-                margin-left: 0 !important;
-            }
-        }
     </style>
 </head>
 
-<body class="min-h-screen flex flex-col font-sans bg-light">
+<body class="min-h-screen flex flex-col font-sans">
+    <!-- Sidebar -->
     <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
         <div class="flex flex-col h-full">
-            <!-- Logo e título -->
             <div class="p-6 border-b border-white/20">
                 <div class="flex items-center">
-                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png " alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
+                    <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
                     <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
                 </div>
             </div>
-
-            <!-- Menu de navegação -->
             <nav class="flex-1 p-4 space-y-2">
                 <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                    <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-home mr-3 text-lg"></i>
                         <span>Início</span>
                     </a>
-                <?php } ?>
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                     <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-boxes mr-3 text-lg"></i>
                         <span>Estoque</span>
                     </a>
-                <?php } ?>
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                     <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-plus-circle mr-3 text-lg"></i>
                         <span>Adicionar</span>
                     </a>
-                <?php } ?>
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                     <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                         <span>Solicitar</span>
                     </a>
-                <?php } ?>
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])|| isset($_SESSION['liberador_estoque'])) { ?>
                     <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                         <span>Relatórios</span>
                     </a>
                 <?php } ?>
                 <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="ambiente.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                    <a href="ambiente.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                        <i class="fas fa-building mr-3 text-lg"></i>
                         <span>Ambiente</span>
                     </a>
                 <?php } ?>
             </nav>
-
-            <!-- Botão de Sair -->
             <div class="p-4 border-t border-white/20">
                 <a href="../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     Sair
                 </a>
             </div>
-
-            <!-- Botão de fechar sidebar no mobile -->
             <div class="p-4 border-t border-white/20 md:hidden">
                 <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
                     <i class="fas fa-times mr-2"></i>
@@ -520,92 +541,88 @@ $session->tempo_session();
         </div>
     </div>
 
-    <!-- Botão de menu mobile -->
-    <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
+    <button class="fixed top-4 left-4 z-50 md:hidden text-primary p-3 rounded-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
 
-    <!-- Overlay para mobile -->
     <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
 
-    <!-- Botão Voltar ao Topo -->
     <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
         <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
     </button>
 
-    <!-- Main content -->
     <main class="ml-0 md:ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
-        <div class="flex flex-col items-center justify-start pt-16 md:pt-20">
-            <h1 class="text-primary text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-center page-title tracking-tight font-heading">GERENCIAMENTO DE ESTOQUE</h1>
+        <div class="bg-white p-6 rounded-xl shadow-card mb-8">
+            <h2 class="text-xl font-bold text-primary mb-4">Criar Novo Ambiente</h2>
+            <form action="../controllers/controller_ambiente.php" method="post" class="flex flex-col md:flex-row gap-4">
+                <input type="text" name="ambiente" placeholder="Nome do ambiente" class="flex-1 px-4 py-3 border-2 border-accent rounded-lg focus:border-secondary focus:outline-none transition-all" required>
+                <button type="submit" class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-dark transition-all font-semibold">Criar</button>
+            </form>
+        </div>
 
-            <!-- Layout: Leitor de código de barras (somente visual) -->
-            <div class="w-full max-w-5xl mx-auto px-4 mb-8 md:mb-10">
-
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <div class="relative">
-                        <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-primary">
-                            <i class="fas fa-barcode text-xl"></i>
-                        </span>
-                        <input
-                            id="barcodeHome"
-                            type="text"
-                            placeholder="Escaneie o código de barras aqui"
-                            class="w-full pl-12 pr-4 py-4 bg-white border-2 border-primary/50 focus:border-secondary focus:ring-2 focus:ring-secondary/40 rounded-2xl outline-none placeholder:text-gray-400 text-gray-700 shadow-card text-lg"
-                            autocomplete="off" />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php
+            $ambientes = $select->select_ambientes();
+            foreach ($ambientes as $ambiente) { ?>
+                <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in">
+                    <div class="card-shine"></div>
+                    <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                        <i class="fas fa-building text-4xl"></i>
                     </div>
-                <?php } ?>
+                    <h3 class="text-lg font-bold text-primary mb-2 text-center"><?= htmlspecialchars($ambiente['nome_ambiente']) ?></h3>
+                    <p class="text-gray-600 text-center mb-4 text-sm">Ambiente cadastrado</p>
+                    <div class="flex space-x-2 w-full">
+                        <button onclick="openEditAmbiente(<?= json_encode($ambiente['id']) ?>, '<?= addslashes($ambiente['nome_ambiente']) ?>')" class="flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all font-medium text-sm">Editar</button>
+                        <button onclick="openDeleteAmbiente(<?= json_encode($ambiente['id']) ?>, '<?= addslashes($ambiente['nome_ambiente']) ?>')" class="flex-1 bg-danger text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-all font-medium text-sm">Excluir</button>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+
+        <!-- Modal Editar Ambiente -->
+        <div id="modalEditAmbiente" class="modal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeModal('modalEditAmbiente')">&times;</button>
+                <h2>Editar Ambiente</h2>
+                <form id="editAmbienteForm" action="../controllers/controller_ambiente.php" method="post">
+                    <input type="hidden" name="id_ambiente" id="inpEditAmbienteId">
+                    <div class="form-group">
+                        <label for="inpEditAmbienteNome">Nome do Ambiente *</label>
+                        <input type="text" id="inpEditAmbienteNome" name="ambiente" required>
+                    </div>
+                    <button type="submit" class="confirm-btn">Salvar Alterações</button>
+                </form>
             </div>
+        </div>
 
+        <!-- Modal Confirmar Exclusão -->
+        <div id="modalDeleteAmbiente" class="modal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeModal('modalDeleteAmbiente')">&times;</button>
+                <h2>Confirmar Exclusão</h2>
+                <p>Tem certeza que deseja excluir o ambiente <span id="deleteAmbienteName"></span>?</p>
+                <form id="deleteAmbienteForm" action="../controllers/controller_ambiente.php" method="post">
+                    <input type="hidden" name="id_excluir" id="inpDeleteAmbienteId">
+                    <button type="submit" class="confirm-btn bg-danger hover:bg-red-700">Excluir</button>
+                </form>
+            </div>
+        </div>
 
-            <div id="cardsGrid" class="w-full max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 px-4 justify-center">
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="./products/adc_produto.php" class="group animate-fade-in" style="animation-delay: 0.1s">
-                        <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
-                            <div class="card-shine"></div>
-                            <i class="fas fa-plus-circle card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
-                            <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">ADICIONAR</p>
-                        </div>
-                    </a>
-                <?php } ?>
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="estoque.php" class="group animate-fade-in">
-                        <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
-                            <div class="card-shine"></div>
-                            <i class="fas fa-boxes card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
-                            <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">ESTOQUE</p>
-                        </div>
-                    </a>
-                <?php } ?>
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="solicitar.php" class="group animate-fade-in" style="animation-delay: 0.2s">
-                        <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
-                            <div class="card-shine"></div>
-                            <i class="fas fa-clipboard-list card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
-                            <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">SOLICITAR</p>
-                        </div>
-                    </a>
-                <?php } ?>
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])|| isset($_SESSION['liberador_estoque'])) { ?>
-                    <a href="relatorios.php" class="group animate-fade-in" style="animation-delay: 0.4s">
-                        <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
-                            <div class="card-shine"></div>
-                            <i class="fas fa-chart-bar card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
-                            <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">RELATÓRIOS</p>
-                        </div>
-                    </a>
-                <?php } ?>
+        <!-- Modal de Notificação -->
+        <div id="notificationModal" class="modal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeModal('notificationModal')">&times;</button>
+                <h2 id="notificationTitle"></h2>
+                <p id="notificationMessage"></p>
             </div>
         </div>
     </main>
 
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
-        <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-        
         <div class="px-4 md:px-8 transition-all duration-300" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                    <!-- Sobre a Escola -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
@@ -617,8 +634,6 @@ $session->tempo_session();
                             Maranguape - CE
                         </p>
                     </div>
-
-                    <!-- Contato -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-address-book mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
@@ -635,27 +650,23 @@ $session->tempo_session();
                             </a>
                         </div>
                     </div>
-
-                    <!-- Desenvolvedores -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-code mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Pedro Uchoa 
+                                Pedro Uchoa
                             </a>
                         </div>
                     </div>
                 </div>
-
-                <!-- Rodapé inferior -->
                 <div class="border-t border-white/20 pt-6 mt-8 text-center">
                     <p class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">
                         © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
@@ -663,10 +674,9 @@ $session->tempo_session();
                 </div>
             </div>
         </div>
-        
-        <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Sidebar mobile toggle
@@ -680,18 +690,14 @@ $session->tempo_session();
                     e.stopPropagation();
                     sidebar.classList.toggle('show');
                     overlay.classList.toggle('hidden');
-
-                    // Mostrar/ocultar o botão do menu
                     if (sidebar.classList.contains('show')) {
                         menuButton.classList.add('hidden');
                     } else {
                         menuButton.classList.remove('hidden');
                     }
-
                     document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
                 });
 
-                // Fechar sidebar ao clicar no overlay
                 if (overlay) {
                     overlay.addEventListener('click', function() {
                         sidebar.classList.remove('show');
@@ -701,7 +707,6 @@ $session->tempo_session();
                     });
                 }
 
-                // Fechar sidebar ao clicar no botão fechar
                 if (closeSidebar) {
                     closeSidebar.addEventListener('click', function() {
                         sidebar.classList.remove('show');
@@ -711,7 +716,6 @@ $session->tempo_session();
                     });
                 }
 
-                // Fechar sidebar ao clicar em um link
                 const navLinks = sidebar.querySelectorAll('a');
                 navLinks.forEach(link => {
                     link.addEventListener('click', function() {
@@ -724,7 +728,6 @@ $session->tempo_session();
                     });
                 });
 
-                // Fechar sidebar ao pressionar ESC
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && sidebar.classList.contains('show')) {
                         sidebar.classList.remove('show');
@@ -733,159 +736,152 @@ $session->tempo_session();
                         document.body.style.overflow = '';
                     }
                 });
+            }
 
-                // Ajustar footer quando sidebar é aberta/fechada no mobile
-                const footerContent = document.getElementById('footerContent');
-                if (footerContent) {
-                    const adjustFooter = () => {
-                        if (window.innerWidth <= 768) {
-                            if (sidebar.classList.contains('show')) {
-                                footerContent.style.marginLeft = '0';
-                            } else {
-                                footerContent.style.marginLeft = '0';
-                            }
-                        } else {
-                            footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
-                        }
-                    };
+            // Funções para abrir e fechar modais
+            window.openModal = function(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.classList.add('show');
+            }
 
-                    // Ajustar na inicialização
-                    adjustFooter();
-
-                    // Ajustar quando a sidebar é aberta/fechada
-                    menuButton.addEventListener('click', adjustFooter);
-
-                    // Ajustar quando a janela é redimensionada
-                    window.addEventListener('resize', adjustFooter);
+            window.closeModal = function(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.classList.remove('show');
+                if (modalId === 'modalEditAmbiente') {
+                    document.getElementById('editAmbienteForm').reset();
+                } else if (modalId === 'modalDeleteAmbiente') {
+                    document.getElementById('deleteAmbienteForm').reset();
                 }
             }
 
-
-
-            // Back to top button visibility and functionality
-            const backToTop = document.querySelector('.back-to-top');
-            if (backToTop) {
-                window.addEventListener('scroll', () => {
-                    if (window.scrollY > 300) {
-                        backToTop.classList.add('visible');
-                        backToTop.classList.remove('hidden');
-                    } else {
-                        backToTop.classList.remove('visible');
-                        backToTop.classList.add('hidden');
-                    }
-                });
-
-                // Funcionalidade do botão voltar ao topo
-                backToTop.addEventListener('click', () => {
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                });
+            // Abrir modal de edição
+            window.openEditAmbiente = function(id, nome) {
+                document.getElementById('inpEditAmbienteId').value = id;
+                document.getElementById('inpEditAmbienteNome').value = nome;
+                openModal('modalEditAmbiente');
             }
 
-            // Card entrance animation
-            const cards = document.querySelectorAll('.card-item');
-            cards.forEach((card, index) => {
+            // Abrir modal de exclusão
+            window.openDeleteAmbiente = function(id, nome) {
+                document.getElementById('deleteAmbienteName').textContent = nome;
+                document.getElementById('inpDeleteAmbienteId').value = id;
+                openModal('modalDeleteAmbiente');
+            }
+
+            // Fechar modais ao clicar fora
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        closeModal(modal.id);
+                    }
+                });
+            });
+
+            // Validação do formulário de edição
+            document.getElementById('editAmbienteForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const nome = document.getElementById('inpEditAmbienteNome').value.trim();
+                if (!nome) {
+                    showNotification('Por favor, preencha o nome do ambiente.', 'error');
+                    return;
+                }
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="loading-spinner"></span> Salvando...';
+                submitBtn.disabled = true;
                 setTimeout(() => {
-                    card.classList.add('translate-y-0', 'opacity-100');
-                    card.classList.remove('translate-y-4', 'opacity-0');
-                }, index * 100);
+                    this.submit();
+                }, 1000);
+                setTimeout(() => {
+                    if (submitBtn.disabled) {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                }, 5000);
             });
 
-            // Lazy loading for images
-            if ('loading' in HTMLImageElement.prototype) {
-                const images = document.querySelectorAll('img[loading="lazy"]');
-                images.forEach(img => {
-                    img.loading = 'lazy';
-                });
-            }
-
-            // Preload linked pages
-            const links = document.querySelectorAll('a[target="_blank"]');
-            links.forEach(link => {
-                link.addEventListener('mouseover', () => {
-                    const href = link.getAttribute('href');
-                    if (href) {
-                        fetch(href, {
-                                mode: 'no-cors'
-                            })
-                            .catch(() => {});
+            // Validação do formulário de exclusão
+            document.getElementById('deleteAmbienteForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="loading-spinner"></span> Excluindo...';
+                submitBtn.disabled = true;
+                setTimeout(() => {
+                    this.submit();
+                }, 1000);
+                setTimeout(() => {
+                    if (submitBtn.disabled) {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
                     }
-                });
+                }, 5000);
             });
 
-            // Funcionalidade do campo de código de barras
-            const barcodeInput = document.getElementById('barcodeHome');
-
-            if (barcodeInput) {
-                // Função para redirecionar com o código de barras
-                function redirecionarComBarcode() {
-                    const barcode = barcodeInput.value.trim();
-                    if (barcode) {
-                        // Redirecionar para o controller com o código de barras como parâmetro
-                        window.location.href = `../controllers/controller_input.php?barcode=${encodeURIComponent(barcode)}`;
-                    }
-                }
-
-                // Redirecionar quando pressionar Enter
-                barcodeInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        redirecionarComBarcode();
-                    }
-                });
-
-                // Redirecionar quando o input perder o foco (opcional)
-                barcodeInput.addEventListener('blur', function() {
-                    if (this.value.trim()) {
-                        redirecionarComBarcode();
-                    }
-                });
-
-                // Focar no input quando a página carregar
-                barcodeInput.focus();
+            // Função para mostrar notificações
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type} fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
+                notification.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'} mr-2"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                document.body.appendChild(notification);
+                setTimeout(() => {
+                    notification.classList.remove('translate-x-full');
+                }, 100);
+                setTimeout(() => {
+                    notification.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
             }
 
-            // Funcionalidade da barra de pesquisa
-            const searchInput = document.getElementById('searchInput');
-            const searchButton = document.getElementById('searchButton');
+            // Mostrar notificações baseadas em GET
+            const urlParams = new URLSearchParams(window.location.search);
+            let title = '';
+            let message = '';
+            let type = 'info';
 
-            if (searchInput && searchButton) {
-                // Função para realizar a pesquisa
-                function realizarPesquisa() {
-                    const termo = searchInput.value.trim();
-                    if (termo) {
-                        // Redirecionar para a página de estoque com o termo de pesquisa
-                        window.location.href = `../view/estoque.php?search=${encodeURIComponent(termo)}`;
-                    }
-                }
+            if (urlParams.has('cadastrado')) {
+                title = 'Sucesso!';
+                message = 'Ambiente cadastrado com sucesso.';
+                type = 'success';
+            } else if (urlParams.has('editado')) {
+                title = 'Sucesso!';
+                message = 'Ambiente editado com sucesso.';
+                type = 'success';
+            } else if (urlParams.has('excluido')) {
+                title = 'Sucesso!';
+                message = 'Ambiente excluído com sucesso.';
+                type = 'success';
+            } else if (urlParams.has('erro')) {
+                title = 'Erro!';
+                message = 'Ocorreu um erro ao processar a operação.';
+                type = 'error';
+            } else if (urlParams.has('ja_cadastrado')) {
+                title = 'Aviso!';
+                message = 'Ambiente já cadastrado.';
+                type = 'warning';
+            } else if (urlParams.has('falha')) {
+                title = 'Falha!';
+                message = 'Falha ao executar a operação.';
+                type = 'error';
+            }
 
-                // Pesquisar quando pressionar Enter
-                searchInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        realizarPesquisa();
-                    }
-                });
-
-                // Pesquisar quando clicar no botão
-                searchButton.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    realizarPesquisa();
-                });
-
-                // Efeito de hover no botão
-                searchButton.addEventListener('mouseenter', function() {
-                    this.style.transform = 'scale(1.1)';
-                });
-
-                searchButton.addEventListener('mouseleave', function() {
-                    this.style.transform = 'scale(1)';
-                });
+            if (message) {
+                document.getElementById('notificationTitle').textContent = title;
+                document.getElementById('notificationMessage').textContent = message;
+                const notificationModal = document.getElementById('notificationModal');
+                notificationModal.classList.add(type);
+                openModal('notificationModal');
+                setTimeout(() => closeModal('notificationModal'), 3000);
             }
         });
     </script>
 </body>
-
 </html>
+```

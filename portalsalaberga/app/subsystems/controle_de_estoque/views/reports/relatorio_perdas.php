@@ -17,11 +17,11 @@ class relatorio extends connect
     function __construct()
     {
         parent::__construct();
-        $table = require(__DIR__.'/../../../../../.env/tables.php');
-        $this->table1 = $table['salaberga_estoque'][1];
+        require(__DIR__ . '/../../../../../.env/tables.php');
+        $this->table1 = $table['salaberga_estoque'][1]; // Categories table
         $this->table2 = $table['salaberga_estoque'][2];
         $this->table3 = $table['salaberga_estoque'][3];
-        $this->table4 = $table['salaberga_estoque'][4];
+        $this->table4 = $table['salaberga_estoque'][4]; // Products table
         $this->relatorio_perdas_geral();
     }
 

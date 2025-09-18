@@ -11,6 +11,7 @@ class liberador extends connect
     protected string $table2;
     protected string $table3;
     protected string $table4;
+    protected string $table5;
 
     function __construct()
     {
@@ -20,9 +21,10 @@ class liberador extends connect
         $this->table2 = $table['salaberga_estoque'][2];
         $this->table3 = $table['salaberga_estoque'][3];
         $this->table4 = $table['salaberga_estoque'][4];
+        $this->table5 = $table['salaberga_estoque'][5];
     }
 
-    public function cadastrar_produto($barcode, string $nome, int $quantidade, int $id_categoria, string $validade): int
+    public function cadastrar_produto($barcode, string $nome, int $quantidade, int $id_categoria, string $validade, int $id_ambiente): int
     {
         $consulta = "SELECT * FROM $this->table4 WHERE nome_produto = :nome";
         $query = $this->connect->prepare($consulta);
@@ -33,13 +35,14 @@ class liberador extends connect
             date_default_timezone_set('America/Fortaleza');
             $data = date('Y-m-d H:i:s');
 
-            $consulta = "INSERT INTO $this->table4 VALUES (null, :barcode, :nome, :quantidade, :id_categoria,:validade, :data)";
+            $consulta = "INSERT INTO $this->table4 VALUES (null, :barcode, :nome, :quantidade, :id_categoria,:validade, :id_ambiente, :data)";
             $query = $this->connect->prepare($consulta);
             $query->bindValue(":nome", $nome);
             $query->bindValue(":barcode", $barcode);
             $query->bindValue(":quantidade", $quantidade);
             $query->bindValue(":id_categoria", $id_categoria);
             $query->bindValue(":validade", $validade);
+            $query->bindValue(":id_ambiente", $id_ambiente);
             $query->bindValue(":data", $data);
 
             if ($query->execute()) {
