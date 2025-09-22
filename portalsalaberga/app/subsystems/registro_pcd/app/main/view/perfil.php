@@ -1,14 +1,14 @@
 <?php 
  
- session_start();
- function redirect_to_login()
- {
-   header('Location: ../../../../../main/views/autenticacao/login.php');
- }
- if (!isset($_SESSION['Email'])) {
-   session_destroy();
-   redirect_to_login();
- } 
+//  session_start();
+//  function redirect_to_login()
+//  {
+//    header('Location: ../../../../../main/views/autenticacao/login.php');
+//  }
+//  if (!isset($_SESSION['Email'])) {
+//    session_destroy();
+//    redirect_to_login();
+//  } 
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">

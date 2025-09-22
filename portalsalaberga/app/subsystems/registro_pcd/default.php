@@ -1,4 +1,4 @@
 <?php
-header('Location: app/main/view/menu.php');
+header('Location: views/menu.php');
 exit();
 ?>
