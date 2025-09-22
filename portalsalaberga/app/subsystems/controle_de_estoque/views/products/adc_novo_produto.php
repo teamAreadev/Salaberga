@@ -343,6 +343,7 @@ $select = new select();
             align-items: center;
             transition: all 0.3s ease;
             background-color: #FFFFFF;
+            position: relative;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -352,10 +353,27 @@ $select = new select();
             font-weight: 600;
             color: #1A3C34;
             text-align: left;
+            /* Mantém o texto selecionado alinhado à esquerda */
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Centraliza o conteúdo */
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            text-align: center !important;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center !important;
+            color: #6c757d;
+            /* Cor do placeholder, igual aos outros campos */
         }
 
         .select2-container--default .select2-selection--single .select2-selection__arrow {
-            display: none; /* Escondemos a seta padrão pois adicionamos nosso próprio ícone */
+            display: none;
+            /* Escondemos a seta padrão pois adicionamos nosso próprio ícone */
         }
 
         .select2-container--default .select2-selection--single:focus,
@@ -390,16 +408,23 @@ $select = new select();
             padding: 8px 12px;
             transition: all 0.3s ease;
         }
-        
+
         .select2-search--dropdown .select2-search__field:focus {
             border-color: #FFA500 !important;
             box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.25);
         }
-        
+
         /* Animação para o dropdown */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Estilo para o campo de data */
@@ -424,7 +449,7 @@ $select = new select();
     <!-- Sidebar -->
     <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
         <div class="flex flex-col h-full">
-        <div class="p-6 border-b border-white/20">
+            <div class="p-6 border-b border-white/20">
                 <div class="flex items-center">
                     <img src="https://i.postimg.cc/Dy40VtFL/Design-sem-nome-13-removebg-preview.png " alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
                     <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
@@ -457,7 +482,7 @@ $select = new select();
                         <span>Solicitar</span>
                     </a>
                 <?php } ?>
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])|| isset($_SESSION['liberador_estoque'])) { ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque']) || isset($_SESSION['liberador_estoque'])) { ?>
                     <a href="../relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                         <span>Relatórios</span>
@@ -535,11 +560,11 @@ $select = new select();
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <i class="fas fa-tags text-primary text-lg"></i>
                         </div>
-                        <select class="js-example-basic-single w-full px-4 py-3 pl-10 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent font-semibold" 
-                                id="categoria" 
-                                name="id_categoria" 
-                                required 
-                                data-placeholder="Selecione uma categoria">
+                        <select class="js-example-basic-single w-full px-4 py-3 pl-10 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent font-semibold"
+                            id="categoria"
+                            name="id_categoria"
+                            required
+                            data-placeholder="SELECIONE UMA CATEGORIA">
                             <option class="text-center" value="" disabled selected hidden>Selecione uma categoria</option>
 
                             <?php
@@ -556,13 +581,13 @@ $select = new select();
 
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i class="fas fa-map-marker-alt text-primary text-lg"></i>
+                            <i class="fas fa-tags text-primary text-lg"></i>
                         </div>
-                        <select class="js-example-basic-single w-full px-4 py-3 pl-10 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent font-semibold" 
-                                id="ambiente" 
-                                name="id_ambiente" 
-                                required 
-                                data-placeholder="Selecione um ambiente">
+                        <select class="js-example-basic-single text-center w-full px-4 py-3 pl-10 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent font-semibold"
+                            id="ambiente"
+                            name="id_ambiente"
+                            required
+                            data-placeholder="SELECIONE UM AMBIENTE">
                             <option class="text-center" value="" disabled selected hidden>Selecione um ambiente</option>
 
                             <?php
@@ -588,7 +613,7 @@ $select = new select();
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-        
+
         <div class="px-4 md:px-8 transition-all duration-300" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
@@ -630,13 +655,13 @@ $select = new select();
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Pedro Uchoa 
+                                Pedro Uchoa
                             </a>
                         </div>
                     </div>
@@ -650,7 +675,7 @@ $select = new select();
                 </div>
             </div>
         </div>
-        
+
         <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
@@ -668,12 +693,12 @@ $select = new select();
                     }
                 }
             });
-            
+
             // Adiciona efeito de foco nos selects
             $('.js-example-basic-single').on('select2:open', function() {
                 $(this).parent().find('.fa-chevron-down').addClass('fa-chevron-up').removeClass('fa-chevron-down');
             });
-            
+
             $('.js-example-basic-single').on('select2:close', function() {
                 $(this).parent().find('.fa-chevron-up').addClass('fa-chevron-down').removeClass('fa-chevron-up');
             });
