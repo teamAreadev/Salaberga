@@ -341,7 +341,8 @@ $select = new select();
             border-radius: 0.5rem;
             display: flex;
             align-items: center;
-            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+            transition: all 0.3s ease;
+            background-color: #FFFFFF;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -350,32 +351,31 @@ $select = new select();
             padding-right: 40px;
             font-weight: 600;
             color: #1A3C34;
-            text-align: center;
-        }
-
-        /* Responsividade para o Select2 */
-        @media (min-width: 768px) {
-            .select2-container--default .select2-selection--single .select2-selection__rendered {
-                padding-left: 180px;
-                padding-right: 40px;
-            }
+            text-align: left;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 46px;
-            right: 15px;
+            display: none; /* Escondemos a seta padrão pois adicionamos nosso próprio ícone */
         }
 
         .select2-container--default .select2-selection--single:focus,
         .select2-container--default .select2-selection--single:hover {
             border-color: #FFA500;
             box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.25);
+            transform: translateY(-2px);
         }
 
         .select2-dropdown {
             border: 2px solid #005A24;
             border-radius: 0.5rem;
             overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 90, 36, 0.1), 0 4px 6px -2px rgba(0, 90, 36, 0.05);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .select2-results__option {
+            padding: 10px 15px;
+            transition: all 0.2s ease;
         }
 
         .select2-results__option--highlighted.select2-results__option--selectable {
@@ -387,6 +387,19 @@ $select = new select();
             border: 2px solid #005A24 !important;
             border-radius: 0.5rem;
             outline: none;
+            padding: 8px 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .select2-search--dropdown .select2-search__field:focus {
+            border-color: #FFA500 !important;
+            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.25);
+        }
+        
+        /* Animação para o dropdown */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Estilo para o campo de data */
@@ -518,10 +531,16 @@ $select = new select();
                         </div>
                     </div>
 
-                    <div class="p-4 border-2 border-primary rounded-lg">
-                        
-                        <select class="js-example-basic-single " id="categoria" name="id_categoria" required data-placeholder="Selecione uma categoria">
-                            <option class="text-center " value="" disabled selected hidden>Selecione uma categoria</option>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i class="fas fa-tags text-primary text-lg"></i>
+                        </div>
+                        <select class="js-example-basic-single w-full px-4 py-3 pl-10 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent font-semibold" 
+                                id="categoria" 
+                                name="id_categoria" 
+                                required 
+                                data-placeholder="Selecione uma categoria">
+                            <option class="text-center" value="" disabled selected hidden>Selecione uma categoria</option>
 
                             <?php
                             $dados = $select->select_categoria();
@@ -530,12 +549,21 @@ $select = new select();
                                 <option value="<?= $dado['id'] ?>"><?= $dado['nome_categoria'] ?></option>
                             <?php } ?>
                         </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <i class="fas fa-chevron-down text-primary text-lg"></i>
+                        </div>
                     </div>
 
-                    <div class="p-4 border-2 border-primary rounded-lg">
-                        
-                        <select class="js-example-basic-single " id="categoria" name="id_ambiente" required data-placeholder="Selecione um ambiente">
-                            <option class="text-center " value="" disabled selected hidden>Selecione uma categoria</option>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i class="fas fa-map-marker-alt text-primary text-lg"></i>
+                        </div>
+                        <select class="js-example-basic-single w-full px-4 py-3 pl-10 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent font-semibold" 
+                                id="ambiente" 
+                                name="id_ambiente" 
+                                required 
+                                data-placeholder="Selecione um ambiente">
+                            <option class="text-center" value="" disabled selected hidden>Selecione um ambiente</option>
 
                             <?php
                             $dados = $select->select_ambientes();
@@ -544,6 +572,9 @@ $select = new select();
                                 <option value="<?= $dado['id'] ?>"><?= $dado['nome_ambiente'] ?></option>
                             <?php } ?>
                         </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <i class="fas fa-chevron-down text-primary text-lg"></i>
+                        </div>
                     </div>
                 </div>
                 <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
@@ -629,11 +660,22 @@ $select = new select();
             $('.js-example-basic-single').select2({
                 placeholder: 'Selecione uma categoria',
                 width: '100%',
+                dropdownCssClass: 'select2-dropdown-custom',
+                minimumResultsForSearch: 5,
                 language: {
                     noResults: function() {
                         return 'Nenhum resultado encontrado';
                     }
                 }
+            });
+            
+            // Adiciona efeito de foco nos selects
+            $('.js-example-basic-single').on('select2:open', function() {
+                $(this).parent().find('.fa-chevron-down').addClass('fa-chevron-up').removeClass('fa-chevron-down');
+            });
+            
+            $('.js-example-basic-single').on('select2:close', function() {
+                $(this).parent().find('.fa-chevron-up').addClass('fa-chevron-down').removeClass('fa-chevron-up');
             });
 
             // Campo de data de validade

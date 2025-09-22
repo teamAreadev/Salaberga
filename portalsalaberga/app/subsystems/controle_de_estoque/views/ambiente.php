@@ -1,4 +1,4 @@
-```php
+
 <?php
 require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
@@ -884,4 +884,3 @@ $select = new select();
     </script>
 </body>
 </html>
-```
