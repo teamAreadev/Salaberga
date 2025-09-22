@@ -3,6 +3,7 @@ require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
+// print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -1271,6 +1272,19 @@ $session->tempo_session();
                                 <img src="https://i.postimg.cc/j2mdwpFn/icon-entrada-e-saida.png" alt="Ícone Controle de Estoque" class="app-icon">
                             </div>
                             <h3 class="app-name">Entrada/saída</h3>
+                            <span class="category-tag">Sistema</span>
+                        </div>
+                    </a>
+                <?php } ?>
+
+                <!-- Card 2: Sistema PCD -->
+                <?php if (isset($_SESSION['PCD'])) { ?>
+                    <a href="../../subsystems/registro_pcd/app/main/view/menu.php" class="app-card-link">
+                        <div class="app-card w-{100px} h-full">
+                            <div class="icon-wrapper">
+                                <img src="https://i.postimg.cc/j2mdwpFn/icon-entrada-e-saida.png" alt="Ícone Controle de Estoque" class="app-icon">
+                            </div>
+                            <h3 class="app-name">Sistema PCD</h3>
                             <span class="category-tag">Sistema</span>
                         </div>
                     </a>
