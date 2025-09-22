@@ -5,11 +5,11 @@ $session->autenticar_session();
 $session->tempo_session();
 
 require_once(__DIR__ . '/../models/model.admin.php');
-print_r($_POST);
+//print_r($_POST);
 
 
 if (
-    !isset($_POST['ambiente']) && !empty($_POST['ambiente']) && is_string($_POST['ambiente'])
+    isset($_POST['ambiente']) && !empty($_POST['ambiente']) && is_string($_POST['ambiente']) && !isset($_POST['id_ambiente']) && empty($_POST['id_ambiente'])
 ) {
 
     $nome_ambiente = $_POST['ambiente'];
@@ -72,8 +72,8 @@ if (
             header('Location: ../views/ambiente.php?falha');
             exit();
     }
-} /*else {
+} else {
 
     header('location:../views/index.php');
     exit();
-}*/
+}

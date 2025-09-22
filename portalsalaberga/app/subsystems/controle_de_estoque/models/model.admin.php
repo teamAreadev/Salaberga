@@ -5,7 +5,7 @@ $session->autenticar_session();
 $session->tempo_session();
 
 require_once(__DIR__ . '/model.liberador.php');
-class admin extends liberador 
+class admin extends liberador
 {
     function __construct()
     {
@@ -119,7 +119,8 @@ class admin extends liberador
         }
     }
 
-    public function cadastrar_ambiente($nome_ambiente){
+    public function cadastrar_ambiente($nome_ambiente)
+    {
         try {
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE nome_ambiente = :nome");
             $stmt_check->bindValue(":nome", $nome_ambiente);
@@ -145,7 +146,8 @@ class admin extends liberador
             return 0;
         }
     }
-    public function editar_ambiente($id_ambiente, $nome_ambiente){
+    public function editar_ambiente($id_ambiente, $nome_ambiente)
+    {
         try {
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE id = :id");
             $stmt_check->bindValue(":id", $id_ambiente);
@@ -172,8 +174,9 @@ class admin extends liberador
             return 0;
         }
     }
-    public function excluir_ambiente($id_ambiente){
-       // try {
+    public function excluir_ambiente($id_ambiente)
+    {
+        try {
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE id = :id");
             $stmt_check->bindValue(":id", $id_ambiente);
             $stmt_check->execute();
@@ -193,9 +196,9 @@ class admin extends liberador
 
                 return 3;
             }
-        /*} catch (Exception $e) {
+        } catch (Exception $e) {
 
             return 0;
-        }*/
+        }
     }
 }
