@@ -56,10 +56,10 @@ class admin extends liberador
             return 0;
         }
     }
-    public function editar_produto_geral(int $id_produto, $barcode, string $nome, int $quantidade, int $id_categoria, string $validade, int $id_ambiente): int
+    public function editar_produto_geral(int $id_produto, $barcode, string $nome, int $quantidade, int $id_categoria, string $validade): int
     {
         try {
-            $consulta = "UPDATE $this->table4 SET barcode = :barcode, nome_produto = :nome, quantidade = :quantidade, id_categoria = :id_categoria, vencimento = :validade, id_ambiente = :id_ambiente WHERE id = :id";
+            $consulta = "UPDATE $this->table4 SET barcode = :barcode, nome_produto = :nome, quantidade = :quantidade, id_categoria = :id_categoria, vencimento = :validade WHERE id = :id";
             $query = $this->connect->prepare($consulta);
             $query->bindValue(":id", $id_produto);
             $query->bindValue(":nome", $nome);
@@ -67,7 +67,6 @@ class admin extends liberador
             $query->bindValue(":quantidade", $quantidade);
             $query->bindValue(":id_categoria", $id_categoria);
             $query->bindValue(":validade", $validade);
-            $query->bindValue(":id_ambiente", $id_ambiente);
 
             if ($query->execute()) {
                 return 1;
@@ -183,6 +182,10 @@ class admin extends liberador
 
             if ($stmt_check->rowCount() == 1) {
 
+                $stmt_check = $this->connect->prepare("UPDATE $this->table4 SET id_ambiente = 2 WHERE id_ambiente = :id");
+                $stmt_check->bindValue(":id", $id_ambiente);
+                $stmt_check->execute();
+                
                 $stmt_check = $this->connect->prepare("DELETE FROM `ambientes` WHERE id =:id");
                 $stmt_check->bindValue(":id", $id_ambiente);
 
