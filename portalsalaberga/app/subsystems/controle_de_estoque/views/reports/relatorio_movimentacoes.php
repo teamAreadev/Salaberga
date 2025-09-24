@@ -45,7 +45,7 @@ class relatorio extends connect
         $data_fim = isset($_POST['data_fim']) ? $_POST['data_fim'] : '';
 
         // Fetch movimentacoes within date range with product details
-        $query = $this->connect->prepare("SELECT p.nome_produto, m.quantidade_retirada, m.liberador, m.solicitador, m.datareg 
+        $query = $this->connect->prepare("SELECT p.nome_produto, m.*
                                          FROM $this->table2 m 
                                          LEFT JOIN $this->table4 p ON m.id_produtos = p.id 
                                          WHERE m.datareg BETWEEN :data_inicio AND :data_fim 
@@ -74,11 +74,12 @@ class relatorio extends connect
         $pdf->SetFillColor(255, 221, 119);
         $pdf->SetY($y_position);
         $pdf->SetX(1);
-        $pdf->Cell(12, 0.6, 'NOME', 1, 0, 'C', true);
+        $pdf->Cell(11, 0.6, 'NOME', 1, 0, 'C', true);
         $pdf->Cell(2, 0.6, 'QTD', 1, 0, 'C', true);
         $pdf->Cell(5, 0.6, 'LIBERADOR', 1, 0, 'C', true);
         $pdf->Cell(5, 0.6, 'SOLICITANTE', 1, 0, 'C', true);
-        $pdf->Cell(4, 0.6, 'DATA', 1, 1, 'C', true);
+        $pdf->Cell(2, 0.6, 'TIPO', 1, 0, 'C', true);
+        $pdf->Cell(3, 0.6, 'DATA', 1, 1, 'C', true);
         $y_position += 0.6;
 
         // Movimentacoes
@@ -100,11 +101,12 @@ class relatorio extends connect
                 $pdf->SetFillColor(255, 221, 119);
                 $pdf->SetY($y_position);
                 $pdf->SetX(1);
-                $pdf->Cell(12, 0.6, 'NOME', 1, 0, 'C', true);
+                $pdf->Cell(11, 0.6, 'NOME', 1, 0, 'C', true);
                 $pdf->Cell(2, 0.6, 'QTD', 1, 0, 'C', true);
                 $pdf->Cell(5, 0.6, 'LIBERADOR', 1, 0, 'C', true);
                 $pdf->Cell(5, 0.6, 'SOLICITANTE', 1, 0, 'C', true);
-                $pdf->Cell(4, 0.6, 'DATA', 1, 1, 'C', true);
+                $pdf->Cell(2, 0.6, 'TIPO', 1, 0, 'C', true);
+                $pdf->Cell(3, 0.6, 'DATA', 1, 1, 'C', true);
                 $y_position += 0.6;
                 $pdf->SetFont('Arial', '', 9);
                 $fill = false;
@@ -120,13 +122,14 @@ class relatorio extends connect
 
             // Set text color to red for quantity
             $pdf->SetTextColor(0, 0, 0);
-            $pdf->Cell(12, 0.6, mb_strtoupper($mov['nome_produto'], 'UTF-8'), 1, 0, 'L', true);
+            $pdf->Cell(11, 0.6, utf8_decode(mb_strtoupper($mov['nome_produto'], 'UTF-8')), 1, 0, 'L', true);
             $pdf->SetTextColor(255, 0, 0); // Red for quantity
             $pdf->Cell(2, 0.6, mb_strtoupper($mov['quantidade_retirada'], 'UTF-8'), 1, 0, 'C', true);
             $pdf->SetTextColor(0, 0, 0);
-            $pdf->Cell(5, 0.6, mb_strtoupper($mov['liberador'], 'UTF-8'), 1, 0, 'L', true);
-            $pdf->Cell(5, 0.6, mb_strtoupper($mov['solicitador'], 'UTF-8'), 1, 0, 'L', true);
-            $pdf->Cell(4, 0.6, mb_strtoupper(date('d/m/Y H:i', strtotime($mov['datareg'])), 'UTF-8'), 1, 1, 'C', true);
+            $pdf->Cell(5, 0.6,  utf8_decode(mb_strtoupper($mov['liberador'], 'UTF-8')), 1, 0, 'L', true);
+            $pdf->Cell(5, 0.6,  utf8_decode(mb_strtoupper($solicitador = $mov['solicitador'] === NULL ? utf8_decode('não se aplica') : $mov['solicitador'], 'UTF-8')), 1, 0, 'L', true);
+            $pdf->Cell(2, 0.6, utf8_decode(mb_strtoupper($mov['tipo_movimentacao'])), 1, 0, 'L', true);
+            $pdf->Cell(3, 0.6, mb_strtoupper(date('d/m/Y H:i', strtotime($mov['datareg'])), 'UTF-8'), 1, 1, 'C', true);
 
             $y_position += 0.6;
             $fill = !$fill;
