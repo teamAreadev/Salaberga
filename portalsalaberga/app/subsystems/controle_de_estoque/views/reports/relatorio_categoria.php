@@ -143,14 +143,16 @@ class relatorio extends connect
 
                 // Repeat category header
                 $pdf->SetFont('Arial', 'B', 14);
+                $pdf->SetTextColor(255, 255, 255); // White text
                 $pdf->SetFillColor(1, 88, 36);
                 $pdf->SetY($y_position);
                 $pdf->SetX(2.5);
-                $pdf->Cell(24, 1, 'CATEGORIA: ' . utf8_decode($categoria_nome) . ' (continuação)', 1, 1, 'C', true);
+                $pdf->Cell(24, 1, 'CATEGORIA: ' . utf8_decode($categoria_nome) . utf8_decode(' (continuação)'), 1, 1, 'C', true);
                 $y_position += 1;
 
                 // Repeat table header
                 $pdf->SetFont('Arial', 'B', 12);
+                $pdf->SetTextColor(0, 0, 0); // White text
                 $pdf->SetFillColor(255, 221, 119);
                 $pdf->SetY($y_position);
                 $pdf->SetX(2.5);
