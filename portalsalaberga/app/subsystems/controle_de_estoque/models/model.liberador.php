@@ -126,7 +126,7 @@ class liberador extends connect
                 $stmt_select->execute();
                 $id_produto = $stmt_select->fetch(PDO::FETCH_ASSOC);
 
-                $tipo_movimentacao = "entrada";
+                $tipo_movimentacao = "Entrada";
                 date_default_timezone_set('America/Fortaleza');
                 $datetime = date('Y-m-d H:i:s');
                 $usuario = $_SESSION['nome'];
@@ -159,7 +159,7 @@ class liberador extends connect
                 $stmt_select->execute();
                 $id_produto = $stmt_select->fetch(PDO::FETCH_ASSOC);
 
-                $tipo_movimentacao = "entrada";
+                $tipo_movimentacao = "Entrada";
                 date_default_timezone_set('America/Fortaleza');
                 $datetime = date('Y-m-d H:i:s');
                 $usuario = $_SESSION['nome'];
@@ -205,7 +205,7 @@ class liberador extends connect
             $queryUpdate->bindValue(":id", $id_produto);
             $queryUpdate->execute();
 
-            $tipo_movimentacao = "saida";
+            $tipo_movimentacao = "Retirada";
 
             $consultaInsert = "INSERT INTO movimentacao VALUES (NULL, :id_produtos, :liberador, :solicitador, :tipo_movimentacao, :datareg, :quantidade_retirada)";
             $queryInsert = $this->connect->prepare($consultaInsert);
@@ -247,7 +247,7 @@ class liberador extends connect
             $queryUpdate->bindValue(":id", $id_produto);
             $queryUpdate->execute();
 
-            $tipo_movimentacao = "saida";
+            $tipo_movimentacao = "Retirada";
 
             $consultaInsert = "INSERT INTO movimentacao VALUES (NULL, :id_produtos, :liberador, :solicitador, :tipo_movimentacao, :datareg, :quantidade_retirada)";
             $queryInsert = $this->connect->prepare($consultaInsert);
