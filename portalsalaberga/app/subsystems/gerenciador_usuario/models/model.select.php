@@ -184,27 +184,19 @@ class select extends connect
         }
     }
 
-      
-    /**
-     * Buscar tipo de usuário por ID
-     */
-    public function buscarTipoUsuario(int $id): array
+    public function select_tipo_usuario_sistema(int $id_sistema): array
     {
         try {
-            $stmt = $this->connect->prepare("SELECT * FROM {$this->table3} WHERE id = :id");
-            $stmt->bindValue(":id", $id);
+            $stmt = $this->connect->prepare("SELECT * FROM {$this->table3} WHERE id_sistema = :id ORDER BY tipo");
+            $stmt->bindValue(":id", $id_sistema);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            error_log("Erro ao buscar tipo de usuário: " . $e->getMessage());
+            error_log("Erro ao buscar tipos de usuário: " . $e->getMessage());
             return [];
         }
     }
 
-    
-    /**
-     * Buscar setor por ID
-     */
     public function buscarSetor(int $id): array
     {
         try {

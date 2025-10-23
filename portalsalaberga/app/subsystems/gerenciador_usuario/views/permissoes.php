@@ -252,7 +252,6 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                         <p class="text-xs text-gray-500 font-medium hidden sm:block">Gerenciamento de Permissões</p>
                     </div>
                 </div>
-               
             </div>
         </header>
         <!-- Main Content -->
@@ -303,8 +302,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                                 </div>
                             </div>
                             <!-- Permissões -->
-                                                       <!-- Permissões -->
-                                                       <div class="xl:col-span-3 flex flex-col">
+                            <div class="xl:col-span-3 flex flex-col">
                                 <h4 class="text-lg sm:text-xl font-semibold text-dark mb-6 flex items-center gap-3">
                                     <i class="fa-solid fa-key text-secondary text-xl"></i>
                                     Gerenciar Permissões
@@ -408,7 +406,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                                 <i class="fa-solid fa-desktop text-primary"></i>
                                 Sistema *
                             </label>
-                            <select id="addSistema" name="sistema" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" required>
+                            <select id="addSistema" name="sistema" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" onchange="loadUserTypes('add', this.value)" required>
                                 <option value="">Selecione um sistema</option>
                                 <?php 
                                 $dados = $select->listar_sistemas();
@@ -425,12 +423,6 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                             </label>
                             <select id="addTipoPermissao" name="tipo_permissao" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-secondary focus:ring-4 focus:ring-secondary/10" required>
                                 <option value="">Selecione o tipo</option>
-                                <?php 
-                                $dados = $select->listar_tipos_usuarios();
-                                foreach ($dados as $dado) {
-                                ?>
-                                <option value="<?php echo $dado['id']; ?>"><?php echo htmlspecialchars($dado['tipo']); ?></option>
-                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -473,7 +465,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                                 <i class="fa-solid fa-desktop text-primary"></i>
                                 Sistema *
                             </label>
-                            <select id="editSistema" name="sistema" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" required>
+                            <select id="editSistema" name="sistema" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" onchange="loadUserTypes('edit', this.value)" required>
                                 <option value="">Selecione um sistema</option>
                                 <?php 
                                 $dados = $select->listar_sistemas();
@@ -490,12 +482,6 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                             </label>
                             <select id="editTipoPermissao" name="tipo_permissao" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-secondary focus:ring-4 focus:ring-secondary/10" required>
                                 <option value="">Selecione o tipo</option>
-                                <?php 
-                                $dados = $select->listar_tipos_usuarios();
-                                foreach ($dados as $dado) {
-                                ?>
-                                <option value="<?php echo $dado['id']; ?>"><?php echo htmlspecialchars($dado['tipo']); ?></option>
-                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -545,8 +531,6 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
         const usuarios = <?php echo json_encode($usuarios); ?>;
         let selectedUserId = <?php echo json_encode($selected_user_id); ?>;
 
-
-
         function showNotification(message, type = 'info') {
             const existingNotification = document.querySelector('.notification');
             if (existingNotification) {
@@ -590,36 +574,34 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             url.searchParams.set('user_id', userId);
             window.history.pushState({}, '', url);
             
-                         // Update selected user visual state
-             document.querySelectorAll('.user-card').forEach(card => {
-                 card.classList.remove('bg-gradient-to-r', 'from-primary/10', 'to-secondary/10', 'border-primary', 'shadow-lg', 'shadow-primary/20', 'ring-2', 'ring-primary/20');
-                 card.querySelector('.font-bold')?.classList.remove('text-primary');
-                 card.querySelector('.w-12.h-12')?.classList.remove('ring-2', 'ring-primary/30', 'scale-110');
-                 card.querySelector('.w-12.h-12.rounded-full')?.classList.remove('ring-2', 'ring-primary/30', 'scale-110');
+            // Update selected user visual state
+            document.querySelectorAll('.user-card').forEach(card => {
+                card.classList.remove('bg-gradient-to-r', 'from-primary/10', 'to-secondary/10', 'border-primary', 'shadow-lg', 'shadow-primary/20', 'ring-2', 'ring-primary/20');
+                card.querySelector('.font-bold')?.classList.remove('text-primary');
+                card.querySelector('.w-12.h-12')?.classList.remove('ring-2', 'ring-primary/30', 'scale-110');
+                card.querySelector('.w-12.h-12.rounded-full')?.classList.remove('ring-2', 'ring-primary/30', 'scale-110');
                 
-                                 // Remove check icon if exists
-                 const checkIcon = card.querySelector('.w-8.h-8.rounded-full.bg-primary');
-                 if (checkIcon) checkIcon.remove();
+                // Remove check icon if exists
+                const checkIcon = card.querySelector('.w-8.h-8.rounded-full.bg-primary');
+                if (checkIcon) checkIcon.remove();
             });
             
-                         // Add selected state to current card
-             const currentCard = document.querySelectorAll('.user-card')[index];
-             if (currentCard) {
-                 currentCard.classList.add('bg-gradient-to-r', 'from-primary/10', 'to-secondary/10', 'border-primary', 'shadow-lg', 'shadow-primary/20', 'ring-2', 'ring-primary/20');
-                 currentCard.querySelector('.font-bold')?.classList.add('text-primary');
-                 currentCard.querySelector('.w-12.h-12')?.classList.add('ring-2', 'ring-primary/30', 'scale-110');
-                 currentCard.querySelector('.w-12.h-12.rounded-full')?.classList.add('ring-2', 'ring-primary/30', 'scale-110');
+            // Add selected state to current card
+            const currentCard = document.querySelectorAll('.user-card')[index];
+            if (currentCard) {
+                currentCard.classList.add('bg-gradient-to-r', 'from-primary/10', 'to-secondary/10', 'border-primary', 'shadow-lg', 'shadow-primary/20', 'ring-2', 'ring-primary/20');
+                currentCard.querySelector('.font-bold')?.classList.add('text-primary');
+                currentCard.querySelector('.w-12.h-12')?.classList.add('ring-2', 'ring-primary/30', 'scale-110');
+                currentCard.querySelector('.w-12.h-12.rounded-full')?.classList.add('ring-2', 'ring-primary/30', 'scale-110');
                 
-                                 // Add check icon
-                 const userInfo = currentCard.querySelector('.flex-1');
-                 if (userInfo) {
-                     const checkIcon = document.createElement('div');
-                     checkIcon.className = 'flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white shadow-lg';
-                     checkIcon.innerHTML = '<i class="fa-solid fa-check text-sm"></i>';
-                     
-                     // Insert the check icon after the userInfo div, not at the end of the card
-                     userInfo.parentNode.insertBefore(checkIcon, userInfo.nextSibling);
-                 }
+                // Add check icon
+                const userInfo = currentCard.querySelector('.flex-1');
+                if (userInfo) {
+                    const checkIcon = document.createElement('div');
+                    checkIcon.className = 'flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white shadow-lg';
+                    checkIcon.innerHTML = '<i class="fa-solid fa-check text-sm"></i>';
+                    userInfo.parentNode.insertBefore(checkIcon, userInfo.nextSibling);
+                }
             }
             
             // Load permissions for selected user via AJAX
@@ -698,6 +680,48 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             }
         }
 
+        function loadUserTypes(modalType, sistemaId) {
+            const userTypeSelect = modalType === 'add' 
+                ? document.getElementById('addTipoPermissao') 
+                : document.getElementById('editTipoPermissao');
+            
+            // Reset the user type dropdown
+            userTypeSelect.innerHTML = '<option value="">Selecione o tipo</option>';
+            
+            if (!sistemaId) {
+                return;
+            }
+            
+            // Show loading state
+            userTypeSelect.disabled = true;
+            userTypeSelect.innerHTML = '<option value="">Carregando...</option>';
+            
+            // Make AJAX request to fetch user types for the selected system
+            fetch(`../controllers/controller_permissoes.php?action=get_user_types&sistema_id=${sistemaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    userTypeSelect.disabled = false;
+                    userTypeSelect.innerHTML = '<option value="">Selecione o tipo</option>';
+                    
+                    if (data.success && data.user_types.length > 0) {
+                        data.user_types.forEach(type => {
+                            const option = document.createElement('option');
+                            option.value = type.id;
+                            option.textContent = type.tipo;
+                            userTypeSelect.appendChild(option);
+                        });
+                    } else {
+                        showNotification('Nenhum tipo de usuário disponível para este sistema.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    userTypeSelect.disabled = false;
+                    userTypeSelect.innerHTML = '<option value="">Selecione o tipo</option>';
+                    showNotification('Erro ao carregar tipos de usuário.', 'error');
+                });
+        }
+
         function openAddPermissionModal() {
             if (selectedUserId === null) {
                 showNotification('Selecione um usuário primeiro.', 'error');
@@ -705,7 +729,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             }
             document.getElementById('addUserId').value = selectedUserId;
             document.getElementById('addSistema').value = '';
-            document.getElementById('addTipoPermissao').value = '';
+            document.getElementById('addTipoPermissao').innerHTML = '<option value="">Selecione o tipo</option>';
             openModal('modalAddPermission');
         }
 
@@ -721,7 +745,16 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             document.getElementById('editUserId').value = selectedUserId;
             document.getElementById('editPermId').value = permId;
             document.getElementById('editSistema').value = sistemaId;
-            document.getElementById('editTipoPermissao').value = tipoPermissaoId;
+            document.getElementById('editTipoPermissao').innerHTML = '<option value="">Carregando...</option>';
+
+            // Load user types for the selected system
+            loadUserTypes('edit', sistemaId);
+
+            // Set the selected user type after loading
+            setTimeout(() => {
+                document.getElementById('editTipoPermissao').value = tipoPermissaoId;
+            }, 500); // Delay to ensure user types are loaded
+
             openModal('modalEditPermission');
         }
 
@@ -836,24 +869,20 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                 userCards.forEach((card, index) => {
                     const cardUserId = parseInt(card.dataset.userId);
                     if (cardUserId === selectedUserId) {
-                                                 // Update visual state for selected user
-                         card.classList.add('bg-gradient-to-r', 'from-primary/10', 'to-secondary/10', 'border-primary', 'shadow-lg', 'shadow-primary/20', 'ring-2', 'ring-primary/20');
-                         card.querySelector('.font-bold')?.classList.add('text-primary');
-                         card.querySelector('.w-12.h-12')?.classList.add('ring-2', 'ring-primary/30', 'scale-110');
-                         card.querySelector('.w-12.h-12.rounded-full')?.classList.add('ring-2', 'ring-primary/30', 'scale-110');
+                        card.classList.add('bg-gradient-to-r', 'from-primary/10', 'to-secondary/10', 'border-primary', 'shadow-lg', 'shadow-primary/20', 'ring-2', 'ring-primary/20');
+                        card.querySelector('.font-bold')?.classList.add('text-primary');
+                        card.querySelector('.w-12.h-12')?.classList.add('ring-2', 'ring-primary/30', 'scale-110');
+                        card.querySelector('.w-12.h-12.rounded-full')?.classList.add('ring-2', 'ring-primary/30', 'scale-110');
                         
-                                                 // Add check icon if not exists
-                         if (!card.querySelector('.w-8.h-8.rounded-full.bg-primary')) {
-                             const checkIcon = document.createElement('div');
-                             checkIcon.className = 'flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white shadow-lg';
-                             checkIcon.innerHTML = '<i class="fa-solid fa-check text-sm"></i>';
-                             
-                             // Insert the check icon after the userInfo div, not at the end of the card
-                             const userInfo = card.querySelector('.flex-1');
-                             if (userInfo) {
-                                 userInfo.parentNode.insertBefore(checkIcon, userInfo.nextSibling);
-                             }
-                         }
+                        if (!card.querySelector('.w-8.h-8.rounded-full.bg-primary')) {
+                            const checkIcon = document.createElement('div');
+                            checkIcon.className = 'flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white shadow-lg';
+                            checkIcon.innerHTML = '<i class="fa-solid fa-check text-sm"></i>';
+                            const userInfo = card.querySelector('.flex-1');
+                            if (userInfo) {
+                                userInfo.parentNode.insertBefore(checkIcon, userInfo.nextSibling);
+                            }
+                        }
                     }
                 });
             }

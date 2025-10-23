@@ -22,6 +22,26 @@ if (isset($_GET['action']) && $_GET['action'] === 'get_permissions' && isset($_G
     exit();
 }
 
+// Handle AJAX request for getting user types for a specific system
+if (isset($_GET['action']) && $_GET['action'] === 'get_user_types' && isset($_GET['sistema_id'])) {
+    $sistema_id = (int)$_GET['sistema_id'];
+    
+    $select = new select();
+    $user_types = $select->select_tipo_usuario_sistema($sistema_id);
+    
+    if ($user_types === false) {
+        $user_types = [];
+    }
+    
+    // Return JSON response
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => true,
+        'user_types' => $user_types
+    ]);
+    exit();
+}
+
 //print_r($_POST);
 
 if (
