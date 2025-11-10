@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .flex {
-            display: flex
+            display: flex;
         }
 
         .items-center {
