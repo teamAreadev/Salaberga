@@ -324,11 +324,8 @@ $select_model = new select_model();
                                 class="w-full pl-3 pr-10 py-3 text-base border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none appearance-none bg-white hover:border-gray-300 text-gray-600 transition-all duration-200 cursor-pointer"
                                 required>
                                 <option value="" disabled selected>Selecione a Estante</option>
-                                <?php for ($i = 1; $i <= 33; $i++) { ?>
+                                <?php for ($i = 1; $i <= 40; $i++) { ?>
                                     <option value="<?= $i ?>">Estante <?= $i ?></option>
-                                <?php } ?>
-                                <?php for ($i = 1; $i <= 5; $i++) { ?>
-                                    <option value="armario-<?= $i ?>">Armário <?= $i ?></option>
                                 <?php } ?>
                             </select>
                             <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">

@@ -84,7 +84,7 @@
                     <select id="relatorioSelect" name="estante"
                         class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ceara-green focus:border-ceara-green appearance-none bg-white text-gray-700 cursor-pointer shadow-sm transition-all duration-300 text-base" required>
                         <option value="" disabled selected>Selecione a Estante</option>
-                        <?php for ($i = 1; $i <= 32; $i++) { ?>
+                        <?php for ($i = 1; $i <= 40; $i++) { ?>
                             <option value="<?= $i ?>">Estante <?= $i ?></option>
                         <?php } ?>
                     </select>

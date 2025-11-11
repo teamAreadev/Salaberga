@@ -227,11 +227,8 @@ $livros = $select_model->select_nome_livro();
                                             <label for="editEstante" class="block text-base font-medium text-gray-700 mb-2">Estante/Armário</label>
                                             <select id="editEstante" name="estante" class="w-full px-5 py-3 bg-white border-2 border-gray-200 rounded-lg focus:border-ceara-green focus:ring-2 focus:ring-ceara-green/20 focus:outline-none hover:border-gray-300 text-gray-700 transition-all duration-200 text-lg" required>
                                                 <option value="">Selecione uma estante/armário</option>
-                                                <?php for ($i = 1; $i <= 33; $i++) { ?>
+                                                <?php for ($i = 1; $i <= 40; $i++) { ?>
                                                     <option value="<?= $i ?>">Estante <?= $i ?></option>
-                                                <?php } ?>
-                                                <?php for ($i = 1; $i <= 5; $i++) { ?>
-                                                    <option value="armario-<?= $i ?>">Armário <?= $i ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
