@@ -172,7 +172,7 @@ if(isset($_GET['sair'])){
 
             <!-- Form Container -->
             <div class="form-card p-8 border-t-4 border-ceara-green">
-                <form id="turmaForm" action="qrcode.php" method="post" class="space-y-6">
+                <form id="turmaForm" action="qrcode_cracha.php" method="post" class="space-y-6">
                     <!-- Turma Selection -->
                     <div class="space-y-2">
                         <label for="turma" class="block text-sm font-medium text-gray-700">
