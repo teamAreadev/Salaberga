@@ -42,29 +42,42 @@ class qrCode1 extends connect
         // Configurações de layout
         $cracha_width = 5.5;  // Largura do crachá (cm)
         $cracha_height = 8.5;  // Altura do crachá (cm)
-        $foto_aluno_width = 2.5;  // Largura do crachá (cm)
-        $foto_aluno_height = 4.5;  // Altura do crachá (cm)
+        $foto_aluno_width = 2.3;  // Largura do crachá (cm)
+        $foto_aluno_height = 2.3;  // Altura do crachá (cm)
         $qr_size = 4;  // Tamanho do QR code (cm)
         $espaco_cracha = 6;  // Espaço entre crachás (cm)
         $max_per_line = 2;  // Máximo de crachás por linha
         $start_x = 1;  // Posição X inicial (cm)
         $start_y = 0.5;  // Posição Y inicial (cm)
+        $start_aluno_x = 2.7;  // Posição X inicial (cm)
+        $start_aluno_y = 3.3;  // Posição Y inicial (cm)
         $current_x = $start_x;
         $current_y = $start_y;
-
+        $cor_curso_enfermagem = '#E22B2B';
+        $cor_curso_informatica = '#004AAC';
+        $cor_curso_meio_ambiente = '#26A726';
+        $cor_curso_edificações = '#8c8c8c';
         $turma_dir = '';
         switch ($curso) {
             case '9':
-                $turma_dir = 'img3A';
+                $turma_dir = '3a';
+                $curso_nome = 'Enfermagem';
+                $cor_curso = $cor_curso_enfermagem;
                 break;
             case '10':
-                $turma_dir = 'img3B';
+                $turma_dir = '3b';
+                $curso_nome = 'Informatica';
+                $cor_curso = $cor_curso_informatica;
                 break;
             case '11':
-                $turma_dir = 'img3C';
+                $turma_dir = '3c';
+                $curso_nome = 'Meio Ambiente';
+                $cor_curso = $cor_curso_meio_ambiente;
                 break;
             case '12':
-                $turma_dir = 'img3D';
+                $turma_dir = '3d';
+                $curso_nome = 'Edificações';
+                $cor_curso = $cor_curso_edificações;
                 break;
         }
 
@@ -88,15 +101,19 @@ class qrCode1 extends connect
                 
                 // imagem qrcode atras do cracha
                 $pdf->Image($cracha_fundo, $start_x , $start_y, $cracha_width, $cracha_height);
-                $pdf->Image($foto_aluno, $start_x , $start_y, $foto_aluno_width, $foto_aluno_height);
+                $pdf->Image($foto_aluno, $start_aluno_x , $start_aluno_y, $foto_aluno_width, $foto_aluno_height);
+                $pdf->SetXY(3, 5);
+                $pdf->Cell(4, 2, $aluno['nome'], 1, 1, 'c', false);
+                $pdf->SetXY(3, 6);
+                $pdf->Cell(4, 2, $aluno['matricula'], 1, 1, 'c', false);
 
                 // Gerar o QR code
                 $url = "https://salaberga.com/salaberga/portalsalaberga/app/subsystems/entradasaida/index.php?id_aluno=" . urlencode($aluno['matricula']);
-                QRcode::png($url, $foto_aluno, QR_ECLEVEL_M, 3, 1, false);
+                //QRcode::png($url, $foto_aluno, QR_ECLEVEL_M, 3, 1, false);
                 $pdf->Image($cracha_fundo, $start_x + $espaco_cracha, $start_y, $cracha_width, $cracha_height);
                 
-
-                $pdf->Cell(1, 1, $aluno['nome'], 0, 1, 'c', false);
+                $pdf->SetXY(5, 8.5);
+                $pdf->Cell(4, 2, $aluno['nome'], 0, 1, 'c', false);
             }
         }
         $pdf->Output('I', 'crachas_turma_' . $curso . '.pdf');
